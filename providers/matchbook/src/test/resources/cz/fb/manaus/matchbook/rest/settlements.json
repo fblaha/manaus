@@ -1,0 +1,38 @@
+{
+  "offset": 40,
+  "per-page": 20,
+  "total": 49,
+  "currency": "EUR",
+  "markets": [
+    {
+      "sport-id": 1,
+      "event-id": 123456789,
+      "event-name": "22nd Nov New England Patriots at Green Bay Packers",
+      "market-id": 121242344,
+      "market-type": "Pointspread",
+      "stake": "3000",
+      "profit-and-loss": "6000",
+      "settled-at": "2012-06-13T12:25:59Z"
+    },
+    {
+      "sport-id": 2,
+      "event-id": 123456788,
+      "event-name": "Tiger Woods International Tournament",
+      "market-id": 121242345,
+      "market-type": "Winner",
+      "stake": "3000",
+      "profit-and-loss": "6000",
+      "settled-at": "2012-06-13T12:25:59Z"
+    },
+    {
+      "sport-id": 3,
+      "event-id": 123456787,
+      "event-name": "English Premier League - Man City v Arsenal",
+      "market-id": 121242346,
+      "market-type": "1X2",
+      "stake": "3000",
+      "profit-and-loss": "6000",
+      "settled-at": "2012-06-13T12:25:59Z"
+    }
+  ]
+}

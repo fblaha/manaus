@@ -1,0 +1,8 @@
+target/
+.idea/
+.vagrant/
+*.log
+*.iml
+generated/
+j8
+credentials.properties

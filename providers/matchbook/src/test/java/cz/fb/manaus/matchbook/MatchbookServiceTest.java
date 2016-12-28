@@ -1,0 +1,47 @@
+package cz.fb.manaus.matchbook;
+
+import cz.fb.manaus.core.model.AccountMoney;
+import cz.fb.manaus.core.model.Bet;
+import cz.fb.manaus.core.model.Price;
+import cz.fb.manaus.core.model.Side;
+import cz.fb.manaus.core.test.AbstractRemoteTestCase;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
+import java.util.List;
+
+import static cz.fb.manaus.spring.CoreLocalConfiguration.TEST_PROFILE;
+
+@ActiveProfiles(value = {"matchbook", TEST_PROFILE}, inheritProfiles = false)
+public class MatchbookServiceTest extends AbstractRemoteTestCase {
+
+    @Autowired
+    private MatchbookService service;
+
+    @Test
+    public void testWalk() throws Exception {
+        service.walkMarkets(Instant.now(), Instant.now().plus(5, ChronoUnit.DAYS), System.out::println);
+    }
+
+    @Test
+    public void testMoney() throws Exception {
+        AccountMoney accountMoney = service.getAccountMoney();
+        System.out.println("accountMoney = " + accountMoney);
+    }
+
+    @Test
+    public void testPlace() throws Exception {
+        Bet bet = new Bet(null, "1315615", 2494510, new Price(1.63458, 2, Side.LAY), null, 0);
+        List<String> ids = service.placeBets(Collections.singletonList(bet));
+        System.out.println("ids = " + ids);
+    }
+
+    @Test
+    public void testSettled() throws Exception {
+        service.walkSettlements(Instant.now().minus(1, ChronoUnit.DAYS), System.out::println);
+    }
+}

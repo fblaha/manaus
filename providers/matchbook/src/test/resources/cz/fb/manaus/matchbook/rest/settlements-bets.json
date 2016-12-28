@@ -1,0 +1,54 @@
+{
+  "odds-type": "US",
+  "currency": "EUR",
+  "bets": [
+    {
+      "id": 123456,
+      "sport-id": 2,
+      "event-id": 123456789,
+      "event-name": "New England Patriots at Green Bay Packers",
+      "market-id": 121242344,
+      "market-type": "Pointspread",
+      "runner-id": 335,
+      "runner-name": "Green Bay Packers (WIN)",
+      "odds": "+113",
+      "stake": "11",
+      "profit-and-loss": "12.43",
+      "placed-at": "2012-06-13T12:25:59Z",
+      "settled-at": "2012-06-13T12:25:59Z",
+      "action": "Accepted"
+    },
+    {
+      "id": 123457,
+      "sport-id": 2,
+      "event-id": 123456789,
+      "event-name": "New England Patriots at Green Bay Packers",
+      "market-id": 121242345,
+      "market-type": "Pointspread",
+      "runner-id": 336,
+      "runner-name": "Green Bay Packers (LOSE)",
+      "odds": "+113",
+      "stake": "11",
+      "profit-and-loss": "12.43",
+      "placed-at": "2012-06-13T12:25:59Z",
+      "settled-at": "2012-06-13T12:25:59Z",
+      "action": "Offered"
+    },
+    {
+      "id": 123458,
+      "sport-id": 2,
+      "event-id": 123456789,
+      "event-name": "New England Patriots at Green Bay Packers",
+      "market-id": 121242345,
+      "market-type": "Pointspread",
+      "runner-id": 337,
+      "runner-name": "New England Patriots (WIN)",
+      "odds": "+113",
+      "stake": "11",
+      "profit-and-loss": "12.43",
+      "placed-at": "2012-06-13T12:25:59Z",
+      "settled-at": "2012-06-13T12:25:59Z",
+      "action": "Accepted"
+    }
+  ]
+}

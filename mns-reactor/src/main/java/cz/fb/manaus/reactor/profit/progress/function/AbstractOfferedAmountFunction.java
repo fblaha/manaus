@@ -1,0 +1,19 @@
+package cz.fb.manaus.reactor.profit.progress.function;
+
+import cz.fb.manaus.core.model.Price;
+import cz.fb.manaus.core.model.RunnerPrices;
+import cz.fb.manaus.core.model.SettledBet;
+
+import java.util.OptionalDouble;
+
+public abstract class AbstractOfferedAmountFunction implements ProgressFunction {
+
+    @Override
+    public OptionalDouble function(SettledBet bet) {
+        RunnerPrices runnerPrices = getRunnerPrices(bet);
+        double sum = runnerPrices.getPrices().stream().mapToDouble(Price::getAmount).sum();
+        return OptionalDouble.of(sum);
+    }
+
+    protected abstract RunnerPrices getRunnerPrices(SettledBet bet);
+}
