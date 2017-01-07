@@ -10,5 +10,5 @@ Manaus is code name for automated trading system operating on [betting exchanges
 Used technologies and frameworks:
 * Java 8
 * Spring Boot
-* Hybernate
+* Hibernate
 
