@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicates;
+import com.google.common.base.Splitter;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -33,6 +34,7 @@ import cz.fb.manaus.reactor.betting.BetService;
 import cz.fb.manaus.reactor.betting.action.BetUtils;
 import cz.fb.manaus.reactor.traffic.ExpensiveOperationModerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -50,6 +52,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import static com.google.common.base.Strings.nullToEmpty;
 import static com.google.common.collect.FluentIterable.from;
 
 @Service
@@ -60,11 +63,7 @@ public class MatchbookService implements BetService {
     private final ExpensiveOperationModerator moneyModerator = new ExpensiveOperationModerator(Duration.ofSeconds(20), "money");
     private final ExpensiveOperationModerator settledBetsModerator = new ExpensiveOperationModerator(Duration.ofSeconds(10), "settledBets");
 
-    private final Set<String> SPORTS = ImmutableSet.of(
-            "ice-hockey",
-            "soccer");
-
-    private final Map<String, String> URI_PARAMS = ImmutableMap.of(
+    private static final Map<String, String> URI_PARAMS = ImmutableMap.of(
             "soccer", "market-types=multirunner&grading-types=single-winner-wins");
 
     @Autowired
@@ -75,6 +74,15 @@ public class MatchbookService implements BetService {
     private AccountMoneyRegistry accountMoneyRegistry;
     @Autowired
     private BetUtils betUtils;
+    private Set<String> sports;
+
+    @Autowired
+    public MatchbookService(@Value("#{systemEnvironment['MNS_MATCHBOOK_SPORTS'] ?: 'soccer'}") String rawSports) {
+        this.sports = ImmutableSet.copyOf(Splitter.on(',')
+                .omitEmptyStrings()
+                .trimResults()
+                .split(nullToEmpty(rawSports).toLowerCase()));
+    }
 
     static <T> ResponseEntity<T> checkResponse(ResponseEntity<T> responseEntity) {
         HttpStatus statusCode = responseEntity.getStatusCode();
@@ -87,7 +95,7 @@ public class MatchbookService implements BetService {
     }
 
     public void walkMarkets(Instant from, Instant to, Consumer<MarketSnapshot> consumer) {
-        for (String sport : SPORTS) {
+        for (String sport : sports) {
             pagedWalk(offset -> getEvents(from, to, sport, offset),
                     eventPage -> processEventPage(eventPage, consumer));
         }
