@@ -10,7 +10,6 @@ import java.util.Date;
 public class PlacedBeforeCategorizer extends AbstractBeforeCategorizer {
 
     public static final String CATEGORY = "placedBefore";
-    public static final String MIN_PREFIX = CATEGORY + MIN;
 
     public PlacedBeforeCategorizer() {
         super(CATEGORY);
