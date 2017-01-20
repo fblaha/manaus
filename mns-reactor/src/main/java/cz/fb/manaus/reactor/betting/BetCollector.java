@@ -1,19 +1,19 @@
 package cz.fb.manaus.reactor.betting;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.Side;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.collect.FluentIterable.from;
-import static com.google.common.collect.Iterables.concat;
 import static com.google.common.collect.Lists.transform;
+import static java.util.stream.Stream.concat;
 
 public class BetCollector {
 
@@ -49,13 +49,14 @@ public class BetCollector {
         return ImmutableList.copyOf(toCancel);
     }
 
-    public Bet findBet(String marketId, int selId, final Side side) {
-        Iterable<Bet> bets = concat(Iterables.transform(concat(toUpdate, toPlace), BetCommand::getNewBet), toCancel);
-        return from(bets).firstMatch(
-                bet -> bet.getMarketId().equals(marketId)
+    public Optional<Bet> findBet(String marketId, int selId, final Side side) {
+        Stream<Bet> placeOrUpdate = concat(toPlace.stream(), toUpdate.stream())
+                .map(BetCommand::getNewBet);
+        return concat(placeOrUpdate, toCancel.stream())
+                .filter(bet -> bet.getMarketId().equals(marketId)
                         && bet.getSelectionId() == selId
                         && bet.getRequestedPrice().getSide() == side)
-                .orNull();
+                .findAny();
     }
 
     void callPlaceHandlers(List<String> ids) {

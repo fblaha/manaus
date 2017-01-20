@@ -10,9 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -36,10 +35,10 @@ public class BetCollectorTest {
     }
 
     private void checkCollector(BetCollector collector) {
-        assertThat(collector.findBet(MARKET_ID, SELECTION_ID, Side.LAY), notNullValue());
-        assertThat(collector.findBet(MARKET_ID, SELECTION_ID, Side.BACK), nullValue());
-        assertThat(collector.findBet(MARKET_ID + 1, SELECTION_ID, Side.LAY), nullValue());
-        assertThat(collector.findBet(MARKET_ID, SELECTION_ID + 1, Side.LAY), nullValue());
+        assertTrue(collector.findBet(MARKET_ID, SELECTION_ID, Side.LAY).isPresent());
+        assertFalse(collector.findBet(MARKET_ID, SELECTION_ID, Side.BACK).isPresent());
+        assertFalse(collector.findBet(MARKET_ID + 1, SELECTION_ID, Side.LAY).isPresent());
+        assertFalse(collector.findBet(MARKET_ID, SELECTION_ID + 1, Side.LAY).isPresent());
     }
 
     @Test
