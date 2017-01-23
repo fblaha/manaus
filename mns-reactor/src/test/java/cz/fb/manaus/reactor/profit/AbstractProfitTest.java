@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.stream.IntStream.range;
 import static org.apache.commons.lang3.time.DateUtils.addDays;
 
 public abstract class AbstractProfitTest extends AbstractLocalTestCase {
@@ -30,10 +31,10 @@ public abstract class AbstractProfitTest extends AbstractLocalTestCase {
     }
 
     protected void setBetAction(SettledBet... bets) {
-        for (int i = 0; i < bets.length; i++) {
+        range(0, bets.length).forEach(i -> {
             SettledBet bet = bets[i];
             bet.setBetAction(CoreTestFactory.newBetAction(Integer.toString(i + 1), market));
-        }
+        });
     }
 
     protected List<SettledBet> generateBets(Optional<Side> requestedSide) {

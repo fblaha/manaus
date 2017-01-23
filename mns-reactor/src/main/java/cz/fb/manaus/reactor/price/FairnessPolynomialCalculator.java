@@ -22,16 +22,16 @@ public class FairnessPolynomialCalculator {
 
     public OptionalDouble getFairness(double winnerCount, List<OptionalDouble> prices) {
         if (prices.stream().allMatch(OptionalDouble::isPresent)) {
-            List<Double> prices1 = prices.stream().map(OptionalDouble::getAsDouble).collect(toList());
-            PolynomialFunction rightSide = multiplyPolynomials(prices1);
+            List<Double> presentPrices = prices.stream().map(OptionalDouble::getAsDouble).collect(toList());
+            PolynomialFunction rightSide = multiplyPolynomials(presentPrices);
             rightSide = rightSide.multiply(new PolynomialFunction(new double[]{winnerCount}));
 
             List<PolynomialFunction> leftSideItems = new LinkedList<>();
-            for (int i = 0; i < prices1.size(); i++) {
+            for (int i = 0; i < presentPrices.size(); i++) {
                 List<Double> otherPrices = new LinkedList<>();
-                for (int j = 0; j < prices1.size(); j++) {
+                for (int j = 0; j < presentPrices.size(); j++) {
                     if (i != j) {
-                        otherPrices.add(prices1.get(j));
+                        otherPrices.add(presentPrices.get(j));
                     }
                 }
                 leftSideItems.add(multiplyPolynomials(otherPrices));

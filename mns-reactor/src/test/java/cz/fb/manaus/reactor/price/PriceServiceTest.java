@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.price;
 
-import com.google.common.collect.Range;
 import com.google.common.primitives.Doubles;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.Price;
@@ -16,12 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Arrays;
 import java.util.List;
 import java.util.OptionalDouble;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.ContiguousSet.create;
-import static com.google.common.collect.DiscreteDomain.integers;
 import static com.google.common.collect.FluentIterable.from;
 import static java.util.Collections.singletonList;
+import static java.util.stream.IntStream.rangeClosed;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -120,21 +120,21 @@ public class PriceServiceTest extends AbstractLocalTestCase {
 
     @Test
     public void testFairPriceOverroundTwoGenerated() throws Exception {
-        for (int i : create(Range.closed(1, 9), integers()).asList()) {
+        rangeClosed(1, 9).forEach(i -> {
             checkFairPrices(1, 1.9, 1d + i * 0.1d);
-        }
+        });
     }
 
     @Test
     public void testFairPriceOverroundThreeGenerated() throws Exception {
-        for (int i : create(Range.closed(1, 19), integers()).asList()) {
+        rangeClosed(1, 19).forEach(i -> {
             double price = 1d + i * 0.1d;
             checkFairPrices(1, 2.8, 2.8, price);
-        }
-        for (int i : create(Range.closed(1, 19), integers()).asList()) {
+        });
+        rangeClosed(1, 19).forEach(i -> {
             double price = 1d + i * 0.1d;
             checkFairPrices(1, 2.8, 1.5, price);
-        }
+        });
     }
 
 
@@ -163,14 +163,14 @@ public class PriceServiceTest extends AbstractLocalTestCase {
         double fairness = getFairness(Side.BACK, marketPrices);
         assertTrue(overround.getAsDouble() > 1);
 
-        List<Double> overroundPrices = from(Doubles.asList(unfairPrices))
-                .transform(price -> {
+        List<Double> overroundPrices = DoubleStream.of(unfairPrices)
+                .map(price -> {
                     double fair = priceService.getOverroundFairPrice(price, overround.getAsDouble(),
                             winnerCount, unfairPrices.length);
                     assertTrue(price < fair);
                     return fair;
                 })
-                .toList();
+                .boxed().collect(Collectors.toList());
 
         checkOverroundUnfairPrices(reciprocal, winnerCount, Doubles.asList(unfairPrices), overroundPrices);
         List<Double> fairnessPrices = from(Doubles.asList(unfairPrices))
