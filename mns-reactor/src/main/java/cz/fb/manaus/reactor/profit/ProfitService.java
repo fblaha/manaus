@@ -20,11 +20,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.FluentIterable.from;
-import static com.google.common.collect.Iterables.getFirst;
 import static com.google.common.collect.Maps.transformValues;
 import static com.google.common.collect.Ordering.from;
-import static com.google.common.math.DoubleMath.mean;
 import static java.util.Comparator.comparing;
 
 
@@ -54,8 +51,10 @@ public class ProfitService {
     }
 
     public ProfitRecord mergeProfitRecords(Collection<ProfitRecord> records) {
-        ProfitRecord first = getFirst(from(records), null);
-        double avgPrice = mean(from(records).transform(ProfitRecord::getAvgPrice));
+        ProfitRecord first = records.stream().findFirst().get();
+        double avgPrice = records.stream()
+                .mapToDouble(ProfitRecord::getAvgPrice)
+                .average().getAsDouble();
         double theoreticalProfit = records.stream().mapToDouble(ProfitRecord::getTheoreticalProfit).sum();
         double charge = records.stream().mapToDouble(ProfitRecord::getCharge).sum();
         int layCount = records.stream().mapToInt(ProfitRecord::getLayCount).sum();
