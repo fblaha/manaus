@@ -29,6 +29,7 @@ import java.util.OptionalDouble;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.FluentIterable.from;
+import static java.util.Objects.requireNonNull;
 
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Entity
@@ -73,7 +74,7 @@ public class MarketPrices implements SideMixed<MarketPrices> {
 
     @JsonIgnore
     public OptionalDouble getOverround(Side type) {
-        FluentIterable<Optional<Price>> bestPrices = getBestPricesIterable(checkNotNull(type));
+        FluentIterable<Optional<Price>> bestPrices = getBestPricesIterable(requireNonNull(type));
         if (bestPrices.allMatch(Optional::isPresent)) {
             Preconditions.checkState(bestPrices.allMatch(price -> price.get().getSide() == type));
             return OptionalDouble.of(getOverround(bestPrices
