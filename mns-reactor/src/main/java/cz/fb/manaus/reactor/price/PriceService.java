@@ -53,11 +53,10 @@ public class PriceService {
         return Price.round(baseAmount * baseProbability / probability);
     }
 
-    @Deprecated
-
     /**
      * http://www.matterofstats.com/what-is-vig-and-overround/
      */
+    @Deprecated
     public double getReciprocalFairPrice(double unfairPrice, double reciprocal) {
         return unfairPrice / reciprocal;
     }

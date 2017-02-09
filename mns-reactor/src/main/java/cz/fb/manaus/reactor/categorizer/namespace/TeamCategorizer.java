@@ -30,13 +30,13 @@ public class TeamCategorizer implements SettledBetCategorizer {
         return market.getRunners().stream().map(Runner::getName)
                 .filter(name -> eventName.contains(name))
                 .map(String::toLowerCase)
-                .map(CharMatcher.WHITESPACE.or(CharMatcher.JAVA_LETTER_OR_DIGIT)::retainFrom)
+                .map(CharMatcher.whitespace().or(CharMatcher.javaLetterOrDigit())::retainFrom)
                 .map(this::getCategory)
                 .collect(Collectors.toSet());
     }
 
     private String getCategory(String name) {
-        name = CharMatcher.WHITESPACE.replaceFrom(name, '_');
+        name = CharMatcher.whitespace().replaceFrom(name, '_');
         name = name.substring(0, Math.min(name.length(), 30));
         return Joiner.on('_').join(NAMESPACE, name);
     }

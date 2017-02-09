@@ -85,13 +85,13 @@ public class RestBetfairServiceTest extends AbstractRemoteTestCase {
 
     @Test
     public void testReplaceBet() throws Exception {
-        AbstractExecutionReport bet = service.replaceBets(singletonList(new Bet("45446464", "1.114786454", 1234639l, new Price(2d, 2d, Side.BACK), null, 0d)));
+        AbstractExecutionReport bet = service.replaceBets(singletonList(new Bet("45446464", "1.114786454", 1234639L, new Price(2d, 2d, Side.BACK), null, 0d)));
         System.out.println("bet = " + bet);
     }
 
     @Test
     public void testCancelBet() throws Exception {
-        AbstractExecutionReport bet = service.cancelBets(singletonList(new Bet("45333414548", "1.116946265", 1234639l, null, null, 0d)));
+        AbstractExecutionReport bet = service.cancelBets(singletonList(new Bet("45333414548", "1.116946265", 1234639L, null, null, 0d)));
         System.out.println("bet = " + bet);
     }
 

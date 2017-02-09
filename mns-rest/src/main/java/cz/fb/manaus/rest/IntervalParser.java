@@ -25,8 +25,8 @@ public class IntervalParser {
         List<String> split = Splitter.on('-').splitToList(interval);
         interval = split.get(0);
 
-        int count = Integer.parseInt(CharMatcher.DIGIT.retainFrom(interval));
-        char unitChar = CharMatcher.DIGIT.removeFrom(interval).charAt(0);
+        int count = Integer.parseInt(CharMatcher.digit().retainFrom(interval));
+        char unitChar = CharMatcher.digit().removeFrom(interval).charAt(0);
         ChronoUnit unit = UNITS.get(unitChar);
 
         if (split.size() == 2) {

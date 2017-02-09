@@ -15,7 +15,7 @@ public class MarketFilterServiceTest extends AbstractMarketDataAwareTestCase {
     @Test
     public void testFilterService() throws Exception {
         long cnt = from(markets).filter(filterService::accept).size();
-        assertTrue(Range.closed(1000l, 1500l).contains(cnt));
+        assertTrue(Range.closed(1000L, 1500L).contains(cnt));
     }
 
 

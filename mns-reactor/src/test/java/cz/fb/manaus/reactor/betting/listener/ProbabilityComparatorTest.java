@@ -22,10 +22,10 @@ public class ProbabilityComparatorTest extends AbstractLocalTestCase {
     public void testCompare() throws Exception {
         RunnerPrices first = testFactory.newRP(1, 1.4d, 1.6d);
         RunnerPrices second = testFactory.newRP(2, 2.8d, 3.3d);
-        assertThat(getFirstSelection(asList(first, first)), is(1l));
-        assertThat(getFirstSelection(asList(first, second)), is(1l));
-        assertThat(getFirstSelection(asList(second, first)), is(1l));
-        assertThat(getFirstSelection(asList(second, second)), is(2l));
+        assertThat(getFirstSelection(asList(first, first)), is(1L));
+        assertThat(getFirstSelection(asList(first, second)), is(1L));
+        assertThat(getFirstSelection(asList(second, first)), is(1L));
+        assertThat(getFirstSelection(asList(second, second)), is(2L));
     }
 
     private long getFirstSelection(List<RunnerPrices> lists) {

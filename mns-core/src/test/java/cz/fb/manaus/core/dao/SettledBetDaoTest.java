@@ -55,12 +55,12 @@ public class SettledBetDaoTest extends AbstractDaoTest {
         assertThat(bets.get(0).getSelectionName(), is(CoreTestFactory.DRAW_NAME));
 
         assertThat(settledBetDao.getSettledBets(MARKET_ID, OptionalLong.empty(), empty()).size(), is(1));
-        assertThat(settledBetDao.getSettledBets(MARKET_ID, OptionalLong.of(555l), empty()).size(), is(1));
-        assertThat(settledBetDao.getSettledBets(MARKET_ID, OptionalLong.of(555l), of(Side.LAY)).size(), is(1));
+        assertThat(settledBetDao.getSettledBets(MARKET_ID, OptionalLong.of(555L), empty()).size(), is(1));
+        assertThat(settledBetDao.getSettledBets(MARKET_ID, OptionalLong.of(555L), of(Side.LAY)).size(), is(1));
         assertThat(settledBetDao.getSettledBets(MARKET_ID, OptionalLong.empty(), of(Side.LAY)).size(), is(1));
 
-        assertThat(settledBetDao.getSettledBets(MARKET_ID, OptionalLong.of(556l), empty()).size(), is(0));
-        assertThat(settledBetDao.getSettledBets(MARKET_ID, OptionalLong.of(555l), of(Side.BACK)).size(), is(0));
+        assertThat(settledBetDao.getSettledBets(MARKET_ID, OptionalLong.of(556L), empty()).size(), is(0));
+        assertThat(settledBetDao.getSettledBets(MARKET_ID, OptionalLong.of(555L), of(Side.BACK)).size(), is(0));
 
     }
 

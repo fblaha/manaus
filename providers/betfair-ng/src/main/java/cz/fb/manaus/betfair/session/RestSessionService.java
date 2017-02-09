@@ -152,7 +152,7 @@ public class RestSessionService implements ProviderConfigurationValidator {
                     .setSSLSocketFactory(socketFactory);
 
             if (proxy != null) {
-                clientBuilder.setProxy(new HttpHost(proxy.getHostText(), proxy.getPort()));
+                clientBuilder.setProxy(new HttpHost(proxy.getHost(), proxy.getPort()));
             }
             CloseableHttpClient httpClient = clientBuilder.build();
 

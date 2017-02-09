@@ -51,7 +51,7 @@ public class ModelConverter {
         modelMarket.setBspMarket(false);
         modelMarket.setInPlay(market.isAllowLiveBetting());
 
-        modelMarket.setType(CharMatcher.WHITESPACE.replaceFrom(market.getName().toLowerCase(), '_'));
+        modelMarket.setType(CharMatcher.whitespace().replaceFrom(market.getName().toLowerCase(), '_'));
 
         cz.fb.manaus.core.model.Event modelEvent = new cz.fb.manaus.core.model.Event(
                 Long.toString(event.getId()), event.getName(), event.getStart(), null);

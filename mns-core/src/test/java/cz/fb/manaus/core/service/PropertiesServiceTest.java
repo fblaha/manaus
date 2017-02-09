@@ -139,8 +139,8 @@ public class PropertiesServiceTest extends AbstractDaoTest {
 
     @Test
     public void testIncrement() throws Exception {
-        assertThat(service.incrementAntGet("aaa", Duration.ofDays(100)), is(1l));
-        assertThat(service.incrementAntGet("aaa", Duration.ofDays(100)), is(2l));
-        assertThat(service.incrementAntGet("aaa", Duration.ofDays(100)), is(3l));
+        assertThat(service.incrementAntGet("aaa", Duration.ofDays(100)), is(1L));
+        assertThat(service.incrementAntGet("aaa", Duration.ofDays(100)), is(2L));
+        assertThat(service.incrementAntGet("aaa", Duration.ofDays(100)), is(3L));
     }
 }

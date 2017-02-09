@@ -29,8 +29,8 @@ final public class CompetitionCategorizer extends AbstractDelegatingCategorizer 
     }
 
     private String normalize(String name) {
-        name = CharMatcher.WHITESPACE.or(CharMatcher.JAVA_LETTER_OR_DIGIT).retainFrom(name);
-        name = CharMatcher.WHITESPACE.replaceFrom(name, '_');
+        name = CharMatcher.whitespace().or(CharMatcher.javaLetterOrDigit()).retainFrom(name);
+        name = CharMatcher.whitespace().replaceFrom(name, '_');
         name = name.substring(0, Math.min(name.length(), 30));
         return name;
     }

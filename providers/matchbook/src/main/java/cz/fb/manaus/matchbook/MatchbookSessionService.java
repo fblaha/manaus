@@ -117,7 +117,7 @@ public class MatchbookSessionService implements ProviderConfigurationValidator {
     private RestTemplate getProxyTemplate(SimpleClientHttpRequestFactory requestFactory, Optional<HostAndPort> proxy) {
         if (proxy.isPresent()) {
             requestFactory.setProxy(new Proxy(Proxy.Type.HTTP,
-                    new InetSocketAddress(proxy.get().getHostText(), proxy.get().getPort())));
+                    new InetSocketAddress(proxy.get().getHost(), proxy.get().getPort())));
         }
         return new RestTemplate(requestFactory);
     }
