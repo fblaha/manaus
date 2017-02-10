@@ -5,3 +5,9 @@ jdk:
 cache:
   directories:
     - $HOME/.m2
+
+# Use updated jdk version instead of buggy default
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
