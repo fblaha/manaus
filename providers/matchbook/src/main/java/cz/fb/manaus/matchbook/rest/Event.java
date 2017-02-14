@@ -15,13 +15,13 @@ public class Event {
     @JsonProperty("sport-id")
     private long sportId;
     @JsonProperty("category-id")
-    private List<Integer> categoryId;
+    private List<Long> categoryId;
     @JsonProperty("in-running-flag")
     private boolean inRunningFlag;
     @JsonProperty("allow-live-betting")
     private boolean allowLiveBetting;
     @JsonProperty("market-ids")
-    private List<Integer> marketIds;
+    private List<Long> marketIds;
     @JsonProperty("meta-tags")
     private List<MetaTag> metaTags;
     private List<Market> markets;
@@ -66,11 +66,11 @@ public class Event {
         this.sportId = sportId;
     }
 
-    public List<Integer> getCategoryId() {
+    public List<Long> getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(List<Integer> categoryId) {
+    public void setCategoryId(List<Long> categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -90,11 +90,11 @@ public class Event {
         this.allowLiveBetting = allowLiveBetting;
     }
 
-    public List<Integer> getMarketIds() {
+    public List<Long> getMarketIds() {
         return marketIds;
     }
 
-    public void setMarketIds(List<Integer> marketIds) {
+    public void setMarketIds(List<Long> marketIds) {
         this.marketIds = marketIds;
     }
 

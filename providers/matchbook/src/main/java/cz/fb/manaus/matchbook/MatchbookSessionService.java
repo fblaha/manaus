@@ -38,7 +38,7 @@ import static cz.fb.manaus.matchbook.MatchbookService.checkResponse;
 @Service
 public class MatchbookSessionService implements ProviderConfigurationValidator {
 
-    public static final String REST = "https://matchbook.com/bpapi/rest/";
+    public static final String REST = "https://matchbook.com/edge/rest/";
     public static final ParameterizedTypeReference<Map<String, ?>> STRING_MAP = new ParameterizedTypeReference<Map<String, ?>>() {
     };
     private final ExpensiveOperationModerator sessionModerator = new ExpensiveOperationModerator(Duration.ofSeconds(10), "session");
