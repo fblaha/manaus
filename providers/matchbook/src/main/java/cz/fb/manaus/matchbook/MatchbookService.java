@@ -58,14 +58,12 @@ import static com.google.common.collect.FluentIterable.from;
 @Service
 public class MatchbookService implements BetService {
 
+    private static final Map<String, String> URI_PARAMS = ImmutableMap.of(
+            "soccer", "market-types=multirunner&grading-types=single-winner-wins");
     private final ExpensiveOperationModerator eventsModerator = new ExpensiveOperationModerator(Duration.ofSeconds(10), "events");
     private final ExpensiveOperationModerator offerModerator = new ExpensiveOperationModerator(Duration.ofSeconds(10), "offers");
     private final ExpensiveOperationModerator moneyModerator = new ExpensiveOperationModerator(Duration.ofSeconds(20), "money");
     private final ExpensiveOperationModerator settledBetsModerator = new ExpensiveOperationModerator(Duration.ofSeconds(10), "settledBets");
-
-    private static final Map<String, String> URI_PARAMS = ImmutableMap.of(
-            "soccer", "market-types=multirunner&grading-types=single-winner-wins");
-
     @Autowired
     private MatchbookSessionService sessionService;
     @Autowired
@@ -92,6 +90,10 @@ public class MatchbookService implements BetService {
 
     private String rest(String path) {
         return MatchbookSessionService.REST + path;
+    }
+
+    private String oldRest(String path) {
+        return MatchbookSessionService.OLD_REST + path;
     }
 
     public void walkMarkets(Instant from, Instant to, Consumer<MarketSnapshot> consumer) {
@@ -266,7 +268,7 @@ public class MatchbookService implements BetService {
     private SettlementPage getSettlementPage(Instant from, int offset) {
         settledBetsModerator.suspendOnExceeded();
         ResponseEntity<SettlementPage> responseEntity = sessionService.getTemplate()
-                .exchange(rest("reports/settlements?offset={offset}&after={after}"),
+                .exchange(oldRest("reports/settlements?offset={offset}&after={after}"),
                         HttpMethod.GET, null, SettlementPage.class, offset, from.getEpochSecond());
         return checkResponse(responseEntity).getBody();
     }
