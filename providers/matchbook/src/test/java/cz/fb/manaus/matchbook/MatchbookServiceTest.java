@@ -41,6 +41,15 @@ public class MatchbookServiceTest extends AbstractRemoteTestCase {
     }
 
     @Test
+    public void testUpdate() throws Exception {
+        Price price = new Price(6, 2, Side.BACK);
+        Bet bet = new Bet("412514648480014", "411264087370009", 411264087490009L,
+                price, null, 0);
+        List<String> ids = service.placeBets(Collections.singletonList(bet));
+        System.out.println("ids = " + ids);
+    }
+
+    @Test
     public void testSettled() throws Exception {
         service.walkSettlements(Instant.now().minus(1, ChronoUnit.DAYS), System.out::println);
     }

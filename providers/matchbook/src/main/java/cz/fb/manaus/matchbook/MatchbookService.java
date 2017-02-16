@@ -52,6 +52,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Strings.nullToEmpty;
 import static com.google.common.collect.FluentIterable.from;
 
@@ -84,7 +85,7 @@ public class MatchbookService implements BetService {
 
     static <T> ResponseEntity<T> checkResponse(ResponseEntity<T> responseEntity) {
         HttpStatus statusCode = responseEntity.getStatusCode();
-        Preconditions.checkState(statusCode.is2xxSuccessful(), statusCode.getReasonPhrase());
+        checkState(statusCode.is2xxSuccessful(), statusCode.getReasonPhrase());
         return responseEntity;
     }
 
@@ -182,32 +183,31 @@ public class MatchbookService implements BetService {
         offers.setExchangeType("back-lay");
         offers.setOddsType("DECIMAL");
         LinkedList<Offer> items = new LinkedList<>();
-        int tempId = 0;
-        boolean update = false;
+        boolean update = bets.stream().allMatch(b -> b.getBetId() != null);
         Map<Long, Integer> indices = new HashMap<>();
-        for (Bet bet : bets) {
+        for (int i = 0; i < bets.size(); i++) {
+            Bet bet = bets.get(i);
             Offer offer = new Offer();
             if (bet.getBetId() != null) {
-                update = true;
                 long id = Long.parseLong(bet.getBetId());
                 offer.setId(id);
-                indices.put(id, tempId);
+                indices.put(id, i);
             }
             Price requestedPrice = bet.getRequestedPrice();
             offer.setSide(requestedPrice.getSide().name().toLowerCase());
             offer.setOdds(requestedPrice.getPrice());
             offer.setStake(requestedPrice.getAmount());
-            offer.setTempId(tempId++);
+            offer.setTempId(i);
             offer.setRunnerId(bet.getSelectionId());
             items.add(offer);
         }
         HttpMethod method;
         if (update) {
             method = HttpMethod.PUT;
-            Preconditions.checkState(items.stream().noneMatch(offer -> offer.getId() == null));
+            checkState(items.stream().noneMatch(offer -> offer.getId() == null));
         } else {
             method = HttpMethod.POST;
-            Preconditions.checkState(items.stream().allMatch(offer -> offer.getId() == null));
+            checkState(items.stream().allMatch(offer -> offer.getId() == null));
         }
         offers.setOffers(items);
         String offersUrl = rest("offers");
@@ -220,7 +220,7 @@ public class MatchbookService implements BetService {
         AccountMoney accountMoney = new AccountMoney(report.getBalance(), report.getAvailableAmount());
         accountMoneyRegistry.register(accountMoney);
         for (Offer offer : report.getOffers()) {
-            int index = update ? indices.get(offer.getTempId()) : (int) offer.getTempId();
+            int index = update ? indices.get(offer.getId()) : (int) offer.getTempId();
             result[index] = Long.toString(offer.getId());
         }
         return ImmutableList.copyOf(result);
