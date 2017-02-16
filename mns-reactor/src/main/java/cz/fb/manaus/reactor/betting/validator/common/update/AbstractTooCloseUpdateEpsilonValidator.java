@@ -1,9 +1,9 @@
 package cz.fb.manaus.reactor.betting.validator.common.update;
 
+import com.google.common.collect.Range;
 import cz.fb.manaus.reactor.betting.BetContext;
 import cz.fb.manaus.reactor.betting.validator.ValidationResult;
 import cz.fb.manaus.reactor.betting.validator.Validator;
-import org.apache.commons.math3.util.Precision;
 
 public abstract class AbstractTooCloseUpdateEpsilonValidator implements Validator {
     private final double epsilon;
@@ -17,7 +17,8 @@ public abstract class AbstractTooCloseUpdateEpsilonValidator implements Validato
         double oldOne = context.getOldBet().get().getRequestedPrice().getPrice();
         double newOne = context.getNewPrice().get().getPrice();
         double epsilon = (oldOne - 1) * this.epsilon;
-        return ValidationResult.of(!Precision.equals(newOne, oldOne, epsilon));
+        Range<Double> closeRange = Range.closed(oldOne - epsilon, oldOne + epsilon);
+        return ValidationResult.of(!closeRange.contains(newOne));
     }
 
     @Override
