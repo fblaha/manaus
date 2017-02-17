@@ -41,7 +41,7 @@ public class ActionSaver {
             Date actionDate = stored.getActionDate();
             long time = actionDate.getTime();
             stored.setBetId(betId + "_" + Long.toHexString(time));
-            betActionDao.saveOrUpdate(action);
+            betActionDao.saveOrUpdate(stored);
         });
         betActionDao.saveOrUpdate(action);
     }
