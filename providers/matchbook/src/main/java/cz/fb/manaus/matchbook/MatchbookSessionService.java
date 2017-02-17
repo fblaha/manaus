@@ -38,23 +38,21 @@ import static cz.fb.manaus.matchbook.MatchbookService.checkResponse;
 @Service
 public class MatchbookSessionService implements ProviderConfigurationValidator {
 
-    public static final String REST = "https://matchbook.com/edge/rest/";
-    public static final String OLD_REST = "https://matchbook.com/bpapi/rest/";
-
     public static final ParameterizedTypeReference<Map<String, ?>> STRING_MAP = new ParameterizedTypeReference<Map<String, ?>>() {
     };
     private final ExpensiveOperationModerator sessionModerator = new ExpensiveOperationModerator(Duration.ofSeconds(10), "session");
 
+
     private final String user;
     private final String password;
     private final Optional<HostAndPort> proxy;
-
+    @Autowired
+    private MatchbookEndpointManager endpointManager;
     private final LoadingCache<String, RestTemplate> session = CacheBuilder.newBuilder()
             .maximumSize(1)
             .expireAfterWrite(6, TimeUnit.HOURS)
             .removalListener(this::onSessionExpired)
             .build(CacheLoader.from(this::getFreshTemplate));
-
 
     @Autowired
     public MatchbookSessionService(@Value(CoreLocalConfiguration.USER_EL) String user,
@@ -79,7 +77,7 @@ public class MatchbookSessionService implements ProviderConfigurationValidator {
         Credentials credentials = new Credentials(user, password);
 
         RequestEntity<Credentials> request = new RequestEntity<>(credentials, createCommonHeaders(), HttpMethod.POST,
-                URI.create(REST + "security/session"));
+                URI.create(endpointManager.oldRest("security/session")));
 
         sessionModerator.exceptionOnExceeded();
         ResponseEntity<Map<String, ?>> resp = checkResponse(template.exchange(request, STRING_MAP));
@@ -100,7 +98,7 @@ public class MatchbookSessionService implements ProviderConfigurationValidator {
 
     private void logout(RestTemplate template) {
         RequestEntity<Object> entity = new RequestEntity<>(null, createCommonHeaders(), HttpMethod.DELETE,
-                URI.create(REST + "security/session"));
+                URI.create(endpointManager.oldRest("security/session")));
         checkResponse(template.exchange(entity, STRING_MAP));
     }
 

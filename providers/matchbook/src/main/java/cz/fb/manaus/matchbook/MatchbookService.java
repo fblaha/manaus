@@ -73,6 +73,8 @@ public class MatchbookService implements BetService {
     private AccountMoneyRegistry accountMoneyRegistry;
     @Autowired
     private BetUtils betUtils;
+    @Autowired
+    private MatchbookEndpointManager endpointManager;
     private Set<String> sports;
 
     @Autowired
@@ -89,13 +91,6 @@ public class MatchbookService implements BetService {
         return responseEntity;
     }
 
-    private String rest(String path) {
-        return MatchbookSessionService.REST + path;
-    }
-
-    private String oldRest(String path) {
-        return MatchbookSessionService.OLD_REST + path;
-    }
 
     public void walkMarkets(Instant from, Instant to, Consumer<MarketSnapshot> consumer) {
         for (String sport : sports) {
@@ -141,7 +136,7 @@ public class MatchbookService implements BetService {
             urlPath += "&" + Preconditions.checkNotNull(URI_PARAMS.get(sport));
         }
         ResponseEntity<EventPage> responseEntity = sessionService.getTemplate().exchange(
-                rest(urlPath),
+                endpointManager.rest(urlPath),
                 HttpMethod.GET, null, EventPage.class, offset, 20,
                 from.getEpochSecond(), to.getEpochSecond(), sport);
         return checkResponse(responseEntity).getBody();
@@ -158,7 +153,7 @@ public class MatchbookService implements BetService {
     private OfferPage getOfferPage(List<Long> eventIds, String status, int offset) {
         String events = Joiner.on(',').join(eventIds);
         ResponseEntity<OfferPage> responseEntity = sessionService.getTemplate()
-                .exchange(rest("offers?event-ids={eventIds}&offset={offset}&per-page={perPage}&status={status}"),
+                .exchange(endpointManager.rest("offers?event-ids={eventIds}&offset={offset}&per-page={perPage}&status={status}"),
                         HttpMethod.GET, null, OfferPage.class, events, offset, 50, status);
         return checkResponse(responseEntity).getBody();
     }
@@ -210,7 +205,7 @@ public class MatchbookService implements BetService {
             checkState(items.stream().allMatch(offer -> offer.getId() == null));
         }
         offers.setOffers(items);
-        String offersUrl = rest("offers");
+        String offersUrl = endpointManager.rest("offers");
 
         ResponseEntity<PlaceReport> responseEntity = sessionService.getTemplate().exchange(offersUrl, method,
                 new HttpEntity<>(offers), PlaceReport.class);
@@ -235,14 +230,15 @@ public class MatchbookService implements BetService {
     public void cancelBets(List<Bet> bets) {
         RestTemplate template = sessionService.getTemplate();
         for (Bet bet : bets) {
-            template.delete(rest("offers/{offerId}"), bet.getBetId());
+            template.delete(endpointManager.rest("offers/{offerId}"), bet.getBetId());
         }
     }
 
     @Override
     public AccountMoney getAccountMoney() {
         moneyModerator.suspendOnExceeded();
-        ResponseEntity<Balance> entity = sessionService.getTemplate().exchange(rest("account/balance"), HttpMethod.GET, null, Balance.class);
+        ResponseEntity<Balance> entity = sessionService.getTemplate().exchange(
+                endpointManager.rest("account/balance"), HttpMethod.GET, null, Balance.class);
         checkResponse(entity);
         Balance balance = entity.getBody();
         return new AccountMoney(balance.getBalance(), balance.getFreeFunds());
@@ -250,7 +246,7 @@ public class MatchbookService implements BetService {
 
     public List<SettledBet> getSettledBets(long marketId, long selectionId) {
         ResponseEntity<SettledBets> responseEntity = sessionService.getTemplate()
-                .exchange(rest("reports/settlements/{marketId}/runners/{runnerId}"),
+                .exchange(endpointManager.rest("reports/settlements/{marketId}/runners/{runnerId}"),
 
                         HttpMethod.GET, null, SettledBets.class, marketId, selectionId);
         List<cz.fb.manaus.matchbook.rest.SettledBet> bets = checkResponse(responseEntity).getBody().getBets();
@@ -268,7 +264,7 @@ public class MatchbookService implements BetService {
     private SettlementPage getSettlementPage(Instant from, int offset) {
         settledBetsModerator.suspendOnExceeded();
         ResponseEntity<SettlementPage> responseEntity = sessionService.getTemplate()
-                .exchange(oldRest("reports/settlements?offset={offset}&after={after}"),
+                .exchange(endpointManager.oldRest("reports/settlements?offset={offset}&after={after}"),
                         HttpMethod.GET, null, SettlementPage.class, offset, from.getEpochSecond());
         return checkResponse(responseEntity).getBody();
     }
