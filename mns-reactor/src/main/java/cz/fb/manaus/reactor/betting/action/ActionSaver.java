@@ -11,6 +11,8 @@ import java.time.Duration;
 import java.util.Date;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkState;
 import static cz.fb.manaus.core.category.categorizer.WeekDayCategorizer.getWeekDay;
@@ -19,6 +21,7 @@ import static cz.fb.manaus.core.category.categorizer.WeekDayCategorizer.getWeekD
 public class ActionSaver {
 
     public static final String PROPOSER_STATS = "proposer.stats";
+    private static final Logger log = Logger.getLogger(ActionSaver.class.getSimpleName());
     @Autowired
     private BetActionDao betActionDao;
     @Autowired
@@ -35,13 +38,16 @@ public class ActionSaver {
             service.incrementAntGet(key, Duration.ofDays(1));
         }
         action.setBetId(betId);
+        // TODO all in one DB transaction and use HQL update for setting the betId
         betActionDao.getBetAction(betId).ifPresent(stored -> {
             checkState(Objects.equals(stored.getBetId(), action.getBetId()));
             checkState(stored.getSelectionId() == action.getSelectionId());
-            Date actionDate = stored.getActionDate();
-            long time = actionDate.getTime();
-            stored.setBetId(betId + "_" + Long.toHexString(time));
+            checkState(Objects.equals(stored.getMarket().getId(), action.getMarket().getId()));
+            long time = stored.getActionDate().getTime();
+            String previousBetId = betId + "_" + Long.toHexString(time);
+            stored.setBetId(previousBetId);
             betActionDao.saveOrUpdate(stored);
+            log.log(Level.INFO, "Previous action bet id set to ''{0}''", previousBetId);
         });
         betActionDao.saveOrUpdate(action);
     }
