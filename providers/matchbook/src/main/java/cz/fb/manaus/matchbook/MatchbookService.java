@@ -246,7 +246,7 @@ public class MatchbookService implements BetService {
 
     public List<SettledBet> getSettledBets(long marketId, long selectionId) {
         ResponseEntity<SettledBets> responseEntity = sessionService.getTemplate()
-                .exchange(endpointManager.rest("reports/settlements/{marketId}/runners/{runnerId}"),
+                .exchange(endpointManager.oldRest("reports/settlements/{marketId}/runners/{runnerId}"),
 
                         HttpMethod.GET, null, SettledBets.class, marketId, selectionId);
         List<cz.fb.manaus.matchbook.rest.SettledBet> bets = checkResponse(responseEntity).getBody().getBets();
