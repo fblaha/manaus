@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Duration;
 import java.util.Date;
+import java.util.Objects;
 import java.util.function.Consumer;
 
+import static com.google.common.base.Preconditions.checkState;
 import static cz.fb.manaus.core.category.categorizer.WeekDayCategorizer.getWeekDay;
 
 @DatabaseComponent
@@ -33,6 +35,14 @@ public class ActionSaver {
             service.incrementAntGet(key, Duration.ofDays(1));
         }
         action.setBetId(betId);
+        betActionDao.getBetAction(betId).ifPresent(stored -> {
+            checkState(Objects.equals(stored.getBetId(), action.getBetId()));
+            checkState(stored.getSelectionId() == action.getSelectionId());
+            Date actionDate = stored.getActionDate();
+            long time = actionDate.getTime();
+            stored.setBetId(betId + "_" + Long.toHexString(time));
+            betActionDao.saveOrUpdate(action);
+        });
         betActionDao.saveOrUpdate(action);
     }
 

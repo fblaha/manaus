@@ -16,6 +16,7 @@ import org.hibernate.LazyInitializationException;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +48,19 @@ public class BetActionDaoTest extends AbstractDaoTest {
         createAndSaveBetAction(market, new Date(), singletonMap("k1", "XXX"), BET_ID);
         Set<String> ids = betActionDao.getBetActionIds(market.getId(), OptionalLong.empty(), empty());
         assertThat(ids, hasItem(BET_ID));
+    }
+
+    @Test
+    public void testUpdateBetId() {
+        Market market = newMarket();
+        marketDao.saveOrUpdate(market);
+        createAndSaveBetAction(market, new Date(), Collections.emptyMap(), BET_ID);
+        BetAction stored = betActionDao.getBetAction(BET_ID).get();
+        String newId = BET_ID + "_1";
+        stored.setBetId(newId);
+        betActionDao.saveOrUpdate(stored);
+        assertTrue(betActionDao.getBetAction(newId).isPresent());
+        assertFalse(betActionDao.getBetAction(BET_ID).isPresent());
     }
 
     @Test
