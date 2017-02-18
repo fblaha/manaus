@@ -54,11 +54,11 @@ public class BetActionDaoTest extends AbstractDaoTest {
     public void testUpdateBetId() {
         Market market = newMarket();
         marketDao.saveOrUpdate(market);
-        createAndSaveBetAction(market, new Date(), Collections.emptyMap(), BET_ID);
-        BetAction stored = betActionDao.getBetAction(BET_ID).get();
+        BetAction action = createAndSaveBetAction(market, new Date(), Collections.emptyMap(), BET_ID);
         String newId = BET_ID + "_1";
-        stored.setBetId(newId);
-        betActionDao.saveOrUpdate(stored);
+        String marketId = action.getMarket().getId();
+        assertThat(betActionDao.updateBetId(BET_ID, newId, marketId, action.getSelectionId()), is(1));
+        assertThat(betActionDao.updateBetId(BET_ID, newId, marketId, action.getSelectionId()), is(0));
         assertTrue(betActionDao.getBetAction(newId).isPresent());
         assertFalse(betActionDao.getBetAction(BET_ID).isPresent());
     }

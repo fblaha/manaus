@@ -40,6 +40,16 @@ public class BetActionDao extends GenericHibernateDao<BetAction, Integer> {
                 Optional.empty(), Optional.of("actionDate"));
     }
 
+    @Transactional
+    public int updateBetId(String oldOne, String newOne, String marketId, long selectionId) {
+        Query query = getSession().getNamedQuery(BetAction.SET_BET_ID);
+        query.setParameter("newOne", newOne);
+        query.setParameter("oldOne", oldOne);
+        query.setParameter("selectionId", selectionId);
+        query.setParameter("marketId", marketId);
+        return query.executeUpdate();
+    }
+
     @Transactional(readOnly = true)
     public Set<String> getBetActionIds(String marketId, OptionalLong selId, Optional<Side> side) {
         List<String> result = listActionQuery(marketId, selId, side, String.class,

@@ -18,6 +18,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,8 +28,12 @@ import java.util.OptionalInt;
 import java.util.Set;
 
 @Entity
+@NamedQuery(name = BetAction.SET_BET_ID,
+        query = "update BetAction ba set ba.betId = :newOne where ba.betId = :oldOne and " +
+                "ba.selectionId = :selectionId and ba.market.id = :marketId")
 public class BetAction {
 
+    public static final String SET_BET_ID = "setBetIdQuery";
     public static final String TRADED_VOL_MEAN = "tradedVolumeMean";
     public static final String PROPOSER_PROP = "proposer";
 
