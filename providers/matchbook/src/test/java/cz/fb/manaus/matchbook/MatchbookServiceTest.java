@@ -51,6 +51,7 @@ public class MatchbookServiceTest extends AbstractRemoteTestCase {
 
     @Test
     public void testSettled() throws Exception {
-        service.walkSettlements(Instant.now().minus(1, ChronoUnit.DAYS), System.out::println);
+        service.walkSettledBets(Instant.now().minus(1, ChronoUnit.DAYS),
+                (s, settledBet) -> System.out.println(s + " : " + settledBet));
     }
 }

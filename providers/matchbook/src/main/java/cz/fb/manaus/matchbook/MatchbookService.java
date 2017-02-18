@@ -27,9 +27,10 @@ import cz.fb.manaus.matchbook.rest.Offer;
 import cz.fb.manaus.matchbook.rest.OfferPage;
 import cz.fb.manaus.matchbook.rest.PlaceOffers;
 import cz.fb.manaus.matchbook.rest.PlaceReport;
-import cz.fb.manaus.matchbook.rest.SettledBets;
-import cz.fb.manaus.matchbook.rest.Settlement;
-import cz.fb.manaus.matchbook.rest.SettlementPage;
+import cz.fb.manaus.matchbook.rest.SettledEvent;
+import cz.fb.manaus.matchbook.rest.SettledMarket;
+import cz.fb.manaus.matchbook.rest.SettledPage;
+import cz.fb.manaus.matchbook.rest.SettledSelection;
 import cz.fb.manaus.reactor.betting.BetService;
 import cz.fb.manaus.reactor.betting.action.BetUtils;
 import cz.fb.manaus.reactor.traffic.ExpensiveOperationModerator;
@@ -50,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -244,28 +246,31 @@ public class MatchbookService implements BetService {
         return new AccountMoney(balance.getBalance(), balance.getFreeFunds());
     }
 
-    public List<SettledBet> getSettledBets(long marketId, long selectionId) {
-        ResponseEntity<SettledBets> responseEntity = sessionService.getTemplate()
-                .exchange(endpointManager.oldRest("reports/settlements/{marketId}/runners/{runnerId}"),
-
-                        HttpMethod.GET, null, SettledBets.class, marketId, selectionId);
-        List<cz.fb.manaus.matchbook.rest.SettledBet> bets = checkResponse(responseEntity).getBody().getBets();
-        return from(bets).transform(modelConverter::toModel)
-                // TODO filter by selection does not work
-                .filter(bet -> bet.getSelectionId() == selectionId)
-                .toList();
-    }
-
-    public void walkSettlements(Instant from, Consumer<Settlement> consumer) {
+    public void walkSettledBets(Instant from, BiConsumer<String, SettledBet> consumer) {
         pagedWalk(offset -> getSettlementPage(from, offset),
-                settlementPage -> settlementPage.getMarkets().forEach(consumer));
+                settledPage -> walkSettledPage(settledPage, consumer));
     }
 
-    private SettlementPage getSettlementPage(Instant from, int offset) {
+    private void walkSettledPage(SettledPage page, BiConsumer<String, SettledBet> consumer) {
+        for (SettledEvent event : page.getEvents()) {
+            for (SettledMarket market : event.getMarkets()) {
+                for (SettledSelection selection : market.getSelections()) {
+                    String selectionId = selection.getId();
+                    String selectionName = selection.getName();
+                    for (cz.fb.manaus.matchbook.rest.SettledBet bet : selection.getBets()) {
+                        SettledBet modelBet = modelConverter.toModel(selectionId, selectionName, bet);
+                        consumer.accept(Long.toString(bet.getOfferId()), modelBet);
+                    }
+                }
+            }
+        }
+    }
+
+    private SettledPage getSettlementPage(Instant from, int offset) {
         settledBetsModerator.suspendOnExceeded();
-        ResponseEntity<SettlementPage> responseEntity = sessionService.getTemplate()
+        ResponseEntity<SettledPage> responseEntity = sessionService.getTemplate()
                 .exchange(endpointManager.oldRest("reports/settlements?offset={offset}&after={after}"),
-                        HttpMethod.GET, null, SettlementPage.class, offset, from.getEpochSecond());
+                        HttpMethod.GET, null, SettledPage.class, offset, from.getEpochSecond());
         return checkResponse(responseEntity).getBody();
     }
 

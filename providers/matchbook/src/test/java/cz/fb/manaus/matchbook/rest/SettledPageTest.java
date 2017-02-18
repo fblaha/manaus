@@ -10,16 +10,17 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class SettledMarketTest {
+public class SettledPageTest {
 
     private ObjectMapper mapper = new ObjectMapper();
 
     @Test
-    public void testDeserialize() throws Exception {
-        URL resource = Resources.getResource(this.getClass(), "settlements-runners.json");
-        SettledMarket values = mapper.readValue(resource.openStream(), SettledMarket.class);
+    public void testDeserializeNG() throws Exception {
+        URL resource = Resources.getResource(this.getClass(), "settlements-ng.json");
+        SettledPage values = mapper.readValue(resource.openStream(), SettledPage.class);
         System.out.println("values = " + values);
-        assertThat(values.getRunners().size(), is(3));
-        assertThat(values.getRunners().get(0), instanceOf(SettledRunner.class));
+        assertThat(values.getEvents().size(), is(2));
+        assertThat(values.getEvents().get(0), instanceOf(SettledEvent.class));
     }
+
 }

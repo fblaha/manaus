@@ -1,6 +1,8 @@
 package cz.fb.manaus.matchbook;
 
 import com.google.common.base.CharMatcher;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.Competition;
 import cz.fb.manaus.core.model.EventType;
@@ -78,10 +80,13 @@ public class ModelConverter {
     }
 
 
-    public SettledBet toModel(cz.fb.manaus.matchbook.rest.SettledBet bet) {
-        return new SettledBet(bet.getRunnerId(), bet.getRunnerName(), Double.parseDouble(bet.getProfitAndLoss()),
-                bet.getPlacedAt(), bet.getSettledAt(), new cz.fb.manaus.core.model.Price(
-                Double.parseDouble(bet.getOdds()), Double.parseDouble(bet.getStake()), null));
+    public SettledBet toModel(String selectionId, String selectionName, cz.fb.manaus.matchbook.rest.SettledBet bet) {
+        List<String> parsedId = Splitter.on('_').splitToList(selectionId);
+        Preconditions.checkState(parsedId.size() == 2);
+        return new SettledBet(Long.parseLong(parsedId.get(0)), selectionName, Double.parseDouble(bet.getProfitAndLoss()),
+                // TODO matched vs. placed
+                bet.getMatchedTime(), bet.getSettledTime(), new cz.fb.manaus.core.model.Price(
+                bet.getOdds(), bet.getStake(), parseSide(parsedId.get(1))));
     }
 
 

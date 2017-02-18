@@ -5,32 +5,28 @@ import com.google.common.base.MoreObjects;
 
 import java.util.Date;
 
+
 public class SettledBet {
 
     private long id;
     @JsonProperty("sport-id")
     private long sportId;
-    @JsonProperty("event-id")
-    private long eventId;
-    @JsonProperty("event-name")
-    private String eventName;
-    @JsonProperty("market-id")
-    private long marketId;
-    @JsonProperty("market-type")
-    private String marketType;
-    @JsonProperty("runner-id")
-    private long runnerId;
-    @JsonProperty("runner-name")
-    private String runnerName;
-    private String odds;
-    private String stake;
+    @JsonProperty("offer-id")
+    private long offerId;
+    @JsonProperty("in-play")
+    private boolean inPlay;
+    @JsonProperty("matched-time")
+    private Date matchedTime;
+    @JsonProperty("settled-time")
+    private Date settledTime;
+
+    private double odds;
+    private double stake;
+    private double commission;
+    @JsonProperty("commission-rate")
+    private double commissionRate;
     @JsonProperty("profit-and-loss")
     private String profitAndLoss;
-    @JsonProperty("placed-at")
-    private Date placedAt;
-    @JsonProperty("settled-at")
-    private Date settledAt;
-    private String action;
 
     public long getId() {
         return id;
@@ -48,68 +44,68 @@ public class SettledBet {
         this.sportId = sportId;
     }
 
-    public long getEventId() {
-        return eventId;
+    public long getOfferId() {
+        return offerId;
     }
 
-    public void setEventId(long eventId) {
-        this.eventId = eventId;
+    public void setOfferId(long offerId) {
+        this.offerId = offerId;
     }
 
-    public String getEventName() {
-        return eventName;
+    public boolean getInPlay() {
+        return inPlay;
     }
 
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
+    public void setInPlay(boolean inPlay) {
+        this.inPlay = inPlay;
     }
 
-    public long getMarketId() {
-        return marketId;
+    public Date getMatchedTime() {
+        return matchedTime;
     }
 
-    public void setMarketId(long marketId) {
-        this.marketId = marketId;
+    public void setMatchedTime(Date matchedTime) {
+        this.matchedTime = matchedTime;
     }
 
-    public String getMarketType() {
-        return marketType;
+    public Date getSettledTime() {
+        return settledTime;
     }
 
-    public void setMarketType(String marketType) {
-        this.marketType = marketType;
+    public void setSettledTime(Date settledTime) {
+        this.settledTime = settledTime;
     }
 
-    public long getRunnerId() {
-        return runnerId;
-    }
-
-    public void setRunnerId(long runnerId) {
-        this.runnerId = runnerId;
-    }
-
-    public String getRunnerName() {
-        return runnerName;
-    }
-
-    public void setRunnerName(String runnerName) {
-        this.runnerName = runnerName;
-    }
-
-    public String getOdds() {
+    public double getOdds() {
         return odds;
     }
 
-    public void setOdds(String odds) {
+    public void setOdds(double odds) {
         this.odds = odds;
     }
 
-    public String getStake() {
+    public double getStake() {
         return stake;
     }
 
-    public void setStake(String stake) {
+    public void setStake(double stake) {
         this.stake = stake;
+    }
+
+    public double getCommission() {
+        return commission;
+    }
+
+    public void setCommission(double commission) {
+        this.commission = commission;
+    }
+
+    public double getCommissionRate() {
+        return commissionRate;
+    }
+
+    public void setCommissionRate(double commissionRate) {
+        this.commissionRate = commissionRate;
     }
 
     public String getProfitAndLoss() {
@@ -120,47 +116,20 @@ public class SettledBet {
         this.profitAndLoss = profitAndLoss;
     }
 
-    public Date getPlacedAt() {
-        return placedAt;
-    }
-
-    public void setPlacedAt(Date placedAt) {
-        this.placedAt = placedAt;
-    }
-
-    public Date getSettledAt() {
-        return settledAt;
-    }
-
-    public void setSettledAt(Date settledAt) {
-        this.settledAt = settledAt;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
-
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("sportId", sportId)
-                .add("eventId", eventId)
-                .add("eventName", eventName)
-                .add("marketId", marketId)
-                .add("marketType", marketType)
-                .add("runnerId", runnerId)
-                .add("runnerName", runnerName)
+                .add("offerId", offerId)
+                .add("inPlay", inPlay)
+                .add("matchedTime", matchedTime)
+                .add("settledTime", settledTime)
                 .add("odds", odds)
                 .add("stake", stake)
+                .add("commission", commission)
+                .add("commissionRate", commissionRate)
                 .add("profitAndLoss", profitAndLoss)
-                .add("placedAt", placedAt)
-                .add("settledAt", settledAt)
-                .add("action", action)
                 .toString();
     }
 }

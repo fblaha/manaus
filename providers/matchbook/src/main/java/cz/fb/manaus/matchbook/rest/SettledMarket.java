@@ -6,95 +6,72 @@ import com.google.common.base.MoreObjects;
 import java.util.List;
 
 public class SettledMarket {
-    @JsonProperty("sub-total")
-    private String subTotal;
-    @JsonProperty("odds-type")
-    private String oddsType;
-    @JsonProperty("total-stake")
-    private String totalStake;
-    @JsonProperty("commission-credit")
-    private String commissionCredit;
-    private String commission;
-    @JsonProperty("total-profit-and-loss")
-    private String totalProfitAndLoss;
-    private String currency;
-    private List<SettledRunner> runners;
+    private long id;
+    private String name;
+    private double commission;
+    @JsonProperty("profit-and-loss")
+    private String profitAndLoss;
+    private double stake;
 
-    public String getSubTotal() {
-        return subTotal;
+    private List<SettledSelection> selections;
+
+    public long getId() {
+        return id;
     }
 
-    public void setSubTotal(String subTotal) {
-        this.subTotal = subTotal;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public String getOddsType() {
-        return oddsType;
+    public String getName() {
+        return name;
     }
 
-    public void setOddsType(String oddsType) {
-        this.oddsType = oddsType;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getTotalStake() {
-        return totalStake;
-    }
-
-    public void setTotalStake(String totalStake) {
-        this.totalStake = totalStake;
-    }
-
-    public List<SettledRunner> getRunners() {
-        return runners;
-    }
-
-    public void setRunners(List<SettledRunner> runners) {
-        this.runners = runners;
-    }
-
-    public String getCommissionCredit() {
-        return commissionCredit;
-    }
-
-    public void setCommissionCredit(String commissionCredit) {
-        this.commissionCredit = commissionCredit;
-    }
-
-    public String getCommission() {
+    public double getCommission() {
         return commission;
     }
 
-    public void setCommission(String commission) {
+    public void setCommission(double commission) {
         this.commission = commission;
     }
 
-    public String getTotalProfitAndLoss() {
-        return totalProfitAndLoss;
+    public String getProfitAndLoss() {
+        return profitAndLoss;
     }
 
-    public void setTotalProfitAndLoss(String totalProfitAndLoss) {
-        this.totalProfitAndLoss = totalProfitAndLoss;
+    public void setProfitAndLoss(String profitAndLoss) {
+        this.profitAndLoss = profitAndLoss;
     }
 
-    public String getCurrency() {
-        return currency;
+    public double getStake() {
+        return stake;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setStake(double stake) {
+        this.stake = stake;
+    }
+
+    public List<SettledSelection> getSelections() {
+        return selections;
+    }
+
+    public void setSelections(List<SettledSelection> selections) {
+        this.selections = selections;
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("subTotal", subTotal)
-                .add("oddsType", oddsType)
-                .add("totalStake", totalStake)
-                .add("runners", runners)
-                .add("commissionCredit", commissionCredit)
+                .add("id", id)
+                .add("name", name)
                 .add("commission", commission)
-                .add("totalProfitAndLoss", totalProfitAndLoss)
-                .add("currency", currency)
+                .add("profitAndLoss", profitAndLoss)
+                .add("stake", stake)
+                .add("selections", selections)
                 .toString();
     }
 }
