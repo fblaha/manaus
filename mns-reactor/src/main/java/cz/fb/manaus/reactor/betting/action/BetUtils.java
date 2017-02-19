@@ -6,19 +6,13 @@ import com.google.common.collect.Ordering;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
-import cz.fb.manaus.core.model.SettledBet;
-import org.apache.commons.math3.util.Precision;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
@@ -56,17 +50,6 @@ public class BetUtils {
         return Splitter.on(',').omitEmptyStrings().trimResults().splitToList(proposers);
     }
 
-    public Optional<BetAction> findBestMatchingAction(SettledBet settledBet, double priceEps, List<BetAction> actions) {
-        double price = settledBet.getPrice().getPrice();
-        Instant placed = settledBet.getPlaced().toInstant();
-
-        Stream<BetAction> current = actions.stream()
-                .filter(a -> a.getSelectionId() == settledBet.getSelectionId())
-                .filter(a -> Precision.equals(a.getPrice().getPrice(), price, priceEps));
-
-        return current.min(Comparator.comparing(a -> Duration.between(a.getActionDate().toInstant(), placed).abs()));
-    }
-
     public List<Bet> filterDuplicates(List<Bet> bets) {
         List<Bet> result = new LinkedList<>();
         for (Collection<Bet> theSameBets : Multimaps.index(bets, Bet::getBetId).asMap().values()) {
@@ -74,7 +57,5 @@ public class BetUtils {
         }
         return result;
     }
-
-
 
 }

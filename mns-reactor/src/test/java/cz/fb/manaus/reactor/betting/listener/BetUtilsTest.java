@@ -5,7 +5,6 @@ import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.Price;
-import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import cz.fb.manaus.reactor.betting.action.BetUtils;
@@ -24,7 +23,6 @@ import static com.google.common.collect.Iterables.size;
 import static cz.fb.manaus.core.test.CoreTestFactory.DRAW;
 import static cz.fb.manaus.core.test.CoreTestFactory.MARKET_ID;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -74,17 +72,6 @@ public class BetUtilsTest extends AbstractLocalTestCase {
         when(bet.getBetId()).thenReturn("1");
         assertThat(betUtils.getUnknownBets(Collections.singletonList(bet), Collections.singleton("1")).size(), is(0));
         assertThat(betUtils.getUnknownBets(Collections.singletonList(bet), Collections.singleton("2")).size(), is(1));
-    }
-
-    @Test
-    public void testFindAction() throws Exception {
-        Price price = new Price(3d, 30d, Side.BACK);
-        BetAction place = new BetAction(BetActionType.UPDATE, DateUtils.addMinutes(new Date(), -120), price, null, DRAW);
-        BetAction update = new BetAction(BetActionType.UPDATE, DateUtils.addMinutes(new Date(), -60), price, null, DRAW);
-
-        SettledBet settledBet = new SettledBet(DRAW, "Draw", 5d, new Date(), new Date(), price);
-        assertThat(betUtils.findBestMatchingAction(settledBet, 0.001, Arrays.asList(place, update)).get(), sameInstance(update));
-        assertThat(betUtils.findBestMatchingAction(settledBet, 0.001, Arrays.asList(place)).get(), sameInstance(place));
     }
 
     @Test
