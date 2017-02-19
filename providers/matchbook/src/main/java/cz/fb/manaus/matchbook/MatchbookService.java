@@ -27,10 +27,7 @@ import cz.fb.manaus.matchbook.rest.Offer;
 import cz.fb.manaus.matchbook.rest.OfferPage;
 import cz.fb.manaus.matchbook.rest.PlaceOffers;
 import cz.fb.manaus.matchbook.rest.PlaceReport;
-import cz.fb.manaus.matchbook.rest.SettledEvent;
-import cz.fb.manaus.matchbook.rest.SettledMarket;
 import cz.fb.manaus.matchbook.rest.SettledPage;
-import cz.fb.manaus.matchbook.rest.SettledSelection;
 import cz.fb.manaus.reactor.betting.BetService;
 import cz.fb.manaus.reactor.betting.action.BetUtils;
 import cz.fb.manaus.reactor.traffic.ExpensiveOperationModerator;
@@ -252,25 +249,16 @@ public class MatchbookService implements BetService {
     }
 
     private void walkSettledPage(SettledPage page, BiConsumer<String, SettledBet> consumer) {
-        for (SettledEvent event : page.getEvents()) {
-            for (SettledMarket market : event.getMarkets()) {
-                for (SettledSelection selection : market.getSelections()) {
-                    String selectionId = selection.getId();
-                    String selectionName = selection.getName();
-                    for (cz.fb.manaus.matchbook.rest.SettledBet bet : selection.getBets()) {
-                        SettledBet modelBet = modelConverter.toModel(selectionId, selectionName, bet);
-                        consumer.accept(Long.toString(bet.getOfferId()), modelBet);
-                    }
-                }
-            }
+        for (Map.Entry<String, SettledBet> bet : modelConverter.toModel(page).entrySet()) {
+            consumer.accept(bet.getKey(), bet.getValue());
         }
     }
 
     private SettledPage getSettlementPage(Instant from, int offset) {
         settledBetsModerator.suspendOnExceeded();
         ResponseEntity<SettledPage> responseEntity = sessionService.getTemplate()
-                .exchange(endpointManager.oldRest("reports/settlements?offset={offset}&after={after}"),
-                        HttpMethod.GET, null, SettledPage.class, offset, from.getEpochSecond());
+                .exchange(endpointManager.rest("reports/v1/bets/settled?offset={offset}&after={after}"),
+                        HttpMethod.GET, null, SettledPage.class, offset, from);
         return checkResponse(responseEntity).getBody();
     }
 

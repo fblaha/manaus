@@ -3,6 +3,7 @@ package cz.fb.manaus.matchbook;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableMap;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.Competition;
 import cz.fb.manaus.core.model.EventType;
@@ -18,11 +19,16 @@ import cz.fb.manaus.matchbook.rest.MetaTag;
 import cz.fb.manaus.matchbook.rest.Offer;
 import cz.fb.manaus.matchbook.rest.Price;
 import cz.fb.manaus.matchbook.rest.Runner;
+import cz.fb.manaus.matchbook.rest.SettledEvent;
+import cz.fb.manaus.matchbook.rest.SettledMarket;
+import cz.fb.manaus.matchbook.rest.SettledPage;
+import cz.fb.manaus.matchbook.rest.SettledSelection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -80,7 +86,24 @@ public class ModelConverter {
     }
 
 
-    public SettledBet toModel(String selectionId, String selectionName, cz.fb.manaus.matchbook.rest.SettledBet bet) {
+    public Map<String, SettledBet> toModel(SettledPage page) {
+        ImmutableMap.Builder<String, SettledBet> builder = ImmutableMap.builder();
+        for (SettledEvent event : page.getEvents()) {
+            for (SettledMarket market : event.getMarkets()) {
+                for (SettledSelection selection : market.getSelections()) {
+                    String selectionId = selection.getId();
+                    String selectionName = selection.getName();
+                    for (cz.fb.manaus.matchbook.rest.SettledBet bet : selection.getBets()) {
+                        String offerId = Long.toString(bet.getOfferId());
+                        builder.put(offerId, toModel(selectionId, selectionName, bet));
+                    }
+                }
+            }
+        }
+        return builder.build();
+    }
+
+    private SettledBet toModel(String selectionId, String selectionName, cz.fb.manaus.matchbook.rest.SettledBet bet) {
         List<String> parsedId = Splitter.on('_').splitToList(selectionId);
         Preconditions.checkState(parsedId.size() == 2);
         return new SettledBet(Long.parseLong(parsedId.get(0)), selectionName, Double.parseDouble(bet.getProfitAndLoss()),
