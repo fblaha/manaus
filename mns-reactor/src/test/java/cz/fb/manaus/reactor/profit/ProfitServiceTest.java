@@ -42,18 +42,18 @@ public class ProfitServiceTest extends AbstractProfitTest {
 
     @Test
     public void testSingleSelection() throws Exception {
-        SettledBet lay = new SettledBet(CoreTestFactory.DRAW, "The Draw", 5d, marketDate, marketDate, new Price(2d, 4d, Side.LAY));
-        SettledBet back = new SettledBet(CoreTestFactory.DRAW, "The Draw", -4.5d, marketDate, marketDate, new Price(2.2d, 3.5d, Side.BACK));
+        SettledBet lay = new SettledBet(CoreTestFactory.DRAW, "The Draw", 5d, marketDate, new Price(2d, 4d, Side.LAY));
+        SettledBet back = new SettledBet(CoreTestFactory.DRAW, "The Draw", -4.5d, marketDate, new Price(2.2d, 3.5d, Side.BACK));
         setBetAction(lay, back);
         checkRecords(0.47d, null, lay, back);
     }
 
     @Test
     public void testMultiSelection() throws Exception {
-        SettledBet layDraw = new SettledBet(CoreTestFactory.DRAW, "The Draw", 5d, marketDate, marketDate, new Price(2d, 4d, Side.LAY));
-        SettledBet backDraw = new SettledBet(CoreTestFactory.DRAW, "The Draw", -4.9d, marketDate, marketDate, new Price(2.2d, 3.5d, Side.BACK));
-        SettledBet layHome = new SettledBet(CoreTestFactory.HOME, "Home", 5d, marketDate, marketDate, new Price(2d, 4d, Side.LAY));
-        SettledBet backHome = new SettledBet(CoreTestFactory.HOME, "Home", -4.1d, marketDate, marketDate, new Price(2.2d, 3.5d, Side.BACK));
+        SettledBet layDraw = new SettledBet(CoreTestFactory.DRAW, "The Draw", 5d, marketDate, new Price(2d, 4d, Side.LAY));
+        SettledBet backDraw = new SettledBet(CoreTestFactory.DRAW, "The Draw", -4.9d, marketDate, new Price(2.2d, 3.5d, Side.BACK));
+        SettledBet layHome = new SettledBet(CoreTestFactory.HOME, "Home", 5d, marketDate, new Price(2d, 4d, Side.LAY));
+        SettledBet backHome = new SettledBet(CoreTestFactory.HOME, "Home", -4.1d, marketDate, new Price(2.2d, 3.5d, Side.BACK));
         setBetAction(layDraw, backDraw, layHome, backHome);
         checkRecords(0.935d, of("selectionRegexp_draw", 0.067), layHome, backHome, layDraw, backDraw);
     }
@@ -62,9 +62,9 @@ public class ProfitServiceTest extends AbstractProfitTest {
     @Test
     public void testRealBackWin() throws Exception {
 //22263	2012-04-26 15:37:47.0	2012-04-26 06:11:23.0	6.4	    2.14	1	-7.3	47973	Over 2.5 Goals	105524600	105524600	RUS	2012-04-26 16:00:00.0	1524.3	Over/Under 2.5 goals	26837433
-        SettledBet lay = new SettledBet(CoreTestFactory.DRAW, "Over 2.5 Goals", -7.3, marketDate, marketDate, new Price(2.14d, 6.4d, Side.LAY));
+        SettledBet lay = new SettledBet(CoreTestFactory.DRAW, "Over 2.5 Goals", -7.3, marketDate, new Price(2.14d, 6.4d, Side.LAY));
 //22264	2012-04-26 15:53:26.0	2012-04-26 15:53:07.0	5.44	2.34	0	7.29	47973	Over 2.5 Goals	105524600	105524600	RUS	2012-04-26 16:00:00.0	1524.3	Over/Under 2.5 goals	26837433
-        SettledBet back = new SettledBet(CoreTestFactory.DRAW, "Over 2.5 Goals", 7.29d, marketDate, marketDate, new Price(2.34d, 5.44d, Side.BACK));
+        SettledBet back = new SettledBet(CoreTestFactory.DRAW, "Over 2.5 Goals", 7.29d, marketDate, new Price(2.34d, 5.44d, Side.BACK));
         setBetAction(lay, back);
         checkRecords(-0.01d, null, lay, back);
     }
@@ -79,12 +79,12 @@ public class ProfitServiceTest extends AbstractProfitTest {
 
     private SettledBet createKamazBack() {
         //22256	2012-04-26 12:40:33.0	2012-04-26 12:14:07.0	4.22	2.98	0	-4.22	2460921	Kamaz	105486372	105486372	RUS	2012-04-26 16:00:00.0	4314.43	Match Odds	26836220
-        return new SettledBet(CoreTestFactory.DRAW, "Kamaz", -4.22, marketDate, marketDate, new Price(2.98d, 4.22d, Side.BACK));
+        return new SettledBet(CoreTestFactory.DRAW, "Kamaz", -4.22, marketDate, new Price(2.98d, 4.22d, Side.BACK));
     }
 
     private SettledBet createKamazLay() {
         //22255	2012-04-26 06:56:08.0	2012-04-26 02:00:51.0	5.27	2.92	1	5.27	2460921	Kamaz	105486372	105486372	RUS	2012-04-26 16:00:00.0	4314.43	Match Odds	26836220
-        return new SettledBet(CoreTestFactory.DRAW, "Kamaz", 5.27, marketDate, marketDate, new Price(2.92d, 5.27d, Side.LAY));
+        return new SettledBet(CoreTestFactory.DRAW, "Kamaz", 5.27, marketDate, new Price(2.92d, 5.27d, Side.LAY));
     }
 
     @Test
@@ -138,10 +138,12 @@ public class ProfitServiceTest extends AbstractProfitTest {
 
     @Test
     public void testGetProfitRecords() throws Exception {
-        SettledBet bet1 = new SettledBet(CoreTestFactory.HOME, "The Draw", 5d, addDays(marketDate, -1),
+        SettledBet bet1 = new SettledBet(CoreTestFactory.HOME, "The Draw", 5d,
                 addDays(marketDate, 1), new Price(2d, 4d, Side.LAY));
-        SettledBet bet2 = new SettledBet(CoreTestFactory.HOME, "The Draw", -2d, addHours(marketDate, -1),
+        bet1.setPlaced(addDays(marketDate, -1));
+        SettledBet bet2 = new SettledBet(CoreTestFactory.HOME, "The Draw", -2d,
                 addDays(marketDate, 1), new Price(2d, 5d, Side.BACK));
+        bet2.setPlaced(addHours(marketDate, -1));
         setBetAction(bet1, bet2);
         List<ProfitRecord> records = profitService.getProfitRecords(asList(bet1, bet2), empty(), true, empty(),
                 provider.getChargeRate());

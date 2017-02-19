@@ -87,7 +87,7 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
         marketDao.saveOrUpdate(market);
         Date actionDate = Date.from(Instant.now().minus(1, ChronoUnit.HOURS));
         BetAction action = createAndSaveBetAction(market, actionDate, PROPS, BET_ID);
-        SettledBet bet = new SettledBet(action.getSelectionId(), "x", 5, actionDate, now, action.getPrice());
+        SettledBet bet = new SettledBet(action.getSelectionId(), "x", 5, now, action.getPrice());
         bet.setBetAction(action);
         settledBetDao.saveOrUpdate(bet);
     }

@@ -35,13 +35,13 @@ public class MarketChargeTest extends AbstractLocalTestCase {
      * 16:36	 Qualifying Matches Bozoljac v Hernych / Match Odds / Jan Hernych       Lay	 	 1.53	2.00	Lost	(1.06)	 	1,296.83
      */
     private SettledBet back1 = mockAction(
-            new SettledBet(SEL1, "Ilia Bozoljac", -2d, current, current, new Price(2.98d, 2d, Side.BACK)), "1");
+            new SettledBet(SEL1, "Ilia Bozoljac", -2d, current, new Price(2.98d, 2d, Side.BACK)), "1");
     private SettledBet lay1 = mockAction(
-            new SettledBet(SEL1, "Ilia Bozoljac", 2d, current, current, new Price(2.6d, 2d, Side.LAY)), "2");
+            new SettledBet(SEL1, "Ilia Bozoljac", 2d, current, new Price(2.6d, 2d, Side.LAY)), "2");
     private SettledBet back2 = mockAction(
-            new SettledBet(SEL2, "Jan Hernych", 1.26d, current, current, new Price(1.63d, 2d, Side.BACK)), "3");
+            new SettledBet(SEL2, "Jan Hernych", 1.26d, current, new Price(1.63d, 2d, Side.BACK)), "3");
     private SettledBet lay2 = mockAction(
-            new SettledBet(SEL2, "Jan Hernych", -1.06d, current, current, new Price(1.53d, 2d, Side.LAY)), "4");
+            new SettledBet(SEL2, "Jan Hernych", -1.06d, current, new Price(1.53d, 2d, Side.LAY)), "4");
 
     private SettledBet mockAction(SettledBet bet, String betId) {
         BetAction mock = mock(BetAction.class);

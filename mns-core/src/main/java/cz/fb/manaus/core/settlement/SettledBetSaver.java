@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,21 +46,30 @@ public class SettledBetSaver {
     }
 
     private void validate(SettledBet bet) {
-        Date betDate = bet.getPlaced();
-        Date actionDate = bet.getBetAction().getActionDate();
-        Date openDate = bet.getBetAction().getMarket().getEvent().getOpenDate();
-        long latency = actionDate.toInstant().until(betDate.toInstant(), ChronoUnit.SECONDS);
-        if (latency > 30) {
-            log.log(Level.WARNING, "Too big latency for ''{0}''", bet);
-        }
-        if (betDate.after(openDate)) {
-            log.log(Level.SEVERE, "Placed after open date ''{0}''", bet);
-        }
+        validateTimes(bet);
+        validatePrice(bet);
+    }
+
+    private void validatePrice(SettledBet bet) {
         Price requestedPrice = bet.getBetAction().getPrice();
         Price price = bet.getPrice();
         if (!Price.priceEq(requestedPrice.getPrice(), price.getPrice())) {
             log.log(Level.WARNING, "Different requested price ''{0}''", bet);
         }
+    }
+
+    private void validateTimes(SettledBet bet) {
+        Optional.ofNullable(bet.getPlaced()).ifPresent(placed -> {
+            Date actionDate = bet.getBetAction().getActionDate();
+            Date openDate = bet.getBetAction().getMarket().getEvent().getOpenDate();
+            long latency = actionDate.toInstant().until(placed.toInstant(), ChronoUnit.SECONDS);
+            if (latency > 30) {
+                log.log(Level.WARNING, "Too big latency for ''{0}''", bet);
+            }
+            if (placed.after(openDate)) {
+                log.log(Level.SEVERE, "Placed after open date ''{0}''", bet);
+            }
+        });
     }
 
 

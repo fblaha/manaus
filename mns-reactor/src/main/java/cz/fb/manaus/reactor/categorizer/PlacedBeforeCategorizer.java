@@ -5,6 +5,7 @@ import cz.fb.manaus.core.model.SettledBet;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Component
 public class PlacedBeforeCategorizer extends AbstractBeforeCategorizer {
@@ -17,7 +18,7 @@ public class PlacedBeforeCategorizer extends AbstractBeforeCategorizer {
 
     @Override
     protected Date getDate(SettledBet settledBet) {
-        return settledBet.getPlaced();
+        return Optional.ofNullable(settledBet.getPlaced()).orElse(settledBet.getBetAction().getActionDate());
     }
 
 }

@@ -133,8 +133,9 @@ public class BetContext {
 
     public SettledBet simulateSettledBet() {
         BetAction action = createBetAction();
-        SettledBet bet = new SettledBet(action.getSelectionId(), null, 0d, action.getActionDate(), null, action.getPrice());
+        SettledBet bet = new SettledBet(action.getSelectionId(), null, 0d, null, action.getPrice());
         bet.setBetAction(action);
+        bet.setPlaced(action.getActionDate());
         return bet;
     }
 

@@ -31,8 +31,11 @@ public class SettledBet {
     @Column(nullable = false)
     private double profitAndLoss;
 
-    @Column(nullable = false)
+    @Column
     private Date placed;
+
+    @Column
+    private Date matched;
 
     @Column(nullable = false)
     private Date settled;
@@ -45,11 +48,10 @@ public class SettledBet {
     private BetAction betAction;
 
 
-    public SettledBet(long selectionId, String selectionName, double profitAndLoss, Date placed, Date settled, Price price) {
+    public SettledBet(long selectionId, String selectionName, double profitAndLoss, Date settled, Price price) {
         this.selectionId = selectionId;
         this.selectionName = selectionName;
         this.profitAndLoss = profitAndLoss;
-        this.placed = placed;
         this.settled = settled;
         this.price = price;
     }
@@ -83,6 +85,18 @@ public class SettledBet {
 
     public Date getPlaced() {
         return placed;
+    }
+
+    public void setPlaced(Date placed) {
+        this.placed = placed;
+    }
+
+    public Date getMatched() {
+        return matched;
+    }
+
+    public void setMatched(Date matched) {
+        this.matched = matched;
     }
 
     public Date getSettled() {

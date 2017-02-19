@@ -27,7 +27,7 @@ public class SettledBetSaverTest extends AbstractDaoTest {
     }
 
     private SettledBet createAction() {
-        return new SettledBet(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME, 5, new Date(), new Date(), new Price(3, 3, Side.LAY));
+        return new SettledBet(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME, 5, new Date(), new Price(3, 3, Side.LAY));
     }
 
 }

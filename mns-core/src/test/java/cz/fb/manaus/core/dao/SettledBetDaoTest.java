@@ -35,7 +35,7 @@ public class SettledBetDaoTest extends AbstractDaoTest {
         Market market = newMarket(MARKET_ID, curr, CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);
         BetAction fooAction = createAndSaveBetAction(market, curr, PROPS, "foo");
-        SettledBet settledBet = new SettledBet(555, CoreTestFactory.DRAW_NAME, 5d, curr,
+        SettledBet settledBet = new SettledBet(555, CoreTestFactory.DRAW_NAME, 5d,
                 curr, new Price(3d, 5d, Side.LAY));
         settledBet.setBetAction(fooAction);
         settledBetDao.saveOrUpdate(settledBet);
@@ -93,10 +93,10 @@ public class SettledBetDaoTest extends AbstractDaoTest {
         marketDao.saveOrUpdate(market);
         BetAction fooAction = createAndSaveBetAction(market, new Date(), PROPS, "foo");
         BetAction barAction = createAndSaveBetAction(market, new Date(), PROPS, "bar");
-        SettledBet fooBet = new SettledBet(555, CoreTestFactory.DRAW_NAME, 5d, new Date(),
+        SettledBet fooBet = new SettledBet(555, CoreTestFactory.DRAW_NAME, 5d,
                 new Date(), new Price(3d, 5d, Side.LAY));
         fooBet.setBetAction(fooAction);
-        SettledBet barBet = new SettledBet(556, CoreTestFactory.DRAW_NAME, 5d, new Date(),
+        SettledBet barBet = new SettledBet(556, CoreTestFactory.DRAW_NAME, 5d,
                 new Date(), new Price(3d, 5d, Side.LAY));
         barBet.setBetAction(barAction);
         settledBetDao.saveOrUpdate(fooBet);
@@ -110,7 +110,7 @@ public class SettledBetDaoTest extends AbstractDaoTest {
         Market market = newMarket(MARKET_ID, new Date(), CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);
         BetAction fooAction = createAndSaveBetAction(market, new Date(), PROPS, BET_ID);
-        SettledBet settledBet = new SettledBet(555, CoreTestFactory.DRAW_NAME, 5d, new Date(),
+        SettledBet settledBet = new SettledBet(555, CoreTestFactory.DRAW_NAME, 5d,
                 new Date(), new Price(3d, 5d, Side.LAY));
         settledBet.setBetAction(fooAction);
         settledBetDao.saveOrUpdate(settledBet);

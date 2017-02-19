@@ -113,7 +113,7 @@ public class CoreTestFactory {
     }
 
     public static SettledBet newSettledBet(double price, Side side) {
-        SettledBet bet = new SettledBet(CoreTestFactory.HOME, "Home", 2d, DateUtils.addDays(new Date(), -1), new Date(), new Price(price, 2d, side));
+        SettledBet bet = new SettledBet(CoreTestFactory.HOME, "Home", 2d, new Date(), new Price(price, 2d, side));
         Market market = newMarket();
         BetAction action = newBetAction("1", market);
         action.setMarketPrices(CoreTestFactory.newMarketPrices(market));

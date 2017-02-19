@@ -106,10 +106,11 @@ public class ModelConverter {
     private SettledBet toModel(String selectionId, String selectionName, cz.fb.manaus.matchbook.rest.SettledBet bet) {
         List<String> parsedId = Splitter.on('_').splitToList(selectionId);
         Preconditions.checkState(parsedId.size() == 2);
-        return new SettledBet(Long.parseLong(parsedId.get(0)), selectionName, Double.parseDouble(bet.getProfitAndLoss()),
-                // TODO matched vs. placed
-                bet.getMatchedTime(), bet.getSettledTime(), new cz.fb.manaus.core.model.Price(
+        SettledBet result = new SettledBet(Long.parseLong(parsedId.get(0)), selectionName, Double.parseDouble(bet.getProfitAndLoss()),
+                bet.getSettledTime(), new cz.fb.manaus.core.model.Price(
                 bet.getOdds(), bet.getStake(), parseSide(parsedId.get(1))));
+        result.setMatched(bet.getMatchedTime());
+        return result;
     }
 
 

@@ -219,9 +219,11 @@ public class BetfairFacade implements BetService {
         } else {
             throw new IllegalStateException();
         }
-        return new SettledBet(selectionId, legacyData.getSelectionName(),
-                statement.getAmount(), legacyData.getPlacedDate(), statement.getItemDate(),
+        SettledBet result = new SettledBet(selectionId, legacyData.getSelectionName(),
+                statement.getAmount(), statement.getItemDate(),
                 new Price(legacyData.getAvgPrice(), legacyData.getBetSize(), side));
+        result.setPlaced(legacyData.getPlacedDate());
+        return result;
     }
 
     public Map<String, MarketSnapshot> getSnapshot(Set<String> marketIds) {
