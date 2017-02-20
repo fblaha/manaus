@@ -210,9 +210,9 @@ public class MatchbookService implements BetService {
                 new HttpEntity<>(offers), PlaceReport.class);
         String result[] = new String[bets.size()];
         PlaceReport report = checkResponse(responseEntity).getBody();
-
-        AccountMoney accountMoney = new AccountMoney(report.getBalance(), report.getAvailableAmount());
-        accountMoneyRegistry.register(accountMoney);
+        // TODO fix it
+        // AccountMoney accountMoney = new AccountMoney(report.getBalance(), report.getAvailableAmount());
+        // accountMoneyRegistry.register(accountMoney);
         for (Offer offer : report.getOffers()) {
             int index = update ? indices.get(offer.getId()) : (int) offer.getTempId();
             result[index] = Long.toString(offer.getId());
