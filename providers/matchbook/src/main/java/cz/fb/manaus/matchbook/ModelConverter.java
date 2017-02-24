@@ -102,8 +102,12 @@ public class ModelConverter {
                         SettledBet modelBet = toModel(selectionId, selectionName, bet);
                         // TODO handle this correctly
                         if (result.containsKey(offerId)) {
+                            SettledBet partialMatch = result.get(offerId);
                             log.log(Level.WARNING, "The same offer ID ''{0}'' and ''{1}''",
-                                    new Object[]{result.get(offerId), modelBet});
+                                    new Object[]{partialMatch, modelBet});
+                            if (partialMatch.getPrice().getAmount() > modelBet.getPrice().getAmount()) {
+                                modelBet = partialMatch;
+                            }
                         }
                         result.put(offerId, modelBet);
                     }
