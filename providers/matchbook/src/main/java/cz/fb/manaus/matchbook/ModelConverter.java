@@ -3,7 +3,6 @@ package cz.fb.manaus.matchbook;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableMap;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.Competition;
 import cz.fb.manaus.core.model.EventType;
@@ -26,14 +25,19 @@ import cz.fb.manaus.matchbook.rest.SettledSelection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Component
 public class ModelConverter {
+
+    private static final Logger log = Logger.getLogger(ModelConverter.class.getSimpleName());
 
     @Autowired
     private ExchangeProvider provider;
@@ -87,7 +91,7 @@ public class ModelConverter {
 
 
     public Map<String, SettledBet> toModel(SettledPage page) {
-        ImmutableMap.Builder<String, SettledBet> builder = ImmutableMap.builder();
+        Map<String, SettledBet> result = new LinkedHashMap<>();
         for (SettledEvent event : page.getEvents()) {
             for (SettledMarket market : event.getMarkets()) {
                 for (SettledSelection selection : market.getSelections()) {
@@ -95,12 +99,18 @@ public class ModelConverter {
                     String selectionName = selection.getName();
                     for (cz.fb.manaus.matchbook.rest.SettledBet bet : selection.getBets()) {
                         String offerId = Long.toString(bet.getOfferId());
-                        builder.put(offerId, toModel(selectionId, selectionName, bet));
+                        SettledBet modelBet = toModel(selectionId, selectionName, bet);
+                        // TODO handle this correctly
+                        if (result.containsKey(offerId)) {
+                            log.log(Level.WARNING, "The same offer ID ''{0}'' and ''{1}''",
+                                    new Object[]{result.get(offerId), modelBet});
+                        }
+                        result.put(offerId, modelBet);
                     }
                 }
             }
         }
-        return builder.build();
+        return result;
     }
 
     private SettledBet toModel(String selectionId, String selectionName, cz.fb.manaus.matchbook.rest.SettledBet bet) {
