@@ -12,7 +12,7 @@ public class PlacedFunction implements ProgressFunction {
 
     @Override
     public OptionalDouble function(SettledBet bet) {
-        Instant placed = bet.getPlaced().toInstant();
+        Instant placed = bet.getPlacedOrActionDate().toInstant();
         Instant openDate = bet.getBetAction().getMarket().getEvent().getOpenDate().toInstant();
         double minutes = placed.until(openDate, ChronoUnit.MINUTES);
         return OptionalDouble.of(minutes / 60d);

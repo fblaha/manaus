@@ -8,13 +8,16 @@ import java.time.temporal.ChronoUnit;
 import java.util.OptionalDouble;
 
 @Component
-public class TimeDiffFunction implements ProgressFunction {
+public class MatchedDelayFunction implements ProgressFunction {
 
     @Override
     public OptionalDouble function(SettledBet bet) {
         Instant placed = bet.getPlacedOrActionDate().toInstant();
-        Instant actionDate = bet.getBetAction().getActionDate().toInstant();
-        return OptionalDouble.of(actionDate.until(placed, ChronoUnit.SECONDS));
+        if (bet.getMatched() != null) {
+            Instant matched = bet.getMatched().toInstant();
+            return OptionalDouble.of((double) placed.until(matched, ChronoUnit.SECONDS));
+        }
+        return OptionalDouble.empty();
     }
 
 }

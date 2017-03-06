@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import java.util.Date;
+import java.util.Optional;
 
 
 @Entity
@@ -109,6 +110,10 @@ public class SettledBet {
 
     public void setBetAction(BetAction betAction) {
         this.betAction = betAction;
+    }
+
+    public Date getPlacedOrActionDate() {
+        return Optional.ofNullable(placed).orElse(betAction.getActionDate());
     }
 
     @Override
