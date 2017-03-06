@@ -15,7 +15,7 @@ public class MatchedDelayFunction implements ProgressFunction {
         Instant placed = bet.getPlacedOrActionDate().toInstant();
         if (bet.getMatched() != null) {
             Instant matched = bet.getMatched().toInstant();
-            return OptionalDouble.of((double) placed.until(matched, ChronoUnit.SECONDS));
+            return OptionalDouble.of((double) placed.until(matched, ChronoUnit.MINUTES));
         }
         return OptionalDouble.empty();
     }
