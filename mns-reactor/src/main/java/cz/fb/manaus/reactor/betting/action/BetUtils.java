@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.betting.action;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.Multimaps;
 import com.google.common.collect.Ordering;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
@@ -19,6 +18,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Iterables.getFirst;
 import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.groupingBy;
 
 @Component
 public class BetUtils {
@@ -52,7 +52,7 @@ public class BetUtils {
 
     public List<Bet> filterDuplicates(List<Bet> bets) {
         List<Bet> result = new LinkedList<>();
-        for (Collection<Bet> theSameBets : Multimaps.index(bets, Bet::getBetId).asMap().values()) {
+        for (Collection<Bet> theSameBets : bets.stream().collect(groupingBy(Bet::getBetId)).values()) {
             result.add(theSameBets.stream().max(Comparator.comparingDouble(Bet::getMatchedAmount)).get());
         }
         return result;

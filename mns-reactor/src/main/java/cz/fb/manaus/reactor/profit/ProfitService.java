@@ -1,8 +1,6 @@
 package cz.fb.manaus.reactor.profit;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Multimaps;
 import cz.fb.manaus.core.category.BetCoverage;
 import cz.fb.manaus.core.category.CategoryService;
 import cz.fb.manaus.core.model.ProfitRecord;
@@ -23,6 +21,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Maps.transformValues;
 import static com.google.common.collect.Ordering.from;
 import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.groupingBy;
 
 
 @Service
@@ -42,11 +41,11 @@ public class ProfitService {
             bets = categoryService.filterBets(bets, projection.get(), checkNotNull(namespace), coverage);
         }
 
-        Iterable<ProfitRecord> betRecords = computeProfitRecords(bets, simulationAwareOnly,
+        List<ProfitRecord> betRecords = computeProfitRecords(bets, simulationAwareOnly,
                 checkNotNull(namespace), charges, coverage);
 
-        ListMultimap<String, ProfitRecord> byCategory = Multimaps.index(betRecords, ProfitRecord::getCategory);
-        Map<String, ProfitRecord> result = transformValues(byCategory.asMap(), this::mergeProfitRecords);
+        Map<String, List<ProfitRecord>> byCategory = betRecords.stream().collect(groupingBy(ProfitRecord::getCategory));
+        Map<String, ProfitRecord> result = transformValues(byCategory, this::mergeProfitRecords);
         return from(comparing(ProfitRecord::getCategory)).immutableSortedCopy(result.values());
     }
 
@@ -70,8 +69,8 @@ public class ProfitService {
         return result;
     }
 
-    private Iterable<ProfitRecord> computeProfitRecords(List<SettledBet> bets, boolean simulationAwareOnly,
-                                                        Optional<String> namespace, Map<String, Double> charges, BetCoverage coverage) {
+    private List<ProfitRecord> computeProfitRecords(List<SettledBet> bets, boolean simulationAwareOnly,
+                                                    Optional<String> namespace, Map<String, Double> charges, BetCoverage coverage) {
         return bets.parallelStream().flatMap(bet -> {
             Set<String> categories = categoryService.getSettledBetCategories(bet, simulationAwareOnly, namespace, coverage);
             return categories.stream().map(category -> {
