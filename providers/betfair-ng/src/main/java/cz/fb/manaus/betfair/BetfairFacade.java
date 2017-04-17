@@ -3,7 +3,6 @@ package cz.fb.manaus.betfair;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import cz.fb.manaus.betfair.rest.AccountFunds;
@@ -55,13 +54,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Predicates.not;
 import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Maps.transformValues;
-import static com.google.common.collect.Maps.uniqueIndex;
 import static cz.fb.manaus.betfair.rest.MarketCountAware.split;
 import static java.lang.Math.abs;
 import static java.util.stream.Collectors.toSet;
@@ -182,16 +183,19 @@ public class BetfairFacade implements BetService {
     public List<String> placeBets(List<Bet> bets) {
         transactionLogger.incrementBy(bets.size(), true);
         PlaceExecutionReport report = service.placeBets(bets);
-        return from(report.getInstructionReports()).transform(PlaceInstructionReport::getBetId).toList();
+        return report.getInstructionReports().stream()
+                .map(PlaceInstructionReport::getBetId)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<String> updateBets(List<Bet> newBets) {
         transactionLogger.incrementBy(newBets.size(), false);
         ReplaceExecutionReport report = service.replaceBets(newBets);
-        return from(report.getInstructionReports())
-                .transform(ReplaceInstructionReport::getPlaceInstructionReport)
-                .transform(PlaceInstructionReport::getBetId).toList();
+        return report.getInstructionReports().stream()
+                .map(ReplaceInstructionReport::getPlaceInstructionReport)
+                .map(PlaceInstructionReport::getBetId)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -201,9 +205,10 @@ public class BetfairFacade implements BetService {
 
     public Map<String, SettledBet> getSettledBets(int head, int count) {
         AccountStatementReport accountStatement = service.getAccountStatement(head, count);
-        Iterable<AccountStatement> statements = from(accountStatement.getAccountStatement())
-                .filter(s -> s.getLegacyData().getWinLose().isSignificant());
-        Map<String, AccountStatement> byRefId = uniqueIndex(statements, AccountStatement::getRefId);
+        Map<String, AccountStatement> byRefId = accountStatement.getAccountStatement()
+                .stream()
+                .filter(s -> s.getLegacyData().getWinLose().isSignificant())
+                .collect(Collectors.toMap(AccountStatement::getRefId, Function.identity()));
         Map<String, SettledBet> result = transformValues(byRefId, this::toSettledBet);
         return ImmutableMap.copyOf(result);
     }
@@ -227,15 +232,16 @@ public class BetfairFacade implements BetService {
     }
 
     public Map<String, MarketSnapshot> getSnapshot(Set<String> marketIds) {
-        List<MarketBook> marketBooks = from(service.listMarketBooks(marketIds))
-                .filter(book -> book.getStatus() == MarketStatus.OPEN).toList();
-        ImmutableMap<String, MarketBook> byId = uniqueIndex(marketBooks, MarketBook::getMarketId);
+        Map<String, MarketBook> byId = service.listMarketBooks(marketIds).stream()
+                .filter(book -> book.getStatus() == MarketStatus.OPEN)
+                .collect(Collectors.toMap(MarketBook::getMarketId, Function.identity()));
         return transformValues(byId, this::toSnapshot);
     }
 
     private MarketSnapshot toSnapshot(MarketBook book) {
         List<cz.fb.manaus.betfair.rest.Runner> runners = book.getRunners();
-        ImmutableList<RunnerPrices> runnerPrices = from(runners).transform(this::toRunnerPrices).toList();
+        List<RunnerPrices> runnerPrices = runners.stream().map(this::toRunnerPrices)
+                .collect(Collectors.toList());
         List<Bet> currentBets = new LinkedList<>();
         for (cz.fb.manaus.betfair.rest.Runner runner : runners) {
             List<Order> orders = runner.getOrders();
@@ -268,16 +274,16 @@ public class BetfairFacade implements BetService {
 
     private RunnerPrices toRunnerPrices(cz.fb.manaus.betfair.rest.Runner runner) {
         ExchangePrices exchangePrices = runner.getEx();
-        FluentIterable<Price> prices = from(exchangePrices.getAvailableToLay())
-                .transform(size -> new Price(size.getPrice(), size.getSize(), Side.LAY))
-                .append(from(exchangePrices.getAvailableToBack())
-                        .transform(size -> new Price(size.getPrice(), size.getSize(), Side.BACK)));
+        List<Price> prices = Stream.concat(exchangePrices.getAvailableToLay().stream()
+                        .map(size -> new Price(size.getPrice(), size.getSize(), Side.LAY)),
+                exchangePrices.getAvailableToBack().stream()
+                        .map(size -> new Price(size.getPrice(), size.getSize(), Side.BACK)))
+                .collect(Collectors.toList());
         Double totalMatched = runner.getTotalMatched();
         if (totalMatched == null) {
             totalMatched = 0d;
         }
-
-        return new RunnerPrices(runner.getSelectionId(), prices.toList(), totalMatched, runner.getLastPriceTraded());
+        return new RunnerPrices(runner.getSelectionId(), prices, totalMatched, runner.getLastPriceTraded());
     }
 
 }
