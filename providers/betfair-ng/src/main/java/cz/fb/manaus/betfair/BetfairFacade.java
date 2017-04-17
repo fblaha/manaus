@@ -3,7 +3,6 @@ package cz.fb.manaus.betfair;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import cz.fb.manaus.betfair.rest.AccountFunds;
 import cz.fb.manaus.betfair.rest.AccountStatement;
@@ -54,7 +53,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -62,7 +60,6 @@ import java.util.stream.Stream;
 
 import static com.google.common.base.Predicates.not;
 import static com.google.common.collect.FluentIterable.from;
-import static com.google.common.collect.Maps.transformValues;
 import static cz.fb.manaus.betfair.rest.MarketCountAware.split;
 import static java.lang.Math.abs;
 import static java.util.stream.Collectors.toSet;
@@ -205,12 +202,10 @@ public class BetfairFacade implements BetService {
 
     public Map<String, SettledBet> getSettledBets(int head, int count) {
         AccountStatementReport accountStatement = service.getAccountStatement(head, count);
-        Map<String, AccountStatement> byRefId = accountStatement.getAccountStatement()
+        return accountStatement.getAccountStatement()
                 .stream()
                 .filter(s -> s.getLegacyData().getWinLose().isSignificant())
-                .collect(Collectors.toMap(AccountStatement::getRefId, Function.identity()));
-        Map<String, SettledBet> result = transformValues(byRefId, this::toSettledBet);
-        return ImmutableMap.copyOf(result);
+                .collect(Collectors.toMap(AccountStatement::getRefId, this::toSettledBet));
     }
 
     private SettledBet toSettledBet(AccountStatement statement) {
@@ -232,10 +227,9 @@ public class BetfairFacade implements BetService {
     }
 
     public Map<String, MarketSnapshot> getSnapshot(Set<String> marketIds) {
-        Map<String, MarketBook> byId = service.listMarketBooks(marketIds).stream()
+        return service.listMarketBooks(marketIds).stream()
                 .filter(book -> book.getStatus() == MarketStatus.OPEN)
-                .collect(Collectors.toMap(MarketBook::getMarketId, Function.identity()));
-        return transformValues(byId, this::toSnapshot);
+                .collect(Collectors.toMap(MarketBook::getMarketId, this::toSnapshot));
     }
 
     private MarketSnapshot toSnapshot(MarketBook book) {
