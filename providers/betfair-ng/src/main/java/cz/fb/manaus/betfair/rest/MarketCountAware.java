@@ -3,17 +3,19 @@ package cz.fb.manaus.betfair.rest;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.google.common.collect.FluentIterable.from;
+import java.util.stream.Collectors;
 
 public interface MarketCountAware {
     int MARKET_LIMIT = 100;
 
-    static <T extends MarketCountAware> List<List<T>> split(Iterable<T> countAwareList) {
+    static <T extends MarketCountAware> List<List<T>> split(List<T> countAwareList) {
         int sum = 0;
         List<List<T>> result = new LinkedList<>();
         List<T> current = new LinkedList<>();
-        for (T countAware : from(countAwareList).filter(cntAware -> cntAware.getMarketCount() <= MARKET_LIMIT)) {
+        List<T> smallMarkets = countAwareList.stream().
+                filter(cntAware -> cntAware.getMarketCount() <= MARKET_LIMIT).
+                collect(Collectors.toList());
+        for (T countAware : smallMarkets) {
             if (sum + countAware.getMarketCount() > MARKET_LIMIT) {
                 result.add(current);
                 current = new LinkedList<>();
@@ -25,9 +27,9 @@ public interface MarketCountAware {
             }
         }
         if (!current.isEmpty()) result.add(current);
-        for (T countAware : from(countAwareList).filter(cntAware -> cntAware.getMarketCount() > MARKET_LIMIT)) {
-            result.add(Collections.singletonList(countAware));
-        }
+        countAwareList.stream()
+                .filter(MarketCountAware::isOverLimit)
+                .forEach(countAware -> result.add(Collections.singletonList(countAware)));
         return result;
     }
 
