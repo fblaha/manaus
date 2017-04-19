@@ -3,9 +3,8 @@ package cz.fb.manaus.matchbook;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Predicates;
+import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -50,10 +49,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Strings.nullToEmpty;
-import static com.google.common.collect.FluentIterable.from;
 
 @Service
 public class MatchbookService implements BetService {
@@ -100,22 +99,27 @@ public class MatchbookService implements BetService {
 
     private void processEventPage(EventPage eventPage, Consumer<MarketSnapshot> consumer) {
         ListMultimap<String, Bet> bets = LinkedListMultimap.create();
-        List<Event> events = from(eventPage.getEvents())
+        Predicate<Event> runningFlag = Event::isInRunningFlag;
+        List<Event> events = eventPage.getEvents().stream()
                 .filter(e -> e.getMetaTags() != null)
-                .filter(Predicates.not(Event::isInRunningFlag))
-                .toList();
+                .filter(runningFlag.negate())
+                .collect(Collectors.toList());
         if (!events.isEmpty()) {
-            ImmutableList<Long> eventIds = from(events).transform(Event::getId).toList();
+            List<Long> eventIds = events.stream().map(Event::getId)
+                    .collect(Collectors.toList());
             List<Offer> offers = getOffers(eventIds);
-            List<Bet> rawBets = from(offers).transform(modelConverter::toModel).toList();
+            List<Bet> rawBets = offers.stream().map(modelConverter::toModel)
+                    .collect(Collectors.toList());
             List<Bet> genuineBets = betUtils.filterDuplicates(rawBets);
             for (Bet bet : genuineBets) {
                 bets.put(bet.getMarketId(), bet);
             }
 
             for (Event event : events) {
-                FluentIterable<Market> markets = from(event.getMarkets())
-                        .filter(Predicates.not(Market::isInRunningFlag));
+                Predicate<Market> marketRunningFlag = Market::isInRunningFlag;
+                List<Market> markets = event.getMarkets().stream()
+                        .filter(marketRunningFlag.negate())
+                        .collect(Collectors.toList());
                 for (Market market : markets) {
                     MarketPrices marketPrices = modelConverter.toModel(event, market);
                     MarketSnapshot marketSnapshot = new MarketSnapshot(marketPrices,
