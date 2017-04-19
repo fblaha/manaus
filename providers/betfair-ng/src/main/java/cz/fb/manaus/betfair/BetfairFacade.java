@@ -2,7 +2,6 @@ package cz.fb.manaus.betfair;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
 import cz.fb.manaus.betfair.rest.AccountFunds;
 import cz.fb.manaus.betfair.rest.AccountStatement;
@@ -58,10 +57,9 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Predicates.not;
-import static com.google.common.collect.FluentIterable.from;
 import static cz.fb.manaus.betfair.rest.MarketCountAware.split;
 import static java.lang.Math.abs;
+import static java.util.stream.Collectors.partitioningBy;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.math3.util.Precision.round;
 
@@ -92,18 +90,12 @@ public class BetfairFacade implements BetService {
     }
 
     public void walkMarkets(Date from, Date to, Consumer<Market> consumer) {
-        FluentIterable<EventTypeResult> typeResults = from(service.listEventTypes());
         log.log(Level.INFO, "Allowed event types ''{0}''", eventTypes);
-        typeResults = typeResults.filter(type -> {
-            String name = type.getEventType().getName().toLowerCase();
-            boolean result = eventTypes.contains(name);
-            if (!result) {
-                log.log(Level.INFO, "Excluded event types ''{0}''", name);
-            }
-            return result;
-        });
+        Map<Boolean, List<EventTypeResult>> typeResults = service.listEventTypes().stream()
+                .filter(this::filterEventTypes)
+                .collect(partitioningBy(EventTypeResult::isOverLimit));
 
-        for (List<EventTypeResult> results : split(typeResults.filter(not(MarketCountAware::isOverLimit)))) {
+        for (List<EventTypeResult> results : split(typeResults.get(false))) {
             results.forEach(result -> log.log(Level.INFO, "Processing small event type ''{0}''", result));
             Set<String> typeIds = results.stream()
                     .map(EventTypeResult::getEventType)
@@ -112,7 +104,7 @@ public class BetfairFacade implements BetService {
             List<MarketCatalogue> marketCatalogues = service.listMarkets(typeIds, Collections.emptySet(), from, to);
             marketCatalogues.stream().map(this::toMarket).forEach(consumer);
         }
-        for (EventTypeResult result : typeResults.filter(MarketCountAware::isOverLimit)) {
+        for (EventTypeResult result : typeResults.get(true)) {
             log.log(Level.INFO, "Processing big event type ''{0}''", result);
             Set<String> eventTypesIds = Collections.singleton(result.getEventType().getId());
             List<EventResult> allEvents = service.listEvents(eventTypesIds, from, to);
@@ -129,6 +121,15 @@ public class BetfairFacade implements BetService {
                 catalogues.stream().map(this::toMarket).forEach(consumer);
             }
         }
+    }
+
+    private boolean filterEventTypes(EventTypeResult type) {
+        String name = type.getEventType().getName().toLowerCase();
+        boolean result = eventTypes.contains(name);
+        if (!result) {
+            log.log(Level.INFO, "Excluded event types ''{0}''", name);
+        }
+        return result;
     }
 
     private List<MarketCatalogue> getMarketCatalogues(Date from, Date to, Set<String> eventTypesIds, Set<String> eventIds) {
