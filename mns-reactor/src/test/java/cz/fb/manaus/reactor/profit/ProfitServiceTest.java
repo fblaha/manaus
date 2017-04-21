@@ -1,7 +1,5 @@
 package cz.fb.manaus.reactor.profit;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import cz.fb.manaus.core.MarketCategories;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.ProfitRecord;
@@ -24,6 +22,8 @@ import static com.google.common.collect.ImmutableMap.of;
 import static com.google.common.collect.Iterables.find;
 import static java.util.Arrays.asList;
 import static java.util.Optional.empty;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.lang3.time.DateUtils.addDays;
 import static org.apache.commons.lang3.time.DateUtils.addHours;
 import static org.hamcrest.core.Is.is;
@@ -128,7 +128,7 @@ public class ProfitServiceTest extends AbstractProfitTest {
         assertThat(all.getLayCount(), is(layCount));
         assertThat(all.getTotalCount(), is(layCount + backCount));
         if (otherProfits != null) {
-            ImmutableMap<String, ProfitRecord> byCategory = byCategory(result);
+            Map<String, ProfitRecord> byCategory = byCategory(result);
             for (Map.Entry<String, Double> entry : otherProfits.entrySet()) {
                 ProfitRecord record = byCategory.get(entry.getKey());
                 assertEquals(entry.getValue(), record.getProfit(), 0.0001d);
@@ -168,8 +168,8 @@ public class ProfitServiceTest extends AbstractProfitTest {
 
     }
 
-    private ImmutableMap<String, ProfitRecord> byCategory(List<ProfitRecord> records) {
-        return Maps.uniqueIndex(records, ProfitRecord::getCategory);
+    private Map<String, ProfitRecord> byCategory(List<ProfitRecord> records) {
+        return records.stream().collect(toMap(ProfitRecord::getCategory, identity()));
     }
 
     @Test

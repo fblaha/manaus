@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.profit.progress;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.Maps;
 import cz.fb.manaus.core.category.BetCoverage;
 import cz.fb.manaus.core.category.CategoryService;
 import cz.fb.manaus.core.model.ProfitRecord;
@@ -25,6 +24,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Ordering.from;
 import static java.util.Collections.singletonList;
 import static java.util.Comparator.comparing;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 
 abstract public class AbstractFunctionProfitService {
     private final Map<String, ProgressFunction> functions;
@@ -37,7 +38,7 @@ abstract public class AbstractFunctionProfitService {
 
 
     public AbstractFunctionProfitService(List<ProgressFunction> functions) {
-        this.functions = Maps.uniqueIndex(functions, ProgressFunction::getName);
+        this.functions = functions.stream().collect(toMap(ProgressFunction::getName, identity()));
     }
 
     protected List<ProfitRecord> getProfitRecords(FunctionProfitRecordCalculator calculator, List<SettledBet> bets,

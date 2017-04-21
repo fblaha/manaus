@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.price;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Range;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.Price;
@@ -17,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -67,7 +68,8 @@ public class AbstractPriceFilterTest extends AbstractLocalTestCase {
             Price bestBack = runnerPrices.getHomogeneous(Side.BACK).getBestPrice().get();
             Price bestLay = runnerPrices.getHomogeneous(Side.LAY).getBestPrice().get();
             List<Price> filteredPrices = this.filter.filter(runnerPrices.getPrices());
-            Map<Side, Price> bySide = Maps.uniqueIndex(filteredPrices, Price::getSide);
+            Map<Side, Price> bySide = filteredPrices.stream()
+                    .collect(toMap(Price::getSide, identity()));
             assertThat(bestBack, is(bySide.get(Side.BACK)));
             assertThat(bestLay, is(bySide.get(Side.LAY)));
         }
