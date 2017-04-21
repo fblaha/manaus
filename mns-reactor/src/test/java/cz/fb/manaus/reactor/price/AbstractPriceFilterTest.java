@@ -17,6 +17,7 @@ import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -67,7 +68,8 @@ public class AbstractPriceFilterTest extends AbstractLocalTestCase {
         for (RunnerPrices runnerPrices : market.getRunnerPrices()) {
             Price bestBack = runnerPrices.getHomogeneous(Side.BACK).getBestPrice().get();
             Price bestLay = runnerPrices.getHomogeneous(Side.LAY).getBestPrice().get();
-            List<Price> filteredPrices = this.filter.filter(runnerPrices.getPrices());
+            List<Price> prices = runnerPrices.getPrices().stream().collect(toList());
+            List<Price> filteredPrices = this.filter.filter(prices);
             Map<Side, Price> bySide = filteredPrices.stream()
                     .collect(toMap(Price::getSide, identity()));
             assertThat(bestBack, is(bySide.get(Side.BACK)));

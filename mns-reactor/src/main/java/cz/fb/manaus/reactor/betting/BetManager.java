@@ -24,7 +24,6 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpStatusCodeException;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,6 +36,7 @@ import java.util.logging.Logger;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Lists.transform;
 import static com.google.common.collect.Ordering.from;
+import static java.util.stream.Collectors.toList;
 
 @Lazy
 @DatabaseComponent
@@ -147,7 +147,7 @@ public class BetManager {
     private void filterPrices(MarketPrices marketPrices) {
         if (priceFilter.isPresent()) {
             for (RunnerPrices runnerPrices : marketPrices.getRunnerPrices()) {
-                Collection<Price> prices = runnerPrices.getPrices();
+                List<Price> prices = runnerPrices.getPrices().stream().collect(toList());
                 List<Price> filtered = priceFilter.get().filter(prices);
                 runnerPrices.setPrices(filtered);
             }
