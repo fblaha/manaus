@@ -8,7 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.OptionalDouble;
 
-import static com.google.common.collect.FluentIterable.from;
+import static java.util.stream.Collectors.toList;
+
 
 public class TradedVolume {
     public static final TradedVolume EMPTY = new TradedVolume(Collections.emptyList());
@@ -23,8 +24,8 @@ public class TradedVolume {
         if (volume.isEmpty()) {
             return OptionalDouble.empty();
         } else {
-            List<Double> prices = from(volume).transform(Price::getPrice).toList();
-            List<Double> amounts = from(volume).transform(Price::getAmount).toList();
+            List<Double> prices = volume.stream().map(Price::getPrice).collect(toList());
+            List<Double> amounts = volume.stream().map(Price::getAmount).collect(toList());
             return OptionalDouble.of(new Mean().evaluate(Doubles.toArray(prices), Doubles.toArray(amounts)));
         }
     }

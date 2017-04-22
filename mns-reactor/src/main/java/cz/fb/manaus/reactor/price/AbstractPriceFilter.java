@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static com.google.common.collect.FluentIterable.from;
-import static com.google.common.collect.ImmutableList.copyOf;
-import static com.google.common.collect.Iterables.concat;
+import java.util.stream.Stream;
 
 public abstract class AbstractPriceFilter {
 
@@ -38,9 +35,9 @@ public abstract class AbstractPriceFilter {
         List<Price> sortedLay = PriceComparator.ORDERING.immutableSortedCopy(bySide.get(Side.LAY));
         List<Price> bulldozedBack = bulldozer.bulldoze(bulldozeThreshold, sortedBack);
         List<Price> bulldozedLay = bulldozer.bulldoze(bulldozeThreshold, sortedLay);
-        List<Price> topBack = from(bulldozedBack).limit(minCount).toList();
-        List<Price> topLay = from(bulldozedLay).limit(minCount).toList();
-        return copyOf(concat(topBack, topLay));
+        Stream<Price> topBack = bulldozedBack.stream().limit(minCount);
+        Stream<Price> topLay = bulldozedLay.stream().limit(minCount);
+        return Stream.concat(topBack, topLay).collect(Collectors.toList());
     }
 
 

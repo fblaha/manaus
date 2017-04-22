@@ -15,10 +15,10 @@ import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Iterables.getFirst;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class BetUtils {
@@ -43,7 +43,7 @@ public class BetUtils {
     }
 
     public List<Bet> getUnknownBets(List<Bet> bets, Set<String> myBets) {
-        return from(bets).filter(bet -> !myBets.contains(bet.getBetId())).toList();
+        return bets.stream().filter(bet -> !myBets.contains(bet.getBetId())).collect(toList());
     }
 
     public List<String> parseProposers(String proposers) {

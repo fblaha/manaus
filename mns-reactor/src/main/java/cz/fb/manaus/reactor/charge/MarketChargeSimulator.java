@@ -13,15 +13,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.google.common.collect.FluentIterable.from;
-
 @Component
 public class MarketChargeSimulator {
 
 
     public double getChargeMean(int winnerCount, double chargeRate, Map<Long, Double> probabilities, ListMultimap<Long, Price> bets) {
         Set<Long> selections = probabilities.keySet();
-        Iterable<Set<Long>> winnerPowerSet = getWinnersPowerSet(winnerCount, selections);
+        List<Set<Long>> winnerPowerSet = getWinnersPowerSet(winnerCount, selections);
         double chargeMean = 0;
         for (Set<Long> winners : winnerPowerSet) {
             double probability = getProbability(winners, probabilities);
@@ -76,11 +74,11 @@ public class MarketChargeSimulator {
         }
     }
 
-    private Iterable<Set<Long>> getWinnersPowerSet(int winnerCount, Set<Long> selections) {
+    private List<Set<Long>> getWinnersPowerSet(int winnerCount, Set<Long> selections) {
         if (winnerCount == 0) {
             return selections.stream().map(Collections::singleton).collect(Collectors.toList());
         }
-        return from(Sets.powerSet(selections)).filter(w -> w.size() == winnerCount);
+        return Sets.powerSet(selections).stream().filter(w -> w.size() == winnerCount).collect(Collectors.toList());
     }
 
 }

@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-import static com.google.common.collect.Collections2.transform;
 
 @Component
 public class MarketRegexpCategorizer extends AbstractRegexpResolver implements SettledBetCategorizer, Categorizer {
@@ -46,8 +46,10 @@ public class MarketRegexpCategorizer extends AbstractRegexpResolver implements S
 
     Set<String> getCategories(String marketName, String eventName) {
         Set<String> result = new HashSet<>();
-        result.addAll(transform(getCategories(marketName, MATCH_MAP), this::addPrefix));
-        result.addAll(transform(getCategories(eventName, EVENT_MAP), this::addPrefix));
+        result.addAll(getCategories(marketName, MATCH_MAP).stream()
+                .map(this::addPrefix).collect(Collectors.toList()));
+        result.addAll(getCategories(eventName, EVENT_MAP).stream()
+                .map(this::addPrefix).collect(Collectors.toList()));
         return result;
     }
 

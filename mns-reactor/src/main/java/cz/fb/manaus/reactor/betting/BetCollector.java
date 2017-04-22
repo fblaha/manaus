@@ -8,11 +8,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.collect.Lists.transform;
 import static java.util.stream.Stream.concat;
 
 public class BetCollector {
@@ -69,7 +69,8 @@ public class BetCollector {
 
     private void callHandlersInternal(List<String> ids, List<BetCommand> betCommands) {
         checkState(ids.size() == betCommands.size());
-        List<Consumer<String>> handlers = transform(betCommands, BetCommand::getBetIdHandler);
+        List<Consumer<String>> handlers = betCommands.stream().map(BetCommand::getBetIdHandler)
+                .collect(Collectors.toList());
         checkState(ids.size() == handlers.size());
         for (int i = 0; i < ids.size(); i++) {
             Consumer<String> handler = handlers.get(i);

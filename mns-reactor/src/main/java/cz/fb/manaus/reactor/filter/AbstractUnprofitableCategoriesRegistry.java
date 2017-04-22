@@ -45,7 +45,6 @@ import java.util.stream.Stream;
 
 import static com.google.common.base.Splitter.on;
 import static com.google.common.base.Suppliers.memoizeWithExpiration;
-import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Iterables.find;
 import static com.google.common.collect.Sets.intersection;
 import static java.util.Comparator.comparingDouble;
@@ -211,7 +210,9 @@ abstract public class AbstractUnprofitableCategoriesRegistry implements Namespac
         if (Strings.isNullOrEmpty(filterPrefix)) {
             return profitRecords;
         } else {
-            return from(profitRecords).filter(r -> r.getCategory().startsWith(filterPrefix)).toList();
+            return profitRecords.stream()
+                    .filter(r -> r.getCategory().startsWith(filterPrefix))
+                    .collect(toList());
         }
     }
 

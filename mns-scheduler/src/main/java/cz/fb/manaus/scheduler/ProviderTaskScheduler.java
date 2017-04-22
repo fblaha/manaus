@@ -3,8 +3,6 @@ package cz.fb.manaus.scheduler;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.Ordering;
 import cz.fb.manaus.core.provider.ExchangeProvider;
 import cz.fb.manaus.core.provider.ProviderConfigurationValidator;
@@ -41,8 +39,9 @@ public class ProviderTaskScheduler {
 
     @Autowired
     public ProviderTaskScheduler(List<ProviderTask> tasks) {
-        ImmutableMultiset<String> names = FluentIterable.from(tasks).transform(ProviderTask::getName).toMultiset();
-        Preconditions.checkState(names.size() == names.elementSet().size(), names);
+        long distinctCount = tasks.stream().map(ProviderTask::getName).distinct().count();
+        long count = tasks.stream().map(ProviderTask::getName).count();
+        Preconditions.checkState(count == distinctCount);
         this.tasks = TASK_ORDERING.immutableSortedCopy(tasks);
     }
 

@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Predicates.not;
-import static com.google.common.collect.FluentIterable.from;
 
 @Service
 public class ValidationService {
@@ -44,8 +44,9 @@ public class ValidationService {
         return ValidationResult.of(results.stream().allMatch(ValidationResult::isSuccess));
     }
 
-    public ValidationResult validate(BetContext context, Iterable<Validator> validators) {
-        List<Validator> filteredValidators = from(validators).filter(createPredicate(context)).toList();
+    public ValidationResult validate(BetContext context, List<Validator> validators) {
+        List<Validator> filteredValidators = validators.stream()
+                .filter(createPredicate(context)).collect(Collectors.toList());
         Preconditions.checkState(!filteredValidators.isEmpty());
 
         Optional<Price> newPrice = context.getNewPrice();

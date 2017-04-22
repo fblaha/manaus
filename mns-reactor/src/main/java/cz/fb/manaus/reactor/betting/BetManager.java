@@ -34,7 +34,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.collect.Lists.transform;
 import static com.google.common.collect.Ordering.from;
 import static java.util.stream.Collectors.toList;
 
@@ -131,12 +130,14 @@ public class BetManager {
                 List<BetCommand> toPlace = collector.getToPlace();
                 if (!previewMode) {
                     if (!toPlace.isEmpty()) {
-                        List<String> ids = betService.placeBets(transform(toPlace, BetCommand::getNewBet));
+                        List<Bet> bets = toPlace.stream().map(BetCommand::getNewBet).collect(toList());
+                        List<String> ids = betService.placeBets(bets);
                         collector.callPlaceHandlers(ids);
                     }
                     List<BetCommand> toUpdate = collector.getToUpdate();
                     if (!toUpdate.isEmpty()) {
-                        List<String> ids = betService.updateBets(transform(toUpdate, BetCommand::getNewBet));
+                        List<Bet> bets = toUpdate.stream().map(BetCommand::getNewBet).collect(toList());
+                        List<String> ids = betService.updateBets(bets);
                         collector.callUpdateHandlers(ids);
                     }
                 }
