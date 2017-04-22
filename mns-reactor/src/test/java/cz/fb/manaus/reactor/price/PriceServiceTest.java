@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.FluentIterable.from;
 import static java.util.Collections.singletonList;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.hamcrest.CoreMatchers.is;
@@ -173,20 +172,21 @@ public class PriceServiceTest extends AbstractLocalTestCase {
                 .boxed().collect(Collectors.toList());
 
         checkOverroundUnfairPrices(reciprocal, winnerCount, Doubles.asList(unfairPrices), overroundPrices);
-        List<Double> fairnessPrices = from(Doubles.asList(unfairPrices))
-                .transform(price -> {
+
+        List<Double> fairnessPrices = DoubleStream.of(unfairPrices)
+                .map(price -> {
                     double fair = priceService.getFairnessFairPrice(price, fairness);
                     assertTrue(price < fair);
                     return fair;
                 })
-                .toList();
-        List<Double> reciprocalPrices = from(Doubles.asList(unfairPrices))
-                .transform(price -> {
+                .boxed().collect(Collectors.toList());
+        List<Double> reciprocalPrices = DoubleStream.of(unfairPrices)
+                .map(price -> {
                     double fair = priceService.getReciprocalFairPrice(price, reciprocal);
                     assertTrue(price < fair);
                     return fair;
                 })
-                .toList();
+                .boxed().collect(Collectors.toList());
         System.out.println("reciprocalPrices = " + reciprocalPrices);
         System.out.println("fairnessPrices = " + fairnessPrices);
         System.out.println("overroundPrices = " + overroundPrices);

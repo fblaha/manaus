@@ -1,7 +1,5 @@
 package cz.fb.manaus.betfair.task;
 
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import cz.fb.manaus.betfair.BetfairFacade;
 import cz.fb.manaus.core.dao.BetActionDao;
@@ -25,6 +23,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.time.DateUtils.addSeconds;
 
 @DatabaseComponent
@@ -41,7 +41,7 @@ public class MarketPriceScanner implements ProviderTask {
     @Autowired
     private BetManager betManager;
 
-    private Map<String, MarketSnapshot> getSnapshots(ImmutableSet<String> ids) {
+    private Map<String, MarketSnapshot> getSnapshots(Set<String> ids) {
         try {
             return betService.getSnapshot(ids);
         } catch (RuntimeException e) {
@@ -74,10 +74,10 @@ public class MarketPriceScanner implements ProviderTask {
         List<Market> allMarkets = marketDao.getMarkets(Optional.of(new Date()), Optional.empty(), OptionalInt.empty());
         int counter = 0;
         for (List<Market> marketGroup : Lists.partition(allMarkets, 6)) {
-            FluentIterable<Market> filter = FluentIterable.from(marketGroup).filter(this::isOk);
-            ImmutableSet<String> ids = filter.transform(Market::getId).toSet();
+            List<Market> filtered = marketGroup.stream().filter(this::isOk).collect(toList());
+            Set<String> ids = filtered.stream().map(Market::getId).collect(toSet());
             Map<String, MarketSnapshot> snapshots = getSnapshots(ids);
-            for (Market market : filter) {
+            for (Market market : filtered) {
                 counter++;
                 if (counter % 50 == 0) {
                     log.log(Level.INFO, getLogPrefix() + "processing ''{0}/{1}''", new Object[]{counter, allMarkets.size()});

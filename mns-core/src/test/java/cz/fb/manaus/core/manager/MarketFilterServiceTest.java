@@ -5,7 +5,6 @@ import cz.fb.manaus.core.service.AbstractMarketDataAwareTestCase;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.google.common.collect.FluentIterable.from;
 import static junit.framework.TestCase.assertTrue;
 
 public class MarketFilterServiceTest extends AbstractMarketDataAwareTestCase {
@@ -14,9 +13,8 @@ public class MarketFilterServiceTest extends AbstractMarketDataAwareTestCase {
 
     @Test
     public void testFilterService() throws Exception {
-        long cnt = from(markets).filter(filterService::accept).size();
+        long cnt = markets.stream().filter(filterService::accept).count();
         assertTrue(Range.closed(1000L, 1500L).contains(cnt));
     }
-
 
 }
