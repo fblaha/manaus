@@ -3,8 +3,6 @@ package cz.fb.manaus.core.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
@@ -26,9 +24,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
+import java.util.stream.Collectors;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.FluentIterable.from;
 import static java.util.Objects.requireNonNull;
 
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
@@ -74,12 +71,12 @@ public class MarketPrices implements SideMixed<MarketPrices> {
 
     @JsonIgnore
     public OptionalDouble getOverround(Side type) {
-        FluentIterable<Optional<Price>> bestPrices = getBestPricesIterable(requireNonNull(type));
-        if (bestPrices.allMatch(Optional::isPresent)) {
-            Preconditions.checkState(bestPrices.allMatch(price -> price.get().getSide() == type));
-            return OptionalDouble.of(getOverround(bestPrices
-                    .transform(Optional::get)
-                    .transform(Price::getPrice).toList()));
+        List<Optional<Price>> bestPrices = getSideBestPrices(requireNonNull(type));
+        if (bestPrices.stream().allMatch(Optional::isPresent)) {
+            Preconditions.checkState(bestPrices.stream().allMatch(price -> price.get().getSide() == type));
+            return OptionalDouble.of(getOverround(bestPrices.stream()
+                    .map(Optional::get).map(Price::getPrice)
+                    .collect(Collectors.toList())));
         }
         return OptionalDouble.empty();
     }
@@ -125,7 +122,9 @@ public class MarketPrices implements SideMixed<MarketPrices> {
         for (RunnerPrices runnerPrices : getRunnerPrices()) {
             if (runnerPrices.getLastMatchedPrice() == null) return OptionalDouble.empty();
         }
-        ImmutableList<Double> prices = from(getRunnerPrices()).transform(RunnerPrices::getLastMatchedPrice).toList();
+        List<Double> prices = getRunnerPrices().stream()
+                .map(RunnerPrices::getLastMatchedPrice)
+                .collect(Collectors.toList());
         return OptionalDouble.of(winnerCount / getOverround(prices));
     }
 
@@ -147,9 +146,9 @@ public class MarketPrices implements SideMixed<MarketPrices> {
     }
 
     public List<OptionalDouble> getBestPrices(Side type) {
-        return getBestPricesIterable(checkNotNull(type))
-                .transform(this::getOptionalPrice)
-                .toList();
+        return getSideBestPrices(requireNonNull(type)).stream()
+                .map(this::getOptionalPrice)
+                .collect(Collectors.toList());
     }
 
     private OptionalDouble getOptionalPrice(Optional<Price> price) {
@@ -160,9 +159,9 @@ public class MarketPrices implements SideMixed<MarketPrices> {
         }
     }
 
-    private FluentIterable<Optional<Price>> getBestPricesIterable(Side type) {
-        return from(getHomogeneous(type).getRunnerPrices())
-                .transform(RunnerPrices::getBestPrice);
+    private List<Optional<Price>> getSideBestPrices(Side type) {
+        return getHomogeneous(type).getRunnerPrices().stream()
+                .map(RunnerPrices::getBestPrice).collect(Collectors.toList());
     }
 
     @Override

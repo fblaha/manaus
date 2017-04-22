@@ -1,7 +1,5 @@
 package cz.fb.manaus.core.model;
 
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -24,6 +22,7 @@ import javax.persistence.NamedQuery;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static cz.fb.manaus.core.model.PriceComparator.ORDERING;
 
@@ -124,7 +123,8 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
 
     @Override
     public RunnerPrices getHomogeneous(Side side) {
-        ImmutableList<Price> prices = FluentIterable.from(this.prices).filter(price -> price.getSide() == side).toList();
+        List<Price> prices = this.prices.stream().filter(price -> price.getSide() == side)
+                .collect(Collectors.toList());
         return new RunnerPrices(getSelectionId(), prices, matchedAmount, lastMatchedPrice);
     }
 

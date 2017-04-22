@@ -1,6 +1,5 @@
 package cz.fb.manaus.core.category;
 
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Table;
 import cz.fb.manaus.core.model.Price;
@@ -23,11 +22,11 @@ public class BetCoverage {
         this.coverage = coverage;
     }
 
-    private static Table<String, Long, List<SettledBet>> buildCoverage(Iterable<SettledBet> settledBets) {
+    private static Table<String, Long, List<SettledBet>> buildCoverage(List<SettledBet> settledBets) {
         ImmutableTable.Builder<String, Long, List<SettledBet>> builder = ImmutableTable.builder();
-        Set<ImmutablePair<String, Long>> coverKeys = FluentIterable.from(settledBets)
-                .transform(BetCoverage::getCoverageKey)
-                .toSet();
+        Set<ImmutablePair<String, Long>> coverKeys = settledBets.stream()
+                .map(BetCoverage::getCoverageKey)
+                .collect(Collectors.toSet());
         coverKeys.forEach(key -> builder.put(key.getLeft(), key.getRight(), new LinkedList<>()));
         Table<String, Long, List<SettledBet>> coverage = builder.build();
         settledBets.forEach(bet -> coverage.get(bet.getBetAction().getMarket().getId(), bet.getSelectionId()).add(bet));
@@ -38,16 +37,17 @@ public class BetCoverage {
         return new ImmutablePair<>(bet.getBetAction().getMarket().getId(), bet.getSelectionId());
     }
 
-    public static BetCoverage from(Iterable<SettledBet> bets) {
+    public static BetCoverage from(List<SettledBet> bets) {
         return new BetCoverage(buildCoverage(bets));
     }
 
     public List<SettledBet> getBets(String marketId, long selectionId, Side side) {
-        FluentIterable<SettledBet> bets = FluentIterable.from(coverage.get(marketId, selectionId));
+        List<SettledBet> bets = coverage.get(marketId, selectionId);
         if (side != null) {
-            bets = bets.filter(bet -> bet.getPrice().getSide() == side);
+            bets = bets.stream().filter(bet -> bet.getPrice().getSide() == side)
+                    .collect(Collectors.toList());
         }
-        return bets.toList();
+        return bets;
     }
 
     public Set<Side> getSides(String marketId, long selectionId) {

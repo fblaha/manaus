@@ -1,6 +1,5 @@
 package cz.fb.manaus.core.category;
 
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import cz.fb.manaus.core.category.categorizer.Categorizer;
 import cz.fb.manaus.core.category.categorizer.NamespaceAware;
@@ -18,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableSet.copyOf;
@@ -57,16 +57,16 @@ final public class CategoryService {
         }).collect(Collectors.toList());
     }
 
-    private <T extends SimulationAware & NamespaceAware> Iterable<T> filterCategorizers(List<T> categorizers,
-                                                                                        boolean simulationAwareOnly,
-                                                                                        Optional<String> namespace) {
+    private <T extends SimulationAware & NamespaceAware> List<T> filterCategorizers(List<T> categorizers,
+                                                                                    boolean simulationAwareOnly,
+                                                                                    Optional<String> namespace) {
         checkNotNull(namespace);
-        FluentIterable<T> filtered = FluentIterable.from(categorizers)
+        Stream<T> filtered = categorizers.stream()
                 .filter(c -> namespace.equals(c.getNamespace()) || c.isGlobal());
         if (simulationAwareOnly) {
-            return filtered.filter(SimulationAware::isSimulationSupported);
+            filtered = filtered.filter(SimulationAware::isSimulationSupported);
         }
-        return filtered;
+        return filtered.collect(Collectors.toList());
     }
 
 }

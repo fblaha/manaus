@@ -1,13 +1,12 @@
 package cz.fb.manaus.reactor.categorizer;
 
-import com.google.common.collect.FluentIterable;
 import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.SettledBet;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.OptionalDouble;
-
-import static com.google.common.collect.FluentIterable.from;
+import java.util.stream.Collectors;
 
 @Component
 public class ActualMatchedCategorizer extends AbstractMatchedCategorizer {
@@ -23,12 +22,13 @@ public class ActualMatchedCategorizer extends AbstractMatchedCategorizer {
 
     @Override
     protected OptionalDouble getAmount(SettledBet bet) {
-        FluentIterable<RunnerPrices> runnerPrices = from(bet.getBetAction().getMarketPrices().getRunnerPrices())
-                .filter(p -> p.getMatchedAmount() != null);
+        List<RunnerPrices> runnerPrices = bet.getBetAction()
+                .getMarketPrices().getRunnerPrices().stream()
+                .filter(p -> p.getMatchedAmount() != null).collect(Collectors.toList());
         if (runnerPrices.isEmpty()) {
             return OptionalDouble.empty();
         } else {
-            return OptionalDouble.of(runnerPrices.toList().stream()
+            return OptionalDouble.of(runnerPrices.stream()
                     .mapToDouble(RunnerPrices::getMatchedAmount)
                     .sum());
         }
