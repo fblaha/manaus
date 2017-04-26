@@ -54,7 +54,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.getFirst;
 import static cz.fb.manaus.betfair.rest.Params.withFilter;
 
 @Service
@@ -184,7 +183,7 @@ public class RestBetfairService {
     private String getMarketId(List<Bet> bets) {
         Set<String> ids = bets.stream().map(Bet::getMarketId).collect(Collectors.toSet());
         Preconditions.checkState(ids.size() == 1);
-        return getFirst(ids, null);
+        return ids.stream().findFirst().orElse(null);
     }
 
     public ReplaceExecutionReport replaceBets(List<Bet> bets) {

@@ -1,7 +1,6 @@
 package cz.fb.manaus.core.dao;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
@@ -254,7 +253,7 @@ public class BetActionDaoTest extends AbstractDaoTest {
     public void testBetActionWithRunnerPrices() {
         Market market = newMarket();
         RunnerPrices runnerPrices = new RunnerPrices(232, ImmutableList.of(new Price(2.3d, 22, Side.BACK)), 5d, 2.5d);
-        MarketPrices marketPrices = new MarketPrices(1, market, Lists.newArrayList(runnerPrices));
+        MarketPrices marketPrices = new MarketPrices(1, market, Arrays.asList(runnerPrices));
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
@@ -270,7 +269,7 @@ public class BetActionDaoTest extends AbstractDaoTest {
     public void testSharedPrices() {
         Market market = newMarket();
         RunnerPrices runnerPrices = new RunnerPrices(232, ImmutableList.of(new Price(2.3d, 22, Side.BACK)), 5d, 2.5d);
-        MarketPrices marketPrices = new MarketPrices(1, market, Lists.newArrayList(runnerPrices));
+        MarketPrices marketPrices = new MarketPrices(1, market, Arrays.asList(runnerPrices));
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);

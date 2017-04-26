@@ -19,7 +19,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.google.common.collect.ImmutableMap.of;
-import static com.google.common.collect.Iterables.find;
 import static java.util.Arrays.asList;
 import static java.util.Optional.empty;
 import static java.util.function.Function.identity;
@@ -120,7 +119,7 @@ public class ProfitServiceTest extends AbstractProfitTest {
         List<SettledBet> betList = Arrays.asList(bets);
         List<ProfitRecord> result = profitService.getProfitRecords(betList, empty(),
                 false, empty(), provider.getChargeRate());
-        ProfitRecord all = find(result, ProfitRecord::isAllCategory);
+        ProfitRecord all = result.stream().filter(ProfitRecord::isAllCategory).findAny().get();
         assertEquals(expectedAllProfit, all.getProfit(), 0.01d);
         int backCount = (int) betList.stream().filter(bet -> bet.getPrice().getSide() == Side.BACK).count();
         int layCount = (int) betList.stream().filter(bet -> bet.getPrice().getSide() == Side.LAY).count();

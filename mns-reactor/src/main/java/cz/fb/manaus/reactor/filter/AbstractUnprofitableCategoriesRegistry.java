@@ -45,7 +45,6 @@ import java.util.stream.Stream;
 
 import static com.google.common.base.Splitter.on;
 import static com.google.common.base.Suppliers.memoizeWithExpiration;
-import static com.google.common.collect.Iterables.find;
 import static com.google.common.collect.Sets.intersection;
 import static java.util.Comparator.comparingDouble;
 import static java.util.Optional.of;
@@ -185,7 +184,8 @@ abstract public class AbstractUnprofitableCategoriesRegistry implements Namespac
     }
 
     void updateBlackLists(List<ProfitRecord> profitRecords) {
-        ProfitRecord all = find(profitRecords, ProfitRecord::isAllCategory);
+        ProfitRecord all = profitRecords.stream().filter(ProfitRecord::isAllCategory)
+                .findAny().get();
         List<ProfitRecord> filtered = getFiltered(profitRecords);
         final int totalCount = all.getTotalCount();
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {

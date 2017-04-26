@@ -1,7 +1,6 @@
 package cz.fb.manaus.core.manager.filter;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import cz.fb.manaus.core.MarketCategories;
 import cz.fb.manaus.core.category.Category;
 import cz.fb.manaus.core.category.categorizer.SportCategorizer;
@@ -24,7 +23,7 @@ public class AbstractFixedCategoryFilterTest extends AbstractMarketDataAwareTest
 
     @Test
     public void testAccept() throws Exception {
-        int size = Iterables.size(markets);
+        int size = markets.size();
         int cnt = 0;
         for (Market market : markets) {
             if (testFilter.test(market)) cnt++;

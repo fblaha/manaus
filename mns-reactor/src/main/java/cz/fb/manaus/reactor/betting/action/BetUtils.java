@@ -15,7 +15,6 @@ import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.collect.Iterables.getFirst;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
@@ -26,7 +25,7 @@ public class BetUtils {
     public List<BetAction> getCurrentActions(List<BetAction> bets) {
         LinkedList<BetAction> lastUpdates = new LinkedList<>();
         if (bets != null) {
-            BetAction first = getFirst(bets, null);
+            BetAction first = bets.get(0);
             for (BetAction bet : bets) {
                 validate(first, bet);
                 if (bet.getBetActionType() != BetActionType.UPDATE) lastUpdates.clear();

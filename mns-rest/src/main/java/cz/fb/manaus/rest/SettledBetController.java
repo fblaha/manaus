@@ -1,7 +1,6 @@
 package cz.fb.manaus.rest;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 import cz.fb.manaus.core.category.BetCoverage;
 import cz.fb.manaus.core.category.CategoryService;
@@ -24,8 +23,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
+import java.util.stream.Collectors;
 
-import static com.google.common.collect.Iterables.filter;
 import static java.util.Optional.empty;
 
 
@@ -90,7 +89,9 @@ public class SettledBetController {
         List<BetAction> previous = betActionDao.getBetActions(head.getMarket().getId(),
                 OptionalLong.of(head.getSelectionId()),
                 Optional.of(head.getPrice().getSide()));
-        previous = Lists.newArrayList(filter(previous, action -> head.getActionDate().after(action.getActionDate())));
+        previous = previous.stream()
+                .filter(action -> head.getActionDate().after(action.getActionDate()))
+                .collect(Collectors.toList());
         previous.forEach(betActionDao::fetchMarketPrices);
         return new BetStory(head, runnerPrices, previous);
     }

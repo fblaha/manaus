@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.Event;
 import cz.fb.manaus.core.model.Market;
@@ -23,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -126,7 +126,7 @@ public class ReactorTestFactory {
         RunnerPrices home = newRP(CoreTestFactory.HOME, betBack, bestLay, lastMatched);
         RunnerPrices draw = newRP(CoreTestFactory.DRAW, betBack, bestLay, lastMatched);
         RunnerPrices away = newRP(CoreTestFactory.AWAY, betBack, bestLay, lastMatched);
-        return new MarketPrices(winnerCount, market, Lists.newArrayList(home, draw, away));
+        return new MarketPrices(winnerCount, market, Arrays.asList(home, draw, away));
     }
 
     public MarketPrices createMarket(double downgradeFraction, List<Double> probabilities) {

@@ -1,7 +1,6 @@
 package cz.fb.manaus.core.test;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.dao.MarketPricesDao;
@@ -98,7 +97,7 @@ public class CoreTestFactory {
 
     public static MarketPrices newMarketPrices(int winnerCount, double bestBackPrice) {
         Market market = newMarket();
-        List<RunnerPrices> runnerPrices = Lists.newArrayList(
+        List<RunnerPrices> runnerPrices = Arrays.asList(
                 newBackRP(bestBackPrice, 1, 2.5d),
                 newBackRP(bestBackPrice, 2, 2.5d),
                 newBackRP(bestBackPrice, 3, 2.5d));

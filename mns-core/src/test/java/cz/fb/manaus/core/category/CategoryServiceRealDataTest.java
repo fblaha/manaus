@@ -2,7 +2,6 @@ package cz.fb.manaus.core.category;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
 import cz.fb.manaus.core.MarketCategories;
@@ -109,7 +108,7 @@ public class CategoryServiceRealDataTest extends AbstractMarketDataAwareTestCase
     }
 
     private void checkCategory(String category, String mustContainLower) {
-        int size = Iterables.size(markets);
+        int size = markets.size();
         int count = getCategoryCount(category, mustContainLower);
         System.out.println("size = " + size);
         System.out.println("count = " + count);

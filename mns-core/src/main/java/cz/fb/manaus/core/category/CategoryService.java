@@ -1,6 +1,5 @@
 package cz.fb.manaus.core.category;
 
-import com.google.common.collect.Iterables;
 import cz.fb.manaus.core.category.categorizer.Categorizer;
 import cz.fb.manaus.core.category.categorizer.NamespaceAware;
 import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer;
@@ -53,7 +52,7 @@ final public class CategoryService {
                                        Optional<String> namespace, BetCoverage coverage) {
         return settledBets.parallelStream().filter(input -> {
             Set<String> categories = getSettledBetCategories(input, false, namespace, coverage);
-            return Iterables.any(categories, category -> category.contains(projection));
+            return categories.stream().anyMatch(category -> category.contains(projection));
         }).collect(Collectors.toList());
     }
 

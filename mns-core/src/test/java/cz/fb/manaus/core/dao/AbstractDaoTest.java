@@ -2,7 +2,6 @@ package cz.fb.manaus.core.dao;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Market;
@@ -24,6 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 import javax.persistence.EntityManagerFactory;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -125,7 +125,7 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
     }
 
     private List<RunnerPrices> createRPs(double price, double lastMatchedPrice) {
-        return Lists.newArrayList(
+        return Arrays.asList(
                 CoreTestFactory.newBackRP(price, CoreTestFactory.HOME, lastMatchedPrice),
                 CoreTestFactory.newBackRP(price, CoreTestFactory.DRAW, lastMatchedPrice),
                 CoreTestFactory.newBackRP(price, CoreTestFactory.AWAY, lastMatchedPrice));
