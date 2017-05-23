@@ -4,14 +4,20 @@ import cz.fb.manaus.core.model.SettledBet;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.Optional;
 
 @Component
-public class PlacedFunction implements RelativeTimeFunction {
+public class MatchedFunction implements RelativeTimeFunction {
 
     @Override
     public Optional<Instant> getRelatedTime(SettledBet bet) {
-        return Optional.ofNullable(bet.getPlacedOrActionDate().toInstant());
+        Date matched = bet.getMatched();
+        if (matched == null) {
+            return Optional.empty();
+        } else {
+            return Optional.ofNullable(matched.toInstant());
+        }
     }
 
 }
