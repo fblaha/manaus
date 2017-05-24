@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
-public interface RelativeTimeFunction extends ProgressFunction {
+public interface AheadTimeFunction extends ProgressFunction {
 
     @Override
     default OptionalDouble function(SettledBet bet) {

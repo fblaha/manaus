@@ -22,7 +22,7 @@ public class ProfitControllerTest extends AbstractControllerTest {
     @Test
     public void testCoverageRecords() throws Exception {
         createMarketWithSingleSettledBet();
-        checkResponse("/fc-coverage/1d", "placed_solo");
+        checkResponse("/fc-coverage/1d", "placedAhead_solo");
     }
 
     @Test
