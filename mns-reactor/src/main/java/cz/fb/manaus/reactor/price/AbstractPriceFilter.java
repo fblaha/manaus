@@ -7,6 +7,7 @@ import cz.fb.manaus.core.model.PriceComparator;
 import cz.fb.manaus.core.model.Side;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,8 +32,10 @@ public abstract class AbstractPriceFilter {
     List<Price> getSignificantPrices(int minCount, List<Price> prices) {
         Map<Side, List<Price>> bySide = prices.stream().filter(this::priceRangeFilter)
                 .collect(Collectors.groupingBy(Price::getSide));
-        List<Price> sortedBack = PriceComparator.ORDERING.immutableSortedCopy(bySide.get(Side.BACK));
-        List<Price> sortedLay = PriceComparator.ORDERING.immutableSortedCopy(bySide.get(Side.LAY));
+        List<Price> sortedBack = PriceComparator.ORDERING.immutableSortedCopy(
+                bySide.getOrDefault(Side.BACK, Collections.emptyList()));
+        List<Price> sortedLay = PriceComparator.ORDERING.immutableSortedCopy(
+                bySide.getOrDefault(Side.LAY, Collections.emptyList()));
         List<Price> bulldozedBack = bulldozer.bulldoze(bulldozeThreshold, sortedBack);
         List<Price> bulldozedLay = bulldozer.bulldoze(bulldozeThreshold, sortedLay);
         Stream<Price> topBack = bulldozedBack.stream().limit(minCount);
