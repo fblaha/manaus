@@ -9,8 +9,8 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 
 public class ExpensiveOperationModerator {
     private static final Logger log = Logger.getLogger(ExpensiveOperationModerator.class.getSimpleName());
@@ -21,7 +21,7 @@ public class ExpensiveOperationModerator {
 
     public ExpensiveOperationModerator(Duration pause, String name) {
         this.pause = pause;
-        this.name = checkNotNull(name);
+        this.name = requireNonNull(name);
     }
 
     public void suspendOnExceeded() {

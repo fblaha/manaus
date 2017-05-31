@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.OptionalDouble;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static java.util.Objects.requireNonNull;
 
 @Service
 public class PriceService {
@@ -28,7 +28,7 @@ public class PriceService {
         double targetFairness = 1 - downgradeFraction;
         Preconditions.checkState(Range.closed(0d, 1d).contains(targetFairness));
 
-        if (checkNotNull(side) == Side.LAY) {
+        if (requireNonNull(side) == Side.LAY) {
             return 1 + aboveOne * targetFairness;
         } else if (side == Side.BACK) {
             return 1 + aboveOne / targetFairness;

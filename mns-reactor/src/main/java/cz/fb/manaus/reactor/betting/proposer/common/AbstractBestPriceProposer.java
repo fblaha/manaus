@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public abstract class AbstractBestPriceProposer implements PriceProposer {
 
@@ -38,7 +38,7 @@ public abstract class AbstractBestPriceProposer implements PriceProposer {
 
     @Override
     public OptionalDouble getProposedPrice(BetContext context) {
-        Side side = checkNotNull(context.getSide());
+        Side side = requireNonNull(context.getSide());
         double bestPrice = context.getRunnerPrices().getHomogeneous(side.getOpposite()).getBestPrice().get().getPrice();
         int step = getStep();
         Preconditions.checkState(step >= 0);

@@ -17,10 +17,10 @@ import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Maps.transformValues;
 import static com.google.common.collect.Ordering.from;
 import static java.util.Comparator.comparing;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.groupingBy;
 
 
@@ -38,11 +38,11 @@ public class ProfitService {
         Map<String, Double> charges = profitPlugin.getCharges(bets, chargeRate);
 
         if (projection.isPresent()) {
-            bets = categoryService.filterBets(bets, projection.get(), checkNotNull(namespace), coverage);
+            bets = categoryService.filterBets(bets, projection.get(), requireNonNull(namespace), coverage);
         }
 
         List<ProfitRecord> betRecords = computeProfitRecords(bets, simulationAwareOnly,
-                checkNotNull(namespace), charges, coverage);
+                requireNonNull(namespace), charges, coverage);
 
         Map<String, List<ProfitRecord>> byCategory = betRecords.stream().collect(groupingBy(ProfitRecord::getCategory));
         Map<String, ProfitRecord> result = transformValues(byCategory, this::mergeProfitRecords);
@@ -82,7 +82,7 @@ public class ProfitService {
     }
 
     public ProfitRecord toProfitRecord(SettledBet bet, String category, double chargeContribution, BetCoverage coverage) {
-        Side type = checkNotNull(bet.getPrice().getSide());
+        Side type = requireNonNull(bet.getPrice().getSide());
         Double backLayDiff;
         double price = bet.getPrice().getPrice();
         ProfitRecord result;

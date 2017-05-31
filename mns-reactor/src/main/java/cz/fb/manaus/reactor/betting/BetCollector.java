@@ -11,8 +11,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Stream.concat;
 
 public class BetCollector {
@@ -22,7 +22,7 @@ public class BetCollector {
     private final LinkedList<Bet> toCancel = new LinkedList<>();
 
     public void updateBet(BetCommand command) {
-        checkNotNull(command.getNewBet().getBetId());
+        requireNonNull(command.getNewBet().getBetId());
         toUpdate.addLast(command);
     }
 
@@ -32,7 +32,7 @@ public class BetCollector {
     }
 
     public void cancelBet(Bet oldBet) {
-        checkNotNull(oldBet.getBetId());
+        requireNonNull(oldBet.getBetId());
         toCancel.addLast(oldBet);
     }
 

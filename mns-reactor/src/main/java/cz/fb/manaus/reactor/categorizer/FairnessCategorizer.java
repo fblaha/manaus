@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.categorizer;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.BoundType;
 import com.google.common.collect.ImmutableRangeMap;
 import com.google.common.collect.Range;
@@ -18,6 +17,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import static com.google.common.collect.Range.closedOpen;
+import static java.util.Objects.requireNonNull;
 
 @Component
 public class FairnessCategorizer implements SettledBetCategorizer {
@@ -58,6 +58,6 @@ public class FairnessCategorizer implements SettledBetCategorizer {
     }
 
     String getCategory(double fairness) {
-        return PREFIX + Preconditions.checkNotNull(RANGES.get(fairness));
+        return PREFIX + requireNonNull(RANGES.get(fairness));
     }
 }

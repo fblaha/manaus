@@ -53,8 +53,8 @@ import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static cz.fb.manaus.betfair.rest.Params.withFilter;
+import static java.util.Objects.requireNonNull;
 
 @Service
 public class RestBetfairService {
@@ -158,7 +158,7 @@ public class RestBetfairService {
         for (Bet bet : bets) {
             PlaceInstruction instruction = new PlaceInstruction();
             instruction.setHandicap(0);
-            Side side = checkNotNull(bet.getRequestedPrice().getSide());
+            Side side = requireNonNull(bet.getRequestedPrice().getSide());
             if (side == Side.LAY) {
                 instruction.setSide(cz.fb.manaus.betfair.rest.Side.LAY);
             } else if (side == Side.BACK) {
@@ -190,7 +190,7 @@ public class RestBetfairService {
         List<ReplaceInstruction> instructions = new LinkedList<>();
         for (Bet bet : bets) {
             ReplaceInstruction instruction = new ReplaceInstruction();
-            instruction.setBetId(checkNotNull(bet.getBetId()));
+            instruction.setBetId(requireNonNull(bet.getBetId()));
             instruction.setNewPrice(bet.getRequestedPrice().getPrice());
             instructions.add(instruction);
         }
@@ -205,7 +205,7 @@ public class RestBetfairService {
         List<CancelInstruction> instructions = new LinkedList<>();
         for (Bet bet : bets) {
             CancelInstruction instruction = new CancelInstruction();
-            instruction.setBetId(checkNotNull(bet.getBetId()));
+            instruction.setBetId(requireNonNull(bet.getBetId()));
             instructions.add(instruction);
         }
         String marketId = getMarketId(bets);

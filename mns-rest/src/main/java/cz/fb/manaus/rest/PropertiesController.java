@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Strings.emptyToNull;
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
 @Controller
@@ -37,7 +37,7 @@ public class PropertiesController {
     @ResponseBody
     @RequestMapping(value = "/properties/{prefix}", method = RequestMethod.DELETE)
     public void deleteProperties(@PathVariable String prefix) {
-        propertiesService.delete(checkNotNull(emptyToNull(prefix), "prefix"));
+        propertiesService.delete(requireNonNull(emptyToNull(prefix), "prefix"));
     }
 
 }

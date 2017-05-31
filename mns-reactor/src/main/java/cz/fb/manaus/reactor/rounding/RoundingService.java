@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static java.util.Objects.requireNonNull;
 
 @Service
 public class RoundingService {
@@ -38,7 +38,7 @@ public class RoundingService {
     }
 
     public OptionalDouble downgrade(double price, int stepNum, Side side) {
-        if (checkNotNull(side) == Side.LAY) {
+        if (requireNonNull(side) == Side.LAY) {
             return decrement(price, stepNum);
         } else if (side == Side.BACK) {
             return increment(price, stepNum);

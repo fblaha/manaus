@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Ordering.from;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 @Lazy
@@ -71,7 +72,7 @@ public class BetManager {
 
     @Autowired
     public void setMarketSnapshotListeners(List<MarketSnapshotListener> marketSnapshotListeners) {
-        Preconditions.checkNotNull(marketSnapshotListeners);
+        requireNonNull(marketSnapshotListeners);
         this.marketSnapshotListeners = from(new AnnotationAwareOrderComparator()).sortedCopy(marketSnapshotListeners);
     }
 
@@ -124,7 +125,7 @@ public class BetManager {
                 if (!collector.isEmpty()) {
                     Preconditions.checkState(marketPrices.getId() == null);
                     marketPricesDao.saveOrUpdate(marketPrices);
-                    Preconditions.checkNotNull(marketPrices.getId());
+                    requireNonNull(marketPrices.getId());
                 }
 
                 List<BetCommand> toPlace = collector.getToPlace();

@@ -6,7 +6,7 @@ import cz.fb.manaus.core.model.Side;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public class Fairness {
     private final OptionalDouble back;
@@ -26,7 +26,7 @@ public class Fairness {
     }
 
     public OptionalDouble get(Side side) {
-        return checkNotNull(side) == Side.BACK ? back : lay;
+        return requireNonNull(side) == Side.BACK ? back : lay;
     }
 
     public Optional<Side> getMoreCredibleSide() {

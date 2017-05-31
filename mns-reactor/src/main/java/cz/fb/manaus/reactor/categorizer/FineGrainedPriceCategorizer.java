@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.categorizer;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.BoundType;
 import com.google.common.collect.ImmutableRangeMap;
 import com.google.common.collect.Range;
@@ -15,6 +14,7 @@ import java.text.DecimalFormat;
 import java.util.Set;
 
 import static java.util.Collections.singleton;
+import static java.util.Objects.requireNonNull;
 
 @Component
 public class FineGrainedPriceCategorizer implements SettledBetCategorizer {
@@ -40,7 +40,7 @@ public class FineGrainedPriceCategorizer implements SettledBetCategorizer {
     }
 
     private String getCategory(double price) {
-        String value = Preconditions.checkNotNull(CATEGORY_STEPS.get(price));
+        String value = requireNonNull(CATEGORY_STEPS.get(price));
         return PRICE_RANGE_FINE + value;
     }
 

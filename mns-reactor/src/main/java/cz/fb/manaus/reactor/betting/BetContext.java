@@ -21,8 +21,8 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
 public class BetContext {
@@ -105,16 +105,16 @@ public class BetContext {
     }
 
     public BetContext withNewPrice(Price newPrice) {
-        Side newSide = checkNotNull(newPrice.getSide());
+        Side newSide = requireNonNull(newPrice.getSide());
         checkState(side == newSide);
         Optional<Bet> oldBet = getOldBet();
         if (oldBet.isPresent()) {
-            Side oldSide = checkNotNull(oldBet.get().getRequestedPrice().getSide());
+            Side oldSide = requireNonNull(oldBet.get().getRequestedPrice().getSide());
             checkState(oldSide == newSide);
         }
         Optional<Bet> counterBet = getCounterBet();
         if (counterBet.isPresent()) {
-            Side otherSide = checkNotNull(counterBet.get().getRequestedPrice().getSide());
+            Side otherSide = requireNonNull(counterBet.get().getRequestedPrice().getSide());
             checkState(otherSide == newSide.getOpposite());
         }
         this.newPrice = Optional.of(newPrice);

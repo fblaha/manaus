@@ -20,10 +20,10 @@ import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Ordering.from;
 import static java.util.Collections.singletonList;
 import static java.util.Comparator.comparing;
+import static java.util.Objects.requireNonNull;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
@@ -60,8 +60,8 @@ abstract public class AbstractFunctionProfitService {
     private Iterable<ProgressFunction> getProgressFunctions(Optional<String> funcName) {
         Iterable<ProgressFunction> selectedFunctions;
         if (funcName.isPresent()) {
-            selectedFunctions = singletonList(checkNotNull(functions.get(funcName.get()),
-                    "No such function '%s'", funcName));
+            selectedFunctions = singletonList(requireNonNull(functions.get(funcName.get()),
+                    String.format("No such function '%s'", funcName)));
         } else {
             selectedFunctions = from(comparing(ProgressFunction::getName))
                     .immutableSortedCopy(functions.values());

@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Predicates.not;
+import static java.util.Objects.requireNonNull;
 
 @Service
 public class ValidationService {
@@ -30,7 +30,7 @@ public class ValidationService {
     Optional<ValidationResult> handleDowngrade(Optional<Price> newOne, Optional<Bet> oldOne, Validator validator) {
         if (oldOne.isPresent() && newOne.isPresent()) {
             Price oldPrice = oldOne.get().getRequestedPrice();
-            checkState(newOne.get().getSide() == checkNotNull(oldPrice.getSide()), validator.getClass());
+            checkState(newOne.get().getSide() == requireNonNull(oldPrice.getSide()), validator.getClass());
             if (priceService.isDowngrade(newOne.get().getPrice(), oldPrice.getPrice(),
                     newOne.get().getSide()) && validator.isDowngradeAccepting()) {
                 return Optional.of(ValidationResult.ACCEPT);
@@ -56,11 +56,11 @@ public class ValidationService {
                 Preconditions.checkState(context.getOldBet().isPresent());
             }
             ValidationResult validationResult = handleDowngrade(newPrice, context.getOldBet(), validator)
-                    .orElse(checkNotNull(validator.validate(context)));
+                    .orElse(requireNonNull(validator.validate(context)));
             recorder.record(validationResult, context.getSide(), validator);
             collected.add(validationResult);
         }
-        return checkNotNull(reduce(collected));
+        return requireNonNull(reduce(collected));
     }
 
     private Predicate<Validator> createPredicate(BetContext context) {

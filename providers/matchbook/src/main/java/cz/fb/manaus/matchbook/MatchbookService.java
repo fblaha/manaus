@@ -2,7 +2,6 @@ package cz.fb.manaus.matchbook;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
@@ -53,6 +52,7 @@ import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Strings.nullToEmpty;
+import static java.util.Objects.requireNonNull;
 
 @Service
 public class MatchbookService implements BetService {
@@ -136,7 +136,7 @@ public class MatchbookService implements BetService {
                 "&offset={offset}&per-page={perPage}&after={after}&before={before}" +
                 "&tag-url-names={sport}";
         if (URI_PARAMS.containsKey(sport)) {
-            urlPath += "&" + Preconditions.checkNotNull(URI_PARAMS.get(sport));
+            urlPath += "&" + requireNonNull(URI_PARAMS.get(sport));
         }
         ResponseEntity<EventPage> responseEntity = sessionService.getTemplate().exchange(
                 endpointManager.rest(urlPath),

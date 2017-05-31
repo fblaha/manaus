@@ -21,6 +21,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.util.Objects.requireNonNull;
+
 @DatabaseComponent
 public class ProviderTaskScheduler {
 
@@ -56,7 +58,7 @@ public class ProviderTaskScheduler {
 
     private void checkAndExecute(ProviderTask task) {
         log.log(Level.INFO, "executing task ''{0}''", task.getName());
-        Duration pauseDuration = Preconditions.checkNotNull(task.getPauseDuration());
+        Duration pauseDuration = requireNonNull(task.getPauseDuration());
         taskService.runIfExpired(task.getName(), pauseDuration, () -> execute(task));
     }
 

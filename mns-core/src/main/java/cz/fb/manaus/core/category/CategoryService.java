@@ -18,8 +18,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableSet.copyOf;
+import static java.util.Objects.requireNonNull;
 
 @Service
 final public class CategoryService {
@@ -59,7 +59,7 @@ final public class CategoryService {
     private <T extends SimulationAware & NamespaceAware> List<T> filterCategorizers(List<T> categorizers,
                                                                                     boolean simulationAwareOnly,
                                                                                     Optional<String> namespace) {
-        checkNotNull(namespace);
+        requireNonNull(namespace);
         Stream<T> filtered = categorizers.stream()
                 .filter(c -> namespace.equals(c.getNamespace()) || c.isGlobal());
         if (simulationAwareOnly) {

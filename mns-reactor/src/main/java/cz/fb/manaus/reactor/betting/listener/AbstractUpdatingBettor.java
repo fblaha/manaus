@@ -43,10 +43,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Ordering.from;
 import static cz.fb.manaus.reactor.betting.listener.ProbabilityComparator.COMPARATORS;
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
 public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
@@ -104,7 +104,7 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
         if (flowFilter.getWinnerCountRange().contains(winnerCount)) {
             Table<Side, Long, Bet> coverage = snapshot.getCoverage();
             Fairness fairness = calculator.getFairness(marketPrices);
-            Optional<Side> credibleSide = checkNotNull(fairness.getMoreCredibleSide());
+            Optional<Side> credibleSide = requireNonNull(fairness.getMoreCredibleSide());
             Ordering<RunnerPrices> ordering = COMPARATORS.get(credibleSide.get());
             ImmutableList<RunnerPrices> prices = ordering.immutableSortedCopy(marketPrices.getRunnerPrices());
             checkState(prices.stream()

@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.categorizer;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.BoundType;
 import com.google.common.collect.ImmutableRangeMap;
 import com.google.common.collect.RangeMap;
@@ -15,6 +14,7 @@ import static com.google.common.collect.Range.closedOpen;
 import static com.google.common.collect.Range.downTo;
 import static com.google.common.collect.Range.upTo;
 import static java.util.Collections.singleton;
+import static java.util.Objects.requireNonNull;
 
 @Component
 public class PriceCategorizer implements SettledBetCategorizer {
@@ -30,7 +30,7 @@ public class PriceCategorizer implements SettledBetCategorizer {
             .put(downTo(5d, BoundType.CLOSED), "5.0+").build();
 
     String getCategory(double price) {
-        String suffix = Preconditions.checkNotNull(CATEGORY_STEPS.get(price));
+        String suffix = requireNonNull(CATEGORY_STEPS.get(price));
         return "priceRange_" + suffix;
     }
 

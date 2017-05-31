@@ -16,11 +16,11 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Range.closedOpen;
 import static com.google.common.collect.Range.downTo;
 import static com.google.common.collect.Range.upTo;
 import static java.time.Duration.between;
+import static java.util.Objects.requireNonNull;
 
 public abstract class AbstractBeforeCategorizer implements SettledBetCategorizer {
     public static final String NEGATIVE = "<0";
@@ -46,7 +46,7 @@ public abstract class AbstractBeforeCategorizer implements SettledBetCategorizer
         }
         long diffDay = between(date.toInstant(), market.getEvent().getOpenDate().toInstant()).toDays();
         Set<String> result = new HashSet<>();
-        result.add(checkNotNull(getDayMap().get(diffDay)));
+        result.add(requireNonNull(getDayMap().get(diffDay)));
         if (diffDay == 0) {
             handleDay(date, market, result);
         }
@@ -55,7 +55,7 @@ public abstract class AbstractBeforeCategorizer implements SettledBetCategorizer
 
     private void handleDay(Date date, Market market, Set<String> result) {
         long diffHours = between(date.toInstant(), market.getEvent().getOpenDate().toInstant()).toHours();
-        result.add(checkNotNull(getHourMap().get(diffHours)));
+        result.add(requireNonNull(getHourMap().get(diffHours)));
         if (diffHours == 0) {
             handleMin(date, market, result);
 
@@ -64,7 +64,7 @@ public abstract class AbstractBeforeCategorizer implements SettledBetCategorizer
 
     private void handleMin(Date date, Market market, Set<String> result) {
         long diffMin = between(date.toInstant(), market.getEvent().getOpenDate().toInstant()).toMinutes();
-        result.add(checkNotNull(getMinMap().get(diffMin)));
+        result.add(requireNonNull(getMinMap().get(diffMin)));
     }
 
     protected RangeMap<Long, String> getDayMap() {

@@ -17,8 +17,8 @@ import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Comparator.comparingDouble;
+import static java.util.Objects.requireNonNull;
 
 @Service
 public class PriceProposalService {
@@ -46,7 +46,7 @@ public class PriceProposalService {
 
     private ProposedPrice reduce(Side side, Collection<ProposedPrice> values) {
         ProposedPrice result;
-        if (checkNotNull(side) == Side.BACK) {
+        if (requireNonNull(side) == Side.BACK) {
             result = ORDERING.max(values);
         } else {
             result = ORDERING.min(values);
