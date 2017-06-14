@@ -5,6 +5,7 @@ import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer;
 import cz.fb.manaus.core.model.SettledBet;
 import org.springframework.stereotype.Component;
 
+import java.time.Clock;
 import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
@@ -12,7 +13,7 @@ import java.util.Set;
 @Component
 public class RandomCategorizer implements SettledBetCategorizer {
 
-    private final Random random = new Random(System.currentTimeMillis());
+    private final Random random = new Random(Clock.systemUTC().millis());
 
     @Override
     public boolean isSimulationSupported() {
