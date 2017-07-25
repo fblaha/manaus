@@ -1,8 +1,19 @@
 package cz.fb.manaus.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import cz.fb.manaus.core.model.Price;
+import cz.fb.manaus.core.model.SettledBet;
+import cz.fb.manaus.core.model.Side;
+import cz.fb.manaus.core.test.CoreTestFactory;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
+
+import java.util.Date;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ContextConfiguration(classes = SettledBetController.class)
@@ -25,4 +36,22 @@ public class SettledBetControllerTest extends AbstractControllerTest {
         checkResponse("/stories/" + BET_ID, "previousActions");
     }
 
+    @Test
+    public void testPostSettledBet() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        SettledBet original = new SettledBet(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
+                5d, new Date(), new Price(5d, 3d, Side.BACK));
+        String serialized = mapper.writer().writeValueAsString(original);
+        checkPost(serialized, BET_ID, 204);
+        checkPost(serialized, BET_ID + "55", 404);
+    }
+
+    private void checkPost(String serialized, String betId, int status) throws Exception {
+        mvc.perform(post("/bets/" + betId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(serialized))
+                .andExpect(status().is(status))
+                .andReturn();
+    }
 }

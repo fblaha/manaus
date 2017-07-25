@@ -1,5 +1,6 @@
 package cz.fb.manaus.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.MoreObjects;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -112,6 +113,7 @@ public class SettledBet {
         this.betAction = betAction;
     }
 
+    @JsonIgnore
     public Date getPlacedOrActionDate() {
         return Optional.ofNullable(placed).orElse(betAction.getActionDate());
     }

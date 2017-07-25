@@ -9,9 +9,13 @@ import cz.fb.manaus.core.dao.SettledBetDao;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.SettledBet;
+import cz.fb.manaus.core.settlement.SaveStatus;
+import cz.fb.manaus.core.settlement.SettledBetSaver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,6 +43,8 @@ public class SettledBetController {
     private IntervalParser intervalParser;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private SettledBetSaver betSaver;
 
 
     @ResponseBody
@@ -75,13 +81,21 @@ public class SettledBetController {
         return ImmutableList.copyOf(settledBets).reverse();
     }
 
-
     @ResponseBody
     @RequestMapping(value = "/stories/{betId}", method = RequestMethod.GET)
     public BetStory getBetStory(@PathVariable String betId) {
         BetAction action = betActionDao.getBetAction(betId).get();
         betActionDao.fetchMarketPrices(action);
         return toBetStory(action);
+    }
+
+    @RequestMapping(value = "/bets/{betId}", method = RequestMethod.POST)
+    ResponseEntity<?> add(@PathVariable String betId, @RequestBody SettledBet bet) {
+        if (betSaver.saveBet(betId, bet) == SaveStatus.NO_ACTION) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.noContent().build();
+        }
     }
 
     private BetStory toBetStory(BetAction head) {
