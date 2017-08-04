@@ -89,8 +89,8 @@ public class SettledBetController {
         return toBetStory(action);
     }
 
-    @RequestMapping(value = "/bets/{betId}", method = RequestMethod.POST)
-    ResponseEntity<?> add(@PathVariable String betId, @RequestBody SettledBet bet) {
+    @RequestMapping(value = "/bets", method = RequestMethod.POST)
+    ResponseEntity<?> add(@RequestParam String betId, @RequestBody SettledBet bet) {
         if (betSaver.saveBet(betId, bet) == SaveStatus.NO_ACTION) {
             return ResponseEntity.notFound().build();
         } else {

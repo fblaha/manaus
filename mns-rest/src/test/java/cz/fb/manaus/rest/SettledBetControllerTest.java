@@ -47,7 +47,7 @@ public class SettledBetControllerTest extends AbstractControllerTest {
     }
 
     private void checkPost(String serialized, String betId, int status) throws Exception {
-        mvc.perform(post("/bets/" + betId)
+        mvc.perform(post("/bets?betId={betId}", betId)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(serialized))
