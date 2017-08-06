@@ -42,8 +42,8 @@ public class SettledBetControllerTest extends AbstractControllerTest {
         SettledBet original = new SettledBet(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
                 5d, new Date(), new Price(5d, 3d, Side.BACK));
         String serialized = mapper.writer().writeValueAsString(original);
-        checkPost(serialized, BET_ID, 204);
-        checkPost(serialized, BET_ID + "55", 404);
+        checkPost(serialized, BET_ID, 202);
+        checkPost(serialized, BET_ID + "55", 204);
     }
 
     private void checkPost(String serialized, String betId, int status) throws Exception {

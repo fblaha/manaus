@@ -92,9 +92,9 @@ public class SettledBetController {
     @RequestMapping(value = "/bets", method = RequestMethod.POST)
     ResponseEntity<?> add(@RequestParam String betId, @RequestBody SettledBet bet) {
         if (betSaver.saveBet(betId, bet) == SaveStatus.NO_ACTION) {
-            return ResponseEntity.notFound().build();
-        } else {
             return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.accepted().build();
         }
     }
 
