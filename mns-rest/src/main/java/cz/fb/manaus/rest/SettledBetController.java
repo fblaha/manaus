@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
@@ -91,6 +92,7 @@ public class SettledBetController {
 
     @RequestMapping(value = "/bets", method = RequestMethod.POST)
     ResponseEntity<?> add(@RequestParam String betId, @RequestBody SettledBet bet) {
+        Objects.requireNonNull(betId, "betId==null");
         if (betSaver.saveBet(betId, bet) == SaveStatus.NO_ACTION) {
             return ResponseEntity.noContent().build();
         } else {
