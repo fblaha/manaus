@@ -1,7 +1,6 @@
 package cz.fb.manaus.core.model;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Throwables;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Table;
@@ -48,9 +47,9 @@ public class MarketSnapshot {
                 result.put(side, bet.getSelectionId(), bet);
             }
             return result;
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.log(Level.SEVERE, "Illegal bets ''{0}''", bets);
-            throw Throwables.propagate(e);
+            throw e;
         }
     }
 

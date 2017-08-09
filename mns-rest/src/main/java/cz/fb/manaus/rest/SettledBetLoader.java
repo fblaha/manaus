@@ -50,7 +50,7 @@ public class SettledBetLoader {
             try {
                 return this.cache.get(interval);
             } catch (ExecutionException e) {
-                throw Throwables.propagate(e);
+                throw new RuntimeException(e);
             }
         } else {
             return loadFromDatabase(interval);

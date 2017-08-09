@@ -132,7 +132,7 @@ public class RestSessionService implements ProviderConfigurationValidator {
         try {
             return sessionCache.get("template");
         } catch (ExecutionException e) {
-            throw Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -161,13 +161,12 @@ public class RestSessionService implements ProviderConfigurationValidator {
             requestFactory.setReadTimeout((int) Duration.ofMinutes(2).toMillis());
             return new RestTemplate(requestFactory);
         } catch (Exception e) {
-            throw Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
     }
 
     @PreDestroy
     public void logout() {
-
         RestSession session = getCachedSession();
         logout(session);
     }

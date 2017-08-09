@@ -106,7 +106,7 @@ public class MatchbookSessionService implements ProviderConfigurationValidator {
         try {
             return session.get("template");
         } catch (ExecutionException e) {
-            throw Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
     }
 

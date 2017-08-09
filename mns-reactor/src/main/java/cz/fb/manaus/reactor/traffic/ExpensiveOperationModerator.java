@@ -52,7 +52,7 @@ public class ExpensiveOperationModerator {
         try {
             Thread.sleep(delay);
         } catch (InterruptedException e) {
-            throw Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
     }
 
