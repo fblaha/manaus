@@ -3,12 +3,16 @@ package cz.fb.manaus.rest;
 import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.model.Market;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -32,5 +36,15 @@ public class MarketController {
     @RequestMapping(value = "/markets", method = RequestMethod.GET)
     public List<Market> getMarkets() {
         return marketDao.getMarkets(Optional.of(new Date()), empty(), OptionalInt.empty());
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/markets", method = RequestMethod.POST)
+    ResponseEntity<?> addOrUpdateMarket(@RequestBody Market market) {
+        marketDao.saveOrUpdate(market);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(market.getId()).toUri();
+        return ResponseEntity.created(location).build();
     }
 }
