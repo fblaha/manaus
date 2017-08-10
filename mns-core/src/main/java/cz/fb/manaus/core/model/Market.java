@@ -44,8 +44,8 @@ public class Market {
 
     @Column(nullable = false)
     private boolean inPlay;
-    @Column
 
+    @Column
     private String type;
 
 
