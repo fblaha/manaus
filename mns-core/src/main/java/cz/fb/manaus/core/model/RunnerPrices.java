@@ -1,5 +1,6 @@
 package cz.fb.manaus.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -63,6 +64,7 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
     public RunnerPrices() {
     }
 
+    @JsonIgnore
     public Optional<Price> getBestPrice() {
         return prices.isEmpty() ? Optional.empty() : Optional.of(ORDERING.min(prices));
     }

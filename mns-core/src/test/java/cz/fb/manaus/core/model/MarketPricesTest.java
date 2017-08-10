@@ -1,5 +1,6 @@
 package cz.fb.manaus.core.model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import org.apache.commons.math3.util.Precision;
 import org.junit.Test;
@@ -7,11 +8,23 @@ import org.junit.Test;
 import static com.google.common.collect.ImmutableList.of;
 import static cz.fb.manaus.core.model.MarketPrices.getOverround;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class MarketPricesTest {
 
+
+    @Test
+    public void testSerialization() throws Exception {
+        MarketPrices prices = CoreTestFactory.newMarketPrices(1, 2.4d);
+        ObjectMapper mapper = new ObjectMapper();
+        String serialized = mapper.writer().writeValueAsString(prices);
+        System.out.println("serialized = " + serialized);
+        MarketPrices restored = mapper.readerFor(MarketPrices.class).readValue(serialized);
+        String doubleSerialized = mapper.writer().writeValueAsString(restored);
+        assertEquals(serialized, doubleSerialized);
+    }
 
     @Test
     public void testReciprocal() throws Exception {
