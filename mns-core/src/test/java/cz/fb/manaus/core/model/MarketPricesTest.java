@@ -20,7 +20,6 @@ public class MarketPricesTest {
         MarketPrices prices = CoreTestFactory.newMarketPrices(1, 2.4d);
         ObjectMapper mapper = new ObjectMapper();
         String serialized = mapper.writer().writeValueAsString(prices);
-        System.out.println("serialized = " + serialized);
         MarketPrices restored = mapper.readerFor(MarketPrices.class).readValue(serialized);
         String doubleSerialized = mapper.writer().writeValueAsString(restored);
         assertEquals(serialized, doubleSerialized);
