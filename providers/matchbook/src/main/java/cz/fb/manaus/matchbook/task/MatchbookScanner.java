@@ -60,7 +60,7 @@ public class MatchbookScanner implements ProviderTask {
         Market market = prices.getMarket();
         if (marketsUpdater.checkAndSave(market)) {
             Set<String> myBets = actionDao.getBetActionIds(market.getId(), OptionalLong.empty(), Optional.empty());
-            manager.silentFire(snapshot, myBets);
+            manager.silentFire(snapshot, myBets, Optional.empty());
         }
     }
 }

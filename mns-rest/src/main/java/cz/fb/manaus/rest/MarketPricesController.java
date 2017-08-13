@@ -51,7 +51,9 @@ public class MarketPricesController {
         marketDao.get(id).ifPresent(marketPrices::setMarket);
         MarketSnapshot marketSnapshot = new MarketSnapshot(marketPrices, Collections.emptyList(), Optional.empty());
         Set<String> myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty());
-        betUrl.ifPresent(url -> manager.silentFire(marketSnapshot, myBets));
+        if (betUrl.isPresent()) {
+            manager.silentFire(marketSnapshot, myBets, betUrl);
+        }
         return ResponseEntity.accepted().build();
     }
 

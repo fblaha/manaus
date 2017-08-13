@@ -94,7 +94,7 @@ public class MarketPriceScanner implements ProviderTask {
                 }
                 snapshot.getMarketPrices().setMarket(market);
 
-                betManager.silentFire(snapshot, myBets);
+                betManager.silentFire(snapshot, myBets, Optional.empty());
             }
         }
     }
