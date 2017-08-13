@@ -46,14 +46,12 @@ public class MarketPricesController {
 
     @RequestMapping(value = "/markets/{id}/prices", method = RequestMethod.POST)
     public ResponseEntity<?> pushMarketPrices(@PathVariable String id,
-                                              @RequestParam(required = false, defaultValue = "false") boolean preview,
+                                              @RequestParam Optional<String> betUrl,
                                               @RequestBody MarketPrices marketPrices) {
         marketDao.get(id).ifPresent(marketPrices::setMarket);
         MarketSnapshot marketSnapshot = new MarketSnapshot(marketPrices, Collections.emptyList(), Optional.empty());
         Set<String> myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty());
-        if (!preview) {
-            manager.silentFire(marketSnapshot, myBets);
-        }
+        betUrl.ifPresent(url -> manager.silentFire(marketSnapshot, myBets));
         return ResponseEntity.accepted().build();
     }
 

@@ -26,7 +26,7 @@ public class MarketPricesControllerTest extends AbstractControllerTest {
     public void testAddPrices() throws Exception {
         createMarketWithSingleAction();
         String prices = new ObjectMapper().writer().writeValueAsString(newMarketPrices(3, 2.8d));
-        mvc.perform(post("/markets/{id}/prices?preview=true", MARKET_ID)
+        mvc.perform(post("/markets/{id}/prices", MARKET_ID)
                 .content(prices)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted())
