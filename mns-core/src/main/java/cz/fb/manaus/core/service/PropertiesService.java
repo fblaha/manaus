@@ -39,12 +39,17 @@ public class PropertiesService {
 
     @Transactional
     public void set(String name, String value, Duration validPeriod) {
+        Date expiryDate = Date.from(Instant.now().plus(validPeriod));
+        set(new Property(name, value, expiryDate));
+    }
+
+    @Transactional
+    public void set(Property property) {
         Session session = getSession();
-        Instant expiryDate = Instant.now().plus(validPeriod);
-        if (session.get(Property.class, name) != null) {
-            session.merge(new Property(name, value, Date.from(expiryDate)));
+        if (session.get(Property.class, property.getName()) != null) {
+            session.merge(property);
         } else {
-            session.saveOrUpdate(new Property(name, value, Date.from(expiryDate)));
+            session.saveOrUpdate(property);
         }
     }
 

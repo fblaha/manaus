@@ -3,12 +3,16 @@ package cz.fb.manaus.rest;
 import cz.fb.manaus.core.model.Property;
 import cz.fb.manaus.core.service.PropertiesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 import static com.google.common.base.Strings.emptyToNull;
@@ -17,7 +21,6 @@ import static java.util.Optional.ofNullable;
 
 @Controller
 public class PropertiesController {
-
 
     @Autowired
     private PropertiesService propertiesService;
@@ -40,4 +43,13 @@ public class PropertiesController {
         propertiesService.delete(requireNonNull(emptyToNull(prefix), "prefix"));
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/properties", method = RequestMethod.POST)
+    public ResponseEntity<?> setProperty(@RequestBody Property property) {
+        propertiesService.set(property);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{name}")
+                .buildAndExpand(property.getName()).toUri();
+        return ResponseEntity.created(location).build();
+    }
 }
