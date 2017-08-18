@@ -1,5 +1,6 @@
 package cz.fb.manaus.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.MoreObjects;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -27,6 +28,9 @@ public class Bet {
 
     }
 
+    public Bet() {
+    }
+
     public String getMarketId() {
         return marketId;
     }
@@ -47,10 +51,12 @@ public class Bet {
         return matchedAmount;
     }
 
+    @JsonIgnore
     public boolean isMatched() {
         return !Price.amountEq(getMatchedAmount(), 0);
     }
 
+    @JsonIgnore
     public boolean isHalfMatched() {
         return getMatchedAmount() > getRequestedPrice().getAmount() / 2;
     }
