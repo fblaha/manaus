@@ -1,5 +1,6 @@
 package cz.fb.manaus.rest;
 
+import com.google.common.base.MoreObjects;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.model.Bet;
@@ -21,9 +22,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalLong;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Controller
 public class MarketSnapshotController {
+
+    public static final String MNS_BET_URL = "MNS_BET_URL";
+    public static final String MNS_AUTH_TOKEN = "MNS_AUTH_TOKEN";
+    private static final Logger log = Logger.getLogger(MarketSnapshotController.class.getSimpleName());
 
     @Lazy
     @Autowired
@@ -35,17 +42,29 @@ public class MarketSnapshotController {
 
     @RequestMapping(value = "/markets/{id}/snapshot", method = RequestMethod.POST)
     public ResponseEntity<?> pushMarketSnapshot(@PathVariable String id,
-                                                @RequestHeader("MNS_BET_URL") Optional<String> betUrl,
+                                                @RequestHeader(MNS_BET_URL) Optional<String> betUrl,
+                                                @RequestHeader(MNS_AUTH_TOKEN) Optional<String> authToken,
                                                 @RequestBody MarketSnapshotCrate snapshotCrate) {
         MarketPrices marketPrices = snapshotCrate.getPrices();
+        log.log(Level.INFO, "Market snapshot for ''{0}'' recieved");
         marketDao.get(id).ifPresent(marketPrices::setMarket);
         List<Bet> bets = Optional.ofNullable(snapshotCrate.getBets()).orElse(Collections.emptyList());
         MarketSnapshot marketSnapshot = new MarketSnapshot(marketPrices, bets, Optional.empty());
         Set<String> myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty());
-        if (betUrl.isPresent()) {
+        if (betUrl.isPresent() && authToken.isPresent()) {
             manager.silentFire(marketSnapshot, myBets, betUrl);
         }
+        if (!betUrl.isPresent()) {
+            logMissingHeader(MNS_BET_URL);
+        }
+        if (!authToken.isPresent()) {
+            logMissingHeader(MNS_AUTH_TOKEN);
+        }
         return ResponseEntity.accepted().build();
+    }
+
+    private void logMissingHeader(String header) {
+        log.log(Level.WARNING, "Missing ''{0}'' header", header);
     }
 }
 
@@ -67,5 +86,13 @@ class MarketSnapshotCrate {
 
     public void setBets(List<Bet> bets) {
         this.bets = bets;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("prices", prices)
+                .add("bets", bets)
+                .toString();
     }
 }
