@@ -1,6 +1,9 @@
 package cz.fb.manaus.matchbook;
 
 import com.google.common.base.CharMatcher;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.Price;
@@ -20,21 +23,54 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkState;
 
 @Service
 public class MatchbookService implements BetService {
 
-    static <T> ResponseEntity<T> checkResponse(ResponseEntity<T> responseEntity) {
-        HttpStatus statusCode = responseEntity.getStatusCode();
-        checkState(statusCode.is2xxSuccessful(), statusCode.getReasonPhrase());
-        return responseEntity;
+    private final LoadingCache<String, RestTemplate> cache = CacheBuilder.newBuilder()
+            .maximumSize(5)
+            .expireAfterAccess(5, TimeUnit.MINUTES)
+            .expireAfterWrite(5, TimeUnit.MINUTES)
+            .build(new CacheLoader<String, RestTemplate>() {
+
+                @Override
+                public RestTemplate load(String key) throws Exception {
+                    TokenCookieHttpRequestFactory requestFactory = new TokenCookieHttpRequestFactory(key);
+                    return new RestTemplate(requestFactory);
+                }
+            });
+
+    @Override
+    public Optional<String> validate(BetEndpoint endpoint) {
+        boolean result = endpoint.getBetUrl().isPresent() && endpoint.getAuthToken().isPresent();
+        if (result) {
+            return Optional.empty();
+        } else {
+            return Optional.of("Bet URL and auth token are required");
+        }
     }
 
     @Override
     public List<String> placeBets(BetEndpoint endpoint, List<Bet> bets) {
         return placeOrUpdate(endpoint, bets);
+    }
+
+    @Override
+    public List<String> updateBets(BetEndpoint endpoint, List<Bet> bets) {
+        return placeOrUpdate(endpoint, bets);
+    }
+
+    @Override
+    public void cancelBets(BetEndpoint endpoint, List<Bet> bets) {
+        RestTemplate template = cache.getUnchecked(endpoint.getAuthToken().get());
+        for (Bet bet : bets) {
+            String betUrl = CharMatcher.is('/').trimTrailingFrom(endpoint.getBetUrl().get());
+            template.delete(betUrl + "/{offerId}", bet.getBetId());
+        }
     }
 
     private List<String> placeOrUpdate(BetEndpoint endpoint, List<Bet> bets) {
@@ -71,7 +107,7 @@ public class MatchbookService implements BetService {
         offers.setOffers(items);
         String offersUrl = endpoint.getBetUrl().get();
 
-        RestTemplate template = getRestTemplate(endpoint.getAuthToken().get());
+        RestTemplate template = cache.getUnchecked(endpoint.getAuthToken().get());
 
         ResponseEntity<PlaceReport> responseEntity = template.exchange(offersUrl, method,
                 new HttpEntity<>(offers), PlaceReport.class);
@@ -84,22 +120,9 @@ public class MatchbookService implements BetService {
         return ImmutableList.copyOf(result);
     }
 
-    private RestTemplate getRestTemplate(String sessionToken) {
-        TokenCookieHttpRequestFactory requestFactory = new TokenCookieHttpRequestFactory(sessionToken);
-        return new RestTemplate(requestFactory);
-    }
-
-    @Override
-    public List<String> updateBets(BetEndpoint endpoint, List<Bet> bets) {
-        return placeOrUpdate(endpoint, bets);
-    }
-
-    @Override
-    public void cancelBets(BetEndpoint endpoint, List<Bet> bets) {
-        RestTemplate template = getRestTemplate(endpoint.getAuthToken().get());
-        for (Bet bet : bets) {
-            String betUrl = CharMatcher.is('/').trimTrailingFrom(endpoint.getBetUrl().get());
-            template.delete(betUrl + "/{offerId}", bet.getBetId());
-        }
+    private <T> ResponseEntity<T> checkResponse(ResponseEntity<T> responseEntity) {
+        HttpStatus statusCode = responseEntity.getStatusCode();
+        checkState(statusCode.is2xxSuccessful(), statusCode.getReasonPhrase());
+        return responseEntity;
     }
 }

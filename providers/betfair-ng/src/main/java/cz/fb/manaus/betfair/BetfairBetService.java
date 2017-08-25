@@ -6,9 +6,15 @@ import cz.fb.manaus.reactor.betting.BetService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BetfairBetService implements BetService {
+
+    @Override
+    public Optional<String> validate(BetEndpoint endpoint) {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
     public List<String> placeBets(BetEndpoint endpoint, List<Bet> bets) {

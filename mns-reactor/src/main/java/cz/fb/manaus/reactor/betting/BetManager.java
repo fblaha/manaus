@@ -118,7 +118,7 @@ public class BetManager {
                 }
 
                 List<Bet> toCancel = collector.getToCancel();
-                if (!toCancel.isEmpty()) {
+                if (!toCancel.isEmpty() && validate(endpoint)) {
                     betService.cancelBets(endpoint, toCancel);
                 }
 
@@ -130,13 +130,13 @@ public class BetManager {
 
                 List<BetCommand> toPlace = collector.getToPlace();
                 if (!previewMode) {
-                    if (!toPlace.isEmpty()) {
+                    if (!toPlace.isEmpty() && validate(endpoint)) {
                         List<Bet> bets = toPlace.stream().map(BetCommand::getNewBet).collect(toList());
                         List<String> ids = betService.placeBets(endpoint, bets);
                         collector.callPlaceHandlers(ids);
                     }
                     List<BetCommand> toUpdate = collector.getToUpdate();
-                    if (!toUpdate.isEmpty()) {
+                    if (!toUpdate.isEmpty() && validate(endpoint)) {
                         List<Bet> bets = toUpdate.stream().map(BetCommand::getNewBet).collect(toList());
                         List<String> ids = betService.updateBets(endpoint, bets);
                         collector.callUpdateHandlers(ids);
@@ -144,6 +144,12 @@ public class BetManager {
                 }
             }
         }
+    }
+
+    private boolean validate(BetEndpoint endpoint) {
+        Optional<String> result = betService.validate(endpoint);
+        result.ifPresent(log::warning);
+        return !result.isPresent();
     }
 
     private void filterPrices(MarketPrices marketPrices) {
