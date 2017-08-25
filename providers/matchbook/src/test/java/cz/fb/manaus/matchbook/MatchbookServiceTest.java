@@ -9,8 +9,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,11 +19,6 @@ public class MatchbookServiceTest extends AbstractRemoteTestCase {
 
     @Autowired
     private MatchbookService service;
-
-    @Test
-    public void testWalk() throws Exception {
-        service.walkMarkets(Instant.now(), Instant.now().plus(5, ChronoUnit.DAYS), System.out::println);
-    }
 
     @Test
     public void testPlace() throws Exception {
@@ -41,11 +34,5 @@ public class MatchbookServiceTest extends AbstractRemoteTestCase {
                 price, null, 0);
         List<String> ids = service.placeBets(BetEndpoint.devNull(), Collections.singletonList(bet));
         System.out.println("ids = " + ids);
-    }
-
-    @Test
-    public void testSettled() throws Exception {
-        service.walkSettledBets(Instant.now().minus(1, ChronoUnit.DAYS),
-                (s, settledBet) -> System.out.println(s + " : " + settledBet));
     }
 }
