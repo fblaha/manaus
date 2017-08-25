@@ -1,10 +1,10 @@
 package cz.fb.manaus.matchbook;
 
-import cz.fb.manaus.core.model.AccountMoney;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.AbstractRemoteTestCase;
+import cz.fb.manaus.reactor.betting.BetEndpoint;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -28,15 +28,9 @@ public class MatchbookServiceTest extends AbstractRemoteTestCase {
     }
 
     @Test
-    public void testMoney() throws Exception {
-        AccountMoney accountMoney = service.getAccountMoney();
-        System.out.println("accountMoney = " + accountMoney);
-    }
-
-    @Test
     public void testPlace() throws Exception {
         Bet bet = new Bet(null, "1315615", 2494510, new Price(1.63458, 2, Side.LAY), null, 0);
-        List<String> ids = service.placeBets(Collections.singletonList(bet));
+        List<String> ids = service.placeBets(BetEndpoint.devNull(), Collections.singletonList(bet));
         System.out.println("ids = " + ids);
     }
 
@@ -45,7 +39,7 @@ public class MatchbookServiceTest extends AbstractRemoteTestCase {
         Price price = new Price(6, 2, Side.BACK);
         Bet bet = new Bet("412514648480014", "411264087370009", 411264087490009L,
                 price, null, 0);
-        List<String> ids = service.placeBets(Collections.singletonList(bet));
+        List<String> ids = service.placeBets(BetEndpoint.devNull(), Collections.singletonList(bet));
         System.out.println("ids = " + ids);
     }
 

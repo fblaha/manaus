@@ -7,6 +7,7 @@ import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.MarketSnapshot;
 import cz.fb.manaus.core.provider.ProviderTask;
 import cz.fb.manaus.matchbook.MatchbookService;
+import cz.fb.manaus.reactor.betting.BetEndpoint;
 import cz.fb.manaus.reactor.betting.BetManager;
 import cz.fb.manaus.spring.CoreLocalConfiguration;
 import cz.fb.manaus.spring.DatabaseComponent;
@@ -60,7 +61,7 @@ public class MatchbookScanner implements ProviderTask {
         Market market = prices.getMarket();
         if (marketsUpdater.checkAndSave(market)) {
             Set<String> myBets = actionDao.getBetActionIds(market.getId(), OptionalLong.empty(), Optional.empty());
-            manager.silentFire(snapshot, myBets, Optional.empty());
+            manager.silentFire(snapshot, myBets, BetEndpoint.devNull());
         }
     }
 }

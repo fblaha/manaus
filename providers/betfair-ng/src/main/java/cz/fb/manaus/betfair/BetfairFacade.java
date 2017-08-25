@@ -3,7 +3,6 @@ package cz.fb.manaus.betfair;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
-import cz.fb.manaus.betfair.rest.AccountFunds;
 import cz.fb.manaus.betfair.rest.AccountStatement;
 import cz.fb.manaus.betfair.rest.AccountStatementReport;
 import cz.fb.manaus.betfair.rest.EventResult;
@@ -22,7 +21,6 @@ import cz.fb.manaus.betfair.rest.ReplaceExecutionReport;
 import cz.fb.manaus.betfair.rest.ReplaceInstructionReport;
 import cz.fb.manaus.betfair.rest.RunnerCatalog;
 import cz.fb.manaus.betfair.rest.StatementLegacyData;
-import cz.fb.manaus.core.model.AccountMoney;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.Competition;
 import cz.fb.manaus.core.model.Event;
@@ -36,6 +34,7 @@ import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.model.TradedVolume;
+import cz.fb.manaus.reactor.betting.BetEndpoint;
 import cz.fb.manaus.reactor.betting.BetService;
 import cz.fb.manaus.reactor.traffic.BetTransactionLogger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,10 +57,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static cz.fb.manaus.betfair.rest.MarketCountAware.split;
-import static java.lang.Math.abs;
 import static java.util.stream.Collectors.partitioningBy;
 import static java.util.stream.Collectors.toSet;
-import static org.apache.commons.math3.util.Precision.round;
 
 @Service
 public class BetfairFacade implements BetService {
@@ -80,13 +77,6 @@ public class BetfairFacade implements BetService {
                 .omitEmptyStrings()
                 .trimResults()
                 .split(Strings.nullToEmpty(rawEventTypes).toLowerCase()));
-    }
-
-    @Override
-    public AccountMoney getAccountMoney() {
-        AccountFunds funds = service.getAccountFunds();
-        double total = round(funds.getAvailableToBetBalance() + abs(funds.getExposure()), 3);
-        return new AccountMoney(total, funds.getAvailableToBetBalance());
     }
 
     public void walkMarkets(Date from, Date to, Consumer<Market> consumer) {
@@ -178,7 +168,7 @@ public class BetfairFacade implements BetService {
     }
 
     @Override
-    public List<String> placeBets(List<Bet> bets) {
+    public List<String> placeBets(BetEndpoint endpoint, List<Bet> bets) {
         transactionLogger.incrementBy(bets.size(), true);
         PlaceExecutionReport report = service.placeBets(bets);
         return report.getInstructionReports().stream()
@@ -187,7 +177,7 @@ public class BetfairFacade implements BetService {
     }
 
     @Override
-    public List<String> updateBets(List<Bet> newBets) {
+    public List<String> updateBets(BetEndpoint endpoint, List<Bet> newBets) {
         transactionLogger.incrementBy(newBets.size(), false);
         ReplaceExecutionReport report = service.replaceBets(newBets);
         return report.getInstructionReports().stream()
@@ -197,7 +187,7 @@ public class BetfairFacade implements BetService {
     }
 
     @Override
-    public void cancelBets(List<Bet> bets) {
+    public void cancelBets(BetEndpoint endpoint, List<Bet> bets) {
         service.cancelBets(bets);
     }
 

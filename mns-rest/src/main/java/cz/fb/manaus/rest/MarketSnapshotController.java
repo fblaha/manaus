@@ -6,6 +6,7 @@ import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.MarketSnapshot;
+import cz.fb.manaus.reactor.betting.BetEndpoint;
 import cz.fb.manaus.reactor.betting.BetManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -51,8 +52,8 @@ public class MarketSnapshotController {
         List<Bet> bets = Optional.ofNullable(snapshotCrate.getBets()).orElse(Collections.emptyList());
         MarketSnapshot marketSnapshot = new MarketSnapshot(marketPrices, bets, Optional.empty());
         Set<String> myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty());
-        if (betUrl.isPresent() && authToken.isPresent()) {
-            manager.silentFire(marketSnapshot, myBets, betUrl);
+        if (betUrl.isPresent()) {
+            manager.silentFire(marketSnapshot, myBets, new BetEndpoint(betUrl, authToken));
         }
         if (!betUrl.isPresent()) {
             logMissingHeader(MNS_BET_URL);

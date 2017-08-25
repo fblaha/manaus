@@ -76,7 +76,7 @@ public class BetManager {
         this.marketSnapshotListeners = from(new AnnotationAwareOrderComparator()).sortedCopy(marketSnapshotListeners);
     }
 
-    public void silentFire(MarketSnapshot snapshot, Set<String> myBets, Optional<String> betUrl) {
+    public void silentFire(MarketSnapshot snapshot, Set<String> myBets, BetEndpoint betUrl) {
         try {
             fire(snapshot, myBets, betUrl);
         } catch (HttpStatusCodeException e) {
@@ -96,7 +96,7 @@ public class BetManager {
         log.log(Level.SEVERE, "fix it!", e);
     }
 
-    private void fire(MarketSnapshot snapshot, Set<String> myBets, Optional<String> betUrl) {
+    private void fire(MarketSnapshot snapshot, Set<String> myBets, BetEndpoint endpoint) {
         MarketPrices marketPrices = snapshot.getMarketPrices();
         filterPrices(marketPrices);
 
@@ -119,7 +119,7 @@ public class BetManager {
 
                 List<Bet> toCancel = collector.getToCancel();
                 if (!toCancel.isEmpty()) {
-                    betService.cancelBets(toCancel);
+                    betService.cancelBets(endpoint, toCancel);
                 }
 
                 if (!collector.isEmpty()) {
@@ -130,21 +130,16 @@ public class BetManager {
 
                 List<BetCommand> toPlace = collector.getToPlace();
                 if (!previewMode) {
-                    if (betUrl.isPresent()) {
-                        // TODO implement it
-                        throw new UnsupportedOperationException("hopefully soon");
-                    } else {
-                        if (!toPlace.isEmpty()) {
-                            List<Bet> bets = toPlace.stream().map(BetCommand::getNewBet).collect(toList());
-                            List<String> ids = betService.placeBets(bets);
-                            collector.callPlaceHandlers(ids);
-                        }
-                        List<BetCommand> toUpdate = collector.getToUpdate();
-                        if (!toUpdate.isEmpty()) {
-                            List<Bet> bets = toUpdate.stream().map(BetCommand::getNewBet).collect(toList());
-                            List<String> ids = betService.updateBets(bets);
-                            collector.callUpdateHandlers(ids);
-                        }
+                    if (!toPlace.isEmpty()) {
+                        List<Bet> bets = toPlace.stream().map(BetCommand::getNewBet).collect(toList());
+                        List<String> ids = betService.placeBets(endpoint, bets);
+                        collector.callPlaceHandlers(ids);
+                    }
+                    List<BetCommand> toUpdate = collector.getToUpdate();
+                    if (!toUpdate.isEmpty()) {
+                        List<Bet> bets = toUpdate.stream().map(BetCommand::getNewBet).collect(toList());
+                        List<String> ids = betService.updateBets(endpoint, bets);
+                        collector.callUpdateHandlers(ids);
                     }
                 }
             }

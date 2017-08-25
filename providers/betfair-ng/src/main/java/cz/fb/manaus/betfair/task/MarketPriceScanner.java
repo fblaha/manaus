@@ -7,6 +7,7 @@ import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketSnapshot;
 import cz.fb.manaus.core.provider.ProviderTask;
+import cz.fb.manaus.reactor.betting.BetEndpoint;
 import cz.fb.manaus.reactor.betting.BetManager;
 import cz.fb.manaus.spring.DatabaseComponent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +95,7 @@ public class MarketPriceScanner implements ProviderTask {
                 }
                 snapshot.getMarketPrices().setMarket(market);
 
-                betManager.silentFire(snapshot, myBets, Optional.empty());
+                betManager.silentFire(snapshot, myBets, BetEndpoint.devNull());
             }
         }
     }

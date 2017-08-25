@@ -1,5 +1,6 @@
 package cz.fb.manaus.matchbook;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
@@ -9,7 +10,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
-import cz.fb.manaus.core.model.AccountMoney;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.MarketSnapshot;
@@ -17,7 +17,6 @@ import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.money.AccountMoneyRegistry;
 import cz.fb.manaus.matchbook.rest.AbstractPage;
-import cz.fb.manaus.matchbook.rest.Balance;
 import cz.fb.manaus.matchbook.rest.Event;
 import cz.fb.manaus.matchbook.rest.EventPage;
 import cz.fb.manaus.matchbook.rest.Market;
@@ -26,6 +25,7 @@ import cz.fb.manaus.matchbook.rest.OfferPage;
 import cz.fb.manaus.matchbook.rest.PlaceOffers;
 import cz.fb.manaus.matchbook.rest.PlaceReport;
 import cz.fb.manaus.matchbook.rest.SettledPage;
+import cz.fb.manaus.reactor.betting.BetEndpoint;
 import cz.fb.manaus.reactor.betting.BetService;
 import cz.fb.manaus.reactor.betting.action.BetUtils;
 import cz.fb.manaus.reactor.traffic.ExpensiveOperationModerator;
@@ -172,11 +172,11 @@ public class MatchbookService implements BetService {
     }
 
     @Override
-    public List<String> placeBets(List<Bet> bets) {
-        return placeOrUpdate(bets);
+    public List<String> placeBets(BetEndpoint endpoint, List<Bet> bets) {
+        return placeOrUpdate(endpoint, bets);
     }
 
-    private List<String> placeOrUpdate(List<Bet> bets) {
+    private List<String> placeOrUpdate(BetEndpoint endpoint, List<Bet> bets) {
         PlaceOffers offers = new PlaceOffers();
         offers.setExchangeType("back-lay");
         offers.setOddsType("DECIMAL");
@@ -208,9 +208,11 @@ public class MatchbookService implements BetService {
             checkState(items.stream().allMatch(offer -> offer.getId() == null));
         }
         offers.setOffers(items);
-        String offersUrl = endpointManager.rest("offers");
+        String offersUrl = endpoint.getBetUrl().get();
 
-        ResponseEntity<PlaceReport> responseEntity = sessionService.getTemplate().exchange(offersUrl, method,
+        RestTemplate template = getRestTemplate(endpoint.getAuthToken().get());
+
+        ResponseEntity<PlaceReport> responseEntity = template.exchange(offersUrl, method,
                 new HttpEntity<>(offers), PlaceReport.class);
         String result[] = new String[bets.size()];
         PlaceReport report = checkResponse(responseEntity).getBody();
@@ -224,27 +226,23 @@ public class MatchbookService implements BetService {
         return ImmutableList.copyOf(result);
     }
 
-    @Override
-    public List<String> updateBets(List<Bet> bets) {
-        return placeBets(bets);
+    private RestTemplate getRestTemplate(String sessionToken) {
+        TokenCookieHttpRequestFactory requestFactory = new TokenCookieHttpRequestFactory(sessionToken);
+        return new RestTemplate(requestFactory);
     }
 
     @Override
-    public void cancelBets(List<Bet> bets) {
-        RestTemplate template = sessionService.getTemplate();
+    public List<String> updateBets(BetEndpoint endpoint, List<Bet> bets) {
+        return placeOrUpdate(endpoint, bets);
+    }
+
+    @Override
+    public void cancelBets(BetEndpoint endpoint, List<Bet> bets) {
+        RestTemplate template = getRestTemplate(endpoint.getAuthToken().get());
         for (Bet bet : bets) {
-            template.delete(endpointManager.rest("offers/{offerId}"), bet.getBetId());
+            String betUrl = CharMatcher.is('/').trimTrailingFrom(endpoint.getBetUrl().get());
+            template.delete(betUrl + "/{offerId}", bet.getBetId());
         }
-    }
-
-    @Override
-    public AccountMoney getAccountMoney() {
-        moneyModerator.suspendOnExceeded();
-        ResponseEntity<Balance> entity = sessionService.getTemplate().exchange(
-                endpointManager.rest("account/balance"), HttpMethod.GET, null, Balance.class);
-        checkResponse(entity);
-        Balance balance = entity.getBody();
-        return new AccountMoney(balance.getBalance(), balance.getFreeFunds());
     }
 
     public void walkSettledBets(Instant from, BiConsumer<String, SettledBet> consumer) {
