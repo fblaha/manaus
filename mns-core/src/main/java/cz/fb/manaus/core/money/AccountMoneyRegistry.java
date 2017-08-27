@@ -15,6 +15,7 @@ public class AccountMoneyRegistry {
     @Autowired
     private Optional<AccountMoneyRepository> moneyRepository;
 
+    // TODO broken
     public void register(AccountMoney accountMoney) {
         reference.set(accountMoney);
         moneyRepository.ifPresent(repository -> repository.save(accountMoney));
