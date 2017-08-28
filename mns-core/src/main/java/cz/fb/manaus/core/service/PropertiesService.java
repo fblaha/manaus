@@ -137,7 +137,7 @@ public class PropertiesService {
     public OptionalDouble getDouble(String name) {
         Optional<String> stringDouble = get(name);
         if (stringDouble.isPresent()) {
-            return OptionalDouble.of(Long.parseLong(stringDouble.get()));
+            return OptionalDouble.of(Double.parseDouble(stringDouble.get()));
         } else {
             return OptionalDouble.empty();
         }
