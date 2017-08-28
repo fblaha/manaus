@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
-import java.util.logging.Level;
+import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.logging.Logger;
 
 @Repository
@@ -19,10 +19,14 @@ public class AccountMoneyRepository {
     private PropertiesService propertiesService;
 
     @Transactional
-    public void save(AccountMoney accountMoney) {
-        propertiesService.setDouble(MONEY_TOTAL, accountMoney.getTotal(), Duration.ofDays(1));
-        propertiesService.setDouble(MONEY_AVAILABLE, accountMoney.getAvailable(), Duration.ofDays(1));
-        log.log(Level.INFO, "ACCOUNT_MONEY: money update ''{0}''", accountMoney);
+    public Optional<AccountMoney> getAccountMoney() {
+        OptionalDouble total = propertiesService.getDouble(MONEY_TOTAL);
+        OptionalDouble available = propertiesService.getDouble(MONEY_AVAILABLE);
+        if (total.isPresent() && available.isPresent()) {
+            return Optional.of(new AccountMoney(total.getAsDouble(), available.getAsDouble()));
+        } else {
+            log.warning("Missing account money");
+            return Optional.empty();
+        }
     }
-
 }
