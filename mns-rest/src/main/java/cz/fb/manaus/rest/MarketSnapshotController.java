@@ -47,7 +47,7 @@ public class MarketSnapshotController {
                                                 @RequestHeader(MNS_AUTH_TOKEN) Optional<String> authToken,
                                                 @RequestBody MarketSnapshotCrate snapshotCrate) {
         MarketPrices marketPrices = snapshotCrate.getPrices();
-        log.log(Level.INFO, "Market snapshot for ''{0}'' recieved");
+        log.log(Level.INFO, "Market snapshot for ''{0}'' recieved", id);
         marketDao.get(id).ifPresent(marketPrices::setMarket);
         List<Bet> bets = Optional.ofNullable(snapshotCrate.getBets()).orElse(Collections.emptyList());
         MarketSnapshot marketSnapshot = new MarketSnapshot(marketPrices, bets, Optional.empty());
