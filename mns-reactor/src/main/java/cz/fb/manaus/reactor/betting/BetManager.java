@@ -76,9 +76,9 @@ public class BetManager {
         this.marketSnapshotListeners = from(new AnnotationAwareOrderComparator()).sortedCopy(marketSnapshotListeners);
     }
 
-    public void silentFire(MarketSnapshot snapshot, Set<String> myBets, BetEndpoint betUrl) {
+    public void silentFire(MarketSnapshot snapshot, Set<String> myBets, BetEndpoint endpoint) {
         try {
-            fire(snapshot, myBets, betUrl);
+            fire(snapshot, myBets, endpoint);
         } catch (HttpStatusCodeException e) {
             String body = e.getResponseBodyAsString();
             HttpStatus statusCode = e.getStatusCode();
