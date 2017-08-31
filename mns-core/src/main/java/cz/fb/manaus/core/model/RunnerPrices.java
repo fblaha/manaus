@@ -73,6 +73,7 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
         return id;
     }
 
+    @JsonIgnore
     public List<Price> getPricesSorted() {
         return ORDERING.sortedCopy(prices);
     }
