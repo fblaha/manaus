@@ -84,7 +84,6 @@ public class CoreDatabaseConfiguration {
             properties.setProperty("hibernate.generate_statistics", "true");
         }
         if (profiles.contains("external-db")) {
-            // TODO switch to postgresql or mariadb
             properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLInnoDBDialect");
         } else {
             properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
