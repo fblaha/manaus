@@ -2,15 +2,22 @@ package cz.fb.manaus.rest;
 
 import com.google.common.collect.ImmutableList;
 import cz.fb.manaus.core.dao.BetActionDao;
+import cz.fb.manaus.core.dao.MarketDao;
+import cz.fb.manaus.core.dao.MarketPricesDao;
 import cz.fb.manaus.core.model.BetAction;
+import cz.fb.manaus.core.model.Market;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
@@ -22,6 +29,10 @@ public class BetActionController {
 
     @Autowired
     private BetActionDao betActionDao;
+    @Autowired
+    private MarketDao marketDao;
+    @Autowired
+    private MarketPricesDao marketPricesDao;
 
     @ResponseBody
     @RequestMapping(value = "/markets/{id}/actions", method = RequestMethod.GET)
@@ -39,4 +50,17 @@ public class BetActionController {
         return ImmutableList.copyOf(actions).reverse();
     }
 
+    @RequestMapping(value = "/markets/{id}/actions", method = RequestMethod.POST)
+    public ResponseEntity<?> addAction(@PathVariable String id,
+                                       @RequestParam int priceId,
+                                       @RequestBody BetAction action) {
+        Market market = marketDao.get(id)
+                .orElseThrow(IllegalArgumentException::new);
+        action.setMarket(market);
+        betActionDao.saveOrUpdate(action);
+        marketPricesDao.get(priceId).ifPresent(action::setMarketPrices);
+        betActionDao.saveOrUpdate(action);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequestUri().build().toUri();
+        return ResponseEntity.created(location).build();
+    }
 }
