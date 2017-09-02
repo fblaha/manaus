@@ -34,7 +34,7 @@ public class MarketSnapshotControllerTest extends AbstractControllerTest {
         mvc.perform(post("/markets/{id}/snapshot", MARKET_ID)
                 .content(snapshot)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isAccepted())
+                .andExpect(status().isNoContent())
                 .andReturn();
     }
 }

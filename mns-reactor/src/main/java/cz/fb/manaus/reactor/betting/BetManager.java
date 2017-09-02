@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableSet;
 import cz.fb.manaus.core.dao.MarketPricesDao;
 import cz.fb.manaus.core.manager.MarketFilterService;
 import cz.fb.manaus.core.model.Bet;
+import cz.fb.manaus.core.model.CollectedBets;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.MarketSnapshot;
@@ -76,9 +77,9 @@ public class BetManager {
         this.marketSnapshotListeners = from(new AnnotationAwareOrderComparator()).sortedCopy(marketSnapshotListeners);
     }
 
-    public void silentFire(MarketSnapshot snapshot, Set<String> myBets, BetEndpoint endpoint) {
+    public CollectedBets silentFire(MarketSnapshot snapshot, Set<String> myBets, BetEndpoint endpoint) {
         try {
-            fire(snapshot, myBets, endpoint);
+            return fire(snapshot, myBets, endpoint);
         } catch (HttpStatusCodeException e) {
             String body = e.getResponseBodyAsString();
             HttpStatus statusCode = e.getStatusCode();
@@ -89,6 +90,7 @@ public class BetManager {
         } catch (RuntimeException e) {
             logException(snapshot, e);
         }
+        return CollectedBets.empty();
     }
 
     private void logException(MarketSnapshot snapshot, RuntimeException e) {
@@ -96,12 +98,13 @@ public class BetManager {
         log.log(Level.SEVERE, "fix it!", e);
     }
 
-    private void fire(MarketSnapshot snapshot, Set<String> myBets, BetEndpoint endpoint) {
+    private CollectedBets fire(MarketSnapshot snapshot, Set<String> myBets, BetEndpoint endpoint) {
         MarketPrices marketPrices = snapshot.getMarketPrices();
         filterPrices(marketPrices);
 
         OptionalDouble reciprocal = marketPrices.getReciprocal(Side.BACK);
         Market market = marketPrices.getMarket();
+        CollectedBets collectedBets = CollectedBets.create();
 
         if (checkMarket(myBets, market, reciprocal)) {
             Date currDate = new Date();
@@ -113,7 +116,7 @@ public class BetManager {
                 BetCollector collector = new BetCollector();
                 for (MarketSnapshotListener listener : marketSnapshotListeners) {
                     if (!disabledListeners.contains(listener.getClass().getSimpleName())) {
-                        listener.onMarketSnapshot(snapshot, collector);
+                        listener.onMarketSnapshot(snapshot, collector, collectedBets);
                     }
                 }
 
@@ -144,6 +147,7 @@ public class BetManager {
                 }
             }
         }
+        return collectedBets;
     }
 
     private boolean validate(BetEndpoint endpoint) {

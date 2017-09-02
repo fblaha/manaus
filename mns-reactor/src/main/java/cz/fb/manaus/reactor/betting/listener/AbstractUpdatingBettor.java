@@ -6,6 +6,7 @@ import com.google.common.collect.Ordering;
 import com.google.common.collect.Table;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
+import cz.fb.manaus.core.model.CollectedBets;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.MarketSnapshot;
@@ -96,7 +97,7 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
     }
 
     @Override
-    public final void onMarketSnapshot(MarketSnapshot snapshot, BetCollector betCollector) {
+    public final void onMarketSnapshot(MarketSnapshot snapshot, BetCollector betCollector, CollectedBets collectedBets) {
         MarketPrices marketPrices = snapshot.getMarketPrices();
         Market market = marketPrices.getMarket();
         int winnerCount = marketPrices.getWinnerCount();
@@ -127,13 +128,13 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
                     setTradedVolumeMean(ctx);
                     ValidationResult pricelessValidation = validationService.validate(ctx, validators);
                     if (!pricelessValidation.isSuccess()) {
-                        cancelBet(oldBet, betCollector);
+                        cancelBet(oldBet, betCollector, collectedBets);
                         continue;
                     }
 
                     Optional<Price> newPrice = getNewPrice(ctx);
                     if (!newPrice.isPresent()) {
-                        cancelBet(oldBet, betCollector);
+                        cancelBet(oldBet, betCollector, collectedBets);
                         continue;
                     }
 
@@ -144,32 +145,37 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
                     ValidationResult priceValidation = validationService.validate(priceCtx, validators);
 
                     if (priceValidation.isSuccess()) {
-                        bet(priceCtx, betCollector);
+                        bet(priceCtx, betCollector, collectedBets);
                     }
                 }
             }
         }
     }
 
-    private void bet(BetContext ctx, BetCollector betCollector) {
+    private void bet(BetContext ctx, BetCollector betCollector, CollectedBets collectedBets) {
         BetAction action = ctx.createBetAction();
         Price newPrice = ctx.getNewPrice().get();
         Consumer<String> actionSaver = actionUtils.actionSaver(action);
         if (ctx.getOldBet().isPresent()) {
             betCollector.updateBet(new BetCommand(ctx.getOldBet().get().replacePrice(newPrice.getPrice()), actionSaver));
+            collectedBets.getUpdate().add(ctx.getOldBet().get().replacePrice(newPrice.getPrice()));
         } else {
             Market market = ctx.getMarketPrices().getMarket();
             Bet bet = new Bet(null, market.getId(), ctx.getRunnerPrices().getSelectionId(), newPrice, null, 0);
             betCollector.placeBet(new BetCommand(bet, actionSaver));
+            collectedBets.getPlace().add(bet);
         }
         logAction(action);
     }
 
-    private void cancelBet(Optional<Bet> oldBet, BetCollector betCollector) {
-        if (oldBet.isPresent() && !oldBet.get().isMatched()) {
-            betCollector.cancelBet(oldBet.get());
-            log.log(Level.INFO, "CANCEL_BET: unable propose price for bet ''{0}''", oldBet);
-        }
+    private void cancelBet(Optional<Bet> oldBet, BetCollector betCollector, CollectedBets collectedBets) {
+        oldBet.ifPresent(bet -> {
+            if (!bet.isMatched()) {
+                betCollector.cancelBet(bet);
+                collectedBets.getCancel().add(bet.getBetId());
+                log.log(Level.INFO, "CANCEL_BET: unable propose price for bet ''{0}''", bet);
+            }
+        });
     }
 
     protected OptionalDouble reducePrices(BetContext context) {

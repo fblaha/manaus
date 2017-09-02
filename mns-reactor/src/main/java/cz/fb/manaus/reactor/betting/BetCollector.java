@@ -15,6 +15,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Stream.concat;
 
+@Deprecated
 public class BetCollector {
 
     private final LinkedList<BetCommand> toUpdate = new LinkedList<>();

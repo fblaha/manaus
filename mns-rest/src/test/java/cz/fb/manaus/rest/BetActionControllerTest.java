@@ -47,7 +47,7 @@ public class BetActionControllerTest extends AbstractControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(serialized))
-                .andExpect(status().is(201))
+                .andExpect(status().isCreated())
                 .andReturn();
         assertThat(result.getResponse().getHeader(HttpHeaders.LOCATION), notNullValue());
     }

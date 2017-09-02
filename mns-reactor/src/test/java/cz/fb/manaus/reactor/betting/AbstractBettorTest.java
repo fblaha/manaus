@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import cz.fb.manaus.core.dao.AbstractDaoTest;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
+import cz.fb.manaus.core.model.CollectedBets;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.MarketSnapshot;
 import cz.fb.manaus.core.model.Price;
@@ -47,10 +48,13 @@ public abstract class AbstractBettorTest<T extends AbstractUpdatingBettor> exten
 
     protected BetCollector check(MarketPrices marketPrices, List<Bet> bets, int placeCount, int updateCount) {
         BetCollector collector = new BetCollector();
+        CollectedBets collectedBets = CollectedBets.create();
         MarketSnapshot snapshot = new MarketSnapshot(marketPrices, bets, Optional.of(createTradedVolume(marketPrices)));
-        bettor.onMarketSnapshot(snapshot, collector);
+        bettor.onMarketSnapshot(snapshot, collector, collectedBets);
         assertThat(collector.getToPlace().size(), is(placeCount));
         assertThat(collector.getToUpdate().size(), is(updateCount));
+        assertThat(collectedBets.getPlace().size(), is(placeCount));
+        assertThat(collectedBets.getUpdate().size(), is(updateCount));
         return collector;
     }
 

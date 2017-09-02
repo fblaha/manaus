@@ -4,6 +4,7 @@ import com.google.common.base.MoreObjects;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.model.Bet;
+import cz.fb.manaus.core.model.CollectedBets;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.MarketSnapshot;
 import cz.fb.manaus.reactor.betting.BetEndpoint;
@@ -53,7 +54,11 @@ public class MarketSnapshotController {
         MarketSnapshot marketSnapshot = new MarketSnapshot(marketPrices, bets, Optional.empty());
         Set<String> myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty());
         if (betUrl.isPresent()) {
-            manager.silentFire(marketSnapshot, myBets, new BetEndpoint(betUrl, authToken));
+            CollectedBets collectedBets = manager.silentFire(marketSnapshot, myBets,
+                    new BetEndpoint(betUrl, authToken));
+            if (!collectedBets.isEmpty()) {
+                return ResponseEntity.ok(collectedBets);
+            }
         }
         if (!betUrl.isPresent()) {
             logMissingHeader(MNS_BET_URL);
@@ -61,7 +66,7 @@ public class MarketSnapshotController {
         if (!authToken.isPresent()) {
             logMissingHeader(MNS_AUTH_TOKEN);
         }
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.noContent().build();
     }
 
     private void logMissingHeader(String header) {
