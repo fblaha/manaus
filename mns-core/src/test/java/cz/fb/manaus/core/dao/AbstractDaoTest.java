@@ -81,7 +81,7 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
         createAndSaveBetAction(market, addHours(date, -1), PROPS, BET_ID);
     }
 
-    protected void createMarketWithSingleSettledBet() {
+    protected SettledBet createMarketWithSingleSettledBet() {
         Date now = Date.from(Instant.now());
         Market market = newMarket(MARKET_ID, now, CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);
@@ -90,9 +90,10 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
         SettledBet bet = new SettledBet(action.getSelectionId(), "x", 5, now, action.getPrice());
         bet.setBetAction(action);
         settledBetDao.saveOrUpdate(bet);
+        return bet;
     }
 
-    protected void createMarketWithPricesAndBets() {
+    protected void createBet() {
         Date current = new Date();
         Market market = newMarket();
         MarketPrices prices = new MarketPrices(1, market, createRPs(2.1d, 2.2d));

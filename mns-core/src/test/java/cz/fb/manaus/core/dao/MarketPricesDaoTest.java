@@ -63,7 +63,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
 
     @Test
     public void testMarketPricesOrder() {
-        createMarketWithPricesAndBets();
+        createBet();
         List<MarketPrices> shortList = marketPricesDao.getPrices(CoreTestFactory.MARKET_ID, OptionalInt.of(1));
         List<MarketPrices> marketPricesList = marketPricesDao.getPrices(CoreTestFactory.MARKET_ID);
         assertThat(marketPricesList.size(), is(2));
@@ -194,14 +194,14 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
 
     @Test
     public void testMarketDelete2() {
-        createMarketWithPricesAndBets();
+        createBet();
         marketDao.delete(CoreTestFactory.MARKET_ID);
         assertThat(marketPricesDao.getPrices(CoreTestFactory.MARKET_ID).size(), is(0));
     }
 
     @Test
     public void testRunnerPricesByMarketAndSelection() {
-        createMarketWithPricesAndBets();
+        createBet();
         for (Long selectionId : asList(CoreTestFactory.HOME, CoreTestFactory.DRAW, CoreTestFactory.AWAY)) {
             List<RunnerPrices> shortList = marketPricesDao.getRunnerPrices(CoreTestFactory.MARKET_ID, selectionId, OptionalInt.of(1));
             List<RunnerPrices> complete = marketPricesDao.getRunnerPrices(CoreTestFactory.MARKET_ID, selectionId, OptionalInt.empty());

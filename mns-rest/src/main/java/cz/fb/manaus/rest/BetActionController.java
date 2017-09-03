@@ -63,4 +63,15 @@ public class BetActionController {
         URI location = ServletUriComponentsBuilder.fromCurrentRequestUri().build().toUri();
         return ResponseEntity.created(location).build();
     }
+
+    @RequestMapping(value = "/actions/{id}/betId", method = RequestMethod.PUT)
+    public ResponseEntity<?> setBetId(@PathVariable int id,
+                                      @RequestBody String betId) {
+        int changedRows = betActionDao.setBetId(id, betId);
+        if (changedRows > 0) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

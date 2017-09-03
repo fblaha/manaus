@@ -110,7 +110,7 @@ public class MarketDaoTest extends AbstractDaoTest {
 
     @Test
     public void testMarketBulkDelete() {
-        createMarketWithPricesAndBets();
+        createBet();
         int count = marketDao.deleteMarkets(from(Instant.now().minus(1, ChronoUnit.HOURS)));
         assertThat(count, is(0));
         count = marketDao.deleteMarkets(from(Instant.now().plus(3, ChronoUnit.HOURS)));

@@ -5,6 +5,7 @@ import com.google.common.net.HttpHeaders;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Price;
+import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import org.junit.Before;
@@ -19,15 +20,18 @@ import java.util.Date;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ContextConfiguration(classes = BetActionController.class)
 public class BetActionControllerTest extends AbstractControllerTest {
 
+    private SettledBet bet;
+
     @Before
     public void setUp() throws Exception {
-        createMarketWithSingleSettledBet();
+        bet = createMarketWithSingleSettledBet();
     }
 
     @Test
@@ -50,6 +54,18 @@ public class BetActionControllerTest extends AbstractControllerTest {
                 .andExpect(status().isCreated())
                 .andReturn();
         assertThat(result.getResponse().getHeader(HttpHeaders.LOCATION), notNullValue());
+    }
+
+    @Test
+    public void testSetBetId() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        int actionId = bet.getBetAction().getId();
+        mvc.perform(put(
+                "/actions/{id}/betId", actionId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("100"))
+                .andExpect(status().isOk())
+                .andReturn();
     }
 
     private BetAction createBetAction() {
