@@ -63,6 +63,16 @@ public class BetActionDaoTest extends AbstractDaoTest {
     }
 
     @Test
+    public void testSetBetId() {
+        Market market = newMarket();
+        marketDao.saveOrUpdate(market);
+        BetAction action = createAndSaveBetAction(market, new Date(), Collections.emptyMap(), null);
+        Integer actionId = action.getId();
+        assertThat(betActionDao.setBetId(actionId, "111"), is(1));
+        assertThat(betActionDao.get(actionId).get().getBetId(), is("111"));
+    }
+
+    @Test
     public void testBetAction() {
         Market market = newMarket();
         marketDao.saveOrUpdate(market);

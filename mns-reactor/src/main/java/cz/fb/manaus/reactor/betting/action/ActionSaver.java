@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 
 import static cz.fb.manaus.core.category.categorizer.WeekDayCategorizer.getWeekDay;
 
+@Deprecated
 @DatabaseComponent
 public class ActionSaver {
 
