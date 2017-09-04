@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 
 import static cz.fb.manaus.core.category.categorizer.WeekDayCategorizer.getWeekDay;
 
-@Deprecated
 @DatabaseComponent
 public class ActionSaver {
 
@@ -29,7 +28,12 @@ public class ActionSaver {
     @Autowired
     private BetUtils betUtils;
 
-    private void saveBet(BetAction action, String betId) {
+    private void setBetId(BetAction action, String betId) {
+        replaceExistingBetId(action);
+        betActionDao.setBetId(action.getId(), betId);
+    }
+
+    public void saveAction(BetAction action) {
         Date date = new Date();
         String proposers = action.getProperties().get(BetAction.PROPOSER_PROP);
         String side = action.getPrice().getSide().name().toLowerCase();
@@ -37,8 +41,6 @@ public class ActionSaver {
             String key = Joiner.on('.').join(PROPOSER_STATS, getWeekDay(date), side, proposer);
             service.incrementAntGet(key, Duration.ofDays(1));
         }
-        action.setBetId(betId);
-        replaceExistingBetId(action);
         betActionDao.saveOrUpdate(action);
     }
 
@@ -52,20 +54,22 @@ public class ActionSaver {
         }
     }
 
-    public Consumer<String> actionSaver(BetAction action) {
-        return new BetActionSaver(action);
+    @Deprecated
+    public Consumer<String> betIdSetter(BetAction action) {
+        return new BetIdSetter(action);
     }
 
-    private class BetActionSaver implements Consumer<String> {
+    @Deprecated
+    private class BetIdSetter implements Consumer<String> {
         private final BetAction action;
 
-        public BetActionSaver(BetAction action) {
+        public BetIdSetter(BetAction action) {
             this.action = action;
         }
 
         @Override
         public void accept(String betId) {
-            saveBet(action, betId);
+            setBetId(action, betId);
         }
     }
 }

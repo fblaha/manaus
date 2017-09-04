@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Table;
+import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.CollectedBets;
@@ -62,7 +63,7 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
     @Autowired
     protected PriceService priceService;
     @Autowired
-    protected ActionSaver actionUtils;
+    protected ActionSaver actionSaver;
     @Autowired
     private FlowFilterRegistry flowFilterRegistry;
     @Autowired
@@ -73,6 +74,8 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
     private FairnessPolynomialCalculator calculator;
     @Autowired
     private BetContextFactory contextFactory;
+    @Autowired
+    private BetActionDao actionDao;
 
 
     protected AbstractUpdatingBettor(Side side, List<Validator> validators,
@@ -155,14 +158,16 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
     private void bet(BetContext ctx, BetCollector betCollector, CollectedBets collectedBets) {
         BetAction action = ctx.createBetAction();
         Price newPrice = ctx.getNewPrice().get();
-        Consumer<String> actionSaver = actionUtils.actionSaver(action);
+
+        actionSaver.saveAction(action);
+        Consumer<String> betIdSetter = actionSaver.betIdSetter(action);
         if (ctx.getOldBet().isPresent()) {
-            betCollector.updateBet(new BetCommand(ctx.getOldBet().get().replacePrice(newPrice.getPrice()), actionSaver));
+            betCollector.updateBet(new BetCommand(ctx.getOldBet().get().replacePrice(newPrice.getPrice()), betIdSetter));
             collectedBets.getUpdate().add(ctx.getOldBet().get().replacePrice(newPrice.getPrice()));
         } else {
             Market market = ctx.getMarketPrices().getMarket();
             Bet bet = new Bet(null, market.getId(), ctx.getRunnerPrices().getSelectionId(), newPrice, null, 0);
-            betCollector.placeBet(new BetCommand(bet, actionSaver));
+            betCollector.placeBet(new BetCommand(bet, betIdSetter));
             collectedBets.getPlace().add(bet);
         }
         logAction(action);
