@@ -7,8 +7,6 @@ import cz.fb.manaus.core.model.Side;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -58,27 +56,6 @@ public class BetCollector {
                         && bet.getSelectionId() == selId
                         && bet.getRequestedPrice().getSide() == side)
                 .findAny();
-    }
-
-    void callPlaceHandlers(List<String> ids) {
-        callHandlersInternal(ids, getToPlace());
-    }
-
-    void callUpdateHandlers(List<String> ids) {
-        callHandlersInternal(ids, getToUpdate());
-    }
-
-    private void callHandlersInternal(List<String> ids, List<BetCommand> betCommands) {
-        checkState(ids.size() == betCommands.size());
-        List<Consumer<String>> handlers = betCommands.stream().map(BetCommand::getBetIdHandler)
-                .collect(Collectors.toList());
-        checkState(ids.size() == handlers.size());
-        for (int i = 0; i < ids.size(); i++) {
-            Consumer<String> handler = handlers.get(i);
-            if (handler != null) {
-                handler.accept(ids.get(i));
-            }
-        }
     }
 
     public boolean isEmpty() {

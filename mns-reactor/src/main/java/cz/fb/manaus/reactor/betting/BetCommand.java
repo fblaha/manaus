@@ -1,25 +1,24 @@
 package cz.fb.manaus.reactor.betting;
 
 import cz.fb.manaus.core.model.Bet;
-
-import java.util.function.Consumer;
+import cz.fb.manaus.core.model.BetAction;
 
 public class BetCommand {
 
     private final Bet newBet;
-    private final Consumer<String> handler;
+    private final BetAction action;
 
-    public BetCommand(Bet newBet, Consumer<String> handler) {
+    public BetCommand(Bet newBet, BetAction action) {
         this.newBet = newBet;
-        this.handler = handler;
+        this.action = action;
     }
 
     public Bet getNewBet() {
         return newBet;
     }
 
-    public Consumer<String> getBetIdHandler() {
-        return handler;
+    public BetAction getAction() {
+        return action;
     }
 }
 

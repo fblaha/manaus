@@ -6,7 +6,6 @@ import com.google.common.collect.Ordering;
 import com.google.common.collect.Table;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
-import cz.fb.manaus.core.model.CollectedBets;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.MarketSnapshot;
@@ -19,7 +18,6 @@ import cz.fb.manaus.reactor.betting.BetCollector;
 import cz.fb.manaus.reactor.betting.BetCommand;
 import cz.fb.manaus.reactor.betting.BetContext;
 import cz.fb.manaus.reactor.betting.BetContextFactory;
-import cz.fb.manaus.reactor.betting.action.ActionSaver;
 import cz.fb.manaus.reactor.betting.proposer.PriceProposalService;
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer;
 import cz.fb.manaus.reactor.betting.proposer.ProposedPrice;
@@ -39,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -61,9 +58,6 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
     protected ValidationService validationService;
     @Autowired
     protected PriceService priceService;
-    // TODO remove persistence from this class
-    @Autowired
-    protected ActionSaver actionSaver;
     @Autowired
     private FlowFilterRegistry flowFilterRegistry;
     @Autowired
@@ -98,7 +92,7 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
     }
 
     @Override
-    public final void onMarketSnapshot(MarketSnapshot snapshot, BetCollector betCollector, CollectedBets collectedBets) {
+    public final void onMarketSnapshot(MarketSnapshot snapshot, BetCollector betCollector) {
         MarketPrices marketPrices = snapshot.getMarketPrices();
         Market market = marketPrices.getMarket();
         int winnerCount = marketPrices.getWinnerCount();
@@ -129,13 +123,13 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
                     setTradedVolumeMean(ctx);
                     ValidationResult pricelessValidation = validationService.validate(ctx, validators);
                     if (!pricelessValidation.isSuccess()) {
-                        cancelBet(oldBet, betCollector, collectedBets);
+                        cancelBet(oldBet, betCollector);
                         continue;
                     }
 
                     Optional<Price> newPrice = getNewPrice(ctx);
                     if (!newPrice.isPresent()) {
-                        cancelBet(oldBet, betCollector, collectedBets);
+                        cancelBet(oldBet, betCollector);
                         continue;
                     }
 
@@ -146,36 +140,31 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
                     ValidationResult priceValidation = validationService.validate(priceCtx, validators);
 
                     if (priceValidation.isSuccess()) {
-                        bet(priceCtx, betCollector, collectedBets);
+                        bet(priceCtx, betCollector);
                     }
                 }
             }
         }
     }
 
-    private void bet(BetContext ctx, BetCollector betCollector, CollectedBets collectedBets) {
+    private void bet(BetContext ctx, BetCollector betCollector) {
         BetAction action = ctx.createBetAction();
         Price newPrice = ctx.getNewPrice().get();
 
-        actionSaver.saveAction(action);
-        Consumer<String> betIdSetter = actionSaver.betIdSetter(action);
         if (ctx.getOldBet().isPresent()) {
-            betCollector.updateBet(new BetCommand(ctx.getOldBet().get().replacePrice(newPrice.getPrice()), betIdSetter));
-            collectedBets.getUpdate().add(ctx.getOldBet().get().replacePrice(newPrice.getPrice()));
+            betCollector.updateBet(new BetCommand(ctx.getOldBet().get().replacePrice(newPrice.getPrice()), action));
         } else {
             Market market = ctx.getMarketPrices().getMarket();
             Bet bet = new Bet(null, market.getId(), ctx.getRunnerPrices().getSelectionId(), newPrice, null, 0);
-            betCollector.placeBet(new BetCommand(bet, betIdSetter));
-            collectedBets.getPlace().add(bet);
+            betCollector.placeBet(new BetCommand(bet, action));
         }
-        logAction(action);
+        log.log(Level.INFO, "{0}_BET:  new bet ''{1}''", new Object[]{action.getBetActionType(), action});
     }
 
-    private void cancelBet(Optional<Bet> oldBet, BetCollector betCollector, CollectedBets collectedBets) {
+    private void cancelBet(Optional<Bet> oldBet, BetCollector betCollector) {
         oldBet.ifPresent(bet -> {
             if (!bet.isMatched()) {
                 betCollector.cancelBet(bet);
-                collectedBets.getCancel().add(bet.getBetId());
                 log.log(Level.INFO, "CANCEL_BET: unable propose price for bet ''{0}''", bet);
             }
         });
@@ -188,10 +177,6 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
             context.getProperties().put(BetAction.PROPOSER_PROP, Joiner.on(',').join(proposedPrice.getProposers()));
         }
         return rounded;
-    }
-
-    private void logAction(BetAction action) {
-        log.log(Level.INFO, "{0}_BET:  new bet ''{1}''", new Object[]{action.getBetActionType(), action});
     }
 
     private void setTradedVolumeMean(BetContext context) {
