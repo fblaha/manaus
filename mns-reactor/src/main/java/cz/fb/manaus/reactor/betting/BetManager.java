@@ -1,10 +1,8 @@
 package cz.fb.manaus.reactor.betting;
 
-import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
-import cz.fb.manaus.core.dao.MarketPricesDao;
 import cz.fb.manaus.core.manager.MarketFilterService;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.CollectedBets;
@@ -54,8 +52,6 @@ public class BetManager {
     private MarketFilterService filterService;
     @Autowired
     private Optional<AbstractPriceFilter> priceFilter;
-    @Autowired
-    private MarketPricesDao marketPricesDao;
     @Autowired
     private BetService betService;
     private List<MarketSnapshotListener> marketSnapshotListeners = new LinkedList<>();
@@ -123,12 +119,6 @@ public class BetManager {
                 List<Bet> toCancel = collector.getToCancel();
                 if (!toCancel.isEmpty() && validate(endpoint)) {
                     betService.cancelBets(endpoint, toCancel);
-                }
-
-                if (!collector.isEmpty()) {
-                    Preconditions.checkState(marketPrices.getId() == null);
-                    marketPricesDao.saveOrUpdate(marketPrices);
-                    requireNonNull(marketPrices.getId());
                 }
 
                 List<BetCommand> toPlace = collector.getToPlace();

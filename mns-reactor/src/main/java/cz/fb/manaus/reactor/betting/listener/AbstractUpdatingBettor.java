@@ -4,7 +4,6 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Table;
-import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.CollectedBets;
@@ -62,6 +61,7 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
     protected ValidationService validationService;
     @Autowired
     protected PriceService priceService;
+    // TODO remove persistence from this class
     @Autowired
     protected ActionSaver actionSaver;
     @Autowired
@@ -74,8 +74,6 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
     private FairnessPolynomialCalculator calculator;
     @Autowired
     private BetContextFactory contextFactory;
-    @Autowired
-    private BetActionDao actionDao;
 
 
     protected AbstractUpdatingBettor(Side side, List<Validator> validators,
