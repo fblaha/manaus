@@ -136,7 +136,7 @@ public class BetManager {
                 if (!previewMode) {
                     if (!toPlace.isEmpty() && validate(endpoint)) {
                         List<BetAction> actions = getPersistedActions(toPlace);
-                        List<Bet> bets = toPlace.stream().map(BetCommand::getNewBet).collect(toList());
+                        List<Bet> bets = toPlace.stream().map(BetCommand::getBet).collect(toList());
                         collectedBets.getPlace().addAll(bets);
                         List<String> ids = betService.placeBets(endpoint, bets);
                         setBetId(actions, ids);
@@ -144,7 +144,7 @@ public class BetManager {
                     List<BetCommand> toUpdate = collector.getToUpdate();
                     if (!toUpdate.isEmpty() && validate(endpoint)) {
                         List<BetAction> actions = getPersistedActions(toUpdate);
-                        List<Bet> bets = toUpdate.stream().map(BetCommand::getNewBet).collect(toList());
+                        List<Bet> bets = toUpdate.stream().map(BetCommand::getBet).collect(toList());
                         collectedBets.getUpdate().addAll(bets);
                         List<String> ids = betService.updateBets(endpoint, bets);
                         setBetId(actions, ids);

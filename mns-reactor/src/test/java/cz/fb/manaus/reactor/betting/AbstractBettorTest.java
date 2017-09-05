@@ -76,7 +76,7 @@ public abstract class AbstractBettorTest<T extends AbstractUpdatingBettor> exten
         List<BetCommand> toPlace = result.getToPlace();
         if (expectedPrice != null) {
             for (BetCommand command : toPlace) {
-                assertThat(command.getNewBet().getRequestedPrice().getPrice(), is(expectedPrice));
+                assertThat(command.getBet().getRequestedPrice().getPrice(), is(expectedPrice));
             }
         }
         return result;

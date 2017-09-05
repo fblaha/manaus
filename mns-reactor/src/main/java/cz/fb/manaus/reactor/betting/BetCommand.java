@@ -5,16 +5,16 @@ import cz.fb.manaus.core.model.BetAction;
 
 public class BetCommand {
 
-    private final Bet newBet;
+    private final Bet bet;
     private final BetAction action;
 
-    public BetCommand(Bet newBet, BetAction action) {
-        this.newBet = newBet;
+    public BetCommand(Bet bet, BetAction action) {
+        this.bet = bet;
         this.action = action;
     }
 
-    public Bet getNewBet() {
-        return newBet;
+    public Bet getBet() {
+        return bet;
     }
 
     public BetAction getAction() {

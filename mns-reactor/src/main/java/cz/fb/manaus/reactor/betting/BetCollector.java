@@ -21,12 +21,12 @@ public class BetCollector {
     private final LinkedList<Bet> toCancel = new LinkedList<>();
 
     public void updateBet(BetCommand command) {
-        requireNonNull(command.getNewBet().getBetId());
+        requireNonNull(command.getBet().getBetId());
         toUpdate.addLast(command);
     }
 
     public void placeBet(BetCommand betCommand) {
-        checkState(betCommand.getNewBet().getBetId() == null);
+        checkState(betCommand.getBet().getBetId() == null);
         toPlace.addLast(betCommand);
     }
 
@@ -50,7 +50,7 @@ public class BetCollector {
 
     public Optional<Bet> findBet(String marketId, int selId, final Side side) {
         Stream<Bet> placeOrUpdate = concat(toPlace.stream(), toUpdate.stream())
-                .map(BetCommand::getNewBet);
+                .map(BetCommand::getBet);
         return concat(placeOrUpdate, toCancel.stream())
                 .filter(bet -> bet.getMarketId().equals(marketId)
                         && bet.getSelectionId() == selId
