@@ -35,7 +35,7 @@ public class ActionSaver {
     private BetUtils betUtils;
 
     private void setBetId(BetAction action, String betId) {
-        replaceExistingBetId(action);
+        replaceExistingBetId(betId, action.getMarket().getId(), action.getSelectionId());
         betActionDao.setBetId(action.getId(), betId);
     }
 
@@ -56,11 +56,10 @@ public class ActionSaver {
         betActionDao.saveOrUpdate(action);
     }
 
-    private void replaceExistingBetId(BetAction action) {
+    private void replaceExistingBetId(String betId, String marketId, long selectionId) {
         long time = Instant.now().getEpochSecond();
-        String previousBetId = action.getBetId() + "_" + Long.toHexString(time);
-        String marketId = action.getMarket().getId();
-        int updatedCount = betActionDao.updateBetId(action.getBetId(), previousBetId, marketId, action.getSelectionId());
+        String previousBetId = betId + "_" + Long.toHexString(time);
+        int updatedCount = betActionDao.updateBetId(betId, previousBetId, marketId, selectionId);
         if (updatedCount > 0) {
             log.log(Level.INFO, "Previous action bet id set to ''{0}''", previousBetId);
         }
