@@ -76,6 +76,7 @@ public class BetActionDao extends GenericHibernateDao<BetAction, Integer> {
 
         List<Predicate> predicates = new LinkedList<>();
         predicates.add(builder.equal(root.join("market").get("id"), marketId));
+        predicates.add(builder.isNotNull(root.get("betId")));
         selId.ifPresent(val -> predicates.add(builder.equal(root.get("selectionId"), val)));
         side.ifPresent(val -> predicates.add(builder.equal(root.get("price").get("side"), val)));
         criteria.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
