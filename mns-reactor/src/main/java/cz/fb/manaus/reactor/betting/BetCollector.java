@@ -2,6 +2,7 @@ package cz.fb.manaus.reactor.betting;
 
 import com.google.common.collect.ImmutableList;
 import cz.fb.manaus.core.model.Bet;
+import cz.fb.manaus.core.model.CollectedBets;
 import cz.fb.manaus.core.model.Side;
 
 import java.util.LinkedList;
@@ -13,7 +14,6 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Stream.concat;
 
-@Deprecated
 public class BetCollector {
 
     private final LinkedList<BetCommand> toUpdate = new LinkedList<>();
@@ -46,6 +46,14 @@ public class BetCollector {
 
     public List<Bet> getToCancel() {
         return ImmutableList.copyOf(toCancel);
+    }
+
+    public CollectedBets toCollectedBets() {
+        CollectedBets bets = CollectedBets.create();
+        getToCancel().stream().map(Bet::getBetId).forEach(bets.getCancel()::add);
+        getToUpdate().stream().map(BetCommand::getBet).forEach(bets.getUpdate()::add);
+        getToPlace().stream().map(BetCommand::getBet).forEach(bets.getPlace()::add);
+        return bets;
     }
 
     public Optional<Bet> findBet(String marketId, int selId, final Side side) {

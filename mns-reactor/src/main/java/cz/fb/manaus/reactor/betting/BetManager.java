@@ -108,7 +108,7 @@ public class BetManager {
 
         OptionalDouble reciprocal = marketPrices.getReciprocal(Side.BACK);
         Market market = marketPrices.getMarket();
-        CollectedBets collectedBets = CollectedBets.create();
+        BetCollector collector = new BetCollector();
 
         if (checkMarket(myBets, market, reciprocal)) {
             Date currDate = new Date();
@@ -117,7 +117,6 @@ public class BetManager {
             List<Bet> unknownBets = betUtils.getUnknownBets(snapshot.getCurrentBets(), myBets);
             unknownBets.forEach(bet -> log.log(Level.WARNING, "unknown bet ''{0}''", bet));
             if (unknownBets.isEmpty()) {
-                BetCollector collector = new BetCollector();
                 for (MarketSnapshotListener listener : marketSnapshotListeners) {
                     if (!disabledListeners.contains(listener.getClass().getSimpleName())) {
                         listener.onMarketSnapshot(snapshot, collector);
@@ -127,9 +126,6 @@ public class BetManager {
                 List<Bet> toCancel = collector.getToCancel();
                 if (!toCancel.isEmpty() && validate(endpoint)) {
                     betService.cancelBets(endpoint, toCancel);
-                    List<String> cancelIds = toCancel.stream()
-                            .map(Bet::getBetId).collect(toList());
-                    collectedBets.getCancel().addAll(cancelIds);
                 }
 
                 List<BetCommand> toPlace = collector.getToPlace();
@@ -137,7 +133,6 @@ public class BetManager {
                     if (!toPlace.isEmpty() && validate(endpoint)) {
                         List<BetAction> actions = getPersistedActions(toPlace);
                         List<Bet> bets = toPlace.stream().map(BetCommand::getBet).collect(toList());
-                        collectedBets.getPlace().addAll(bets);
                         List<String> ids = betService.placeBets(endpoint, bets);
                         setBetId(actions, ids);
                     }
@@ -145,14 +140,13 @@ public class BetManager {
                     if (!toUpdate.isEmpty() && validate(endpoint)) {
                         List<BetAction> actions = getPersistedActions(toUpdate);
                         List<Bet> bets = toUpdate.stream().map(BetCommand::getBet).collect(toList());
-                        collectedBets.getUpdate().addAll(bets);
                         List<String> ids = betService.updateBets(endpoint, bets);
                         setBetId(actions, ids);
                     }
                 }
             }
         }
-        return collectedBets;
+        return collector.toCollectedBets();
     }
 
     @Deprecated
