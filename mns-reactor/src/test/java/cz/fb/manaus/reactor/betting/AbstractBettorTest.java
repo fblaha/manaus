@@ -6,7 +6,6 @@ import com.google.common.collect.Maps;
 import cz.fb.manaus.core.dao.AbstractDaoTest;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
-import cz.fb.manaus.core.model.CollectedBets;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.MarketSnapshot;
 import cz.fb.manaus.core.model.Price;
@@ -25,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 
 import static cz.fb.manaus.core.test.CoreTestFactory.AWAY;
@@ -48,13 +48,10 @@ public abstract class AbstractBettorTest<T extends AbstractUpdatingBettor> exten
 
     protected BetCollector check(MarketPrices marketPrices, List<Bet> bets, int placeCount, int updateCount) {
         BetCollector collector = new BetCollector();
-        CollectedBets collectedBets = CollectedBets.create();
         MarketSnapshot snapshot = new MarketSnapshot(marketPrices, bets, Optional.of(createTradedVolume(marketPrices)));
         bettor.onMarketSnapshot(snapshot, collector);
         assertThat(collector.getToPlace().size(), is(placeCount));
         assertThat(collector.getToUpdate().size(), is(updateCount));
-        assertThat(collectedBets.getPlace().size(), is(placeCount));
-        assertThat(collectedBets.getUpdate().size(), is(updateCount));
         return collector;
     }
 
@@ -71,12 +68,12 @@ public abstract class AbstractBettorTest<T extends AbstractUpdatingBettor> exten
         return Maps.transformValues(result.asMap(), TradedVolume::new);
     }
 
-    protected BetCollector checkPlace(MarketPrices marketPrices, int expectedCount, Double expectedPrice) {
+    protected BetCollector checkPlace(MarketPrices marketPrices, int expectedCount, OptionalDouble expectedPrice) {
         BetCollector result = check(marketPrices, Collections.<Bet>emptyList(), expectedCount, 0);
         List<BetCommand> toPlace = result.getToPlace();
-        if (expectedPrice != null) {
+        if (expectedPrice.isPresent()) {
             for (BetCommand command : toPlace) {
-                assertThat(command.getBet().getRequestedPrice().getPrice(), is(expectedPrice));
+                assertThat(command.getBet().getRequestedPrice().getPrice(), is(expectedPrice.getAsDouble()));
             }
         }
         return result;
