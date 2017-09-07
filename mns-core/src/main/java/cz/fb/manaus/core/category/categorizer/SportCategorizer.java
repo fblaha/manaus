@@ -9,8 +9,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static java.util.Collections.singleton;
-
 
 @Component
 final public class SportCategorizer extends AbstractDelegatingCategorizer {
@@ -69,10 +67,6 @@ final public class SportCategorizer extends AbstractDelegatingCategorizer {
     @Override
     public Set<String> getCategoryRaw(Market market) {
         Optional<String> category = getCategory(market);
-        if (category.isPresent()) {
-            return singleton(category.get());
-        } else {
-            return Collections.emptySet();
-        }
+        return category.map(Collections::singleton).orElse(Collections.emptySet());
     }
 }

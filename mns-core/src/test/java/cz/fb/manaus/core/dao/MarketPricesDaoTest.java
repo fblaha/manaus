@@ -345,10 +345,8 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
 
     private OptionalDouble getMarketReciprocal(List<MarketPrices> latestPrices, Side side) {
         Optional<MarketPrices> latest = latestPrices.stream().findFirst();
-        if (latest.isPresent()) {
-            return latest.get().getReciprocal(side);
-        }
-        return OptionalDouble.empty();
+        return latest.map(marketPrices -> marketPrices.getReciprocal(side))
+                .orElse(OptionalDouble.empty());
     }
 
 }

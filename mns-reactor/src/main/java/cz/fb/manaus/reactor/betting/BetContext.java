@@ -113,10 +113,10 @@ public class BetContext {
             checkState(oldSide == newSide);
         }
         Optional<Bet> counterBet = getCounterBet();
-        if (counterBet.isPresent()) {
-            Side otherSide = requireNonNull(counterBet.get().getRequestedPrice().getSide());
+        counterBet.ifPresent(bet -> {
+            Side otherSide = requireNonNull(bet.getRequestedPrice().getSide());
             checkState(otherSide == newSide.getOpposite());
-        }
+        });
         this.newPrice = Optional.of(newPrice);
         return this;
     }
@@ -141,11 +141,7 @@ public class BetContext {
 
     public boolean isCounterHalfMatched() {
         Optional<Bet> counterBet = getCounterBet();
-        if (counterBet.isPresent()) {
-            return counterBet.get().isHalfMatched();
-        } else {
-            return false;
-        }
+        return counterBet.map(Bet::isHalfMatched).orElse(false);
     }
 
     public boolean isUpdate() {
