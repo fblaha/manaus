@@ -13,7 +13,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,9 +33,9 @@ public class ActionSaver {
     @Autowired
     private BetUtils betUtils;
 
-    private void setBetId(BetAction action, String betId) {
-        replaceExistingBetId(betId, action.getMarket().getId(), action.getSelectionId());
-        betActionDao.setBetId(action.getId(), betId);
+    public void setBetId(String betId, int actionId, String marketId, long selectionId) {
+        replaceExistingBetId(betId, marketId, selectionId);
+        betActionDao.setBetId(actionId, betId);
     }
 
     public void saveAction(BetAction action) {
@@ -65,22 +64,4 @@ public class ActionSaver {
         }
     }
 
-    @Deprecated
-    public Consumer<String> betIdSetter(BetAction action) {
-        return new BetIdSetter(action);
-    }
-
-    @Deprecated
-    private class BetIdSetter implements Consumer<String> {
-        private final BetAction action;
-
-        public BetIdSetter(BetAction action) {
-            this.action = action;
-        }
-
-        @Override
-        public void accept(String betId) {
-            setBetId(action, betId);
-        }
-    }
 }

@@ -151,8 +151,11 @@ public class BetManager {
 
     @Deprecated
     private void setBetId(List<BetAction> actions, List<String> ids) {
-        IntStream.range(0, ids.size()).forEach(
-                idx -> actionDao.setBetId(actions.get(idx).getId(), ids.get(idx)));
+        IntStream.range(0, ids.size()).forEach(idx -> {
+            BetAction action = actions.get(idx);
+            actionSaver.setBetId(ids.get(idx), action.getId(), action.getMarket().getId(),
+                    action.getSelectionId());
+        });
     }
 
     private List<BetAction> getPersistedActions(List<BetCommand> commands) {
