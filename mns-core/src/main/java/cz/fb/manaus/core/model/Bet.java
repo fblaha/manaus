@@ -15,7 +15,7 @@ public class Bet {
     private Price requestedPrice;
     private Date placedDate;
     private double matchedAmount;
-    private Bet predecessor;
+    private int actionId;
 
 
     public Bet(String betId, String marketId, long selectionId, Price requestedPrice, Date placedDate, double matchedAmount) {
@@ -65,18 +65,18 @@ public class Bet {
         return betId;
     }
 
-    public Bet getPredecessor() {
-        return predecessor;
+    public int getActionId() {
+        return actionId;
     }
 
-    public void setPredecessor(Bet predecessor) {
-        this.predecessor = predecessor;
+    public void setActionId(int actionId) {
+        this.actionId = actionId;
     }
 
     public Bet replacePrice(double newPrice) {
         Price newOne = new Price(newPrice, getRequestedPrice().getAmount(), getRequestedPrice().getSide());
         Bet bet = new Bet(getBetId(), getMarketId(), getSelectionId(), newOne, placedDate, matchedAmount);
-        bet.setPredecessor(predecessor);
+        bet.setActionId(actionId);
         return bet;
     }
 
@@ -92,15 +92,13 @@ public class Bet {
         return new EqualsBuilder().append(marketId, other.marketId).append(selectionId, other.selectionId)
                 .append(requestedPrice, other.requestedPrice).append(betId, other.betId)
                 .append(matchedAmount, other.matchedAmount)
-                .append(predecessor, other.predecessor)
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(marketId).append(selectionId).append(requestedPrice)
-                .append(betId).append(matchedAmount).append(predecessor)
-                .toHashCode();
+                .append(betId).append(matchedAmount).append(actionId).toHashCode();
     }
 
     @Override
@@ -112,7 +110,7 @@ public class Bet {
                 .add("requestedPrice", requestedPrice)
                 .add("placedDate", placedDate)
                 .add("matchedAmount", matchedAmount)
-                .add("predecessor", predecessor)
+                .add("actionId", actionId)
                 .toString();
     }
 }

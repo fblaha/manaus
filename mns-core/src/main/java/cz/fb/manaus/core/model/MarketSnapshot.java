@@ -39,7 +39,6 @@ public class MarketSnapshot {
                 Side side = bet.getRequestedPrice().getSide();
                 Bet predecessor = result.get(side, bet.getSelectionId());
                 if (predecessor != null) {
-                    bet.setPredecessor(predecessor);
                     log.log(Level.WARNING, "Suspicious relationship between predecessor ''{0}'' and successor ''{1}''",
                             new Object[]{predecessor, bet});
 

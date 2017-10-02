@@ -131,14 +131,14 @@ public class BetManager {
                 List<BetCommand> toPlace = collector.getToPlace();
                 if (!previewMode) {
                     if (!toPlace.isEmpty() && validate(endpoint)) {
-                        List<BetAction> actions = getPersistedActions(toPlace);
+                        List<BetAction> actions = saveActions(toPlace);
                         List<Bet> bets = toPlace.stream().map(BetCommand::getBet).collect(toList());
                         List<String> ids = betService.placeBets(endpoint, bets);
                         setBetId(actions, ids);
                     }
                     List<BetCommand> toUpdate = collector.getToUpdate();
                     if (!toUpdate.isEmpty() && validate(endpoint)) {
-                        List<BetAction> actions = getPersistedActions(toUpdate);
+                        List<BetAction> actions = saveActions(toUpdate);
                         List<Bet> bets = toUpdate.stream().map(BetCommand::getBet).collect(toList());
                         List<String> ids = betService.updateBets(endpoint, bets);
                         setBetId(actions, ids);
@@ -158,9 +158,10 @@ public class BetManager {
         });
     }
 
-    private List<BetAction> getPersistedActions(List<BetCommand> commands) {
+    private List<BetAction> saveActions(List<BetCommand> commands) {
         List<BetAction> actions = commands.stream().map(BetCommand::getAction).collect(toList());
         actions.forEach(actionSaver::saveAction);
+        commands.forEach(c -> c.getBet().setActionId(c.getAction().getId()));
         return actions;
     }
 

@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class MarketSnapshotTest {
@@ -22,8 +21,6 @@ public class MarketSnapshotTest {
         Table<Side, Long, Bet> coverage = MarketSnapshot.getMarketCoverage(Arrays.asList(successor, predecessor));
         assertThat(coverage.size(), is(1));
         assertThat(coverage.get(side, selectionId), is(successor));
-        assertThat(successor.getPredecessor(), is(predecessor));
-        assertThat(predecessor.getPredecessor(), nullValue());
     }
 
 }
