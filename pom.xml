@@ -14,8 +14,6 @@
         <version>1.4.2.RELEASE</version>
     </parent>
     <modules>
-        <module>providers/betfair-ng</module>
-        <module>providers/matchbook</module>
         <module>mns-core</module>
         <module>mns-scheduler</module>
         <module>mns-reactor</module>
@@ -92,18 +90,6 @@
             <dependency>
                 <groupId>cz.fb.manaus</groupId>
                 <artifactId>manaus-rest</artifactId>
-                <scope>compile</scope>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cz.fb.manaus</groupId>
-                <artifactId>betfair-ng</artifactId>
-                <scope>compile</scope>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cz.fb.manaus</groupId>
-                <artifactId>matchbook</artifactId>
                 <scope>compile</scope>
                 <version>${project.version}</version>
             </dependency>
