@@ -9,7 +9,6 @@ import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.MarketSnapshot;
 import cz.fb.manaus.reactor.betting.BetManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +32,6 @@ public class MarketSnapshotController {
     public static final String MNS_AUTH_TOKEN = "MNS_AUTH_TOKEN";
     private static final Logger log = Logger.getLogger(MarketSnapshotController.class.getSimpleName());
 
-    @Lazy
     @Autowired
     private BetManager manager;
     @Autowired

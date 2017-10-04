@@ -66,7 +66,7 @@ public class BetManager {
                 .split(Strings.nullToEmpty(rawDisabledListeners)));
     }
 
-    @Autowired
+    @Autowired(required = false)
     public void setMarketSnapshotListeners(List<MarketSnapshotListener> marketSnapshotListeners) {
         requireNonNull(marketSnapshotListeners);
         this.marketSnapshotListeners = from(new AnnotationAwareOrderComparator()).sortedCopy(marketSnapshotListeners);
