@@ -72,9 +72,9 @@ public class BetManager {
         this.marketSnapshotListeners = from(new AnnotationAwareOrderComparator()).sortedCopy(marketSnapshotListeners);
     }
 
-    public CollectedBets silentFire(MarketSnapshot snapshot, Set<String> myBets, BetEndpoint endpoint) {
+    public CollectedBets silentFire(MarketSnapshot snapshot, Set<String> myBets) {
         try {
-            return fire(snapshot, myBets, endpoint);
+            return fire(snapshot, myBets);
         } catch (HttpStatusCodeException e) {
             String body = e.getResponseBodyAsString();
             HttpStatus statusCode = e.getStatusCode();
@@ -93,7 +93,7 @@ public class BetManager {
         log.log(Level.SEVERE, "fix it!", e);
     }
 
-    private CollectedBets fire(MarketSnapshot snapshot, Set<String> myBets, BetEndpoint endpoint) {
+    private CollectedBets fire(MarketSnapshot snapshot, Set<String> myBets) {
         MarketPrices marketPrices = snapshot.getMarketPrices();
         filterPrices(marketPrices);
 
