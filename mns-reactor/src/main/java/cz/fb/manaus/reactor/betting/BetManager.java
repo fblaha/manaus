@@ -3,7 +3,6 @@ package cz.fb.manaus.reactor.betting;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
-import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.manager.MarketFilterService;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
@@ -34,7 +33,6 @@ import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.IntStream;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Ordering.from;
@@ -48,7 +46,6 @@ public class BetManager {
     public static final String PREVIEW_MODE_EL = "#{systemEnvironment['MNS_PREVIEW_MODE'] ?: false}";
     public static final String DISABLED_LISTENERS_EL = "#{systemEnvironment['MNS_DISABLED_LISTENERS']}";
     private static final Logger log = Logger.getLogger(BetManager.class.getSimpleName());
-    private final boolean previewMode;
     private final Set<String> disabledListeners;
     @Autowired
     private BetUtils betUtils;
@@ -57,18 +54,12 @@ public class BetManager {
     @Autowired
     private Optional<AbstractPriceFilter> priceFilter;
     @Autowired
-    private BetService betService;
-    @Autowired
     private ActionSaver actionSaver;
-    @Autowired
-    private BetActionDao actionDao;
     private List<MarketSnapshotListener> marketSnapshotListeners = new LinkedList<>();
 
 
     @Autowired
-    public BetManager(@Value(PREVIEW_MODE_EL) boolean previewMode,
-                      @Value(DISABLED_LISTENERS_EL) String rawDisabledListeners) {
-        this.previewMode = previewMode;
+    public BetManager(@Value(DISABLED_LISTENERS_EL) String rawDisabledListeners) {
         this.disabledListeners = ImmutableSet.copyOf(Splitter.on(',')
                 .omitEmptyStrings()
                 .trimResults()
@@ -122,53 +113,17 @@ public class BetManager {
                         listener.onMarketSnapshot(snapshot, collector);
                     }
                 }
-
-                List<Bet> toCancel = collector.getToCancel();
-                if (!toCancel.isEmpty() && validate(endpoint)) {
-                    betService.cancelBets(endpoint, toCancel);
-                }
-
-                List<BetCommand> toPlace = collector.getToPlace();
-                if (!previewMode) {
-                    if (!toPlace.isEmpty() && validate(endpoint)) {
-                        List<BetAction> actions = saveActions(toPlace);
-                        List<Bet> bets = toPlace.stream().map(BetCommand::getBet).collect(toList());
-                        List<String> ids = betService.placeBets(endpoint, bets);
-                        setBetId(actions, ids);
-                    }
-                    List<BetCommand> toUpdate = collector.getToUpdate();
-                    if (!toUpdate.isEmpty() && validate(endpoint)) {
-                        List<BetAction> actions = saveActions(toUpdate);
-                        List<Bet> bets = toUpdate.stream().map(BetCommand::getBet).collect(toList());
-                        List<String> ids = betService.updateBets(endpoint, bets);
-                        setBetId(actions, ids);
-                    }
-                }
+                saveActions(collector.getToPlace());
+                saveActions(collector.getToUpdate());
             }
         }
         return collector.toCollectedBets();
     }
 
-    @Deprecated
-    private void setBetId(List<BetAction> actions, List<String> ids) {
-        IntStream.range(0, ids.size()).forEach(idx -> {
-            BetAction action = actions.get(idx);
-            actionSaver.setBetId(ids.get(idx), action.getId(), action.getMarket().getId(),
-                    action.getSelectionId());
-        });
-    }
-
-    private List<BetAction> saveActions(List<BetCommand> commands) {
+    private void saveActions(List<BetCommand> commands) {
         List<BetAction> actions = commands.stream().map(BetCommand::getAction).collect(toList());
         actions.forEach(actionSaver::saveAction);
         commands.forEach(c -> c.getBet().setActionId(c.getAction().getId()));
-        return actions;
-    }
-
-    private boolean validate(BetEndpoint endpoint) {
-        Optional<String> result = betService.validate(endpoint);
-        result.ifPresent(log::warning);
-        return !result.isPresent();
     }
 
     private void filterPrices(MarketPrices marketPrices) {

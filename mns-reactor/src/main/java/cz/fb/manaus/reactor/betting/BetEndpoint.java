@@ -2,6 +2,7 @@ package cz.fb.manaus.reactor.betting;
 
 import java.util.Optional;
 
+@Deprecated
 public class BetEndpoint {
     private final Optional<String> betUrl;
     private final Optional<String> authToken;
