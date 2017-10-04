@@ -41,12 +41,10 @@ public class BetActionDao extends GenericHibernateDao<BetAction, Integer> {
     }
 
     @Transactional
-    public int updateBetId(String oldOne, String newOne, String marketId, long selectionId) {
+    public int updateBetId(String oldOne, String newOne) {
         Query query = getSession().getNamedQuery(BetAction.UPDATE_BET_ID);
         query.setParameter("newOne", newOne);
         query.setParameter("oldOne", oldOne);
-        query.setParameter("selectionId", selectionId);
-        query.setParameter("marketId", marketId);
         return query.executeUpdate();
     }
 

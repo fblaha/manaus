@@ -6,6 +6,7 @@ import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.dao.MarketPricesDao;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.Market;
+import cz.fb.manaus.reactor.betting.action.ActionSaver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,8 @@ public class BetActionController {
     private MarketDao marketDao;
     @Autowired
     private MarketPricesDao marketPricesDao;
+    @Autowired
+    private ActionSaver actionSaver;
 
     @ResponseBody
     @RequestMapping(value = "/markets/{id}/actions", method = RequestMethod.GET)
@@ -67,7 +70,7 @@ public class BetActionController {
     @RequestMapping(value = "/actions/{id}/betId", method = RequestMethod.PUT)
     public ResponseEntity<?> setBetId(@PathVariable int id,
                                       @RequestBody String betId) {
-        int changedRows = betActionDao.setBetId(id, betId);
+        int changedRows = actionSaver.setBetId(betId, id);
         if (changedRows > 0) {
             return ResponseEntity.ok().build();
         } else {

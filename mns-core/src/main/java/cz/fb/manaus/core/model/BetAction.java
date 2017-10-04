@@ -31,8 +31,7 @@ import java.util.Set;
 @Entity
 @NamedQueries({
         @NamedQuery(name = BetAction.UPDATE_BET_ID,
-                query = "update BetAction ba set ba.betId = :newOne where ba.betId = :oldOne and " +
-                        "ba.selectionId = :selectionId and ba.market.id = :marketId"),
+                query = "update BetAction ba set ba.betId = :newOne where ba.betId = :oldOne"),
         @NamedQuery(name = BetAction.SET_BET_ID,
                 query = "update BetAction ba set ba.betId = :betId where ba.id = :actionId")})
 public class BetAction {
