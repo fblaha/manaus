@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.2.RELEASE</version>
+        <version>1.5.7.RELEASE</version>
     </parent>
     <modules>
         <module>mns-core</module>
@@ -21,7 +21,6 @@
     </modules>
 
     <properties>
-        <hibernate.version>5.2.4.Final</hibernate.version>
         <jackson.version>2.8.4</jackson.version>
     </properties>
 
