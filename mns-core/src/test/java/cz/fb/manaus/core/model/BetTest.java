@@ -22,7 +22,6 @@ public class BetTest extends AbstractLocalTestCase {
     @Autowired
     private ExchangeProvider provider;
 
-
     @Test
     public void testHalfMatched() throws Exception {
         assertTrue(createBet(provider.getMinAmount()).isHalfMatched());
