@@ -1,5 +1,6 @@
 package cz.fb.manaus.spring;
 
+import com.codahale.metrics.MetricRegistry;
 import cz.fb.manaus.core.provider.ExchangeProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,13 +18,13 @@ import org.springframework.stereotype.Repository;
 public class CoreLocalConfiguration {
 
     public static final String LOOK_AHEAD_EL = "#{systemEnvironment['MNS_LOOK_AHEAD'] ?: 7}";
-    public static final String USER_EL = "#{systemEnvironment['MNS_USER']}";
-    public static final String PASSWORD_EL = "#{systemEnvironment['MNS_PASSWORD']}";
-    public static final String KEYSTORE_EL = "#{systemEnvironment['MNS_KEYSTORE']}";
-    public static final String PROXY_EL = "#{systemEnvironment['MNS_PROXY']}";
-
     public static final String PRODUCTION_PROFILE = "production";
     public static final String TEST_PROFILE = "test";
+
+    @Bean
+    public MetricRegistry metricRegistry() {
+        return new MetricRegistry();
+    }
 
     @Bean
     @Profile("matchbook")
@@ -36,5 +37,4 @@ public class CoreLocalConfiguration {
     public ExchangeProvider betfairExchangeProvider() {
         return new ExchangeProvider("betfair", 2d, 1.01d, 0.065d, true);
     }
-
 }

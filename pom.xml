@@ -114,7 +114,11 @@
                 <artifactId>guava</artifactId>
                 <version>23.1-jre</version>
             </dependency>
-
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-core</artifactId>
+                <version>3.2.5</version>
+            </dependency>
             <!--core dependencies-->
             <dependency>
                 <groupId>com.h2database</groupId>

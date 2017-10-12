@@ -43,7 +43,6 @@ import static java.util.stream.Collectors.toList;
 @DatabaseComponent
 public class BetManager {
 
-    public static final String PREVIEW_MODE_EL = "#{systemEnvironment['MNS_PREVIEW_MODE'] ?: false}";
     public static final String DISABLED_LISTENERS_EL = "#{systemEnvironment['MNS_DISABLED_LISTENERS']}";
     private static final Logger log = Logger.getLogger(BetManager.class.getSimpleName());
     private final Set<String> disabledListeners;

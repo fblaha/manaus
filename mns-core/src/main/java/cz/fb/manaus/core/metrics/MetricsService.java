@@ -1,5 +1,6 @@
 package cz.fb.manaus.core.metrics;
 
+import com.codahale.metrics.MetricRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,8 @@ import java.util.stream.Collectors;
 @Component
 public class MetricsService {
 
+    @Autowired
+    private MetricRegistry registry;
     @Autowired
     private List<MetricsContributor> contributors;
 
