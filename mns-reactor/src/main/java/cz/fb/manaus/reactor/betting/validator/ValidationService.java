@@ -25,7 +25,7 @@ public class ValidationService {
     @Autowired
     private PriceService priceService;
     @Autowired
-    private ValidationStatisticsRecorder recorder;
+    private ValidationMetricsCollector recorder;
 
     Optional<ValidationResult> handleDowngrade(Optional<Price> newOne, Optional<Bet> oldOne, Validator validator) {
         if (oldOne.isPresent() && newOne.isPresent()) {
