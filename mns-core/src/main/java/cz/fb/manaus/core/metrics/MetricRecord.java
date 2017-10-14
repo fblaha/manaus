@@ -2,11 +2,11 @@ package cz.fb.manaus.core.metrics;
 
 import com.google.common.base.MoreObjects;
 
-public class MetricRecord {
+public class MetricRecord<T> {
     private final String name;
-    private final double value;
+    private final T value;
 
-    public MetricRecord(String name, double value) {
+    public MetricRecord(String name, T value) {
         this.name = name;
         this.value = value;
     }
@@ -15,7 +15,7 @@ public class MetricRecord {
         return name;
     }
 
-    public double getValue() {
+    public T getValue() {
         return value;
     }
 

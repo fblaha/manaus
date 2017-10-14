@@ -61,7 +61,7 @@ public class MarketSnapshotController implements MetricsContributor {
     }
 
     @Override
-    public Stream<MetricRecord> getMetricRecords() {
+    public Stream<MetricRecord<?>> getMetricRecords() {
         return getMeterMetricRecords("market.snapshot", metricRegistry);
     }
 }

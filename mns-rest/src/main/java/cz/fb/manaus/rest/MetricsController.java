@@ -24,19 +24,19 @@ public class MetricsController implements MetricsContributor {
 
     @ResponseBody
     @RequestMapping(value = "/metrics", method = RequestMethod.GET)
-    public List<MetricRecord> getMetrics() {
+    public List<MetricRecord<?>> getMetrics() {
         return getMetrics("");
     }
 
     @ResponseBody
     @RequestMapping(value = "/metrics/{prefix}", method = RequestMethod.GET)
-    public List<MetricRecord> getMetrics(@PathVariable String prefix) {
+    public List<MetricRecord<?>> getMetrics(@PathVariable String prefix) {
         registry.counter("metrics").inc();
         return metricsService.getCollectedMetrics(prefix);
     }
 
     @Override
-    public Stream<MetricRecord> getMetricRecords() {
+    public Stream<MetricRecord<?>> getMetricRecords() {
         return getCounterMetricRecords("metrics", registry);
     }
 }

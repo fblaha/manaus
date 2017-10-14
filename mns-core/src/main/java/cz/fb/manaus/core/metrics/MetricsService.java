@@ -14,7 +14,7 @@ public class MetricsService {
     @Autowired(required = false)
     private final List<MetricsContributor> contributors = Collections.emptyList();
 
-    public List<MetricRecord> getCollectedMetrics(String prefix) {
+    public List<MetricRecord<?>> getCollectedMetrics(String prefix) {
         return contributors.stream().flatMap(MetricsContributor::getMetricRecords)
                 .filter(record -> record.getName().startsWith(prefix))
                 .sorted(Comparator.comparing(MetricRecord::getName))

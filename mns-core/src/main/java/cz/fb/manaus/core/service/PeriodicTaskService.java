@@ -64,7 +64,7 @@ public class PeriodicTaskService implements MetricsContributor {
     }
 
     @Override
-    public Stream<MetricRecord> getMetricRecords() {
+    public Stream<MetricRecord<?>> getMetricRecords() {
         return getCounterMetricRecords("tasks.executed", registry);
     }
 }
