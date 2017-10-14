@@ -1,8 +1,12 @@
 package cz.fb.manaus.rest;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.MoreObjects;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketDao;
+import cz.fb.manaus.core.metrics.MetricRecord;
+import cz.fb.manaus.core.metrics.MetricsContributor;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.CollectedBets;
 import cz.fb.manaus.core.model.MarketPrices;
@@ -23,10 +27,11 @@ import java.util.OptionalLong;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 
 @Controller
-public class MarketSnapshotController {
+public class MarketSnapshotController implements MetricsContributor {
 
     public static final String MNS_BET_URL = "MNS_BET_URL";
     public static final String MNS_AUTH_TOKEN = "MNS_AUTH_TOKEN";
@@ -38,10 +43,13 @@ public class MarketSnapshotController {
     private MarketDao marketDao;
     @Autowired
     private BetActionDao actionDao;
+    @Autowired
+    private MetricRegistry metricRegistry;
 
     @RequestMapping(value = "/markets/{id}/snapshot", method = RequestMethod.POST)
     public ResponseEntity<?> pushMarketSnapshot(@PathVariable String id,
                                                 @RequestBody MarketSnapshotCrate snapshotCrate) {
+        metricRegistry.meter("market.snapshot").mark();
         MarketPrices marketPrices = snapshotCrate.getPrices();
         log.log(Level.INFO, "Market snapshot for ''{0}'' recieved", id);
         marketDao.get(id).ifPresent(marketPrices::setMarket);
@@ -53,6 +61,33 @@ public class MarketSnapshotController {
             return ResponseEntity.ok(collectedBets);
         }
         return ResponseEntity.noContent().build();
+    }
+
+    private void updateMetrics(CollectedBets collectedBets) {
+        int placeCount = collectedBets.getPlace().size();
+        if (placeCount > 0) {
+            metricRegistry.meter("bet.placed").mark(placeCount);
+        }
+        int updateCount = collectedBets.getUpdate().size();
+        if (updateCount > 0) {
+            metricRegistry.meter("bet.updated").mark(updateCount);
+        }
+        int cancelCount = collectedBets.getCancel().size();
+        if (cancelCount > 0) {
+            metricRegistry.meter("bet.cancel").mark(cancelCount);
+        }
+        metricRegistry.meter("bet").mark(placeCount + updateCount + cancelCount);
+    }
+
+    @Override
+    public Stream<MetricRecord> getMetricRecords() {
+        Meter meter = metricRegistry.meter("bet.placed");
+        return Stream.of(
+                new MetricRecord("market.snapshot.count", meter.getCount()),
+                new MetricRecord("market.snapshot.rate15", meter.getFifteenMinuteRate()),
+                new MetricRecord("market.snapshot.rate5", meter.getFiveMinuteRate()),
+                new MetricRecord("market.snapshot.rate1", meter.getOneMinuteRate()),
+                new MetricRecord("market.snapshot.meanRate", meter.getMeanRate()));
     }
 }
 
