@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+// TODO replace by metrics
 @Component
 public class ValidationStatisticsRecorder {
 

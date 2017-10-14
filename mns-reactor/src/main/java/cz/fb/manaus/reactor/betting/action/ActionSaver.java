@@ -49,6 +49,7 @@ public class ActionSaver {
         String proposers = action.getProperties().get(BetAction.PROPOSER_PROP);
         String side = action.getPrice().getSide().name().toLowerCase();
         for (String proposer : betUtils.parseProposers(proposers)) {
+            // TODO replace by metrics
             String key = Joiner.on('.').join(PROPOSER_STATS, getWeekDay(date), side, proposer);
             service.incrementAntGet(key, Duration.ofDays(1));
         }
