@@ -57,7 +57,7 @@ public class ValidationService {
             }
             ValidationResult validationResult = handleDowngrade(newPrice, context.getOldBet(), validator)
                     .orElse(requireNonNull(validator.validate(context)));
-            recorder.record(validationResult, context.getSide(), validator);
+            recorder.updateMetrics(validationResult, context.getSide(), validator.getName());
             collected.add(validationResult);
         }
         return requireNonNull(reduce(collected));

@@ -19,8 +19,8 @@ public class ValidationMetricsCollectorTest extends AbstractLocalTestCase {
 
     @Test
     public void testMetrics() throws Exception {
-        metricsCollector.record(ValidationResult.ACCEPT, Side.BACK, VALIDATOR);
-        metricsCollector.record(ValidationResult.REJECT, Side.BACK, VALIDATOR);
+        metricsCollector.updateMetrics(ValidationResult.ACCEPT, Side.BACK, VALIDATOR.getName());
+        metricsCollector.updateMetrics(ValidationResult.REJECT, Side.BACK, VALIDATOR.getName());
         List<MetricRecord<?>> records = metricsCollector.getMetricRecords().collect(Collectors.toList());
         assertEquals(2, records.size());
         records.forEach(record -> assertEquals(1L, record.getValue()));

@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting.validator;
 
-import com.codahale.metrics.Counter;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Joiner;
 import cz.fb.manaus.core.metrics.MetricRecord;
@@ -21,16 +20,15 @@ public class ValidationMetricsCollector implements MetricsContributor {
     @Autowired
     private MetricRegistry registry;
 
-    public void record(ValidationResult result, Side type, Validator validator) {
-        String name = getName(type, result.isSuccess(), validator);
+    public void updateMetrics(ValidationResult result, Side type, String validatorName) {
+        String name = getName(type, result.isSuccess(), validatorName);
         names.add(name);
-        Counter counter = registry.counter(name);
-        counter.inc();
+        registry.counter(name).inc();
     }
 
-    private String getName(Side type, boolean pass, Validator validator) {
+    private String getName(Side type, boolean pass, String validatorName) {
         return Joiner.on('.').join("validator.stats",
-                type.name().toLowerCase(), validator.getName(),
+                type.name().toLowerCase(), validatorName,
                 pass ? "pass" : "fail");
     }
 
