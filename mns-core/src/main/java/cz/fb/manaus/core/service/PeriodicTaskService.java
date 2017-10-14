@@ -1,6 +1,9 @@
 package cz.fb.manaus.core.service;
 
+import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Preconditions;
+import cz.fb.manaus.core.metrics.MetricRecord;
+import cz.fb.manaus.core.metrics.MetricsContributor;
 import cz.fb.manaus.spring.DatabaseComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -9,14 +12,17 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 @DatabaseComponent
-public class PeriodicTaskService {
+public class PeriodicTaskService implements MetricsContributor {
 
     public static final String PREFIX = "periodic.task.timestamp.";
     private static final Logger log = Logger.getLogger(PeriodicTaskService.class.getSimpleName());
     @Autowired
     private PropertiesService propertiesService;
+    @Autowired
+    private MetricRegistry registry;
 
     boolean isRefreshRequired(String taskName, Duration pauseDuration) {
         Optional<Instant> timestamp = propertiesService.getInstant(getTimestampPropertyName(taskName));
@@ -48,6 +54,7 @@ public class PeriodicTaskService {
     public void runIfExpired(String taskName, Duration pauseDuration, Runnable task) {
         if (isRefreshRequired(taskName, pauseDuration)) {
             markUpdated(taskName);
+            registry.counter("tasks.executed").inc();
             task.run();
         }
     }
@@ -56,4 +63,8 @@ public class PeriodicTaskService {
         setTimestamp(taskName, Instant.now());
     }
 
+    @Override
+    public Stream<MetricRecord> getMetricRecords() {
+        return getCounterMetricRecords("tasks.executed", registry);
+    }
 }
