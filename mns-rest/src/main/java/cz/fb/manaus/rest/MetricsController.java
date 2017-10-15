@@ -1,9 +1,8 @@
 package cz.fb.manaus.rest;
 
-import com.codahale.metrics.MetricRegistry;
 import cz.fb.manaus.core.metrics.MetricRecord;
-import cz.fb.manaus.core.metrics.MetricRecordConverter;
 import cz.fb.manaus.core.metrics.MetricsContributor;
+import cz.fb.manaus.core.metrics.MetricsManager;
 import cz.fb.manaus.core.metrics.MetricsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,9 +20,7 @@ public class MetricsController implements MetricsContributor {
     @Autowired
     private MetricsService metricsService;
     @Autowired
-    private MetricRegistry registry;
-    @Autowired
-    private MetricRecordConverter converter;
+    private MetricsManager metricsManager;
 
     @ResponseBody
     @RequestMapping(value = "/metrics", method = RequestMethod.GET)
@@ -34,12 +31,12 @@ public class MetricsController implements MetricsContributor {
     @ResponseBody
     @RequestMapping(value = "/metrics/{prefix}", method = RequestMethod.GET)
     public List<MetricRecord<?>> getMetrics(@PathVariable String prefix) {
-        registry.counter("metrics").inc();
+        metricsManager.getRegistry().counter("metrics").inc();
         return metricsService.getCollectedMetrics(prefix);
     }
 
     @Override
     public Stream<MetricRecord<?>> getMetricRecords() {
-        return converter.getCounterMetricRecords("metrics");
+        return metricsManager.getCounterMetricRecords("metrics");
     }
 }

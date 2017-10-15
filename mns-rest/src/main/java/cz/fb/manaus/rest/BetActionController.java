@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableList;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.dao.MarketPricesDao;
+import cz.fb.manaus.core.metrics.MetricRecord;
+import cz.fb.manaus.core.metrics.MetricsContributor;
+import cz.fb.manaus.core.metrics.MetricsManager;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.reactor.betting.action.ActionSaver;
@@ -22,12 +25,14 @@ import java.net.URI;
 import java.util.List;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
+import java.util.stream.Stream;
 
 import static java.util.Optional.empty;
 
 @Controller
-public class BetActionController {
+public class BetActionController implements MetricsContributor {
 
+    public static final String METRIC_NAME = "put.action.betId";
     @Autowired
     private BetActionDao betActionDao;
     @Autowired
@@ -36,6 +41,8 @@ public class BetActionController {
     private MarketPricesDao marketPricesDao;
     @Autowired
     private ActionSaver actionSaver;
+    @Autowired
+    private MetricsManager metricsManager;
 
     @ResponseBody
     @RequestMapping(value = "/markets/{id}/actions", method = RequestMethod.GET)
@@ -71,10 +78,16 @@ public class BetActionController {
     public ResponseEntity<?> setBetId(@PathVariable int id,
                                       @RequestBody String betId) {
         int changedRows = actionSaver.setBetId(betId, id);
+        metricsManager.getRegistry().meter(METRIC_NAME).mark(changedRows);
         if (changedRows > 0) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @Override
+    public Stream<MetricRecord<?>> getMetricRecords() {
+        return metricsManager.getMeterMetricRecords(METRIC_NAME);
     }
 }

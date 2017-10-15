@@ -1,12 +1,11 @@
 package cz.fb.manaus.rest;
 
-import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.MoreObjects;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.metrics.MetricRecord;
-import cz.fb.manaus.core.metrics.MetricRecordConverter;
 import cz.fb.manaus.core.metrics.MetricsContributor;
+import cz.fb.manaus.core.metrics.MetricsManager;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.CollectedBets;
 import cz.fb.manaus.core.model.MarketPrices;
@@ -34,6 +33,7 @@ import java.util.stream.Stream;
 public class MarketSnapshotController implements MetricsContributor {
 
     private static final Logger log = Logger.getLogger(MarketSnapshotController.class.getSimpleName());
+    public static final String METRIC_NAME = "post.market.snapshot";
 
     @Autowired
     private BetManager manager;
@@ -42,14 +42,12 @@ public class MarketSnapshotController implements MetricsContributor {
     @Autowired
     private BetActionDao actionDao;
     @Autowired
-    private MetricRegistry metricRegistry;
-    @Autowired
-    private MetricRecordConverter converter;
+    private MetricsManager metricsManager;
 
     @RequestMapping(value = "/markets/{id}/snapshot", method = RequestMethod.POST)
     public ResponseEntity<?> pushMarketSnapshot(@PathVariable String id,
                                                 @RequestBody MarketSnapshotCrate snapshotCrate) {
-        metricRegistry.meter("market.snapshot").mark();
+        metricsManager.getRegistry().meter(METRIC_NAME).mark();
         MarketPrices marketPrices = snapshotCrate.getPrices();
         log.log(Level.INFO, "Market snapshot for ''{0}'' recieved", id);
         marketDao.get(id).ifPresent(marketPrices::setMarket);
@@ -65,7 +63,7 @@ public class MarketSnapshotController implements MetricsContributor {
 
     @Override
     public Stream<MetricRecord<?>> getMetricRecords() {
-        return converter.getMeterMetricRecords("market.snapshot");
+        return metricsManager.getMeterMetricRecords(METRIC_NAME);
     }
 }
 

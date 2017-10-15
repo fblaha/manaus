@@ -6,6 +6,9 @@ import cz.fb.manaus.core.category.BetCoverage;
 import cz.fb.manaus.core.category.CategoryService;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.SettledBetDao;
+import cz.fb.manaus.core.metrics.MetricRecord;
+import cz.fb.manaus.core.metrics.MetricsContributor;
+import cz.fb.manaus.core.metrics.MetricsManager;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.SettledBet;
@@ -29,13 +32,15 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Optional.empty;
 
 
 @Controller
-public class SettledBetController {
+public class SettledBetController implements MetricsContributor {
 
+    public static final String METRIC_NAME = "post.settled.bet";
     @Autowired
     private SettledBetDao settledBetDao;
     @Autowired
@@ -46,6 +51,8 @@ public class SettledBetController {
     private CategoryService categoryService;
     @Autowired
     private SettledBetSaver betSaver;
+    @Autowired
+    private MetricsManager metricsManager;
 
 
     @ResponseBody
@@ -93,6 +100,7 @@ public class SettledBetController {
     @RequestMapping(value = "/bets", method = RequestMethod.POST)
     public ResponseEntity<?> addBet(@RequestParam String betId, @RequestBody SettledBet bet) {
         Objects.requireNonNull(betId, "betId==null");
+        metricsManager.getRegistry().meter(METRIC_NAME);
         if (betSaver.saveBet(betId, bet) == SaveStatus.NO_ACTION) {
             return ResponseEntity.noContent().build();
         } else {
@@ -110,5 +118,10 @@ public class SettledBetController {
                 .collect(Collectors.toList());
         previous.forEach(betActionDao::fetchMarketPrices);
         return new BetStory(head, runnerPrices, previous);
+    }
+
+    @Override
+    public Stream<MetricRecord<?>> getMetricRecords() {
+        return metricsManager.getMeterMetricRecords(METRIC_NAME);
     }
 }

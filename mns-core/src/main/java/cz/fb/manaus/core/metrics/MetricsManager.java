@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 import java.util.stream.Stream;
 
 @Component
-public class MetricRecordConverter {
+public class MetricsManager {
 
     @Autowired
-    private MetricRegistry metricRegistry;
+    private MetricRegistry registry;
 
     public Stream<MetricRecord<?>> getMeterMetricRecords(String name) {
-        Meter meter = metricRegistry.meter(name);
+        Meter meter = registry.meter(name);
         String prefix = "meter." + name;
         return Stream.of(
                 new MetricRecord<>(prefix + ".count", meter.getCount()),
@@ -26,9 +26,11 @@ public class MetricRecordConverter {
     }
 
     public Stream<MetricRecord<?>> getCounterMetricRecords(String name) {
-        Counter counter = metricRegistry.counter(name);
+        Counter counter = registry.counter(name);
         return Stream.of(new MetricRecord<>("counter." + name, counter.getCount()));
     }
 
-
+    public MetricRegistry getRegistry() {
+        return registry;
+    }
 }

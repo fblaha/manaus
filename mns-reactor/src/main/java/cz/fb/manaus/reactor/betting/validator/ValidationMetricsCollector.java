@@ -1,10 +1,9 @@
 package cz.fb.manaus.reactor.betting.validator;
 
-import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Joiner;
 import cz.fb.manaus.core.metrics.MetricRecord;
-import cz.fb.manaus.core.metrics.MetricRecordConverter;
 import cz.fb.manaus.core.metrics.MetricsContributor;
+import cz.fb.manaus.core.metrics.MetricsManager;
 import cz.fb.manaus.core.model.Side;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,14 +18,12 @@ public class ValidationMetricsCollector implements MetricsContributor {
     private final Set<String> names = ConcurrentHashMap.newKeySet();
 
     @Autowired
-    private MetricRegistry registry;
-    @Autowired
-    private MetricRecordConverter converter;
+    private MetricsManager metricsManager;
 
     public void updateMetrics(ValidationResult result, Side type, String validatorName) {
         String name = getName(type, result.isSuccess(), validatorName);
         names.add(name);
-        registry.counter(name).inc();
+        metricsManager.getRegistry().counter(name).inc();
     }
 
     private String getName(Side type, boolean pass, String validatorName) {
@@ -37,6 +34,6 @@ public class ValidationMetricsCollector implements MetricsContributor {
 
     @Override
     public Stream<MetricRecord<?>> getMetricRecords() {
-        return names.stream().flatMap(name -> converter.getCounterMetricRecords(name));
+        return names.stream().flatMap(name -> metricsManager.getCounterMetricRecords(name));
     }
 }
