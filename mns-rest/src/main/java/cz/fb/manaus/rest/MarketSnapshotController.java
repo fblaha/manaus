@@ -5,6 +5,7 @@ import com.google.common.base.MoreObjects;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.metrics.MetricRecord;
+import cz.fb.manaus.core.metrics.MetricRecordConverter;
 import cz.fb.manaus.core.metrics.MetricsContributor;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.CollectedBets;
@@ -42,6 +43,8 @@ public class MarketSnapshotController implements MetricsContributor {
     private BetActionDao actionDao;
     @Autowired
     private MetricRegistry metricRegistry;
+    @Autowired
+    private MetricRecordConverter converter;
 
     @RequestMapping(value = "/markets/{id}/snapshot", method = RequestMethod.POST)
     public ResponseEntity<?> pushMarketSnapshot(@PathVariable String id,
@@ -62,7 +65,7 @@ public class MarketSnapshotController implements MetricsContributor {
 
     @Override
     public Stream<MetricRecord<?>> getMetricRecords() {
-        return getMeterMetricRecords("market.snapshot", metricRegistry);
+        return converter.getMeterMetricRecords("market.snapshot");
     }
 }
 

@@ -3,6 +3,7 @@ package cz.fb.manaus.core.service;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Preconditions;
 import cz.fb.manaus.core.metrics.MetricRecord;
+import cz.fb.manaus.core.metrics.MetricRecordConverter;
 import cz.fb.manaus.core.metrics.MetricsContributor;
 import cz.fb.manaus.spring.DatabaseComponent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class PeriodicTaskService implements MetricsContributor {
     private PropertiesService propertiesService;
     @Autowired
     private MetricRegistry registry;
+    @Autowired
+    private MetricRecordConverter converter;
 
     boolean isRefreshRequired(String taskName, Duration pauseDuration) {
         Optional<Instant> timestamp = propertiesService.getInstant(getTimestampPropertyName(taskName));
@@ -65,6 +68,6 @@ public class PeriodicTaskService implements MetricsContributor {
 
     @Override
     public Stream<MetricRecord<?>> getMetricRecords() {
-        return getCounterMetricRecords("tasks.executed", registry);
+        return converter.getCounterMetricRecords("tasks.executed");
     }
 }
