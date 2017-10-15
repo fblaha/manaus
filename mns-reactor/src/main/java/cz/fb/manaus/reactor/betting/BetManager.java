@@ -1,5 +1,6 @@
 package cz.fb.manaus.reactor.betting;
 
+import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
@@ -22,8 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -54,6 +53,8 @@ public class BetManager {
     private Optional<AbstractPriceFilter> priceFilter;
     @Autowired
     private ActionSaver actionSaver;
+    @Autowired
+    private MetricRegistry metricRegistry;
     private List<MarketSnapshotListener> marketSnapshotListeners = new LinkedList<>();
 
 
@@ -74,14 +75,8 @@ public class BetManager {
     public CollectedBets silentFire(MarketSnapshot snapshot, Set<String> myBets) {
         try {
             return fire(snapshot, myBets);
-        } catch (HttpStatusCodeException e) {
-            String body = e.getResponseBodyAsString();
-            HttpStatus statusCode = e.getStatusCode();
-            String statusText = e.getStatusText();
-            log.log(Level.SEVERE, "Http error, status: ''{0}'', status text: ''{1}'', body: ''{2}''",
-                    new Object[]{statusCode, statusText, body});
-            logException(snapshot, e);
         } catch (RuntimeException e) {
+            metricRegistry.meter("_EXCEPTION_RAISED_").mark();
             logException(snapshot, e);
         }
         return CollectedBets.empty();

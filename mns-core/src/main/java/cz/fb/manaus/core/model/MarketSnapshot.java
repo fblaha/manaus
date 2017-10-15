@@ -30,26 +30,21 @@ public class MarketSnapshot {
     }
 
     static Table<Side, Long, Bet> getMarketCoverage(List<Bet> bets) {
-        try {
-            List<Bet> sortedBets = Ordering.from(comparing(Bet::getPlacedDate))
-                    .immutableSortedCopy(bets);
+        List<Bet> sortedBets = Ordering.from(comparing(Bet::getPlacedDate))
+                .immutableSortedCopy(bets);
 
-            Table<Side, Long, Bet> result = HashBasedTable.create();
-            for (Bet bet : sortedBets) {
-                Side side = bet.getRequestedPrice().getSide();
-                Bet predecessor = result.get(side, bet.getSelectionId());
-                if (predecessor != null) {
-                    log.log(Level.WARNING, "Suspicious relationship between predecessor ''{0}'' and successor ''{1}''",
-                            new Object[]{predecessor, bet});
+        Table<Side, Long, Bet> result = HashBasedTable.create();
+        for (Bet bet : sortedBets) {
+            Side side = bet.getRequestedPrice().getSide();
+            Bet predecessor = result.get(side, bet.getSelectionId());
+            if (predecessor != null) {
+                log.log(Level.WARNING, "Suspicious relationship between predecessor ''{0}'' and successor ''{1}''",
+                        new Object[]{predecessor, bet});
 
-                }
-                result.put(side, bet.getSelectionId(), bet);
             }
-            return result;
-        } catch (RuntimeException e) {
-            log.log(Level.SEVERE, "Illegal bets ''{0}''", bets);
-            throw e;
+            result.put(side, bet.getSelectionId(), bet);
         }
+        return result;
     }
 
     public List<Bet> getCurrentBets() {
