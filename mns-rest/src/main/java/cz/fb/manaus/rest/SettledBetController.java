@@ -1,14 +1,12 @@
 package cz.fb.manaus.rest;
 
+import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Range;
 import cz.fb.manaus.core.category.BetCoverage;
 import cz.fb.manaus.core.category.CategoryService;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.SettledBetDao;
-import cz.fb.manaus.core.metrics.MetricRecord;
-import cz.fb.manaus.core.metrics.MetricsContributor;
-import cz.fb.manaus.core.metrics.MetricsManager;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.SettledBet;
@@ -32,13 +30,12 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.Optional.empty;
 
 
 @Controller
-public class SettledBetController implements MetricsContributor {
+public class SettledBetController {
 
     public static final String METRIC_NAME = "post.settled.bet";
     @Autowired
@@ -52,7 +49,7 @@ public class SettledBetController implements MetricsContributor {
     @Autowired
     private SettledBetSaver betSaver;
     @Autowired
-    private MetricsManager metricsManager;
+    private MetricRegistry metricRegistry;
 
 
     @ResponseBody
@@ -100,7 +97,7 @@ public class SettledBetController implements MetricsContributor {
     @RequestMapping(value = "/bets", method = RequestMethod.POST)
     public ResponseEntity<?> addBet(@RequestParam String betId, @RequestBody SettledBet bet) {
         Objects.requireNonNull(betId, "betId==null");
-        metricsManager.getRegistry().counter(METRIC_NAME).inc();
+        metricRegistry.counter(METRIC_NAME).inc();
         if (betSaver.saveBet(betId, bet) == SaveStatus.NO_ACTION) {
             return ResponseEntity.noContent().build();
         } else {
@@ -118,10 +115,5 @@ public class SettledBetController implements MetricsContributor {
                 .collect(Collectors.toList());
         previous.forEach(betActionDao::fetchMarketPrices);
         return new BetStory(head, runnerPrices, previous);
-    }
-
-    @Override
-    public Stream<MetricRecord<?>> getMetricRecords() {
-        return metricsManager.getCounterMetricRecords(METRIC_NAME);
     }
 }

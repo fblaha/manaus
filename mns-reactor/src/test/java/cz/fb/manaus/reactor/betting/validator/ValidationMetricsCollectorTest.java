@@ -1,6 +1,6 @@
 package cz.fb.manaus.reactor.betting.validator;
 
-import cz.fb.manaus.core.metrics.MetricRecord;
+import com.codahale.metrics.MetricRegistry;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import org.junit.Test;
@@ -16,13 +16,19 @@ public class ValidationMetricsCollectorTest extends AbstractLocalTestCase {
     public static final Validator VALIDATOR = context -> ValidationResult.ACCEPT;
     @Autowired
     private ValidationMetricsCollector metricsCollector;
+    @Autowired
+    private MetricRegistry metricRegistry;
 
     @Test
     public void testMetrics() throws Exception {
         metricsCollector.updateMetrics(ValidationResult.ACCEPT, Side.BACK, VALIDATOR.getName());
         metricsCollector.updateMetrics(ValidationResult.REJECT, Side.BACK, VALIDATOR.getName());
-        List<MetricRecord<?>> records = metricsCollector.getMetricRecords().collect(Collectors.toList());
-        assertEquals(2, records.size());
-        records.forEach(record -> assertEquals(1L, record.getValue()));
+        List<String> keys = metricRegistry.getCounters().keySet().stream()
+                .filter(key -> key.startsWith(ValidationMetricsCollector.PREFIX))
+                .filter(key -> key.contains(VALIDATOR.getName()))
+                .collect(Collectors.toList());
+
+        assertEquals(2, keys.size());
+        keys.forEach(key -> assertEquals(1L, metricRegistry.counter(key).getCount()));
     }
 }

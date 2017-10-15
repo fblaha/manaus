@@ -1,11 +1,9 @@
 package cz.fb.manaus.rest;
 
+import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.MoreObjects;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketDao;
-import cz.fb.manaus.core.metrics.MetricRecord;
-import cz.fb.manaus.core.metrics.MetricsContributor;
-import cz.fb.manaus.core.metrics.MetricsManager;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.CollectedBets;
 import cz.fb.manaus.core.model.MarketPrices;
@@ -26,11 +24,10 @@ import java.util.OptionalLong;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 
 @Controller
-public class MarketSnapshotController implements MetricsContributor {
+public class MarketSnapshotController {
 
     private static final Logger log = Logger.getLogger(MarketSnapshotController.class.getSimpleName());
     public static final String METRIC_NAME = "post.market.snapshot";
@@ -42,12 +39,12 @@ public class MarketSnapshotController implements MetricsContributor {
     @Autowired
     private BetActionDao actionDao;
     @Autowired
-    private MetricsManager metricsManager;
+    private MetricRegistry metricRegistry;
 
     @RequestMapping(value = "/markets/{id}/snapshot", method = RequestMethod.POST)
     public ResponseEntity<?> pushMarketSnapshot(@PathVariable String id,
                                                 @RequestBody MarketSnapshotCrate snapshotCrate) {
-        metricsManager.getRegistry().meter(METRIC_NAME).mark();
+        metricRegistry.meter(METRIC_NAME).mark();
         MarketPrices marketPrices = snapshotCrate.getPrices();
         log.log(Level.INFO, "Market snapshot for ''{0}'' recieved", id);
         marketDao.get(id).ifPresent(marketPrices::setMarket);
@@ -59,11 +56,6 @@ public class MarketSnapshotController implements MetricsContributor {
             return ResponseEntity.ok(collectedBets);
         }
         return ResponseEntity.noContent().build();
-    }
-
-    @Override
-    public Stream<MetricRecord<?>> getMetricRecords() {
-        return metricsManager.getMeterMetricRecords(METRIC_NAME);
     }
 }
 
