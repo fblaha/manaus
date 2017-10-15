@@ -78,7 +78,7 @@ public class BetActionController implements MetricsContributor {
     public ResponseEntity<?> setBetId(@PathVariable int id,
                                       @RequestBody String betId) {
         int changedRows = actionSaver.setBetId(betId, id);
-        metricsManager.getRegistry().meter(METRIC_NAME).mark(changedRows);
+        metricsManager.getRegistry().counter(METRIC_NAME).inc(changedRows);
         if (changedRows > 0) {
             return ResponseEntity.ok().build();
         } else {
@@ -88,6 +88,6 @@ public class BetActionController implements MetricsContributor {
 
     @Override
     public Stream<MetricRecord<?>> getMetricRecords() {
-        return metricsManager.getMeterMetricRecords(METRIC_NAME);
+        return metricsManager.getCounterMetricRecords(METRIC_NAME);
     }
 }

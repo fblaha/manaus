@@ -16,18 +16,17 @@ public class MetricsManager {
 
     public Stream<MetricRecord<?>> getMeterMetricRecords(String name) {
         Meter meter = registry.meter(name);
-        String prefix = "meter." + name;
         return Stream.of(
-                new MetricRecord<>(prefix + ".count", meter.getCount()),
-                new MetricRecord<>(prefix + ".rate15", meter.getFifteenMinuteRate()),
-                new MetricRecord<>(prefix + ".rate5", meter.getFiveMinuteRate()),
-                new MetricRecord<>(prefix + ".rate1", meter.getOneMinuteRate()),
-                new MetricRecord<>(prefix + ".meanRate", meter.getMeanRate()));
+                new MetricRecord<>(name + ".count", meter.getCount()),
+                new MetricRecord<>(name + ".rate15", meter.getFifteenMinuteRate()),
+                new MetricRecord<>(name + ".rate5", meter.getFiveMinuteRate()),
+                new MetricRecord<>(name + ".rate1", meter.getOneMinuteRate()),
+                new MetricRecord<>(name + ".meanRate", meter.getMeanRate()));
     }
 
     public Stream<MetricRecord<?>> getCounterMetricRecords(String name) {
         Counter counter = registry.counter(name);
-        return Stream.of(new MetricRecord<>("counter." + name, counter.getCount()));
+        return Stream.of(new MetricRecord<>(name, counter.getCount()));
     }
 
     public MetricRegistry getRegistry() {

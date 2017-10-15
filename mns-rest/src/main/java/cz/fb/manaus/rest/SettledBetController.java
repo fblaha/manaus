@@ -100,7 +100,7 @@ public class SettledBetController implements MetricsContributor {
     @RequestMapping(value = "/bets", method = RequestMethod.POST)
     public ResponseEntity<?> addBet(@RequestParam String betId, @RequestBody SettledBet bet) {
         Objects.requireNonNull(betId, "betId==null");
-        metricsManager.getRegistry().meter(METRIC_NAME);
+        metricsManager.getRegistry().counter(METRIC_NAME).inc();
         if (betSaver.saveBet(betId, bet) == SaveStatus.NO_ACTION) {
             return ResponseEntity.noContent().build();
         } else {
@@ -122,6 +122,6 @@ public class SettledBetController implements MetricsContributor {
 
     @Override
     public Stream<MetricRecord<?>> getMetricRecords() {
-        return metricsManager.getMeterMetricRecords(METRIC_NAME);
+        return metricsManager.getCounterMetricRecords(METRIC_NAME);
     }
 }
