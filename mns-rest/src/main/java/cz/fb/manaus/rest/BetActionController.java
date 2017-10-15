@@ -29,7 +29,6 @@ import static java.util.Optional.empty;
 @Controller
 public class BetActionController {
 
-    public static final String METRIC_NAME = "put.action.betId";
     @Autowired
     private BetActionDao betActionDao;
     @Autowired
@@ -75,10 +74,11 @@ public class BetActionController {
     public ResponseEntity<?> setBetId(@PathVariable int id,
                                       @RequestBody String betId) {
         int changedRows = actionSaver.setBetId(betId, id);
-        metricRegistry.counter(METRIC_NAME).inc(changedRows);
+        metricRegistry.counter("put.action.betId").inc();
         if (changedRows > 0) {
             return ResponseEntity.ok().build();
         } else {
+            metricRegistry.counter("put.action.betId.notFound").inc();
             return ResponseEntity.notFound().build();
         }
     }

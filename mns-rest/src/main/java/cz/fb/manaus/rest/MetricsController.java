@@ -29,7 +29,7 @@ public class MetricsController {
     @ResponseBody
     @RequestMapping(value = "/metrics/{prefix}", method = RequestMethod.GET)
     public List<MetricRecord<?>> getMetrics(@PathVariable String prefix) {
-        metricRegistry.counter("metrics").inc();
+        metricRegistry.counter("metrics.get").inc();
         return metricsService.getCollectedMetrics(prefix);
     }
 }

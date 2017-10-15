@@ -1,5 +1,6 @@
 package cz.fb.manaus.rest;
 
+import com.codahale.metrics.MetricRegistry;
 import cz.fb.manaus.core.model.Property;
 import cz.fb.manaus.core.service.PropertiesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class PropertiesController {
 
     @Autowired
     private PropertiesService propertiesService;
+    @Autowired
+    private MetricRegistry metricRegistry;
 
     @ResponseBody
     @RequestMapping(value = "/properties", method = RequestMethod.GET)
@@ -46,6 +49,7 @@ public class PropertiesController {
     @ResponseBody
     @RequestMapping(value = "/properties", method = RequestMethod.POST)
     public ResponseEntity<?> setProperty(@RequestBody Property property) {
+        metricRegistry.counter("property.post").inc();
         propertiesService.set(property);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{name}")
