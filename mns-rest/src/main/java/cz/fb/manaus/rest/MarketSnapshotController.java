@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 public class MarketSnapshotController {
 
     private static final Logger log = Logger.getLogger(MarketSnapshotController.class.getSimpleName());
-    public static final String METRIC_NAME = "post.market.snapshot";
 
     @Autowired
     private BetManager manager;
@@ -44,7 +43,7 @@ public class MarketSnapshotController {
     @RequestMapping(value = "/markets/{id}/snapshot", method = RequestMethod.POST)
     public ResponseEntity<?> pushMarketSnapshot(@PathVariable String id,
                                                 @RequestBody MarketSnapshotCrate snapshotCrate) {
-        metricRegistry.meter(METRIC_NAME).mark();
+        metricRegistry.meter("market.snapshot.post").mark();
         MarketPrices marketPrices = snapshotCrate.getPrices();
         log.log(Level.INFO, "Market snapshot for ''{0}'' recieved", id);
         marketDao.get(id).ifPresent(marketPrices::setMarket);

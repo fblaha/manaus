@@ -37,7 +37,6 @@ import static java.util.Optional.empty;
 @Controller
 public class SettledBetController {
 
-    public static final String METRIC_NAME = "post.settled.bet";
     @Autowired
     private SettledBetDao settledBetDao;
     @Autowired
@@ -97,8 +96,9 @@ public class SettledBetController {
     @RequestMapping(value = "/bets", method = RequestMethod.POST)
     public ResponseEntity<?> addBet(@RequestParam String betId, @RequestBody SettledBet bet) {
         Objects.requireNonNull(betId, "betId==null");
-        metricRegistry.counter(METRIC_NAME).inc();
+        metricRegistry.counter("settled.bet.post").inc();
         if (betSaver.saveBet(betId, bet) == SaveStatus.NO_ACTION) {
+            metricRegistry.counter("settled.bet.noAction").inc();
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.accepted().build();

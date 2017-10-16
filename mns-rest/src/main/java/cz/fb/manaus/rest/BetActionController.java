@@ -74,11 +74,11 @@ public class BetActionController {
     public ResponseEntity<?> setBetId(@PathVariable int id,
                                       @RequestBody String betId) {
         int changedRows = actionSaver.setBetId(betId, id);
-        metricRegistry.counter("put.action.betId").inc();
+        metricRegistry.counter("action.betId.put").inc();
         if (changedRows > 0) {
             return ResponseEntity.ok().build();
         } else {
-            metricRegistry.counter("put.action.betId.notFound").inc();
+            metricRegistry.counter("action.betId.notFound").inc();
             return ResponseEntity.notFound().build();
         }
     }
