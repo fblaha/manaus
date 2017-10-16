@@ -9,6 +9,6 @@ public class MetricsControllerTest extends AbstractControllerTest {
 
     @Test
     public void testMetrics() throws Exception {
-        checkResponse("/metrics", "metrics.get", "1");
+        checkResponse("/metrics", "metric.get", "1");
     }
 }
