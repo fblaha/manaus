@@ -1,5 +1,6 @@
 package cz.fb.manaus.scheduler;
 
+import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Stopwatch;
 import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.spring.DatabaseComponent;
@@ -20,13 +21,15 @@ public class MarketCleaner {
     private static final Logger log = Logger.getLogger(MarketCleaner.class.getSimpleName());
     @Autowired
     private MarketDao marketDao;
+    @Autowired
+    private MetricRegistry metricRegistry;
 
     @Scheduled(fixedDelay = 10 * DateUtils.MILLIS_PER_MINUTE)
     public void purgeMarkets() {
         Stopwatch stopwatch = Stopwatch.createUnstarted().start();
         int count = marketDao.deleteMarkets(from(Instant.now().minus(140, ChronoUnit.DAYS)));
+        metricRegistry.counter("purge.market").inc(count);
         long elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS);
         log.log(Level.INFO, "DELETE_MARKETS: ''{0}'' obsolete markets removed in ''{1}'' seconds", new Object[]{count, elapsed});
     }
-
 }

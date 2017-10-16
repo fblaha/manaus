@@ -76,7 +76,7 @@ public class BetManager {
         try {
             return fire(snapshot, myBets);
         } catch (RuntimeException e) {
-            metricRegistry.meter("_EXCEPTION_RAISED_").mark();
+            metricRegistry.meter("_EXCEPTION_").mark();
             logException(snapshot, e);
         }
         return CollectedBets.empty();
