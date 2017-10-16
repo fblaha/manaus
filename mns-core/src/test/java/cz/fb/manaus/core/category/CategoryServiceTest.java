@@ -60,7 +60,4 @@ public class CategoryServiceTest extends AbstractLocalTestCase {
         assertThat(categories,
                 hasItems("market_country_br", "market_runnerCount_3", "market_sport_soccer", "market_type_match_odds"));
     }
-
-
-
 }

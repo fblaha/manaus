@@ -60,15 +60,18 @@ public class AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabase
     @Test
     public void testBlackListSort() throws Exception {
         assertThat(registry.getBlackList(0.1d, 1, 110,
-                        asList(pr("horror", -10d, 10), pr("weak", -1d, 10), pr("bad", -5d, 10)).stream(), Collections.<String>emptySet()),
+                asList(pr("horror", -10d, 10), pr("weak", -1d, 10),
+                        pr("bad", -5d, 10)).stream(), Collections.<String>emptySet()),
                 allOf(hasItem("horror"), not(hasItem("weak")), not(hasItem("bad")))
         );
         assertThat(registry.getBlackList(0.1d, 2, 110,
-                        asList(pr("horror", -10d, 10), pr("weak", -1d, 10), pr("bad", -5d, 10)).stream(), Collections.<String>emptySet()),
+                asList(pr("horror", -10d, 10), pr("weak", -1d, 10),
+                        pr("bad", -5d, 10)).stream(), Collections.<String>emptySet()),
                 allOf(hasItem("horror"), not(hasItem("weak")), hasItem("bad"))
         );
         assertThat(registry.getBlackList(0.1d, 3, 110,
-                        asList(pr("horror", -10d, 10), pr("weak", -1d, 10), pr("bad", -5d, 10)).stream(), Collections.<String>emptySet()),
+                asList(pr("horror", -10d, 10), pr("weak", -1d, 10),
+                        pr("bad", -5d, 10)).stream(), Collections.<String>emptySet()),
                 allOf(hasItem("horror"), hasItem("weak"), hasItem("bad"))
         );
     }
@@ -76,7 +79,7 @@ public class AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabase
     @Test
     public void testBlackListDuplicate() throws Exception {
         assertThat(registry.getBlackList(0.1d, 2, 110,
-                        asList(pr("horror", -10d, 10), pr("weak", -1d, 10), pr("bad", -5d, 10)).stream(), Collections.singleton("horror")),
+                asList(pr("horror", -10d, 10), pr("weak", -1d, 10), pr("bad", -5d, 10)).stream(), Collections.singleton("horror")),
                 allOf(not(hasItem("horror")), hasItem("weak"), hasItem("bad"))
         );
     }
@@ -84,7 +87,7 @@ public class AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabase
     @Test
     public void testBlackListWhiteList() throws Exception {
         assertThat(registry.getBlackList(0.1d, 2, 110,
-                        asList(pr("white.test", -10d, 10), pr("weak", -1d, 10), pr("bad", -5d, 10)).stream(), Collections.<String>emptySet()),
+                asList(pr("white.test", -10d, 10), pr("weak", -1d, 10), pr("bad", -5d, 10)).stream(), Collections.<String>emptySet()),
                 allOf(not(hasItem("white.test")), hasItem("weak"), hasItem("bad"))
         );
     }

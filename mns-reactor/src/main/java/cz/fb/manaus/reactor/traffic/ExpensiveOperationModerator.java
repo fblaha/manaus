@@ -1,7 +1,5 @@
 package cz.fb.manaus.reactor.traffic;
 
-import com.google.common.base.Throwables;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.atomic.AtomicReference;
