@@ -52,7 +52,6 @@ public class MetricsService {
         return Stream.of(
                 new MetricRecord<>(name + ".max", snapshot.getMax()),
                 new MetricRecord<>(name + ".min", snapshot.getMax()),
-                new MetricRecord<>(name + ".mean", snapshot.getMean()),
-                new MetricRecord<>(name + ".median", snapshot.getMedian()));
+                new MetricRecord<>(name + ".mean", snapshot.getMean()));
     }
 }

@@ -98,7 +98,7 @@ public class SettledBetController {
         Objects.requireNonNull(betId, "betId==null");
         metricRegistry.counter("settled.bet.post").inc();
         if (betSaver.saveBet(betId, bet) == SaveStatus.NO_ACTION) {
-            metricRegistry.counter("settled.bet.noAction").inc();
+            metricRegistry.counter("settled.bet.NO_ACTION").inc();
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.accepted().build();
