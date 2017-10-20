@@ -1,13 +1,16 @@
 package cz.fb.manaus.core.metrics;
 
 import com.codahale.metrics.Counter;
+import com.codahale.metrics.Histogram;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Snapshot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,7 +25,10 @@ public class MetricsService {
                 .flatMap(e -> getCounterMetricRecords(e.getKey(), e.getValue()));
         Stream<MetricRecord<?>> meters = registry.getMeters().entrySet().stream()
                 .flatMap(e -> getMeterMetricRecords(e.getKey(), e.getValue()));
-        return Stream.concat(counters, meters)
+        Stream<MetricRecord<?>> histograms = registry.getHistograms().entrySet().stream()
+                .flatMap(e -> getHistogramMetricRecords(e.getKey(), e.getValue()));
+
+        return Stream.of(counters, meters, histograms).flatMap(Function.identity())
                 .filter(record -> record.getName().startsWith(prefix))
                 .sorted(Comparator.comparing(MetricRecord::getName))
                 .collect(Collectors.toList());
@@ -39,5 +45,14 @@ public class MetricsService {
 
     private Stream<MetricRecord<?>> getCounterMetricRecords(String name, Counter counter) {
         return Stream.of(new MetricRecord<>(name, counter.getCount()));
+    }
+
+    private Stream<MetricRecord<?>> getHistogramMetricRecords(String name, Histogram histogram) {
+        Snapshot snapshot = histogram.getSnapshot();
+        return Stream.of(
+                new MetricRecord<>(name + ".max", snapshot.getMax()),
+                new MetricRecord<>(name + ".min", snapshot.getMax()),
+                new MetricRecord<>(name + ".mean", snapshot.getMean()),
+                new MetricRecord<>(name + ".median", snapshot.getMedian()));
     }
 }

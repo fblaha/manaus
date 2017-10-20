@@ -20,7 +20,9 @@ public class MatchedBetMetricUpdater {
     public void update(long scanTime, List<Bet> bets) {
         long last = lastScan.getAndSet(scanTime);
         if (last > 0 && last != scanTime) {
+            long lastCount = metricRegistry.counter(METRIC_NAME).getCount();
             metricRegistry.remove(METRIC_NAME);
+            metricRegistry.histogram("bet.matched").update(lastCount);
         }
         long currentCount = bets.stream().filter(Bet::isHalfMatched).count();
         if (currentCount > 0) {
