@@ -51,7 +51,7 @@ public class MetricsService {
         Snapshot snapshot = histogram.getSnapshot();
         return Stream.of(
                 new MetricRecord<>(name + ".max", snapshot.getMax()),
-                new MetricRecord<>(name + ".min", snapshot.getMax()),
+                new MetricRecord<>(name + ".min", snapshot.getMin()),
                 new MetricRecord<>(name + ".mean", snapshot.getMean()));
     }
 }
