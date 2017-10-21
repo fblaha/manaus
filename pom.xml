@@ -22,7 +22,6 @@
 
     <properties>
         <hibernate.version>5.2.11.Final</hibernate.version>
-        <jackson.version>2.9.2</jackson.version>
     </properties>
 
     <build>
