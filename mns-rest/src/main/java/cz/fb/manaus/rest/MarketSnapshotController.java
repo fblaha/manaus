@@ -64,7 +64,7 @@ public class MarketSnapshotController {
             }
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
-            metricRegistry.meter("_SNAPSHOT_EXCEPTION_").mark();
+            metricRegistry.meter("_SNAPSHOT_ERROR_").mark();
             logException(snapshotCrate, e);
             throw e;
         }
