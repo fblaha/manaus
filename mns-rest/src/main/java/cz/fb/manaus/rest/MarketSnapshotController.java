@@ -50,24 +50,35 @@ public class MarketSnapshotController {
                                                 @RequestBody MarketSnapshotCrate snapshotCrate) {
         validateMarket(snapshotCrate);
         metricRegistry.meter("market.snapshot.post").mark();
-        MarketPrices marketPrices = snapshotCrate.getPrices();
-        log.log(Level.INFO, "Market snapshot for ''{0}'' recieved", id);
-        marketDao.get(id).ifPresent(marketPrices::setMarket);
-        List<Bet> bets = Optional.ofNullable(snapshotCrate.getBets()).orElse(Collections.emptyList());
-        betMetricUpdater.update(scanTime, bets);
-        MarketSnapshot marketSnapshot = new MarketSnapshot(marketPrices, bets, Optional.empty());
-        Set<String> myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty());
-        CollectedBets collectedBets = manager.silentFire(marketSnapshot, myBets);
-        if (!collectedBets.isEmpty()) {
-            return ResponseEntity.ok(collectedBets);
+        try {
+            MarketPrices marketPrices = snapshotCrate.getPrices();
+            log.log(Level.INFO, "Market snapshot for ''{0}'' recieved", id);
+            marketDao.get(id).ifPresent(marketPrices::setMarket);
+            List<Bet> bets = Optional.ofNullable(snapshotCrate.getBets()).orElse(Collections.emptyList());
+            betMetricUpdater.update(scanTime, bets);
+            MarketSnapshot marketSnapshot = new MarketSnapshot(marketPrices, bets, Optional.empty());
+            Set<String> myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty());
+            CollectedBets collectedBets = manager.fire(marketSnapshot, myBets);
+            if (!collectedBets.isEmpty()) {
+                return ResponseEntity.ok(collectedBets);
+            }
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            metricRegistry.meter("_SNAPSHOT_EXCEPTION_").mark();
+            logException(snapshotCrate, e);
+            throw e;
         }
-        return ResponseEntity.noContent().build();
     }
 
     private void validateMarket(MarketSnapshotCrate snapshotCrate) {
         Preconditions.checkNotNull(snapshotCrate.getPrices());
         Preconditions.checkNotNull(snapshotCrate.getPrices().getRunnerPrices());
         Preconditions.checkState(!snapshotCrate.getPrices().getRunnerPrices().isEmpty());
+    }
+
+    private void logException(MarketSnapshotCrate snapshot, RuntimeException e) {
+        log.log(Level.SEVERE, "Error emerged for ''{0}''", snapshot);
+        log.log(Level.SEVERE, "fix it!", e);
     }
 }
 

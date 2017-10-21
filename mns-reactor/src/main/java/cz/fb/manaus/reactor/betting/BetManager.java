@@ -72,22 +72,7 @@ public class BetManager {
         this.marketSnapshotListeners = from(new AnnotationAwareOrderComparator()).sortedCopy(marketSnapshotListeners);
     }
 
-    public CollectedBets silentFire(MarketSnapshot snapshot, Set<String> myBets) {
-        try {
-            return fire(snapshot, myBets);
-        } catch (RuntimeException e) {
-            metricRegistry.meter("_EXCEPTION_").mark();
-            logException(snapshot, e);
-        }
-        return CollectedBets.empty();
-    }
-
-    private void logException(MarketSnapshot snapshot, RuntimeException e) {
-        log.log(Level.SEVERE, "Error emerged for ''{0}''", snapshot);
-        log.log(Level.SEVERE, "fix it!", e);
-    }
-
-    private CollectedBets fire(MarketSnapshot snapshot, Set<String> myBets) {
+    public CollectedBets fire(MarketSnapshot snapshot, Set<String> myBets) {
         MarketPrices marketPrices = snapshot.getMarketPrices();
         filterPrices(marketPrices);
 

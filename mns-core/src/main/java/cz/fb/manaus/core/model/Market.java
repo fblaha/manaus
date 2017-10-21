@@ -24,12 +24,10 @@ import java.util.Collection;
 public class Market {
 
     public static final String DELETE_OLDER_THAN = "M_DELETE_OLDER_THAN";
-    public static final String MATCH_ODDS_TYPE = "match_odds";
-    @Id
 
+    @Id
     private String id;
     @Version
-
     private int version;
 
     @Column(nullable = false)
