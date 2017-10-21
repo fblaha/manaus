@@ -51,6 +51,7 @@ public class MarketController {
     }
 
     private void validateMarket(Market market) {
+        Preconditions.checkNotNull(market.getId(), "id==null");
         Preconditions.checkArgument(!market.getRunners().isEmpty(), "runners is empty");
         Preconditions.checkNotNull(market.getEvent().getOpenDate(), "openDate==null");
     }
