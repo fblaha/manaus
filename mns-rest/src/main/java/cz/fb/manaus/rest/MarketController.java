@@ -1,5 +1,6 @@
 package cz.fb.manaus.rest;
 
+import com.google.common.base.Preconditions;
 import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.model.Market;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +42,16 @@ public class MarketController {
     @ResponseBody
     @RequestMapping(value = "/markets", method = RequestMethod.POST)
     ResponseEntity<?> addOrUpdateMarket(@RequestBody Market market) {
+        validateMarket(market);
         marketDao.saveOrUpdate(market);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(market.getId()).toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    private void validateMarket(Market market) {
+        Preconditions.checkArgument(!market.getRunners().isEmpty(), "runners is empty");
+        Preconditions.checkNotNull(market.getEvent().getOpenDate(), "openDate==null");
     }
 }

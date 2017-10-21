@@ -2,6 +2,7 @@ package cz.fb.manaus.rest;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.model.Bet;
@@ -47,6 +48,7 @@ public class MarketSnapshotController {
     public ResponseEntity<?> pushMarketSnapshot(@PathVariable String id,
                                                 @RequestHeader(value = "scan-time", defaultValue = "0") long scanTime,
                                                 @RequestBody MarketSnapshotCrate snapshotCrate) {
+        validateMarket(snapshotCrate);
         metricRegistry.meter("market.snapshot.post").mark();
         MarketPrices marketPrices = snapshotCrate.getPrices();
         log.log(Level.INFO, "Market snapshot for ''{0}'' recieved", id);
@@ -60,6 +62,12 @@ public class MarketSnapshotController {
             return ResponseEntity.ok(collectedBets);
         }
         return ResponseEntity.noContent().build();
+    }
+
+    private void validateMarket(MarketSnapshotCrate snapshotCrate) {
+        Preconditions.checkNotNull(snapshotCrate.getPrices());
+        Preconditions.checkNotNull(snapshotCrate.getPrices().getRunnerPrices());
+        Preconditions.checkState(!snapshotCrate.getPrices().getRunnerPrices().isEmpty());
     }
 }
 
