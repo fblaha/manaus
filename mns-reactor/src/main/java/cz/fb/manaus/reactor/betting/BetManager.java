@@ -1,5 +1,7 @@
 package cz.fb.manaus.reactor.betting;
 
+import com.codahale.metrics.MetricRegistry;
+import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
@@ -41,6 +43,7 @@ import static java.util.stream.Collectors.toList;
 @DatabaseComponent
 public class BetManager {
 
+    public static final String PROPOSER_METRIC = "proposer";
     public static final String DISABLED_LISTENERS_EL = "#{systemEnvironment['MNS_DISABLED_LISTENERS']}";
     private static final Logger log = Logger.getLogger(BetManager.class.getSimpleName());
     private final Set<String> disabledListeners;
@@ -52,6 +55,8 @@ public class BetManager {
     private Optional<AbstractPriceFilter> priceFilter;
     @Autowired
     private ActionSaver actionSaver;
+    @Autowired
+    private MetricRegistry metricRegistry;
     private List<MarketSnapshotListener> marketSnapshotListeners = new LinkedList<>();
 
 
@@ -105,7 +110,18 @@ public class BetManager {
     private void saveActions(List<BetCommand> commands) {
         List<BetAction> actions = commands.stream().map(BetCommand::getAction).collect(toList());
         actions.forEach(actionSaver::saveAction);
+        actions.forEach(this::updateProposerMetrics);
         commands.forEach(c -> c.getBet().setActionId(c.getAction().getId()));
+    }
+
+
+    private void updateProposerMetrics(BetAction action) {
+        String proposers = action.getProperties().get(BetAction.PROPOSER_PROP);
+        String side = action.getPrice().getSide().name().toLowerCase();
+        for (String proposer : betUtils.parseProposers(proposers)) {
+            String key = Joiner.on('.').join(PROPOSER_METRIC, side, proposer);
+            metricRegistry.counter(key).inc();
+        }
     }
 
     private void filterPrices(MarketPrices marketPrices) {

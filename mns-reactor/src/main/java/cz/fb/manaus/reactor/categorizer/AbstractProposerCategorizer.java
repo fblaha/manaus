@@ -21,7 +21,6 @@ public abstract class AbstractProposerCategorizer implements SettledBetCategoriz
     protected List<String> getProposers(SettledBet settledBet) {
         Map<String, String> properties = settledBet.getBetAction().getProperties();
         String rawProposers = MoreObjects.firstNonNull(emptyToNull(properties.get(BetAction.PROPOSER_PROP)), "none");
-
         return betUtils.parseProposers(rawProposers);
     }
 
