@@ -114,6 +114,10 @@ public class Event {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("name", name)
+                .add("countryCode", countryCode)
+                .add("timezone", timezone)
+                .add("venue", venue)
+                .add("openDate", openDate)
                 .toString();
     }
 }
