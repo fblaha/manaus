@@ -167,7 +167,7 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
     private void cancelBet(Optional<Bet> oldBet, BetCollector betCollector) {
         oldBet.ifPresent(bet -> {
             if (!bet.isMatched()) {
-                metricRegistry.counter("bet.cancel").inc();
+                metricRegistry.counter("bet.CANCEL").inc();
                 betCollector.cancelBet(bet);
                 log.log(Level.INFO, "CANCEL_BET: unable propose price for bet ''{0}''", bet);
             }
