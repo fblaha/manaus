@@ -114,7 +114,7 @@ public class BetManager {
         commands.forEach(c -> c.getBet().setActionId(c.getAction().getId()));
     }
 
-
+    // TODO this should not be here this class should not be aware of price proposers
     private void updateProposerMetrics(BetAction action) {
         String proposers = action.getProperties().get(BetAction.PROPOSER_PROP);
         String side = action.getPrice().getSide().name().toLowerCase();
