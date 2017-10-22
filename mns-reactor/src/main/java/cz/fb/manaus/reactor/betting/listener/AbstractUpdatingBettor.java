@@ -1,5 +1,6 @@
 package cz.fb.manaus.reactor.betting.listener;
 
+import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
@@ -68,6 +69,8 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
     private FairnessPolynomialCalculator calculator;
     @Autowired
     private BetContextFactory contextFactory;
+    @Autowired
+    private MetricRegistry metricRegistry;
 
 
     protected AbstractUpdatingBettor(Side side, List<Validator> validators,
@@ -164,6 +167,7 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
     private void cancelBet(Optional<Bet> oldBet, BetCollector betCollector) {
         oldBet.ifPresent(bet -> {
             if (!bet.isMatched()) {
+                metricRegistry.counter("bet.cancel").inc();
                 betCollector.cancelBet(bet);
                 log.log(Level.INFO, "CANCEL_BET: unable propose price for bet ''{0}''", bet);
             }

@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting;
 
-import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
@@ -53,8 +52,6 @@ public class BetManager {
     private Optional<AbstractPriceFilter> priceFilter;
     @Autowired
     private ActionSaver actionSaver;
-    @Autowired
-    private MetricRegistry metricRegistry;
     private List<MarketSnapshotListener> marketSnapshotListeners = new LinkedList<>();
 
 
