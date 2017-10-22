@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.betting.listener;
 
 import com.codahale.metrics.MetricRegistry;
-import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Table;
@@ -19,31 +18,22 @@ import cz.fb.manaus.reactor.betting.BetCollector;
 import cz.fb.manaus.reactor.betting.BetCommand;
 import cz.fb.manaus.reactor.betting.BetContext;
 import cz.fb.manaus.reactor.betting.BetContextFactory;
-import cz.fb.manaus.reactor.betting.proposer.PriceProposalService;
-import cz.fb.manaus.reactor.betting.proposer.PriceProposer;
-import cz.fb.manaus.reactor.betting.proposer.ProposedPrice;
 import cz.fb.manaus.reactor.betting.validator.ValidationResult;
 import cz.fb.manaus.reactor.betting.validator.ValidationService;
 import cz.fb.manaus.reactor.betting.validator.Validator;
 import cz.fb.manaus.reactor.price.Fairness;
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator;
-import cz.fb.manaus.reactor.price.PriceService;
-import cz.fb.manaus.reactor.rounding.RoundingService;
 import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.collect.Ordering.from;
 import static cz.fb.manaus.reactor.betting.listener.ProbabilityComparator.COMPARATORS;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
@@ -53,18 +43,11 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
     private static final Logger log = Logger.getLogger(AbstractUpdatingBettor.class.getSimpleName());
 
     protected final Side side;
-    protected final List<Validator> validators;
-    protected final List<PriceProposer> proposers;
+    private final List<Validator> validators;
     @Autowired
-    protected ValidationService validationService;
-    @Autowired
-    protected PriceService priceService;
+    private ValidationService validationService;
     @Autowired
     private FlowFilterRegistry flowFilterRegistry;
-    @Autowired
-    private RoundingService roundingService;
-    @Autowired
-    private PriceProposalService proposalService;
     @Autowired
     private FairnessPolynomialCalculator calculator;
     @Autowired
@@ -73,25 +56,9 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
     private MetricRegistry metricRegistry;
 
 
-    protected AbstractUpdatingBettor(Side side, List<Validator> validators,
-                                     List<PriceProposer> proposers) {
+    protected AbstractUpdatingBettor(Side side, List<Validator> validators) {
         this.validators = validators;
         this.side = side;
-        this.proposers = proposers;
-    }
-
-    protected List<PriceProposer> getSortedProposers(List<PriceProposer> proposers) {
-        return from(new AnnotationAwareOrderComparator()).sortedCopy(proposers);
-    }
-
-    @PostConstruct
-    public void logConfig() {
-        String validatorList = this.validators.stream().map(Validator::getClass)
-                .map(Class::getSimpleName).sorted().collect(Collectors.joining(","));
-        String proposerList = this.proposers.stream().map(Validator::getClass)
-                .map(Class::getSimpleName).sorted().collect(Collectors.joining(","));
-        log.log(Level.INFO, "Bettor class: ''{0}'', validators: ''{1}'', proposers: ''{2}''",
-                new Object[]{this.getClass().getSimpleName(), validatorList, proposerList});
     }
 
     @Override
@@ -172,15 +139,6 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
                 log.log(Level.INFO, "CANCEL_BET: unable propose price for bet ''{0}''", bet);
             }
         });
-    }
-
-    protected OptionalDouble reducePrices(BetContext context) {
-        ProposedPrice proposedPrice = proposalService.reducePrices(context, proposers, context.getSide());
-        OptionalDouble rounded = roundingService.roundBet(proposedPrice.getPrice());
-        if (rounded.isPresent()) {
-            context.getProperties().put(BetAction.PROPOSER_PROP, Joiner.on(',').join(proposedPrice.getProposers()));
-        }
-        return rounded;
     }
 
     private void setTradedVolumeMean(BetContext context) {

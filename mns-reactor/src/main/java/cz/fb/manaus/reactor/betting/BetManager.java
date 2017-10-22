@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.betting;
 
 import com.codahale.metrics.MetricRegistry;
-import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
@@ -16,6 +15,7 @@ import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.reactor.betting.action.ActionSaver;
+import cz.fb.manaus.reactor.betting.action.BetActionListener;
 import cz.fb.manaus.reactor.betting.action.BetUtils;
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener;
 import cz.fb.manaus.reactor.price.AbstractPriceFilter;
@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,7 +44,6 @@ import static java.util.stream.Collectors.toList;
 @DatabaseComponent
 public class BetManager {
 
-    public static final String PROPOSER_METRIC = "proposer";
     public static final String DISABLED_LISTENERS_EL = "#{systemEnvironment['MNS_DISABLED_LISTENERS']}";
     private static final Logger log = Logger.getLogger(BetManager.class.getSimpleName());
     private final Set<String> disabledListeners;
@@ -57,6 +57,8 @@ public class BetManager {
     private ActionSaver actionSaver;
     @Autowired
     private MetricRegistry metricRegistry;
+    @Autowired(required = false)
+    private List<BetActionListener> actionListeners = Collections.emptyList();
     private List<MarketSnapshotListener> marketSnapshotListeners = new LinkedList<>();
 
 
@@ -110,18 +112,8 @@ public class BetManager {
     private void saveActions(List<BetCommand> commands) {
         List<BetAction> actions = commands.stream().map(BetCommand::getAction).collect(toList());
         actions.forEach(actionSaver::saveAction);
-        actions.forEach(this::updateProposerMetrics);
+        actionListeners.forEach(listener -> actions.forEach(listener::onAction));
         commands.forEach(c -> c.getBet().setActionId(c.getAction().getId()));
-    }
-
-    // TODO this should not be here this class should not be aware of price proposers
-    private void updateProposerMetrics(BetAction action) {
-        String proposers = action.getProperties().get(BetAction.PROPOSER_PROP);
-        String side = action.getPrice().getSide().name().toLowerCase();
-        for (String proposer : betUtils.parseProposers(proposers)) {
-            String key = Joiner.on('.').join(PROPOSER_METRIC, side, proposer);
-            metricRegistry.counter(key).inc();
-        }
     }
 
     private void filterPrices(MarketPrices marketPrices) {
