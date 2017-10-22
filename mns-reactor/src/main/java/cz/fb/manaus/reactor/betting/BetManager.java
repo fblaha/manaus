@@ -81,8 +81,7 @@ public class BetManager {
         BetCollector collector = new BetCollector();
 
         if (checkMarket(myBets, market, reciprocal)) {
-            Date currDate = new Date();
-            checkState(currDate.before(market.getEvent().getOpenDate()));
+            validateOpenDate(market);
 
             List<Bet> unknownBets = betUtils.getUnknownBets(snapshot.getCurrentBets(), myBets);
             unknownBets.forEach(bet -> log.log(Level.WARNING, "unknown bet ''{0}''", bet));
@@ -97,6 +96,13 @@ public class BetManager {
             }
         }
         return collector.toCollectedBets();
+    }
+
+    public void validateOpenDate(Market market) {
+        Date currDate = new Date();
+        Date openDate = market.getEvent().getOpenDate();
+        checkState(currDate.before(openDate),
+                "current %s, open date %s", currDate, openDate);
     }
 
     private void saveActions(List<BetCommand> commands) {
