@@ -1,5 +1,6 @@
 package cz.fb.manaus.core.settlement;
 
+import com.codahale.metrics.MetricRegistry;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.dao.SettledBetDao;
@@ -24,18 +25,20 @@ public class SettledBetSaver {
     private BetActionDao betActionDao;
     @Autowired
     private MarketDao marketDao;
+    @Autowired
+    private MetricRegistry metricRegistry;
 
     @Transactional
     public SaveStatus saveBet(String betId, final SettledBet settledBet) {
         if (!settledBetDao.getSettledBet(betId).isPresent()) {
-            if (settledBet.getBetAction() == null) {
-                settledBet.setBetAction(betActionDao.getBetAction(betId).orElse(null));
-            }
+            settledBet.setBetAction(betActionDao.getBetAction(betId).orElse(null));
             if (settledBet.getBetAction() != null) {
                 validate(settledBet);
                 settledBetDao.saveOrUpdate(settledBet);
+                metricRegistry.counter("settled.bet.new").inc();
                 return SaveStatus.OK;
             } else {
+                metricRegistry.counter("settled.bet.NO_ACTION").inc();
                 log.log(Level.WARNING, "SETTLED_BET: no bet action for ''{0}''", settledBet);
                 return SaveStatus.NO_ACTION;
             }
