@@ -7,6 +7,7 @@ import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.provider.ExchangeProvider;
 import cz.fb.manaus.reactor.betting.AmountAdviser;
 import cz.fb.manaus.reactor.betting.BetContext;
+import cz.fb.manaus.reactor.betting.PriceAdviser;
 import cz.fb.manaus.reactor.betting.validator.Validator;
 import cz.fb.manaus.reactor.rounding.RoundingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class ProposerCoordinator {
+public class ProposerCoordinator implements PriceAdviser {
 
     private static final Logger log = Logger.getLogger(ProposerCoordinator.class.getSimpleName());
     private final List<PriceProposer> proposers;
@@ -37,6 +38,7 @@ public class ProposerCoordinator {
         this.proposers = proposers;
     }
 
+    @Override
     public Optional<Price> getNewPrice(BetContext betContext) {
         OptionalDouble proposedPrice = reducePrices(betContext);
         if (proposedPrice.isPresent()) {

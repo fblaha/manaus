@@ -18,7 +18,7 @@ import cz.fb.manaus.reactor.betting.BetCollector;
 import cz.fb.manaus.reactor.betting.BetCommand;
 import cz.fb.manaus.reactor.betting.BetContext;
 import cz.fb.manaus.reactor.betting.BetContextFactory;
-import cz.fb.manaus.reactor.betting.proposer.ProposerCoordinator;
+import cz.fb.manaus.reactor.betting.PriceAdviser;
 import cz.fb.manaus.reactor.betting.validator.ValidationResult;
 import cz.fb.manaus.reactor.betting.validator.ValidationService;
 import cz.fb.manaus.reactor.betting.validator.Validator;
@@ -45,7 +45,7 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
 
     private final Side side;
     private final List<Validator> validators;
-    private final ProposerCoordinator proposerCoordinator;
+    private final PriceAdviser priceAdviser;
     @Autowired
     private ValidationService validationService;
     @Autowired
@@ -58,10 +58,10 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
     private MetricRegistry metricRegistry;
 
 
-    protected AbstractUpdatingBettor(Side side, List<Validator> validators, ProposerCoordinator proposerCoordinator) {
+    protected AbstractUpdatingBettor(Side side, List<Validator> validators, PriceAdviser priceAdviser) {
         this.side = side;
         this.validators = validators;
-        this.proposerCoordinator = proposerCoordinator;
+        this.priceAdviser = priceAdviser;
     }
 
     @Override
@@ -100,7 +100,7 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
                         continue;
                     }
 
-                    Optional<Price> newPrice = proposerCoordinator.getNewPrice(ctx);
+                    Optional<Price> newPrice = priceAdviser.getNewPrice(ctx);
                     if (!newPrice.isPresent()) {
                         cancelBet(oldBet, betCollector);
                         continue;
