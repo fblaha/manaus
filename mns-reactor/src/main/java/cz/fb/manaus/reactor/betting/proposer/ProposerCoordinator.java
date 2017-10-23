@@ -4,7 +4,6 @@ import com.google.common.base.Joiner;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.Price;
-import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.provider.ExchangeProvider;
 import cz.fb.manaus.reactor.betting.AmountAdviser;
 import cz.fb.manaus.reactor.betting.BetContext;
@@ -21,9 +20,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class ProposerCoordinator {
-    private static final Logger log = Logger.getLogger(ProposerCoordinator.class.getSimpleName());
 
-    private final Side side;
+    private static final Logger log = Logger.getLogger(ProposerCoordinator.class.getSimpleName());
     private final List<PriceProposer> proposers;
 
     @Autowired
@@ -35,8 +33,7 @@ public class ProposerCoordinator {
     @Autowired
     private RoundingService roundingService;
 
-    public ProposerCoordinator(Side side, List<PriceProposer> proposers) {
-        this.side = side;
+    public ProposerCoordinator(List<PriceProposer> proposers) {
         this.proposers = proposers;
     }
 
@@ -48,7 +45,8 @@ public class ProposerCoordinator {
             if (counterBet.isPresent() && counterBet.get().getMatchedAmount() > 0) {
                 amount = counterBet.get().getRequestedPrice().getAmount();
             }
-            return Optional.of(new Price(proposedPrice.getAsDouble(), Math.max(amount, provider.getMinAmount()), side));
+            return Optional.of(new Price(proposedPrice.getAsDouble(),
+                    Math.max(amount, provider.getMinAmount()), betContext.getSide()));
         } else {
             return Optional.empty();
         }
