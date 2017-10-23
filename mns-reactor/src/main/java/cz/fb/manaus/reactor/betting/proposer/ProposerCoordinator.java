@@ -65,7 +65,7 @@ public class ProposerCoordinator {
     public void logConfig() {
         String proposerList = this.proposers.stream().map(Validator::getClass)
                 .map(Class::getSimpleName).sorted().collect(Collectors.joining(","));
-        log.log(Level.INFO, "Bettor class: ''{0}'', proposers: ''{2}''",
+        log.log(Level.INFO, "Proposer coordinator class: ''{0}'', proposers: ''{2}''",
                 new Object[]{this.getClass().getSimpleName(), proposerList});
     }
 }
