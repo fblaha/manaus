@@ -18,6 +18,7 @@ import cz.fb.manaus.reactor.betting.BetCollector;
 import cz.fb.manaus.reactor.betting.BetCommand;
 import cz.fb.manaus.reactor.betting.BetContext;
 import cz.fb.manaus.reactor.betting.BetContextFactory;
+import cz.fb.manaus.reactor.betting.proposer.ProposerCoordinator;
 import cz.fb.manaus.reactor.betting.validator.ValidationResult;
 import cz.fb.manaus.reactor.betting.validator.ValidationService;
 import cz.fb.manaus.reactor.betting.validator.Validator;
@@ -42,8 +43,9 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
 
     private static final Logger log = Logger.getLogger(AbstractUpdatingBettor.class.getSimpleName());
 
-    protected final Side side;
+    private final Side side;
     private final List<Validator> validators;
+    private final ProposerCoordinator proposerCoordinator;
     @Autowired
     private ValidationService validationService;
     @Autowired
@@ -56,9 +58,10 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
     private MetricRegistry metricRegistry;
 
 
-    protected AbstractUpdatingBettor(Side side, List<Validator> validators) {
-        this.validators = validators;
+    protected AbstractUpdatingBettor(Side side, List<Validator> validators, ProposerCoordinator proposerCoordinator) {
         this.side = side;
+        this.validators = validators;
+        this.proposerCoordinator = proposerCoordinator;
     }
 
     @Override
@@ -97,7 +100,7 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
                         continue;
                     }
 
-                    Optional<Price> newPrice = getNewPrice(ctx);
+                    Optional<Price> newPrice = proposerCoordinator.getNewPrice(ctx);
                     if (!newPrice.isPresent()) {
                         cancelBet(oldBet, betCollector);
                         continue;
@@ -151,10 +154,7 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
         }
     }
 
-    private void setProperty(String key, Double value, Map<String, String> properties) {
-        if (value != null) properties.put(key, Double.toString(Precision.round(value, 4)));
+    private void setProperty(String key, double value, Map<String, String> properties) {
+        properties.put(key, Double.toString(Precision.round(value, 4)));
     }
-
-    protected abstract Optional<Price> getNewPrice(BetContext betContext);
-
 }

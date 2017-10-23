@@ -1,4 +1,4 @@
-package cz.fb.manaus.reactor.betting.listener;
+package cz.fb.manaus.reactor.betting.proposer;
 
 import com.google.common.base.Joiner;
 import cz.fb.manaus.core.model.Bet;
@@ -8,9 +8,6 @@ import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.provider.ExchangeProvider;
 import cz.fb.manaus.reactor.betting.AmountAdviser;
 import cz.fb.manaus.reactor.betting.BetContext;
-import cz.fb.manaus.reactor.betting.proposer.PriceProposalService;
-import cz.fb.manaus.reactor.betting.proposer.PriceProposer;
-import cz.fb.manaus.reactor.betting.proposer.ProposedPrice;
 import cz.fb.manaus.reactor.betting.validator.Validator;
 import cz.fb.manaus.reactor.rounding.RoundingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,26 +20,27 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-abstract public class AbstractProposerBettor extends AbstractUpdatingBettor {
-    private static final Logger log = Logger.getLogger(AbstractProposerBettor.class.getSimpleName());
+public class ProposerCoordinator {
+    private static final Logger log = Logger.getLogger(ProposerCoordinator.class.getSimpleName());
+
+    private final Side side;
+    private final List<PriceProposer> proposers;
 
     @Autowired
     private AmountAdviser adviser;
     @Autowired
     private ExchangeProvider provider;
-    private final List<PriceProposer> proposers;
     @Autowired
     private PriceProposalService proposalService;
     @Autowired
     private RoundingService roundingService;
 
-    public AbstractProposerBettor(Side side, List<Validator> validators, List<PriceProposer> proposers) {
-        super(side, validators);
+    public ProposerCoordinator(Side side, List<PriceProposer> proposers) {
+        this.side = side;
         this.proposers = proposers;
     }
 
-    @Override
-    protected Optional<Price> getNewPrice(BetContext betContext) {
+    public Optional<Price> getNewPrice(BetContext betContext) {
         OptionalDouble proposedPrice = reducePrices(betContext);
         if (proposedPrice.isPresent()) {
             double amount = adviser.getAmount();
