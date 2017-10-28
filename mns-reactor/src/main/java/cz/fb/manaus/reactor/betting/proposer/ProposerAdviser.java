@@ -20,9 +20,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class ProposerCoordinator implements PriceAdviser {
+public class ProposerAdviser implements PriceAdviser {
 
-    private static final Logger log = Logger.getLogger(ProposerCoordinator.class.getSimpleName());
+    private static final Logger log = Logger.getLogger(ProposerAdviser.class.getSimpleName());
     private final List<PriceProposer> proposers;
 
     @Autowired
@@ -34,7 +34,7 @@ public class ProposerCoordinator implements PriceAdviser {
     @Autowired
     private RoundingService roundingService;
 
-    public ProposerCoordinator(List<PriceProposer> proposers) {
+    public ProposerAdviser(List<PriceProposer> proposers) {
         this.proposers = proposers;
     }
 
