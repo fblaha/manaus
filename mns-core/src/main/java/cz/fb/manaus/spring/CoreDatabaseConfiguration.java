@@ -84,7 +84,7 @@ public class CoreDatabaseConfiguration {
             properties.setProperty("hibernate.generate_statistics", "true");
         }
         if (profiles.contains("external-db")) {
-            properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLInnoDBDialect");
+            properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MariaDBDialect");
         } else {
             properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
 
