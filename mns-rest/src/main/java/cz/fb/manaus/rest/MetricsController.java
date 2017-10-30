@@ -37,6 +37,7 @@ public class MetricsController {
         return metricsService.getCollectedMetrics(prefix);
     }
 
+    @ResponseBody
     @RequestMapping(value = "/metrics/histogram/{name}", method = RequestMethod.POST)
     public void updateHistogram(@PathVariable String name,
                                 @RequestParam(defaultValue = "100") int reservoirSize,
@@ -46,11 +47,13 @@ public class MetricsController {
                 .update(value);
     }
 
+    @ResponseBody
     @RequestMapping(value = "/metrics/meter/{name}", method = RequestMethod.POST)
     public void updateMeter(@PathVariable String name, @RequestBody long value) {
         metricRegistry.meter(name).mark(value);
     }
 
+    @ResponseBody
     @RequestMapping(value = "/metrics/counter/{name}", method = RequestMethod.POST)
     public void updateCounter(@PathVariable String name, @RequestBody long value) {
         metricRegistry.counter(name).inc(value);
