@@ -64,7 +64,7 @@ public class BetAction {
     @Fetch(FetchMode.JOIN)
     private Set<String> tags = new HashSet<>();
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @ManyToOne(fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     private MarketPrices marketPrices;
 
