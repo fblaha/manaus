@@ -88,7 +88,6 @@ public class ProfitService {
 
     public ProfitRecord toProfitRecord(SettledBet bet, String category, double chargeContribution, BetCoverage coverage) {
         Side type = requireNonNull(bet.getPrice().getSide());
-        Double backLayDiff;
         double price = bet.getPrice().getPrice();
         ProfitRecord result;
         if (type == Side.BACK) {
@@ -101,8 +100,7 @@ public class ProfitService {
         if (coverage.isCovered(marketId, selectionId)) {
             double backPrice = coverage.getPrice(marketId, selectionId, Side.BACK);
             double layPrice = coverage.getPrice(marketId, selectionId, Side.LAY);
-            backLayDiff = backPrice - layPrice;
-            result.setCoverDiff(backLayDiff);
+            result.setCoverDiff(backPrice - layPrice);
             result.setCoverCount(1);
         }
         return result;
