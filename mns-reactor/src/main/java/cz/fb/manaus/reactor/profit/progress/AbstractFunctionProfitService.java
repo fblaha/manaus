@@ -96,7 +96,7 @@ abstract public class AbstractFunctionProfitService {
             String betId = bet.getBetAction().getBetId();
             return profitService.toProfitRecord(bet, category, charges.get(betId), coverage);
         }).collect(Collectors.toList());
-        return profitService.mergeProfitRecords(chunkRecords);
+        return profitService.mergeCategory(category, chunkRecords);
     }
 
 }

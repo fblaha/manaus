@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -17,11 +18,8 @@ import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.google.common.collect.Maps.transformValues;
-import static com.google.common.collect.Ordering.from;
-import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 
 @Service
@@ -43,14 +41,21 @@ public class ProfitService {
 
         List<ProfitRecord> betRecords = computeProfitRecords(bets, simulationAwareOnly,
                 requireNonNull(namespace), charges, coverage);
-
-        Map<String, List<ProfitRecord>> byCategory = betRecords.stream().collect(groupingBy(ProfitRecord::getCategory));
-        Map<String, ProfitRecord> result = transformValues(byCategory, this::mergeProfitRecords);
-        return from(comparing(ProfitRecord::getCategory)).immutableSortedCopy(result.values());
+        return mergeProfitRecords(betRecords);
     }
 
-    public ProfitRecord mergeProfitRecords(Collection<ProfitRecord> records) {
-        ProfitRecord first = records.stream().findFirst().get();
+    public List<ProfitRecord> mergeProfitRecords(Collection<ProfitRecord> records) {
+        Map<String, List<ProfitRecord>> categories = records.stream()
+                .collect(Collectors.groupingBy(ProfitRecord::getCategory));
+        return categories.entrySet().stream()
+                .map(e -> mergeCategory(e.getKey(), e.getValue()))
+                .sorted(Comparator.comparing(ProfitRecord::getCategory))
+                .collect(toList());
+    }
+
+    public ProfitRecord mergeCategory(String category, Collection<ProfitRecord> records) {
+        Preconditions.checkArgument(records.stream().map(ProfitRecord::getCategory)
+                .allMatch(category::equals));
         double avgPrice = records.stream()
                 .mapToDouble(ProfitRecord::getAvgPrice)
                 .average().getAsDouble();
@@ -59,7 +64,7 @@ public class ProfitService {
         int layCount = records.stream().mapToInt(ProfitRecord::getLayCount).sum();
         int backCount = records.stream().mapToInt(ProfitRecord::getBackCount).sum();
         int coverCount = records.stream().mapToInt(ProfitRecord::getCoverCount).sum();
-        ProfitRecord result = new ProfitRecord(first.getCategory(), theoreticalProfit, layCount, backCount, avgPrice, charge);
+        ProfitRecord result = new ProfitRecord(category, theoreticalProfit, layCount, backCount, avgPrice, charge);
         if (coverCount > 0) {
             OptionalDouble diff = records.stream().filter(profitRecord -> profitRecord.getCoverDiff() != null)
                     .mapToDouble(ProfitRecord::getCoverDiff).average();

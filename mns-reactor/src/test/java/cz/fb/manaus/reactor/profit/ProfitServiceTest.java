@@ -172,12 +172,12 @@ public class ProfitServiceTest extends AbstractProfitTest {
     }
 
     @Test
-    public void testMerge() throws Exception {
+    public void testMergeCategory() throws Exception {
         ProfitRecord r1 = new ProfitRecord("test", 100d, 1, 1, 2d, 0.06);
         r1.setCoverDiff(0.2);
         r1.setCoverCount(1);
         ProfitRecord r2 = new ProfitRecord("test", 100d, 1, 1, 2d, 0.06);
-        ProfitRecord record = profitService.mergeProfitRecords(Arrays.asList(r1, r2));
+        ProfitRecord record = profitService.mergeCategory("test", Arrays.asList(r1, r2));
         assertEquals(record.getCoverDiff(), r1.getCoverDiff(), 0.00001d);
     }
 }
