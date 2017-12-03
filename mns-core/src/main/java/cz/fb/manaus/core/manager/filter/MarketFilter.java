@@ -6,4 +6,7 @@ import java.util.function.Predicate;
 
 public interface MarketFilter extends Predicate<Market> {
 
+    default boolean isStrict() {
+        return false;
+    }
 }

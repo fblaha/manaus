@@ -133,8 +133,6 @@ public class BetManager {
     }
 
     private boolean checkFilter(Set<String> myBets, Market market) {
-        return !myBets.isEmpty() || filterService.accept(market);
+        return filterService.accept(market, !myBets.isEmpty());
     }
-
-
 }

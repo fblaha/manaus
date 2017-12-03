@@ -21,4 +21,8 @@ public class ObsoleteFilter implements MarketFilter {
         return result;
     }
 
+    @Override
+    public boolean isStrict() {
+        return true;
+    }
 }

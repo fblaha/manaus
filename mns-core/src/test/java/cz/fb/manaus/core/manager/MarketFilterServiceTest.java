@@ -13,8 +13,14 @@ public class MarketFilterServiceTest extends AbstractMarketDataAwareTestCase {
 
     @Test
     public void testFilterService() throws Exception {
-        long cnt = markets.stream().filter(filterService::accept).count();
-        assertTrue(Range.closed(1000L, 1500L).contains(cnt));
+        checkFilterCount(Range.closed(1000L, 1500L), false);
+        checkFilterCount(Range.singleton(6700L), true);
     }
 
+    public void checkFilterCount(Range<Long> expectedRange, boolean hasBets) {
+        System.out.println(" = " + markets.size());
+        long cnt = markets.stream()
+                .filter(market -> filterService.accept(market, hasBets)).count();
+        assertTrue(expectedRange.contains(cnt));
+    }
 }
