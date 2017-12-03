@@ -39,8 +39,7 @@ public class MetricsService {
                 new MetricRecord<>(name + ".count", meter.getCount()),
                 new MetricRecord<>(name + ".rate15", meter.getFifteenMinuteRate()),
                 new MetricRecord<>(name + ".rate5", meter.getFiveMinuteRate()),
-                new MetricRecord<>(name + ".rate1", meter.getOneMinuteRate()),
-                new MetricRecord<>(name + ".meanRate", meter.getMeanRate()));
+                new MetricRecord<>(name + ".rate1", meter.getOneMinuteRate()));
     }
 
     private Stream<MetricRecord<?>> getCounterMetricRecords(String name, Counter counter) {
@@ -51,7 +50,6 @@ public class MetricsService {
         Snapshot snapshot = histogram.getSnapshot();
         return Stream.of(
                 new MetricRecord<>(name + ".max", snapshot.getMax()),
-                new MetricRecord<>(name + ".min", snapshot.getMin()),
-                new MetricRecord<>(name + ".mean", snapshot.getMean()));
+                new MetricRecord<>(name + ".min", snapshot.getMin()));
     }
 }

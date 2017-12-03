@@ -42,7 +42,6 @@ public class MetricsServiceTest extends AbstractLocalTestCase {
         Map<String, MetricRecord<?>> recordMap = getRecordMap();
         assertThat(recordMap.get("test.hist.max").getValue(), is(20L));
         assertThat(recordMap.get("test.hist.min").getValue(), is(10L));
-        assertThat(recordMap.get("test.hist.mean").getValue(), is(15.0d));
     }
 
     public Map<String, MetricRecord<?>> getRecordMap() {
