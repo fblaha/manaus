@@ -6,6 +6,7 @@ import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.spring.DatabaseComponent;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.Instant;
@@ -19,10 +20,18 @@ import static java.util.Date.from;
 @DatabaseComponent
 public class MarketCleaner {
     private static final Logger log = Logger.getLogger(MarketCleaner.class.getSimpleName());
+    public static final String HIST_DAYS_EL = "#{systemEnvironment['MNS_MARKET_HISTORY_DAYS'] ?: 200}";
     @Autowired
     private MarketDao marketDao;
     @Autowired
     private MetricRegistry metricRegistry;
+
+    private final int marketHistoryDays;
+
+    @Autowired
+    public MarketCleaner(@Value(HIST_DAYS_EL) int marketHistoryDays) {
+        this.marketHistoryDays = marketHistoryDays;
+    }
 
     @Scheduled(fixedDelay = 10 * DateUtils.MILLIS_PER_MINUTE)
     public void purgeMarkets() {
