@@ -22,7 +22,7 @@ class TestTask implements PeriodicMaintenanceTask {
 
     @Override
     public Duration getPausePeriod() {
-        return Duration.ofMinutes(10);
+        return Duration.ofNanos(777);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class MaintenanceControllerTest extends AbstractControllerTest {
 
     @Test
     public void testTasks() throws Exception {
-        checkResponse("/maintenance", "testTask");
+        checkResponse("/maintenance", "testTask", "777");
     }
 
     @Test
