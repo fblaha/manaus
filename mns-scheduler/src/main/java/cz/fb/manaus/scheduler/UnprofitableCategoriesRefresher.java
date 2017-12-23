@@ -18,7 +18,6 @@ public class UnprofitableCategoriesRefresher implements PeriodicMaintenanceTask 
     @Autowired(required = false)
     private List<AbstractUnprofitableCategoriesRegistry> unprofitableCategoriesRegistries = new LinkedList<>();
 
-
     @Override
     public String getName() {
         return "unprofitableCategoriesRefresh";
@@ -30,12 +29,8 @@ public class UnprofitableCategoriesRefresher implements PeriodicMaintenanceTask 
     }
 
     @Override
-    public void run() {
-        updateUnprofitableCategoriesRegistry();
-    }
-
     @Scheduled(fixedDelay = 10 * MILLIS_PER_MINUTE)
-    public void updateUnprofitableCategoriesRegistry() {
+    public void run() {
         unprofitableCategoriesRegistries.forEach(AbstractUnprofitableCategoriesRegistry::updateBlackLists);
     }
 }

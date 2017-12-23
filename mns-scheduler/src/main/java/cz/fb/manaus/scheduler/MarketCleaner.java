@@ -35,15 +35,6 @@ public class MarketCleaner implements PeriodicMaintenanceTask {
         this.marketHistoryDays = marketHistoryDays;
     }
 
-    @Scheduled(fixedDelay = 10 * DateUtils.MILLIS_PER_MINUTE)
-    public void purgeMarkets() {
-        Stopwatch stopwatch = Stopwatch.createUnstarted().start();
-        int count = marketDao.deleteMarkets(from(Instant.now().minus(140, ChronoUnit.DAYS)));
-        metricRegistry.counter("purge.market").inc(count);
-        long elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS);
-        log.log(Level.INFO, "DELETE_MARKETS: ''{0}'' obsolete markets removed in ''{1}'' seconds", new Object[]{count, elapsed});
-    }
-
     @Override
     public String getName() {
         return "marketCleanup";
@@ -55,7 +46,12 @@ public class MarketCleaner implements PeriodicMaintenanceTask {
     }
 
     @Override
+    @Scheduled(fixedDelay = 10 * DateUtils.MILLIS_PER_MINUTE)
     public void run() {
-        purgeMarkets();
+        Stopwatch stopwatch = Stopwatch.createUnstarted().start();
+        int count = marketDao.deleteMarkets(from(Instant.now().minus(140, ChronoUnit.DAYS)));
+        metricRegistry.counter("purge.market").inc(count);
+        long elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS);
+        log.log(Level.INFO, "DELETE_MARKETS: ''{0}'' obsolete markets removed in ''{1}'' seconds", new Object[]{count, elapsed});
     }
 }

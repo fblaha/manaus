@@ -21,13 +21,6 @@ public class PropertyCleaner implements PeriodicMaintenanceTask {
     @Autowired
     private MetricRegistry metricRegistry;
 
-    @Scheduled(fixedDelay = DateUtils.MILLIS_PER_HOUR)
-    public void purgeExpiredProperties() {
-        int count = propertiesService.purgeExpired();
-        metricRegistry.counter("purge.property").inc(count);
-        log.log(Level.INFO, "''{0}'' expired properties purged", count);
-    }
-
     @Override
     public String getName() {
         return "propertyCleanup";
@@ -39,7 +32,10 @@ public class PropertyCleaner implements PeriodicMaintenanceTask {
     }
 
     @Override
+    @Scheduled(fixedDelay = DateUtils.MILLIS_PER_HOUR)
     public void run() {
-        purgeExpiredProperties();
+        int count = propertiesService.purgeExpired();
+        metricRegistry.counter("purge.property").inc(count);
+        log.log(Level.INFO, "''{0}'' expired properties purged", count);
     }
 }

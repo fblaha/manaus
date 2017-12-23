@@ -1,5 +1,6 @@
 package cz.fb.manaus.rest;
 
+import com.codahale.metrics.MetricRegistry;
 import cz.fb.manaus.core.maintanance.PeriodicMaintenanceTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,9 @@ import java.util.Optional;
 @Controller
 public class MaintenanceController {
 
+    @Autowired
+    private MetricRegistry metricRegistry;
+
     @Autowired(required = false)
     private List<PeriodicMaintenanceTask> maintenanceTasks = new LinkedList<>();
 
@@ -28,6 +32,7 @@ public class MaintenanceController {
     @ResponseBody
     @RequestMapping(value = "/maintenance/{name}", method = RequestMethod.POST)
     public ResponseEntity<?> runTask(@PathVariable String name) {
+        metricRegistry.counter("maintenance." + name).inc();
         Optional<PeriodicMaintenanceTask> task = maintenanceTasks.stream()
                 .filter(t -> name.equals(t.getName())).findAny();
         task.ifPresent(PeriodicMaintenanceTask::run);

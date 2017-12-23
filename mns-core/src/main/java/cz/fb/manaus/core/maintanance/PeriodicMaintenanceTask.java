@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.Duration;
 
-public interface PeriodicMaintenanceTask {
+public interface PeriodicMaintenanceTask extends Runnable {
 
     String getName();
 
@@ -15,5 +15,4 @@ public interface PeriodicMaintenanceTask {
         return getPausePeriod().toNanos();
     }
 
-    void run();
 }
