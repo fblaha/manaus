@@ -15,7 +15,6 @@
     </parent>
     <modules>
         <module>mns-core</module>
-        <module>mns-scheduler</module>
         <module>mns-reactor</module>
         <module>mns-rest</module>
     </modules>
@@ -70,12 +69,6 @@
             <dependency>
                 <groupId>cz.fb.manaus</groupId>
                 <artifactId>manaus-reactor</artifactId>
-                <scope>compile</scope>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cz.fb.manaus</groupId>
-                <artifactId>manaus-scheduler</artifactId>
                 <scope>compile</scope>
                 <version>${project.version}</version>
             </dependency>

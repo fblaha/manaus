@@ -1,14 +1,11 @@
-package cz.fb.manaus.scheduler;
+package cz.fb.manaus.core.maintanance;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Stopwatch;
 import cz.fb.manaus.core.dao.MarketDao;
-import cz.fb.manaus.core.maintanance.PeriodicMaintenanceTask;
 import cz.fb.manaus.spring.DatabaseComponent;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -42,11 +39,10 @@ public class MarketCleaner implements PeriodicMaintenanceTask {
 
     @Override
     public Duration getPausePeriod() {
-        return Duration.ofMinutes(10);
+        return Duration.ofMinutes(15);
     }
 
     @Override
-    @Scheduled(fixedDelay = 10 * DateUtils.MILLIS_PER_MINUTE)
     public void run() {
         Stopwatch stopwatch = Stopwatch.createUnstarted().start();
         int count = marketDao.deleteMarkets(from(Instant.now().minus(140, ChronoUnit.DAYS)));

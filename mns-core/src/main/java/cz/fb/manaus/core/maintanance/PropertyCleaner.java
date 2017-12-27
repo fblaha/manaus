@@ -1,12 +1,9 @@
-package cz.fb.manaus.scheduler;
+package cz.fb.manaus.core.maintanance;
 
 import com.codahale.metrics.MetricRegistry;
-import cz.fb.manaus.core.maintanance.PeriodicMaintenanceTask;
 import cz.fb.manaus.core.service.PropertiesService;
 import cz.fb.manaus.spring.DatabaseComponent;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.Duration;
 import java.util.logging.Level;
@@ -28,11 +25,10 @@ public class PropertyCleaner implements PeriodicMaintenanceTask {
 
     @Override
     public Duration getPausePeriod() {
-        return Duration.ofHours(1);
+        return Duration.ofMinutes(10);
     }
 
     @Override
-    @Scheduled(fixedDelay = DateUtils.MILLIS_PER_HOUR)
     public void run() {
         int count = propertiesService.purgeExpired();
         metricRegistry.counter("purge.property").inc(count);
