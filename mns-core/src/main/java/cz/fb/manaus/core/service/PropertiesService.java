@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.OptionalLong;
 
 @Repository
 public class PropertiesService {
@@ -99,38 +98,6 @@ public class PropertiesService {
         } else {
             return Optional.empty();
         }
-    }
-
-    @Transactional
-    public void setLong(String name, long number, Duration validPeriod) {
-        set(name, Long.toString(number), validPeriod);
-    }
-
-    @Transactional
-    public long incrementAntGet(String name, Duration validPeriod) {
-        OptionalLong stored = getLong(name);
-        long val = 0;
-        if (stored.isPresent()) {
-            val = stored.getAsLong();
-        }
-        val++;
-        setLong(name, val, validPeriod);
-        return val;
-    }
-
-    @Transactional(readOnly = true)
-    public OptionalLong getLong(String name) {
-        Optional<String> stringLong = get(name);
-        if (stringLong.isPresent()) {
-            return OptionalLong.of(Long.parseLong(stringLong.get()));
-        } else {
-            return OptionalLong.empty();
-        }
-    }
-
-    @Transactional
-    public void setDouble(String name, double number, Duration validPeriod) {
-        set(name, Double.toString(number), validPeriod);
     }
 
     @Transactional(readOnly = true)
