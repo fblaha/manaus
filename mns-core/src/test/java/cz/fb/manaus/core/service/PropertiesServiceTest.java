@@ -19,7 +19,6 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
-@Ignore
 public class PropertiesServiceTest extends AbstractDaoTest {
 
     @Autowired
@@ -28,7 +27,7 @@ public class PropertiesServiceTest extends AbstractDaoTest {
     @Before
     @After
     public void cleanUpConfiguration() throws Exception {
-        service.delete(null);
+        service.delete(Optional.empty());
         Preconditions.checkState(service.list(Optional.empty()).isEmpty());
     }
 
@@ -76,6 +75,7 @@ public class PropertiesServiceTest extends AbstractDaoTest {
     }
 
     @Test
+    @Ignore
     public void testExpiredUpdate() throws Exception {
         service.set("aaa", "XXX", Duration.ofDays(-1));
         assertThat(service.get("aaa").orElse(null), nullValue());
@@ -89,15 +89,14 @@ public class PropertiesServiceTest extends AbstractDaoTest {
     public void testDelete() throws Exception {
         service.set("a.b.c", "BBB", Duration.ofDays(100));
         assertThat(service.get("a.b.c").get(), is("BBB"));
-        service.delete(null);
+        service.delete(Optional.empty());
         assertThat(service.get("a.b.c").orElse(null), nullValue());
         service.set("a.b.c", "BBB", Duration.ofDays(100));
-        service.delete("b");
+        service.delete(Optional.of("b"));
         assertThat(service.get("a.b.c").get(), is("BBB"));
-        service.delete("a.");
+        service.delete(Optional.of("a."));
         assertThat(service.get("a.b.c").orElse(null), nullValue());
     }
-
 
     @Test
     public void testDate() throws Exception {

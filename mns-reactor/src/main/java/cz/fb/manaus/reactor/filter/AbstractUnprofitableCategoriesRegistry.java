@@ -215,7 +215,7 @@ abstract public class AbstractUnprofitableCategoriesRegistry implements Namespac
     }
 
     void cleanUp() {
-        propertiesService.delete(getPropertyPrefix());
+        propertiesService.delete(Optional.of(getPropertyPrefix()));
     }
 
     void saveBlackList(int thresholdPct, Set<String> blackList) {

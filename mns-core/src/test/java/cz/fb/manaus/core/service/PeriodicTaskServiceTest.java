@@ -2,7 +2,6 @@ package cz.fb.manaus.core.service;
 
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.verification.VerificationMode;
@@ -11,11 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
-@Ignore
 public class PeriodicTaskServiceTest extends AbstractDatabaseTestCase {
 
     public static final String TASK_NAME = "test.task";
@@ -26,7 +25,7 @@ public class PeriodicTaskServiceTest extends AbstractDatabaseTestCase {
 
     @Before
     public void setUp() throws Exception {
-        propertiesService.delete(PeriodicTaskService.PREFIX);
+        propertiesService.delete(Optional.of(PeriodicTaskService.PREFIX));
     }
 
     @Test
@@ -62,6 +61,4 @@ public class PeriodicTaskServiceTest extends AbstractDatabaseTestCase {
         service.runIfExpired(TASK_NAME, Duration.ofMinutes(10), mock);
         Mockito.verify(mock, verificationMode).run();
     }
-
-
 }
