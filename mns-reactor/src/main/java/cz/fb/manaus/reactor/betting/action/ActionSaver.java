@@ -4,7 +4,6 @@ import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketPricesDao;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.MarketPrices;
-import cz.fb.manaus.core.service.PropertiesService;
 import cz.fb.manaus.spring.DatabaseComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,10 +22,6 @@ public class ActionSaver {
     private BetActionDao betActionDao;
     @Autowired
     private MarketPricesDao pricesDao;
-    @Autowired
-    private PropertiesService service;
-    @Autowired
-    private BetUtils betUtils;
 
     public int setBetId(String betId, int actionId) {
         replaceExistingBetId(betId);
