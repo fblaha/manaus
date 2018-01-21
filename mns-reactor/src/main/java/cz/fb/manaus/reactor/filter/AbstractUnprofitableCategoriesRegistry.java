@@ -11,7 +11,6 @@ import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.SettledBetDao;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.ProfitRecord;
-import cz.fb.manaus.core.model.Property;
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.provider.ExchangeProvider;
@@ -139,9 +138,8 @@ abstract public class AbstractUnprofitableCategoriesRegistry implements Namespac
 
     Set<String> getSavedBlackList() {
         Set<String> blackList = new HashSet<>();
-        List<Property> items = propertiesService.list(Optional.of(getPropertyPrefix()));
-        for (Property item : items) {
-            if (!blackListProperty.matcher(item.getName()).matches()) continue;
+        for (Map.Entry<String, String> item : propertiesService.list(Optional.of(getPropertyPrefix())).entrySet()) {
+            if (!blackListProperty.matcher(item.getKey()).matches()) continue;
             String rawCategories = item.getValue();
             blackList.addAll(on(',').splitToList(rawCategories));
         }

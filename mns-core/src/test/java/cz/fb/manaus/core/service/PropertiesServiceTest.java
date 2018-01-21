@@ -2,9 +2,9 @@ package cz.fb.manaus.core.service;
 
 import com.google.common.base.Preconditions;
 import cz.fb.manaus.core.dao.AbstractDaoTest;
-import cz.fb.manaus.core.model.Property;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +19,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
+@Ignore
 public class PropertiesServiceTest extends AbstractDaoTest {
 
     @Autowired
@@ -48,21 +49,6 @@ public class PropertiesServiceTest extends AbstractDaoTest {
         assertThat(plus4.getEpochSecond(), is(plus2.getEpochSecond()));
     }
 
-    @Test
-    public void testCache() throws Exception {
-        getSessionFactory().getStatistics().clear();
-        getSessionFactory().getCache().evictAllRegions();
-        checkStats(0, 0, 0, 0, Property.class);
-        service.set("aaa", "test.val", Duration.ofHours(5));
-        checkStats(1, 0, 1, 1, Property.class);
-        getSessionFactory().getCache().evictAllRegions();
-        getSessionFactory().getStatistics().clear();
-        checkStats(0, 0, 0, 0, Property.class);
-        service.get("aaa");
-        checkStats(1, 0, 1, 1, Property.class);
-        service.get("aaa");
-        checkStats(1, 1, 1, 1, Property.class);
-    }
 
     @Test
     public void testService() throws Exception {
@@ -87,22 +73,6 @@ public class PropertiesServiceTest extends AbstractDaoTest {
         assertThat(service.list(Optional.of("aaa")).size(), is(1));
         assertThat(service.list(Optional.of("a")).size(), is(1));
         assertThat(service.list(Optional.of("b")).size(), is(0));
-    }
-
-    @Test
-    public void testExpired() throws Exception {
-        service.set("aaa", "XXX", Duration.ofDays(100));
-        service.set("bbb", "YYY", Duration.ofDays(-1));
-        checkExpired();
-        assertThat(service.purgeExpired(), is(1));
-        assertThat(service.purgeExpired(), is(0));
-        checkExpired();
-    }
-
-    private void checkExpired() {
-        assertThat(service.list(Optional.empty()).size(), is(1));
-        assertThat(service.get("aaa").get(), is("XXX"));
-        assertThat(service.get("bbb").orElse(null), nullValue());
     }
 
     @Test

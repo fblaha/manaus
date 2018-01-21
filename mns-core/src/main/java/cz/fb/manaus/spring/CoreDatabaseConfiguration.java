@@ -6,7 +6,6 @@ import cz.fb.manaus.core.model.Event;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.Price;
-import cz.fb.manaus.core.model.Property;
 import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.SettledBet;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -45,8 +44,10 @@ public class CoreDatabaseConfiguration {
             "#{systemEnvironment['MNS_JDBC_PASSWORD']}";
     public static final String JDBC_URL_EL =
             "#{systemEnvironment['MNS_JDBC_URL'] ?: '" + DEFAULT_DB_URL + "'}";
-    public static final Class[] HIBERNATE_CLASSES = {Market.class, Event.class, RunnerPrices.class, Price.class,
-            MarketPrices.class, BetAction.class, Property.class, SettledBet.class};
+    public static final Class[] HIBERNATE_CLASSES = {
+            Market.class, Event.class, RunnerPrices.class, Price.class,
+            MarketPrices.class, BetAction.class, SettledBet.class
+    };
 
     @Autowired
     @Qualifier("hibernateProperties")

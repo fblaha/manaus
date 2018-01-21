@@ -6,7 +6,6 @@ import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.ProfitRecord;
-import cz.fb.manaus.core.model.Property;
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
@@ -32,14 +31,6 @@ public class JsonMarshallerTest extends AbstractLocalTestCase {
         String json = mapper.writer().writeValueAsString(singletonList(action));
         System.out.println("json = " + json);
     }
-
-    @Test
-    public void testPropertyList() throws Exception {
-        Property item = new Property("test.name", new Date().toString(), new Date());
-        String json = mapper.writer().writeValueAsString(singletonList(item));
-        System.out.println("json = " + json);
-    }
-
 
     @Test
     public void testSettledBetList() throws Exception {

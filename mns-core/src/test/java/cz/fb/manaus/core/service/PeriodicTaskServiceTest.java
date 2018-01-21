@@ -2,6 +2,7 @@ package cz.fb.manaus.core.service;
 
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.verification.VerificationMode;
@@ -14,6 +15,7 @@ import java.time.temporal.ChronoUnit;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
+@Ignore
 public class PeriodicTaskServiceTest extends AbstractDatabaseTestCase {
 
     public static final String TASK_NAME = "test.task";
