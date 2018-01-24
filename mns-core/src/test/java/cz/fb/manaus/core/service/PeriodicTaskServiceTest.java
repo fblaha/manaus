@@ -1,10 +1,8 @@
 package cz.fb.manaus.core.service;
 
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.verification.VerificationMode;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Duration;
@@ -14,6 +12,9 @@ import java.util.Optional;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 
 public class PeriodicTaskServiceTest extends AbstractDatabaseTestCase {
 
@@ -23,42 +24,42 @@ public class PeriodicTaskServiceTest extends AbstractDatabaseTestCase {
     @Autowired
     private PropertiesService propertiesService;
 
-    @Before
-    public void setUp() throws Exception {
-        propertiesService.delete(Optional.of(PeriodicTaskService.PREFIX));
-    }
-
     @Test
     public void testExpiry() throws Exception {
-        assertTrue(service.isRefreshRequired(TASK_NAME, Duration.ofMinutes(120)));
-        service.markUpdated(TASK_NAME);
-        assertFalse(service.isRefreshRequired(TASK_NAME, Duration.ofMinutes(120)));
-        service.setTimestamp(TASK_NAME, Instant.now().minus(3, ChronoUnit.HOURS));
-        assertTrue(service.isRefreshRequired(TASK_NAME, Duration.ofMinutes(120)));
+        assertTrue(service.isRefreshRequired(TASK_NAME, Duration.ofMinutes(120),
+                Optional.empty()));
+        assertFalse(service.isRefreshRequired(TASK_NAME, Duration.ofMinutes(120),
+                Optional.of(Instant.now())));
+        assertTrue(service.isRefreshRequired(TASK_NAME, Duration.ofMinutes(120),
+                Optional.of(Instant.now().minus(3, ChronoUnit.HOURS))));
     }
-
 
     @Test
     public void testRunFirst() throws Exception {
-        checkTaskExecution(Mockito.times(1));
+        reset(propertiesService);
+        when(propertiesService.getInstant(anyString())).thenReturn(Optional.empty());
+        checkTaskExecution(1);
     }
 
     @Test
     public void testFresh() throws Exception {
-        service.markUpdated(TASK_NAME);
-        checkTaskExecution(Mockito.never());
+        reset(propertiesService);
+        when(propertiesService.getInstant(anyString()))
+                .thenReturn(Optional.of(Instant.now()));
+        checkTaskExecution(0);
     }
 
     @Test
     public void testRunExpired() throws Exception {
-        service.setTimestamp(TASK_NAME, Instant.now().minus(3, ChronoUnit.HOURS));
-        checkTaskExecution(Mockito.times(1));
+        reset(propertiesService);
+        when(propertiesService.getInstant(anyString()))
+                .thenReturn(Optional.of(Instant.now().minus(3, ChronoUnit.HOURS)));
+        checkTaskExecution(1);
     }
 
-    private void checkTaskExecution(VerificationMode verificationMode) {
+    private void checkTaskExecution(int expectedCalls) {
         Runnable mock = Mockito.mock(Runnable.class);
         service.runIfExpired(TASK_NAME, Duration.ofMinutes(10), mock);
-        service.runIfExpired(TASK_NAME, Duration.ofMinutes(10), mock);
-        Mockito.verify(mock, verificationMode).run();
+        Mockito.verify(mock, Mockito.times(expectedCalls)).run();
     }
 }

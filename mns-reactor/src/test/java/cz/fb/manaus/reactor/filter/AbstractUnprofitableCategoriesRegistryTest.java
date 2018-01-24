@@ -9,7 +9,9 @@ import cz.fb.manaus.core.test.AbstractDatabaseTestCase;
 import cz.fb.manaus.spring.DatabaseComponent;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Duration;
@@ -26,6 +28,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsNot.not;
 
+@Ignore
 public class AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabaseTestCase {
 
     @Autowired
@@ -41,6 +44,7 @@ public class AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabase
 
     @Before
     public void setUp() throws Exception {
+        Mockito.reset(propertiesService);
         registry.setWhiteList("white.tes");
         registry.cleanUp();
     }

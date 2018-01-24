@@ -22,7 +22,12 @@ public class PeriodicTaskService {
     private MetricRegistry metricRegistry;
 
     boolean isRefreshRequired(String taskName, Duration pauseDuration) {
-        Optional<Instant> timestamp = propertiesService.getInstant(getTimestampPropertyName(taskName));
+        String timestampPropertyName = getTimestampPropertyName(taskName);
+        Optional<Instant> timestamp = propertiesService.getInstant(timestampPropertyName);
+        return isRefreshRequired(taskName, pauseDuration, timestamp);
+    }
+
+    boolean isRefreshRequired(String taskName, Duration pauseDuration, Optional<Instant> timestamp) {
         if (timestamp.isPresent()) {
             Duration actualDuration = Duration.between(timestamp.get(), Instant.now());
             Preconditions.checkState(!actualDuration.isNegative());
