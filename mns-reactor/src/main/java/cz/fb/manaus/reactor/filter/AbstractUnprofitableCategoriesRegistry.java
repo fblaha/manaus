@@ -95,7 +95,7 @@ abstract public class AbstractUnprofitableCategoriesRegistry implements Namespac
         this.side = side;
         this.pauseDuration = pauseDuration;
         this.filterPrefix = filterPrefix;
-        blackListProperty = Pattern.compile("^" + Pattern.quote(getPropertyPrefix()) + "\\d{1,2}$");
+        this.blackListProperty = Pattern.compile("^" + Pattern.quote(getPropertyPrefix()) + "\\d{1,2}$");
     }
 
     @Autowired
@@ -139,9 +139,10 @@ abstract public class AbstractUnprofitableCategoriesRegistry implements Namespac
     Set<String> getSavedBlackList() {
         Set<String> blackList = new HashSet<>();
         for (Map.Entry<String, String> item : propertiesService.list(Optional.of(getPropertyPrefix())).entrySet()) {
-            if (!blackListProperty.matcher(item.getKey()).matches()) continue;
-            String rawCategories = item.getValue();
-            blackList.addAll(on(',').splitToList(rawCategories));
+            if (blackListProperty.matcher(item.getKey()).matches()) {
+                String rawCategories = item.getValue();
+                blackList.addAll(on(',').splitToList(rawCategories));
+            }
         }
         log.log(Level.INFO, getLogPrefix() + "blacklist fetched ''{0}''", blackList);
         return blackList;
@@ -245,7 +246,7 @@ abstract public class AbstractUnprofitableCategoriesRegistry implements Namespac
         return currentBlackList;
     }
 
-    String getPropertyPrefix() {
+    private String getPropertyPrefix() {
         return UNPROFITABLE_BLACK_LIST + name + ".";
     }
 

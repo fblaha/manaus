@@ -26,8 +26,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsNot.not;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+// TODO maven ignores it
 public class AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabaseTestCase {
 
     @Autowired
@@ -112,7 +116,8 @@ public class AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabase
                 pr("weak1", -1d, 5),
                 pr("not_match", -1d, 2),
                 pr("weak2", -1d, 5)));
-        assertThat(registry.getSavedBlackList(), is(of("weak1", "weak2")));
+        verify(propertiesService).set(eq("unprofitable.black.list.test.5"),
+                eq("weak1,weak2"), eq(Duration.ofDays(7)));
     }
 
     @Test
@@ -123,7 +128,7 @@ public class AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabase
     @Test
     public void testSave() throws Exception {
         registry.saveBlackList(10, of("weak1", "weak2", "weak3"));
-        Mockito.verify(propertiesService).set(eq("unprofitable.black.list.test.10"),
+        verify(propertiesService).set(eq("unprofitable.black.list.test.10"),
                 eq("weak1,weak2,weak3"),
                 eq(Duration.ofDays(7)));
     }
@@ -131,7 +136,19 @@ public class AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabase
     @Test
     public void testSavedBlackList() throws Exception {
         registry.saveBlackList(10, of("weak10_1", "weak10_2", "weak10_3"));
+        verify(propertiesService).set(eq("unprofitable.black.list.test.10"),
+                eq("weak10_1,weak10_2,weak10_3"), eq(Duration.ofDays(7)));
         registry.saveBlackList(5, of("weak5_1", "weak5_2", "weak5_3"));
+        verify(propertiesService).set(eq("unprofitable.black.list.test.5"),
+                eq("weak5_1,weak5_2,weak5_3"), eq(Duration.ofDays(7)));
+    }
+
+    @Test
+    public void testGetBlackList() throws Exception {
+        when(propertiesService.list(any()))
+                .thenReturn(ImmutableMap.of(
+                        "unprofitable.black.list.test.10", "weak10_1,weak10_2,weak10_3",
+                        "unprofitable.black.list.test.5", "weak5_1,weak5_2,weak5_3"));
         Set<String> blackList = registry.getSavedBlackList();
         assertThat(blackList.size(), is(6));
         assertThat(blackList, hasItems("weak10_1", "weak10_2", "weak10_3", "weak5_1", "weak5_2", "weak5_3"));
@@ -139,8 +156,10 @@ public class AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabase
 
     @Test
     public void testUnprofitableCategories() throws Exception {
-        registry.saveBlackList(10, of("weak10_1", "weak10_2", "weak10_3"));
-        registry.saveBlackList(5, of("weak5_1", "weak5_2", "weak5_3"));
+        when(propertiesService.list(any()))
+                .thenReturn(ImmutableMap.of(
+                        "unprofitable.black.list.test.10", "weak10_1,weak10_2,weak10_3",
+                        "unprofitable.black.list.test.5", "weak5_1,weak5_2,weak5_3"));
         assertThat(registry.getUnprofitableCategories(of("weak5_1", "weak5_2", "weak5_3")),
                 is(of("weak5_1", "weak5_2", "weak5_3")));
         assertThat(registry.getUnprofitableCategories(of("weak5_1", "weak5_2-XXX", "weak10_1")),
