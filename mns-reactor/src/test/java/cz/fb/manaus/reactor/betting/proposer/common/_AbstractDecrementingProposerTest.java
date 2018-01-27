@@ -13,7 +13,7 @@ import java.util.OptionalDouble;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-public class AbstractDecrementingProposerTest extends AbstractLocalTestCase {
+public class _AbstractDecrementingProposerTest extends AbstractLocalTestCase {
 
     @Autowired
     private TestProposer proposer;

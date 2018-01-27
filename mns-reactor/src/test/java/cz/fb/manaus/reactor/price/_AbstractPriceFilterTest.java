@@ -23,7 +23,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 
-public class AbstractPriceFilterTest extends AbstractLocalTestCase {
+public class _AbstractPriceFilterTest extends AbstractLocalTestCase {
 
 
     public static final Price BACK1 = new Price(1.96d, 5d, Side.BACK);

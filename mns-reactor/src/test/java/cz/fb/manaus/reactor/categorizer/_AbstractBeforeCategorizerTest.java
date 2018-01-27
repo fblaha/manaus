@@ -11,7 +11,7 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 
 
-public class AbstractBeforeCategorizerTest extends AbstractLocalTestCase {
+public class _AbstractBeforeCategorizerTest extends AbstractLocalTestCase {
 
     @Autowired
     private TestBeforeCategorizer categorizer;

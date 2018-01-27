@@ -16,7 +16,7 @@ import static java.util.Collections.singleton;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class AbstractFixedCategoryFilterTest extends AbstractMarketDataAwareTestCase {
+public class _AbstractFixedCategoryFilterTest extends AbstractMarketDataAwareTestCase {
 
     @Autowired
     private TestFilter testFilter;

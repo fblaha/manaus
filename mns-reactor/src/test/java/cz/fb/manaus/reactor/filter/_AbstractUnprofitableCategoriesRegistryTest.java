@@ -31,8 +31,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-// TODO maven ignores it
-public class AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabaseTestCase {
+public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabaseTestCase {
 
     @Autowired
     private TestUnprofitableCategoriesRegistry registry;

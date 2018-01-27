@@ -27,7 +27,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AbstractTooCloseUpdateValidatorTest extends AbstractLocalTestCase {
+public class _AbstractTooCloseUpdateValidatorTest extends AbstractLocalTestCase {
 
     @Autowired
     private TestValidator validator;

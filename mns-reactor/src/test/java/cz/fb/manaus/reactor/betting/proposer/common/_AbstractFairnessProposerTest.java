@@ -14,7 +14,7 @@ import java.util.OptionalDouble;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class AbstractFairnessProposerTest extends AbstractLocalTestCase {
+public class _AbstractFairnessProposerTest extends AbstractLocalTestCase {
 
     @Autowired
     private TestLayProposer layProposer;

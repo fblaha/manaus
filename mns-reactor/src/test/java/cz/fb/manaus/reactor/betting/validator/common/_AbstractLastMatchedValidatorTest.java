@@ -24,7 +24,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ActiveProfiles(value = {"matchbook", TEST_PROFILE}, inheritProfiles = false)
-public class AbstractLastMatchedValidatorTest extends AbstractLocalTestCase {
+public class _AbstractLastMatchedValidatorTest extends AbstractLocalTestCase {
 
     @Autowired
     private TestValidator validator;

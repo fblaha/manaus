@@ -27,7 +27,7 @@ import static cz.fb.manaus.spring.CoreLocalConfiguration.TEST_PROFILE;
 import static org.hamcrest.CoreMatchers.is;
 
 @ActiveProfiles(value = {"matchbook", TEST_PROFILE}, inheritProfiles = false)
-public class AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
+public class _AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
     @Autowired
     private TestValidator validator;
     @Autowired

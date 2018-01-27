@@ -24,7 +24,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AbstractTooCloseUpdateEpsilonValidatorTest extends AbstractLocalTestCase {
+public class _AbstractTooCloseUpdateEpsilonValidatorTest extends AbstractLocalTestCase {
 
     @Autowired
     private TestValidator validator;
