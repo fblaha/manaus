@@ -19,6 +19,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
+// TODO approach to test PropertiesService
 @Ignore
 public class PropertiesServiceTest extends AbstractDaoTest {
 
@@ -76,7 +77,6 @@ public class PropertiesServiceTest extends AbstractDaoTest {
     }
 
     @Test
-    @Ignore
     public void testExpiredUpdate() throws Exception {
         service.set("aaa", "XXX", Duration.ofDays(-1));
         assertThat(service.get("aaa").orElse(null), nullValue());
