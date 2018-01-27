@@ -2,7 +2,7 @@ package cz.fb.manaus.core.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.net.HostAndPort;
+import com.google.common.base.CharMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -23,28 +23,25 @@ public class PropertiesService {
 
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS Z");
 
-    private final HostAndPort confEndpoint;
+    private final String confUrl;
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    public PropertiesService(@Value("#{systemEnvironment['MNS_CONF_NLOC'] ?: 'localhost:8080'}") String confEndpoint) {
-        this.confEndpoint = HostAndPort.fromString(confEndpoint);
+    public PropertiesService(@Value("#{systemEnvironment['MNS_CONF_URL'] ?: 'http://localhost:8080'}") String confUrl) {
+        this.confUrl = CharMatcher.is('/').trimTrailingFrom(confUrl);
     }
 
     public Optional<String> get(String name) {
-        return Optional.ofNullable(restTemplate.getForObject("http://{host}:{port}/{name}",
-                String.class, confEndpoint.getHost(), confEndpoint.getPort(), name));
+        return Optional.ofNullable(restTemplate.getForObject(confUrl + "/{name}", String.class, name));
     }
 
     public void set(String name, String value, Duration ttl) {
-        restTemplate.put("http://{host}:{port}/{name}?ttl={ttl}", value,
-                confEndpoint.getHost(), confEndpoint.getPort(), name, ttl.toMinutes() + "m");
+        restTemplate.put(confUrl + "/{name}?ttl={ttl}", value, name, ttl.toMinutes() + "m");
     }
 
     public Map<String, String> list(Optional<String> prefix) {
-        String json = restTemplate.getForObject("http://{host}:{port}?prefix={prefix}",
-                String.class, confEndpoint.getHost(), confEndpoint.getPort(), prefix.orElse(""));
+        String json = restTemplate.getForObject(confUrl + "?prefix={prefix}", String.class, prefix.orElse(""));
         HashMap<String, String> result = new HashMap<>();
         try {
             JsonNode jsonNode = mapper.readTree(json);
@@ -56,8 +53,7 @@ public class PropertiesService {
     }
 
     public void delete(Optional<String> prefix) {
-        restTemplate.delete("http://{host}:{port}/{prefix}",
-                confEndpoint.getHost(), confEndpoint.getPort(), prefix.orElse(""));
+        restTemplate.delete(confUrl + "/{prefix}", prefix.orElse(""));
     }
 
     public void setInstant(String name, Instant instant, Duration validPeriod) {
