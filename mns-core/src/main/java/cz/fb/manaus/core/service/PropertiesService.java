@@ -1,45 +1,63 @@
 package cz.fb.manaus.core.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.net.HostAndPort;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 @Component
 public class PropertiesService {
 
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS Z");
 
-    private final Map<String, String> storage = new ConcurrentHashMap<>();
+    private final HostAndPort confEndpoint;
+    private final RestTemplate restTemplate = new RestTemplate();
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    @Autowired
+    public PropertiesService(@Value("#{systemEnvironment['MNS_CONF_NLOC'] ?: 'localhost:8080'}") String confEndpoint) {
+        this.confEndpoint = HostAndPort.fromString(confEndpoint);
+    }
 
     public Optional<String> get(String name) {
-        return Optional.ofNullable(storage.get(name));
+        return Optional.ofNullable(restTemplate.getForObject("http://{host}:{port}/{name}",
+                String.class, confEndpoint.getHost(), confEndpoint.getPort(), name));
     }
 
     public void set(String name, String value, Duration ttl) {
-        storage.put(name, value);
+        restTemplate.put("http://{host}:{port}/{name}?ttl={ttl}", value,
+                confEndpoint.getHost(), confEndpoint.getPort(), name, ttl.toMinutes() + "m");
     }
 
     public Map<String, String> list(Optional<String> prefix) {
-        return storage.entrySet().stream()
-                .filter(e -> e.getKey().startsWith(prefix.orElse("")))
-                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+        String json = restTemplate.getForObject("http://{host}:{port}?prefix={prefix}",
+                String.class, confEndpoint.getHost(), confEndpoint.getPort(), prefix.orElse(""));
+        HashMap<String, String> result = new HashMap<>();
+        try {
+            JsonNode jsonNode = mapper.readTree(json);
+            jsonNode.fields().forEachRemaining(e -> result.put(e.getKey(), e.getValue().asText()));
+            return result;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public int delete(Optional<String> prefix) {
-        Set<String> keys = storage.keySet().stream()
-                .filter(k -> k.startsWith(prefix.orElse("")))
-                .collect(Collectors.toSet());
-        storage.keySet().removeAll(keys);
-        return keys.size();
+    public void delete(Optional<String> prefix) {
+        restTemplate.delete("http://{host}:{port}/{prefix}",
+                confEndpoint.getHost(), confEndpoint.getPort(), prefix.orElse(""));
     }
 
     public void setInstant(String name, Instant instant, Duration validPeriod) {
