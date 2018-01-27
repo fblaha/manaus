@@ -1,8 +1,13 @@
 package cz.fb.manaus.spring;
 
+import cz.fb.manaus.core.service.PropertiesService;
+import org.mockito.Mockito;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
 @ComponentScan(
@@ -12,11 +17,11 @@ import org.springframework.context.annotation.FilterType;
 )
 public class LocalTestConfiguration {
 
-//    @Bean
-//    @Primary
-//    @Profile("test")
-//    public PropertiesService propertiesService() {
-//        return Mockito.mock(PropertiesService.class);
-//    }
+    @Bean
+    @Primary
+    @Profile("test")
+    public PropertiesService propertiesService() {
+        return Mockito.mock(PropertiesService.class);
+    }
 
 }
