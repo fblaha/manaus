@@ -3,8 +3,8 @@ package cz.fb.manaus.core.service;
 import com.google.common.base.Preconditions;
 import cz.fb.manaus.core.dao.AbstractDaoTest;
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +20,15 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
 // TODO approach to test PropertiesService
-@Ignore
 public class PropertiesServiceTest extends AbstractDaoTest {
 
     @Autowired
     private PropertiesService service;
+
+    @Before
+    public void assumeRealImplementation() {
+        Assume.assumeTrue(PropertiesService.class.equals(service.getClass()));
+    }
 
     @Before
     @After
