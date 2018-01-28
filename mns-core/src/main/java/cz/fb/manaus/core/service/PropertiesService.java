@@ -24,12 +24,14 @@ public class PropertiesService {
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS Z");
 
     private final String confUrl;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    public PropertiesService(@Value("#{systemEnvironment['MNS_CONF_URL'] ?: 'http://localhost:8080'}") String confUrl) {
+    public PropertiesService(@Value("#{systemEnvironment['MNS_CONF_URL'] ?: 'http://localhost:8080'}") String confUrl,
+                             Optional<RestTemplate> restTemplate) {
         this.confUrl = CharMatcher.is('/').trimTrailingFrom(confUrl);
+        this.restTemplate = restTemplate.orElseGet(() -> new RestTemplate());
     }
 
     public Optional<String> get(String name) {
