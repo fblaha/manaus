@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting.listener;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Doubles;
 import cz.fb.manaus.core.model.RunnerPrices;
@@ -11,7 +10,7 @@ import java.util.Map;
 
 public class ProbabilityComparator implements Comparator<RunnerPrices> {
 
-    public static Map<Side, Ordering<RunnerPrices>> COMPARATORS = ImmutableMap.of(
+    public static Map<Side, Ordering<RunnerPrices>> COMPARATORS = Map.of(
             Side.BACK, Ordering.from(new ProbabilityComparator(Side.BACK)),
             Side.LAY, Ordering.from(new ProbabilityComparator(Side.LAY)));
     private final Side side;

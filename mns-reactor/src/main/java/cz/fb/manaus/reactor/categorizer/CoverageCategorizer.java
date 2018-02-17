@@ -44,7 +44,7 @@ public class CoverageCategorizer implements SettledBetCategorizer {
         String sideFormatted = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, mySide.name());
         if (EnumSet.of(mySide).equals(amounts.keySet())) {
             String soloSide = "solo" + sideFormatted;
-            return ImmutableSet.of(PREFIX + soloSide, PREFIX + "solo");
+            return Set.of(PREFIX + soloSide, PREFIX + "solo");
         } else if (EnumSet.of(mySide, mySide.getOpposite()).equals(amounts.keySet())) {
             ImmutableSet.Builder<String> builder = ImmutableSet.<String>builder().add(PREFIX + "both");
             builder.add(PREFIX + "both");

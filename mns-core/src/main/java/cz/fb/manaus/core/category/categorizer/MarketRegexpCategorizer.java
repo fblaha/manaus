@@ -8,6 +8,7 @@ import cz.fb.manaus.core.model.SettledBet;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 public class MarketRegexpCategorizer extends AbstractRegexpResolver implements SettledBetCategorizer, Categorizer {
     public static final String PREFIX = "regexp_";
 
-    public static final ImmutableMap<String, Pattern> MATCH_MAP = ImmutableMap.of(
+    public static final Map<String, Pattern> MATCH_MAP = Map.of(
             "overUnderGoals", compile("^Over/Under\\s+\\d+\\.5\\s+goals$"),
             "regularTimeMatchOdd", compile("^Regular\\s+Time\\s+Match\\s+Odds$"));
 

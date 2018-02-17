@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.charge;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
 import cz.fb.manaus.core.model.Price;
@@ -11,6 +10,7 @@ import cz.fb.manaus.core.test.CoreTestFactory;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 import static org.junit.Assert.assertTrue;
@@ -18,17 +18,17 @@ import static org.junit.Assert.assertTrue;
 
 public class MarketChargeSimulatorTest extends AbstractLocalTestCase {
 
-    public static final ImmutableMap<Long, Double> THREE_IMBALANCED = ImmutableMap.of(
+    public static final Map<Long, Double> THREE_IMBALANCED = Map.of(
             CoreTestFactory.HOME, 0.5,
             CoreTestFactory.DRAW, 0.3,
             CoreTestFactory.AWAY, 0.2);
 
-    public static final ImmutableMap<Long, Double> THREE_BALANCED = ImmutableMap.of(
+    public static final Map<Long, Double> THREE_BALANCED = Map.of(
             CoreTestFactory.HOME, 0.34,
             CoreTestFactory.DRAW, 0.33,
             CoreTestFactory.AWAY, 0.33);
 
-    public static final ImmutableMap<Long, Double> TWO_BALANCED = ImmutableMap.of(
+    public static final Map<Long, Double> TWO_BALANCED = Map.of(
             CoreTestFactory.HOME, 0.5,
             CoreTestFactory.AWAY, 0.5);
 
@@ -105,7 +105,7 @@ public class MarketChargeSimulatorTest extends AbstractLocalTestCase {
     }
 
     private void checkSimulatedCharge(long selection, Price newBet, ListMultimap<Long, Price> bets,
-                                      ImmutableMap<Long, Double> probabilities, BiConsumer<Double, Double> assertion) {
+                                      Map<Long, Double> probabilities, BiConsumer<Double, Double> assertion) {
         double before = simulator.getChargeMean(1, provider.getChargeRate(), probabilities, bets);
         bets.put(selection, newBet);
         double after = simulator.getChargeMean(1, provider.getChargeRate(), probabilities, bets);

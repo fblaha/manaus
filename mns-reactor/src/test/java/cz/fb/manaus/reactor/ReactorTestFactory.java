@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor;
 
-import com.google.common.collect.ImmutableList;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.Event;
 import cz.fb.manaus.core.model.Market;
@@ -111,7 +110,7 @@ public class ReactorTestFactory {
         }
         Price backBestPrice = new Price(bestBack, 100d, Side.BACK);
         Price layBestPrice = new Price(bestLay, 100d, Side.LAY);
-        return new RunnerPrices(selectionId, ImmutableList.of(
+        return new RunnerPrices(selectionId, List.of(
                 backBestPrice,
                 layBestPrice,
                 roundingService.decrement(backBestPrice, 1).get(),

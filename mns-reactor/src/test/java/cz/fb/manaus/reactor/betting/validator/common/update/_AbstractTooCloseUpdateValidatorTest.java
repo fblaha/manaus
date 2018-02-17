@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting.validator.common.update;
 
-import com.google.common.collect.ImmutableSet;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.Price;
@@ -20,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.Set;
 
 import static java.util.Optional.of;
 import static org.hamcrest.CoreMatchers.is;
@@ -104,7 +104,7 @@ public class _AbstractTooCloseUpdateValidatorTest extends AbstractLocalTestCase 
     @Component
     final private static class TestValidator extends AbstractTooCloseUpdateValidator {
         public TestValidator() {
-            super(ImmutableSet.of(-2, -1, 1, 2));
+            super(Set.of(-2, -1, 1, 2));
         }
 
     }

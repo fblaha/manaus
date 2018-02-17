@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.filter;
 
-import com.google.common.collect.ImmutableMap;
 import cz.fb.manaus.core.MarketCategories;
 import cz.fb.manaus.core.model.ProfitRecord;
 import cz.fb.manaus.core.model.Side;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Duration;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -145,7 +145,7 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
     @Test
     public void testGetBlackList() throws Exception {
         when(propertiesService.list(any()))
-                .thenReturn(ImmutableMap.of(
+                .thenReturn(Map.of(
                         "unprofitable.black.list.test.10", "weak10_1,weak10_2,weak10_3",
                         "unprofitable.black.list.test.5", "weak5_1,weak5_2,weak5_3"));
         Set<String> blackList = registry.getSavedBlackList();
@@ -156,7 +156,7 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
     @Test
     public void testUnprofitableCategories() throws Exception {
         when(propertiesService.list(any()))
-                .thenReturn(ImmutableMap.of(
+                .thenReturn(Map.of(
                         "unprofitable.black.list.test.10", "weak10_1,weak10_2,weak10_3",
                         "unprofitable.black.list.test.5", "weak5_1,weak5_2,weak5_3"));
         assertThat(registry.getUnprofitableCategories(of("weak5_1", "weak5_2", "weak5_3")),
@@ -168,14 +168,16 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
     @DatabaseComponent
     private static class TestUnprofitableCategoriesRegistry extends AbstractUnprofitableCategoriesRegistry {
         public TestUnprofitableCategoriesRegistry() {
-            super("test", Duration.ofDays(30), Optional.of(Side.LAY), 0, Duration.ofHours(2), "weak", ImmutableMap.of(5, 2, 2, 7));
+            super("test", Duration.ofDays(30), Optional.of(Side.LAY), 0, Duration.ofHours(2),
+                    "weak", Map.of(5, 2, 2, 7));
         }
     }
 
     @DatabaseComponent
     private static class Test2UnprofitableCategoriesRegistry extends AbstractUnprofitableCategoriesRegistry {
         public Test2UnprofitableCategoriesRegistry() {
-            super("test2", Duration.ofDays(30), Optional.of(Side.LAY), 0, Duration.ofHours(2), "weak", ImmutableMap.of(10, 1));
+            super("test2", Duration.ofDays(30), Optional.of(Side.LAY), 0, Duration.ofHours(2),
+                    "weak", Map.of(10, 1));
         }
     }
 

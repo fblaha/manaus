@@ -1,6 +1,5 @@
 package cz.fb.manaus.core.manager.filter;
 
-import com.google.common.collect.ImmutableSet;
 import cz.fb.manaus.core.MarketCategories;
 import cz.fb.manaus.core.category.Category;
 import cz.fb.manaus.core.category.categorizer.SportCategorizer;
@@ -35,7 +34,7 @@ public class _AbstractFixedCategoryFilterTest extends AbstractMarketDataAwareTes
     @Component
     private static class TestFilter extends AbstractFixedCategoryFilter {
 
-        public static final Set<Set<String>> EXCLUDED_CATEGORIES = ImmutableSet.of(
+        public static final Set<Set<String>> EXCLUDED_CATEGORIES = Set.of(
                 singleton(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.HORSES),
                 singleton(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.SPECIAL),
                 singleton(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.FINANCIAL),

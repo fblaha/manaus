@@ -1,6 +1,5 @@
 package cz.fb.manaus.core.test;
 
-import com.google.common.collect.ImmutableList;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.dao.MarketPricesDao;
@@ -89,7 +88,7 @@ public class CoreTestFactory {
     }
 
     public static RunnerPrices newBackRP(double currPrice, long selectionId, Double lastMatchedPrice) {
-        return new RunnerPrices(selectionId, ImmutableList.of(
+        return new RunnerPrices(selectionId, List.of(
                 new Price(currPrice, 100d, Side.BACK),
                 new Price(1.4d, 100d, Side.BACK),
                 new Price(1.3d, 100d, Side.BACK)), 10d, lastMatchedPrice);

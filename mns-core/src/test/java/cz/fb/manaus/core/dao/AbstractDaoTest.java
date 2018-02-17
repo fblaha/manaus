@@ -1,7 +1,5 @@
 package cz.fb.manaus.core.dao;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Market;
@@ -27,6 +25,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static cz.fb.manaus.core.test.CoreTestFactory.newMarket;
 import static org.apache.commons.lang3.time.DateUtils.addHours;
@@ -38,8 +37,8 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
 
     public static final String BET_ID = "99999";
     public static final String SPARTA = "Sparta Praha - Banik Ostrava";
-    public static final ImmutableSet<String> TAGS = ImmutableSet.of("tag1", "tag2", "tag3");
-    public static final Map<String, String> PROPS = ImmutableMap.of("reciprocal", "0.9", "lastMatched", "2");
+    public static final Set<String> TAGS = Set.of("tag1", "tag2", "tag3");
+    public static final Map<String, String> PROPS = Map.of("reciprocal", "0.9", "lastMatched", "2");
     public static final String MARKET_ID = "33";
 
     @Autowired

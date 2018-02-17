@@ -1,7 +1,6 @@
 package cz.fb.manaus.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Price;
@@ -26,7 +25,7 @@ public class JsonMarshallerTest extends AbstractLocalTestCase {
     @Test
     public void testBetActionList() throws Exception {
         BetAction action = new BetAction(BetActionType.PLACE, new Date(), new Price(2d, 5d, Side.LAY), null, 10);
-        Map<String, String> props = ImmutableMap.of("property1", "value1", "reciprocal", "0.92");
+        Map<String, String> props = Map.of("property1", "value1", "reciprocal", "0.92");
         action.setProperties(props);
         String json = mapper.writer().writeValueAsString(singletonList(action));
         System.out.println("json = " + json);

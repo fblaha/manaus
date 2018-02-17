@@ -1,7 +1,6 @@
 package cz.fb.manaus.core.category;
 
 import com.google.common.collect.HashMultiset;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
 import cz.fb.manaus.core.MarketCategories;
@@ -22,7 +21,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class CategoryServiceRealDataTest extends AbstractMarketDataAwareTestCase {
-    public static final Set<String> DISJUNCTIVE_CATEGORIES = ImmutableSet.of(
+    public static final Set<String> DISJUNCTIVE_CATEGORIES = Set.of(
             Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.BASKETBALL,
             Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.VOLLEYBALL,
             Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.BASEBALL,
