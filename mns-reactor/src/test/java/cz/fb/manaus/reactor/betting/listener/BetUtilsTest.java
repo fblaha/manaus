@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static com.google.common.collect.Iterables.getLast;
 import static cz.fb.manaus.core.test.CoreTestFactory.DRAW;
 import static cz.fb.manaus.core.test.CoreTestFactory.MARKET_ID;
 import static org.hamcrest.CoreMatchers.is;
@@ -50,16 +49,16 @@ public class BetUtilsTest extends AbstractLocalTestCase {
                 mock(Market.class), selectionId);
         List<BetAction> filtered = betUtils.getCurrentActions(Arrays.asList(back1, back2, back3));
         assertThat(filtered.size(), is(1));
-        assertThat(getLast(filtered), is(back3));
+        assertThat(filtered.get(filtered.size() - 1), is(back3));
 
         filtered = betUtils.getCurrentActions(Arrays.asList(lay1, lay2));
         assertThat(filtered.size(), is(2));
         assertThat(filtered.get(0), is(lay1));
-        assertThat(getLast(filtered, null), is(lay2));
+        assertThat(filtered.get(filtered.size() - 1), is(lay2));
 
         filtered = betUtils.getCurrentActions(Arrays.asList(lay1, lay2, lay3));
         assertThat(filtered.size(), is(1));
-        assertThat(getLast(filtered), is(lay3));
+        assertThat(filtered.get(filtered.size() - 1), is(lay3));
     }
 
     @Test

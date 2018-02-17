@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-import static com.google.common.collect.Iterables.get;
 import static cz.fb.manaus.core.test.CoreTestFactory.newMarket;
 import static java.util.Date.from;
 import static java.util.Optional.of;
@@ -62,9 +61,13 @@ public class MarketDaoTest extends AbstractDaoTest {
         marketDao.saveOrUpdate(newMarket());
         Market market = marketDao.get(CoreTestFactory.MARKET_ID).get();
         assertThat(market.getRunners().size(), is(3));
-        assertThat(get(market.getRunners(), 0).getName(), is(CoreTestFactory.HOME_NAME));
-        assertThat(get(market.getRunners(), 1).getName(), is(CoreTestFactory.DRAW_NAME));
-        assertThat(get(market.getRunners(), 2).getName(), is(CoreTestFactory.AWAY_NAME));
+
+        assertThat(market.getRunners().stream().findFirst().get().getName(),
+                is(CoreTestFactory.HOME_NAME));
+        assertThat(market.getRunners().stream().skip(1).findFirst().get().getName(),
+                is(CoreTestFactory.DRAW_NAME));
+        assertThat(market.getRunners().stream().skip(2).findFirst().get().getName(),
+                is(CoreTestFactory.AWAY_NAME));
     }
 
     @Test

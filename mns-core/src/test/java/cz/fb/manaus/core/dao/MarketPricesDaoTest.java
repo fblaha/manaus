@@ -19,7 +19,6 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 
-import static com.google.common.collect.Iterables.getFirst;
 import static com.google.common.collect.Iterables.getLast;
 import static cz.fb.manaus.core.test.CoreTestFactory.newMarket;
 import static java.util.Arrays.asList;
@@ -70,7 +69,8 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         assertTrue(longFirst.getTime().after(marketPricesList.get(1).getTime()));
         MarketPrices shortFirst = shortList.get(0);
         assertThat(shortFirst.getTime(), equalTo(longFirst.getTime()));
-        assertThat(getFirst(shortFirst.getRunnerPrices(), null), is(getFirst(longFirst.getRunnerPrices(), null)));
+        assertThat(shortFirst.getRunnerPrices().stream().findFirst().get(),
+                is(longFirst.getRunnerPrices().stream().findFirst().get()));
     }
 
     @Test
@@ -95,7 +95,9 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
         List<MarketPrices> marketPricesList = marketPricesDao.getPrices(market.getId());
-        assertThat(better, is(getFirst(marketPricesList.get(0).getRunnerPrices(232).getPricesSorted(), null)));
+        assertThat(better,
+                is(marketPricesList.get(0).getRunnerPrices(232).getPricesSorted()
+                        .stream().findFirst().get()));
         assertThat(worse, is(getLast(marketPricesList.get(0).getRunnerPrices(232).getPricesSorted())));
     }
 
@@ -111,7 +113,8 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
         List<MarketPrices> marketPricesList = marketPricesDao.getPrices(market.getId());
-        assertThat(better, is(getFirst(marketPricesList.get(0).getRunnerPrices(selId).getPricesSorted(), null)));
+        assertThat(better,
+                is(marketPricesList.get(0).getRunnerPrices(selId).getPricesSorted().stream().findFirst().get()));
         assertThat(worse, is(getLast(marketPricesList.get(0).getRunnerPrices(selId).getPricesSorted())));
     }
 
@@ -127,7 +130,8 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
         List<MarketPrices> marketPricesList = marketPricesDao.getPrices(market.getId());
-        assertThat(better, is(getFirst(marketPricesList.get(0).getRunnerPrices(selId).getPricesSorted(), null)));
+        assertThat(better,
+                is(marketPricesList.get(0).getRunnerPrices(selId).getPricesSorted().stream().findFirst().get()));
         assertThat(worse, is(getLast(marketPricesList.get(0).getRunnerPrices(selId).getPricesSorted())));
     }
 
@@ -148,18 +152,20 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         MarketPrices marketPrices = marketPricesList.get(0);
         System.out.println(marketPrices.getRunnerPrices(selId).getPricesSorted());
         assertThat(4, is(marketPrices.getRunnerPrices(selId).getPricesSorted().size()));
-        assertThat(backBetter, is(getFirst(marketPrices.getRunnerPrices(selId).getPricesSorted(), null)));
+        assertThat(backBetter,
+                is(marketPrices.getRunnerPrices(selId).getPricesSorted().stream().findFirst().get()));
         assertThat(layWorse, is(getLast(marketPrices.getRunnerPrices(selId).getPricesSorted())));
         {
             MarketPrices backPrices = marketPrices.getHomogeneous(Side.BACK);
             assertThat(2, is(backPrices.getRunnerPrices(selId).getPricesSorted().size()));
-            assertThat(backBetter, is(getFirst(backPrices.getRunnerPrices(selId).getPricesSorted(), null)));
+            assertThat(backBetter,
+                    is(backPrices.getRunnerPrices(selId).getPricesSorted().stream().findFirst().get()));
             assertThat(backWorse, is(getLast(backPrices.getRunnerPrices(selId).getPricesSorted())));
         }
         {
             MarketPrices layPrices = marketPrices.getHomogeneous(Side.LAY);
             assertThat(2, is(layPrices.getRunnerPrices(selId).getPricesSorted().size()));
-            assertThat(layBetter, is(getFirst(layPrices.getRunnerPrices(selId).getPricesSorted(), null)));
+            assertThat(layBetter, is(layPrices.getRunnerPrices(selId).getPricesSorted().stream().findFirst().get()));
             assertThat(layWorse, is(getLast(layPrices.getRunnerPrices(selId).getPricesSorted())));
         }
     }
