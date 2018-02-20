@@ -20,7 +20,7 @@
     </modules>
 
     <properties>
-        <hibernate.version>5.2.11.Final</hibernate.version>
+        <hibernate.version>5.2.13.Final</hibernate.version>
     </properties>
 
     <build>
