@@ -100,7 +100,7 @@ public class CoreTestFactory {
                 newBackRP(bestBackPrice, 1, 2.5d),
                 newBackRP(bestBackPrice, 2, 2.5d),
                 newBackRP(bestBackPrice, 3, 2.5d));
-        return new MarketPrices(winnerCount, market, runnerPrices);
+        return new MarketPrices(winnerCount, market, runnerPrices, new Date());
     }
 
     public static MarketPrices newMarketPrices(Market market) {

@@ -86,12 +86,12 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
     protected void createBet() {
         Date current = new Date();
         Market market = newMarket();
-        MarketPrices prices = new MarketPrices(1, market, createRPs(2.1d, 2.2d));
+        MarketPrices prices = new MarketPrices(1, market, createRPs(2.1d, 2.2d), new Date());
         prices.setTime(DateUtils.addHours(current, -1));
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(prices);
         betActionDao.saveOrUpdate(createAction(market, prices, "1"));
-        MarketPrices prices2 = new MarketPrices(1, market, createRPs(2.3d, 2.5d));
+        MarketPrices prices2 = new MarketPrices(1, market, createRPs(2.3d, 2.5d), new Date());
         prices2.setTime(current);
         marketPricesDao.saveOrUpdate(prices2);
         betActionDao.saveOrUpdate(createAction(market, prices2, "2"));

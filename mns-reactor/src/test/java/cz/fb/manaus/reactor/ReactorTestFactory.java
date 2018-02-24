@@ -125,7 +125,7 @@ public class ReactorTestFactory {
         RunnerPrices home = newRP(CoreTestFactory.HOME, betBack, bestLay, lastMatched);
         RunnerPrices draw = newRP(CoreTestFactory.DRAW, betBack, bestLay, lastMatched);
         RunnerPrices away = newRP(CoreTestFactory.AWAY, betBack, bestLay, lastMatched);
-        return new MarketPrices(winnerCount, market, Arrays.asList(home, draw, away));
+        return new MarketPrices(winnerCount, market, Arrays.asList(home, draw, away), new Date());
     }
 
     public MarketPrices createMarket(double downgradeFraction, List<Double> probabilities) {
@@ -141,7 +141,7 @@ public class ReactorTestFactory {
             double lastMatched = roundingService.roundBet(fairPrice).getAsDouble();
             runnerPrices.add(newRP(selectionId, backRounded, layRounded, OptionalDouble.of(lastMatched)));
         }
-        return new MarketPrices(1, market, runnerPrices);
+        return new MarketPrices(1, market, runnerPrices, new Date());
     }
 
     private Market createMarket() {

@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.OptionalDouble;
 import java.util.stream.Collectors;
@@ -84,8 +85,7 @@ public class PriceServiceTest extends AbstractLocalTestCase {
 
     @Test
     public void testFairPrice() throws Exception {
-        MarketPrices marketPrices = new MarketPrices(1, null,
-                Arrays.asList(factory.newRP(1, 4.2, 6), factory.newRP(2, 2.87, 4), factory.newRP(1, 1.8, 3)));
+        MarketPrices marketPrices = new MarketPrices(1, null, Arrays.asList(factory.newRP(1, 4.2, 6), factory.newRP(2, 2.87, 4), factory.newRP(1, 1.8, 3)), new Date());
         Double layFairness = getFairness(Side.LAY, marketPrices);
         assertEquals(1.5d, layFairness, 0.1d);
         double backFairness = getFairness(Side.BACK, marketPrices);
@@ -156,7 +156,7 @@ public class PriceServiceTest extends AbstractLocalTestCase {
 
     private void checkFairPrices(int winnerCount, double... unfairPrices) {
         System.out.println("unfairPrices = " + Doubles.asList(unfairPrices));
-        MarketPrices marketPrices = new MarketPrices(winnerCount, null, factory.createRP(Doubles.asList(unfairPrices)));
+        MarketPrices marketPrices = new MarketPrices(winnerCount, null, factory.createRP(Doubles.asList(unfairPrices)), new Date());
         OptionalDouble overround = marketPrices.getOverround(Side.BACK);
         double reciprocal = marketPrices.getReciprocal(Side.BACK).getAsDouble();
         double fairness = getFairness(Side.BACK, marketPrices);
@@ -192,9 +192,9 @@ public class PriceServiceTest extends AbstractLocalTestCase {
         System.out.println("overroundPrices = " + overroundPrices);
 
 
-        OptionalDouble overReciprocalBased = new MarketPrices(winnerCount, null, factory.createRP(reciprocalPrices)).getOverround(Side.BACK);
-        OptionalDouble overFairnessBased = new MarketPrices(winnerCount, null, factory.createRP(fairnessPrices)).getOverround(Side.BACK);
-        OptionalDouble overOverroundBased = new MarketPrices(winnerCount, null, factory.createRP(overroundPrices)).getOverround(Side.BACK);
+        OptionalDouble overReciprocalBased = new MarketPrices(winnerCount, null, factory.createRP(reciprocalPrices), new Date()).getOverround(Side.BACK);
+        OptionalDouble overFairnessBased = new MarketPrices(winnerCount, null, factory.createRP(fairnessPrices), new Date()).getOverround(Side.BACK);
+        OptionalDouble overOverroundBased = new MarketPrices(winnerCount, null, factory.createRP(overroundPrices), new Date()).getOverround(Side.BACK);
         System.out.println("overround = " + overround);
         System.out.println("overReciprocalBased = " + overReciprocalBased);
         System.out.println("overFairnessBased = " + overFairnessBased);
@@ -220,7 +220,7 @@ public class PriceServiceTest extends AbstractLocalTestCase {
         double lowPrice = 1.04d, highPrice = 15d;
         RunnerPrices home = new RunnerPrices(CoreTestFactory.HOME, singletonList(new Price(lowPrice, 10d, Side.BACK)), 50d, lowPrice);
         RunnerPrices away = new RunnerPrices(CoreTestFactory.AWAY, singletonList(new Price(highPrice, 10d, Side.BACK)), 50d, highPrice);
-        MarketPrices marketPrices = new MarketPrices(1, null, Arrays.asList(home, away));
+        MarketPrices marketPrices = new MarketPrices(1, null, Arrays.asList(home, away), new Date());
         double fairness = getFairness(Side.BACK, marketPrices);
         double reciprocal = marketPrices.getReciprocal(Side.BACK).getAsDouble();
         double lowFairPrice = priceService.getFairnessFairPrice(lowPrice, fairness);

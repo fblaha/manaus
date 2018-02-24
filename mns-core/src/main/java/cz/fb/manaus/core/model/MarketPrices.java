@@ -57,10 +57,6 @@ public class MarketPrices implements SideMixed<MarketPrices> {
         this.time = time;
     }
 
-    public MarketPrices(int winnerCount, Market market, Collection<RunnerPrices> runnerPrices) {
-        this(winnerCount, market, runnerPrices, new Date());
-    }
-
     public static double getOverround(List<Double> bestPrices) {
         return bestPrices.stream().mapToDouble(p -> 1 / p).sum();
     }
