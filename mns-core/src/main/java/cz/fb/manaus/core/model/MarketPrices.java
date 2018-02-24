@@ -3,8 +3,6 @@ package cz.fb.manaus.core.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -28,7 +26,6 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Entity
 public class MarketPrices implements SideMixed<MarketPrices> {
 
@@ -48,7 +45,6 @@ public class MarketPrices implements SideMixed<MarketPrices> {
     private Market market;
     @JoinColumn(name = "marketPrices_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     private Collection<RunnerPrices> runnerPrices;
 
     public MarketPrices() {

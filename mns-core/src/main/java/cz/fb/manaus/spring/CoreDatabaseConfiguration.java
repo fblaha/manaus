@@ -79,11 +79,6 @@ public class CoreDatabaseConfiguration {
         Properties properties = new Properties();
         ImmutableSet<String> profiles = ImmutableSet.copyOf(environment.getActiveProfiles());
 
-        // cache stats
-        if (profiles.contains("cache-stats")) {
-            properties.setProperty("hibernate.cache.use_structured_entries", "true");
-            properties.setProperty("hibernate.generate_statistics", "true");
-        }
         if (profiles.contains("external-db")) {
             properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MariaDBDialect");
         } else {
@@ -94,10 +89,6 @@ public class CoreDatabaseConfiguration {
             // hibernate.show_sql=true
         }
         // cache related
-        properties.setProperty("hibernate.cache.region.factory_class",
-                "org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory");
-        properties.setProperty("hibernate.cache.use_query_cache", "false");
-        properties.setProperty("hibernate.cache.use_second_level_cache", "true");
         return properties;
     }
 

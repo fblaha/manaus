@@ -5,8 +5,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.SortComparator;
@@ -34,7 +32,6 @@ import static cz.fb.manaus.core.model.PriceComparator.ORDERING;
                         "where mp.market.id = :marketId and rp.selectionId = :selectionId order by mp.time desc")
 }
 )
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class RunnerPrices implements SideMixed<RunnerPrices> {
 
     public static final String BY_MARKET_AND_SELECTION = "byMarketAndSelection";
@@ -47,7 +44,6 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
     @ElementCollection(fetch = FetchType.EAGER)
     @Fetch(FetchMode.SELECT)
     @SortComparator(PriceComparator.class)
-    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     private Collection<Price> prices;
 
     private Double lastMatchedPrice;

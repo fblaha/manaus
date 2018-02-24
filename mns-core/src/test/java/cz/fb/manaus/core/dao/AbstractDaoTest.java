@@ -11,12 +11,8 @@ import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import org.apache.commons.lang3.time.DateUtils;
-import org.hamcrest.core.Is;
-import org.hibernate.SessionFactory;
-import org.hibernate.stat.SecondLevelCacheStatistics;
 import org.junit.After;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 
 import javax.persistence.EntityManagerFactory;
 import java.time.Instant;
@@ -32,7 +28,6 @@ import static org.apache.commons.lang3.time.DateUtils.addHours;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-@ActiveProfiles("cache-stats")
 abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
 
     public static final String BET_ID = "99999";
@@ -55,10 +50,6 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
     @After
     public void cleanUp() {
         marketDao.deleteMarkets(Date.from(Instant.now().plus(5_000, ChronoUnit.DAYS)));
-    }
-
-    protected SessionFactory getSessionFactory() {
-        return factory.unwrap(SessionFactory.class);
     }
 
     protected BetAction createAndSaveBetAction(Market market, Date date, Map<String, String> values, String betId) {
@@ -105,16 +96,6 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
         marketPricesDao.saveOrUpdate(prices2);
         betActionDao.saveOrUpdate(createAction(market, prices2, "2"));
         assertThat(marketPricesDao.getPrices(CoreTestFactory.MARKET_ID).size(), is(2));
-    }
-
-    protected void checkStats(long memoryCount, long hitCount, long missCount, long putCount, Class<?> clazz) {
-        SessionFactory sessionFactory = getSessionFactory();
-        SecondLevelCacheStatistics secondLevelCacheStatistics =
-                sessionFactory.getStatistics().getSecondLevelCacheStatistics(clazz.getName());
-        assertThat(secondLevelCacheStatistics.getElementCountInMemory(), Is.is(memoryCount));
-        assertThat(secondLevelCacheStatistics.getHitCount(), Is.is(hitCount));
-        assertThat(secondLevelCacheStatistics.getMissCount(), Is.is(missCount));
-        assertThat(secondLevelCacheStatistics.getPutCount(), Is.is(putCount));
     }
 
     private BetAction createAction(Market market, MarketPrices prices, String betId) {

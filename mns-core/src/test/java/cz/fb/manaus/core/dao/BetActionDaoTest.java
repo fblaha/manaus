@@ -197,27 +197,6 @@ public class BetActionDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    public void testMarketPricesCache() {
-        createMarketWithSingleAction();
-        getSessionFactory().getStatistics().clear();
-        getSessionFactory().getCache().evictAllRegions();
-        checkStats(0, 0, 0, 0, MarketPrices.class);
-        checkStats(0, 0, 0, 0, RunnerPrices.class);
-        BetAction action = betActionDao.getBetAction(BET_ID).get();
-        checkStats(0, 0, 0, 0, MarketPrices.class);
-        checkStats(0, 0, 0, 0, RunnerPrices.class);
-        betActionDao.fetchMarketPrices(action);
-        checkStats(1, 0, 1, 1, MarketPrices.class);
-        checkStats(3, 0, 0, 3, RunnerPrices.class);
-        action = betActionDao.getBetAction(BET_ID).get();
-        checkStats(1, 0, 1, 1, MarketPrices.class);
-        checkStats(3, 0, 0, 3, RunnerPrices.class);
-        betActionDao.fetchMarketPrices(action);
-        checkStats(1, 1, 1, 1, MarketPrices.class);
-        checkStats(3, 3, 0, 3, RunnerPrices.class);
-    }
-
-    @Test
     public void testTags() {
         Market market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);

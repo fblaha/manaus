@@ -2,8 +2,6 @@ package cz.fb.manaus.core.model;
 
 
 import com.google.common.base.MoreObjects;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OnDelete;
@@ -65,7 +63,6 @@ public class BetAction {
     private Set<String> tags = new HashSet<>();
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
-    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     private MarketPrices marketPrices;
 
     public BetAction(BetActionType betActionType, Date actionDate, Price price, Market market, long selectionId) {
