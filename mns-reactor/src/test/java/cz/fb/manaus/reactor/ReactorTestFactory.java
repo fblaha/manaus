@@ -64,7 +64,7 @@ public class ReactorTestFactory {
 
         List<Bet> bets = new LinkedList<>();
         oldBet.ifPresent(bet -> bets.add(bet));
-        MarketSnapshot snapshot = new MarketSnapshot(marketPrices, bets, empty());
+        MarketSnapshot snapshot = new MarketSnapshot(marketPrices, bets, empty(), empty());
 
         return contextFactory.create(side, CoreTestFactory.HOME, snapshot, fairness);
     }
@@ -89,7 +89,7 @@ public class ReactorTestFactory {
                     Date.from(date), provider.getMinAmount());
             bets.add(counterBet);
         }
-        MarketSnapshot snapshot = new MarketSnapshot(marketPrices, bets, empty());
+        MarketSnapshot snapshot = new MarketSnapshot(marketPrices, bets, empty(), empty());
         return contextFactory.create(side, selectionId, snapshot,
                 calculator.getFairness(marketPrices));
 
@@ -151,5 +151,4 @@ public class ReactorTestFactory {
         market.setEvent(event);
         return market;
     }
-
 }

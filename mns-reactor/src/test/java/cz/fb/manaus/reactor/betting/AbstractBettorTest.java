@@ -48,7 +48,8 @@ public abstract class AbstractBettorTest<T extends AbstractUpdatingBettor> exten
 
     protected BetCollector check(MarketPrices marketPrices, List<Bet> bets, int placeCount, int updateCount) {
         BetCollector collector = new BetCollector();
-        MarketSnapshot snapshot = new MarketSnapshot(marketPrices, bets, Optional.of(createTradedVolume(marketPrices)));
+        MarketSnapshot snapshot = new MarketSnapshot(marketPrices, bets,
+                Optional.of(createTradedVolume(marketPrices)), Optional.empty());
         bettor.onMarketSnapshot(snapshot, collector);
         assertThat(collector.getToPlace().size(), is(placeCount));
         assertThat(collector.getToUpdate().size(), is(updateCount));

@@ -1,6 +1,7 @@
 package cz.fb.manaus.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cz.fb.manaus.core.model.AccountMoney;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.Price;
@@ -27,6 +28,10 @@ public class MarketSnapshotControllerTest extends AbstractControllerTest {
         MarketPrices marketPrices = newMarketPrices(3, 2.8d);
         MarketSnapshotCrate crate = new MarketSnapshotCrate();
         crate.setPrices(marketPrices);
+        AccountMoney accountMoney = new AccountMoney();
+        accountMoney.setAvailable(1000);
+        accountMoney.setTotal(2000);
+        crate.setAccountMoney(accountMoney);
         Bet bet = new Bet("1", marketPrices.getMarket().getId(), CoreTestFactory.DRAW,
                 new Price(3d, 5d, Side.BACK), new Date(), 0d);
         crate.setBets(Collections.singletonList(bet));

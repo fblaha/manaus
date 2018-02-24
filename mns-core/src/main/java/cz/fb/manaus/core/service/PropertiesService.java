@@ -16,7 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.OptionalDouble;
 
 @Component
 public class PropertiesService {
@@ -71,12 +70,4 @@ public class PropertiesService {
         return get(name).map(d -> Instant.from(FORMATTER.parse(d)));
     }
 
-    public OptionalDouble getDouble(String name) {
-        Optional<Double> value = get(name).map(Double::parseDouble);
-        if (value.isPresent()) {
-            return OptionalDouble.of(value.get());
-        } else {
-            return OptionalDouble.empty();
-        }
-    }
 }

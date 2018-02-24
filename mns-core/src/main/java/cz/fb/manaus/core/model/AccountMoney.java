@@ -4,24 +4,23 @@ package cz.fb.manaus.core.model;
 import com.google.common.base.MoreObjects;
 
 public class AccountMoney {
-    private final double total;
-    private final double available;
-
-    public AccountMoney(double total, double available) {
-        this.total = total;
-        this.available = available;
-    }
+    private double total;
+    private double available;
 
     public double getTotal() {
         return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
     }
 
     public double getAvailable() {
         return available;
     }
 
-    public double getAvailableRate() {
-        return available / total;
+    public void setAvailable(double available) {
+        this.available = available;
     }
 
     @Override

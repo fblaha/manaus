@@ -6,6 +6,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketDao;
+import cz.fb.manaus.core.model.AccountMoney;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.CollectedBets;
 import cz.fb.manaus.core.model.Market;
@@ -58,7 +59,8 @@ public class MarketSnapshotController {
             logMarket(marketPrices);
             List<Bet> bets = Optional.ofNullable(snapshotCrate.getBets()).orElse(Collections.emptyList());
             betMetricUpdater.update(scanTime, bets);
-            MarketSnapshot marketSnapshot = new MarketSnapshot(marketPrices, bets, Optional.empty());
+            MarketSnapshot marketSnapshot = new MarketSnapshot(marketPrices, bets,
+                    Optional.empty(), Optional.ofNullable(snapshotCrate.getAccountMoney()));
             Set<String> myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty());
             CollectedBets collectedBets = manager.fire(marketSnapshot, myBets);
             if (!collectedBets.isEmpty()) {
@@ -93,6 +95,7 @@ public class MarketSnapshotController {
 class MarketSnapshotCrate {
     private MarketPrices prices;
     private List<Bet> bets;
+    private AccountMoney accountMoney;
 
     public MarketPrices getPrices() {
         return prices;
@@ -110,11 +113,20 @@ class MarketSnapshotCrate {
         this.bets = bets;
     }
 
+    public AccountMoney getAccountMoney() {
+        return accountMoney;
+    }
+
+    public void setAccountMoney(AccountMoney accountMoney) {
+        this.accountMoney = accountMoney;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("prices", prices)
                 .add("bets", bets)
+                .add("accountMoney", accountMoney)
                 .toString();
     }
 }

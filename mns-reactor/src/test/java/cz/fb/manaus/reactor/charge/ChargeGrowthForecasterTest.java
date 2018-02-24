@@ -38,12 +38,11 @@ public class ChargeGrowthForecasterTest extends AbstractLocalTestCase {
     @Autowired
     private ExchangeProvider provider;
 
-
     @Test
     public void testForecast() throws Exception {
         MarketPrices market = factory.createMarket(0.05, Arrays.asList(0.5, 0.3, 0.2));
         LinkedList<Bet> currentBets = new LinkedList<>();
-        MarketSnapshot marketSnapshot = new MarketSnapshot(market, currentBets, Optional.empty());
+        MarketSnapshot marketSnapshot = new MarketSnapshot(market, currentBets, Optional.empty(), Optional.empty());
         Fairness fairness = calculator.getFairness(market);
         OptionalDouble forecast = forecaster.getForecast(CoreTestFactory.DRAW, Side.BACK, marketSnapshot, fairness);
         assertTrue(forecast.getAsDouble() > 1);
@@ -59,5 +58,4 @@ public class ChargeGrowthForecasterTest extends AbstractLocalTestCase {
         forecast = forecaster.getForecast(CoreTestFactory.HOME, Side.LAY, marketSnapshot, fairness);
         assertFalse(forecast.getAsDouble() > 1);
     }
-
 }
