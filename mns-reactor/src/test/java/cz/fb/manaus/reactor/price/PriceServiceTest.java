@@ -15,11 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Collections.singletonList;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.hamcrest.CoreMatchers.is;
@@ -63,7 +63,7 @@ public class PriceServiceTest extends AbstractLocalTestCase {
     }
 
     private boolean isDowngrade(Price newOne, Price oldOne) {
-        Side type = checkNotNull(newOne.getSide());
+        Side type = Objects.requireNonNull(newOne.getSide());
         double newPrice = newOne.getPrice();
         double oldPrice = oldOne.getPrice();
         return priceService.isDowngrade(newPrice, oldPrice, type);

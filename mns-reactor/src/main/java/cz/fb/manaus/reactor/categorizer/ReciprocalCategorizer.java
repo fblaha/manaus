@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.categorizer;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.BoundType;
 import com.google.common.collect.ImmutableRangeMap;
 import com.google.common.collect.Range;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.OptionalDouble;
 import java.util.Set;
 
@@ -72,7 +72,7 @@ public class ReciprocalCategorizer implements SettledBetCategorizer {
             Set<String> result = new HashSet<>();
             handleCustomRange(reciprocal.getAsDouble(), result);
             double rounded = Precision.round(reciprocal.getAsDouble(), 2);
-            String strRange = Preconditions.checkNotNull(RANGES.get(rounded), reciprocal.getAsDouble());
+            String strRange = Objects.requireNonNull(RANGES.get(rounded), reciprocal.toString());
             result.add(RECIPROCAL + strRange);
             return result;
         }

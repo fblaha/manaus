@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -51,8 +52,8 @@ public class MarketController {
     }
 
     private void validateMarket(Market market) {
-        Preconditions.checkNotNull(market.getId(), "id==null");
+        Objects.requireNonNull(market.getId(), "id==null");
         Preconditions.checkArgument(!market.getRunners().isEmpty(), "runners is empty");
-        Preconditions.checkNotNull(market.getEvent().getOpenDate(), "openDate==null");
+        Objects.requireNonNull(market.getEvent().getOpenDate(), "openDate==null");
     }
 }

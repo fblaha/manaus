@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalLong;
 import java.util.Set;
@@ -79,8 +80,8 @@ public class MarketSnapshotController {
     }
 
     private void validateMarket(MarketSnapshotCrate snapshotCrate) {
-        Preconditions.checkNotNull(snapshotCrate.getPrices());
-        Preconditions.checkNotNull(snapshotCrate.getPrices().getRunnerPrices());
+        Objects.requireNonNull(snapshotCrate.getPrices());
+        Objects.requireNonNull(snapshotCrate.getPrices().getRunnerPrices());
         Preconditions.checkState(!snapshotCrate.getPrices().getRunnerPrices().isEmpty());
     }
 
