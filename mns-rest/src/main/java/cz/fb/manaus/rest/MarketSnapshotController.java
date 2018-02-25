@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -49,7 +48,6 @@ public class MarketSnapshotController {
 
     @RequestMapping(value = "/markets/{id}/snapshot", method = RequestMethod.POST)
     public ResponseEntity<?> pushMarketSnapshot(@PathVariable String id,
-                                                @RequestHeader(value = "scan-time", defaultValue = "0") long scanTime,
                                                 @RequestBody MarketSnapshotCrate snapshotCrate) {
         validateMarket(snapshotCrate);
         metricRegistry.meter("market.snapshot.post").mark();
@@ -58,7 +56,7 @@ public class MarketSnapshotController {
             marketDao.get(id).ifPresent(marketPrices::setMarket);
             logMarket(marketPrices);
             List<Bet> bets = Optional.ofNullable(snapshotCrate.getBets()).orElse(Collections.emptyList());
-            betMetricUpdater.update(scanTime, bets);
+            betMetricUpdater.update(snapshotCrate.getScanTime(), bets);
             MarketSnapshot marketSnapshot = new MarketSnapshot(marketPrices, bets,
                     Optional.empty(), Optional.ofNullable(snapshotCrate.getMoney()));
             Set<String> myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty());
@@ -96,6 +94,7 @@ class MarketSnapshotCrate {
     private MarketPrices prices;
     private List<Bet> bets;
     private AccountMoney money;
+    private int scanTime;
 
     public MarketPrices getPrices() {
         return prices;
@@ -121,12 +120,21 @@ class MarketSnapshotCrate {
         this.money = money;
     }
 
+    public int getScanTime() {
+        return scanTime;
+    }
+
+    public void setScanTime(int scanTime) {
+        this.scanTime = scanTime;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("prices", prices)
                 .add("bets", bets)
                 .add("money", money)
+                .add("scanTime", scanTime)
                 .toString();
     }
 }
