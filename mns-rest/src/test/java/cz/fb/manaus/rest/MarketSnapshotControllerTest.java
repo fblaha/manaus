@@ -31,7 +31,7 @@ public class MarketSnapshotControllerTest extends AbstractControllerTest {
         AccountMoney accountMoney = new AccountMoney();
         accountMoney.setAvailable(1000);
         accountMoney.setTotal(2000);
-        crate.setAccountMoney(accountMoney);
+        crate.setMoney(accountMoney);
         Bet bet = new Bet("1", marketPrices.getMarket().getId(), CoreTestFactory.DRAW,
                 new Price(3d, 5d, Side.BACK), new Date(), 0d);
         crate.setBets(Collections.singletonList(bet));

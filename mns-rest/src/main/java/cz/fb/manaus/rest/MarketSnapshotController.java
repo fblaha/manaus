@@ -60,7 +60,7 @@ public class MarketSnapshotController {
             List<Bet> bets = Optional.ofNullable(snapshotCrate.getBets()).orElse(Collections.emptyList());
             betMetricUpdater.update(scanTime, bets);
             MarketSnapshot marketSnapshot = new MarketSnapshot(marketPrices, bets,
-                    Optional.empty(), Optional.ofNullable(snapshotCrate.getAccountMoney()));
+                    Optional.empty(), Optional.ofNullable(snapshotCrate.getMoney()));
             Set<String> myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty());
             CollectedBets collectedBets = manager.fire(marketSnapshot, myBets);
             if (!collectedBets.isEmpty()) {
@@ -95,7 +95,7 @@ public class MarketSnapshotController {
 class MarketSnapshotCrate {
     private MarketPrices prices;
     private List<Bet> bets;
-    private AccountMoney accountMoney;
+    private AccountMoney money;
 
     public MarketPrices getPrices() {
         return prices;
@@ -113,12 +113,12 @@ class MarketSnapshotCrate {
         this.bets = bets;
     }
 
-    public AccountMoney getAccountMoney() {
-        return accountMoney;
+    public AccountMoney getMoney() {
+        return money;
     }
 
-    public void setAccountMoney(AccountMoney accountMoney) {
-        this.accountMoney = accountMoney;
+    public void setMoney(AccountMoney money) {
+        this.money = money;
     }
 
     @Override
@@ -126,7 +126,7 @@ class MarketSnapshotCrate {
         return MoreObjects.toStringHelper(this)
                 .add("prices", prices)
                 .add("bets", bets)
-                .add("accountMoney", accountMoney)
+                .add("money", money)
                 .toString();
     }
 }
