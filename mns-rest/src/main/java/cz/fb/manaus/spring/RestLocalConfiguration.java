@@ -9,7 +9,6 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -21,8 +20,7 @@ import java.util.TimeZone;
 @ComponentScan(value = "cz.fb.manaus.rest",
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ANNOTATION, value = DatabaseComponent.class),
-                @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class),
-                @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Repository.class)
+                @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class)
         })
 public class RestLocalConfiguration implements WebMvcConfigurer {
 
