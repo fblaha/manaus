@@ -11,7 +11,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -24,17 +24,15 @@ import java.util.TimeZone;
                 @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class),
                 @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Repository.class)
         })
-public class RestLocalConfiguration extends WebMvcConfigurerAdapter {
+public class RestLocalConfiguration implements WebMvcConfigurer {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        super.configureMessageConverters(converters);
         converters.add(new MappingJackson2HttpMessageConverter(objectMapper()));
     }
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
-        super.configurePathMatch(configurer);
         configurer.setUseSuffixPatternMatch(false);
     }
 
@@ -45,6 +43,4 @@ public class RestLocalConfiguration extends WebMvcConfigurerAdapter {
         builder.timeZone(TimeZone.getDefault());
         return builder.build();
     }
-
-
 }
