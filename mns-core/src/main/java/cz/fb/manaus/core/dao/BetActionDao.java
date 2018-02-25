@@ -1,6 +1,5 @@
 package cz.fb.manaus.core.dao;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.Side;
@@ -17,6 +16,7 @@ import javax.persistence.criteria.Root;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
@@ -109,7 +109,7 @@ public class BetActionDao extends GenericHibernateDao<BetAction, Integer> {
 
     @Transactional(readOnly = true)
     public void fetchMarketPrices(BetAction action) {
-        getSession().refresh(Preconditions.checkNotNull(action, "action==null"));
+        getSession().refresh(Objects.requireNonNull(action, "action==null"));
         Hibernate.initialize(action.getMarketPrices());
         action.setMarketPrices(clearProxy(action.getMarketPrices()));
     }
