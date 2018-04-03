@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.OptionalDouble;
 
-import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
 @Service
@@ -43,14 +42,6 @@ public class PriceService {
         } else {
             return newPrice < oldPrice;
         }
-    }
-
-    public double getProgressiveAmount(double currPrice, double minPrice, double maxPrice, double baseAmount) {
-        checkState(minPrice <= maxPrice);
-        currPrice = Math.min(currPrice, maxPrice);
-        double probability = 1 - 1 / Math.max(currPrice, minPrice);
-        double baseProbability = 1 - 1 / maxPrice;
-        return Price.round(baseAmount * baseProbability / probability);
     }
 
     /**

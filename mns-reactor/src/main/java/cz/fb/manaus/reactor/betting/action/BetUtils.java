@@ -5,6 +5,9 @@ import com.google.common.collect.Ordering;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
+import cz.fb.manaus.core.model.Price;
+import cz.fb.manaus.core.model.SettledBet;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -57,4 +60,21 @@ public class BetUtils {
         return result;
     }
 
+    public SettledBet ceilAmount(double ceiling, SettledBet bet) {
+        Price origPrice = bet.getPrice();
+        double amount = origPrice.getAmount();
+        if (ceiling < amount) {
+            double rate = ceiling / amount;
+            SettledBet copy = new SettledBet();
+            BeanUtils.copyProperties(bet, copy);
+            copy.setProfitAndLoss(rate * bet.getProfitAndLoss());
+            copy.setProfitAndLoss(rate * bet.getProfitAndLoss());
+            Price newPrice = new Price();
+            BeanUtils.copyProperties(origPrice, newPrice);
+            newPrice.setAmount(ceiling);
+            copy.setPrice(newPrice);
+            return copy;
+        }
+        return bet;
+    }
 }

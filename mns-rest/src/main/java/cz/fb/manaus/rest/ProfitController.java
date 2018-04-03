@@ -5,6 +5,7 @@ import com.google.common.base.Stopwatch;
 import cz.fb.manaus.core.model.ProfitRecord;
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.provider.ExchangeProvider;
+import cz.fb.manaus.reactor.betting.action.BetUtils;
 import cz.fb.manaus.reactor.profit.ProfitService;
 import cz.fb.manaus.reactor.profit.progress.CoverageFunctionProfitService;
 import cz.fb.manaus.reactor.profit.progress.ProgressProfitService;
@@ -50,7 +51,10 @@ public class ProfitController {
     private ExchangeProvider provider;
     @Autowired
     private SettledBetLoader betLoader;
+    @Autowired
+    private BetUtils betUtils;
 
+    // TODO reduce arguments
     @ResponseBody
     @RequestMapping(value = "/profit/" + IntervalParser.INTERVAL, method = RequestMethod.GET)
     public List<ProfitRecord> getProfitRecords(@PathVariable String interval,
@@ -59,8 +63,16 @@ public class ProfitController {
                                                @RequestParam(required = false) Optional<String> projection,
                                                @RequestParam(required = false) Optional<String> namespace,
                                                @RequestParam(required = false) Optional<Double> charge,
+                                               @RequestParam(required = false) Optional<Double> ceiling,
                                                @RequestParam(defaultValue = "true") boolean cache) {
         List<SettledBet> settledBets = loadBets(interval, cache);
+
+        double ceil = ceiling.orElse(-1d);
+        if (ceil > 0) {
+            settledBets = settledBets.stream()
+                    .map(b -> betUtils.ceilAmount(ceil, b))
+                    .collect(Collectors.toList());
+        }
         Stopwatch stopwatch = Stopwatch.createStarted();
         List<ProfitRecord> profitRecords = profitService.getProfitRecords(settledBets, projection,
                 false, namespace, getChargeRate(charge));

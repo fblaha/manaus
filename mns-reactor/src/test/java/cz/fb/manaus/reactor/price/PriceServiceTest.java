@@ -74,16 +74,6 @@ public class PriceServiceTest extends AbstractLocalTestCase {
     }
 
     @Test
-    public void testProgressiveAmount() throws Exception {
-        assertThat(priceService.getProgressiveAmount(1.1, 1.2, 2.5, provider.getMinAmount()), is(7.2d));
-        assertThat(priceService.getProgressiveAmount(1.2, 1.2, 2.5, provider.getMinAmount()), is(7.2d));
-        assertThat(priceService.getProgressiveAmount(1.5, 1.2, 2.5, provider.getMinAmount()), is(3.6d));
-        assertThat(priceService.getProgressiveAmount(2, 1.2, 2.5, provider.getMinAmount()), is(2.4d));
-        assertThat(priceService.getProgressiveAmount(2.5, 1.2, 2.5, provider.getMinAmount()), is(provider.getMinAmount()));
-        assertThat(priceService.getProgressiveAmount(3, 1.2, 2.5, provider.getMinAmount()), is(provider.getMinAmount()));
-    }
-
-    @Test
     public void testFairPrice() throws Exception {
         MarketPrices marketPrices = new MarketPrices(1, null, Arrays.asList(factory.newRP(1, 4.2, 6), factory.newRP(2, 2.87, 4), factory.newRP(1, 1.8, 3)), new Date());
         Double layFairness = getFairness(Side.LAY, marketPrices);

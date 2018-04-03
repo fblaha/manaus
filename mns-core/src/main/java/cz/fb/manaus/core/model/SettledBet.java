@@ -113,6 +113,26 @@ public class SettledBet {
         this.betAction = betAction;
     }
 
+    public void setSelectionId(long selectionId) {
+        this.selectionId = selectionId;
+    }
+
+    public void setSelectionName(String selectionName) {
+        this.selectionName = selectionName;
+    }
+
+    public void setProfitAndLoss(double profitAndLoss) {
+        this.profitAndLoss = profitAndLoss;
+    }
+
+    public void setSettled(Date settled) {
+        this.settled = settled;
+    }
+
+    public void setPrice(Price price) {
+        this.price = price;
+    }
+
     @JsonIgnore
     public Date getPlacedOrActionDate() {
         return Optional.ofNullable(placed).orElse(betAction.getActionDate());

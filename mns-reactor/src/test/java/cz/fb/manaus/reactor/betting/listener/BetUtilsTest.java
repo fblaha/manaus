@@ -5,8 +5,10 @@ import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.Price;
+import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
+import cz.fb.manaus.core.test.CoreTestFactory;
 import cz.fb.manaus.reactor.betting.action.BetUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
@@ -20,6 +22,9 @@ import java.util.List;
 import static cz.fb.manaus.core.test.CoreTestFactory.DRAW;
 import static cz.fb.manaus.core.test.CoreTestFactory.MARKET_ID;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -81,4 +86,14 @@ public class BetUtilsTest extends AbstractLocalTestCase {
         assertThat(bets.get(0), is(successor));
     }
 
+    @Test
+    public void testCeilAmount() throws Exception {
+        SettledBet bet = new SettledBet(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
+                5d, new Date(), new Price(5d, 3d, Side.BACK));
+        SettledBet ceilCopy = betUtils.ceilAmount(2d, bet);
+        assertThat(bet, not(sameInstance(ceilCopy)));
+        assertThat(bet.getSelectionName(), is(ceilCopy.getSelectionName()));
+        assertThat(bet.getSelectionId(), is(ceilCopy.getSelectionId()));
+        assertThat(bet.getProfitAndLoss(), greaterThan(ceilCopy.getProfitAndLoss()));
+    }
 }
