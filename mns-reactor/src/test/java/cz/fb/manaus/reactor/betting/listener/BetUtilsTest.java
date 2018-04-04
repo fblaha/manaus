@@ -106,4 +106,16 @@ public class BetUtilsTest extends AbstractLocalTestCase {
         assertThat(action.getSelectionId(), is(actionCopy.getSelectionId()));
         assertThat(actionCopy.getPrice().getAmount(), is(2d));
     }
+
+    @Test
+    public void testHighCeiling() throws Exception {
+        SettledBet ceilCopy = betUtils.ceilAmount(100d, bet);
+        BetAction action = bet.getBetAction();
+        BetAction actionCopy = ceilCopy.getBetAction();
+
+        assertThat(ceilCopy, sameInstance(bet));
+        assertThat(ceilCopy.getPrice(), sameInstance(bet.getPrice()));
+        assertThat(actionCopy, sameInstance(action));
+        assertThat(actionCopy.getPrice(), sameInstance(action.getPrice()));
+    }
 }
