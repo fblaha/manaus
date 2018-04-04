@@ -47,7 +47,7 @@ abstract public class AbstractFunctionProfitService {
         BetCoverage coverage = BetCoverage.from(bets);
 
         if (projection.isPresent()) {
-            bets = categoryService.filterBets(bets, projection.get(), Optional.empty(), coverage);
+            bets = categoryService.filterBets(bets, projection.get(), coverage);
         }
 
         List<ProfitRecord> profitRecords = new LinkedList<>();

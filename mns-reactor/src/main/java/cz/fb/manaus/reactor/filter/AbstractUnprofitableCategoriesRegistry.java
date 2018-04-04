@@ -6,7 +6,6 @@ import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import cz.fb.manaus.core.category.BetCoverage;
 import cz.fb.manaus.core.category.CategoryService;
-import cz.fb.manaus.core.category.categorizer.NamespaceAware;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.SettledBetDao;
 import cz.fb.manaus.core.model.Market;
@@ -32,7 +31,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
@@ -51,7 +49,7 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.time.DateUtils.addDays;
 
 
-abstract public class AbstractUnprofitableCategoriesRegistry implements NamespaceAware {
+abstract public class AbstractUnprofitableCategoriesRegistry {
 
     private static final String UNPROFITABLE_BLACK_LIST = "unprofitable.black.list.";
     private static final Logger log = Logger.getLogger(AbstractUnprofitableCategoriesRegistry.class.getSimpleName());
@@ -112,7 +110,7 @@ abstract public class AbstractUnprofitableCategoriesRegistry implements Namespac
     }
 
     public boolean checkMarket(Market market) {
-        Set<String> categories = categoryService.getMarketCategories(market, false, getNamespace());
+        Set<String> categories = categoryService.getMarketCategories(market, false);
         Set<String> unprofitableCategories = getUnprofitableCategories(categories);
         if (!unprofitableCategories.isEmpty()) {
             log.log(Level.INFO, getLogPrefix() + "blacklist category ''{0}'' for market ''{1}''",
@@ -122,7 +120,7 @@ abstract public class AbstractUnprofitableCategoriesRegistry implements Namespac
     }
 
     public boolean checkBet(SettledBet settledBet) {
-        Set<String> categories = categoryService.getSettledBetCategories(settledBet, true, getNamespace(), BetCoverage.EMPTY);
+        Set<String> categories = categoryService.getSettledBetCategories(settledBet, true, BetCoverage.EMPTY);
         Set<String> unprofitableCategories = getUnprofitableCategories(categories);
         if (!unprofitableCategories.isEmpty()) {
             log.log(Level.INFO, getLogPrefix() + "blacklist category ''{0}'' for bet ''{1}''", new Object[]{unprofitableCategories, settledBet});
@@ -169,13 +167,12 @@ abstract public class AbstractUnprofitableCategoriesRegistry implements Namespac
         betActionDao.fetchMarketPrices(settledBets.stream().map(SettledBet::getBetAction));
         if (settledBets.isEmpty()) return;
         double chargeRate = provider.getChargeRate();
-        List<ProfitRecord> profitRecords = profitService.getProfitRecords(settledBets, Optional.empty(), true, getNamespace(), chargeRate);
+        List<ProfitRecord> profitRecords = profitService.getProfitRecords(settledBets, Optional.empty(), true, chargeRate);
 
         Collection<AbstractUnprofitableCategoriesRegistry> registries = context.getBeansOfType(AbstractUnprofitableCategoriesRegistry.class).values();
         registries.stream()
                 .filter(registry -> registry.period == period &&
-                        registry.side.equals(side) &&
-                        Objects.equals(getNamespace(), registry.getNamespace()))
+                        registry.side.equals(side))
                 .forEach(registry -> {
                     log.log(Level.INFO, getLogPrefix() + "updating registry ''{0}''", registry.name);
                     registry.updateBlackLists(profitRecords);

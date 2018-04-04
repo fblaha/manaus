@@ -61,7 +61,6 @@ public class ProfitController {
                                                @RequestParam(required = false) Optional<String> filter,
                                                @RequestParam(required = false) Optional<String> sort,
                                                @RequestParam(required = false) Optional<String> projection,
-                                               @RequestParam(required = false) Optional<String> namespace,
                                                @RequestParam(required = false) Optional<Double> charge,
                                                @RequestParam(required = false) Optional<Double> ceiling,
                                                @RequestParam(defaultValue = "true") boolean cache) {
@@ -75,7 +74,7 @@ public class ProfitController {
         }
         Stopwatch stopwatch = Stopwatch.createStarted();
         List<ProfitRecord> profitRecords = profitService.getProfitRecords(settledBets, projection,
-                false, namespace, getChargeRate(charge));
+                false, getChargeRate(charge));
         logTime(stopwatch, "Profit records computed");
         if (filter.isPresent()) {
             List<String> filters = parseFilter(filter.get());

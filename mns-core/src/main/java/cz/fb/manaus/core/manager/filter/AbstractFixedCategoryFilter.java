@@ -4,7 +4,6 @@ import cz.fb.manaus.core.category.CategoryService;
 import cz.fb.manaus.core.model.Market;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Optional;
 import java.util.Set;
 
 public abstract class AbstractFixedCategoryFilter implements MarketFilter {
@@ -18,7 +17,7 @@ public abstract class AbstractFixedCategoryFilter implements MarketFilter {
 
     @Override
     public boolean test(Market market) {
-        Set<String> categories = categoryService.getMarketCategories(market, false, Optional.empty());
+        Set<String> categories = categoryService.getMarketCategories(market, false);
         for (Set<String> excluded : excludedCategories) {
             if (categories.containsAll(excluded)) {
                 return false;

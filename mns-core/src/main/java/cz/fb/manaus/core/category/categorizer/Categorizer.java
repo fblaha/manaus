@@ -4,7 +4,7 @@ import cz.fb.manaus.core.model.Market;
 
 import java.util.Set;
 
-public interface Categorizer extends SimulationAware, NamespaceAware {
+public interface Categorizer extends SimulationAware {
 
     Set<String> getCategories(Market market);
 

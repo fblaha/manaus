@@ -12,7 +12,6 @@ import cz.fb.manaus.core.service.AbstractMarketDataAwareTestCase;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Optional;
 import java.util.Set;
 
 import static junit.framework.TestCase.assertTrue;
@@ -45,7 +44,7 @@ public class CategoryServiceRealDataTest extends AbstractMarketDataAwareTestCase
     @Test
     public void testDisjunctiveCategories() throws Exception {
         for (Market market : markets) {
-            Set<String> marketCategories = categoryService.getMarketCategories(market, false, Optional.empty());
+            Set<String> marketCategories = categoryService.getMarketCategories(market, false);
             Sets.SetView<String> intersection = Sets.intersection(marketCategories, DISJUNCTIVE_CATEGORIES);
             assertThat(market.toString(), intersection.size(), is(1));
         }
@@ -117,7 +116,7 @@ public class CategoryServiceRealDataTest extends AbstractMarketDataAwareTestCase
     private int getCategoryCount(String category, String mustContainLower) {
         Multiset<String> counts = HashMultiset.create();
         for (Market market : markets) {
-            Set<String> categories = categoryService.getMarketCategories(market, false, Optional.empty());
+            Set<String> categories = categoryService.getMarketCategories(market, false);
             counts.addAll(categories);
             if (categories.contains(category)) {
                 if (mustContainLower != null) {

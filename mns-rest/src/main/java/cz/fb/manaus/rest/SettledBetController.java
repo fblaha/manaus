@@ -78,8 +78,7 @@ public class SettledBetController {
         List<SettledBet> settledBets = settledBetDao.getSettledBets(Optional.of(from), Optional.of(to), empty(),
                 OptionalInt.empty());
         if (projection.isPresent()) {
-            settledBets = categoryService.filterBets(settledBets, projection.get(),
-                    namespace, BetCoverage.from(settledBets));
+            settledBets = categoryService.filterBets(settledBets, projection.get(), BetCoverage.from(settledBets));
         }
         betActionDao.fetchMarketPrices(settledBets.stream().map(SettledBet::getBetAction));
         return ImmutableList.copyOf(settledBets).reverse();

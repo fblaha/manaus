@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Optional;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -36,19 +35,19 @@ public class CategoryServiceTest extends AbstractLocalTestCase {
     @Test
     public void testCategory() throws Exception {
         eventType.setName("Soccer");
-        Set<String> categories = categoryService.getMarketCategories(market, false, Optional.empty());
+        Set<String> categories = categoryService.getMarketCategories(market, false);
         assertThat(categories, hasItem(SPORT_SOCCER));
 
         eventType.setName("Tennis");
-        categories = categoryService.getMarketCategories(market, false, Optional.empty());
+        categories = categoryService.getMarketCategories(market, false);
         assertThat(categories, hasItem(SPORT_TENNIS));
 
         eventType.setName("Horse Racing");
-        categories = categoryService.getMarketCategories(market, false, Optional.empty());
+        categories = categoryService.getMarketCategories(market, false);
         assertThat(categories, hasItem(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.HORSES));
 
         eventType.setName("Golf");
-        categories = categoryService.getMarketCategories(market, false, Optional.empty());
+        categories = categoryService.getMarketCategories(market, false);
         assertThat(categories, hasItem(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.GOLF));
     }
 
@@ -56,7 +55,7 @@ public class CategoryServiceTest extends AbstractLocalTestCase {
     @Test
     public void testBetCategory() throws Exception {
         Set<String> categories = categoryService.getSettledBetCategories(
-                CoreTestFactory.newSettledBet(2d, Side.LAY), false, Optional.empty(), BetCoverage.EMPTY);
+                CoreTestFactory.newSettledBet(2d, Side.LAY), false, BetCoverage.EMPTY);
         assertThat(categories,
                 hasItems("market_country_br", "market_runnerCount_3", "market_sport_soccer", "market_type_match_odds"));
     }

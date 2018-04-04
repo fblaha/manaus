@@ -1,13 +1,11 @@
 package cz.fb.manaus.reactor.profit;
 
-import cz.fb.manaus.core.MarketCategories;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.ProfitRecord;
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.provider.ExchangeProvider;
 import cz.fb.manaus.core.test.CoreTestFactory;
-import cz.fb.manaus.reactor.categorizer.namespace.ExactPriceCategorizer;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,8 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.google.common.collect.ImmutableMap.of;
 import static java.util.Arrays.asList;
@@ -26,7 +22,6 @@ import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.lang3.time.DateUtils.addDays;
 import static org.apache.commons.lang3.time.DateUtils.addHours;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -92,33 +87,18 @@ public class ProfitServiceTest extends AbstractProfitTest {
         SettledBet kamazLay = createKamazLay();
         setBetAction(kamazBack, kamazLay);
         List<SettledBet> bets = Arrays.asList(kamazBack, kamazLay);
-        List<ProfitRecord> simulationOnly = profitService.getProfitRecords(bets, empty(), true, empty(),
+        List<ProfitRecord> simulationOnly = profitService.getProfitRecords(bets, empty(), true,
                 provider.getChargeRate());
-        List<ProfitRecord> all = profitService.getProfitRecords(bets, empty(), false, empty(),
+        List<ProfitRecord> all = profitService.getProfitRecords(bets, empty(), false,
                 provider.getChargeRate());
         assertTrue(simulationOnly.size() < all.size());
         assertTrue(simulationOnly.size() > 0);
     }
 
-    @Test
-    public void testNamespace() throws Exception {
-        SettledBet kamazBack = createKamazBack();
-        SettledBet kamazLay = createKamazLay();
-        setBetAction(kamazBack, kamazLay);
-        List<ProfitRecord> records = profitService.getProfitRecords(Arrays.asList(kamazBack, kamazLay), empty(), false,
-                Optional.of(ExactPriceCategorizer.NAMESPACE),
-                provider.getChargeRate());
-        Set<String> categories = records.stream().map(ProfitRecord::getCategory).collect(Collectors.toSet());
-        assertThat(records.size(), is(3));
-        assertThat(categories, hasItems(MarketCategories.ALL,
-                ExactPriceCategorizer.NAMESPACE + "_2.98",
-                ExactPriceCategorizer.NAMESPACE + "_2.92"));
-    }
-
     private void checkRecords(double expectedAllProfit, Map<String, Double> otherProfits, SettledBet... bets) {
         List<SettledBet> betList = Arrays.asList(bets);
         List<ProfitRecord> result = profitService.getProfitRecords(betList, empty(),
-                false, empty(), provider.getChargeRate());
+                false, provider.getChargeRate());
         ProfitRecord all = result.stream().filter(ProfitRecord::isAllCategory).findAny().get();
         assertEquals(expectedAllProfit, all.getProfit(), 0.01d);
         int backCount = (int) betList.stream().filter(bet -> bet.getPrice().getSide() == Side.BACK).count();
@@ -144,7 +124,7 @@ public class ProfitServiceTest extends AbstractProfitTest {
                 addDays(marketDate, 1), new Price(2d, 5d, Side.BACK));
         bet2.setPlaced(addHours(marketDate, -1));
         setBetAction(bet1, bet2);
-        List<ProfitRecord> records = profitService.getProfitRecords(asList(bet1, bet2), empty(), true, empty(),
+        List<ProfitRecord> records = profitService.getProfitRecords(asList(bet1, bet2), empty(), true,
                 provider.getChargeRate());
 
         Map<String, ProfitRecord> byCategory = byCategory(records);
@@ -160,9 +140,9 @@ public class ProfitServiceTest extends AbstractProfitTest {
         assertThat(byCategory.get("placedBefore_day_1-2").getLayCount(), is(1));
         assertEquals(4.8d, byCategory.get("placedBefore_day_1-2").getProfit(), 0.01);
 
-        assertTrue(profitService.getProfitRecords(asList(bet1, bet2), Optional.of("market_country_ua"), true, empty(),
+        assertTrue(profitService.getProfitRecords(asList(bet1, bet2), Optional.of("market_country_ua"), true,
                 provider.getChargeRate()).isEmpty());
-        assertFalse(profitService.getProfitRecords(asList(bet1, bet2), Optional.of("market_country_br"), true, empty(),
+        assertFalse(profitService.getProfitRecords(asList(bet1, bet2), Optional.of("market_country_br"), true,
                 provider.getChargeRate()).isEmpty());
 
     }

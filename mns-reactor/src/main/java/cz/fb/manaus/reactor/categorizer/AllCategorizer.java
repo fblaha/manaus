@@ -16,11 +16,6 @@ public class AllCategorizer implements SettledBetCategorizer {
     public static final Set<String> CATEGORIES = singleton(MarketCategories.ALL);
 
     @Override
-    public boolean isGlobal() {
-        return true;
-    }
-
-    @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
         return CATEGORIES;
     }

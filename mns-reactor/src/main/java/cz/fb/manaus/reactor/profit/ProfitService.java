@@ -31,16 +31,15 @@ public class ProfitService {
     private ProfitPlugin profitPlugin;
 
     public List<ProfitRecord> getProfitRecords(List<SettledBet> bets, Optional<String> projection,
-                                               boolean simulationAwareOnly, Optional<String> namespace, double chargeRate) {
+                                               boolean simulationAwareOnly, double chargeRate) {
         BetCoverage coverage = BetCoverage.from(bets);
         Map<String, Double> charges = profitPlugin.getCharges(bets, chargeRate);
 
         if (projection.isPresent()) {
-            bets = categoryService.filterBets(bets, projection.get(), requireNonNull(namespace), coverage);
+            bets = categoryService.filterBets(bets, projection.get(), coverage);
         }
 
-        List<ProfitRecord> betRecords = computeProfitRecords(bets, simulationAwareOnly,
-                requireNonNull(namespace), charges, coverage);
+        List<ProfitRecord> betRecords = computeProfitRecords(bets, simulationAwareOnly, charges, coverage);
         return mergeProfitRecords(betRecords);
     }
 
@@ -75,9 +74,9 @@ public class ProfitService {
     }
 
     private List<ProfitRecord> computeProfitRecords(List<SettledBet> bets, boolean simulationAwareOnly,
-                                                    Optional<String> namespace, Map<String, Double> charges, BetCoverage coverage) {
+                                                    Map<String, Double> charges, BetCoverage coverage) {
         return bets.parallelStream().flatMap(bet -> {
-            Set<String> categories = categoryService.getSettledBetCategories(bet, simulationAwareOnly, namespace, coverage);
+            Set<String> categories = categoryService.getSettledBetCategories(bet, simulationAwareOnly, coverage);
             return categories.stream().map(category -> {
                 double charge = charges.get(bet.getBetAction().getBetId());
                 Preconditions.checkState(charge >= 0, charge);
