@@ -10,16 +10,14 @@ import cz.fb.manaus.core.model.SettledBet;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -52,29 +50,43 @@ public class BetUtils {
         return Splitter.on(',').omitEmptyStrings().trimResults().splitToList(proposers);
     }
 
-    public List<Bet> filterDuplicates(List<Bet> bets) {
-        List<Bet> result = new LinkedList<>();
-        for (Collection<Bet> theSameBets : bets.stream().collect(groupingBy(Bet::getBetId)).values()) {
-            result.add(theSameBets.stream().max(Comparator.comparingDouble(Bet::getMatchedAmount)).get());
-        }
-        return result;
-    }
-
     public SettledBet ceilAmount(double ceiling, SettledBet bet) {
-        Price origPrice = bet.getPrice();
-        double amount = origPrice.getAmount();
-        if (ceiling < amount) {
-            double rate = ceiling / amount;
+        Optional<Price> newPrice = getCeilPrice(ceiling, bet.getPrice());
+        if (newPrice.isPresent()) {
             SettledBet copy = new SettledBet();
             BeanUtils.copyProperties(bet, copy);
+
+            double amount = bet.getPrice().getAmount();
+            double rate = ceiling / amount;
             copy.setProfitAndLoss(rate * bet.getProfitAndLoss());
-            copy.setProfitAndLoss(rate * bet.getProfitAndLoss());
-            Price newPrice = new Price();
-            BeanUtils.copyProperties(origPrice, newPrice);
-            newPrice.setAmount(ceiling);
-            copy.setPrice(newPrice);
+
+
+            ceilAction(ceiling, copy);
+            newPrice.ifPresent(copy::setPrice);
             return copy;
         }
         return bet;
+    }
+
+    private Optional<Price> getCeilPrice(double ceiling, Price origPrice) {
+        double amount = origPrice.getAmount();
+        if (ceiling < amount) {
+            Price newPrice = new Price();
+            BeanUtils.copyProperties(origPrice, newPrice);
+            newPrice.setAmount(ceiling);
+            return Optional.of(newPrice);
+        }
+        return Optional.empty();
+    }
+
+    public void ceilAction(double ceiling, SettledBet betCopy) {
+        BetAction orig = betCopy.getBetAction();
+        if (orig != null) {
+            BetAction actionCopy = new BetAction();
+            BeanUtils.copyProperties(orig, actionCopy);
+            Optional<Price> newPrice = getCeilPrice(ceiling, orig.getPrice());
+            newPrice.ifPresent(actionCopy::setPrice);
+            betCopy.setBetAction(actionCopy);
+        }
     }
 }

@@ -97,6 +97,26 @@ public class BetAction {
         return price;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setBetActionType(BetActionType betActionType) {
+        this.betActionType = betActionType;
+    }
+
+    public void setActionDate(Date actionDate) {
+        this.actionDate = actionDate;
+    }
+
+    public void setPrice(Price price) {
+        this.price = price;
+    }
+
+    public void setSelectionId(long selectionId) {
+        this.selectionId = selectionId;
+    }
+
     public Market getMarket() {
         return market;
     }

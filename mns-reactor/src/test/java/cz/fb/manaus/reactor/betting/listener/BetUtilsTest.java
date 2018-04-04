@@ -11,6 +11,7 @@ import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import cz.fb.manaus.reactor.betting.action.BetUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,12 +20,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static cz.fb.manaus.core.test.CoreTestFactory.DRAW;
-import static cz.fb.manaus.core.test.CoreTestFactory.MARKET_ID;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.closeTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -33,6 +32,18 @@ public class BetUtilsTest extends AbstractLocalTestCase {
 
     @Autowired
     private BetUtils betUtils;
+    private SettledBet bet;
+
+
+    @Before
+    public void setUp() throws Exception {
+        Price price = new Price(5d, 3d, Side.BACK);
+        bet = new SettledBet(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
+                5d, new Date(), price);
+
+        BetAction action = new BetAction(BetActionType.PLACE, new Date(), price, null, 1000);
+        bet.setBetAction(action);
+    }
 
     @Test
     public void testCurrentActions() throws Exception {
@@ -77,23 +88,22 @@ public class BetUtilsTest extends AbstractLocalTestCase {
     }
 
     @Test
-    public void testFilterDuplicates() throws Exception {
-        Bet predecessor = new Bet("1", MARKET_ID, DRAW, new Price(2d, 2d, Side.LAY), new Date(), 1d);
-        Bet successor = new Bet("1", MARKET_ID, DRAW, new Price(2d, 2d, Side.LAY), new Date(), 1.5d);
-        List<Bet> bets = betUtils.filterDuplicates(Arrays.asList(predecessor, successor, predecessor, successor));
-
-        assertThat(bets.size(), is(1));
-        assertThat(bets.get(0), is(successor));
+    public void testCeilAmount() throws Exception {
+        SettledBet ceilCopy = betUtils.ceilAmount(2d, bet);
+        assertThat(ceilCopy, not(sameInstance(bet)));
+        assertThat(ceilCopy.getSelectionName(), is(bet.getSelectionName()));
+        assertThat(ceilCopy.getSelectionId(), is(bet.getSelectionId()));
+        assertThat(ceilCopy.getProfitAndLoss(), closeTo(bet.getProfitAndLoss() * 2d / 3, 0.001d));
     }
 
     @Test
-    public void testCeilAmount() throws Exception {
-        SettledBet bet = new SettledBet(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
-                5d, new Date(), new Price(5d, 3d, Side.BACK));
+    public void testCeilActionAmount() throws Exception {
         SettledBet ceilCopy = betUtils.ceilAmount(2d, bet);
-        assertThat(bet, not(sameInstance(ceilCopy)));
-        assertThat(bet.getSelectionName(), is(ceilCopy.getSelectionName()));
-        assertThat(bet.getSelectionId(), is(ceilCopy.getSelectionId()));
-        assertThat(bet.getProfitAndLoss(), greaterThan(ceilCopy.getProfitAndLoss()));
+        BetAction action = bet.getBetAction();
+        BetAction actionCopy = ceilCopy.getBetAction();
+        assertThat(action, not(sameInstance(actionCopy)));
+        assertThat(action.getActionDate(), is(actionCopy.getActionDate()));
+        assertThat(action.getSelectionId(), is(actionCopy.getSelectionId()));
+        assertThat(actionCopy.getPrice().getAmount(), is(2d));
     }
 }
