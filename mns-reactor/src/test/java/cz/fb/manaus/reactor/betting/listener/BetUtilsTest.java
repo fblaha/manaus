@@ -89,7 +89,7 @@ public class BetUtilsTest extends AbstractLocalTestCase {
 
     @Test
     public void testCeilAmount() throws Exception {
-        SettledBet ceilCopy = betUtils.ceilAmount(2d, bet);
+        SettledBet ceilCopy = betUtils.limitBetAmount(2d, bet);
         assertThat(ceilCopy, not(sameInstance(bet)));
         assertThat(ceilCopy.getSelectionName(), is(bet.getSelectionName()));
         assertThat(ceilCopy.getSelectionId(), is(bet.getSelectionId()));
@@ -98,7 +98,7 @@ public class BetUtilsTest extends AbstractLocalTestCase {
 
     @Test
     public void testCeilActionAmount() throws Exception {
-        SettledBet ceilCopy = betUtils.ceilAmount(2d, bet);
+        SettledBet ceilCopy = betUtils.limitBetAmount(2d, bet);
         BetAction action = bet.getBetAction();
         BetAction actionCopy = ceilCopy.getBetAction();
         assertThat(action, not(sameInstance(actionCopy)));
@@ -109,7 +109,7 @@ public class BetUtilsTest extends AbstractLocalTestCase {
 
     @Test
     public void testHighCeiling() throws Exception {
-        SettledBet ceilCopy = betUtils.ceilAmount(100d, bet);
+        SettledBet ceilCopy = betUtils.limitBetAmount(100d, bet);
         BetAction action = bet.getBetAction();
         BetAction actionCopy = ceilCopy.getBetAction();
 

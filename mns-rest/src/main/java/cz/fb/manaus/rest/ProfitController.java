@@ -69,7 +69,7 @@ public class ProfitController {
         double ceil = ceiling.orElse(-1d);
         if (ceil > 0) {
             settledBets = settledBets.stream()
-                    .map(b -> betUtils.ceilAmount(ceil, b))
+                    .map(b -> betUtils.limitBetAmount(ceil, b))
                     .collect(Collectors.toList());
         }
         Stopwatch stopwatch = Stopwatch.createStarted();

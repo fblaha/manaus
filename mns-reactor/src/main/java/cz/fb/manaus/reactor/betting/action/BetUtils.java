@@ -50,8 +50,8 @@ public class BetUtils {
         return Splitter.on(',').omitEmptyStrings().trimResults().splitToList(proposers);
     }
 
-    public SettledBet ceilAmount(double ceiling, SettledBet bet) {
-        Optional<Price> newPrice = getCeilPrice(ceiling, bet.getPrice());
+    public SettledBet limitBetAmount(double ceiling, SettledBet bet) {
+        Optional<Price> newPrice = limitPrice(ceiling, bet.getPrice());
         if (newPrice.isPresent()) {
             SettledBet copy = new SettledBet();
             BeanUtils.copyProperties(bet, copy);
@@ -59,16 +59,16 @@ public class BetUtils {
             double amount = bet.getPrice().getAmount();
             double rate = ceiling / amount;
             copy.setProfitAndLoss(rate * bet.getProfitAndLoss());
+            limitActionAmount(ceiling, copy);
 
-
-            ceilAction(ceiling, copy);
             newPrice.ifPresent(copy::setPrice);
             return copy;
         }
+        limitActionAmount(ceiling, bet);
         return bet;
     }
 
-    private Optional<Price> getCeilPrice(double ceiling, Price origPrice) {
+    private Optional<Price> limitPrice(double ceiling, Price origPrice) {
         double amount = origPrice.getAmount();
         if (ceiling < amount) {
             Price newPrice = new Price();
@@ -79,12 +79,12 @@ public class BetUtils {
         return Optional.empty();
     }
 
-    public void ceilAction(double ceiling, SettledBet betCopy) {
+    public void limitActionAmount(double ceiling, SettledBet betCopy) {
         BetAction orig = betCopy.getBetAction();
         if (orig != null) {
             BetAction actionCopy = new BetAction();
             BeanUtils.copyProperties(orig, actionCopy);
-            Optional<Price> newPrice = getCeilPrice(ceiling, orig.getPrice());
+            Optional<Price> newPrice = limitPrice(ceiling, orig.getPrice());
             newPrice.ifPresent(actionCopy::setPrice);
             betCopy.setBetAction(actionCopy);
         }
