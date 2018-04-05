@@ -51,7 +51,7 @@ public class BetUtils {
     }
 
     public SettledBet limitBetAmount(double ceiling, SettledBet bet) {
-        Optional<Price> newPrice = limitPrice(ceiling, bet.getPrice());
+        Optional<Price> newPrice = limitPriceAmount(ceiling, bet.getPrice());
         if (newPrice.isPresent()) {
             SettledBet copy = new SettledBet();
             BeanUtils.copyProperties(bet, copy);
@@ -68,7 +68,7 @@ public class BetUtils {
         return bet;
     }
 
-    private Optional<Price> limitPrice(double ceiling, Price origPrice) {
+    private Optional<Price> limitPriceAmount(double ceiling, Price origPrice) {
         double amount = origPrice.getAmount();
         if (ceiling < amount) {
             Price newPrice = new Price();
@@ -84,7 +84,7 @@ public class BetUtils {
         if (orig != null) {
             BetAction actionCopy = new BetAction();
             BeanUtils.copyProperties(orig, actionCopy);
-            Optional<Price> newPrice = limitPrice(ceiling, orig.getPrice());
+            Optional<Price> newPrice = limitPriceAmount(ceiling, orig.getPrice());
             newPrice.ifPresent(actionCopy::setPrice);
             betCopy.setBetAction(actionCopy);
         }
