@@ -40,7 +40,7 @@ public class ProgressProfitService extends AbstractFunctionProfitService {
         return getProfitRecords(calculator, bets, chargeRate, funcName, projection);
     }
 
-    public FunctionProfitRecordCalculator getCalculator(int chunkCount) {
+    private FunctionProfitRecordCalculator getCalculator(int chunkCount) {
         return (function, bets, coverage, charges) ->
                 computeProfitRecords(function, chunkCount, coverage, bets, charges);
     }
