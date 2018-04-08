@@ -21,7 +21,7 @@ public class UnprofitableCategoriesRefresher implements PeriodicMaintenanceTask 
 
     @Override
     public Duration getPausePeriod() {
-        return Duration.ofMinutes(10);
+        return Duration.ofHours(8);
     }
 
     @Override

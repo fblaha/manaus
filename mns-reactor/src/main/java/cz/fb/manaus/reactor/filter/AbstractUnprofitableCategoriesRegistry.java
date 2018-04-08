@@ -13,15 +13,12 @@ import cz.fb.manaus.core.model.ProfitRecord;
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.provider.ExchangeProvider;
-import cz.fb.manaus.core.service.PeriodicTaskService;
 import cz.fb.manaus.core.service.PropertiesService;
 import cz.fb.manaus.reactor.profit.ProfitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.Duration;
@@ -65,8 +62,6 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
     private PropertiesService propertiesService;
     private final Supplier<Set<String>> blackListSupplier = memoizeWithExpiration(
             this::getSavedBlackList, 5, TimeUnit.MINUTES);
-    @Autowired
-    private PeriodicTaskService periodicTaskService;
     @Autowired
     private ProfitService profitService;
     @Autowired
@@ -151,14 +146,6 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
     }
 
     public void updateBlackLists() {
-        periodicTaskService.runIfExpired(getTaskName(), pauseDuration, this::doUpdate);
-    }
-
-    private String getTaskName() {
-        return "unprofitable.registry.update." + name;
-    }
-
-    private void doUpdate() {
         log.log(Level.INFO, getLogPrefix() + "black list update started");
         Date now = new Date();
         List<SettledBet> settledBets = settledBetDao.getSettledBets(
@@ -179,27 +166,25 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
                 });
     }
 
+    private String getTaskName() {
+        return "unprofitable.registry.update." + name;
+    }
+
     void updateBlackLists(List<ProfitRecord> profitRecords) {
         ProfitRecord all = profitRecords.stream().filter(ProfitRecord::isAllCategory)
                 .findAny().get();
         List<ProfitRecord> filtered = getFiltered(profitRecords);
-        final int totalCount = all.getTotalCount();
-        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                cleanUp();
-                Set<String> totalBlackList = new HashSet<>();
-                for (Map.Entry<Integer, Integer> entry : thresholds.entrySet()) {
-                    int thresholdPct = entry.getKey();
-                    double threshold = getThreshold(thresholdPct);
-                    int blackCount = entry.getValue();
-                    Set<String> blackList = getBlackList(threshold, blackCount, totalCount, filtered.stream(), totalBlackList);
-                    totalBlackList.addAll(blackList);
-                    saveBlackList(thresholdPct, blackList);
-                }
-                periodicTaskService.markUpdated(getTaskName());
-            }
-        });
+        int totalCount = all.getTotalCount();
+        cleanUp();
+        Set<String> totalBlackList = new HashSet<>();
+        for (Map.Entry<Integer, Integer> entry : thresholds.entrySet()) {
+            int thresholdPct = entry.getKey();
+            double threshold = getThreshold(thresholdPct);
+            int blackCount = entry.getValue();
+            Set<String> blackList = getBlackList(threshold, blackCount, totalCount, filtered.stream(), totalBlackList);
+            totalBlackList.addAll(blackList);
+            saveBlackList(thresholdPct, blackList);
+        }
     }
 
     private List<ProfitRecord> getFiltered(List<ProfitRecord> profitRecords) {

@@ -10,17 +10,12 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 @Component
 public class PropertiesService {
-
-    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS Z");
 
     private final String confUrl;
     private final RestTemplate restTemplate;
@@ -55,19 +50,6 @@ public class PropertiesService {
 
     public void delete(Optional<String> prefix) {
         restTemplate.delete(confUrl + "/{prefix}", prefix.orElse(""));
-    }
-
-    public void setInstant(String name, Instant instant, Duration validPeriod) {
-        setInstant(name, instant, validPeriod, ZoneId.systemDefault());
-    }
-
-    void setInstant(String name, Instant instant, Duration validPeriod, ZoneId zone) {
-        DateTimeFormatter withZone = FORMATTER.withZone(zone);
-        set(name, withZone.format(instant), validPeriod);
-    }
-
-    public Optional<Instant> getInstant(String name) {
-        return get(name).map(d -> Instant.from(FORMATTER.parse(d)));
     }
 
 }

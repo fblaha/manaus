@@ -7,14 +7,10 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.time.Instant;
-import java.time.ZoneId;
 import java.util.Optional;
 
-import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
@@ -36,24 +32,6 @@ public class PropertiesServiceTest extends AbstractDaoTest {
         service.delete(Optional.empty());
         Preconditions.checkState(service.list(Optional.empty()).isEmpty());
     }
-
-    @Test
-    @Transactional
-    public void testTimeZone() throws Exception {
-        Instant now = Instant.now();
-        Duration expiresAfter = Duration.ofDays(2);
-        service.setInstant("plus4", now, expiresAfter, ZoneId.of("+0400"));
-        service.setInstant("plus2", now, expiresAfter, ZoneId.of("+0200"));
-
-        Instant plus4 = service.getInstant("plus4").get();
-        Instant plus2 = service.getInstant("plus2").get();
-
-        assertThat(service.get("plus4").get(), endsWith("+0400"));
-        assertThat(service.get("plus2").get(), endsWith("+0200"));
-
-        assertThat(plus4.getEpochSecond(), is(plus2.getEpochSecond()));
-    }
-
 
     @Test
     public void testService() throws Exception {
@@ -101,13 +79,5 @@ public class PropertiesServiceTest extends AbstractDaoTest {
         assertThat(service.get("a.b.c").get(), is("BBB"));
         service.delete(Optional.of("a."));
         assertThat(service.get("a.b.c").orElse(null), nullValue());
-    }
-
-    @Test
-    public void testDate() throws Exception {
-        Instant now = Instant.now();
-        service.setInstant("aaa", now, Duration.ofDays(100));
-        assertThat(service.getInstant("aaa").get(), is(now));
-        System.out.println(service.get("aaa"));
     }
 }
