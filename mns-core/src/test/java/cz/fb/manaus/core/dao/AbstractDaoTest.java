@@ -59,7 +59,6 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
         betAction.setMarketPrices(marketPrices);
         betAction.setProperties(values);
         betAction.setBetId(betId);
-        betAction.setTags(TAGS);
         betActionDao.saveOrUpdate(betAction);
         return betAction;
     }

@@ -197,15 +197,6 @@ public class BetActionDaoTest extends AbstractDaoTest {
     }
 
     @Test
-    public void testTags() {
-        Market market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
-        marketDao.saveOrUpdate(market);
-        createAndSaveBetAction(market, addHours(new Date(), -1), PROPS, BET_ID);
-        BetAction betAction = betActionDao.getBetAction(BET_ID).get();
-        assertThat(betAction.getTags(), is(TAGS));
-    }
-
-    @Test
     public void testRunnerCount() {
         Market market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);

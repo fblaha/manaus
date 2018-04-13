@@ -73,7 +73,6 @@ public class BetActionControllerTest extends AbstractControllerTest {
                 new Price(2d, 3d, Side.LAY), null, CoreTestFactory.DRAW);
         betAction.setProperties(Collections.singletonMap("key", "val"));
         betAction.setBetId("150");
-        betAction.setTags(TAGS);
         return betAction;
     }
 }

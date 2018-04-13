@@ -20,11 +20,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
-import java.util.Set;
 
 @Entity
 @NamedQueries({
@@ -59,8 +57,6 @@ public class BetAction {
     @Fetch(FetchMode.JOIN)
     private Map<String, String> properties = new HashMap<>();
     @ElementCollection(fetch = FetchType.EAGER)
-    @Fetch(FetchMode.JOIN)
-    private Set<String> tags = new HashSet<>();
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     private MarketPrices marketPrices;
@@ -145,14 +141,6 @@ public class BetAction {
         this.betId = betId;
     }
 
-    public Set<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(Set<String> tags) {
-        this.tags = tags;
-    }
-
     public MarketPrices getMarketPrices() {
         return marketPrices;
     }
@@ -183,7 +171,6 @@ public class BetAction {
                 .add("selectionId", selectionId)
                 .add("betId", betId)
                 .add("properties", properties)
-                .add("tags", tags)
                 .toString();
     }
 }

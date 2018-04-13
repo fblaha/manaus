@@ -15,11 +15,9 @@ import cz.fb.manaus.reactor.price.Fairness;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
@@ -29,7 +27,6 @@ public class BetContext {
     private final Side side;
     private final long selectionId;
     private final MarketSnapshot marketSnapshot;
-    private final Set<String> tags = new HashSet<>();
     private final Map<String, String> properties = new HashMap<>();
     private final Fairness fairness;
     private final OptionalDouble chargeGrowthForecast;
@@ -58,10 +55,6 @@ public class BetContext {
         } else {
             return Optional.empty();
         }
-    }
-
-    public Set<String> getTags() {
-        return tags;
     }
 
     public Map<String, String> getProperties() {
@@ -127,7 +120,6 @@ public class BetContext {
         BetAction action = new BetAction(type, new Date(), newPrice.get(), marketPrices.getMarket(), selectionId);
         action.setMarketPrices(marketPrices);
         action.setProperties(properties);
-        action.setTags(tags);
         return action;
     }
 
