@@ -45,14 +45,6 @@ public class PriceService {
     }
 
     /**
-     * http://www.matterofstats.com/what-is-vig-and-overround/
-     */
-    @Deprecated
-    public double getReciprocalFairPrice(double unfairPrice, double reciprocal) {
-        return unfairPrice / reciprocal;
-    }
-
-    /**
      * https://cs.wikipedia.org/wiki/S%C3%A1zkov%C3%BD_kurz
      */
     public double getFairnessFairPrice(double unfairPrice, double fairness) {

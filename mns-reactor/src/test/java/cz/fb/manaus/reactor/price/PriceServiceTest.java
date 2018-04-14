@@ -169,19 +169,10 @@ public class PriceServiceTest extends AbstractLocalTestCase {
                     return fair;
                 })
                 .boxed().collect(Collectors.toList());
-        List<Double> reciprocalPrices = DoubleStream.of(unfairPrices)
-                .map(price -> {
-                    double fair = priceService.getReciprocalFairPrice(price, reciprocal);
-                    assertTrue(price < fair);
-                    return fair;
-                })
-                .boxed().collect(Collectors.toList());
 
-        OptionalDouble overReciprocalBased = new MarketPrices(winnerCount, null, factory.createRP(reciprocalPrices), new Date()).getOverround(Side.BACK);
         OptionalDouble overFairnessBased = new MarketPrices(winnerCount, null, factory.createRP(fairnessPrices), new Date()).getOverround(Side.BACK);
         OptionalDouble overOverroundBased = new MarketPrices(winnerCount, null, factory.createRP(overroundPrices), new Date()).getOverround(Side.BACK);
 
-        assertEquals((double) winnerCount, overReciprocalBased.getAsDouble(), 0.001);
         assertEquals((double) winnerCount, overFairnessBased.getAsDouble(), 0.001);
         assertEquals((double) winnerCount, overOverroundBased.getAsDouble(), 0.001);
     }
@@ -203,29 +194,21 @@ public class PriceServiceTest extends AbstractLocalTestCase {
         RunnerPrices away = new RunnerPrices(CoreTestFactory.AWAY, singletonList(new Price(highPrice, 10d, Side.BACK)), 50d, highPrice);
         MarketPrices marketPrices = new MarketPrices(1, null, Arrays.asList(home, away), new Date());
         double fairness = getFairness(Side.BACK, marketPrices);
-        double reciprocal = marketPrices.getReciprocal(Side.BACK).getAsDouble();
         double lowFairPrice = priceService.getFairnessFairPrice(lowPrice, fairness);
-        double poorManLowFairPrice = priceService.getReciprocalFairPrice(lowPrice, reciprocal);
         double highFairPrice = priceService.getFairnessFairPrice(highPrice, fairness);
-        double poorManHghFairPrice = priceService.getReciprocalFairPrice(highPrice, reciprocal);
-        assertTrue(lowFairPrice < poorManLowFairPrice);
-        assertTrue(highFairPrice > poorManHghFairPrice);
+        System.out.println(highPrice < highFairPrice);
+        System.out.println(lowPrice < lowFairPrice);
     }
 
     @Test
     public void testFairPrices() throws Exception {
         MarketPrices market = factory.createMarket(0.2, Arrays.asList(0.85d, 0.1d, 0.05d));
-        OptionalDouble reciprocalBack = market.getReciprocal(Side.BACK);
-        OptionalDouble reciprocalLay = market.getReciprocal(Side.LAY);
         Fairness fairness = calculator.getFairness(market);
         double bestBack = market.getBestPrices(Side.BACK).get(0).getAsDouble();
         double bestLay = market.getBestPrices(Side.LAY).get(0).getAsDouble();
-        double reciprocalBackFairPrice = priceService.getReciprocalFairPrice(bestBack, reciprocalBack.getAsDouble());
-        double reciprocalLayFairPrice = priceService.getReciprocalFairPrice(bestLay, reciprocalLay.getAsDouble());
         double fairnessBackFairPrice = priceService.getFairnessFairPrice(bestBack, fairness.get(Side.BACK).getAsDouble());
         double fairnessLayFairPrice = priceService.getFairnessFairPrice(bestLay, fairness.get(Side.LAY).getAsDouble());
         assertEquals(fairnessBackFairPrice, fairnessLayFairPrice, 0.01d);
-        assertEquals(reciprocalBackFairPrice, reciprocalLayFairPrice, 0.1d);
     }
 
     private double getOverroundUnfairPrice(double fairPrice, double targetReciprocal, int winnerCount, int runnerCount) {
@@ -234,6 +217,4 @@ public class PriceServiceTest extends AbstractLocalTestCase {
         double probability = 1 / fairPrice;
         return Math.max(1 / (selectionOverround + probability), provider.getMinPrice());
     }
-
-
 }
