@@ -42,6 +42,5 @@ public class ProgressProfitServiceTest extends AbstractProfitTest {
                 Optional.of("price"), 10, provider.getChargeRate(), Optional.empty());
         assertThat(records.size(), is(10));
         assertTrue(from(comparingDouble(ProfitRecord::getAvgPrice)).isStrictlyOrdered(records));
-        records.forEach(System.out::println);
     }
 }

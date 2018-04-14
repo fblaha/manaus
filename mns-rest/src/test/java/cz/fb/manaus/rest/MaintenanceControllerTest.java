@@ -54,7 +54,6 @@ public class MaintenanceControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String content = result.getResponse().getContentAsString();
-        System.out.println("content = " + content);
         assertThat(content, CoreMatchers.containsString("test_delete"));
     }
 

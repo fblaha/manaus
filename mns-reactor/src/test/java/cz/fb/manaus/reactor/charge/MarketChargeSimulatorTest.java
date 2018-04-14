@@ -109,7 +109,6 @@ public class MarketChargeSimulatorTest extends AbstractLocalTestCase {
         double before = simulator.getChargeMean(1, provider.getChargeRate(), probabilities, bets);
         bets.put(selection, newBet);
         double after = simulator.getChargeMean(1, provider.getChargeRate(), probabilities, bets);
-        System.out.println(String.format("before: %f    after: %f", before, after));
         assertion.accept(before, after);
     }
 }

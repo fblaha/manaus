@@ -145,7 +145,6 @@ public class PriceServiceTest extends AbstractLocalTestCase {
     }
 
     private void checkFairPrices(int winnerCount, double... unfairPrices) {
-        System.out.println("unfairPrices = " + Doubles.asList(unfairPrices));
         MarketPrices marketPrices = new MarketPrices(winnerCount, null, factory.createRP(Doubles.asList(unfairPrices)), new Date());
         OptionalDouble overround = marketPrices.getOverround(Side.BACK);
         double reciprocal = marketPrices.getReciprocal(Side.BACK).getAsDouble();
@@ -177,18 +176,10 @@ public class PriceServiceTest extends AbstractLocalTestCase {
                     return fair;
                 })
                 .boxed().collect(Collectors.toList());
-        System.out.println("reciprocalPrices = " + reciprocalPrices);
-        System.out.println("fairnessPrices = " + fairnessPrices);
-        System.out.println("overroundPrices = " + overroundPrices);
-
 
         OptionalDouble overReciprocalBased = new MarketPrices(winnerCount, null, factory.createRP(reciprocalPrices), new Date()).getOverround(Side.BACK);
         OptionalDouble overFairnessBased = new MarketPrices(winnerCount, null, factory.createRP(fairnessPrices), new Date()).getOverround(Side.BACK);
         OptionalDouble overOverroundBased = new MarketPrices(winnerCount, null, factory.createRP(overroundPrices), new Date()).getOverround(Side.BACK);
-        System.out.println("overround = " + overround);
-        System.out.println("overReciprocalBased = " + overReciprocalBased);
-        System.out.println("overFairnessBased = " + overFairnessBased);
-        System.out.println("overOverroundBased = " + overOverroundBased);
 
         assertEquals((double) winnerCount, overReciprocalBased.getAsDouble(), 0.001);
         assertEquals((double) winnerCount, overFairnessBased.getAsDouble(), 0.001);
@@ -227,19 +218,12 @@ public class PriceServiceTest extends AbstractLocalTestCase {
         OptionalDouble reciprocalBack = market.getReciprocal(Side.BACK);
         OptionalDouble reciprocalLay = market.getReciprocal(Side.LAY);
         Fairness fairness = calculator.getFairness(market);
-        System.out.println("reciprocalBack = " + reciprocalBack);
-        System.out.println("reciprocalLay = " + reciprocalLay);
-        System.out.println("fairness = " + fairness);
         double bestBack = market.getBestPrices(Side.BACK).get(0).getAsDouble();
         double bestLay = market.getBestPrices(Side.LAY).get(0).getAsDouble();
         double reciprocalBackFairPrice = priceService.getReciprocalFairPrice(bestBack, reciprocalBack.getAsDouble());
         double reciprocalLayFairPrice = priceService.getReciprocalFairPrice(bestLay, reciprocalLay.getAsDouble());
         double fairnessBackFairPrice = priceService.getFairnessFairPrice(bestBack, fairness.get(Side.BACK).getAsDouble());
         double fairnessLayFairPrice = priceService.getFairnessFairPrice(bestLay, fairness.get(Side.LAY).getAsDouble());
-        System.out.println("reciprocalBackFairPrice = " + reciprocalBackFairPrice);
-        System.out.println("reciprocalLayFairPrice = " + reciprocalLayFairPrice);
-        System.out.println("fairnessBackFairPrice = " + fairnessBackFairPrice);
-        System.out.println("fairnessLayFairPrice = " + fairnessLayFairPrice);
         assertEquals(fairnessBackFairPrice, fairnessLayFairPrice, 0.01d);
         assertEquals(reciprocalBackFairPrice, reciprocalLayFairPrice, 0.1d);
     }

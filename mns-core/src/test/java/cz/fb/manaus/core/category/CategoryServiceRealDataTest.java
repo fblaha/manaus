@@ -108,8 +108,6 @@ public class CategoryServiceRealDataTest extends AbstractMarketDataAwareTestCase
     private void checkCategory(String category, String mustContainLower) {
         int size = markets.size();
         int count = getCategoryCount(category, mustContainLower);
-        System.out.println("size = " + size);
-        System.out.println("count = " + count);
         assertTrue(count > 0 && count < size);
     }
 

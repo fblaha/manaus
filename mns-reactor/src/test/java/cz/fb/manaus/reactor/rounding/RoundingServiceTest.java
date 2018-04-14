@@ -25,13 +25,11 @@ public class RoundingServiceTest extends AbstractLocalTestCase {
         for (int i = 0; i < REPEAT; i++) {
             price = service.increment(price, 1).getAsDouble();
             upList.add(price);
-            System.out.println(price);
         }
         price = service.increment(price, 1).getAsDouble();
         for (int i = 0; i < REPEAT; i++) {
             price = service.decrement(price, 1).getAsDouble();
             downList.add(price);
-            System.out.println(price);
         }
         price = service.decrement(price, 1).getAsDouble();
         assertThat(price, is(START));

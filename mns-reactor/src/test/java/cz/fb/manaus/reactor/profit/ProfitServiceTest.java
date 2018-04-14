@@ -128,7 +128,6 @@ public class ProfitServiceTest extends AbstractProfitTest {
                 provider.getChargeRate());
 
         Map<String, ProfitRecord> byCategory = byCategory(records);
-        records.forEach(System.out::println);
 
 
         assertThat(byCategory.get("market_country_br").getLayCount(), is(1));

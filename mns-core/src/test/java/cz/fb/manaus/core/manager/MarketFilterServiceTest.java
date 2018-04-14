@@ -18,7 +18,6 @@ public class MarketFilterServiceTest extends AbstractMarketDataAwareTestCase {
     }
 
     public void checkFilterCount(Range<Long> expectedRange, boolean hasBets) {
-        System.out.println(" = " + markets.size());
         long cnt = markets.stream()
                 .filter(market -> filterService.accept(market, hasBets)).count();
         assertTrue(expectedRange.contains(cnt));

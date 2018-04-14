@@ -150,7 +150,6 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         marketPricesDao.saveOrUpdate(prices);
         List<MarketPrices> marketPricesList = marketPricesDao.getPrices(market.getId());
         MarketPrices marketPrices = marketPricesList.get(0);
-        System.out.println(marketPrices.getRunnerPrices(selId).getPricesSorted());
         assertThat(4, is(marketPrices.getRunnerPrices(selId).getPricesSorted().size()));
         assertThat(backBetter,
                 is(marketPrices.getRunnerPrices(selId).getPricesSorted().stream().findFirst().get()));

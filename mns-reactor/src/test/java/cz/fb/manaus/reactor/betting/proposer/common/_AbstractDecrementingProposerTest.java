@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.NoSuchElementException;
-import java.util.OptionalDouble;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -27,8 +26,7 @@ public class _AbstractDecrementingProposerTest extends AbstractLocalTestCase {
     @Test(expected = NoSuchElementException.class)
     public void testLowPrice() throws Exception {
         proposer.setOrigPrice(1.02d);
-        OptionalDouble proposedPrice = proposer.getProposedPrice(null);
-        System.out.println("proposedPrice = " + proposedPrice.getAsDouble());
+        proposer.getProposedPrice(null).getAsDouble();
     }
 
     @Test

@@ -27,7 +27,6 @@ public class _AbstractFixedCategoryFilterTest extends AbstractMarketDataAwareTes
         for (Market market : markets) {
             if (testFilter.test(market)) cnt++;
         }
-        System.out.println("cnt = " + cnt);
         assertThat(cnt > 0 && cnt < size, is(true));
     }
 

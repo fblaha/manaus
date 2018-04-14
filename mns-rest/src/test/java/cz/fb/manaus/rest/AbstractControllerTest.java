@@ -26,7 +26,6 @@ abstract public class AbstractControllerTest extends AbstractDaoTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String content = result.getResponse().getContentAsString();
-        System.out.println("content = " + content);
         for (String substring : substrings) {
             assertThat(content, containsString(substring));
         }

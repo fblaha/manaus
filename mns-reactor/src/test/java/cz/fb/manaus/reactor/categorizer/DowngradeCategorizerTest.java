@@ -52,15 +52,11 @@ public class DowngradeCategorizerTest extends AbstractLocalTestCase {
             categorizer.getCategories(Arrays.asList(update, place), null);
             fail();
         } catch (IllegalStateException e) {
-            System.out.println("OK: " + e);
         }
         try {
             categorizer.getCategories(Arrays.asList(update, update), null);
             fail();
         } catch (IllegalStateException e) {
-            System.out.println("OK: " + e);
         }
-
-
     }
 }

@@ -77,7 +77,6 @@ public class PriceBulldozerTest extends AbstractLocalTestCase {
     private void checkResult(double threshold, List<Price> prices, int expectedCount,
                              double expectedPrice, double expectedAmount) {
         List<Price> bulldozed = bulldozer.bulldoze(threshold, prices);
-        System.out.println("bulldozed = " + bulldozed);
         assertThat(bulldozed.size(), is(expectedCount));
         assertEquals(expectedPrice, bulldozed.get(0).getPrice(), 0.0001);
         assertEquals(expectedAmount, bulldozed.get(0).getAmount(), 0.0001);

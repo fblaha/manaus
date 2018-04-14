@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.price;
 
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 
-import static com.google.common.collect.ImmutableList.of;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -19,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 
 
 public class FairnessPolynomialCalculatorTest extends AbstractLocalTestCase {
-    public static final ImmutableList<Double> BEST_PRICES_HARD = of(
+    public static final List<Double> BEST_PRICES_HARD = List.of(
             85.0, 510.0, 270.0, 700.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0,
             1000.0, 1000.0, 1000.0, 1000.0, 38.0, 95.0, 110.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0,
             1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0);
@@ -45,24 +43,24 @@ public class FairnessPolynomialCalculatorTest extends AbstractLocalTestCase {
     @Test
     public void testFairnessHard() throws Exception {
         double fairness = calculator.getFairness(1, toOptional(BEST_PRICES_HARD)).getAsDouble();
-        System.out.println("fairness = " + fairness);
         assertTrue(fairness > 0);
     }
 
     @Test
     public void testFairnessOneWinner() throws Exception {
-        assertThat(calculator.getFairness(1, toOptional(of(3d, 3d, 3d))).getAsDouble(), is(1d));
+        assertThat(calculator.getFairness(1, toOptional(List.of(3d, 3d, 3d))).getAsDouble(), is(1d));
     }
 
     @Test
     public void testFairnessTwoWinners() throws Exception {
-        assertEquals(1d, calculator.getFairness(2, toOptional(of(1.5d, 1.5d, 1.5d))).getAsDouble(), 0.0001d);
+        assertEquals(1d, calculator.getFairness(2,
+                toOptional(List.of(1.5d, 1.5d, 1.5d))).getAsDouble(), 0.0001d);
     }
 
     @Test
     public void testFairnessTwoWinnersCompare() throws Exception {
-        assertTrue(calculator.getFairness(2, toOptional(of(1.4d, 1.5d, 1.5d))).getAsDouble() <
-                calculator.getFairness(2, toOptional(of(1.5d, 1.5d, 1.5d))).getAsDouble());
+        assertTrue(calculator.getFairness(2, toOptional(List.of(1.4d, 1.5d, 1.5d))).getAsDouble() <
+                calculator.getFairness(2, toOptional(List.of(1.5d, 1.5d, 1.5d))).getAsDouble());
     }
 
     @Test
@@ -77,11 +75,11 @@ public class FairnessPolynomialCalculatorTest extends AbstractLocalTestCase {
 
     @Test
     public void testLegacyComparison() throws Exception {
-        checkLegacyComparison(price -> of(price, price, 2.5));
-        checkLegacyComparison(price -> of(2.5, price, 2.5));
-        checkLegacyComparison(price -> of(price, price, price));
-        checkLegacyComparison(price -> of(3d, 3d, price));
-        checkLegacyComparison(price -> of(1.5, 2.5, price));
+        checkLegacyComparison(price -> List.of(price, price, 2.5));
+        checkLegacyComparison(price -> List.of(2.5, price, 2.5));
+        checkLegacyComparison(price -> List.of(price, price, price));
+        checkLegacyComparison(price -> List.of(3d, 3d, price));
+        checkLegacyComparison(price -> List.of(1.5, 2.5, price));
     }
 
     private void checkLegacyComparison(Function<Double, List<Double>> priceFunc) {
@@ -90,9 +88,6 @@ public class FairnessPolynomialCalculatorTest extends AbstractLocalTestCase {
             List<Double> prices = priceFunc.apply(price);
             double fairness = calculator.getFairness(1, toOptional(prices)).getAsDouble();
             double legacy = legacyCalculator.getFairness(1, prices);
-            System.out.println("prices = " + prices);
-            System.out.println("legacy = " + legacy);
-            System.out.println("fairness = " + fairness);
             assertEquals(legacy, fairness, 0.005d);
         }
     }
