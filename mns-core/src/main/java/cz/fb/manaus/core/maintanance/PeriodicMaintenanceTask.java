@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.Duration;
 
-public interface PeriodicMaintenanceTask extends Runnable {
+public interface PeriodicMaintenanceTask {
+
+    ConfigUpdate execute();
 
     String getName();
 

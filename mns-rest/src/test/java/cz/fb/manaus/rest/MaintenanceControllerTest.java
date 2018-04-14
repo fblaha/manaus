@@ -1,13 +1,17 @@
 package cz.fb.manaus.rest;
 
+import cz.fb.manaus.core.maintanance.ConfigUpdate;
 import cz.fb.manaus.core.maintanance.PeriodicMaintenanceTask;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.Duration;
 
+import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,8 +30,10 @@ class TestTask implements PeriodicMaintenanceTask {
     }
 
     @Override
-    public void run() {
-
+    public ConfigUpdate execute() {
+        ConfigUpdate command = ConfigUpdate.empty(Duration.ofHours(12));
+        command.getDeletePrefixes().add("test_delete");
+        return command;
     }
 }
 
@@ -42,11 +48,14 @@ public class MaintenanceControllerTest extends AbstractControllerTest {
 
     @Test
     public void testRunTask() throws Exception {
-        mvc.perform(post(
+        MvcResult result = mvc.perform(post(
                 "/maintenance/{name}", "testTask")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
+        String content = result.getResponse().getContentAsString();
+        System.out.println("content = " + content);
+        assertThat(content, CoreMatchers.containsString("test_delete"));
     }
 
     @Test

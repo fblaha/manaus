@@ -1,5 +1,6 @@
 package cz.fb.manaus.reactor.filter;
 
+import cz.fb.manaus.core.maintanance.ConfigUpdate;
 import cz.fb.manaus.core.maintanance.PeriodicMaintenanceTask;
 import cz.fb.manaus.spring.DatabaseComponent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,8 @@ public class UnprofitableCategoriesRefresher implements PeriodicMaintenanceTask 
     }
 
     @Override
-    public void run() {
+    public ConfigUpdate execute() {
         unprofitableCategoriesRegistries.forEach(AbstractUnprofitableCategoriesRegistry::updateBlackLists);
+        return ConfigUpdate.empty(Duration.ZERO);
     }
 }

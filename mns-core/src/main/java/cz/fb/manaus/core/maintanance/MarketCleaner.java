@@ -43,11 +43,12 @@ public class MarketCleaner implements PeriodicMaintenanceTask {
     }
 
     @Override
-    public void run() {
+    public ConfigUpdate execute() {
         Stopwatch stopwatch = Stopwatch.createUnstarted().start();
         int count = marketDao.deleteMarkets(from(Instant.now().minus(140, ChronoUnit.DAYS)));
         metricRegistry.counter("purge.market").inc(count);
         long elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS);
         log.log(Level.INFO, "DELETE_MARKETS: ''{0}'' obsolete markets removed in ''{1}'' seconds", new Object[]{count, elapsed});
+        return ConfigUpdate.empty(Duration.ZERO);
     }
 }

@@ -35,8 +35,8 @@ public class MaintenanceController {
         metricRegistry.counter("maintenance." + name).inc();
         Optional<PeriodicMaintenanceTask> task = maintenanceTasks.stream()
                 .filter(t -> name.equals(t.getName())).findAny();
-        task.ifPresent(PeriodicMaintenanceTask::run);
-        return task.map(t -> ResponseEntity.ok().build())
+        return task.map(PeriodicMaintenanceTask::execute)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 }
