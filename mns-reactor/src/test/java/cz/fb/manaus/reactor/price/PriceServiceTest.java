@@ -196,8 +196,8 @@ public class PriceServiceTest extends AbstractLocalTestCase {
         double fairness = getFairness(Side.BACK, marketPrices);
         double lowFairPrice = priceService.getFairnessFairPrice(lowPrice, fairness);
         double highFairPrice = priceService.getFairnessFairPrice(highPrice, fairness);
-        System.out.println(highPrice < highFairPrice);
-        System.out.println(lowPrice < lowFairPrice);
+        assertTrue(highPrice < highFairPrice);
+        assertTrue(lowPrice < lowFairPrice);
     }
 
     @Test
