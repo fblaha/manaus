@@ -186,7 +186,6 @@ public class PriceServiceTest extends AbstractLocalTestCase {
         }
     }
 
-
     @Test
     public void testFairnessHighProbability() throws Exception {
         double lowPrice = 1.04d, highPrice = 15d;

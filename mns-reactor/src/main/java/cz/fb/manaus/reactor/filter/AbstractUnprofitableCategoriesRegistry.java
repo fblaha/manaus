@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
+import cz.fb.manaus.core.MarketCategories;
 import cz.fb.manaus.core.category.BetCoverage;
 import cz.fb.manaus.core.category.CategoryService;
 import cz.fb.manaus.core.dao.BetActionDao;
@@ -18,8 +19,6 @@ import cz.fb.manaus.reactor.profit.ProfitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.Duration;
 import java.util.Collection;
@@ -76,7 +75,6 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
     private ApplicationContext context;
 
     private List<String> whiteList;
-    private TransactionTemplate transactionTemplate;
 
     protected AbstractUnprofitableCategoriesRegistry(String name, Duration period, Optional<Side> side, double maximalProfit,
                                                      Duration pauseDuration, String filterPrefix,
@@ -89,11 +87,6 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
         this.pauseDuration = pauseDuration;
         this.filterPrefix = filterPrefix;
         this.blackListProperty = Pattern.compile("^" + Pattern.quote(getPropertyPrefix()) + "\\d{1,2}$");
-    }
-
-    @Autowired
-    public void setTransactionManager(PlatformTransactionManager transactionManager) {
-        this.transactionTemplate = new TransactionTemplate(transactionManager);
     }
 
     @Autowired
@@ -166,13 +159,9 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
                 });
     }
 
-    private String getTaskName() {
-        return "unprofitable.registry.update." + name;
-    }
-
     void updateBlackLists(List<ProfitRecord> profitRecords) {
-        ProfitRecord all = profitRecords.stream().filter(ProfitRecord::isAllCategory)
-                .findAny().get();
+        ProfitRecord all = profitRecords.stream().filter(ProfitRecord::isAllCategory).findAny()
+                .orElseThrow(() -> new IllegalStateException("missing: " + MarketCategories.ALL));
         List<ProfitRecord> filtered = getFiltered(profitRecords);
         int totalCount = all.getTotalCount();
         cleanUp();

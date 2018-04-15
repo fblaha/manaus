@@ -1,12 +1,14 @@
 package cz.fb.manaus.core.maintanance;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class ConfigUpdate {
+    public static final ConfigUpdate NO_OP = new ConfigUpdate(Collections.emptySet(), Collections.emptyMap(), 0);
     private final Set<String> deletePrefixes;
     private final Map<String, String> setProperties;
     private final long ttl;
