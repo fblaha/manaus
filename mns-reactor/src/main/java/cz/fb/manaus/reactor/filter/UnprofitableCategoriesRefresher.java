@@ -27,7 +27,10 @@ public class UnprofitableCategoriesRefresher implements PeriodicMaintenanceTask 
 
     @Override
     public ConfigUpdate execute() {
-        unprofitableCategoriesRegistries.forEach(AbstractUnprofitableCategoriesRegistry::updateBlackLists);
+        ConfigUpdate configUpdate = ConfigUpdate.empty(Duration.ofDays(1));
+        for (AbstractUnprofitableCategoriesRegistry registry : unprofitableCategoriesRegistries) {
+            registry.updateBlackLists(configUpdate);
+        }
         return ConfigUpdate.empty(Duration.ZERO);
     }
 }

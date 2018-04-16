@@ -32,7 +32,7 @@ public class PropertiesService {
         return Optional.ofNullable(restTemplate.getForObject(confUrl + "/{name}", String.class, name));
     }
 
-    public void set(String name, String value, Duration ttl) {
+    void set(String name, String value, Duration ttl) {
         restTemplate.put(confUrl + "/{name}?ttl={ttl}", value, name, ttl.toMinutes() + "m");
     }
 
@@ -48,7 +48,7 @@ public class PropertiesService {
         }
     }
 
-    public void delete(Optional<String> prefix) {
+    void delete(Optional<String> prefix) {
         restTemplate.delete(confUrl + "/{prefix}", prefix.orElse(""));
     }
 

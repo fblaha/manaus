@@ -1,6 +1,7 @@
 package cz.fb.manaus.reactor.filter;
 
 import cz.fb.manaus.core.MarketCategories;
+import cz.fb.manaus.core.maintanance.ConfigUpdate;
 import cz.fb.manaus.core.model.ProfitRecord;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.service.PropertiesService;
@@ -27,8 +28,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsNot.not;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabaseTestCase {
@@ -111,12 +110,14 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
 
     @Test
     public void testUpdateFilterPrefix() throws Exception {
+        ConfigUpdate configUpdate = ConfigUpdate.empty(Duration.ZERO);
+        Map<String, String> properties = configUpdate.getSetProperties();
         registry.updateBlackLists(asList(pr(MarketCategories.ALL, 10d, 100),
                 pr("weak1", -1d, 5),
                 pr("not_match", -1d, 2),
-                pr("weak2", -1d, 5)));
-        verify(propertiesService).set(eq("unprofitable.black.list.test.5"),
-                eq("weak1,weak2"), eq(Duration.ofDays(7)));
+                pr("weak2", -1d, 5)), configUpdate);
+
+        assertThat(properties.get("unprofitable.black.list.test.5"), is("weak1,weak2"));
     }
 
     @Test
@@ -126,20 +127,22 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
 
     @Test
     public void testSave() throws Exception {
-        registry.saveBlackList(10, of("weak1", "weak2", "weak3"));
-        verify(propertiesService).set(eq("unprofitable.black.list.test.10"),
-                eq("weak1,weak2,weak3"),
-                eq(Duration.ofDays(7)));
+        ConfigUpdate configUpdate = ConfigUpdate.empty(Duration.ZERO);
+        registry.saveBlackList(10, of("weak1", "weak2", "weak3"), configUpdate);
+        Map<String, String> properties = configUpdate.getSetProperties();
+
+        assertThat(properties.get("unprofitable.black.list.test.10"), is("weak1,weak2,weak3"));
+
     }
 
     @Test
     public void testSavedBlackList() throws Exception {
-        registry.saveBlackList(10, of("weak10_1", "weak10_2", "weak10_3"));
-        verify(propertiesService).set(eq("unprofitable.black.list.test.10"),
-                eq("weak10_1,weak10_2,weak10_3"), eq(Duration.ofDays(7)));
-        registry.saveBlackList(5, of("weak5_1", "weak5_2", "weak5_3"));
-        verify(propertiesService).set(eq("unprofitable.black.list.test.5"),
-                eq("weak5_1,weak5_2,weak5_3"), eq(Duration.ofDays(7)));
+        ConfigUpdate configUpdate = ConfigUpdate.empty(Duration.ZERO);
+        Map<String, String> properties = configUpdate.getSetProperties();
+        registry.saveBlackList(10, of("weak10_1", "weak10_2", "weak10_3"), configUpdate);
+        assertThat(properties.get("unprofitable.black.list.test.10"), is("weak10_1,weak10_2,weak10_3"));
+        registry.saveBlackList(5, of("weak5_1", "weak5_2", "weak5_3"), configUpdate);
+        assertThat(properties.get("unprofitable.black.list.test.5"), is("weak5_1,weak5_2,weak5_3"));
     }
 
     @Test

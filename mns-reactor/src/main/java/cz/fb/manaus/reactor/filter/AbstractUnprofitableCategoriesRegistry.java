@@ -9,6 +9,7 @@ import cz.fb.manaus.core.category.BetCoverage;
 import cz.fb.manaus.core.category.CategoryService;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.SettledBetDao;
+import cz.fb.manaus.core.maintanance.ConfigUpdate;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.ProfitRecord;
 import cz.fb.manaus.core.model.SettledBet;
@@ -21,7 +22,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 
 import java.time.Duration;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -138,7 +138,7 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
         return String.format("UNPROFITABLE_REGISTRY(%s): ", name);
     }
 
-    public void updateBlackLists() {
+    public void updateBlackLists(ConfigUpdate configUpdate) {
         log.log(Level.INFO, getLogPrefix() + "black list update started");
         Date now = new Date();
         List<SettledBet> settledBets = settledBetDao.getSettledBets(
@@ -149,22 +149,18 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
         double chargeRate = provider.getChargeRate();
         List<ProfitRecord> profitRecords = profitService.getProfitRecords(settledBets, Optional.empty(), true, chargeRate);
 
-        Collection<AbstractUnprofitableCategoriesRegistry> registries = context.getBeansOfType(AbstractUnprofitableCategoriesRegistry.class).values();
-        registries.stream()
-                .filter(registry -> registry.period == period &&
-                        registry.side.equals(side))
-                .forEach(registry -> {
-                    log.log(Level.INFO, getLogPrefix() + "updating registry ''{0}''", registry.name);
-                    registry.updateBlackLists(profitRecords);
-                });
+        log.log(Level.INFO, getLogPrefix() + "updating registry ''{0}''", name);
+        updateBlackLists(profitRecords, configUpdate);
     }
 
-    void updateBlackLists(List<ProfitRecord> profitRecords) {
+    void updateBlackLists(List<ProfitRecord> profitRecords, ConfigUpdate configUpdate) {
         ProfitRecord all = profitRecords.stream().filter(ProfitRecord::isAllCategory).findAny()
                 .orElseThrow(() -> new IllegalStateException("missing: " + MarketCategories.ALL));
         List<ProfitRecord> filtered = getFiltered(profitRecords);
         int totalCount = all.getTotalCount();
-        cleanUp();
+
+        configUpdate.getDeletePrefixes().add(getPropertyPrefix());
+
         Set<String> totalBlackList = new HashSet<>();
         for (Map.Entry<Integer, Integer> entry : thresholds.entrySet()) {
             int thresholdPct = entry.getKey();
@@ -172,7 +168,7 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
             int blackCount = entry.getValue();
             Set<String> blackList = getBlackList(threshold, blackCount, totalCount, filtered.stream(), totalBlackList);
             totalBlackList.addAll(blackList);
-            saveBlackList(thresholdPct, blackList);
+            saveBlackList(thresholdPct, blackList, configUpdate);
         }
     }
 
@@ -186,13 +182,9 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
         }
     }
 
-    void cleanUp() {
-        propertiesService.delete(Optional.of(getPropertyPrefix()));
-    }
-
-    void saveBlackList(int thresholdPct, Set<String> blackList) {
+    void saveBlackList(int thresholdPct, Set<String> blackList, ConfigUpdate configUpdate) {
         if (!blackList.isEmpty()) {
-            propertiesService.set(getPropertyPrefix() + thresholdPct, Joiner.on(',').join(blackList), Duration.ofDays(7));
+            configUpdate.getSetProperties().put(getPropertyPrefix() + thresholdPct, Joiner.on(',').join(blackList));
         }
     }
 
