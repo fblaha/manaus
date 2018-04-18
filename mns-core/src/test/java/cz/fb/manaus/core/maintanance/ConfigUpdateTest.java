@@ -12,10 +12,11 @@ public class ConfigUpdateTest {
 
     @Test
     public void testJson() throws Exception {
-        ConfigUpdate command = ConfigUpdate.empty(Duration.ofHours(8));
-        command.getDeletePrefixes().add("test_delete");
-        command.getSetProperties().put("test_key", "test value");
-        String json = new ObjectMapper().writeValueAsString(command);
+        ConfigUpdate configUpdate = ConfigUpdate.empty(Duration.ofHours(8));
+        configUpdate.getDeletePrefixes().add("test_delete");
+        configUpdate.getSetProperties().put("test_key", "test value");
+        String json = new ObjectMapper().writeValueAsString(configUpdate);
+        assertThat(json, containsString("480m"));
         assertThat(json, containsString("test value"));
         assertThat(json, containsString("test_delete"));
     }
