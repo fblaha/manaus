@@ -49,6 +49,6 @@ public class MarketCleaner implements PeriodicMaintenanceTask {
         metricRegistry.counter("purge.market").inc(count);
         long elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS);
         log.log(Level.INFO, "DELETE_MARKETS: ''{0}'' obsolete markets removed in ''{1}'' seconds", new Object[]{count, elapsed});
-        return ConfigUpdate.NO_OP;
+        return ConfigUpdate.NOP;
     }
 }

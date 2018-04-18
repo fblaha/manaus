@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class ConfigUpdate {
-    public static final ConfigUpdate NO_OP = new ConfigUpdate(Collections.emptySet(), Collections.emptyMap(), "0m");
+    public static final ConfigUpdate NOP = new ConfigUpdate(Collections.emptySet(), Collections.emptyMap(), "0m");
     private final Set<String> deletePrefixes;
     private final Map<String, String> setProperties;
     private final String ttl;
