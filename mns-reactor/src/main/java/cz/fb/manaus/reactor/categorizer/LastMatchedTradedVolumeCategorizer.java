@@ -8,7 +8,6 @@ import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.SettledBet;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.OptionalDouble;
 import java.util.Set;
 
@@ -40,7 +39,7 @@ public class LastMatchedTradedVolumeCategorizer implements SettledBetCategorizer
         if (tradedMean.isPresent()) {
             MarketPrices marketPrices = settledBet.getBetAction().getMarketPrices();
             double lastMatchedPrice = marketPrices.getRunnerPrices(settledBet.getSelectionId()).getLastMatchedPrice();
-            return Collections.singleton(getCategory(tradedMean.getAsDouble(), lastMatchedPrice));
+            return Set.of(getCategory(tradedMean.getAsDouble(), lastMatchedPrice));
         } else {
             return Set.of();
         }

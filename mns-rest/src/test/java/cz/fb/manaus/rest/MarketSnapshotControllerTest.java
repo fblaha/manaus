@@ -11,9 +11,9 @@ import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static cz.fb.manaus.core.test.CoreTestFactory.newMarketPrices;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,7 +34,7 @@ public class MarketSnapshotControllerTest extends AbstractControllerTest {
         accountMoney.setTotal(2000);
         crate.setMoney(accountMoney);
         crate.setScanTime(1000);
-        crate.setCategoryBlackList(Collections.singleton("bad"));
+        crate.setCategoryBlackList(Set.of("bad"));
         Bet bet = new Bet("1", marketPrices.getMarket().getId(), CoreTestFactory.DRAW,
                 new Price(3d, 5d, Side.BACK), new Date(), 0d);
         crate.setBets(List.of(bet));

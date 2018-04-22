@@ -13,7 +13,6 @@ import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.Set;
 
 import static com.google.common.collect.Range.closedOpen;
@@ -54,7 +53,7 @@ public class FairnessCategorizer implements SettledBetCategorizer {
         MarketPrices marketPrices = settledBet.getBetAction().getMarketPrices();
         double fairness = calculator.getFairness(marketPrices.getWinnerCount(), marketPrices.getBestPrices(Side.BACK))
                 .getAsDouble();
-        return Collections.singleton(getCategory(fairness));
+        return Set.of(getCategory(fairness));
     }
 
     String getCategory(double fairness) {

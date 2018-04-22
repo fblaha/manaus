@@ -6,8 +6,8 @@ import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static cz.fb.manaus.core.test.CoreTestFactory.newSettledBet;
 import static org.hamcrest.core.Is.is;
@@ -22,28 +22,28 @@ public class CounterBetCategorizerTest extends AbstractLocalTestCase {
     public void testCategoryEq() throws Exception {
         BetCoverage coverage = BetCoverage.from(List.of(newSettledBet(2d, Side.BACK)));
         assertThat(categorizer.getCategories(newSettledBet(2d, Side.LAY), coverage),
-                is(Collections.singleton("counter_zero")));
+                is(Set.of("counter_zero")));
     }
 
     @Test
     public void testCategoryGt() throws Exception {
         BetCoverage coverage = BetCoverage.from(List.of(newSettledBet(2.5d, Side.BACK)));
         assertThat(categorizer.getCategories(newSettledBet(2d, Side.LAY), coverage),
-                is(Collections.singleton("counter_profit")));
+                is(Set.of("counter_profit")));
     }
 
     @Test
     public void testCategoryLt() throws Exception {
         BetCoverage coverage = BetCoverage.from(List.of(newSettledBet(1.5d, Side.BACK)));
         assertThat(categorizer.getCategories(newSettledBet(2d, Side.LAY), coverage),
-                is(Collections.singleton("counter_loss")));
+                is(Set.of("counter_loss")));
     }
 
     @Test
     public void testCategoryNone() throws Exception {
         BetCoverage coverage = BetCoverage.from(List.of(newSettledBet(2d, Side.LAY)));
         assertThat(categorizer.getCategories(newSettledBet(2d, Side.LAY), coverage),
-                is(Collections.singleton("counter_none")));
+                is(Set.of("counter_none")));
     }
 
 }

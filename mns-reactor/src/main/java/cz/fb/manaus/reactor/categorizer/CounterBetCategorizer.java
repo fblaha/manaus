@@ -8,7 +8,6 @@ import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalDouble;
@@ -40,16 +39,16 @@ public class CounterBetCategorizer implements SettledBetCategorizer {
             double price = settledBet.getPrice().getPrice();
             Map<Side, Double> prices = Map.of(side, price, counterSide, counterPrice);
             if (Price.priceEq(counterPrice, price)) {
-                return Collections.singleton(PREFIX + "zero");
+                return Set.of(PREFIX + "zero");
             } else if (prices.get(Side.BACK) > prices.get(Side.LAY)) {
-                return Collections.singleton(PREFIX + "profit");
+                return Set.of(PREFIX + "profit");
             } else if (prices.get(Side.BACK) < prices.get(Side.LAY)) {
-                return Collections.singleton(PREFIX + "loss");
+                return Set.of(PREFIX + "loss");
             } else {
                 throw new IllegalStateException();
             }
         } else {
-            return Collections.singleton(PREFIX + "none");
+            return Set.of(PREFIX + "none");
         }
     }
 

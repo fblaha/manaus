@@ -8,7 +8,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collections;
+import java.util.Set;
 
 import static org.junit.Assert.assertThat;
 
@@ -20,7 +20,7 @@ public class SelectionActualMatchedCategorizerTest extends AbstractLocalTestCase
     @Test
     public void testCategory() throws Exception {
         assertThat(categorizer.getCategories(CoreTestFactory.newSettledBet(2d, Side.LAY), BetCoverage.EMPTY),
-                CoreMatchers.is(Collections.singleton("actualMatchedSelection_0-10")));
+                CoreMatchers.is(Set.of("actualMatchedSelection_0-10")));
     }
 
 }

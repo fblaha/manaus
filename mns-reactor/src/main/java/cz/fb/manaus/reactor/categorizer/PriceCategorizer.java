@@ -13,7 +13,6 @@ import java.util.Set;
 import static com.google.common.collect.Range.closedOpen;
 import static com.google.common.collect.Range.downTo;
 import static com.google.common.collect.Range.upTo;
-import static java.util.Collections.singleton;
 import static java.util.Objects.requireNonNull;
 
 @Component
@@ -37,6 +36,6 @@ public class PriceCategorizer implements SettledBetCategorizer {
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
         String category = getCategory(settledBet.getPrice().getPrice());
-        return singleton(category);
+        return Set.of(category);
     }
 }

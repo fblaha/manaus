@@ -7,7 +7,6 @@ import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.SettledBet;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.Set;
 
 @Component
@@ -17,9 +16,9 @@ public class PlaceUpdateCategorizer implements SettledBetCategorizer {
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
         BetAction action = settledBet.getBetAction();
         if (action.getBetActionType() == BetActionType.UPDATE) {
-            return Collections.singleton("matchedAfter_update");
+            return Set.of("matchedAfter_update");
         } else if (action.getBetActionType() == BetActionType.PLACE) {
-            return Collections.singleton("matchedAfter_place");
+            return Set.of("matchedAfter_place");
         }
         return Set.of();
     }

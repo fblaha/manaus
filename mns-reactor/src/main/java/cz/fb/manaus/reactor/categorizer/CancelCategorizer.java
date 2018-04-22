@@ -6,7 +6,6 @@ import cz.fb.manaus.core.model.Market;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +27,7 @@ public class CancelCategorizer implements RelatedActionsAwareCategorizer {
             types.removeFirst();
         }
         boolean cancel = indexOfSubList(types, Arrays.asList(BetActionType.UPDATE, BetActionType.PLACE)) != -1;
-        return Collections.singleton(PREFIX + Boolean.toString(cancel));
+        return Set.of(PREFIX + Boolean.toString(cancel));
     }
 
 }

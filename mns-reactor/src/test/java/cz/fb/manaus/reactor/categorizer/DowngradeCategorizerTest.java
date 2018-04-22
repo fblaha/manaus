@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
-import static java.util.Collections.singleton;
 import static org.apache.commons.lang3.time.DateUtils.addHours;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.core.Is.is;
@@ -45,16 +45,16 @@ public class DowngradeCategorizerTest extends AbstractLocalTestCase {
         BetAction update2 = mock(BetAction.class);
         when(update2.getPrice()).thenReturn(new Price(2.1d, 5d, Side.LAY));
         when(update2.getActionDate()).thenReturn(addHours(curr, -1));
-        assertThat(categorizer.getCategories(Arrays.asList(place, update, update2), null), is(singleton(DowngradeCategorizer.DOWNGRADE)));
+        assertThat(categorizer.getCategories(List.of(place, update, update2), null), is(Set.of(DowngradeCategorizer.DOWNGRADE)));
 
 
         try {
-            categorizer.getCategories(Arrays.asList(update, place), null);
+            categorizer.getCategories(List.of(update, place), null);
             fail();
         } catch (IllegalStateException e) {
         }
         try {
-            categorizer.getCategories(Arrays.asList(update, update), null);
+            categorizer.getCategories(List.of(update, update), null);
             fail();
         } catch (IllegalStateException e) {
         }

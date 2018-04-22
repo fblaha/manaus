@@ -14,7 +14,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Duration;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -91,7 +90,7 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
                 asList(pr("horror", -10d, 10),
                         pr("weak", -1d, 10),
                         pr("bad", -5d, 10)).stream(),
-                Collections.singleton("horror")),
+                Set.of("horror")),
                 allOf(not(hasItem("horror")), hasItem("weak"), hasItem("bad"))
         );
     }

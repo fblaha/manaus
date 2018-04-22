@@ -16,9 +16,9 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -83,8 +83,8 @@ public class BetUtilsTest extends AbstractLocalTestCase {
         when(action.getBetId()).thenReturn("1", "2");
         Bet bet = mock(Bet.class);
         when(bet.getBetId()).thenReturn("1");
-        assertThat(betUtils.getUnknownBets(List.of(bet), Collections.singleton("1")).size(), is(0));
-        assertThat(betUtils.getUnknownBets(List.of(bet), Collections.singleton("2")).size(), is(1));
+        assertThat(betUtils.getUnknownBets(List.of(bet), Set.of("1")).size(), is(0));
+        assertThat(betUtils.getUnknownBets(List.of(bet), Set.of("2")).size(), is(1));
     }
 
     @Test

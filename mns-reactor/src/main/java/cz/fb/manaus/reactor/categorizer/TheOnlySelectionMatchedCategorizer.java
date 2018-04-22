@@ -7,7 +7,6 @@ import cz.fb.manaus.core.model.SettledBet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.OptionalDouble;
 import java.util.Set;
 
@@ -30,7 +29,7 @@ public class TheOnlySelectionMatchedCategorizer implements SettledBetCategorizer
         OptionalDouble allMatched = actualMatchedCategorizer.getAmount(bet);
         if (selectionMatched.isPresent() && allMatched.isPresent()) {
             boolean theOnlyMatched = Price.amountEq(allMatched.getAsDouble(), selectionMatched.getAsDouble());
-            return Collections.singleton("theOnlyMatched_" + theOnlyMatched);
+            return Set.of("theOnlyMatched_" + theOnlyMatched);
         } else {
             return Set.of();
         }

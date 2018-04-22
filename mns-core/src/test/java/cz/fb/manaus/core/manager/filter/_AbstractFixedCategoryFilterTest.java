@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
-import static java.util.Collections.singleton;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -34,10 +33,10 @@ public class _AbstractFixedCategoryFilterTest extends AbstractMarketDataAwareTes
     private static class TestFilter extends AbstractFixedCategoryFilter {
 
         public static final Set<Set<String>> EXCLUDED_CATEGORIES = Set.of(
-                singleton(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.HORSES),
-                singleton(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.SPECIAL),
-                singleton(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.FINANCIAL),
-                singleton(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.POLITICS));
+                Set.of(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.HORSES),
+                Set.of(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.SPECIAL),
+                Set.of(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.FINANCIAL),
+                Set.of(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.POLITICS));
 
         public TestFilter() {
             super(EXCLUDED_CATEGORIES);

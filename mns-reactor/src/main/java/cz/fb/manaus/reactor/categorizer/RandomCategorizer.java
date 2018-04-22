@@ -6,7 +6,6 @@ import cz.fb.manaus.core.model.SettledBet;
 import org.springframework.stereotype.Component;
 
 import java.time.Clock;
-import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
 
@@ -23,7 +22,7 @@ public class RandomCategorizer implements SettledBetCategorizer {
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
         int randInt = random.nextInt(5);
-        return Collections.singleton("random_" + randInt);
+        return Set.of("random_" + randInt);
     }
 
 }

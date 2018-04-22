@@ -7,7 +7,6 @@ import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.SettledBet;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.Set;
 
 @Component
@@ -25,9 +24,9 @@ public class MatchedPartCategorizer implements SettledBetCategorizer {
         double matched = settledBet.getPrice().getAmount();
         double requested = settledBet.getBetAction().getPrice().getAmount();
         if (Price.amountEq(matched, requested)) {
-            return Collections.singleton(PREFIX + "full");
+            return Set.of(PREFIX + "full");
         } else {
-            return Collections.singleton(PREFIX + "partial");
+            return Set.of(PREFIX + "partial");
         }
     }
 

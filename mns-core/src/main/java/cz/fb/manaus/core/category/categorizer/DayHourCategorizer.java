@@ -10,7 +10,6 @@ import java.util.Set;
 
 import static com.google.common.collect.ImmutableList.of;
 import static com.google.common.collect.Range.closedOpen;
-import static java.util.Collections.singleton;
 
 @Component
 final public class DayHourCategorizer extends AbstractDelegatingCategorizer {
@@ -35,7 +34,7 @@ final public class DayHourCategorizer extends AbstractDelegatingCategorizer {
         int hour = startTime.get(Calendar.HOUR_OF_DAY);
         for (Range<Integer> range : RANGES) {
             if (range.contains(hour)) {
-                return singleton(range.lowerEndpoint() + "_" + range.upperEndpoint());
+                return Set.of(range.lowerEndpoint() + "_" + range.upperEndpoint());
             }
         }
         throw new IllegalStateException();

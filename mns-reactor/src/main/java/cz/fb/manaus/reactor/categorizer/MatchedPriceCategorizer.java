@@ -10,7 +10,6 @@ import cz.fb.manaus.reactor.price.PriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.Set;
 
 @Component
@@ -31,7 +30,7 @@ public class MatchedPriceCategorizer implements SettledBetCategorizer {
         double matched = settledBet.getPrice().getPrice();
         double requested = settledBet.getBetAction().getPrice().getPrice();
         Side side = settledBet.getPrice().getSide();
-        return Collections.singleton(getCategory(matched, requested, side));
+        return Set.of(getCategory(matched, requested, side));
     }
 
     String getCategory(double matched, double requested, Side side) {

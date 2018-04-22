@@ -8,12 +8,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
-import static java.util.Collections.singleton;
-
 @Component
 public class AllCategorizer implements SettledBetCategorizer {
 
-    public static final Set<String> CATEGORIES = singleton(MarketCategories.ALL);
+    public static final Set<String> CATEGORIES = Set.of(MarketCategories.ALL);
 
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {

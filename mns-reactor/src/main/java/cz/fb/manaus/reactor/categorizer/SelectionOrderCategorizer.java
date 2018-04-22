@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
-import static java.util.Collections.singleton;
-
 @Component
 public class SelectionOrderCategorizer implements SettledBetCategorizer {
 
@@ -21,6 +19,6 @@ public class SelectionOrderCategorizer implements SettledBetCategorizer {
                 .filter(r -> r.getSelectionId() == settledBet.getSelectionId())
                 .findFirst()
                 .get();
-        return singleton("selectionOrder_" + runner.getSortPriority());
+        return Set.of("selectionOrder_" + runner.getSortPriority());
     }
 }

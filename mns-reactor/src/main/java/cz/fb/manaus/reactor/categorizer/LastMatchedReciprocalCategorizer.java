@@ -7,7 +7,6 @@ import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.SettledBet;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.OptionalDouble;
 import java.util.Set;
 
@@ -28,11 +27,11 @@ public class LastMatchedReciprocalCategorizer implements SettledBetCategorizer {
         OptionalDouble reciprocal = marketPrices.getLastMatchedReciprocal();
         if (reciprocal.isPresent()) {
             if (Price.priceEq(reciprocal.getAsDouble(), 1d)) {
-                return Collections.singleton(PREFIX + "eq1");
+                return Set.of(PREFIX + "eq1");
             } else if (reciprocal.getAsDouble() > 1d) {
-                return Collections.singleton(PREFIX + "above1");
+                return Set.of(PREFIX + "above1");
             } else {
-                return Collections.singleton(PREFIX + "bellow1");
+                return Set.of(PREFIX + "bellow1");
             }
         }
         return Set.of();

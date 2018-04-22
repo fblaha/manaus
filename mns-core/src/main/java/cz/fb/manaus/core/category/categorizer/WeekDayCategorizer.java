@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
@@ -29,6 +28,6 @@ final public class WeekDayCategorizer extends AbstractDelegatingCategorizer {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         String weekDay = new SimpleDateFormat("E", Locale.US).format(date).toLowerCase();
-        return Collections.singleton(weekDay);
+        return Set.of(weekDay);
     }
 }

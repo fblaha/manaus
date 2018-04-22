@@ -8,7 +8,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collections;
+import java.util.Set;
 
 import static org.junit.Assert.assertThat;
 
@@ -20,6 +20,6 @@ public class WinnerCountCategorizerTest extends AbstractLocalTestCase {
     @Test
     public void testCategory() throws Exception {
         assertThat(categorizer.getCategories(CoreTestFactory.newSettledBet(2d, Side.LAY), BetCoverage.EMPTY),
-                CoreMatchers.is(Collections.singleton("winnerCount_1")));
+                CoreMatchers.is(Set.of("winnerCount_1")));
     }
 }

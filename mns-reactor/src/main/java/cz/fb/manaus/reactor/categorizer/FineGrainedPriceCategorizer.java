@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import java.text.DecimalFormat;
 import java.util.Set;
 
-import static java.util.Collections.singleton;
 import static java.util.Objects.requireNonNull;
 
 @Component
@@ -47,6 +46,6 @@ public class FineGrainedPriceCategorizer implements SettledBetCategorizer {
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
         String category = getCategory(settledBet.getPrice().getPrice());
-        return singleton(category);
+        return Set.of(category);
     }
 }

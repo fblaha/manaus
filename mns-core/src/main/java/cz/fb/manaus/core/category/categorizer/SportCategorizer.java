@@ -4,7 +4,6 @@ import cz.fb.manaus.core.MarketCategories;
 import cz.fb.manaus.core.model.Market;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -67,6 +66,6 @@ final public class SportCategorizer extends AbstractDelegatingCategorizer {
     @Override
     public Set<String> getCategoryRaw(Market market) {
         Optional<String> category = getCategory(market);
-        return category.map(Collections::singleton).orElse(Set.of());
+        return category.map(Set::of).orElse(Set.of());
     }
 }

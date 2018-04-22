@@ -8,7 +8,6 @@ import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.Market;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -32,7 +31,7 @@ public class ActionCountCategorizer implements RelatedActionsAwareCategorizer {
 
     @Override
     public Set<String> getCategories(List<BetAction> actions, Market market) {
-        return Collections.singleton("betActionCount_" + RANGES.get(actions.size()));
+        return Set.of("betActionCount_" + RANGES.get(actions.size()));
     }
 
 }

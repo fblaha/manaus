@@ -8,7 +8,6 @@ import cz.fb.manaus.core.category.BetCoverage;
 import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer;
 import cz.fb.manaus.core.model.SettledBet;
 
-import java.util.Collections;
 import java.util.OptionalDouble;
 import java.util.Set;
 
@@ -34,7 +33,7 @@ public abstract class AbstractMatchedCategorizer implements SettledBetCategorize
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
         OptionalDouble amount = getAmount(settledBet);
-        return amount.isPresent() ? Collections.singleton(getCategory(amount.getAsDouble())) : Set.of();
+        return amount.isPresent() ? Set.of(getCategory(amount.getAsDouble())) : Set.of();
     }
 
     protected abstract OptionalDouble getAmount(SettledBet settledBet);

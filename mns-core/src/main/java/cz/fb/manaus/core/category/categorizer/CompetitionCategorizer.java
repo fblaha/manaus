@@ -6,7 +6,6 @@ import cz.fb.manaus.core.model.Competition;
 import cz.fb.manaus.core.model.Market;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.Set;
 
 @Component
@@ -22,9 +21,9 @@ final public class CompetitionCategorizer extends AbstractDelegatingCategorizer 
     public Set<String> getCategoryRaw(Market market) {
         Competition competition = market.getCompetition();
         if (competition == null || Strings.isNullOrEmpty(competition.getName())) {
-            return Collections.singleton("none");
+            return Set.of("none");
         } else {
-            return Collections.singleton(normalize(competition.getName()));
+            return Set.of(normalize(competition.getName()));
         }
     }
 
