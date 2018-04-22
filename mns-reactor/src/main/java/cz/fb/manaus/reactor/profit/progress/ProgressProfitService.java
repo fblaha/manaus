@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Array;
 import java.math.RoundingMode;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +62,7 @@ public class ProgressProfitService extends AbstractFunctionProfitService {
         ImmutableList<Pair<SettledBet, OptionalDouble>> sortedCopy = ImmutableList.copyOf(array);
         int chunkSize = IntMath.divide(sortedCopy.size(), chunkCount, RoundingMode.CEILING);
 
-        if (sortedCopy.isEmpty()) return Collections.emptyList();
+        if (sortedCopy.isEmpty()) return List.of();
 
         List<List<Pair<SettledBet, OptionalDouble>>> chunks = Lists.partition(sortedCopy, chunkSize);
 

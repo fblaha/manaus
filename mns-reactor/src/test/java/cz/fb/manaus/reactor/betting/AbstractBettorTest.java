@@ -19,7 +19,6 @@ import cz.fb.manaus.reactor.rounding.RoundingService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +70,7 @@ public abstract class AbstractBettorTest<T extends AbstractUpdatingBettor> exten
     }
 
     protected BetCollector checkPlace(MarketPrices marketPrices, int expectedCount, OptionalDouble expectedPrice) {
-        BetCollector result = check(marketPrices, Collections.<Bet>emptyList(), expectedCount, 0);
+        BetCollector result = check(marketPrices, List.of(), expectedCount, 0);
         List<BetCommand> toPlace = result.getToPlace();
         if (expectedPrice.isPresent()) {
             for (BetCommand command : toPlace) {

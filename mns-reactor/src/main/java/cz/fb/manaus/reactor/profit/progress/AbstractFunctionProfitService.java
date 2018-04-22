@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.google.common.collect.Ordering.from;
-import static java.util.Collections.singletonList;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import static java.util.function.Function.identity;
@@ -60,7 +59,7 @@ abstract public class AbstractFunctionProfitService {
     private Iterable<ProgressFunction> getProgressFunctions(Optional<String> funcName) {
         Iterable<ProgressFunction> selectedFunctions;
         if (funcName.isPresent()) {
-            selectedFunctions = singletonList(requireNonNull(functions.get(funcName.get()),
+            selectedFunctions = List.of(requireNonNull(functions.get(funcName.get()),
                     String.format("No such function '%s'", funcName)));
         } else {
             selectedFunctions = from(comparing(ProgressFunction::getName))

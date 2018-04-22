@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,7 +58,7 @@ public class BetManager {
     @Autowired
     private MetricRegistry metricRegistry;
     @Autowired(required = false)
-    private List<BetActionListener> actionListeners = Collections.emptyList();
+    private List<BetActionListener> actionListeners = List.of();
     private List<MarketSnapshotListener> marketSnapshotListeners = new LinkedList<>();
 
 

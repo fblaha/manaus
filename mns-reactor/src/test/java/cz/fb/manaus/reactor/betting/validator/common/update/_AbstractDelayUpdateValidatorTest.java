@@ -21,6 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static cz.fb.manaus.spring.CoreLocalConfiguration.TEST_PROFILE;
@@ -52,7 +53,7 @@ public class _AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
     public void testNoBetAction() {
         Market market = newMarket();
         marketDao.saveOrUpdate(market);
-        MarketPrices marketPrices = new MarketPrices(1, market, Collections.<RunnerPrices>emptyList(), new Date());
+        MarketPrices marketPrices = new MarketPrices(1, market, List.of(), new Date());
         RunnerPrices runnerPrices = new RunnerPrices();
         runnerPrices.setSelectionId(CoreTestFactory.DRAW);
         ValidationResult result = validator.validate(factory.newUpdateBetContext(marketPrices, runnerPrices, Side.LAY));

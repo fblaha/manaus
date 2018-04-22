@@ -9,7 +9,6 @@ import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.SettledBet;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,7 +38,7 @@ public abstract class AbstractBeforeCategorizer implements SettledBetCategorizer
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
         Date date = getDate(settledBet);
-        if (date == null) return Collections.emptySet();
+        if (date == null) return Set.of();
         Market market = settledBet.getBetAction().getMarket();
         if (date.after(market.getEvent().getOpenDate())) {
             log.log(Level.WARNING, "BEFORE_RESOLVER: ''{0}'' date ''{1}'' after market start  ''{2}''", new Object[]{category, date, market});

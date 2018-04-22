@@ -8,7 +8,6 @@ import cz.fb.manaus.core.model.SettledBet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.emptySet;
 
 public abstract class AbstractDelegatingCategorizer implements SettledBetCategorizer, Categorizer {
 
@@ -33,7 +32,7 @@ public abstract class AbstractDelegatingCategorizer implements SettledBetCategor
 
     private Set<String> getPrefixedCategories(Market market) {
         Set<String> categories = getCategoryRaw(market);
-        if (categories == null) return emptySet();
+        if (categories == null) return Set.of();
         return categories.stream().map(input -> Category.MARKET_PREFIX + prefix + input)
                 .collect(Collectors.toSet());
     }

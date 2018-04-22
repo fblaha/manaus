@@ -2,7 +2,6 @@ package cz.fb.manaus.core.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class CollectedBets {
     }
 
     public static CollectedBets empty() {
-        return new CollectedBets(Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
+        return new CollectedBets(List.of(), List.of(), List.of());
     }
 
     public List<Bet> getPlace() {

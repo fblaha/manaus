@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -184,7 +185,7 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
 
     void saveBlackList(int thresholdPct, Set<String> blackList, ConfigUpdate configUpdate) {
         if (!blackList.isEmpty()) {
-            configUpdate.getSetProperties().put(getPropertyPrefix() + thresholdPct, Joiner.on(',').join(blackList));
+            configUpdate.getSetProperties().put(getPropertyPrefix() + thresholdPct, Joiner.on(',').join(new TreeSet<>(blackList)));
         }
     }
 

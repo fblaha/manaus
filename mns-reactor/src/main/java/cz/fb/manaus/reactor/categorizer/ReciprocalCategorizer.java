@@ -12,7 +12,6 @@ import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.OptionalDouble;
@@ -76,6 +75,6 @@ public class ReciprocalCategorizer implements SettledBetCategorizer {
             result.add(RECIPROCAL + strRange);
             return result;
         }
-        return Collections.emptySet();
+        return Set.of();
     }
 }

@@ -21,6 +21,6 @@ public class PlaceUpdateCategorizer implements SettledBetCategorizer {
         } else if (action.getBetActionType() == BetActionType.PLACE) {
             return Collections.singleton("matchedAfter_place");
         }
-        return Collections.emptySet();
+        return Set.of();
     }
 }

@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.Doubles;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.OptionalDouble;
 
@@ -12,7 +11,7 @@ import static java.util.stream.Collectors.toList;
 
 
 public class TradedVolume {
-    public static final TradedVolume EMPTY = new TradedVolume(Collections.emptyList());
+    public static final TradedVolume EMPTY = new TradedVolume(List.of());
 
     private final List<Price> volume;
 

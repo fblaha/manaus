@@ -34,7 +34,7 @@ public abstract class AbstractMatchedCategorizer implements SettledBetCategorize
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
         OptionalDouble amount = getAmount(settledBet);
-        return amount.isPresent() ? Collections.singleton(getCategory(amount.getAsDouble())) : Collections.emptySet();
+        return amount.isPresent() ? Collections.singleton(getCategory(amount.getAsDouble())) : Set.of();
     }
 
     protected abstract OptionalDouble getAmount(SettledBet settledBet);

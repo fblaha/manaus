@@ -4,14 +4,13 @@ import com.google.common.collect.Range;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.Runner;
 
-import java.util.Collections;
 import java.util.Set;
 import java.util.function.BiPredicate;
 
 public class FlowFilter {
 
     public static final FlowFilter ALLOW_ALL = new FlowFilter(Range.all(), Range.all(),
-            (market, runner) -> true, Collections.emptySet());
+            (market, runner) -> true, Set.of());
 
     private final Range<Integer> indexRange;
     private final Range<Integer> winnerCountRange;

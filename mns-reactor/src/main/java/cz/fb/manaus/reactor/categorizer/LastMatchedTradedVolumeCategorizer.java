@@ -42,7 +42,7 @@ public class LastMatchedTradedVolumeCategorizer implements SettledBetCategorizer
             double lastMatchedPrice = marketPrices.getRunnerPrices(settledBet.getSelectionId()).getLastMatchedPrice();
             return Collections.singleton(getCategory(tradedMean.getAsDouble(), lastMatchedPrice));
         } else {
-            return Collections.emptySet();
+            return Set.of();
         }
     }
 }

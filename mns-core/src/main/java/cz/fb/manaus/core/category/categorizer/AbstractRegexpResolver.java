@@ -1,6 +1,5 @@
 package cz.fb.manaus.core.category.categorizer;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +20,7 @@ abstract public class AbstractRegexpResolver {
 
     protected Set<String> getCategories(String name, Map<String, Pattern> patterns) {
         if (name == null) {
-            return Collections.emptySet();
+            return Set.of();
         }
         Set<String> result = new HashSet<>();
         for (Map.Entry<String, Pattern> entry : patterns.entrySet()) {

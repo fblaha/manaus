@@ -12,7 +12,6 @@ import org.hibernate.LazyInitializationException;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +32,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     @Test
     public void testMarketPrices() {
         Market market = newMarket();
-        MarketPrices marketPrices = new MarketPrices(1, market, Collections.<RunnerPrices>emptyList(), new Date());
+        MarketPrices marketPrices = new MarketPrices(1, market, List.of(), new Date());
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
         assertThat(marketPricesDao.getPrices(CoreTestFactory.MARKET_ID).size(), is(1));
@@ -42,7 +41,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     @Test(expected = LazyInitializationException.class)
     public void testMarketMarketFetch() {
         Market market = newMarket();
-        MarketPrices marketPrices = new MarketPrices(1, market, Collections.<RunnerPrices>emptyList(), new Date());
+        MarketPrices marketPrices = new MarketPrices(1, market, List.of(), new Date());
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
         marketPricesDao.getPrices(CoreTestFactory.MARKET_ID).get(0).getMarket().getName();
@@ -51,10 +50,10 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     @Test
     public void testMarketPrices2() {
         Market market = newMarket();
-        MarketPrices marketPrices = new MarketPrices(1, market, Collections.<RunnerPrices>emptyList(), new Date());
+        MarketPrices marketPrices = new MarketPrices(1, market, List.of(), new Date());
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
-        MarketPrices marketPrices2 = new MarketPrices(1, market, Collections.<RunnerPrices>emptyList(), new Date());
+        MarketPrices marketPrices2 = new MarketPrices(1, market, List.of(), new Date());
         marketPricesDao.saveOrUpdate(marketPrices2);
         assertThat(marketPricesDao.getPrices(CoreTestFactory.MARKET_ID).size(), is(2));
     }
@@ -172,11 +171,11 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     @Test
     public void testMarketPriceOrder2() {
         Market market = newMarket();
-        MarketPrices marketPrices = new MarketPrices(1, market, Collections.<RunnerPrices>emptyList(), new Date());
+        MarketPrices marketPrices = new MarketPrices(1, market, List.of(), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
-        MarketPrices marketPrices2 = new MarketPrices(1, market, Collections.<RunnerPrices>emptyList(), new Date());
+        MarketPrices marketPrices2 = new MarketPrices(1, market, List.of(), new Date());
         marketPrices2.setTime(DateUtils.addMonths(new Date(), -2));
         marketPricesDao.saveOrUpdate(marketPrices2);
         assertThat(marketPricesDao.getPrices(CoreTestFactory.MARKET_ID).size(), is(2));
@@ -187,9 +186,9 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     public void testMarketDelete() {
         Market market = newMarket("55", new Date(), CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);
-        MarketPrices marketPrices = new MarketPrices(1, market, Collections.<RunnerPrices>emptyList(), new Date());
+        MarketPrices marketPrices = new MarketPrices(1, market, List.of(), new Date());
         marketPricesDao.saveOrUpdate(marketPrices);
-        MarketPrices marketPrices2 = new MarketPrices(1, market, Collections.emptyList(), new Date());
+        MarketPrices marketPrices2 = new MarketPrices(1, market, List.of(), new Date());
         marketPricesDao.saveOrUpdate(marketPrices2);
         assertThat(marketPricesDao.getPrices("55").size(), is(2));
         marketDao.delete("55");

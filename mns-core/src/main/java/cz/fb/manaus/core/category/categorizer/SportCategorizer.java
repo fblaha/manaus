@@ -67,6 +67,6 @@ final public class SportCategorizer extends AbstractDelegatingCategorizer {
     @Override
     public Set<String> getCategoryRaw(Market market) {
         Optional<String> category = getCategory(market);
-        return category.map(Collections::singleton).orElse(Collections.emptySet());
+        return category.map(Collections::singleton).orElse(Set.of());
     }
 }

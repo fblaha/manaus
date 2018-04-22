@@ -8,8 +8,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
+import java.util.Set;
 
 import static java.util.Collections.singleton;
 import static org.apache.commons.lang3.time.DateUtils.addHours;
@@ -35,7 +35,7 @@ public class DowngradeCategorizerTest extends AbstractLocalTestCase {
         when(update.getPrice()).thenReturn(new Price(2.1d, 5d, Side.LAY));
         when(update.getActionDate()).thenReturn(addHours(curr, -2));
 
-        assertThat(categorizer.getCategories(Arrays.asList(place, update), null), is(Collections.<String>emptySet()));
+        assertThat(categorizer.getCategories(Arrays.asList(place, update), null), is(Set.<String>of()));
 
 
         when(update.getPrice()).thenReturn(new Price(1.9d, 5d, Side.LAY));

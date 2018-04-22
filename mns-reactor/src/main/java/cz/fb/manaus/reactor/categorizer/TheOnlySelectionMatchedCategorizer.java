@@ -32,7 +32,7 @@ public class TheOnlySelectionMatchedCategorizer implements SettledBetCategorizer
             boolean theOnlyMatched = Price.amountEq(allMatched.getAsDouble(), selectionMatched.getAsDouble());
             return Collections.singleton("theOnlyMatched_" + theOnlyMatched);
         } else {
-            return Collections.emptySet();
+            return Set.of();
         }
     }
 }

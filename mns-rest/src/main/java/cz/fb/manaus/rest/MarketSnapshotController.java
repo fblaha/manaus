@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -56,7 +55,7 @@ public class MarketSnapshotController {
             MarketPrices marketPrices = snapshotCrate.getPrices();
             marketDao.get(id).ifPresent(marketPrices::setMarket);
             logMarket(marketPrices);
-            List<Bet> bets = Optional.ofNullable(snapshotCrate.getBets()).orElse(Collections.emptyList());
+            List<Bet> bets = Optional.ofNullable(snapshotCrate.getBets()).orElse(List.of());
             betMetricUpdater.update(snapshotCrate.getScanTime(), bets);
             MarketSnapshot marketSnapshot = new MarketSnapshot(marketPrices, bets,
                     Optional.empty());

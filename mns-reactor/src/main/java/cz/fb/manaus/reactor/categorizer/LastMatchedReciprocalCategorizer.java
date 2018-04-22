@@ -35,6 +35,6 @@ public class LastMatchedReciprocalCategorizer implements SettledBetCategorizer {
                 return Collections.singleton(PREFIX + "bellow1");
             }
         }
-        return Collections.emptySet();
+        return Set.of();
     }
 }
