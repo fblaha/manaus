@@ -4,13 +4,11 @@ import cz.fb.manaus.core.MarketCategories;
 import cz.fb.manaus.core.maintanance.ConfigUpdate;
 import cz.fb.manaus.core.model.ProfitRecord;
 import cz.fb.manaus.core.model.Side;
-import cz.fb.manaus.core.service.PropertiesService;
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase;
 import cz.fb.manaus.spring.DatabaseComponent;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Duration;
@@ -20,13 +18,10 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsNot.not;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
 
 public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabaseTestCase {
 
@@ -34,8 +29,6 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
     private TestUnprofitableCategoriesRegistry registry;
     @Autowired
     private Test2UnprofitableCategoriesRegistry registry2;
-    @Autowired
-    private PropertiesService propertiesService;
 
     private ProfitRecord pr(String category, double profitAndLoss, int betCount) {
         return new ProfitRecord(category, profitAndLoss, betCount, 0, 2d, 0.06);
@@ -43,7 +36,6 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
 
     @Before
     public void setUp() throws Exception {
-        Mockito.reset(propertiesService);
         registry.setWhiteList("white.tes");
     }
 
@@ -141,29 +133,6 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
         assertThat(properties.get("unprofitable.black.list.test.10"), is("weak10_1,weak10_2,weak10_3"));
         registry.saveBlackList(5, Set.of("weak5_1", "weak5_2", "weak5_3"), configUpdate);
         assertThat(properties.get("unprofitable.black.list.test.5"), is("weak5_1,weak5_2,weak5_3"));
-    }
-
-    @Test
-    public void testGetBlackList() throws Exception {
-        when(propertiesService.list(any()))
-                .thenReturn(Map.of(
-                        "unprofitable.black.list.test.10", "weak10_1,weak10_2,weak10_3",
-                        "unprofitable.black.list.test.5", "weak5_1,weak5_2,weak5_3"));
-        Set<String> blackList = registry.getSavedBlackList();
-        assertThat(blackList.size(), is(6));
-        assertThat(blackList, hasItems("weak10_1", "weak10_2", "weak10_3", "weak5_1", "weak5_2", "weak5_3"));
-    }
-
-    @Test
-    public void testUnprofitableCategories() throws Exception {
-        when(propertiesService.list(any()))
-                .thenReturn(Map.of(
-                        "unprofitable.black.list.test.10", "weak10_1,weak10_2,weak10_3",
-                        "unprofitable.black.list.test.5", "weak5_1,weak5_2,weak5_3"));
-        assertThat(registry.getUnprofitableCategories(Set.of("weak5_1", "weak5_2", "weak5_3")),
-                is(Set.of("weak5_1", "weak5_2", "weak5_3")));
-        assertThat(registry.getUnprofitableCategories(Set.of("weak5_1", "weak5_2-XXX", "weak10_1")),
-                is(Set.of("weak5_1", "weak10_1")));
     }
 
     @DatabaseComponent

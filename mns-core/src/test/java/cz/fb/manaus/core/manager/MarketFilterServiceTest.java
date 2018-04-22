@@ -1,7 +1,6 @@
 package cz.fb.manaus.core.manager;
 
 import com.google.common.collect.Range;
-import cz.fb.manaus.core.service.AbstractMarketDataAwareTestCase;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -7,8 +7,8 @@ import cz.fb.manaus.core.MarketCategories;
 import cz.fb.manaus.core.category.categorizer.CountryCodeCategorizer;
 import cz.fb.manaus.core.category.categorizer.RunnerCountCategorizer;
 import cz.fb.manaus.core.category.categorizer.SportCategorizer;
+import cz.fb.manaus.core.manager.AbstractMarketDataAwareTestCase;
 import cz.fb.manaus.core.model.Market;
-import cz.fb.manaus.core.service.AbstractMarketDataAwareTestCase;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
