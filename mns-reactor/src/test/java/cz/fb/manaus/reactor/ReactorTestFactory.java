@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
+import java.util.Set;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -64,9 +65,10 @@ public class ReactorTestFactory {
 
         List<Bet> bets = new LinkedList<>();
         oldBet.ifPresent(bet -> bets.add(bet));
-        MarketSnapshot snapshot = new MarketSnapshot(marketPrices, bets, empty(), empty());
+        MarketSnapshot snapshot = new MarketSnapshot(marketPrices, bets, empty());
 
-        return contextFactory.create(side, CoreTestFactory.HOME, snapshot, fairness);
+        return contextFactory.create(side, CoreTestFactory.HOME, snapshot, fairness,
+                empty(), Set.of());
     }
 
     public RunnerPrices newRP(long selectionId, double bestBack, double bestLay) {
@@ -89,9 +91,9 @@ public class ReactorTestFactory {
                     Date.from(date), provider.getMinAmount());
             bets.add(counterBet);
         }
-        MarketSnapshot snapshot = new MarketSnapshot(marketPrices, bets, empty(), empty());
+        MarketSnapshot snapshot = new MarketSnapshot(marketPrices, bets, empty());
         return contextFactory.create(side, selectionId, snapshot,
-                calculator.getFairness(marketPrices));
+                calculator.getFairness(marketPrices), empty(), Set.of());
 
     }
 

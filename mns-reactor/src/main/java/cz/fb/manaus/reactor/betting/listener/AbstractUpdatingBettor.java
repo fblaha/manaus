@@ -4,6 +4,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Table;
+import cz.fb.manaus.core.model.AccountMoney;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.Market;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,7 +67,8 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
     }
 
     @Override
-    public final void onMarketSnapshot(MarketSnapshot snapshot, BetCollector betCollector) {
+    public final void onMarketSnapshot(MarketSnapshot snapshot, BetCollector betCollector,
+                                       Optional<AccountMoney> accountMoney, Set<String> categoryBlackList) {
         MarketPrices marketPrices = snapshot.getMarketPrices();
         Market market = marketPrices.getMarket();
         int winnerCount = marketPrices.getWinnerCount();
@@ -92,7 +95,7 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
                 if (activeSelection || accepted) {
                     Optional<Bet> oldBet = ofNullable(coverage.get(side, selectionId));
                     BetContext ctx = contextFactory.create(side, selectionId,
-                            snapshot, fairness);
+                            snapshot, fairness, accountMoney, categoryBlackList);
                     setTradedVolumeMean(ctx);
                     ValidationResult pricelessValidation = validationService.validate(ctx, validators);
                     if (!pricelessValidation.isSuccess()) {

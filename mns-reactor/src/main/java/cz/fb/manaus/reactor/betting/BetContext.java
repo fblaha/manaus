@@ -1,6 +1,7 @@
 package cz.fb.manaus.reactor.betting;
 
 import com.google.common.collect.Table;
+import cz.fb.manaus.core.model.AccountMoney;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
@@ -30,15 +32,19 @@ public class BetContext {
     private final Map<String, String> properties = new HashMap<>();
     private final Fairness fairness;
     private final OptionalDouble chargeGrowthForecast;
+    private final Optional<AccountMoney> accountMoney;
+    private final Set<String> categoryBlackList;
     private Optional<Price> newPrice = Optional.empty();
 
-    BetContext(Side side, long selectionId, OptionalDouble chargeGrowthForecast, MarketSnapshot marketSnapshot,
-               Fairness fairness) {
+    BetContext(Side side, long selectionId, Optional<AccountMoney> accountMoney, OptionalDouble chargeGrowthForecast, MarketSnapshot marketSnapshot,
+               Fairness fairness, Set<String> categoryBlackList) {
         this.side = side;
         this.selectionId = selectionId;
+        this.accountMoney = accountMoney;
         this.chargeGrowthForecast = chargeGrowthForecast;
         this.fairness = fairness;
         this.marketSnapshot = marketSnapshot;
+        this.categoryBlackList = categoryBlackList;
     }
 
     public RunnerPrices getRunnerPrices() {
@@ -134,6 +140,10 @@ public class BetContext {
     public boolean isCounterHalfMatched() {
         Optional<Bet> counterBet = getCounterBet();
         return counterBet.map(Bet::isHalfMatched).orElse(false);
+    }
+
+    public Optional<AccountMoney> getAccountMoney() {
+        return accountMoney;
     }
 
     public boolean isUpdate() {

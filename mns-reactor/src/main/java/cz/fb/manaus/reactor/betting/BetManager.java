@@ -5,6 +5,7 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 import cz.fb.manaus.core.manager.MarketFilterService;
+import cz.fb.manaus.core.model.AccountMoney;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.CollectedBets;
@@ -76,7 +77,10 @@ public class BetManager {
         this.marketSnapshotListeners = from(new AnnotationAwareOrderComparator()).sortedCopy(marketSnapshotListeners);
     }
 
-    public CollectedBets fire(MarketSnapshot snapshot, Set<String> myBets) {
+    public CollectedBets fire(MarketSnapshot snapshot,
+                              Set<String> myBets,
+                              Optional<AccountMoney> accountMoney,
+                              Set<String> categoryBlackList) {
         MarketPrices marketPrices = snapshot.getMarketPrices();
         filterPrices(marketPrices);
 
@@ -92,7 +96,7 @@ public class BetManager {
             if (unknownBets.isEmpty()) {
                 for (MarketSnapshotListener listener : marketSnapshotListeners) {
                     if (!disabledListeners.contains(listener.getClass().getSimpleName())) {
-                        listener.onMarketSnapshot(snapshot, collector);
+                        listener.onMarketSnapshot(snapshot, collector, accountMoney, categoryBlackList);
                     }
                 }
                 saveActions(collector.getToPlace());

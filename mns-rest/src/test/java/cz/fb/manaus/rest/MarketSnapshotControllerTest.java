@@ -33,6 +33,7 @@ public class MarketSnapshotControllerTest extends AbstractControllerTest {
         accountMoney.setTotal(2000);
         crate.setMoney(accountMoney);
         crate.setScanTime(1000);
+        crate.setCategoryBlackList(Collections.singleton("bad"));
         Bet bet = new Bet("1", marketPrices.getMarket().getId(), CoreTestFactory.DRAW,
                 new Price(3d, 5d, Side.BACK), new Date(), 0d);
         crate.setBets(Collections.singletonList(bet));

@@ -14,7 +14,7 @@ public class AbstractAccountMoneyValidator implements Validator {
 
     @Override
     public ValidationResult validate(BetContext context) {
-        return context.getMarketSnapshot().getAccountMoney()
+        return context.getAccountMoney()
                 .map(am -> ValidationResult.of(am.getAvailable() > minimalAvailable))
                 .orElse(ValidationResult.ACCEPT);
     }

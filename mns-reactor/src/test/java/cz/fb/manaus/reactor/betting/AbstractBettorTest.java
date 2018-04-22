@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static cz.fb.manaus.core.test.CoreTestFactory.AWAY;
@@ -49,8 +50,8 @@ public abstract class AbstractBettorTest<T extends AbstractUpdatingBettor> exten
     protected BetCollector check(MarketPrices marketPrices, List<Bet> bets, int placeCount, int updateCount) {
         BetCollector collector = new BetCollector();
         MarketSnapshot snapshot = new MarketSnapshot(marketPrices, bets,
-                Optional.of(createTradedVolume(marketPrices)), Optional.empty());
-        bettor.onMarketSnapshot(snapshot, collector);
+                Optional.of(createTradedVolume(marketPrices)));
+        bettor.onMarketSnapshot(snapshot, collector, Optional.empty(), Set.of());
         assertThat(collector.getToPlace().size(), is(placeCount));
         assertThat(collector.getToUpdate().size(), is(updateCount));
         return collector;

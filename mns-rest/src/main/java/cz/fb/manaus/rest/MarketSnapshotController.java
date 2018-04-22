@@ -59,9 +59,11 @@ public class MarketSnapshotController {
             List<Bet> bets = Optional.ofNullable(snapshotCrate.getBets()).orElse(Collections.emptyList());
             betMetricUpdater.update(snapshotCrate.getScanTime(), bets);
             MarketSnapshot marketSnapshot = new MarketSnapshot(marketPrices, bets,
-                    Optional.empty(), Optional.ofNullable(snapshotCrate.getMoney()));
+                    Optional.empty());
             Set<String> myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty());
-            CollectedBets collectedBets = manager.fire(marketSnapshot, myBets);
+            CollectedBets collectedBets = manager.fire(marketSnapshot, myBets,
+                    Optional.ofNullable(snapshotCrate.getMoney()),
+                    Optional.ofNullable(snapshotCrate.getCategoryBlackList()).orElse(Set.of()));
             if (!collectedBets.isEmpty()) {
                 return ResponseEntity.ok(collectedBets);
             }
@@ -94,6 +96,7 @@ public class MarketSnapshotController {
 class MarketSnapshotCrate {
     private MarketPrices prices;
     private List<Bet> bets;
+    private Set<String> categoryBlackList;
     private AccountMoney money;
     private int scanTime;
 
@@ -129,11 +132,20 @@ class MarketSnapshotCrate {
         this.scanTime = scanTime;
     }
 
+    public Set<String> getCategoryBlackList() {
+        return categoryBlackList;
+    }
+
+    public void setCategoryBlackList(Set<String> categoryBlackList) {
+        this.categoryBlackList = categoryBlackList;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("prices", prices)
                 .add("bets", bets)
+                .add("categoryBlackList", categoryBlackList)
                 .add("money", money)
                 .add("scanTime", scanTime)
                 .toString();
