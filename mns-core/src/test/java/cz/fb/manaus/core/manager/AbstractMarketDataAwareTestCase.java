@@ -16,7 +16,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 abstract public class AbstractMarketDataAwareTestCase extends AbstractLocalTestCase {
-    public static final TypeReference<List<Market>> TYPE_REF = new TypeReference<List<Market>>() {
+    public static final TypeReference<List<Market>> TYPE_REF = new TypeReference<>() {
     };
     protected List<Market> markets;
     @Autowired
