@@ -10,7 +10,6 @@ import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkState;
 import static cz.fb.manaus.core.model.PriceComparator.ORDERING;
-import static java.util.Arrays.asList;
 
 @Component
 public class DowngradeCategorizer implements RelatedActionsAwareCategorizer {
@@ -28,7 +27,7 @@ public class DowngradeCategorizer implements RelatedActionsAwareCategorizer {
             if (last != null) {
                 checkState(last.getPrice().getSide() == action.getPrice().getSide());
                 checkState(last.getActionDate().before(action.getActionDate()));
-                if (ORDERING.reverse().isStrictlyOrdered(asList(last.getPrice(), action.getPrice()))) {
+                if (ORDERING.reverse().isStrictlyOrdered(List.of(last.getPrice(), action.getPrice()))) {
                     lastDowngrade = true;
                     result.add(DOWNGRADE);
                 }

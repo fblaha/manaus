@@ -35,7 +35,6 @@ public class PriceCategorizer implements SettledBetCategorizer {
 
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
-        String category = getCategory(settledBet.getPrice().getPrice());
-        return Set.of(category);
+        return Set.of(getCategory(settledBet.getPrice().getPrice()));
     }
 }

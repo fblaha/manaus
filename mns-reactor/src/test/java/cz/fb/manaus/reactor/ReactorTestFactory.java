@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -127,7 +126,7 @@ public class ReactorTestFactory {
         RunnerPrices home = newRP(CoreTestFactory.HOME, betBack, bestLay, lastMatched);
         RunnerPrices draw = newRP(CoreTestFactory.DRAW, betBack, bestLay, lastMatched);
         RunnerPrices away = newRP(CoreTestFactory.AWAY, betBack, bestLay, lastMatched);
-        return new MarketPrices(winnerCount, market, Arrays.asList(home, draw, away), new Date());
+        return new MarketPrices(winnerCount, market, List.of(home, draw, away), new Date());
     }
 
     public MarketPrices createMarket(double downgradeFraction, List<Double> probabilities) {

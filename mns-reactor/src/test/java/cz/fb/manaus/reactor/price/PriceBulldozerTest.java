@@ -8,7 +8,6 @@ import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -20,15 +19,15 @@ public class PriceBulldozerTest extends AbstractLocalTestCase {
     @Autowired
     private PriceBulldozer bulldozer;
 
-    private List<Price> SAMPLE = Arrays.asList(
+    private List<Price> SAMPLE = List.of(
             new Price(6d, 2d, Side.BACK),
             new Price(3d, 4d, Side.BACK),
             new Price(2.8, 10d, Side.BACK));
 
     @Test
     public void testBulldozeSimple() throws Exception {
-        checkResult(3, Arrays.asList(new Price(3, 2, Side.LAY), new Price(4, 2, Side.LAY)), 1, 3.5, 4);
-        List<Price> three = Arrays.asList(new Price(3, 2, Side.LAY),
+        checkResult(3, List.of(new Price(3, 2, Side.LAY), new Price(4, 2, Side.LAY)), 1, 3.5, 4);
+        List<Price> three = List.of(new Price(3, 2, Side.LAY),
                 new Price(4, 2, Side.LAY), new Price(5, 2, Side.LAY));
         checkResult(3, three, 2, 3.5, 4);
         checkResult(5, three, 1, 4, 6);
@@ -42,8 +41,8 @@ public class PriceBulldozerTest extends AbstractLocalTestCase {
 
     @Test
     public void testBulldozeBoundary() throws Exception {
-        List<Price> two = Arrays.asList(new Price(4, 2, Side.BACK), new Price(3, 2, Side.BACK));
-        List<Price> three = Arrays.asList(new Price(5, 2, Side.BACK), new Price(4, 2, Side.BACK),
+        List<Price> two = List.of(new Price(4, 2, Side.BACK), new Price(3, 2, Side.BACK));
+        List<Price> three = List.of(new Price(5, 2, Side.BACK), new Price(4, 2, Side.BACK),
                 new Price(3, 2, Side.BACK));
 
         checkResult(2, two, 2, 4, 2);
@@ -70,7 +69,7 @@ public class PriceBulldozerTest extends AbstractLocalTestCase {
 
     @Test(expected = IllegalStateException.class)
     public void testBadOrderLay() throws Exception {
-        bulldozer.bulldoze(10, Arrays.asList(new Price(5d, 2, Side.LAY), new Price(4d, 2, Side.LAY)));
+        bulldozer.bulldoze(10, List.of(new Price(5d, 2, Side.LAY), new Price(4d, 2, Side.LAY)));
     }
 
     private void checkResult(double threshold, List<Price> prices, int expectedCount,

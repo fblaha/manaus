@@ -9,7 +9,7 @@ import cz.fb.manaus.reactor.rounding.RoundingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.OptionalDouble;
 
 import static java.util.Objects.requireNonNull;
@@ -56,7 +56,7 @@ public class PriceService {
      */
     public double getOverroundFairPrice(double unfairPrice, double overround, int winnerCount, int runnerCount) {
         double probability = 1 / unfairPrice - (overround - winnerCount) / runnerCount;
-        Preconditions.checkArgument(probability > 0, Arrays.asList(unfairPrice, overround, winnerCount, runnerCount));
+        Preconditions.checkArgument(probability > 0, List.of(unfairPrice, overround, winnerCount, runnerCount));
         return 1 / probability;
     }
 

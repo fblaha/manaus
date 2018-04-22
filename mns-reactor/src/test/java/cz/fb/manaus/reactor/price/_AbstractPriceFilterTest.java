@@ -11,11 +11,9 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Arrays.asList;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -32,7 +30,7 @@ public class _AbstractPriceFilterTest extends AbstractLocalTestCase {
     public static final Price LAY2 = new Price(2.1d, 5d, Side.LAY);
     public static final Price BACK3 = new Price(1.90d, 5d, Side.BACK);
     public static final Price LAY3 = new Price(2.15d, 5d, Side.LAY);
-    public static final List<Price> SAMPLE_PRICES = asList(LAY1, LAY2,
+    public static final List<Price> SAMPLE_PRICES = List.of(LAY1, LAY2,
             LAY3, new Price(2.2d, 5d, Side.LAY),
             new Price(1.8d, 5d, Side.BACK), new Price(1.82d, 5d, Side.BACK),
             BACK2, new Price(1.88d, 5d, Side.BACK),
@@ -56,15 +54,15 @@ public class _AbstractPriceFilterTest extends AbstractLocalTestCase {
 
     @Test
     public void testSignificantPrices() throws Exception {
-        assertThat(filter.getSignificantPrices(1, SAMPLE_PRICES), is(asList(BACK1, LAY1)));
-        assertThat(filter.getSignificantPrices(2, SAMPLE_PRICES), is(asList(BACK1, BACK2, LAY1, LAY2)));
-        assertThat(filter.getSignificantPrices(3, SAMPLE_PRICES), is(asList(BACK1, BACK2, BACK3, LAY1, LAY2, LAY3)));
+        assertThat(filter.getSignificantPrices(1, SAMPLE_PRICES), is(List.of(BACK1, LAY1)));
+        assertThat(filter.getSignificantPrices(2, SAMPLE_PRICES), is(List.of(BACK1, BACK2, LAY1, LAY2)));
+        assertThat(filter.getSignificantPrices(3, SAMPLE_PRICES), is(List.of(BACK1, BACK2, BACK3, LAY1, LAY2, LAY3)));
     }
 
 
     @Test
     public void testBestPrices() throws Exception {
-        MarketPrices market = testFactory.createMarket(0.15, Arrays.asList(0.5, 0.3, 0.2));
+        MarketPrices market = testFactory.createMarket(0.15, List.of(0.5, 0.3, 0.2));
         for (RunnerPrices runnerPrices : market.getRunnerPrices()) {
             Price bestBack = runnerPrices.getHomogeneous(Side.BACK).getBestPrice().get();
             Price bestLay = runnerPrices.getHomogeneous(Side.LAY).getBestPrice().get();

@@ -5,7 +5,6 @@ import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Market;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -26,7 +25,7 @@ public class CancelCategorizer implements RelatedActionsAwareCategorizer {
         if (types.getFirst() == BetActionType.PLACE) {
             types.removeFirst();
         }
-        boolean cancel = indexOfSubList(types, Arrays.asList(BetActionType.UPDATE, BetActionType.PLACE)) != -1;
+        boolean cancel = indexOfSubList(types, List.of(BetActionType.UPDATE, BetActionType.PLACE)) != -1;
         return Set.of(PREFIX + Boolean.toString(cancel));
     }
 
