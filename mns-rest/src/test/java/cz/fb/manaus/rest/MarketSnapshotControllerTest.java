@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import static cz.fb.manaus.core.test.CoreTestFactory.newMarketPrices;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -36,7 +37,7 @@ public class MarketSnapshotControllerTest extends AbstractControllerTest {
         crate.setCategoryBlackList(Collections.singleton("bad"));
         Bet bet = new Bet("1", marketPrices.getMarket().getId(), CoreTestFactory.DRAW,
                 new Price(3d, 5d, Side.BACK), new Date(), 0d);
-        crate.setBets(Collections.singletonList(bet));
+        crate.setBets(List.of(bet));
         String snapshot = new ObjectMapper().writer().writeValueAsString(crate);
         mvc.perform(post("/markets/{id}/snapshot", MARKET_ID)
                 .content(snapshot)

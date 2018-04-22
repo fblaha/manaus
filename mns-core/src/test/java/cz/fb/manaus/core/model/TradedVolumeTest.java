@@ -3,8 +3,8 @@ package cz.fb.manaus.core.model;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
-import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -12,7 +12,7 @@ public class TradedVolumeTest {
 
     @Test
     public void testMean() throws Exception {
-        assertThat(new TradedVolume(singletonList(new Price(2d, 5d, null))).getWeightedMean().getAsDouble(), is(2d));
+        assertThat(new TradedVolume(List.of(new Price(2d, 5d, null))).getWeightedMean().getAsDouble(), is(2d));
         assertThat(new TradedVolume(Arrays.asList(
                 new Price(2d, 5d, null),
                 new Price(2d, 10d, null))).getWeightedMean().getAsDouble(), is(2d));

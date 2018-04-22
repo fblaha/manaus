@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting.proposer;
 
-import java.util.Collections;
 import java.util.Set;
 
 public class ProposedPrice {
@@ -13,7 +12,7 @@ public class ProposedPrice {
     }
 
     public ProposedPrice(double price, String proposer) {
-        this(price, Collections.singleton(proposer));
+        this(price, Set.of(proposer));
     }
 
     public double getPrice() {

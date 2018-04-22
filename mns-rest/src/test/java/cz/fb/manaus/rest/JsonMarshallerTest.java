@@ -13,11 +13,11 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import static cz.fb.manaus.core.test.CoreTestFactory.newBetAction;
 import static cz.fb.manaus.core.test.CoreTestFactory.newMarket;
-import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertThat;
 
 public class JsonMarshallerTest extends AbstractLocalTestCase {
@@ -29,7 +29,7 @@ public class JsonMarshallerTest extends AbstractLocalTestCase {
         BetAction action = new BetAction(BetActionType.PLACE, new Date(), new Price(2d, 5d, Side.LAY), null, 10);
         Map<String, String> props = Map.of("property1", "value1", "reciprocal", "0.92");
         action.setProperties(props);
-        String json = mapper.writer().writeValueAsString(singletonList(action));
+        String json = mapper.writer().writeValueAsString(List.of(action));
         assertThat(json, CoreMatchers.containsString("value1"));
     }
 
@@ -37,14 +37,14 @@ public class JsonMarshallerTest extends AbstractLocalTestCase {
     public void testSettledBetList() throws Exception {
         SettledBet bet = new SettledBet(555, "The Draw", 5.23d, new Date(), new Price(2.02d, 2.35d, Side.LAY));
         bet.setBetAction(newBetAction("1", newMarket()));
-        String json = mapper.writer().writeValueAsString(singletonList(bet));
+        String json = mapper.writer().writeValueAsString(List.of(bet));
         assertThat(json, CoreMatchers.containsString("The Draw"));
     }
 
     @Test
     public void testProfitRecordList() throws Exception {
         ProfitRecord profitRecord = new ProfitRecord("test_name", 5d, 2, 1, 2d, 0.2);
-        String json = mapper.writer().writeValueAsString(singletonList(profitRecord));
+        String json = mapper.writer().writeValueAsString(List.of(profitRecord));
         assertThat(json, CoreMatchers.containsString("test_name"));
     }
 

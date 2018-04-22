@@ -7,7 +7,6 @@ import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.Side;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -76,7 +75,7 @@ public class MarketChargeSimulator {
 
     private List<Set<Long>> getWinnersPowerSet(int winnerCount, Set<Long> selections) {
         if (winnerCount == 0) {
-            return selections.stream().map(Collections::singleton).collect(Collectors.toList());
+            return selections.stream().map(Set::of).collect(Collectors.toList());
         }
         return Sets.powerSet(selections).stream().filter(w -> w.size() == winnerCount).collect(Collectors.toList());
     }

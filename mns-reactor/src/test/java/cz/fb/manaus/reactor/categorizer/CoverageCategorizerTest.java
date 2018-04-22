@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
+import java.util.List;
 
 import static com.google.common.collect.ImmutableMap.of;
 import static java.util.Collections.singletonMap;
@@ -48,7 +49,7 @@ public class CoverageCategorizerTest extends AbstractLocalTestCase {
     @Test
     public void testCategory() throws Exception {
         SettledBet bet = CoreTestFactory.newSettledBet(2d, Side.LAY);
-        BetCoverage coverage = BetCoverage.from(Collections.singletonList(bet));
+        BetCoverage coverage = BetCoverage.from(List.of(bet));
         assertThat(categorizer.getCategories(bet, coverage), hasItems("coverage_soloLay", "coverage_solo"));
     }
 

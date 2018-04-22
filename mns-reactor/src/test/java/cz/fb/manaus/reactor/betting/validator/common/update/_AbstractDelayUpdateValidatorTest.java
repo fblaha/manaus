@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Duration;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -44,7 +43,7 @@ public class _AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
         RunnerPrices runnerPrices = new RunnerPrices();
         runnerPrices.setSelectionId(CoreTestFactory.HOME);
 
-        MarketPrices marketPrices = new MarketPrices(1, market, Collections.singletonList(runnerPrices), new Date());
+        MarketPrices marketPrices = new MarketPrices(1, market, List.of(runnerPrices), new Date());
         ValidationResult result = validator.validate(factory.newUpdateBetContext(marketPrices, runnerPrices, lay));
         Assert.assertThat(result, is(validationResult));
     }

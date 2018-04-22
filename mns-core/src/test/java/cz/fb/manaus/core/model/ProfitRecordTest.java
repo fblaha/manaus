@@ -5,8 +5,9 @@ import cz.fb.manaus.core.category.Category;
 import cz.fb.manaus.core.category.categorizer.CountryCodeCategorizer;
 import org.junit.Test;
 
+import java.util.List;
+
 import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -19,8 +20,8 @@ public class ProfitRecordTest {
         ProfitRecord cze = new ProfitRecord(COUNTRY_PREFIX + "cze", 100d, 1, 1, 2d, 0.06);
         ProfitRecord all = new ProfitRecord(MarketCategories.ALL, 100d, 1, 1, 2d, 0.06);
         assertThat(asList(cze, all).stream().filter(ProfitRecord::isAllCategory).count(), is(1L));
-        assertThat(singletonList(all).stream().filter(ProfitRecord::isAllCategory).count(), is(1L));
-        assertThat(singletonList(cze).stream().filter(ProfitRecord::isAllCategory).count(), is(0L));
+        assertThat(List.of(all).stream().filter(ProfitRecord::isAllCategory).count(), is(1L));
+        assertThat(List.of(cze).stream().filter(ProfitRecord::isAllCategory).count(), is(0L));
     }
 
 

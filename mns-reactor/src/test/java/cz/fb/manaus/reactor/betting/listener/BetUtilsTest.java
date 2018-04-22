@@ -83,8 +83,8 @@ public class BetUtilsTest extends AbstractLocalTestCase {
         when(action.getBetId()).thenReturn("1", "2");
         Bet bet = mock(Bet.class);
         when(bet.getBetId()).thenReturn("1");
-        assertThat(betUtils.getUnknownBets(Collections.singletonList(bet), Collections.singleton("1")).size(), is(0));
-        assertThat(betUtils.getUnknownBets(Collections.singletonList(bet), Collections.singleton("2")).size(), is(1));
+        assertThat(betUtils.getUnknownBets(List.of(bet), Collections.singleton("1")).size(), is(0));
+        assertThat(betUtils.getUnknownBets(List.of(bet), Collections.singleton("2")).size(), is(1));
     }
 
     @Test

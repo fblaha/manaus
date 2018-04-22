@@ -20,7 +20,6 @@ import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
-import static java.util.Collections.singletonList;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -189,8 +188,8 @@ public class PriceServiceTest extends AbstractLocalTestCase {
     @Test
     public void testFairnessHighProbability() throws Exception {
         double lowPrice = 1.04d, highPrice = 15d;
-        RunnerPrices home = new RunnerPrices(CoreTestFactory.HOME, singletonList(new Price(lowPrice, 10d, Side.BACK)), 50d, lowPrice);
-        RunnerPrices away = new RunnerPrices(CoreTestFactory.AWAY, singletonList(new Price(highPrice, 10d, Side.BACK)), 50d, highPrice);
+        RunnerPrices home = new RunnerPrices(CoreTestFactory.HOME, List.of(new Price(lowPrice, 10d, Side.BACK)), 50d, lowPrice);
+        RunnerPrices away = new RunnerPrices(CoreTestFactory.AWAY, List.of(new Price(highPrice, 10d, Side.BACK)), 50d, highPrice);
         MarketPrices marketPrices = new MarketPrices(1, null, Arrays.asList(home, away), new Date());
         double fairness = getFairness(Side.BACK, marketPrices);
         double lowFairPrice = priceService.getFairnessFairPrice(lowPrice, fairness);

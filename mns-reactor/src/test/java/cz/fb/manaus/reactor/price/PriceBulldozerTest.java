@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -37,8 +36,8 @@ public class PriceBulldozerTest extends AbstractLocalTestCase {
 
     @Test
     public void testBulldozeSingle() throws Exception {
-        checkResult(3, singletonList(new Price(3, 2, Side.LAY)), 1, 3, 2);
-        checkResult(1, singletonList(new Price(3, 2, Side.LAY)), 1, 3, 2);
+        checkResult(3, List.of(new Price(3, 2, Side.LAY)), 1, 3, 2);
+        checkResult(1, List.of(new Price(3, 2, Side.LAY)), 1, 3, 2);
     }
 
     @Test

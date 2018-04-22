@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.OptionalDouble;
@@ -30,21 +29,21 @@ public class PriceProposalServiceTest extends AbstractLocalTestCase {
 
     @Test
     public void testBackPrice() throws Exception {
-        checkProposal(MAX_PRICE, Side.BACK, "testProposer2,fooProposer", PROPOSERS);
+        checkProposal(MAX_PRICE, Side.BACK, PROPOSERS);
     }
 
     @Test
     public void testLayPrice() throws Exception {
-        checkProposal(MIN_PRICE, Side.LAY, "testProposer1", PROPOSERS);
+        checkProposal(MIN_PRICE, Side.LAY, PROPOSERS);
     }
 
     @Test(expected = IllegalStateException.class)
     public void testMandatoryPrice() throws Exception {
         PriceProposer proposer = ctx -> OptionalDouble.empty();
-        service.reducePrices(mock(BetContext.class), Collections.singletonList(proposer), Side.LAY);
+        service.reducePrices(mock(BetContext.class), List.of(proposer), Side.LAY);
     }
 
-    private void checkProposal(double expectedPrice, Side side, String proposer, List<PriceProposer> proposers) {
+    private void checkProposal(double expectedPrice, Side side, List<PriceProposer> proposers) {
         BetContext context = mock(BetContext.class);
         when(context.getProperties()).thenReturn(new HashMap<>());
         double price = service.reducePrices(context, proposers, side).getPrice();
