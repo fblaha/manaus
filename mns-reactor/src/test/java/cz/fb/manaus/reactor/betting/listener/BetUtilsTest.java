@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -63,16 +62,16 @@ public class BetUtilsTest extends AbstractLocalTestCase {
                 mock(Market.class), selectionId);
         BetAction lay3 = new BetAction(BetActionType.PLACE, DateUtils.addHours(currDate, -4), priceLay,
                 mock(Market.class), selectionId);
-        List<BetAction> filtered = betUtils.getCurrentActions(Arrays.asList(back1, back2, back3));
+        List<BetAction> filtered = betUtils.getCurrentActions(List.of(back1, back2, back3));
         assertThat(filtered.size(), is(1));
         assertThat(filtered.get(filtered.size() - 1), is(back3));
 
-        filtered = betUtils.getCurrentActions(Arrays.asList(lay1, lay2));
+        filtered = betUtils.getCurrentActions(List.of(lay1, lay2));
         assertThat(filtered.size(), is(2));
         assertThat(filtered.get(0), is(lay1));
         assertThat(filtered.get(filtered.size() - 1), is(lay2));
 
-        filtered = betUtils.getCurrentActions(Arrays.asList(lay1, lay2, lay3));
+        filtered = betUtils.getCurrentActions(List.of(lay1, lay2, lay3));
         assertThat(filtered.size(), is(1));
         assertThat(filtered.get(filtered.size() - 1), is(lay3));
     }

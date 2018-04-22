@@ -18,7 +18,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import static java.util.Optional.of;
@@ -45,7 +45,7 @@ public class _AbstractTooCloseUpdateValidatorTest extends AbstractLocalTestCase 
 
     @Before
     public void setUp() throws Exception {
-        prices = factory.createMarket(0.1, Arrays.asList(0.4, 0.3, 0.3));
+        prices = factory.createMarket(0.1, List.of(0.4, 0.3, 0.3));
         runnerPrices = prices.getRunnerPrices(CoreTestFactory.HOME);
     }
 

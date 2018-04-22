@@ -15,9 +15,9 @@ import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
@@ -40,7 +40,7 @@ public class ChargeGrowthForecasterTest extends AbstractLocalTestCase {
 
     @Test
     public void testForecast() throws Exception {
-        MarketPrices market = factory.createMarket(0.05, Arrays.asList(0.5, 0.3, 0.2));
+        MarketPrices market = factory.createMarket(0.05, List.of(0.5, 0.3, 0.2));
         LinkedList<Bet> currentBets = new LinkedList<>();
         MarketSnapshot marketSnapshot = new MarketSnapshot(market, currentBets, Optional.empty());
         Fairness fairness = calculator.getFairness(market);

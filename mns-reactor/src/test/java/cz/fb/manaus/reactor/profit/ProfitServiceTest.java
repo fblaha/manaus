@@ -9,13 +9,11 @@ import cz.fb.manaus.core.test.CoreTestFactory;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static com.google.common.collect.ImmutableMap.of;
-import static java.util.Arrays.asList;
 import static java.util.Optional.empty;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
@@ -86,7 +84,7 @@ public class ProfitServiceTest extends AbstractProfitTest {
         SettledBet kamazBack = createKamazBack();
         SettledBet kamazLay = createKamazLay();
         setBetAction(kamazBack, kamazLay);
-        List<SettledBet> bets = Arrays.asList(kamazBack, kamazLay);
+        List<SettledBet> bets = List.of(kamazBack, kamazLay);
         List<ProfitRecord> simulationOnly = profitService.getProfitRecords(bets, empty(), true,
                 provider.getChargeRate());
         List<ProfitRecord> all = profitService.getProfitRecords(bets, empty(), false,
@@ -96,7 +94,7 @@ public class ProfitServiceTest extends AbstractProfitTest {
     }
 
     private void checkRecords(double expectedAllProfit, Map<String, Double> otherProfits, SettledBet... bets) {
-        List<SettledBet> betList = Arrays.asList(bets);
+        List<SettledBet> betList = List.of(bets);
         List<ProfitRecord> result = profitService.getProfitRecords(betList, empty(),
                 false, provider.getChargeRate());
         ProfitRecord all = result.stream().filter(ProfitRecord::isAllCategory).findAny().get();
@@ -124,7 +122,7 @@ public class ProfitServiceTest extends AbstractProfitTest {
                 addDays(marketDate, 1), new Price(2d, 5d, Side.BACK));
         bet2.setPlaced(addHours(marketDate, -1));
         setBetAction(bet1, bet2);
-        List<ProfitRecord> records = profitService.getProfitRecords(asList(bet1, bet2), empty(), true,
+        List<ProfitRecord> records = profitService.getProfitRecords(List.of(bet1, bet2), empty(), true,
                 provider.getChargeRate());
 
         Map<String, ProfitRecord> byCategory = byCategory(records);
@@ -139,9 +137,9 @@ public class ProfitServiceTest extends AbstractProfitTest {
         assertThat(byCategory.get("placedBefore_day_1-2").getLayCount(), is(1));
         assertEquals(4.8d, byCategory.get("placedBefore_day_1-2").getProfit(), 0.01);
 
-        assertTrue(profitService.getProfitRecords(asList(bet1, bet2), Optional.of("market_country_ua"), true,
+        assertTrue(profitService.getProfitRecords(List.of(bet1, bet2), Optional.of("market_country_ua"), true,
                 provider.getChargeRate()).isEmpty());
-        assertFalse(profitService.getProfitRecords(asList(bet1, bet2), Optional.of("market_country_br"), true,
+        assertFalse(profitService.getProfitRecords(List.of(bet1, bet2), Optional.of("market_country_br"), true,
                 provider.getChargeRate()).isEmpty());
 
     }
@@ -156,7 +154,7 @@ public class ProfitServiceTest extends AbstractProfitTest {
         r1.setCoverDiff(0.2);
         r1.setCoverCount(1);
         ProfitRecord r2 = new ProfitRecord("test", 100d, 1, 1, 2d, 0.06);
-        ProfitRecord record = profitService.mergeCategory("test", Arrays.asList(r1, r2));
+        ProfitRecord record = profitService.mergeCategory("test", List.of(r1, r2));
         assertEquals(record.getCoverDiff(), r1.getCoverDiff(), 0.00001d);
     }
 }

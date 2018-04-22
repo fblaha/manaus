@@ -6,7 +6,6 @@ import cz.fb.manaus.reactor.betting.BetContext;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.OptionalDouble;
@@ -18,7 +17,7 @@ import static org.mockito.Mockito.when;
 
 public class PriceProposalServiceTest extends AbstractLocalTestCase {
 
-    public static final List<PriceProposer> PROPOSERS = Arrays.asList(
+    public static final List<PriceProposer> PROPOSERS = List.of(
             new TestProposer1(),
             new TestProposer2(),
             new FooProposer());

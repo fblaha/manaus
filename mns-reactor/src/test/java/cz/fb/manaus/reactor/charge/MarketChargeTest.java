@@ -10,10 +10,10 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.ImmutableMap.of;
-import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -53,25 +53,25 @@ public class MarketChargeTest extends AbstractLocalTestCase {
 
     @Test
     public void testChargeLowProfit() throws Exception {
-        MarketCharge charge = MarketCharge.fromBets(provider.getChargeRate(), asList(lay1, lay2, back1, back2));
+        MarketCharge charge = MarketCharge.fromBets(provider.getChargeRate(), List.of(lay1, lay2, back1, back2));
         checkCharge(charge, 0.013d, 0.2d, of("2", 0.01d, "3", 0d));
     }
 
     @Test
     public void testChargeHighProfit() throws Exception {
-        MarketCharge charge = MarketCharge.fromBets(provider.getChargeRate(), asList(lay1, lay2, back2));
+        MarketCharge charge = MarketCharge.fromBets(provider.getChargeRate(), List.of(lay1, lay2, back2));
         checkCharge(charge, 0.143d, 2.2d, of("2", 0.09d, "3", 0.05d));
     }
 
     @Test
     public void testChargeLoss() throws Exception {
-        MarketCharge charge = MarketCharge.fromBets(provider.getChargeRate(), asList(lay1, lay2, back1));
+        MarketCharge charge = MarketCharge.fromBets(provider.getChargeRate(), List.of(lay1, lay2, back1));
         checkCharge(charge, 0d, -1.06d, of("2", 0d, "3", 0d));
     }
 
     @Test
     public void testOneLossOneProfit() throws Exception {
-        MarketCharge charge = MarketCharge.fromBets(provider.getChargeRate(), asList(lay1, lay2));
+        MarketCharge charge = MarketCharge.fromBets(provider.getChargeRate(), List.of(lay1, lay2));
         checkCharge(charge, 0.061d, 0.94d, of("2", 0.06d, "4", 0d));
     }
 

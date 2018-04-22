@@ -8,9 +8,9 @@ import cz.fb.manaus.reactor.betting.BetContext;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -23,8 +23,8 @@ public class ValidationServiceTest extends AbstractLocalTestCase {
 
     @Test
     public void testReduceAcceptReject() throws Exception {
-        assertThat(service.reduce(asList(ValidationResult.ACCEPT, ValidationResult.REJECT, ValidationResult.ACCEPT)), is(ValidationResult.REJECT));
-        assertThat(service.reduce(asList(ValidationResult.ACCEPT, ValidationResult.ACCEPT)), is(ValidationResult.ACCEPT));
+        assertThat(service.reduce(List.of(ValidationResult.ACCEPT, ValidationResult.REJECT, ValidationResult.ACCEPT)), is(ValidationResult.REJECT));
+        assertThat(service.reduce(List.of(ValidationResult.ACCEPT, ValidationResult.ACCEPT)), is(ValidationResult.ACCEPT));
     }
 
     @Test

@@ -7,7 +7,6 @@ import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -35,11 +34,11 @@ public class DowngradeCategorizerTest extends AbstractLocalTestCase {
         when(update.getPrice()).thenReturn(new Price(2.1d, 5d, Side.LAY));
         when(update.getActionDate()).thenReturn(addHours(curr, -2));
 
-        assertThat(categorizer.getCategories(Arrays.asList(place, update), null), is(Set.<String>of()));
+        assertThat(categorizer.getCategories(List.of(place, update), null), is(Set.<String>of()));
 
 
         when(update.getPrice()).thenReturn(new Price(1.9d, 5d, Side.LAY));
-        assertThat(categorizer.getCategories(Arrays.asList(place, update), null), hasItems(DowngradeCategorizer.DOWNGRADE, DowngradeCategorizer.DOWNGRADE_LAST));
+        assertThat(categorizer.getCategories(List.of(place, update), null), hasItems(DowngradeCategorizer.DOWNGRADE, DowngradeCategorizer.DOWNGRADE_LAST));
 
 
         BetAction update2 = mock(BetAction.class);

@@ -5,7 +5,6 @@ import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.OptionalDouble;
 import java.util.stream.Collectors;
@@ -34,10 +33,10 @@ public class FairnessPolynomialCalculatorTest extends AbstractLocalTestCase {
 
     @Test
     public void testPolynomialFairness() throws Exception {
-        assertEquals(0.866d, calculator.getFairness(1, toOptional(Arrays.asList(2.5, 1.5))).getAsDouble(), 0.001d);
-        assertEquals(0.825d, calculator.getFairness(1, toOptional(Arrays.asList(2.7, 1.4))).getAsDouble(), 0.001d);
-        assertEquals(0.75d, calculator.getFairness(1, toOptional(Arrays.asList(2.5, 2.5, 2.5))).getAsDouble(), 0.001d);
-        assertEquals(0.85d, calculator.getFairness(1, toOptional(Arrays.asList(2.7, 2.7, 2.7))).getAsDouble(), 0.001d);
+        assertEquals(0.866d, calculator.getFairness(1, toOptional(List.of(2.5, 1.5))).getAsDouble(), 0.001d);
+        assertEquals(0.825d, calculator.getFairness(1, toOptional(List.of(2.7, 1.4))).getAsDouble(), 0.001d);
+        assertEquals(0.75d, calculator.getFairness(1, toOptional(List.of(2.5, 2.5, 2.5))).getAsDouble(), 0.001d);
+        assertEquals(0.85d, calculator.getFairness(1, toOptional(List.of(2.7, 2.7, 2.7))).getAsDouble(), 0.001d);
     }
 
     @Test
@@ -65,12 +64,12 @@ public class FairnessPolynomialCalculatorTest extends AbstractLocalTestCase {
 
     @Test
     public void testFairnessLayTwoRunners() throws Exception {
-        assertEquals(1.118d, calculator.getFairness(1, toOptional(Arrays.asList(1.5, 3.5))).getAsDouble(), 0.001d);
+        assertEquals(1.118d, calculator.getFairness(1, toOptional(List.of(1.5, 3.5))).getAsDouble(), 0.001d);
     }
 
     @Test
     public void testFairnessLayThreeRunners() throws Exception {
-        assertEquals(1.093, calculator.getFairness(1, toOptional(Arrays.asList(3.5, 3.5, 2.7))).getAsDouble(), 0.001d);
+        assertEquals(1.093, calculator.getFairness(1, toOptional(List.of(3.5, 3.5, 2.7))).getAsDouble(), 0.001d);
     }
 
     @Test

@@ -11,7 +11,6 @@ import org.apache.commons.math3.util.Precision;
 import org.hibernate.LazyInitializationException;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +19,6 @@ import java.util.OptionalInt;
 
 import static com.google.common.collect.Iterables.getLast;
 import static cz.fb.manaus.core.test.CoreTestFactory.newMarket;
-import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
@@ -75,7 +73,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     @Test
     public void testRunnerPricesDelete() {
         Market market = newMarket();
-        MarketPrices marketPrices = new MarketPrices(1, market, Arrays.asList(
+        MarketPrices marketPrices = new MarketPrices(1, market, List.of(
                 new RunnerPrices(232, List.of(new Price(2.3d, 22, Side.BACK)), 5d, 2.5d)), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
@@ -88,7 +86,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         Market market = newMarket();
         Price better = new Price(2.3d, 22, Side.BACK);
         Price worse = new Price(2.2d, CoreTestFactory.DRAW, Side.BACK);
-        MarketPrices marketPrices = new MarketPrices(1, market, Arrays.asList(
+        MarketPrices marketPrices = new MarketPrices(1, market, List.of(
                 new RunnerPrices(232, List.of(better, worse), 5d, 2.5d)), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
@@ -106,7 +104,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         Price better = new Price(2.2d, 22, Side.BACK);
         Price worse = new Price(2.2d, 22, Side.LAY);
         int selId = 232;
-        MarketPrices marketPrices = new MarketPrices(1, market, Arrays.asList(
+        MarketPrices marketPrices = new MarketPrices(1, market, List.of(
                 new RunnerPrices(selId, List.of(better, worse), 5d, 2.5d)), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
@@ -123,7 +121,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         Price better = new Price(2.3d, 22, Side.LAY);
         Price worse = new Price(2.4d, CoreTestFactory.DRAW, Side.LAY);
         int selId = 232;
-        MarketPrices marketPrices = new MarketPrices(1, market, Arrays.asList(
+        MarketPrices marketPrices = new MarketPrices(1, market, List.of(
                 new RunnerPrices(selId, List.of(better, worse), 5d, 2.5d)), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
@@ -142,7 +140,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         Price backBetter = new Price(2.3d, 22, Side.BACK);
         Price backWorse = new Price(2.2d, CoreTestFactory.DRAW, Side.BACK);
         int selId = 232;
-        MarketPrices prices = new MarketPrices(1, market, Arrays.asList(
+        MarketPrices prices = new MarketPrices(1, market, List.of(
                 new RunnerPrices(selId, List.of(layWorse, backWorse, backBetter, layBetter), 5d, 2.5d)), new Date());
         prices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
@@ -205,7 +203,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     @Test
     public void testRunnerPricesByMarketAndSelection() {
         createBet();
-        for (Long selectionId : asList(CoreTestFactory.HOME, CoreTestFactory.DRAW, CoreTestFactory.AWAY)) {
+        for (Long selectionId : List.of(CoreTestFactory.HOME, CoreTestFactory.DRAW, CoreTestFactory.AWAY)) {
             List<RunnerPrices> shortList = marketPricesDao.getRunnerPrices(CoreTestFactory.MARKET_ID, selectionId, OptionalInt.of(1));
             List<RunnerPrices> complete = marketPricesDao.getRunnerPrices(CoreTestFactory.MARKET_ID, selectionId, OptionalInt.empty());
             assertThat(complete.size(), is(2));
@@ -243,7 +241,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
                 new Price(bestPrice, 100d, Side.BACK),
                 new Price(2d, 100d, Side.BACK),
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
-        MarketPrices result = new MarketPrices(1, market, Arrays.asList(home, draw, away), new Date());
+        MarketPrices result = new MarketPrices(1, market, List.of(home, draw, away), new Date());
         result.setTime(new Date());
         return result;
     }
@@ -299,7 +297,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
                 new Price(2d, 100d, Side.BACK),
                 new Price(2d, 100d, Side.BACK),
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
-        MarketPrices marketPrices = new MarketPrices(1, market, Arrays.asList(home, draw, away), new Date());
+        MarketPrices marketPrices = new MarketPrices(1, market, List.of(home, draw, away), new Date());
         marketPricesDao.saveOrUpdate(marketPrices);
         List<MarketPrices> latest = marketPricesDao.getPrices(market.getId(), OptionalInt.of(1));
         assertThat(getMarketReciprocal(latest, Side.BACK).getAsDouble(), is(1d));
@@ -320,7 +318,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         RunnerPrices away = new RunnerPrices(22, List.of(
                 new Price(2d, 100d, Side.LAY),
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
-        MarketPrices marketPrices = new MarketPrices(1, market, Arrays.asList(home, draw, away), new Date());
+        MarketPrices marketPrices = new MarketPrices(1, market, List.of(home, draw, away), new Date());
         marketPricesDao.saveOrUpdate(marketPrices);
         List<MarketPrices> latest = marketPricesDao.getPrices(market.getId(), OptionalInt.of(1));
         assertThat(getMarketReciprocal(latest, Side.LAY).getAsDouble(), is(1d));
@@ -338,7 +336,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
         RunnerPrices away = new RunnerPrices(22, List.of(
                 new Price(1.5d, 100d, Side.LAY)), 2d, 2d);
-        MarketPrices marketPrices = new MarketPrices(1, market, Arrays.asList(home, draw, away), new Date());
+        MarketPrices marketPrices = new MarketPrices(1, market, List.of(home, draw, away), new Date());
         marketPricesDao.saveOrUpdate(marketPrices);
         List<MarketPrices> latest = marketPricesDao.getPrices(market.getId(), OptionalInt.of(1));
         assertFalse(getMarketReciprocal(latest, Side.LAY).isPresent());

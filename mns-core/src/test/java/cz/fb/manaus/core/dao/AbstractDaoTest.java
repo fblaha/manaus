@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.EntityManagerFactory;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -105,7 +104,7 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
     }
 
     private List<RunnerPrices> createRPs(double price, double lastMatchedPrice) {
-        return Arrays.asList(
+        return List.of(
                 CoreTestFactory.newBackRP(price, CoreTestFactory.HOME, lastMatchedPrice),
                 CoreTestFactory.newBackRP(price, CoreTestFactory.DRAW, lastMatchedPrice),
                 CoreTestFactory.newBackRP(price, CoreTestFactory.AWAY, lastMatchedPrice));

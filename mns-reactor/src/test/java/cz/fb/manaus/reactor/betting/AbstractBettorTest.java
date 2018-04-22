@@ -18,7 +18,6 @@ import cz.fb.manaus.reactor.betting.listener.AbstractUpdatingBettor;
 import cz.fb.manaus.reactor.rounding.RoundingService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +90,7 @@ public abstract class AbstractBettorTest<T extends AbstractUpdatingBettor> exten
         Bet unmatchedHome = new Bet(BET_ID, MARKET_ID, HOME, oldOne, PLACED_DATE, 0d);
         Bet unmatchedDraw = new Bet(BET_ID + 1, MARKET_ID, DRAW, oldOne, PLACED_DATE, 0d);
         Bet unmatchedAway = new Bet(BET_ID + 2, MARKET_ID, AWAY, oldOne, PLACED_DATE, 0d);
-        List<Bet> bets = Arrays.asList(unmatchedHome, unmatchedDraw, unmatchedAway);
+        List<Bet> bets = List.of(unmatchedHome, unmatchedDraw, unmatchedAway);
         List<BetAction> actions = bets.stream()
                 .map(bet -> coreTestFactory.savePlaceAction(bet, marketPrices.getMarket()))
                 .collect(Collectors.toList());

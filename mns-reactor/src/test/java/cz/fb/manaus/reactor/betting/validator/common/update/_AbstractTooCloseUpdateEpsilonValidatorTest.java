@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -41,7 +41,7 @@ public class _AbstractTooCloseUpdateEpsilonValidatorTest extends AbstractLocalTe
         Price oldPrice = new Price(2.5d, 5d, Side.BACK);
         Optional<Bet> oldBet = Optional.of(ReactorTestFactory.newBet(oldPrice));
 
-        MarketPrices prices = factory.createMarket(0.1, Arrays.asList(0.4, 0.3, 0.3));
+        MarketPrices prices = factory.createMarket(0.1, List.of(0.4, 0.3, 0.3));
         RunnerPrices runnerPrices = prices.getRunnerPrices(CoreTestFactory.HOME);
         assertThat(validator.validate(factory.newBetContext(Side.BACK, prices, runnerPrices, oldBet)
                 .withNewPrice(oldPrice)), is(ValidationResult.REJECT));
@@ -62,7 +62,7 @@ public class _AbstractTooCloseUpdateEpsilonValidatorTest extends AbstractLocalTe
         when(oldOne.getPrice()).thenReturn(3.6d);
         Optional<Bet> oldBet = Optional.of(ReactorTestFactory.newBet(oldOne));
 
-        MarketPrices prices = factory.createMarket(0.1, Arrays.asList(0.4, 0.3, 0.3));
+        MarketPrices prices = factory.createMarket(0.1, List.of(0.4, 0.3, 0.3));
         RunnerPrices runnerPrices = prices.getRunnerPrices(CoreTestFactory.HOME);
 
         BetContext context = factory.newBetContext(Side.LAY, prices, runnerPrices, oldBet).withNewPrice(newOne);

@@ -20,7 +20,6 @@ import cz.fb.manaus.spring.DatabaseComponent;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -76,7 +75,7 @@ public class CoreTestFactory {
         Runner home = new Runner(HOME, HOME_NAME, 0, 1);
         Runner draw = new Runner(DRAW, DRAW_NAME, 0, 2);
         Runner away = new Runner(AWAY, AWAY_NAME, 0, 3);
-        return Arrays.asList(draw, home, away);
+        return List.of(draw, home, away);
     }
 
     public static Event newEvent(Date curr) {
@@ -96,7 +95,7 @@ public class CoreTestFactory {
 
     public static MarketPrices newMarketPrices(int winnerCount, double bestBackPrice) {
         Market market = newMarket();
-        List<RunnerPrices> runnerPrices = Arrays.asList(
+        List<RunnerPrices> runnerPrices = List.of(
                 newBackRP(bestBackPrice, 1, 2.5d),
                 newBackRP(bestBackPrice, 2, 2.5d),
                 newBackRP(bestBackPrice, 3, 2.5d));
@@ -107,7 +106,7 @@ public class CoreTestFactory {
         RunnerPrices home = newBackRP(2.5d, HOME, 3d);
         RunnerPrices draw = newBackRP(2.5d, DRAW, 3d);
         RunnerPrices away = newBackRP(2.5d, AWAY, 3d);
-        return new MarketPrices(1, market, Arrays.asList(home, draw, away), new Date());
+        return new MarketPrices(1, market, List.of(home, draw, away), new Date());
     }
 
     public static SettledBet newSettledBet(double price, Side side) {

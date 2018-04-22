@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -19,7 +18,7 @@ public class ProfitRecordTest {
     public void testLayAllPredicate() throws Exception {
         ProfitRecord cze = new ProfitRecord(COUNTRY_PREFIX + "cze", 100d, 1, 1, 2d, 0.06);
         ProfitRecord all = new ProfitRecord(MarketCategories.ALL, 100d, 1, 1, 2d, 0.06);
-        assertThat(asList(cze, all).stream().filter(ProfitRecord::isAllCategory).count(), is(1L));
+        assertThat(List.of(cze, all).stream().filter(ProfitRecord::isAllCategory).count(), is(1L));
         assertThat(List.of(all).stream().filter(ProfitRecord::isAllCategory).count(), is(1L));
         assertThat(List.of(cze).stream().filter(ProfitRecord::isAllCategory).count(), is(0L));
     }

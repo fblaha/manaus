@@ -13,7 +13,6 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.LazyInitializationException;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -220,7 +219,7 @@ public class BetActionDaoTest extends AbstractDaoTest {
         marketDao.saveOrUpdate(market);
         BetAction betActionEarlier = new BetAction(BetActionType.PLACE, DateUtils.addDays(new Date(), -1), new Price(2d, 30d, Side.LAY), market, CoreTestFactory.DRAW, BET_ID);
         BetAction betActionLater = new BetAction(BetActionType.PLACE, new Date(), new Price(3d, 33d, Side.LAY), market, CoreTestFactory.DRAW, BET_ID + 1);
-        List<BetAction> actions = Arrays.asList(betActionLater, betActionEarlier);
+        List<BetAction> actions = List.of(betActionLater, betActionEarlier);
         Ordering.from(comparator).immutableSortedCopy(actions).forEach(betActionDao::saveOrUpdate);
         List<BetAction> betActionsForMarket = betActionDao.getBetActions(market.getId(), OptionalLong.empty(), empty());
         assertThat(betActionsForMarket.size(), is(2));
@@ -248,7 +247,7 @@ public class BetActionDaoTest extends AbstractDaoTest {
     public void testSharedPrices() {
         Market market = newMarket();
         RunnerPrices runnerPrices = new RunnerPrices(232, List.of(new Price(2.3d, 22, Side.BACK)), 5d, 2.5d);
-        MarketPrices marketPrices = new MarketPrices(1, market, Arrays.asList(runnerPrices), new Date());
+        MarketPrices marketPrices = new MarketPrices(1, market, List.of(runnerPrices), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);

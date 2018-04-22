@@ -12,7 +12,6 @@ import cz.fb.manaus.reactor.ReactorTestFactory;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -74,7 +73,7 @@ public class PriceServiceTest extends AbstractLocalTestCase {
 
     @Test
     public void testFairPrice() throws Exception {
-        MarketPrices marketPrices = new MarketPrices(1, null, Arrays.asList(factory.newRP(1, 4.2, 6), factory.newRP(2, 2.87, 4), factory.newRP(1, 1.8, 3)), new Date());
+        MarketPrices marketPrices = new MarketPrices(1, null, List.of(factory.newRP(1, 4.2, 6), factory.newRP(2, 2.87, 4), factory.newRP(1, 1.8, 3)), new Date());
         Double layFairness = getFairness(Side.LAY, marketPrices);
         assertEquals(1.5d, layFairness, 0.1d);
         double backFairness = getFairness(Side.BACK, marketPrices);
@@ -190,7 +189,7 @@ public class PriceServiceTest extends AbstractLocalTestCase {
         double lowPrice = 1.04d, highPrice = 15d;
         RunnerPrices home = new RunnerPrices(CoreTestFactory.HOME, List.of(new Price(lowPrice, 10d, Side.BACK)), 50d, lowPrice);
         RunnerPrices away = new RunnerPrices(CoreTestFactory.AWAY, List.of(new Price(highPrice, 10d, Side.BACK)), 50d, highPrice);
-        MarketPrices marketPrices = new MarketPrices(1, null, Arrays.asList(home, away), new Date());
+        MarketPrices marketPrices = new MarketPrices(1, null, List.of(home, away), new Date());
         double fairness = getFairness(Side.BACK, marketPrices);
         double lowFairPrice = priceService.getFairnessFairPrice(lowPrice, fairness);
         double highFairPrice = priceService.getFairnessFairPrice(highPrice, fairness);
@@ -200,7 +199,7 @@ public class PriceServiceTest extends AbstractLocalTestCase {
 
     @Test
     public void testFairPrices() throws Exception {
-        MarketPrices market = factory.createMarket(0.2, Arrays.asList(0.85d, 0.1d, 0.05d));
+        MarketPrices market = factory.createMarket(0.2, List.of(0.85d, 0.1d, 0.05d));
         Fairness fairness = calculator.getFairness(market);
         double bestBack = market.getBestPrices(Side.BACK).get(0).getAsDouble();
         double bestLay = market.getBestPrices(Side.LAY).get(0).getAsDouble();
