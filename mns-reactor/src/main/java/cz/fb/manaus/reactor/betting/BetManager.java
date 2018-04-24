@@ -87,7 +87,7 @@ public class BetManager {
         Market market = marketPrices.getMarket();
         BetCollector collector = new BetCollector();
 
-        if (checkMarket(myBets, market, reciprocal)) {
+        if (checkMarket(myBets, market, reciprocal, categoryBlackList)) {
             validateOpenDate(market);
 
             List<Bet> unknownBets = betUtils.getUnknownBets(snapshot.getCurrentBets(), myBets);
@@ -131,11 +131,9 @@ public class BetManager {
         }
     }
 
-    private boolean checkMarket(Set<String> myBets, Market market, OptionalDouble reciprocal) {
-        return reciprocal.isPresent() && checkFilter(myBets, market);
+    private boolean checkMarket(Set<String> myBets, Market market, OptionalDouble reciprocal, Set<String> categoryBlacklist) {
+        return reciprocal.isPresent() &&
+                filterService.accept(market, !myBets.isEmpty(), categoryBlacklist);
     }
 
-    private boolean checkFilter(Set<String> myBets, Market market) {
-        return filterService.accept(market, !myBets.isEmpty());
-    }
 }

@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
+import java.util.Set;
 
 import static org.apache.commons.lang3.time.DateUtils.addDays;
 import static org.hamcrest.CoreMatchers.is;
@@ -25,7 +26,7 @@ public class LookAheadFilterTest extends AbstractLocalTestCase {
         Event event = mock(Event.class);
         when(market.getEvent()).thenReturn(event);
         when(event.getOpenDate()).thenReturn(addDays(currDate, 50), addDays(currDate, 2));
-        assertThat(lookAheadFilter.test(market), is(false));
-        assertThat(lookAheadFilter.test(market), is(true));
+        assertThat(lookAheadFilter.accept(market, Set.of()), is(false));
+        assertThat(lookAheadFilter.accept(market, Set.of()), is(true));
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 
@@ -14,11 +15,11 @@ public class MarketFilterService {
     @Autowired
     private List<MarketFilter> marketFilters;
 
-    public boolean accept(Market market, boolean hasBets) {
+    public boolean accept(Market market, boolean hasBets, Set<String> categoryBlacklist) {
         Stream<MarketFilter> filters = marketFilters.stream();
         if (hasBets) {
             filters = filters.filter(MarketFilter::isStrict);
         }
-        return filters.allMatch(filter -> filter.test(market));
+        return filters.allMatch(filter -> filter.accept(market, categoryBlacklist));
     }
 }

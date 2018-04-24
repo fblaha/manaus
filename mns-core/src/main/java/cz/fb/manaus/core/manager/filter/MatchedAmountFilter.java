@@ -4,11 +4,13 @@ import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.Price;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+
 @Component
 public class MatchedAmountFilter implements MarketFilter {
 
     @Override
-    public boolean test(Market market) {
+    public boolean accept(Market market, Set<String> categoryBlacklist) {
         Double matchedAmount = market.getMatchedAmount();
         return matchedAmount == null || !Price.amountEq(matchedAmount, 0d);
     }

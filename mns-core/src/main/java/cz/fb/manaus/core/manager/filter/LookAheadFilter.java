@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Set;
 
 @Component
 public class LookAheadFilter implements MarketFilter {
@@ -21,7 +22,7 @@ public class LookAheadFilter implements MarketFilter {
     }
 
     @Override
-    public boolean test(Market market) {
+    public boolean accept(Market market, Set<String> categoryBlacklist) {
         Duration lookAhead = Duration.ofDays(lookAheadDays);
         Instant start = market.getEvent().getOpenDate().toInstant();
         long untilStart = Instant.now().until(start, ChronoUnit.MINUTES);

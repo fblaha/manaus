@@ -4,6 +4,8 @@ import com.google.common.collect.Range;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Set;
+
 import static junit.framework.TestCase.assertTrue;
 
 public class MarketFilterServiceTest extends AbstractMarketDataAwareTestCase {
@@ -18,7 +20,7 @@ public class MarketFilterServiceTest extends AbstractMarketDataAwareTestCase {
 
     public void checkFilterCount(Range<Long> expectedRange, boolean hasBets) {
         long cnt = markets.stream()
-                .filter(market -> filterService.accept(market, hasBets)).count();
+                .filter(market -> filterService.accept(market, hasBets, Set.of())).count();
         assertTrue(expectedRange.contains(cnt));
     }
 }
