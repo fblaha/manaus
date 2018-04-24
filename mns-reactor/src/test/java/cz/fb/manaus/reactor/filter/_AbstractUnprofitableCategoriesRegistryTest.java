@@ -138,7 +138,7 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
     @DatabaseComponent
     private static class TestUnprofitableCategoriesRegistry extends AbstractUnprofitableCategoriesRegistry {
         public TestUnprofitableCategoriesRegistry() {
-            super("test", Duration.ofDays(30), Optional.of(Side.LAY), 0, Duration.ofHours(2),
+            super("test", Duration.ofDays(30), Optional.of(Side.LAY), 0,
                     "weak", Map.of(5, 2, 2, 7));
         }
     }
@@ -146,7 +146,7 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
     @DatabaseComponent
     private static class Test2UnprofitableCategoriesRegistry extends AbstractUnprofitableCategoriesRegistry {
         public Test2UnprofitableCategoriesRegistry() {
-            super("test2", Duration.ofDays(30), Optional.of(Side.LAY), 0, Duration.ofHours(2),
+            super("test2", Duration.ofDays(30), Optional.of(Side.LAY), 0,
                     "weak", Map.of(10, 1));
         }
     }

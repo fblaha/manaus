@@ -44,7 +44,6 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
     private final Duration period;
     private final double maximalProfit;
     private final Optional<Side> side;
-    private final Duration pauseDuration;
     private final String filterPrefix;
     private final Pattern blackListProperty;
     private final Map<Integer, Integer> thresholds;
@@ -59,15 +58,16 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
 
     private List<String> whiteList;
 
-    protected AbstractUnprofitableCategoriesRegistry(String name, Duration period, Optional<Side> side, double maximalProfit,
-                                                     Duration pauseDuration, String filterPrefix,
+    protected AbstractUnprofitableCategoriesRegistry(String name, Duration period,
+                                                     Optional<Side> side,
+                                                     double maximalProfit,
+                                                     String filterPrefix,
                                                      Map<Integer, Integer> thresholds) {
         this.name = name;
         this.period = period;
         this.maximalProfit = maximalProfit;
         this.thresholds = thresholds;
         this.side = side;
-        this.pauseDuration = pauseDuration;
         this.filterPrefix = filterPrefix;
         this.blackListProperty = Pattern.compile("^" + Pattern.quote(getPropertyPrefix()) + "\\d{1,2}$");
     }
