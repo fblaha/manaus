@@ -1,7 +1,6 @@
 package cz.fb.manaus.core.manager.filter;
 
 import cz.fb.manaus.core.model.Market;
-import cz.fb.manaus.spring.CoreLocalConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,7 +16,7 @@ public class LookAheadFilter implements MarketFilter {
     private final int lookAheadDays;
 
     @Autowired
-    public LookAheadFilter(@Value(CoreLocalConfiguration.LOOK_AHEAD_EL) int lookAheadDays) {
+    public LookAheadFilter(@Value("#{systemEnvironment['MNS_LOOK_AHEAD'] ?: 7}") int lookAheadDays) {
         this.lookAheadDays = lookAheadDays;
     }
 
