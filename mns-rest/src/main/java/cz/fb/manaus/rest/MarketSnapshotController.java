@@ -95,6 +95,7 @@ public class MarketSnapshotController {
 class MarketSnapshotCrate {
     private MarketPrices prices;
     private List<Bet> bets;
+    // TODO blacklist - no came case
     private Set<String> categoryBlackList;
     private AccountMoney money;
     private int scanTime;
