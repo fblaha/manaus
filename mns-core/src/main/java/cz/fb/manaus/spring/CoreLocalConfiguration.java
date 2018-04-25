@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
         })
 public class CoreLocalConfiguration {
 
+    public static final String PRODUCTION_PROFILE = "production";
     public static final String TEST_PROFILE = "test";
 
     @Bean
