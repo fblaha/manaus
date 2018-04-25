@@ -27,11 +27,9 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static java.util.Comparator.comparingDouble;
-import static java.util.Optional.of;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.time.DateUtils.addDays;
 
@@ -45,7 +43,6 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
     private final double maximalProfit;
     private final Optional<Side> side;
     private final String filterPrefix;
-    private final Pattern blackListProperty;
     private final Map<Integer, Integer> thresholds;
     @Autowired
     private ProfitService profitService;
@@ -56,7 +53,7 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
     @Autowired
     private ExchangeProvider provider;
 
-    private List<String> whiteList;
+    private List<String> whitelist;
 
     protected AbstractUnprofitableCategoriesRegistry(String name, Duration period,
                                                      Optional<Side> side,
@@ -69,12 +66,11 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
         this.thresholds = thresholds;
         this.side = side;
         this.filterPrefix = filterPrefix;
-        this.blackListProperty = Pattern.compile("^" + Pattern.quote(getPropertyPrefix()) + "\\d{1,2}$");
     }
 
     @Autowired
-    public void setWhiteList(@Value("#{systemEnvironment['MNS_CATEGORY_WHITE_LIST']}") String rawWhiteList) {
-        this.whiteList = Splitter.on(',')
+    public void setWhitelist(@Value("#{systemEnvironment['MNS_CATEGORY_WHITE_LIST']}") String rawWhiteList) {
+        this.whitelist = Splitter.on(',')
                 .omitEmptyStrings()
                 .trimResults()
                 .splitToList(Strings.nullToEmpty(rawWhiteList));
@@ -84,11 +80,11 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
         return String.format("UNPROFITABLE_REGISTRY(%s): ", name);
     }
 
-    public void updateBlackLists(ConfigUpdate configUpdate) {
+    public void updateBlacklists(ConfigUpdate configUpdate) {
         log.log(Level.INFO, getLogPrefix() + "black list update started");
         Date now = new Date();
         List<SettledBet> settledBets = settledBetDao.getSettledBets(
-                of(addDays(now, -(int) period.toDays())), Optional.of(now), side,
+                Optional.of(addDays(now, -(int) period.toDays())), Optional.of(now), side,
                 OptionalInt.empty());
         betActionDao.fetchMarketPrices(settledBets.stream().map(SettledBet::getBetAction));
         if (settledBets.isEmpty()) return;
@@ -96,10 +92,10 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
         List<ProfitRecord> profitRecords = profitService.getProfitRecords(settledBets, Optional.empty(), true, chargeRate);
 
         log.log(Level.INFO, getLogPrefix() + "updating registry ''{0}''", name);
-        updateBlackLists(profitRecords, configUpdate);
+        updateBlacklists(profitRecords, configUpdate);
     }
 
-    void updateBlackLists(List<ProfitRecord> profitRecords, ConfigUpdate configUpdate) {
+    void updateBlacklists(List<ProfitRecord> profitRecords, ConfigUpdate configUpdate) {
         ProfitRecord all = profitRecords.stream().filter(ProfitRecord::isAllCategory).findAny()
                 .orElseThrow(() -> new IllegalStateException("missing: " + MarketCategories.ALL));
         List<ProfitRecord> filtered = getFiltered(profitRecords);
@@ -107,14 +103,14 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
 
         configUpdate.getDeletePrefixes().add(getPropertyPrefix());
 
-        Set<String> totalBlackList = new HashSet<>();
+        Set<String> totalBlacklist = new HashSet<>();
         for (Map.Entry<Integer, Integer> entry : thresholds.entrySet()) {
             int thresholdPct = entry.getKey();
             double threshold = getThreshold(thresholdPct);
             int blackCount = entry.getValue();
-            Set<String> blackList = getBlackList(threshold, blackCount, totalCount, filtered.stream(), totalBlackList);
-            totalBlackList.addAll(blackList);
-            saveBlackList(thresholdPct, blackList, configUpdate);
+            Set<String> blacklist = getBlacklist(threshold, blackCount, totalCount, filtered.stream(), totalBlacklist);
+            totalBlacklist.addAll(blacklist);
+            saveBlacklist(thresholdPct, blacklist, configUpdate);
         }
     }
 
@@ -128,9 +124,9 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
         }
     }
 
-    void saveBlackList(int thresholdPct, Set<String> blackList, ConfigUpdate configUpdate) {
-        if (!blackList.isEmpty()) {
-            configUpdate.getSetProperties().put(getPropertyPrefix() + thresholdPct, Joiner.on(',').join(new TreeSet<>(blackList)));
+    void saveBlacklist(int thresholdPct, Set<String> blacklist, ConfigUpdate configUpdate) {
+        if (!blacklist.isEmpty()) {
+            configUpdate.getSetProperties().put(getPropertyPrefix() + thresholdPct, Joiner.on(',').join(new TreeSet<>(blacklist)));
         }
     }
 
@@ -138,8 +134,9 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
         return thresholdPct / 100d;
     }
 
-    Set<String> getBlackList(double threshold, int blackCount, int totalCount, Stream<ProfitRecord> profitRecords, Set<String> blackList) {
-        Set<String> currentBlackList = new LinkedHashSet<>();
+    Set<String> getBlacklist(double threshold, int blackCount, int totalCount, Stream<ProfitRecord> profitRecords,
+                             Set<String> blacklist) {
+        Set<String> currentBlacklist = new LinkedHashSet<>();
 
         List<ProfitRecord> sorted = profitRecords.filter(record -> (double) record.getTotalCount() / totalCount <= threshold)
                 .sorted(comparingDouble(ProfitRecord::getProfit)).collect(toList());
@@ -147,12 +144,12 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
         int i = 0;
         for (ProfitRecord weak : sorted) {
             if (i >= blackCount || weak.getProfit() >= maximalProfit) break;
-            if (blackList.contains(weak.getCategory())) continue;
-            if (whiteList.stream().anyMatch(prefix -> weak.getCategory().startsWith(prefix))) continue;
-            currentBlackList.add(weak.getCategory());
+            if (blacklist.contains(weak.getCategory())) continue;
+            if (whitelist.stream().anyMatch(prefix -> weak.getCategory().startsWith(prefix))) continue;
+            currentBlacklist.add(weak.getCategory());
             i++;
         }
-        return currentBlackList;
+        return currentBlacklist;
     }
 
     private String getPropertyPrefix() {

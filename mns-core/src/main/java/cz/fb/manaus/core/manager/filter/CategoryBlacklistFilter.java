@@ -1,5 +1,6 @@
 package cz.fb.manaus.core.manager.filter;
 
+import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.Sets;
 import cz.fb.manaus.core.category.CategoryService;
 import cz.fb.manaus.core.model.Market;
@@ -17,12 +18,15 @@ public class CategoryBlacklistFilter implements MarketFilter {
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private MetricRegistry metricRegistry;
 
     @Override
     public boolean accept(Market market, Set<String> blacklist) {
         Set<String> categories = categoryService.getMarketCategories(market, false);
         Sets.SetView<String> intersection = Sets.intersection(categories, blacklist);
         if (!intersection.isEmpty()) {
+            metricRegistry.counter("blacklist.market").inc();
             log.log(Level.INFO, "blacklist category ''{0}'' for market ''{1}''",
                     new Object[]{intersection, market});
         }

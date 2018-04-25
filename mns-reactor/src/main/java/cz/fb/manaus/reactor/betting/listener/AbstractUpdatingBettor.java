@@ -68,7 +68,7 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
 
     @Override
     public final void onMarketSnapshot(MarketSnapshot snapshot, BetCollector betCollector,
-                                       Optional<AccountMoney> accountMoney, Set<String> categoryBlackList) {
+                                       Optional<AccountMoney> accountMoney, Set<String> categoryBlacklist) {
         MarketPrices marketPrices = snapshot.getMarketPrices();
         Market market = marketPrices.getMarket();
         int winnerCount = marketPrices.getWinnerCount();
@@ -95,7 +95,7 @@ public abstract class AbstractUpdatingBettor implements MarketSnapshotListener {
                 if (activeSelection || accepted) {
                     Optional<Bet> oldBet = ofNullable(coverage.get(side, selectionId));
                     BetContext ctx = contextFactory.create(side, selectionId,
-                            snapshot, fairness, accountMoney, categoryBlackList);
+                            snapshot, fairness, accountMoney, categoryBlacklist);
                     setTradedVolumeMean(ctx);
                     ValidationResult pricelessValidation = validationService.validate(ctx, validators);
                     if (!pricelessValidation.isSuccess()) {

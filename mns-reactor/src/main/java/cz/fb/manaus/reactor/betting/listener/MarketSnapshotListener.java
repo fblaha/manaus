@@ -12,6 +12,6 @@ public interface MarketSnapshotListener {
     void onMarketSnapshot(MarketSnapshot snapshot,
                           BetCollector betCollector,
                           Optional<AccountMoney> accountMoney,
-                          Set<String> categoryBlackList);
+                          Set<String> categoryBlacklist);
 
 }

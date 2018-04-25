@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting;
 
-import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
@@ -55,8 +54,6 @@ public class BetManager {
     private Optional<AbstractPriceFilter> priceFilter;
     @Autowired
     private ActionSaver actionSaver;
-    @Autowired
-    private MetricRegistry metricRegistry;
     @Autowired(required = false)
     private List<BetActionListener> actionListeners = List.of();
     private List<MarketSnapshotListener> marketSnapshotListeners = new LinkedList<>();
@@ -79,7 +76,7 @@ public class BetManager {
     public CollectedBets fire(MarketSnapshot snapshot,
                               Set<String> myBets,
                               Optional<AccountMoney> accountMoney,
-                              Set<String> categoryBlackList) {
+                              Set<String> categoryBlacklist) {
         MarketPrices marketPrices = snapshot.getMarketPrices();
         filterPrices(marketPrices);
 
@@ -87,7 +84,7 @@ public class BetManager {
         Market market = marketPrices.getMarket();
         BetCollector collector = new BetCollector();
 
-        if (checkMarket(myBets, market, reciprocal, categoryBlackList)) {
+        if (checkMarket(myBets, market, reciprocal, categoryBlacklist)) {
             validateOpenDate(market);
 
             List<Bet> unknownBets = betUtils.getUnknownBets(snapshot.getCurrentBets(), myBets);
@@ -95,7 +92,7 @@ public class BetManager {
             if (unknownBets.isEmpty()) {
                 for (MarketSnapshotListener listener : marketSnapshotListeners) {
                     if (!disabledListeners.contains(listener.getClass().getSimpleName())) {
-                        listener.onMarketSnapshot(snapshot, collector, accountMoney, categoryBlackList);
+                        listener.onMarketSnapshot(snapshot, collector, accountMoney, categoryBlacklist);
                     }
                 }
                 saveActions(collector.getToPlace());

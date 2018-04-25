@@ -23,10 +23,10 @@ public class BetContextFactory {
                              MarketSnapshot snapshot,
                              Fairness fairness,
                              Optional<AccountMoney> accountMoney,
-                             Set<String> categoryBlackList) {
+                             Set<String> categoryBlacklist) {
         OptionalDouble forecast = forecaster.getForecast(selectionId, side, snapshot, fairness);
         return new BetContext(side, selectionId, accountMoney, forecast, snapshot, fairness,
-                categoryBlackList);
+                categoryBlacklist);
     }
 
 }

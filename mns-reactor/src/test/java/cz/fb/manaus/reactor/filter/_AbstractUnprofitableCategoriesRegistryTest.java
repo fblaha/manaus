@@ -36,40 +36,40 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
 
     @Before
     public void setUp() throws Exception {
-        registry.setWhiteList("white.tes");
+        registry.setWhitelist("white.tes");
     }
 
     @After
     public void tearDown() throws Exception {
-        registry.setWhiteList("white.tes");
+        registry.setWhitelist("white.tes");
     }
 
     @Test
-    public void testBlackListThreshold() throws Exception {
-        assertThat(registry.getBlackList(0.1d, 1, 110,
+    public void testBlacklistThreshold() throws Exception {
+        assertThat(registry.getBlacklist(0.1d, 1, 110,
                 List.of(pr("horror", -10d, 10)).stream(),
                 Set.of()), hasItem("horror"));
-        assertThat(registry.getBlackList(0.1d, 1, 90,
+        assertThat(registry.getBlacklist(0.1d, 1, 90,
                 List.of(pr("horror", -10d, 10)).stream(),
                 Set.of()), not(hasItem("horror")));
-        assertThat(registry.getBlackList(0.1d, 0, 110,
+        assertThat(registry.getBlacklist(0.1d, 0, 110,
                 List.of(pr("horror", -10d, 10)).stream(),
                 Set.of()), not(hasItem("horror")));
     }
 
     @Test
-    public void testBlackListSort() throws Exception {
-        assertThat(registry.getBlackList(0.1d, 1, 110,
+    public void testBlacklistSort() throws Exception {
+        assertThat(registry.getBlacklist(0.1d, 1, 110,
                 List.of(pr("horror", -10d, 10), pr("weak", -1d, 10),
                         pr("bad", -5d, 10)).stream(), Set.of()),
                 allOf(hasItem("horror"), not(hasItem("weak")), not(hasItem("bad")))
         );
-        assertThat(registry.getBlackList(0.1d, 2, 110,
+        assertThat(registry.getBlacklist(0.1d, 2, 110,
                 List.of(pr("horror", -10d, 10), pr("weak", -1d, 10),
                         pr("bad", -5d, 10)).stream(), Set.of()),
                 allOf(hasItem("horror"), not(hasItem("weak")), hasItem("bad"))
         );
-        assertThat(registry.getBlackList(0.1d, 3, 110,
+        assertThat(registry.getBlacklist(0.1d, 3, 110,
                 List.of(pr("horror", -10d, 10), pr("weak", -1d, 10),
                         pr("bad", -5d, 10)).stream(), Set.of()),
                 allOf(hasItem("horror"), hasItem("weak"), hasItem("bad"))
@@ -77,8 +77,8 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
     }
 
     @Test
-    public void testBlackListDuplicate() throws Exception {
-        assertThat(registry.getBlackList(0.1d, 2, 110,
+    public void testBlacklistDuplicate() throws Exception {
+        assertThat(registry.getBlacklist(0.1d, 2, 110,
                 List.of(pr("horror", -10d, 10),
                         pr("weak", -1d, 10),
                         pr("bad", -5d, 10)).stream(),
@@ -88,8 +88,8 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
     }
 
     @Test
-    public void testBlackListWhiteList() throws Exception {
-        assertThat(registry.getBlackList(0.1d, 2, 110,
+    public void testBlacklistWhiteList() throws Exception {
+        assertThat(registry.getBlacklist(0.1d, 2, 110,
                 List.of(pr("white.test", -10d, 10),
                         pr("weak", -1d, 10),
                         pr("bad", -5d, 10)).stream(),
@@ -102,7 +102,7 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
     public void testUpdateFilterPrefix() throws Exception {
         ConfigUpdate configUpdate = ConfigUpdate.empty(Duration.ZERO);
         Map<String, String> properties = configUpdate.getSetProperties();
-        registry.updateBlackLists(List.of(pr(MarketCategories.ALL, 10d, 100),
+        registry.updateBlacklists(List.of(pr(MarketCategories.ALL, 10d, 100),
                 pr("weak1", -1d, 5),
                 pr("not_match", -1d, 2),
                 pr("weak2", -1d, 5)), configUpdate);
@@ -118,7 +118,7 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
     @Test
     public void testSave() throws Exception {
         ConfigUpdate configUpdate = ConfigUpdate.empty(Duration.ZERO);
-        registry.saveBlackList(10, Set.of("weak1", "weak2", "weak3"), configUpdate);
+        registry.saveBlacklist(10, Set.of("weak1", "weak2", "weak3"), configUpdate);
         Map<String, String> properties = configUpdate.getSetProperties();
 
         assertThat(properties.get("unprofitable.black.list.test.10"), is("weak1,weak2,weak3"));
@@ -126,12 +126,12 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
     }
 
     @Test
-    public void testSavedBlackList() throws Exception {
+    public void testSavedBlacklist() throws Exception {
         ConfigUpdate configUpdate = ConfigUpdate.empty(Duration.ZERO);
         Map<String, String> properties = configUpdate.getSetProperties();
-        registry.saveBlackList(10, Set.of("weak10_1", "weak10_2", "weak10_3"), configUpdate);
+        registry.saveBlacklist(10, Set.of("weak10_1", "weak10_2", "weak10_3"), configUpdate);
         assertThat(properties.get("unprofitable.black.list.test.10"), is("weak10_1,weak10_2,weak10_3"));
-        registry.saveBlackList(5, Set.of("weak5_1", "weak5_2", "weak5_3"), configUpdate);
+        registry.saveBlacklist(5, Set.of("weak5_1", "weak5_2", "weak5_3"), configUpdate);
         assertThat(properties.get("unprofitable.black.list.test.5"), is("weak5_1,weak5_2,weak5_3"));
     }
 

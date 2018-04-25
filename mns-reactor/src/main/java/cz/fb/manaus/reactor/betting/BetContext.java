@@ -33,18 +33,18 @@ public class BetContext {
     private final Fairness fairness;
     private final OptionalDouble chargeGrowthForecast;
     private final Optional<AccountMoney> accountMoney;
-    private final Set<String> categoryBlackList;
+    private final Set<String> categoryBlacklist;
     private Optional<Price> newPrice = Optional.empty();
 
     BetContext(Side side, long selectionId, Optional<AccountMoney> accountMoney, OptionalDouble chargeGrowthForecast, MarketSnapshot marketSnapshot,
-               Fairness fairness, Set<String> categoryBlackList) {
+               Fairness fairness, Set<String> categoryBlacklist) {
         this.side = side;
         this.selectionId = selectionId;
         this.accountMoney = accountMoney;
         this.chargeGrowthForecast = chargeGrowthForecast;
         this.fairness = fairness;
         this.marketSnapshot = marketSnapshot;
-        this.categoryBlackList = categoryBlackList;
+        this.categoryBlacklist = categoryBlacklist;
     }
 
     public RunnerPrices getRunnerPrices() {

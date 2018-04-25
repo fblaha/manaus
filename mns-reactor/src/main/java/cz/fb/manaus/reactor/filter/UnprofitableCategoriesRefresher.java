@@ -38,7 +38,7 @@ public class UnprofitableCategoriesRefresher implements PeriodicMaintenanceTask 
     public ConfigUpdate execute() {
         ConfigUpdate configUpdate = ConfigUpdate.empty(Duration.ofDays(1));
         for (AbstractUnprofitableCategoriesRegistry registry : unprofitableCategoriesRegistries) {
-            registry.updateBlackLists(configUpdate);
+            registry.updateBlacklists(configUpdate);
         }
         return configUpdate;
     }
