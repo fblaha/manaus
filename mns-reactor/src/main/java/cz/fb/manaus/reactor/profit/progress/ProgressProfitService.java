@@ -50,14 +50,11 @@ public class ProgressProfitService extends AbstractFunctionProfitService {
                 .map(bet -> new ImmutablePair<>(bet, function.apply(bet)))
                 .collect(Collectors.toList());
 
-        List<Pair<SettledBet, OptionalDouble>> withValues = computed.stream()
-                .filter(p -> p.getRight().isPresent())
-                .collect(Collectors.toList());
-        List<Pair<SettledBet, OptionalDouble>> noValues = computed.stream()
-                .filter(p -> !p.getRight().isPresent())
-                .collect(Collectors.toList());
 
-        Pair<SettledBet, OptionalDouble>[] array = toArray(withValues);
+        Map<Boolean, List<Pair<SettledBet, OptionalDouble>>> hasValue = computed.stream()
+                .collect(Collectors.partitioningBy(p -> p.getRight().isPresent()));
+
+        Pair<SettledBet, OptionalDouble>[] array = toArray(hasValue.get(true));
         Arrays.parallelSort(array, comparingDouble(pair -> pair.getRight().getAsDouble()));
         ImmutableList<Pair<SettledBet, OptionalDouble>> sortedCopy = ImmutableList.copyOf(array);
         int chunkSize = IntMath.divide(sortedCopy.size(), chunkCount, RoundingMode.CEILING);
@@ -71,6 +68,7 @@ public class ProgressProfitService extends AbstractFunctionProfitService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toCollection(LinkedList::new));
 
+        List<Pair<SettledBet, OptionalDouble>> noValues = hasValue.get(false);
         if (!noValues.isEmpty()) {
             result.addFirst(computeFunctionRecord(function.getName() + ": -",
                     noValues.stream().map(Pair::getLeft), charges, coverage));
