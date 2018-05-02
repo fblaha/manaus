@@ -9,7 +9,7 @@ import java.util.OptionalDouble;
 public class LastMatchedReciprocalFunction implements ProgressFunction {
 
     @Override
-    public OptionalDouble function(SettledBet bet) {
+    public OptionalDouble apply(SettledBet bet) {
         return bet.getBetAction().getMarketPrices().getLastMatchedReciprocal();
     }
 

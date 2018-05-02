@@ -23,7 +23,7 @@ public class FairnessPriceDiffFunction implements ProgressFunction {
     private PriceService priceService;
 
     @Override
-    public OptionalDouble function(SettledBet bet) {
+    public OptionalDouble apply(SettledBet bet) {
         MarketPrices marketPrices = bet.getBetAction().getMarketPrices();
         Fairness fairness = calculator.getFairness(marketPrices);
         if (fairness.get(Side.LAY).isPresent() && fairness.get(Side.BACK).isPresent()) {

@@ -18,7 +18,7 @@ public class LastMatchedFairnessFunction implements ProgressFunction {
     private FairnessPolynomialCalculator calculator;
 
     @Override
-    public OptionalDouble function(SettledBet bet) {
+    public OptionalDouble apply(SettledBet bet) {
         MarketPrices marketPrices = bet.getBetAction().getMarketPrices();
         List<OptionalDouble> lastMatched = marketPrices.getRunnerPrices().stream()
                 .map(this::getLastMatched)

@@ -11,7 +11,7 @@ import java.util.OptionalDouble;
 public class ActualMatchedFunction implements ProgressFunction {
 
     @Override
-    public OptionalDouble function(SettledBet bet) {
+    public OptionalDouble apply(SettledBet bet) {
         Collection<RunnerPrices> prices = bet.getBetAction().getMarketPrices().getRunnerPrices();
         double sum = prices.stream()
                 .filter(p -> p.getMatchedAmount() != null)

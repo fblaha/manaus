@@ -16,7 +16,7 @@ public class FairnessLayFunction implements ProgressFunction {
     private FairnessPolynomialCalculator calculator;
 
     @Override
-    public OptionalDouble function(SettledBet bet) {
+    public OptionalDouble apply(SettledBet bet) {
         MarketPrices marketPrices = bet.getBetAction().getMarketPrices();
         return calculator.getFairness(marketPrices.getWinnerCount(), marketPrices.getBestPrices(Side.LAY));
     }

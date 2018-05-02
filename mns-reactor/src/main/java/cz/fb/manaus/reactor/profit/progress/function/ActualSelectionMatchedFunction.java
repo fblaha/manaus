@@ -9,7 +9,7 @@ import java.util.OptionalDouble;
 public class ActualSelectionMatchedFunction implements ProgressFunction {
 
     @Override
-    public OptionalDouble function(SettledBet bet) {
+    public OptionalDouble apply(SettledBet bet) {
         Double matchedAmount = bet.getBetAction()
                 .getMarketPrices()
                 .getRunnerPrices(bet.getSelectionId())

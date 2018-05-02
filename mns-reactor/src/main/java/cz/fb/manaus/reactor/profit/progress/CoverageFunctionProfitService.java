@@ -73,7 +73,7 @@ public class CoverageFunctionProfitService extends AbstractFunctionProfitService
 
     private OptionalDouble getAverage(List<SettledBet> bets, ProgressFunction function) {
         return bets.stream()
-                .map(function::function)
+                .map(function)
                 .filter(OptionalDouble::isPresent)
                 .mapToDouble(OptionalDouble::getAsDouble)
                 .average();

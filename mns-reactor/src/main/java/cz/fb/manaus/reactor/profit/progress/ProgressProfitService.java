@@ -47,7 +47,7 @@ public class ProgressProfitService extends AbstractFunctionProfitService {
     private List<ProfitRecord> computeProfitRecords(ProgressFunction function, int chunkCount, BetCoverage coverage,
                                                     List<SettledBet> bets, Map<String, Double> charges) {
         List<Pair<SettledBet, OptionalDouble>> computed = bets.stream()
-                .map(bet -> new ImmutablePair<>(bet, function.function(bet)))
+                .map(bet -> new ImmutablePair<>(bet, function.apply(bet)))
                 .collect(Collectors.toList());
 
         List<Pair<SettledBet, OptionalDouble>> withValues = computed.stream()

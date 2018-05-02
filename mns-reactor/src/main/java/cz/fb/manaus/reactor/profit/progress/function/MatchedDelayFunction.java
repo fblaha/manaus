@@ -11,7 +11,7 @@ import java.util.OptionalDouble;
 public class MatchedDelayFunction implements ProgressFunction {
 
     @Override
-    public OptionalDouble function(SettledBet bet) {
+    public OptionalDouble apply(SettledBet bet) {
         Instant placed = bet.getPlacedOrActionDate().toInstant();
         if (bet.getMatched() != null) {
             Instant matched = bet.getMatched().toInstant();

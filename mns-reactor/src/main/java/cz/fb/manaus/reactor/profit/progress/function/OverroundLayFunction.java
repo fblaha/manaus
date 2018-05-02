@@ -10,7 +10,7 @@ import java.util.OptionalDouble;
 public class OverroundLayFunction implements ProgressFunction {
 
     @Override
-    public OptionalDouble function(SettledBet bet) {
+    public OptionalDouble apply(SettledBet bet) {
         return bet.getBetAction().getMarketPrices().getOverround(Side.LAY);
     }
 

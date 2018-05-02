@@ -9,7 +9,7 @@ import java.util.OptionalDouble;
 public abstract class AbstractOfferedAmountFunction implements ProgressFunction {
 
     @Override
-    public OptionalDouble function(SettledBet bet) {
+    public OptionalDouble apply(SettledBet bet) {
         RunnerPrices runnerPrices = getRunnerPrices(bet);
         double sum = runnerPrices.getPrices().stream().mapToDouble(Price::getAmount).sum();
         return OptionalDouble.of(sum);

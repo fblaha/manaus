@@ -11,7 +11,7 @@ import java.util.OptionalDouble;
 public class TimeDiffFunction implements ProgressFunction {
 
     @Override
-    public OptionalDouble function(SettledBet bet) {
+    public OptionalDouble apply(SettledBet bet) {
         Instant placed = bet.getPlacedOrActionDate().toInstant();
         Instant actionDate = bet.getBetAction().getActionDate().toInstant();
         return OptionalDouble.of(actionDate.until(placed, ChronoUnit.SECONDS));

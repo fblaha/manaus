@@ -11,7 +11,7 @@ import java.util.OptionalDouble;
 public class AgeDaysFunction implements ProgressFunction {
 
     @Override
-    public OptionalDouble function(SettledBet bet) {
+    public OptionalDouble apply(SettledBet bet) {
         Instant openDate = bet.getBetAction().getMarket().getEvent().getOpenDate().toInstant();
         long days = Duration.between(openDate, Instant.now()).toDays();
         return OptionalDouble.of(days);

@@ -19,7 +19,7 @@ public abstract class AbstractPriceReduceFunction implements ProgressFunction {
     }
 
     @Override
-    public OptionalDouble function(SettledBet bet) {
+    public OptionalDouble apply(SettledBet bet) {
         MarketPrices marketPrices = bet.getBetAction().getMarketPrices().getHomogeneous(side);
         List<OptionalDouble> bestPrices = marketPrices.getBestPrices(side);
         if (bestPrices.stream().allMatch(OptionalDouble::isPresent)) {

@@ -9,7 +9,7 @@ import java.util.OptionalDouble;
 public class PriceFunction implements ProgressFunction {
 
     @Override
-    public OptionalDouble function(SettledBet bet) {
+    public OptionalDouble apply(SettledBet bet) {
         return OptionalDouble.of(bet.getPrice().getPrice());
     }
 

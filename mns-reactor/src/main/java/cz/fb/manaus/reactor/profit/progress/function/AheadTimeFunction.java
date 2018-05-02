@@ -10,7 +10,7 @@ import java.util.OptionalDouble;
 public interface AheadTimeFunction extends ProgressFunction {
 
     @Override
-    default OptionalDouble function(SettledBet bet) {
+    default OptionalDouble apply(SettledBet bet) {
         Optional<Instant> eventTime = getRelatedTime(bet);
         if (eventTime.isPresent()) {
             Instant openDate = bet.getBetAction().getMarket().getEvent().getOpenDate().toInstant();
