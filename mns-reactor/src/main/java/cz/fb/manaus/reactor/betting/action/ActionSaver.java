@@ -38,7 +38,7 @@ public class ActionSaver {
     }
 
     private void replaceExistingBetId(String betId) {
-        long time = Instant.now().getEpochSecond();
+        long time = Instant.now().toEpochMilli();
         String previousBetId = betId + "_" + Long.toHexString(time);
         int updatedCount = betActionDao.updateBetId(betId, previousBetId);
         if (updatedCount > 0) {
