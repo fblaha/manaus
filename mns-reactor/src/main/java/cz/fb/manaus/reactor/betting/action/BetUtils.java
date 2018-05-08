@@ -1,5 +1,6 @@
 package cz.fb.manaus.reactor.betting.action;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Ordering;
 import cz.fb.manaus.core.model.Bet;
@@ -23,15 +24,14 @@ import static java.util.stream.Collectors.toList;
 @Component
 public class BetUtils {
 
-    public List<BetAction> getCurrentActions(List<BetAction> bets) {
+    public List<BetAction> getCurrentActions(List<BetAction> betActions) {
+        Preconditions.checkArgument(!betActions.isEmpty(), "missing bet actions");
         LinkedList<BetAction> lastUpdates = new LinkedList<>();
-        if (bets != null) {
-            BetAction first = bets.get(0);
-            for (BetAction bet : bets) {
-                validate(first, bet);
-                if (bet.getBetActionType() != BetActionType.UPDATE) lastUpdates.clear();
-                lastUpdates.addLast(bet);
-            }
+        BetAction first = betActions.get(0);
+        for (BetAction bet : betActions) {
+            validate(first, bet);
+            if (bet.getBetActionType() != BetActionType.UPDATE) lastUpdates.clear();
+            lastUpdates.addLast(bet);
         }
         checkState(Ordering.from(comparing(BetAction::getActionDate)).isStrictlyOrdered(lastUpdates));
         return lastUpdates;

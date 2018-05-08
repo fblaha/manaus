@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.OptionalLong;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static java.util.Optional.of;
@@ -41,6 +42,10 @@ public class RelatedActionsCategorizer implements SettledBetCategorizer {
         Market market = settledBet.getBetAction().getMarket();
         List<BetAction> betActions = betActionDao.getBetActions(market.getId(),
                 OptionalLong.of(settledBet.getSelectionId()), of(settledBet.getPrice().getSide()));
+        if (betActions.isEmpty()) {
+            log.log(Level.WARNING, "missing  bet actions ''{0}''", settledBet);
+            return Set.of();
+        }
         List<BetAction> current = betUtils.getCurrentActions(betActions);
         Set<String> result = new HashSet<>();
         for (RelatedActionsAwareCategorizer categorizer : relatedActionsAwareCategorizers) {
