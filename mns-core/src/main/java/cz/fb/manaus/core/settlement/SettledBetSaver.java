@@ -1,6 +1,7 @@
 package cz.fb.manaus.core.settlement;
 
 import com.codahale.metrics.MetricRegistry;
+import com.google.common.base.Preconditions;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.dao.SettledBetDao;
@@ -29,7 +30,7 @@ public class SettledBetSaver {
     private MetricRegistry metricRegistry;
 
     @Transactional
-    public SaveStatus saveBet(String betId, final SettledBet settledBet) {
+    public SaveStatus saveBet(String betId, SettledBet settledBet) {
         if (!settledBetDao.getSettledBet(betId).isPresent()) {
             settledBet.setBetAction(betActionDao.getBetAction(betId).orElse(null));
             if (settledBet.getBetAction() != null) {
@@ -51,6 +52,7 @@ public class SettledBetSaver {
     private void validate(SettledBet bet) {
         validateTimes(bet);
         validatePrice(bet);
+        validateSelection(bet);
     }
 
     private void validatePrice(SettledBet bet) {
@@ -59,6 +61,12 @@ public class SettledBetSaver {
         if (!Price.priceEq(requestedPrice.getPrice(), price.getPrice())) {
             log.log(Level.WARNING, "Different requested price ''{0}''", bet);
         }
+    }
+
+    private void validateSelection(SettledBet bet) {
+        long selectionId = bet.getBetAction().getSelectionId();
+        Preconditions.checkArgument(selectionId == bet.getSelectionId(),
+                "action.selectionId != bet.selectionId");
     }
 
     private void validateTimes(SettledBet bet) {
