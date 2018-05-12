@@ -17,7 +17,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ValidationServiceTest extends AbstractLocalTestCase {
-    private static final String NOVGOROD = "novgorod";
     @Autowired
     private ValidationService service;
 
