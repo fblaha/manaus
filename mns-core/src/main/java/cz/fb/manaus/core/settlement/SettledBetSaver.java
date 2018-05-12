@@ -78,6 +78,7 @@ public class SettledBetSaver {
                 log.log(Level.WARNING, "Too big latency for ''{0}''", bet);
             }
             if (placed.after(openDate)) {
+                metricRegistry.counter("settled.bet.PLACED_AFTER_START").inc();
                 log.log(Level.SEVERE, "Placed after open date ''{0}''", bet);
             }
         });
