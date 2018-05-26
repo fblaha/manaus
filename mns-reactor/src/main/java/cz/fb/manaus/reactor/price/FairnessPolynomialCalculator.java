@@ -36,7 +36,7 @@ public class FairnessPolynomialCalculator {
                 }
                 leftSideItems.add(multiplyPolynomials(otherPrices));
             }
-            PolynomialFunction leftSide = leftSideItems.stream().reduce((p1, p2) -> p1.add(p2)).get();
+            PolynomialFunction leftSide = leftSideItems.stream().reduce(PolynomialFunction::add).get();
             PolynomialFunction equation = leftSide.subtract(rightSide);
 
             LaguerreSolver laguerreSolver = new LaguerreSolver();
@@ -59,6 +59,6 @@ public class FairnessPolynomialCalculator {
 
     private PolynomialFunction multiplyPolynomials(List<Double> prices) {
         List<PolynomialFunction> polynomials = prices.stream().map(this::toPolynomial).collect(toList());
-        return polynomials.stream().reduce((p1, p2) -> p1.multiply(p2)).get();
+        return polynomials.stream().reduce(PolynomialFunction::multiply).get();
     }
 }

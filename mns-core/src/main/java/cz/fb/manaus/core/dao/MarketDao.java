@@ -59,7 +59,7 @@ public class MarketDao extends GenericHibernateDao<Market, String> {
         }
 
         Query<Market> query = getSession().createQuery(criteria);
-        maxResults.ifPresent(val -> query.setMaxResults(val));
+        maxResults.ifPresent(query::setMaxResults);
         return query.getResultList();
     }
 

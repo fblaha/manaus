@@ -45,13 +45,13 @@ public class CoverageFunctionProfitService extends AbstractFunctionProfitService
         ImmutableList.Builder<ProfitRecord> builder = ImmutableList.builder();
 
         addRecord("solo", solo, function, coverage, charges)
-                .ifPresent(record -> builder.add(record));
+                .ifPresent(builder::add);
         addRecord("covered", covered, function, coverage, charges)
-                .ifPresent(record -> builder.add(record));
+                .ifPresent(builder::add);
         addRecord("covHead", head, function, coverage, charges)
-                .ifPresent(record -> builder.add(record));
+                .ifPresent(builder::add);
         addRecord("covTail", tail, function, coverage, charges)
-                .ifPresent(record -> builder.add(record));
+                .ifPresent(builder::add);
         return builder.build();
     }
 

@@ -27,7 +27,7 @@ public class MarketPricesDao extends GenericHibernateDao<MarketPrices, Integer> 
         criteria.orderBy(builder.desc(root.get("time")));
         criteria.where(builder.equal(root.join("market").get("id"), marketId));
         Query<MarketPrices> query = getSession().createQuery(criteria);
-        maxResults.ifPresent(val -> query.setMaxResults(val));
+        maxResults.ifPresent(query::setMaxResults);
         return query.getResultList();
     }
 

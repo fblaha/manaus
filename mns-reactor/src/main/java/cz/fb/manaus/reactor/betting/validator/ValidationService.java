@@ -1,8 +1,6 @@
 package cz.fb.manaus.reactor.betting.validator;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.reactor.betting.BetContext;
@@ -13,10 +11,10 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.base.Predicates.not;
 import static java.util.Objects.requireNonNull;
 
 @Service
@@ -66,14 +64,16 @@ public class ValidationService {
     private Predicate<Validator> createPredicate(BetContext context) {
         List<Predicate<Validator>> predicates = new LinkedList<>();
         if (!context.getOldBet().isPresent()) {
-            predicates.add(not(Validator::isUpdateOnly));
+            Predicate<Validator> updateOnly = Validator::isUpdateOnly;
+            predicates.add(updateOnly.negate());
         }
+        Predicate<Validator> priceRequired = Validator::isPriceRequired;
         if (context.getNewPrice().isPresent()) {
-            predicates.add(Validator::isPriceRequired);
+            predicates.add(priceRequired);
         } else {
-            predicates.add(not(Validator::isPriceRequired));
+            predicates.add(priceRequired.negate());
         }
-        return Predicates.and(predicates);
+        return predicates.stream().reduce(Predicate::and).get();
     }
 
 }

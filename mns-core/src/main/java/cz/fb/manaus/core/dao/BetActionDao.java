@@ -91,7 +91,7 @@ public class BetActionDao extends GenericHibernateDao<BetAction, Integer> {
         criteriaQuery.orderBy(builder.desc(root.get("actionDate")));
 
         TypedQuery<BetAction> query = getSession().createQuery(criteriaQuery);
-        maxResults.ifPresent(val -> query.setMaxResults(val));
+        maxResults.ifPresent(query::setMaxResults);
         List<BetAction> result = query.getResultList();
         checkState(from(comparing(BetAction::getActionDate)).reverse().isOrdered(result));
         return result;

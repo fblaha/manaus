@@ -37,7 +37,7 @@ public class SettledBetLoader {
             .maximumSize(100)
             .expireAfterAccess(10, TimeUnit.MINUTES)
             .expireAfterWrite(30, TimeUnit.MINUTES)
-            .build(new CacheLoader<String, List<SettledBet>>() {
+            .build(new CacheLoader<>() {
                 @Override
                 public List<SettledBet> load(String key) throws Exception {
                     return loadFromDatabase(key);

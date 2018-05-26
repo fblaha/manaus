@@ -67,7 +67,7 @@ public class SettledBetDao extends GenericHibernateDao<SettledBet, Long> {
             criteria.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
         }
         Query<SettledBet> query = getSession().createQuery(criteria);
-        maxResults.ifPresent(val -> query.setMaxResults(val));
+        maxResults.ifPresent(query::setMaxResults);
         return query.getResultList();
     }
 
