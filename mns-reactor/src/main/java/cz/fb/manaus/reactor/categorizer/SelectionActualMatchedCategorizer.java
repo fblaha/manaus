@@ -19,7 +19,7 @@ public class SelectionActualMatchedCategorizer extends AbstractMatchedCategorize
 
     @Override
     protected OptionalDouble getAmount(SettledBet bet) {
-        Double matchedAmount = bet.getBetAction()
+        var matchedAmount = bet.getBetAction()
                 .getMarketPrices()
                 .getRunnerPrices(bet.getSelectionId())
                 .getMatchedAmount();

@@ -100,7 +100,7 @@ public class Event {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Event other = (Event) obj;
+        var other = (Event) obj;
         return new EqualsBuilder().append(getId(), other.getId()).isEquals();
     }
 

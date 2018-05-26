@@ -23,12 +23,12 @@ public class BetCoverage {
     }
 
     private static Table<String, Long, List<SettledBet>> buildCoverage(List<SettledBet> settledBets) {
-        ImmutableTable.Builder<String, Long, List<SettledBet>> builder = ImmutableTable.builder();
-        Set<ImmutablePair<String, Long>> coverKeys = settledBets.stream()
+        var builder = ImmutableTable.<String, Long, List<SettledBet>>builder();
+        var coverKeys = settledBets.stream()
                 .map(BetCoverage::getCoverageKey)
                 .collect(Collectors.toSet());
         coverKeys.forEach(key -> builder.put(key.getLeft(), key.getRight(), new LinkedList<>()));
-        Table<String, Long, List<SettledBet>> coverage = builder.build();
+        var coverage = builder.<String, Long, List<SettledBet>>build();
         settledBets.forEach(bet -> coverage.get(bet.getBetAction().getMarket().getId(), bet.getSelectionId()).add(bet));
         return coverage;
     }
@@ -42,7 +42,7 @@ public class BetCoverage {
     }
 
     public List<SettledBet> getBets(String marketId, long selectionId, Side side) {
-        List<SettledBet> bets = coverage.get(marketId, selectionId);
+        var bets = coverage.get(marketId, selectionId);
         if (side != null) {
             bets = bets.stream().filter(bet -> bet.getPrice().getSide() == side)
                     .collect(Collectors.toList());
@@ -58,7 +58,7 @@ public class BetCoverage {
     }
 
     public boolean isCovered(String marketId, long selectionId) {
-        Set<Side> sides = getSides(marketId, selectionId);
+        var sides = getSides(marketId, selectionId);
         return sides.size() == 2;
     }
 

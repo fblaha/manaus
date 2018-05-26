@@ -9,7 +9,6 @@ import cz.fb.manaus.reactor.betting.action.BetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.google.common.base.Joiner.on;
 import static com.google.common.base.Strings.emptyToNull;
@@ -19,8 +18,8 @@ public abstract class AbstractProposerCategorizer implements SettledBetCategoriz
     private BetUtils betUtils;
 
     protected List<String> getProposers(SettledBet settledBet) {
-        Map<String, String> properties = settledBet.getBetAction().getProperties();
-        String rawProposers = MoreObjects.firstNonNull(emptyToNull(properties.get(BetAction.PROPOSER_PROP)), "none");
+        var properties = settledBet.getBetAction().getProperties();
+        var rawProposers = MoreObjects.firstNonNull(emptyToNull(properties.get(BetAction.PROPOSER_PROP)), "none");
         return betUtils.parseProposers(rawProposers);
     }
 

@@ -21,10 +21,10 @@ public class ProbabilityComparator implements Comparator<RunnerPrices> {
 
     @Override
     public int compare(RunnerPrices list1, RunnerPrices list2) {
-        RunnerPrices backList1 = list1.getHomogeneous(side);
-        RunnerPrices backList2 = list2.getHomogeneous(side);
-        double price1 = backList1.getBestPrice().get().getPrice();
-        double price2 = backList2.getBestPrice().get().getPrice();
+        var backList1 = list1.getHomogeneous(side);
+        var backList2 = list2.getHomogeneous(side);
+        var price1 = backList1.getBestPrice().get().getPrice();
+        var price2 = backList2.getBestPrice().get().getPrice();
         return Doubles.compare(price1, price2);
     }
 

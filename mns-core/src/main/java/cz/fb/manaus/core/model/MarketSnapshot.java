@@ -31,13 +31,13 @@ public class MarketSnapshot {
     }
 
     static Table<Side, Long, Bet> getMarketCoverage(List<Bet> bets) {
-        List<Bet> sortedBets = Ordering.from(comparing(Bet::getPlacedDate))
+        var sortedBets = Ordering.from(comparing(Bet::getPlacedDate))
                 .immutableSortedCopy(bets);
 
-        Table<Side, Long, Bet> result = HashBasedTable.create();
-        for (Bet bet : sortedBets) {
-            Side side = bet.getRequestedPrice().getSide();
-            Bet predecessor = result.get(side, bet.getSelectionId());
+        var result = HashBasedTable.<Side, Long, Bet>create();
+        for (var bet : sortedBets) {
+            var side = bet.getRequestedPrice().getSide();
+            var predecessor = result.get(side, bet.getSelectionId());
             if (predecessor != null) {
                 log.log(Level.WARNING, "Suspicious relationship between predecessor ''{0}'' and successor ''{1}''",
                         new Object[]{predecessor, bet});

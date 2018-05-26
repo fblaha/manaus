@@ -22,7 +22,7 @@ final public class SportCategorizer extends AbstractDelegatingCategorizer {
     }
 
     private Optional<String> getCategory(Market market) {
-        String typeName = market.getEventType().getName().toLowerCase();
+        var typeName = market.getEventType().getName().toLowerCase();
         if ("basketball".equals(typeName)) {
             return Optional.of(MarketCategories.BASKETBALL);
         } else if (AMERICAN_FOOTBALL.matcher(typeName).matches()) {
@@ -65,7 +65,7 @@ final public class SportCategorizer extends AbstractDelegatingCategorizer {
 
     @Override
     public Set<String> getCategoryRaw(Market market) {
-        Optional<String> category = getCategory(market);
+        var category = getCategory(market);
         return category.map(Set::of).orElse(Set.of());
     }
 }

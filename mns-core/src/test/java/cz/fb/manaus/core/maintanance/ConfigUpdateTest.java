@@ -12,7 +12,7 @@ public class ConfigUpdateTest {
 
     @Test
     public void testJson() throws Exception {
-        ConfigUpdate configUpdate = ConfigUpdate.empty(Duration.ofHours(8));
+        var configUpdate = ConfigUpdate.empty(Duration.ofHours(8));
         configUpdate.getDeletePrefixes().add("test_delete");
         configUpdate.getSetProperties().put("test_key", "test value");
         String json = new ObjectMapper().writeValueAsString(configUpdate);

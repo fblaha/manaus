@@ -19,10 +19,10 @@ public class ProposerMetricsUpdater implements BetActionListener {
 
     @Override
     public void onAction(BetAction action) {
-        String proposers = action.getProperties().get(BetAction.PROPOSER_PROP);
-        String side = action.getPrice().getSide().name().toLowerCase();
-        for (String proposer : betUtils.parseProposers(proposers)) {
-            String key = Joiner.on('.').join(PROPOSER_METRIC, side, proposer);
+        var proposers = action.getProperties().get(BetAction.PROPOSER_PROP);
+        var side = action.getPrice().getSide().name().toLowerCase();
+        for (var proposer : betUtils.parseProposers(proposers)) {
+            var key = Joiner.on('.').join(PROPOSER_METRIC, side, proposer);
             metricRegistry.counter(key).inc();
         }
     }

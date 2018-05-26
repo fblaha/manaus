@@ -23,7 +23,7 @@ public class BetTest extends AbstractLocalTestCase {
     private ExchangeProvider provider;
 
     @Test
-    public void testHalfMatched() throws Exception {
+    public void testHalfMatched() {
         assertTrue(createBet(provider.getMinAmount()).isHalfMatched());
         assertTrue(createBet(1.5).isHalfMatched());
         assertFalse(createBet(0d).isHalfMatched());
@@ -31,7 +31,7 @@ public class BetTest extends AbstractLocalTestCase {
     }
 
     @Test
-    public void testMatched() throws Exception {
+    public void testMatched() {
         assertTrue(createBet(provider.getMinAmount()).isMatched());
         assertTrue(createBet(1.5).isMatched());
         assertFalse(createBet(0d).isMatched());
@@ -40,23 +40,23 @@ public class BetTest extends AbstractLocalTestCase {
 
     @Test
     public void testSerialization() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        Bet original = new Bet("111", "222", 333,
+        var mapper = new ObjectMapper();
+        var original = new Bet("111", "222", 333,
                 new Price(3d, 2d, Side.BACK), new Date(), 0d);
 
-        String serialized = mapper.writer().writeValueAsString(original);
+        var serialized = mapper.writer().writeValueAsString(original);
         Bet restored = mapper.readerFor(Bet.class).readValue(serialized);
         assertThat(restored.getRequestedPrice(), is(original.getRequestedPrice()));
         assertThat(restored.getPlacedDate(), is(original.getPlacedDate()));
-        String doubleSerialized = mapper.writer().writeValueAsString(restored);
+        var doubleSerialized = mapper.writer().writeValueAsString(restored);
         assertEquals(serialized, doubleSerialized);
     }
 
     private Bet createBet(double matchedAmount) {
-        String marketId = CoreTestFactory.MARKET_ID;
-        long selectionId = CoreTestFactory.DRAW;
-        Price requestedPrice = new Price(3d, provider.getMinAmount(), Side.LAY);
-        Instant date = Instant.now().minus(2, ChronoUnit.HOURS);
+        var marketId = CoreTestFactory.MARKET_ID;
+        var selectionId = CoreTestFactory.DRAW;
+        var requestedPrice = new Price(3d, provider.getMinAmount(), Side.LAY);
+        var date = Instant.now().minus(2, ChronoUnit.HOURS);
         return new Bet("1", marketId, selectionId, requestedPrice, Date.from(date), matchedAmount);
     }
 }

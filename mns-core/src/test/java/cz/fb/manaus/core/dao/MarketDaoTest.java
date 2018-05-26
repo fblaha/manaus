@@ -26,7 +26,7 @@ public class MarketDaoTest extends AbstractDaoTest {
 
     @Test
     public void testMarketGet() {
-        Date curr = new Date();
+        var curr = new Date();
         marketDao.saveOrUpdate(newMarket(CoreTestFactory.MARKET_ID, curr, CoreTestFactory.MATCH_ODDS));
         assertThat(marketDao.getMarkets(Optional.empty(), Optional.empty(), OptionalInt.empty()).size(), is(1));
         assertThat(marketDao.getMarkets(of(addHours(curr, -1)), Optional.empty(), OptionalInt.empty()).size(), is(1));
@@ -41,7 +41,7 @@ public class MarketDaoTest extends AbstractDaoTest {
 
     @Test
     public void testMarketOrder() {
-        Date date = DateUtils.truncate(new Date(), Calendar.MONTH);
+        var date = DateUtils.truncate(new Date(), Calendar.MONTH);
         marketDao.saveOrUpdate(newMarket("33", addHours(date, 2), CoreTestFactory.MATCH_ODDS));
         marketDao.saveOrUpdate(newMarket("22", addHours(date, 2), CoreTestFactory.MATCH_ODDS));
         marketDao.saveOrUpdate(newMarket("44", addHours(date, 1), CoreTestFactory.MATCH_ODDS));
@@ -59,7 +59,7 @@ public class MarketDaoTest extends AbstractDaoTest {
     @Test
     public void testRunner() {
         marketDao.saveOrUpdate(newMarket());
-        Market market = marketDao.get(CoreTestFactory.MARKET_ID).get();
+        var market = marketDao.get(CoreTestFactory.MARKET_ID).get();
         assertThat(market.getRunners().size(), is(3));
 
         assertThat(market.getRunners().stream().findFirst().get().getName(),
@@ -72,12 +72,12 @@ public class MarketDaoTest extends AbstractDaoTest {
 
     @Test
     public void testMarketMerge() {
-        Market market = newMarket();
-        Event childA = new Event("55", "childA", new Date(), CoreTestFactory.COUNTRY_CODE);
+        var market = newMarket();
+        var childA = new Event("55", "childA", new Date(), CoreTestFactory.COUNTRY_CODE);
         market.setEvent(childA);
         marketDao.saveOrUpdate(market);
-        Market toBeMerged = newMarket(CoreTestFactory.MARKET_ID, new Date(), SPARTA);
-        Event childB = new Event("55", "childB", new Date(), CoreTestFactory.COUNTRY_CODE);
+        var toBeMerged = newMarket(CoreTestFactory.MARKET_ID, new Date(), SPARTA);
+        var childB = new Event("55", "childB", new Date(), CoreTestFactory.COUNTRY_CODE);
         toBeMerged.setEvent(childB);
         marketDao.saveOrUpdate(toBeMerged);
         market = marketDao.get(CoreTestFactory.MARKET_ID).get();
@@ -89,7 +89,7 @@ public class MarketDaoTest extends AbstractDaoTest {
 
     @Test
     public void testMarketSaveSubsequentUpdate() {
-        Market market = newMarket();
+        var market = newMarket();
         marketDao.saveOrUpdate(market);
         assertThat(marketDao.get(CoreTestFactory.MARKET_ID).get().getRunners().size(), is(3));
         market = newMarket(CoreTestFactory.MARKET_ID, new Date(), "new name");
@@ -100,7 +100,7 @@ public class MarketDaoTest extends AbstractDaoTest {
 
     @Test
     public void testMarketVersion() {
-        Market market = newMarket();
+        var market = newMarket();
         marketDao.saveOrUpdate(market);
         assertThat(marketDao.get(CoreTestFactory.MARKET_ID).get().getVersion(), is(0));
         market = newMarket(CoreTestFactory.MARKET_ID, new Date(), SPARTA);

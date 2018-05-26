@@ -17,8 +17,8 @@ public class _AbstractBeforeCategorizerTest extends AbstractLocalTestCase {
     private TestBeforeCategorizer categorizer;
 
     @Test
-    public void testBeforeResolver() throws Exception {
-        String cat = categorizer.getDayMap().get(2L);
+    public void testBeforeResolver() {
+        var cat = categorizer.getDayMap().get(2L);
         assertEquals("test_day_2-3", cat);
     }
 

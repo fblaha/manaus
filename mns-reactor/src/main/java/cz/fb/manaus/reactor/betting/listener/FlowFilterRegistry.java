@@ -17,7 +17,7 @@ public class FlowFilterRegistry {
 
     @Autowired
     public FlowFilterRegistry(List<FlowFilter> flowFilters) {
-        ImmutableMap.Builder<String, FlowFilter> builder = ImmutableMap.builder();
+        var builder = ImmutableMap.<String, FlowFilter>builder();
         flowFilters.forEach(flowFilter -> flowFilter.getMarketTypes().forEach(
                 type -> builder.put(type, flowFilter)));
         defaultFilter = flowFilters.stream()

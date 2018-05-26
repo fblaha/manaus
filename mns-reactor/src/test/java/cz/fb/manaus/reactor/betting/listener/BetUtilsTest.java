@@ -35,34 +35,34 @@ public class BetUtilsTest extends AbstractLocalTestCase {
 
 
     @Before
-    public void setUp() throws Exception {
-        Price price = new Price(5d, 3d, Side.BACK);
+    public void setUp() {
+        var price = new Price(5d, 3d, Side.BACK);
         bet = new SettledBet(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
                 5d, new Date(), price);
 
-        BetAction action = new BetAction(BetActionType.PLACE, new Date(), price, null, 1000);
+        var action = new BetAction(BetActionType.PLACE, new Date(), price, null, 1000);
         bet.setBetAction(action);
     }
 
     @Test
-    public void testCurrentActions() throws Exception {
-        Date currDate = new Date();
-        Price priceBack = new Price(2d, 2d, Side.BACK);
-        Price priceLay = new Price(1.8d, 2d, Side.LAY);
-        int selectionId = 1;
-        BetAction back1 = new BetAction(BetActionType.PLACE, DateUtils.addHours(currDate, -10), priceBack,
+    public void testCurrentActions() {
+        var currDate = new Date();
+        var priceBack = new Price(2d, 2d, Side.BACK);
+        var priceLay = new Price(1.8d, 2d, Side.LAY);
+        var selectionId = 1;
+        var back1 = new BetAction(BetActionType.PLACE, DateUtils.addHours(currDate, -10), priceBack,
                 mock(Market.class), selectionId);
-        BetAction back2 = new BetAction(BetActionType.PLACE, DateUtils.addHours(currDate, -9), priceBack,
+        var back2 = new BetAction(BetActionType.PLACE, DateUtils.addHours(currDate, -9), priceBack,
                 mock(Market.class), selectionId);
-        BetAction back3 = new BetAction(BetActionType.PLACE, DateUtils.addHours(currDate, -8), priceBack,
+        var back3 = new BetAction(BetActionType.PLACE, DateUtils.addHours(currDate, -8), priceBack,
                 mock(Market.class), selectionId);
-        BetAction lay1 = new BetAction(BetActionType.PLACE, DateUtils.addHours(currDate, -6), priceLay,
+        var lay1 = new BetAction(BetActionType.PLACE, DateUtils.addHours(currDate, -6), priceLay,
                 mock(Market.class), selectionId);
-        BetAction lay2 = new BetAction(BetActionType.UPDATE, DateUtils.addHours(currDate, -5), priceLay,
+        var lay2 = new BetAction(BetActionType.UPDATE, DateUtils.addHours(currDate, -5), priceLay,
                 mock(Market.class), selectionId);
-        BetAction lay3 = new BetAction(BetActionType.PLACE, DateUtils.addHours(currDate, -4), priceLay,
+        var lay3 = new BetAction(BetActionType.PLACE, DateUtils.addHours(currDate, -4), priceLay,
                 mock(Market.class), selectionId);
-        List<BetAction> filtered = betUtils.getCurrentActions(List.of(back1, back2, back3));
+        var filtered = betUtils.getCurrentActions(List.of(back1, back2, back3));
         assertThat(filtered.size(), is(1));
         assertThat(filtered.get(filtered.size() - 1), is(back3));
 
@@ -77,18 +77,18 @@ public class BetUtilsTest extends AbstractLocalTestCase {
     }
 
     @Test
-    public void testUnknownBets() throws Exception {
-        BetAction action = mock(BetAction.class);
+    public void testUnknownBets() {
+        var action = mock(BetAction.class);
         when(action.getBetId()).thenReturn("1", "2");
-        Bet bet = mock(Bet.class);
+        var bet = mock(Bet.class);
         when(bet.getBetId()).thenReturn("1");
         assertThat(betUtils.getUnknownBets(List.of(bet), Set.of("1")).size(), is(0));
         assertThat(betUtils.getUnknownBets(List.of(bet), Set.of("2")).size(), is(1));
     }
 
     @Test
-    public void testCeilAmount() throws Exception {
-        SettledBet ceilCopy = betUtils.limitBetAmount(2d, bet);
+    public void testCeilAmount() {
+        var ceilCopy = betUtils.limitBetAmount(2d, bet);
         assertThat(ceilCopy, not(sameInstance(bet)));
         assertThat(ceilCopy.getSelectionName(), is(bet.getSelectionName()));
         assertThat(ceilCopy.getSelectionId(), is(bet.getSelectionId()));
@@ -96,10 +96,10 @@ public class BetUtilsTest extends AbstractLocalTestCase {
     }
 
     @Test
-    public void testCeilActionAmount() throws Exception {
-        SettledBet ceilCopy = betUtils.limitBetAmount(2d, bet);
-        BetAction action = bet.getBetAction();
-        BetAction actionCopy = ceilCopy.getBetAction();
+    public void testCeilActionAmount() {
+        var ceilCopy = betUtils.limitBetAmount(2d, bet);
+        var action = bet.getBetAction();
+        var actionCopy = ceilCopy.getBetAction();
         assertThat(action, not(sameInstance(actionCopy)));
         assertThat(action.getActionDate(), is(actionCopy.getActionDate()));
         assertThat(action.getSelectionId(), is(actionCopy.getSelectionId()));
@@ -107,10 +107,10 @@ public class BetUtilsTest extends AbstractLocalTestCase {
     }
 
     @Test
-    public void testHighCeiling() throws Exception {
-        SettledBet ceilCopy = betUtils.limitBetAmount(100d, bet);
-        BetAction action = bet.getBetAction();
-        BetAction actionCopy = ceilCopy.getBetAction();
+    public void testHighCeiling() {
+        var ceilCopy = betUtils.limitBetAmount(100d, bet);
+        var action = bet.getBetAction();
+        var actionCopy = ceilCopy.getBetAction();
 
         assertThat(ceilCopy, sameInstance(bet));
         assertThat(ceilCopy.getPrice(), sameInstance(bet.getPrice()));

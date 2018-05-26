@@ -1,14 +1,10 @@
 package cz.fb.manaus.reactor.betting.validator.common.update;
 
-import cz.fb.manaus.core.model.Bet;
-import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.Price;
-import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import cz.fb.manaus.reactor.ReactorTestFactory;
-import cz.fb.manaus.reactor.betting.BetContext;
 import cz.fb.manaus.reactor.betting.validator.ValidationResult;
 import cz.fb.manaus.reactor.price.PriceService;
 import cz.fb.manaus.reactor.rounding.RoundingService;
@@ -37,12 +33,12 @@ public class _AbstractTooCloseUpdateEpsilonValidatorTest extends AbstractLocalTe
 
 
     @Test
-    public void testAcceptBack() throws Exception {
-        Price oldPrice = new Price(2.5d, 5d, Side.BACK);
-        Optional<Bet> oldBet = Optional.of(ReactorTestFactory.newBet(oldPrice));
+    public void testAcceptBack() {
+        var oldPrice = new Price(2.5d, 5d, Side.BACK);
+        var oldBet = Optional.of(ReactorTestFactory.newBet(oldPrice));
 
-        MarketPrices prices = factory.createMarket(0.1, List.of(0.4, 0.3, 0.3));
-        RunnerPrices runnerPrices = prices.getRunnerPrices(CoreTestFactory.HOME);
+        var prices = factory.createMarket(0.1, List.of(0.4, 0.3, 0.3));
+        var runnerPrices = prices.getRunnerPrices(CoreTestFactory.HOME);
         assertThat(validator.validate(factory.newBetContext(Side.BACK, prices, runnerPrices, oldBet)
                 .withNewPrice(oldPrice)), is(ValidationResult.REJECT));
 
@@ -54,18 +50,18 @@ public class _AbstractTooCloseUpdateEpsilonValidatorTest extends AbstractLocalTe
     }
 
     @Test
-    public void testAcceptLay() throws Exception {
-        Price newOne = mock(Price.class);
-        Price oldOne = mock(Price.class);
+    public void testAcceptLay() {
+        var newOne = mock(Price.class);
+        var oldOne = mock(Price.class);
         when(newOne.getSide()).thenReturn(Side.LAY);
         when(oldOne.getSide()).thenReturn(Side.LAY);
         when(oldOne.getPrice()).thenReturn(3.6d);
-        Optional<Bet> oldBet = Optional.of(ReactorTestFactory.newBet(oldOne));
+        var oldBet = Optional.of(ReactorTestFactory.newBet(oldOne));
 
-        MarketPrices prices = factory.createMarket(0.1, List.of(0.4, 0.3, 0.3));
-        RunnerPrices runnerPrices = prices.getRunnerPrices(CoreTestFactory.HOME);
+        var prices = factory.createMarket(0.1, List.of(0.4, 0.3, 0.3));
+        var runnerPrices = prices.getRunnerPrices(CoreTestFactory.HOME);
 
-        BetContext context = factory.newBetContext(Side.LAY, prices, runnerPrices, oldBet).withNewPrice(newOne);
+        var context = factory.newBetContext(Side.LAY, prices, runnerPrices, oldBet).withNewPrice(newOne);
         when(newOne.getPrice()).thenReturn(3.65d);
         assertThat(validator.validate(context), is(ValidationResult.REJECT));
         when(newOne.getPrice()).thenReturn(3.7d);

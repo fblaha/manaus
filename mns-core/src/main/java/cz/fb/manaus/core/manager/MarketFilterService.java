@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
 
 @Service
@@ -16,7 +15,7 @@ public class MarketFilterService {
     private List<MarketFilter> marketFilters;
 
     public boolean accept(Market market, boolean hasBets, Set<String> categoryBlacklist) {
-        Stream<MarketFilter> filters = marketFilters.stream();
+        var filters = marketFilters.stream();
         if (hasBets) {
             filters = filters.filter(MarketFilter::isStrict);
         }

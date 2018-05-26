@@ -22,26 +22,26 @@ public class FairnessPolynomialCalculator {
 
     public OptionalDouble getFairness(double winnerCount, List<OptionalDouble> prices) {
         if (prices.stream().allMatch(OptionalDouble::isPresent)) {
-            List<Double> presentPrices = prices.stream().map(OptionalDouble::getAsDouble).collect(toList());
-            PolynomialFunction rightSide = multiplyPolynomials(presentPrices);
+            var presentPrices = prices.stream().map(OptionalDouble::getAsDouble).collect(toList());
+            var rightSide = multiplyPolynomials(presentPrices);
             rightSide = rightSide.multiply(new PolynomialFunction(new double[]{winnerCount}));
 
-            List<PolynomialFunction> leftSideItems = new LinkedList<>();
-            for (int i = 0; i < presentPrices.size(); i++) {
-                List<Double> otherPrices = new LinkedList<>();
-                for (int j = 0; j < presentPrices.size(); j++) {
+            var leftSideItems = new LinkedList<PolynomialFunction>();
+            for (var i = 0; i < presentPrices.size(); i++) {
+                var otherPrices = new LinkedList<Double>();
+                for (var j = 0; j < presentPrices.size(); j++) {
                     if (i != j) {
                         otherPrices.add(presentPrices.get(j));
                     }
                 }
                 leftSideItems.add(multiplyPolynomials(otherPrices));
             }
-            PolynomialFunction leftSide = leftSideItems.stream().reduce(PolynomialFunction::add).get();
-            PolynomialFunction equation = leftSide.subtract(rightSide);
+            var leftSide = leftSideItems.stream().reduce(PolynomialFunction::add).get();
+            var equation = leftSide.subtract(rightSide);
 
-            LaguerreSolver laguerreSolver = new LaguerreSolver();
+            var laguerreSolver = new LaguerreSolver();
             try {
-                double root = laguerreSolver.solve(100, equation, 0, 1000);
+                var root = laguerreSolver.solve(100, equation, 0, 1000);
                 return OptionalDouble.of(1 / root);
             } catch (NoBracketingException exception) {
                 return OptionalDouble.empty();

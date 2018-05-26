@@ -3,7 +3,6 @@ package cz.fb.manaus.reactor.profit.progress.function;
 import cz.fb.manaus.core.model.SettledBet;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.OptionalDouble;
 
@@ -12,9 +11,9 @@ public class MatchedDelayFunction implements ProgressFunction {
 
     @Override
     public OptionalDouble apply(SettledBet bet) {
-        Instant placed = bet.getPlacedOrActionDate().toInstant();
+        var placed = bet.getPlacedOrActionDate().toInstant();
         if (bet.getMatched() != null) {
-            Instant matched = bet.getMatched().toInstant();
+            var matched = bet.getMatched().toInstant();
             return OptionalDouble.of((double) placed.until(matched, ChronoUnit.MINUTES));
         }
         return OptionalDouble.empty();

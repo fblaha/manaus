@@ -35,8 +35,8 @@ public class MarketRegexpCategorizer extends AbstractRegexpResolver implements S
 
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
-        String marketName = settledBet.getBetAction().getMarket().getName();
-        String eventName = settledBet.getBetAction().getMarket().getEvent().getName();
+        var marketName = settledBet.getBetAction().getMarket().getName();
+        var eventName = settledBet.getBetAction().getMarket().getEvent().getName();
         return getCategories(marketName, eventName);
     }
 
@@ -46,7 +46,7 @@ public class MarketRegexpCategorizer extends AbstractRegexpResolver implements S
     }
 
     Set<String> getCategories(String marketName, String eventName) {
-        Set<String> result = new HashSet<>();
+        var result = new HashSet<String>();
         result.addAll(getCategories(marketName, MATCH_MAP).stream()
                 .map(this::addPrefix).collect(Collectors.toList()));
         result.addAll(getCategories(eventName, EVENT_MAP).stream()

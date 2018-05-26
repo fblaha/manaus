@@ -24,21 +24,21 @@ public class MarketCharge {
     }
 
     public static MarketCharge fromBets(double chargeRate, Iterable<SettledBet> bets) {
-        Map<String, Double> profits = new HashMap<>();
+        var profits = new HashMap<String, Double>();
         double totalProfit = 0d, totalPositiveProfit = 0d;
-        for (SettledBet bet : bets) {
-            String betId = bet.getBetAction().getBetId();
+        for (var bet : bets) {
+            var betId = bet.getBetAction().getBetId();
             profits.put(betId, bet.getProfitAndLoss());
             totalProfit += bet.getProfitAndLoss();
             totalPositiveProfit += max(bet.getProfitAndLoss(), 0d);
         }
-        double totalCharge = Price.round(chargeRate * max(totalProfit, 0));
+        var totalCharge = Price.round(chargeRate * max(totalProfit, 0));
         return new MarketCharge(totalProfit, totalPositiveProfit, totalCharge, profits);
     }
 
     public double getChargeContribution(String betId) {
         if (Price.amountEq(totalCharge, 0d)) return 0d;
-        double profit = max(profits.get(betId), 0d);
+        var profit = max(profits.get(betId), 0d);
         return Price.round(totalCharge * profit / totalPositiveProfit);
     }
 

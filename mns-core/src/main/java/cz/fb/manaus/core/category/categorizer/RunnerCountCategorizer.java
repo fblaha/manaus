@@ -17,7 +17,7 @@ final public class RunnerCountCategorizer extends AbstractDelegatingCategorizer 
 
     @Override
     public Set<String> getCategoryRaw(Market market) {
-        long size = market.getRunners().stream().mapToLong(Runner::getSelectionId).distinct().count();
+        var size = market.getRunners().stream().mapToLong(Runner::getSelectionId).distinct().count();
         return Set.of(Long.toString(size));
     }
 }

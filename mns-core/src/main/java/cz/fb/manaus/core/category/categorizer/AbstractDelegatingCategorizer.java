@@ -31,7 +31,7 @@ public abstract class AbstractDelegatingCategorizer implements SettledBetCategor
     protected abstract Set<String> getCategoryRaw(Market market);
 
     private Set<String> getPrefixedCategories(Market market) {
-        Set<String> categories = getCategoryRaw(market);
+        var categories = getCategoryRaw(market);
         if (categories == null) return Set.of();
         return categories.stream().map(input -> Category.MARKET_PREFIX + prefix + input)
                 .collect(Collectors.toSet());

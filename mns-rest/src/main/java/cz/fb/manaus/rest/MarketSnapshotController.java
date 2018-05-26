@@ -8,8 +8,6 @@ import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.model.AccountMoney;
 import cz.fb.manaus.core.model.Bet;
-import cz.fb.manaus.core.model.CollectedBets;
-import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.MarketSnapshot;
 import cz.fb.manaus.reactor.betting.BetManager;
@@ -52,15 +50,15 @@ public class MarketSnapshotController {
         validateMarket(snapshotCrate);
         metricRegistry.meter("market.snapshot.post").mark();
         try {
-            MarketPrices marketPrices = snapshotCrate.getPrices();
+            var marketPrices = snapshotCrate.getPrices();
             marketDao.get(id).ifPresent(marketPrices::setMarket);
             logMarket(marketPrices);
-            List<Bet> bets = Optional.ofNullable(snapshotCrate.getBets()).orElse(List.of());
+            var bets = Optional.ofNullable(snapshotCrate.getBets()).orElse(List.of());
             betMetricUpdater.update(snapshotCrate.getScanTime(), bets);
-            MarketSnapshot marketSnapshot = new MarketSnapshot(marketPrices, bets,
+            var marketSnapshot = new MarketSnapshot(marketPrices, bets,
                     Optional.empty());
-            Set<String> myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty());
-            CollectedBets collectedBets = manager.fire(marketSnapshot, myBets,
+            var myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty());
+            var collectedBets = manager.fire(marketSnapshot, myBets,
                     Optional.ofNullable(snapshotCrate.getMoney()),
                     Optional.ofNullable(snapshotCrate.getCategoryBlacklist()).orElse(Set.of()));
             if (!collectedBets.isEmpty()) {
@@ -75,7 +73,7 @@ public class MarketSnapshotController {
     }
 
     private void logMarket(MarketPrices marketPrices) {
-        Market market = marketPrices.getMarket();
+        var market = marketPrices.getMarket();
         log.log(Level.INFO, "Market snapshot for ''{0}'' received",
                 Joiner.on(" / ").join(market.getEvent().getName(), market.getName(), market.getId()));
     }

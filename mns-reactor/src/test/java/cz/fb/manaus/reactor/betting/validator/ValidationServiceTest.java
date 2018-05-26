@@ -21,31 +21,31 @@ public class ValidationServiceTest extends AbstractLocalTestCase {
     private ValidationService service;
 
     @Test
-    public void testReduceAcceptReject() throws Exception {
+    public void testReduceAcceptReject() {
         assertThat(service.reduce(List.of(ValidationResult.ACCEPT, ValidationResult.REJECT, ValidationResult.ACCEPT)), is(ValidationResult.REJECT));
         assertThat(service.reduce(List.of(ValidationResult.ACCEPT, ValidationResult.ACCEPT)), is(ValidationResult.ACCEPT));
     }
 
     @Test
-    public void testDowngradeAccepting() throws Exception {
+    public void testDowngradeAccepting() {
         assertThat(new TestValidator(ValidationResult.REJECT).isDowngradeAccepting(), is(true));
     }
 
     @Test
-    public void testDowngradePrice() throws Exception {
+    public void testDowngradePrice() {
         checkDownGrade(2d, ValidationResult.ACCEPT);
     }
 
     @Test
-    public void testUpgradePrice() throws Exception {
+    public void testUpgradePrice() {
         checkDownGrade(2.4d, null);
     }
 
     private void checkDownGrade(double newPrice, ValidationResult expected) {
-        Bet oldBet = mock(Bet.class);
+        var oldBet = mock(Bet.class);
         when(oldBet.getRequestedPrice()).thenReturn(new Price(2.2d, 2d, Side.LAY));
-        TestValidator rejecting = new TestValidator(ValidationResult.REJECT);
-        Optional<ValidationResult> result = service.handleDowngrade(
+        var rejecting = new TestValidator(ValidationResult.REJECT);
+        var result = service.handleDowngrade(
                 Optional.of(new Price(newPrice, 2d, Side.LAY)),
                 Optional.of(oldBet), rejecting);
         assertThat(result.orElse(null), is(expected));

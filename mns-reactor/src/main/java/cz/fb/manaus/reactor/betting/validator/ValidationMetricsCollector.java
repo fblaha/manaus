@@ -14,7 +14,7 @@ public class ValidationMetricsCollector {
     private MetricRegistry metricRegistry;
 
     public void updateMetrics(ValidationResult result, Side type, String validatorName) {
-        String name = getName(type, result.isSuccess(), validatorName);
+        var name = getName(type, result.isSuccess(), validatorName);
         metricRegistry.counter(name).inc();
     }
 

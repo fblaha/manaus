@@ -74,8 +74,8 @@ public class Bet {
     }
 
     public Bet replacePrice(double newPrice) {
-        Price newOne = new Price(newPrice, getRequestedPrice().getAmount(), getRequestedPrice().getSide());
-        Bet bet = new Bet(getBetId(), getMarketId(), getSelectionId(), newOne, placedDate, matchedAmount);
+        var newOne = new Price(newPrice, getRequestedPrice().getAmount(), getRequestedPrice().getSide());
+        var bet = new Bet(getBetId(), getMarketId(), getSelectionId(), newOne, placedDate, matchedAmount);
         bet.setActionId(actionId);
         return bet;
     }
@@ -88,7 +88,7 @@ public class Bet {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Bet other = (Bet) obj;
+        var other = (Bet) obj;
         return new EqualsBuilder().append(marketId, other.marketId).append(selectionId, other.selectionId)
                 .append(requestedPrice, other.requestedPrice).append(betId, other.betId)
                 .append(matchedAmount, other.matchedAmount)

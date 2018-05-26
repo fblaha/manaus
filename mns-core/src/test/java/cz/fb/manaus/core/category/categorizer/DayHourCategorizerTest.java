@@ -23,10 +23,10 @@ public class DayHourCategorizerTest extends AbstractLocalTestCase {
     private DayHourCategorizer categorizer;
 
     @Test
-    public void testGetCategories() throws Exception {
-        Date dayStart = DateUtils.truncate(new Date(), Calendar.MONTH);
-        Market market = mock(Market.class);
-        Event event = mock(Event.class);
+    public void testGetCategories() {
+        var dayStart = DateUtils.truncate(new Date(), Calendar.MONTH);
+        var market = mock(Market.class);
+        var event = mock(Event.class);
         when(market.getEvent()).thenReturn(event);
         when(event.getOpenDate()).thenReturn(dayStart);
         assertThat(categorizer.getCategories(market).iterator().next(), containsString("0_4"));

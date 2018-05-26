@@ -26,25 +26,25 @@ public class JsonMarshallerTest extends AbstractLocalTestCase {
 
     @Test
     public void testBetActionList() throws Exception {
-        BetAction action = new BetAction(BetActionType.PLACE, new Date(), new Price(2d, 5d, Side.LAY), null, 10);
-        Map<String, String> props = Map.of("property1", "value1", "reciprocal", "0.92");
+        var action = new BetAction(BetActionType.PLACE, new Date(), new Price(2d, 5d, Side.LAY), null, 10);
+        var props = Map.of("property1", "value1", "reciprocal", "0.92");
         action.setProperties(props);
-        String json = mapper.writer().writeValueAsString(List.of(action));
+        var json = mapper.writer().writeValueAsString(List.of(action));
         assertThat(json, CoreMatchers.containsString("value1"));
     }
 
     @Test
     public void testSettledBetList() throws Exception {
-        SettledBet bet = new SettledBet(555, "The Draw", 5.23d, new Date(), new Price(2.02d, 2.35d, Side.LAY));
+        var bet = new SettledBet(555, "The Draw", 5.23d, new Date(), new Price(2.02d, 2.35d, Side.LAY));
         bet.setBetAction(newBetAction("1", newMarket()));
-        String json = mapper.writer().writeValueAsString(List.of(bet));
+        var json = mapper.writer().writeValueAsString(List.of(bet));
         assertThat(json, CoreMatchers.containsString("The Draw"));
     }
 
     @Test
     public void testProfitRecordList() throws Exception {
-        ProfitRecord profitRecord = new ProfitRecord("test_name", 5d, 2, 1, 2d, 0.2);
-        String json = mapper.writer().writeValueAsString(List.of(profitRecord));
+        var profitRecord = new ProfitRecord("test_name", 5d, 2, 1, 2d, 0.2);
+        var json = mapper.writer().writeValueAsString(List.of(profitRecord));
         assertThat(json, CoreMatchers.containsString("test_name"));
     }
 

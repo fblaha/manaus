@@ -44,7 +44,7 @@ public class MarketChargeTest extends AbstractLocalTestCase {
             new SettledBet(SEL2, "Jan Hernych", -1.06d, current, new Price(1.53d, 2d, Side.LAY)), "4");
 
     private SettledBet mockAction(SettledBet bet, String betId) {
-        BetAction mock = mock(BetAction.class);
+        var mock = mock(BetAction.class);
         when(mock.getBetId()).thenReturn(betId);
         bet.setBetAction(mock);
         return bet;
@@ -52,33 +52,33 @@ public class MarketChargeTest extends AbstractLocalTestCase {
 
 
     @Test
-    public void testChargeLowProfit() throws Exception {
-        MarketCharge charge = MarketCharge.fromBets(provider.getChargeRate(), List.of(lay1, lay2, back1, back2));
+    public void testChargeLowProfit() {
+        var charge = MarketCharge.fromBets(provider.getChargeRate(), List.of(lay1, lay2, back1, back2));
         checkCharge(charge, 0.013d, 0.2d, of("2", 0.01d, "3", 0d));
     }
 
     @Test
-    public void testChargeHighProfit() throws Exception {
-        MarketCharge charge = MarketCharge.fromBets(provider.getChargeRate(), List.of(lay1, lay2, back2));
+    public void testChargeHighProfit() {
+        var charge = MarketCharge.fromBets(provider.getChargeRate(), List.of(lay1, lay2, back2));
         checkCharge(charge, 0.143d, 2.2d, of("2", 0.09d, "3", 0.05d));
     }
 
     @Test
-    public void testChargeLoss() throws Exception {
-        MarketCharge charge = MarketCharge.fromBets(provider.getChargeRate(), List.of(lay1, lay2, back1));
+    public void testChargeLoss() {
+        var charge = MarketCharge.fromBets(provider.getChargeRate(), List.of(lay1, lay2, back1));
         checkCharge(charge, 0d, -1.06d, of("2", 0d, "3", 0d));
     }
 
     @Test
-    public void testOneLossOneProfit() throws Exception {
-        MarketCharge charge = MarketCharge.fromBets(provider.getChargeRate(), List.of(lay1, lay2));
+    public void testOneLossOneProfit() {
+        var charge = MarketCharge.fromBets(provider.getChargeRate(), List.of(lay1, lay2));
         checkCharge(charge, 0.061d, 0.94d, of("2", 0.06d, "4", 0d));
     }
 
     private void checkCharge(MarketCharge charge, double totalCharge, double totalProfit, Map<String, Double> expectedContibutions) {
         assertThat(charge.getTotalCharge(), is(totalCharge));
         assertThat(charge.getTotalProfit(), is(totalProfit));
-        for (Map.Entry<String, Double> entry : expectedContibutions.entrySet()) {
+        for (var entry : expectedContibutions.entrySet()) {
             assertEquals(entry.getValue().doubleValue(), charge.getChargeContribution(entry.getKey()), 0.01);
         }
     }

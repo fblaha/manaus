@@ -6,7 +6,6 @@ import com.google.common.collect.Range;
 import com.google.common.collect.RangeMap;
 import cz.fb.manaus.core.category.BetCoverage;
 import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer;
-import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator;
@@ -50,8 +49,8 @@ public class FairnessCategorizer implements SettledBetCategorizer {
 
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
-        MarketPrices marketPrices = settledBet.getBetAction().getMarketPrices();
-        double fairness = calculator.getFairness(marketPrices.getWinnerCount(), marketPrices.getBestPrices(Side.BACK))
+        var marketPrices = settledBet.getBetAction().getMarketPrices();
+        var fairness = calculator.getFairness(marketPrices.getWinnerCount(), marketPrices.getBestPrices(Side.BACK))
                 .getAsDouble();
         return Set.of(getCategory(fairness));
     }

@@ -22,9 +22,9 @@ public class LookAheadFilter implements MarketFilter {
 
     @Override
     public boolean accept(Market market, Set<String> categoryBlacklist) {
-        Duration lookAhead = Duration.ofDays(lookAheadDays);
-        Instant start = market.getEvent().getOpenDate().toInstant();
-        long untilStart = Instant.now().until(start, ChronoUnit.MINUTES);
+        var lookAhead = Duration.ofDays(lookAheadDays);
+        var start = market.getEvent().getOpenDate().toInstant();
+        var untilStart = Instant.now().until(start, ChronoUnit.MINUTES);
         return untilStart < lookAhead.toMinutes();
     }
 }

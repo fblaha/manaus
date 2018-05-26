@@ -24,7 +24,7 @@ public abstract class AbstractProfitTest extends AbstractLocalTestCase {
     private Market market;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         marketDate = addDays(DateUtils.truncate(new Date(), Calendar.MONTH), -10);
         market = CoreTestFactory.newMarket("1", marketDate, CoreTestFactory.MATCH_ODDS);
         market.setEventType(new EventType("1", "soccer"));
@@ -38,8 +38,8 @@ public abstract class AbstractProfitTest extends AbstractLocalTestCase {
     }
 
     protected List<SettledBet> generateBets(Optional<Side> requestedSide) {
-        List<SettledBet> result = new LinkedList<>();
-        for (double price = 1.5d; price < 4; price += 0.02) {
+        var result = new LinkedList<SettledBet>();
+        for (var price = 1.5d; price < 4; price += 0.02) {
             addSideBets(result, price, Side.LAY, requestedSide);
             addSideBets(result, price + 0.1, Side.BACK, requestedSide);
         }
@@ -55,5 +55,4 @@ public abstract class AbstractProfitTest extends AbstractLocalTestCase {
                     new Price(price, 4d, side)));
         }
     }
-
 }

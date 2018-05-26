@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.betting.proposer;
 
 import com.google.common.base.Joiner;
-import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.provider.ExchangeProvider;
@@ -40,10 +39,10 @@ public class ProposerAdviser implements PriceAdviser {
 
     @Override
     public Optional<Price> getNewPrice(BetContext betContext) {
-        OptionalDouble proposedPrice = reducePrices(betContext);
+        var proposedPrice = reducePrices(betContext);
         if (proposedPrice.isPresent()) {
-            double amount = adviser.getAmount();
-            Optional<Bet> counterBet = betContext.getCounterBet();
+            var amount = adviser.getAmount();
+            var counterBet = betContext.getCounterBet();
             if (counterBet.isPresent() && counterBet.get().getMatchedAmount() > 0) {
                 amount = counterBet.get().getRequestedPrice().getAmount();
             }
@@ -55,8 +54,8 @@ public class ProposerAdviser implements PriceAdviser {
     }
 
     protected OptionalDouble reducePrices(BetContext context) {
-        ProposedPrice proposedPrice = proposalService.reducePrices(context, proposers, context.getSide());
-        OptionalDouble rounded = roundingService.roundBet(proposedPrice.getPrice());
+        var proposedPrice = proposalService.reducePrices(context, proposers, context.getSide());
+        var rounded = roundingService.roundBet(proposedPrice.getPrice());
         if (rounded.isPresent()) {
             context.getProperties().put(BetAction.PROPOSER_PROP, Joiner.on(',').join(proposedPrice.getProposers()));
         }
@@ -65,7 +64,7 @@ public class ProposerAdviser implements PriceAdviser {
 
     @PostConstruct
     public void logConfig() {
-        String proposerList = proposers.stream().map(Validator::getClass)
+        var proposerList = proposers.stream().map(Validator::getClass)
                 .map(Class::getSimpleName).sorted().collect(Collectors.joining(","));
         log.log(Level.INFO, "Proposer coordinator class: ''{0}'', proposers: ''{2}''",
                 new Object[]{this.getClass().getSimpleName(), proposerList});

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.OptionalDouble;
 
 @Component
 public class PriceBulldozer {
@@ -19,10 +18,11 @@ public class PriceBulldozer {
     private RoundingService roundingService;
 
     public List<Price> bulldoze(double threshold, List<Price> prices) {
-        double sum = 0;
+        var sum = 0d;
         Preconditions.checkState(PriceComparator.ORDERING.isStrictlyOrdered(prices));
-        LinkedList<Price> convicts = new LinkedList<>(), untouched = new LinkedList<>();
-        for (Price price : prices) {
+        var convicts = new LinkedList<Price>();
+        var untouched = new LinkedList<Price>();
+        for (var price : prices) {
             if (sum >= threshold) {
                 untouched.add(price);
             } else {
@@ -30,10 +30,10 @@ public class PriceBulldozer {
             }
             sum += price.getAmount();
         }
-        OptionalDouble priceMean = TradedVolume.getWeightedMean(convicts);
+        var priceMean = TradedVolume.getWeightedMean(convicts);
         if (priceMean.isPresent()) {
-            double amount = convicts.stream().mapToDouble(Price::getAmount).sum();
-            double price = roundingService.roundBet(priceMean.getAsDouble()).getAsDouble();
+            var amount = convicts.stream().mapToDouble(Price::getAmount).sum();
+            var price = roundingService.roundBet(priceMean.getAsDouble()).getAsDouble();
             untouched.addFirst(new Price(price, amount, prices.get(0).getSide()));
         }
         return untouched;

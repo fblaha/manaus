@@ -15,10 +15,10 @@ public class SettledBetTest {
 
     @Test
     public void testSerialization() throws Exception {
-        SettledBet original = new SettledBet(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
+        var original = new SettledBet(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
                 5d, new Date(), new Price(5d, 3d, Side.BACK));
 
-        String serialized = mapper.writer().writeValueAsString(original);
+        var serialized = mapper.writer().writeValueAsString(original);
         SettledBet restored = mapper.readerFor(SettledBet.class).readValue(serialized);
         assertThat(restored.getPrice(), is(original.getPrice()));
         assertThat(restored.getSettled(), is(original.getSettled()));

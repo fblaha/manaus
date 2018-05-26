@@ -20,10 +20,10 @@ public class LookAheadFilterTest extends AbstractLocalTestCase {
     private LookAheadFilter lookAheadFilter;
 
     @Test
-    public void testAccept() throws Exception {
-        Date currDate = new Date();
-        Market market = mock(Market.class);
-        Event event = mock(Event.class);
+    public void testAccept() {
+        var currDate = new Date();
+        var market = mock(Market.class);
+        var event = mock(Event.class);
         when(market.getEvent()).thenReturn(event);
         when(event.getOpenDate()).thenReturn(addDays(currDate, 50), addDays(currDate, 2));
         assertThat(lookAheadFilter.accept(market, Set.of()), is(false));

@@ -56,15 +56,15 @@ public class SettledBetSaver {
     }
 
     private void validatePrice(SettledBet bet) {
-        Price requestedPrice = bet.getBetAction().getPrice();
-        Price price = bet.getPrice();
+        var requestedPrice = bet.getBetAction().getPrice();
+        var price = bet.getPrice();
         if (!Price.priceEq(requestedPrice.getPrice(), price.getPrice())) {
             log.log(Level.WARNING, "Different requested price ''{0}''", bet);
         }
     }
 
     private void validateSelection(SettledBet bet) {
-        long selectionId = bet.getBetAction().getSelectionId();
+        var selectionId = bet.getBetAction().getSelectionId();
         Preconditions.checkArgument(selectionId == bet.getSelectionId(),
                 "action.selectionId != bet.selectionId");
     }

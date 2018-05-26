@@ -8,7 +8,6 @@ import cz.fb.manaus.core.model.Side;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
@@ -49,7 +48,7 @@ public class BetCollector {
     }
 
     public CollectedBets toCollectedBets() {
-        CollectedBets bets = CollectedBets.create();
+        var bets = CollectedBets.create();
         getToCancel().stream().map(Bet::getBetId).forEach(bets.getCancel()::add);
         getToUpdate().stream().map(BetCommand::getBet).forEach(bets.getUpdate()::add);
         getToPlace().stream().map(BetCommand::getBet).forEach(bets.getPlace()::add);
@@ -57,7 +56,7 @@ public class BetCollector {
     }
 
     public Optional<Bet> findBet(String marketId, int selId, final Side side) {
-        Stream<Bet> placeOrUpdate = concat(toPlace.stream(), toUpdate.stream())
+        var placeOrUpdate = concat(toPlace.stream(), toUpdate.stream())
                 .map(BetCommand::getBet);
         return concat(placeOrUpdate, toCancel.stream())
                 .filter(bet -> bet.getMarketId().equals(marketId)

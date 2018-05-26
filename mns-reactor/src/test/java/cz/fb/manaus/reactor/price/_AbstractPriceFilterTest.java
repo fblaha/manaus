@@ -1,9 +1,7 @@
 package cz.fb.manaus.reactor.price;
 
 import com.google.common.collect.Range;
-import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.Price;
-import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import cz.fb.manaus.reactor.ReactorTestFactory;
@@ -12,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
@@ -43,7 +40,7 @@ public class _AbstractPriceFilterTest extends AbstractLocalTestCase {
     private ReactorTestFactory testFactory;
 
     @Test
-    public void testSignificantPricesSize() throws Exception {
+    public void testSignificantPricesSize() {
         assertThat(filter.getSignificantPrices(1, SAMPLE_PRICES).size(), is(2));
         assertThat(filter.getSignificantPrices(2, SAMPLE_PRICES).size(), is(4));
         assertThat(filter.getSignificantPrices(3, SAMPLE_PRICES).size(), is(6));
@@ -53,7 +50,7 @@ public class _AbstractPriceFilterTest extends AbstractLocalTestCase {
     }
 
     @Test
-    public void testSignificantPrices() throws Exception {
+    public void testSignificantPrices() {
         assertThat(filter.getSignificantPrices(1, SAMPLE_PRICES), is(List.of(BACK1, LAY1)));
         assertThat(filter.getSignificantPrices(2, SAMPLE_PRICES), is(List.of(BACK1, BACK2, LAY1, LAY2)));
         assertThat(filter.getSignificantPrices(3, SAMPLE_PRICES), is(List.of(BACK1, BACK2, BACK3, LAY1, LAY2, LAY3)));
@@ -61,14 +58,14 @@ public class _AbstractPriceFilterTest extends AbstractLocalTestCase {
 
 
     @Test
-    public void testBestPrices() throws Exception {
-        MarketPrices market = testFactory.createMarket(0.15, List.of(0.5, 0.3, 0.2));
-        for (RunnerPrices runnerPrices : market.getRunnerPrices()) {
-            Price bestBack = runnerPrices.getHomogeneous(Side.BACK).getBestPrice().get();
-            Price bestLay = runnerPrices.getHomogeneous(Side.LAY).getBestPrice().get();
-            List<Price> prices = runnerPrices.getPrices().stream().collect(toList());
-            List<Price> filteredPrices = this.filter.filter(prices);
-            Map<Side, Price> bySide = filteredPrices.stream()
+    public void testBestPrices() {
+        var market = testFactory.createMarket(0.15, List.of(0.5, 0.3, 0.2));
+        for (var runnerPrices : market.getRunnerPrices()) {
+            var bestBack = runnerPrices.getHomogeneous(Side.BACK).getBestPrice().get();
+            var bestLay = runnerPrices.getHomogeneous(Side.LAY).getBestPrice().get();
+            var prices = runnerPrices.getPrices().stream().collect(toList());
+            var filteredPrices = this.filter.filter(prices);
+            var bySide = filteredPrices.stream()
                     .collect(toMap(Price::getSide, identity()));
             assertThat(bestBack, is(bySide.get(Side.BACK)));
             assertThat(bestLay, is(bySide.get(Side.LAY)));

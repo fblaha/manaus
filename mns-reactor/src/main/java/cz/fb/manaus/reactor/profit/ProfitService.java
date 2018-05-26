@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
@@ -32,19 +31,19 @@ public class ProfitService {
 
     public List<ProfitRecord> getProfitRecords(List<SettledBet> bets, Optional<String> projection,
                                                boolean simulationAwareOnly, double chargeRate) {
-        BetCoverage coverage = BetCoverage.from(bets);
-        Map<String, Double> charges = profitPlugin.getCharges(bets, chargeRate);
+        var coverage = BetCoverage.from(bets);
+        var charges = profitPlugin.getCharges(bets, chargeRate);
 
         if (projection.isPresent()) {
             bets = categoryService.filterBets(bets, projection.get(), coverage);
         }
 
-        List<ProfitRecord> betRecords = computeProfitRecords(bets, simulationAwareOnly, charges, coverage);
+        var betRecords = computeProfitRecords(bets, simulationAwareOnly, charges, coverage);
         return mergeProfitRecords(betRecords);
     }
 
     public List<ProfitRecord> mergeProfitRecords(Collection<ProfitRecord> records) {
-        Map<String, List<ProfitRecord>> categories = records.stream()
+        var categories = records.stream()
                 .collect(Collectors.groupingBy(ProfitRecord::getCategory));
         return categories.entrySet().stream()
                 .map(e -> mergeCategory(e.getKey(), e.getValue()))
@@ -55,15 +54,15 @@ public class ProfitService {
     public ProfitRecord mergeCategory(String category, Collection<ProfitRecord> records) {
         Preconditions.checkArgument(records.stream().map(ProfitRecord::getCategory)
                 .allMatch(category::equals));
-        double avgPrice = records.stream()
+        var avgPrice = records.stream()
                 .mapToDouble(ProfitRecord::getAvgPrice)
                 .average().getAsDouble();
-        double theoreticalProfit = records.stream().mapToDouble(ProfitRecord::getTheoreticalProfit).sum();
-        double charge = records.stream().mapToDouble(ProfitRecord::getCharge).sum();
-        int layCount = records.stream().mapToInt(ProfitRecord::getLayCount).sum();
-        int backCount = records.stream().mapToInt(ProfitRecord::getBackCount).sum();
-        int coverCount = records.stream().mapToInt(ProfitRecord::getCoverCount).sum();
-        ProfitRecord result = new ProfitRecord(category, theoreticalProfit, layCount, backCount, avgPrice, charge);
+        var theoreticalProfit = records.stream().mapToDouble(ProfitRecord::getTheoreticalProfit).sum();
+        var charge = records.stream().mapToDouble(ProfitRecord::getCharge).sum();
+        var layCount = records.stream().mapToInt(ProfitRecord::getLayCount).sum();
+        var backCount = records.stream().mapToInt(ProfitRecord::getBackCount).sum();
+        var coverCount = records.stream().mapToInt(ProfitRecord::getCoverCount).sum();
+        var result = new ProfitRecord(category, theoreticalProfit, layCount, backCount, avgPrice, charge);
         if (coverCount > 0) {
             OptionalDouble diff = records.stream().filter(profitRecord -> profitRecord.getCoverDiff() != null)
                     .mapToDouble(ProfitRecord::getCoverDiff).average();
@@ -76,7 +75,7 @@ public class ProfitService {
     private List<ProfitRecord> computeProfitRecords(List<SettledBet> bets, boolean simulationAwareOnly,
                                                     Map<String, Double> charges, BetCoverage coverage) {
         return bets.parallelStream().flatMap(bet -> {
-            Set<String> categories = categoryService.getSettledBetCategories(bet, simulationAwareOnly, coverage);
+            var categories = categoryService.getSettledBetCategories(bet, simulationAwareOnly, coverage);
             return categories.stream().map(category -> {
                 double charge = charges.get(bet.getBetAction().getBetId());
                 Preconditions.checkState(charge >= 0, charge);
@@ -86,19 +85,19 @@ public class ProfitService {
     }
 
     public ProfitRecord toProfitRecord(SettledBet bet, String category, double chargeContribution, BetCoverage coverage) {
-        Side type = requireNonNull(bet.getPrice().getSide());
-        double price = bet.getPrice().getPrice();
+        var type = requireNonNull(bet.getPrice().getSide());
+        var price = bet.getPrice().getPrice();
         ProfitRecord result;
         if (type == Side.BACK) {
             result = new ProfitRecord(category, bet.getProfitAndLoss(), 0, 1, price, chargeContribution);
         } else {
             result = new ProfitRecord(category, bet.getProfitAndLoss(), 1, 0, price, chargeContribution);
         }
-        String marketId = bet.getBetAction().getMarket().getId();
-        long selectionId = bet.getSelectionId();
+        var marketId = bet.getBetAction().getMarket().getId();
+        var selectionId = bet.getSelectionId();
         if (coverage.isCovered(marketId, selectionId)) {
-            double backPrice = coverage.getPrice(marketId, selectionId, Side.BACK);
-            double layPrice = coverage.getPrice(marketId, selectionId, Side.LAY);
+            var backPrice = coverage.getPrice(marketId, selectionId, Side.BACK);
+            var layPrice = coverage.getPrice(marketId, selectionId, Side.LAY);
             result.setCoverDiff(backPrice - layPrice);
             result.setCoverCount(1);
         }

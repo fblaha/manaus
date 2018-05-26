@@ -17,21 +17,21 @@ public class MarketChargeSimulator {
 
 
     public double getChargeMean(int winnerCount, double chargeRate, Map<Long, Double> probabilities, ListMultimap<Long, Price> bets) {
-        Set<Long> selections = probabilities.keySet();
-        List<Set<Long>> winnerPowerSet = getWinnersPowerSet(winnerCount, selections);
-        double chargeMean = 0;
-        for (Set<Long> winners : winnerPowerSet) {
-            double probability = getProbability(winners, probabilities);
-            double profit = 0;
-            for (long selection : selections) {
-                boolean isWinner = winners.contains(selection);
-                List<Price> selectionBets = bets.get(selection);
+        var selections = probabilities.keySet();
+        var winnerPowerSet = getWinnersPowerSet(winnerCount, selections);
+        var chargeMean = 0d;
+        for (var winners : winnerPowerSet) {
+            var probability = getProbability(winners, probabilities);
+            var profit = 0d;
+            for (var selection : selections) {
+                var isWinner = winners.contains(selection);
+                var selectionBets = bets.get(selection);
                 profit += selectionBets.stream()
                         .mapToDouble(isWinner ? this::profitWinner : this::profitLoser)
                         .sum();
             }
             if (profit > 0) {
-                double charge = profit * chargeRate;
+                var charge = profit * chargeRate;
                 chargeMean += probability * charge;
 
             }
@@ -45,7 +45,7 @@ public class MarketChargeSimulator {
 
 
     private double profitWinner(Price price) {
-        double result = (price.getPrice() - 1) * price.getAmount();
+        var result = (price.getPrice() - 1) * price.getAmount();
         if (price.getSide() == Side.BACK) {
             // DRAW (ENG/RUS) 03/06/16 11:08 Back 52500304 Standard 3.66 11/06/16 22:55 2 5.32
             // Fixtures 13 June Nadezhda Mogilev (W) v Zorka-BDU Minsk (W) / Match Odds / The Draw

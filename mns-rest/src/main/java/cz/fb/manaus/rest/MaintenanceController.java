@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class MaintenanceController {
@@ -33,8 +32,9 @@ public class MaintenanceController {
     @RequestMapping(value = "/maintenance/{name}", method = RequestMethod.POST)
     public ResponseEntity<?> runTask(@PathVariable String name) {
         metricRegistry.counter("maintenance." + name).inc();
-        Optional<PeriodicMaintenanceTask> task = maintenanceTasks.stream()
-                .filter(t -> name.equals(t.getName())).findAny();
+        var task = maintenanceTasks.stream()
+                .filter(t -> name.equals(t.getName()))
+                .findAny();
         return task.map(PeriodicMaintenanceTask::execute)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

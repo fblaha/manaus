@@ -37,14 +37,14 @@ public abstract class AbstractBeforeCategorizer implements SettledBetCategorizer
 
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
-        Date date = getDate(settledBet);
+        var date = getDate(settledBet);
         if (date == null) return Set.of();
-        Market market = settledBet.getBetAction().getMarket();
+        var market = settledBet.getBetAction().getMarket();
         if (date.after(market.getEvent().getOpenDate())) {
             log.log(Level.WARNING, "BEFORE_RESOLVER: ''{0}'' date ''{1}'' after market start  ''{2}''", new Object[]{category, date, market});
         }
-        long diffDay = between(date.toInstant(), market.getEvent().getOpenDate().toInstant()).toDays();
-        Set<String> result = new HashSet<>();
+        var diffDay = between(date.toInstant(), market.getEvent().getOpenDate().toInstant()).toDays();
+        var result = new HashSet<String>();
         result.add(requireNonNull(getDayMap().get(diffDay)));
         if (diffDay == 0) {
             handleDay(date, market, result);
@@ -53,7 +53,7 @@ public abstract class AbstractBeforeCategorizer implements SettledBetCategorizer
     }
 
     private void handleDay(Date date, Market market, Set<String> result) {
-        long diffHours = between(date.toInstant(), market.getEvent().getOpenDate().toInstant()).toHours();
+        var diffHours = between(date.toInstant(), market.getEvent().getOpenDate().toInstant()).toHours();
         result.add(requireNonNull(getHourMap().get(diffHours)));
         if (diffHours == 0) {
             handleMin(date, market, result);
@@ -62,7 +62,7 @@ public abstract class AbstractBeforeCategorizer implements SettledBetCategorizer
     }
 
     private void handleMin(Date date, Market market, Set<String> result) {
-        long diffMin = between(date.toInstant(), market.getEvent().getOpenDate().toInstant()).toMinutes();
+        var diffMin = between(date.toInstant(), market.getEvent().getOpenDate().toInstant()).toMinutes();
         result.add(requireNonNull(getMinMap().get(diffMin)));
     }
 

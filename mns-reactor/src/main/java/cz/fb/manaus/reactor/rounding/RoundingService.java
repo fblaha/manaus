@@ -21,13 +21,13 @@ public class RoundingService {
     private ExchangeProvider provider;
 
     public OptionalDouble increment(double price, int stepNum) {
-        OptionalDouble result = plugin.shift(price, stepNum);
+        var result = plugin.shift(price, stepNum);
         if (result.isPresent()) checkState(result.getAsDouble() > price);
         return result;
     }
 
     public OptionalDouble decrement(double price, int stepNum) {
-        OptionalDouble result = plugin.shift(price, -stepNum);
+        var result = plugin.shift(price, -stepNum);
         if (result.isPresent()) {
             checkState(result.getAsDouble() < price);
             if (result.getAsDouble() < provider.getMinPrice()) {
@@ -47,7 +47,7 @@ public class RoundingService {
     }
 
     public Optional<Price> increment(Price price, int stepNum) {
-        OptionalDouble newPrice = increment(price.getPrice(), stepNum);
+        var newPrice = increment(price.getPrice(), stepNum);
         if (newPrice.isPresent()) {
             return Optional.of(new Price(newPrice.getAsDouble(), price.getAmount(), price.getSide()));
         } else {
@@ -56,7 +56,7 @@ public class RoundingService {
     }
 
     public Optional<Price> decrement(Price price, int stepNum) {
-        OptionalDouble newPrice = decrement(price.getPrice(), stepNum);
+        var newPrice = decrement(price.getPrice(), stepNum);
         if (newPrice.isPresent()) {
             return Optional.of(new Price(newPrice.getAsDouble(), price.getAmount(), price.getSide()));
         } else {

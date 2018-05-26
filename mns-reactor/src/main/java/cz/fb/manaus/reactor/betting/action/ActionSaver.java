@@ -3,7 +3,6 @@ package cz.fb.manaus.reactor.betting.action;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketPricesDao;
 import cz.fb.manaus.core.model.BetAction;
-import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.spring.DatabaseComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,7 +28,7 @@ public class ActionSaver {
     }
 
     public void saveAction(BetAction action) {
-        MarketPrices prices = action.getMarketPrices();
+        var prices = action.getMarketPrices();
         if (!Optional.ofNullable(prices.getId()).isPresent()) {
             pricesDao.saveOrUpdate(prices);
             requireNonNull(prices.getId());
@@ -38,9 +37,9 @@ public class ActionSaver {
     }
 
     private void replaceExistingBetId(String betId) {
-        long time = Instant.now().toEpochMilli();
-        String previousBetId = betId + "_" + Long.toHexString(time);
-        int updatedCount = betActionDao.updateBetId(betId, previousBetId);
+        var time = Instant.now().toEpochMilli();
+        var previousBetId = betId + "_" + Long.toHexString(time);
+        var updatedCount = betActionDao.updateBetId(betId, previousBetId);
         if (updatedCount > 0) {
             log.log(Level.INFO, "Previous action bet id set to ''{0}''", previousBetId);
         }

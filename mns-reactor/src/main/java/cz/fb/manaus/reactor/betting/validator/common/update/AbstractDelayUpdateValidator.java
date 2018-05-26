@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 
 import static cz.fb.manaus.reactor.betting.validator.ValidationResult.of;
 
@@ -30,9 +29,9 @@ abstract public class AbstractDelayUpdateValidator implements Validator {
 
     @Override
     public ValidationResult validate(BetContext context) {
-        String betId = context.getOldBet().get().getBetId();
-        Date actionDate = actionDao.getBetActionDate(betId).get();
-        long untilNow = actionDate.toInstant().until(Instant.now(), ChronoUnit.MILLIS);
+        var betId = context.getOldBet().get().getBetId();
+        var actionDate = actionDao.getBetActionDate(betId).get();
+        var untilNow = actionDate.toInstant().until(Instant.now(), ChronoUnit.MILLIS);
         return of(untilNow > pausePeriod.toMillis());
     }
 

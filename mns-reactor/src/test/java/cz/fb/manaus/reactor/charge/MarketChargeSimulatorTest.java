@@ -47,8 +47,8 @@ public class MarketChargeSimulatorTest extends AbstractLocalTestCase {
     }
 
     @Test
-    public void testCounterMatching() throws Exception {
-        ListMultimap<Long, Price> bets = LinkedListMultimap.create();
+    public void testCounterMatching() {
+        var bets = LinkedListMultimap.<Long, Price>create();
         checkSimulatedCharge(CoreTestFactory.HOME, new Price(1.8d, 2, Side.LAY), bets, THREE_IMBALANCED, this::assertUp);
         checkSimulatedCharge(CoreTestFactory.HOME, new Price(2.2d, 2, Side.BACK), bets, THREE_IMBALANCED, this::assertDown);
         checkSimulatedCharge(CoreTestFactory.AWAY, new Price(9d, 2, Side.BACK), bets, THREE_IMBALANCED, this::assertUp);
@@ -56,16 +56,16 @@ public class MarketChargeSimulatorTest extends AbstractLocalTestCase {
     }
 
     @Test
-    public void testBackMatchingThree() throws Exception {
-        ListMultimap<Long, Price> bets = LinkedListMultimap.create();
+    public void testBackMatchingThree() {
+        var bets = LinkedListMultimap.<Long, Price>create();
         checkSimulatedCharge(CoreTestFactory.HOME, new Price(3.5, 2, Side.BACK), bets, THREE_BALANCED, this::assertUp);
         checkSimulatedCharge(CoreTestFactory.DRAW, new Price(3.5, 2, Side.BACK), bets, THREE_BALANCED, this::assertUp);
         checkSimulatedCharge(CoreTestFactory.AWAY, new Price(3.5, 2, Side.BACK), bets, THREE_BALANCED, this::assertDown);
     }
 
     @Test
-    public void testLowMatchedAmount() throws Exception {
-        ListMultimap<Long, Price> bets = LinkedListMultimap.create();
+    public void testLowMatchedAmount() {
+        var bets = LinkedListMultimap.<Long, Price>create();
         checkSimulatedCharge(CoreTestFactory.HOME, new Price(2.1, 0.75, Side.BACK), bets, TWO_BALANCED, this::assertUp);
         checkSimulatedCharge(CoreTestFactory.HOME, new Price(1.9, 2, Side.LAY), bets, TWO_BALANCED, this::assertUp);
 
@@ -74,21 +74,21 @@ public class MarketChargeSimulatorTest extends AbstractLocalTestCase {
     }
 
     @Test
-    public void testBackMatchingTwo() throws Exception {
-        ListMultimap<Long, Price> bets = LinkedListMultimap.create();
+    public void testBackMatchingTwo() {
+        var bets = LinkedListMultimap.<Long, Price>create();
         checkSimulatedCharge(CoreTestFactory.HOME, new Price(2.1, 2, Side.BACK), bets, TWO_BALANCED, this::assertUp);
         checkSimulatedCharge(CoreTestFactory.AWAY, new Price(2.1, 2, Side.BACK), bets, TWO_BALANCED, this::assertDown);
     }
 
     @Test
-    public void testLayMatchingTwo() throws Exception {
+    public void testLayMatchingTwo() {
         ListMultimap<Long, Price> bets = LinkedListMultimap.create();
         checkSimulatedCharge(CoreTestFactory.HOME, new Price(1.8, 2, Side.LAY), bets, TWO_BALANCED, this::assertUp);
         checkSimulatedCharge(CoreTestFactory.AWAY, new Price(1.9, 2, Side.LAY), bets, TWO_BALANCED, this::assertDown);
     }
 
     @Test
-    public void testAllGreenCrossMatching() throws Exception {
+    public void testAllGreenCrossMatching() {
         ListMultimap<Long, Price> bets = LinkedListMultimap.create();
         checkSimulatedCharge(CoreTestFactory.HOME, new Price(1.8, 2, Side.LAY), bets, TWO_BALANCED, this::assertUp);
         checkSimulatedCharge(CoreTestFactory.AWAY, new Price(2.2, 2, Side.BACK), bets, TWO_BALANCED, this::assertUp);
@@ -97,7 +97,7 @@ public class MarketChargeSimulatorTest extends AbstractLocalTestCase {
     }
 
     @Test
-    public void testLayMatchingThree() throws Exception {
+    public void testLayMatchingThree() {
         ListMultimap<Long, Price> bets = LinkedListMultimap.create();
         checkSimulatedCharge(CoreTestFactory.HOME, new Price(2.7, 2.5, Side.LAY), bets, THREE_BALANCED, this::assertUp);
         checkSimulatedCharge(CoreTestFactory.DRAW, new Price(3, 2, Side.LAY), bets, THREE_BALANCED, this::assertDown);

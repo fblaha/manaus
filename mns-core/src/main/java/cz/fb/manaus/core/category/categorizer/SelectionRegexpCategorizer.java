@@ -24,12 +24,12 @@ public class SelectionRegexpCategorizer extends AbstractRegexpResolver implement
 
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
-        String selectionName = settledBet.getSelectionName();
+        var selectionName = settledBet.getSelectionName();
         return getCategories(selectionName);
     }
 
     Set<String> getCategories(String selectionName) {
-        Set<String> selectionBased = getCategories(selectionName, SELECTION_MAP);
+        var selectionBased = getCategories(selectionName, SELECTION_MAP);
         return selectionBased.stream().map(this::addPrefix).collect(toSet());
     }
 

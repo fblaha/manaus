@@ -10,7 +10,7 @@ public class ActualSelectionMatchedFunction implements ProgressFunction {
 
     @Override
     public OptionalDouble apply(SettledBet bet) {
-        Double matchedAmount = bet.getBetAction()
+        var matchedAmount = bet.getBetAction()
                 .getMarketPrices()
                 .getRunnerPrices(bet.getSelectionId())
                 .getMatchedAmount();

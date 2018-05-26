@@ -17,39 +17,39 @@ public class MarketPricesTest {
 
     @Test
     public void testSerialization() throws Exception {
-        MarketPrices prices = CoreTestFactory.newMarketPrices(1, 2.4d);
-        ObjectMapper mapper = new ObjectMapper();
-        String serialized = mapper.writer().writeValueAsString(prices);
+        var prices = CoreTestFactory.newMarketPrices(1, 2.4d);
+        var mapper = new ObjectMapper();
+        var serialized = mapper.writer().writeValueAsString(prices);
         MarketPrices restored = mapper.readerFor(MarketPrices.class).readValue(serialized);
-        String doubleSerialized = mapper.writer().writeValueAsString(restored);
+        var doubleSerialized = mapper.writer().writeValueAsString(restored);
         assertEquals(serialized, doubleSerialized);
     }
 
     @Test
-    public void testReciprocal() throws Exception {
+    public void testReciprocal() {
         assertThat(CoreTestFactory.newMarketPrices(1, 2.4d).getReciprocal(Side.BACK).getAsDouble(), is(0.8d));
         assertThat(CoreTestFactory.newMarketPrices(1, 3d).getReciprocal(Side.BACK).getAsDouble(), is(1d));
     }
 
     @Test
-    public void testReciprocalTwoWinners() throws Exception {
+    public void testReciprocalTwoWinners() {
         assertThat(CoreTestFactory.newMarketPrices(2, 1.5d).getReciprocal(Side.BACK).getAsDouble(), is(1d));
     }
 
     @Test
-    public void testLastMatchedReciprocal() throws Exception {
+    public void testLastMatchedReciprocal() {
         assertThat(CoreTestFactory.newMarketPrices(null).getLastMatchedReciprocal().getAsDouble(), is(1d));
     }
 
     @Test
-    public void testReciprocalTwoWinnersCompare() throws Exception {
+    public void testReciprocalTwoWinnersCompare() {
         assertTrue(CoreTestFactory.newMarketPrices(2, 1.45d).getReciprocal(Side.BACK).getAsDouble() <
                 CoreTestFactory.newMarketPrices(2, 1.46d).getReciprocal(Side.BACK).getAsDouble());
     }
 
     @Test
-    public void testOverround() throws Exception {
-        double overround = getOverround(of(2.5d, 3.25d, 3d));
+    public void testOverround() {
+        var overround = getOverround(of(2.5d, 3.25d, 3d));
         assertThat(Precision.round(overround, 3), is(1.041));
     }
 

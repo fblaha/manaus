@@ -3,7 +3,6 @@ package cz.fb.manaus.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.fb.manaus.core.model.AccountMoney;
 import cz.fb.manaus.core.model.Bet;
-import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.CoreTestFactory;
@@ -26,19 +25,19 @@ public class MarketSnapshotControllerTest extends AbstractControllerTest {
     @Test
     public void testPushSnapshot() throws Exception {
         createMarketWithSingleAction();
-        MarketPrices marketPrices = newMarketPrices(3, 2.8d);
-        MarketSnapshotCrate crate = new MarketSnapshotCrate();
+        var marketPrices = newMarketPrices(3, 2.8d);
+        var crate = new MarketSnapshotCrate();
         crate.setPrices(marketPrices);
-        AccountMoney accountMoney = new AccountMoney();
+        var accountMoney = new AccountMoney();
         accountMoney.setAvailable(1000);
         accountMoney.setTotal(2000);
         crate.setMoney(accountMoney);
         crate.setScanTime(1000);
         crate.setCategoryBlacklist(Set.of("bad"));
-        Bet bet = new Bet("1", marketPrices.getMarket().getId(), CoreTestFactory.DRAW,
+        var bet = new Bet("1", marketPrices.getMarket().getId(), CoreTestFactory.DRAW,
                 new Price(3d, 5d, Side.BACK), new Date(), 0d);
         crate.setBets(List.of(bet));
-        String snapshot = new ObjectMapper().writer().writeValueAsString(crate);
+        var snapshot = new ObjectMapper().writer().writeValueAsString(crate);
         mvc.perform(post("/markets/{id}/snapshot", MARKET_ID)
                 .content(snapshot)
                 .contentType(MediaType.APPLICATION_JSON))

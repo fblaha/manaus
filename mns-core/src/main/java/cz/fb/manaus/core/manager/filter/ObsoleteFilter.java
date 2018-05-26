@@ -15,7 +15,7 @@ public class ObsoleteFilter implements MarketFilter {
 
     @Override
     public boolean accept(Market market, Set<String> categoryBlacklist) {
-        boolean result = market.getEvent().getOpenDate().after(new Date());
+        var result = market.getEvent().getOpenDate().after(new Date());
         if (!result) {
             log.log(Level.FINEST, "Omitting obsolete date ''{0}'' for ''{1}''", new Object[]{market.getEvent().getOpenDate(), market});
         }

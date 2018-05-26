@@ -17,7 +17,7 @@ public abstract class AbstractReciprocalValidator implements Validator {
 
     @Override
     public ValidationResult validate(BetContext context) {
-        double reciprocal = context.getMarketPrices().getReciprocal(type).getAsDouble();
+        var reciprocal = context.getMarketPrices().getReciprocal(type).getAsDouble();
         return ValidationResult.of(validRange.contains(reciprocal));
     }
 }

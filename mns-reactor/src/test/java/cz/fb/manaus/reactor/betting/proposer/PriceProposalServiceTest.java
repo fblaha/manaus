@@ -27,23 +27,23 @@ public class PriceProposalServiceTest extends AbstractLocalTestCase {
     private PriceProposalService service;
 
     @Test
-    public void testBackPrice() throws Exception {
+    public void testBackPrice() {
         checkProposal(MAX_PRICE, Side.BACK, PROPOSERS);
     }
 
     @Test
-    public void testLayPrice() throws Exception {
+    public void testLayPrice() {
         checkProposal(MIN_PRICE, Side.LAY, PROPOSERS);
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testMandatoryPrice() throws Exception {
+    public void testMandatoryPrice() {
         PriceProposer proposer = ctx -> OptionalDouble.empty();
         service.reducePrices(mock(BetContext.class), List.of(proposer), Side.LAY);
     }
 
     private void checkProposal(double expectedPrice, Side side, List<PriceProposer> proposers) {
-        BetContext context = mock(BetContext.class);
+        var context = mock(BetContext.class);
         when(context.getProperties()).thenReturn(new HashMap<>());
         double price = service.reducePrices(context, proposers, side).getPrice();
         assertThat(price, is(expectedPrice));
@@ -67,6 +67,4 @@ public class PriceProposalServiceTest extends AbstractLocalTestCase {
 
     private static class FooProposer extends TestProposer2 {
     }
-
-
 }

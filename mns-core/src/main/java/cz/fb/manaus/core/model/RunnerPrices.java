@@ -122,7 +122,7 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
 
     @Override
     public RunnerPrices getHomogeneous(Side side) {
-        List<Price> prices = this.prices.stream().filter(price -> price.getSide() == side)
+        var prices = this.prices.stream().filter(price -> price.getSide() == side)
                 .collect(Collectors.toList());
         return new RunnerPrices(getSelectionId(), prices, matchedAmount, lastMatchedPrice);
     }

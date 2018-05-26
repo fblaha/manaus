@@ -19,14 +19,14 @@ public abstract class AbstractDecrementingProposer implements PriceProposer {
 
     @Override
     public ValidationResult validate(BetContext context) {
-        OptionalDouble proposedPrice = getProposedPrice(context);
+        var proposedPrice = getProposedPrice(context);
         return proposedPrice.isPresent() ? ValidationResult.ACCEPT : ValidationResult.REJECT;
 
     }
 
     @Override
     public OptionalDouble getProposedPrice(BetContext context) {
-        OptionalDouble originalPrice = roundingService.roundBet(getOriginalPrice(context));
+        var originalPrice = roundingService.roundBet(getOriginalPrice(context));
         if (originalPrice.isPresent()) {
             return roundingService.decrement(originalPrice.getAsDouble(), decrementSteps);
         } else {

@@ -25,12 +25,12 @@ public class DowngradeCategorizerTest extends AbstractLocalTestCase {
 
 
     @Test
-    public void testCategory() throws Exception {
-        BetAction place = mock(BetAction.class);
+    public void testCategory() {
+        var place = mock(BetAction.class);
         when(place.getPrice()).thenReturn(new Price(2d, 5d, Side.LAY));
-        Date curr = new Date();
+        var curr = new Date();
         when(place.getActionDate()).thenReturn(addHours(curr, -5));
-        BetAction update = mock(BetAction.class);
+        var update = mock(BetAction.class);
         when(update.getPrice()).thenReturn(new Price(2.1d, 5d, Side.LAY));
         when(update.getActionDate()).thenReturn(addHours(curr, -2));
 
@@ -41,7 +41,7 @@ public class DowngradeCategorizerTest extends AbstractLocalTestCase {
         assertThat(categorizer.getCategories(List.of(place, update), null), hasItems(DowngradeCategorizer.DOWNGRADE, DowngradeCategorizer.DOWNGRADE_LAST));
 
 
-        BetAction update2 = mock(BetAction.class);
+        var update2 = mock(BetAction.class);
         when(update2.getPrice()).thenReturn(new Price(2.1d, 5d, Side.LAY));
         when(update2.getActionDate()).thenReturn(addHours(curr, -1));
         assertThat(categorizer.getCategories(List.of(place, update, update2), null), is(Set.of(DowngradeCategorizer.DOWNGRADE)));

@@ -35,7 +35,7 @@ public class ProgressProfitService extends AbstractFunctionProfitService {
 
     public List<ProfitRecord> getProfitRecords(List<SettledBet> bets, Optional<String> funcName,
                                                int chunkCount, double chargeRate, Optional<String> projection) {
-        FunctionProfitRecordCalculator calculator = getCalculator(chunkCount);
+        var calculator = getCalculator(chunkCount);
         return getProfitRecords(calculator, bets, chargeRate, funcName, projection);
     }
 
@@ -46,29 +46,30 @@ public class ProgressProfitService extends AbstractFunctionProfitService {
 
     private List<ProfitRecord> computeProfitRecords(ProgressFunction function, int chunkCount, BetCoverage coverage,
                                                     List<SettledBet> bets, Map<String, Double> charges) {
-        List<Pair<SettledBet, OptionalDouble>> computed = bets.stream()
+        var computed = bets.stream()
                 .map(bet -> new ImmutablePair<>(bet, function.apply(bet)))
                 .collect(Collectors.toList());
 
 
-        Map<Boolean, List<Pair<SettledBet, OptionalDouble>>> hasValue = computed.stream()
-                .collect(Collectors.partitioningBy(p -> p.getRight().isPresent()));
+        var hasValue = computed.stream().collect(
+                Collectors.<Pair<SettledBet, OptionalDouble>>partitioningBy(
+                        p -> p.getRight().isPresent()));
 
-        Pair<SettledBet, OptionalDouble>[] array = toArray(hasValue.get(true));
+        var array = toArray(hasValue.get(true));
         Arrays.parallelSort(array, comparingDouble(pair -> pair.getRight().getAsDouble()));
-        ImmutableList<Pair<SettledBet, OptionalDouble>> sortedCopy = ImmutableList.copyOf(array);
-        int chunkSize = IntMath.divide(sortedCopy.size(), chunkCount, RoundingMode.CEILING);
+        var sortedCopy = ImmutableList.copyOf(array);
+        var chunkSize = IntMath.divide(sortedCopy.size(), chunkCount, RoundingMode.CEILING);
 
         if (sortedCopy.isEmpty()) return List.of();
 
-        List<List<Pair<SettledBet, OptionalDouble>>> chunks = Lists.partition(sortedCopy, chunkSize);
+        var chunks = Lists.partition(sortedCopy, chunkSize);
 
-        LinkedList<ProfitRecord> result = chunks.parallelStream()
+        var result = chunks.parallelStream()
                 .map(chunk -> computeChunkRecord(function.getName(), chunk, charges, coverage))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toCollection(LinkedList::new));
 
-        List<Pair<SettledBet, OptionalDouble>> noValues = hasValue.get(false);
+        var noValues = hasValue.get(false);
         if (!noValues.isEmpty()) {
             result.addFirst(computeFunctionRecord(function.getName() + ": -",
                     noValues.stream().map(Pair::getLeft), charges, coverage));

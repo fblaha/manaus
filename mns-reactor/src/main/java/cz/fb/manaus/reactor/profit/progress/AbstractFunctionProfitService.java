@@ -42,15 +42,15 @@ abstract public class AbstractFunctionProfitService {
 
     protected List<ProfitRecord> getProfitRecords(FunctionProfitRecordCalculator calculator, List<SettledBet> bets,
                                                   double chargeRate, Optional<String> funcName, Optional<String> projection) {
-        Map<String, Double> charges = profitPlugin.getCharges(bets, chargeRate);
-        BetCoverage coverage = BetCoverage.from(bets);
+        var charges = profitPlugin.getCharges(bets, chargeRate);
+        var coverage = BetCoverage.from(bets);
 
         if (projection.isPresent()) {
             bets = categoryService.filterBets(bets, projection.get(), coverage);
         }
 
-        List<ProfitRecord> profitRecords = new LinkedList<>();
-        for (ProgressFunction function : getProgressFunctions(funcName)) {
+        var profitRecords = new LinkedList<ProfitRecord>();
+        for (var function : getProgressFunctions(funcName)) {
             profitRecords.addAll(calculator.getProfitRecords(function, bets, coverage, charges));
         }
         return profitRecords;
@@ -70,11 +70,11 @@ abstract public class AbstractFunctionProfitService {
 
     protected ProfitRecord computeChunkRecord(String name, List<Pair<SettledBet, OptionalDouble>> chunk,
                                               Map<String, Double> charges, BetCoverage coverage) {
-        OptionalDouble average = chunk.stream().map(Pair::getRight)
+        var average = chunk.stream().map(Pair::getRight)
                 .mapToDouble(OptionalDouble::getAsDouble).average();
         if (average.isPresent()) {
-            String category = getValueCategory(name, average);
-            List<SettledBet> bets = chunk.stream().map(Pair::getLeft).collect(Collectors.toList());
+            var category = getValueCategory(name, average);
+            var bets = chunk.stream().map(Pair::getLeft).collect(Collectors.toList());
             return computeFunctionRecord(category, bets.stream(), charges, coverage);
         } else {
             throw new IllegalStateException();
@@ -91,8 +91,8 @@ abstract public class AbstractFunctionProfitService {
 
     protected ProfitRecord computeFunctionRecord(String category, Stream<SettledBet> bets,
                                                  Map<String, Double> charges, BetCoverage coverage) {
-        List<ProfitRecord> chunkRecords = bets.map(bet -> {
-            String betId = bet.getBetAction().getBetId();
+        var chunkRecords = bets.map(bet -> {
+            var betId = bet.getBetAction().getBetId();
             return profitService.toProfitRecord(bet, category, charges.get(betId), coverage);
         }).collect(Collectors.toList());
         return profitService.mergeCategory(category, chunkRecords);

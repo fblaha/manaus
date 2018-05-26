@@ -4,7 +4,6 @@ import com.codahale.metrics.Counter;
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Snapshot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,11 +20,11 @@ public class MetricsService {
     private MetricRegistry registry;
 
     public List<MetricRecord<?>> getCollectedMetrics(String prefix) {
-        Stream<MetricRecord<?>> counters = registry.getCounters().entrySet().stream()
+        var counters = registry.getCounters().entrySet().stream()
                 .flatMap(e -> getCounterMetricRecords(e.getKey(), e.getValue()));
-        Stream<MetricRecord<?>> meters = registry.getMeters().entrySet().stream()
+        var meters = registry.getMeters().entrySet().stream()
                 .flatMap(e -> getMeterMetricRecords(e.getKey(), e.getValue()));
-        Stream<MetricRecord<?>> histograms = registry.getHistograms().entrySet().stream()
+        var histograms = registry.getHistograms().entrySet().stream()
                 .flatMap(e -> getHistogramMetricRecords(e.getKey(), e.getValue()));
 
         return Stream.of(counters, meters, histograms).flatMap(Function.identity())
@@ -47,7 +46,7 @@ public class MetricsService {
     }
 
     private Stream<MetricRecord<?>> getHistogramMetricRecords(String name, Histogram histogram) {
-        Snapshot snapshot = histogram.getSnapshot();
+        var snapshot = histogram.getSnapshot();
         return Stream.of(
                 new MetricRecord<>(name + ".max", snapshot.getMax()),
                 new MetricRecord<>(name + ".min", snapshot.getMin()));

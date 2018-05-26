@@ -8,9 +8,7 @@ import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Map;
-import java.util.OptionalDouble;
 import java.util.Set;
 
 @Component
@@ -25,19 +23,19 @@ public class CounterBetCategorizer implements SettledBetCategorizer {
 
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
-        String marketId = settledBet.getBetAction().getMarket().getId();
-        long selectionId = settledBet.getSelectionId();
-        Side side = settledBet.getPrice().getSide();
-        Side counterSide = side.getOpposite();
-        List<SettledBet> bets = coverage.getBets(marketId, selectionId, counterSide);
-        OptionalDouble avgCounter = bets.stream()
+        var marketId = settledBet.getBetAction().getMarket().getId();
+        var selectionId = settledBet.getSelectionId();
+        var side = settledBet.getPrice().getSide();
+        var counterSide = side.getOpposite();
+        var bets = coverage.getBets(marketId, selectionId, counterSide);
+        var avgCounter = bets.stream()
                 .map(SettledBet::getPrice)
                 .mapToDouble(Price::getPrice)
                 .average();
         if (avgCounter.isPresent()) {
-            double counterPrice = avgCounter.getAsDouble();
-            double price = settledBet.getPrice().getPrice();
-            Map<Side, Double> prices = Map.of(side, price, counterSide, counterPrice);
+            var counterPrice = avgCounter.getAsDouble();
+            var price = settledBet.getPrice().getPrice();
+            var prices = Map.of(side, price, counterSide, counterPrice);
             if (Price.priceEq(counterPrice, price)) {
                 return Set.of(PREFIX + "zero");
             } else if (prices.get(Side.BACK) > prices.get(Side.LAY)) {

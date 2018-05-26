@@ -1,13 +1,11 @@
 package cz.fb.manaus.reactor.profit.progress;
 
 import cz.fb.manaus.core.model.ProfitRecord;
-import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.provider.ExchangeProvider;
 import cz.fb.manaus.reactor.profit.AbstractProfitTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
 import java.util.Optional;
 
 import static com.google.common.collect.Ordering.from;
@@ -25,9 +23,9 @@ public class ProgressProfitServiceTest extends AbstractProfitTest {
 
 
     @Test
-    public void testSingleChunk() throws Exception {
-        List<SettledBet> bets = generateBets(Optional.empty());
-        List<ProfitRecord> records = service.getProfitRecords(bets,
+    public void testSingleChunk() {
+        var bets = generateBets(Optional.empty());
+        var records = service.getProfitRecords(bets,
                 Optional.of("price"), 1, provider.getChargeRate(), Optional.empty());
         assertThat(records.size(), is(1));
         assertThat(records.get(0).getCategory(), is("price: 2.79"));
@@ -36,9 +34,9 @@ public class ProgressProfitServiceTest extends AbstractProfitTest {
     }
 
     @Test
-    public void testMultipleChunks() throws Exception {
-        List<SettledBet> bets = generateBets(Optional.empty());
-        List<ProfitRecord> records = service.getProfitRecords(bets,
+    public void testMultipleChunks() {
+        var bets = generateBets(Optional.empty());
+        var records = service.getProfitRecords(bets,
                 Optional.of("price"), 10, provider.getChargeRate(), Optional.empty());
         assertThat(records.size(), is(10));
         assertTrue(from(comparingDouble(ProfitRecord::getAvgPrice)).isStrictlyOrdered(records));

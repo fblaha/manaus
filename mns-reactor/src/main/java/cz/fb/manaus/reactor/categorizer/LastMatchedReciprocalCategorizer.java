@@ -2,12 +2,10 @@ package cz.fb.manaus.reactor.categorizer;
 
 import cz.fb.manaus.core.category.BetCoverage;
 import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer;
-import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.SettledBet;
 import org.springframework.stereotype.Component;
 
-import java.util.OptionalDouble;
 import java.util.Set;
 
 @Component
@@ -23,8 +21,8 @@ public class LastMatchedReciprocalCategorizer implements SettledBetCategorizer {
 
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
-        MarketPrices marketPrices = settledBet.getBetAction().getMarketPrices();
-        OptionalDouble reciprocal = marketPrices.getLastMatchedReciprocal();
+        var marketPrices = settledBet.getBetAction().getMarketPrices();
+        var reciprocal = marketPrices.getLastMatchedReciprocal();
         if (reciprocal.isPresent()) {
             if (Price.priceEq(reciprocal.getAsDouble(), 1d)) {
                 return Set.of(PREFIX + "eq1");

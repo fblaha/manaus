@@ -2,12 +2,9 @@ package cz.fb.manaus.core.dao;
 
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -27,9 +24,9 @@ public class SettledBetDao extends GenericHibernateDao<SettledBet, Long> {
 
     @Transactional(readOnly = true)
     public Optional<SettledBet> getSettledBet(String betId) {
-        CriteriaBuilder builder = entityManagerFactory.getCriteriaBuilder();
-        CriteriaQuery<SettledBet> criteria = builder.createQuery(SettledBet.class);
-        Root<SettledBet> root = criteria.from(SettledBet.class);
+        var builder = entityManagerFactory.getCriteriaBuilder();
+        var criteria = builder.createQuery(SettledBet.class);
+        var root = criteria.from(SettledBet.class);
         criteria.where(builder.equal(root.join("betAction").get("betId"), betId));
         return getSession().createQuery(criteria).uniqueResultOptional();
     }
@@ -37,11 +34,11 @@ public class SettledBetDao extends GenericHibernateDao<SettledBet, Long> {
 
     @Transactional(readOnly = true)
     public List<SettledBet> getSettledBets(String marketId, OptionalLong selectionId, Optional<Side> side) {
-        CriteriaBuilder builder = entityManagerFactory.getCriteriaBuilder();
-        CriteriaQuery<SettledBet> criteria = builder.createQuery(SettledBet.class);
+        var builder = entityManagerFactory.getCriteriaBuilder();
+        var criteria = builder.createQuery(SettledBet.class);
         Root<SettledBet> root = criteria.from(SettledBet.class);
 
-        List<Predicate> predicates = new LinkedList<>();
+        var predicates = new LinkedList<Predicate>();
         predicates.add(builder.equal(root.join("betAction").join("market").get("id"), marketId));
         selectionId.ifPresent(val -> predicates.add(builder.equal(root.get("selectionId"), val)));
         side.ifPresent(val -> predicates.add(builder.equal(root.get("price").get("side"), val)));
@@ -52,21 +49,21 @@ public class SettledBetDao extends GenericHibernateDao<SettledBet, Long> {
 
     @Transactional(readOnly = true)
     public List<SettledBet> getSettledBets(Optional<Date> from, Optional<Date> to, Optional<Side> side, OptionalInt maxResults) {
-        CriteriaBuilder builder = entityManagerFactory.getCriteriaBuilder();
-        CriteriaQuery<SettledBet> criteria = builder.createQuery(SettledBet.class);
-        Root<SettledBet> root = criteria.from(SettledBet.class);
+        var builder = entityManagerFactory.getCriteriaBuilder();
+        var criteria = builder.createQuery(SettledBet.class);
+        var root = criteria.from(SettledBet.class);
 
         criteria.orderBy(builder.desc(root.get("settled")));
         Path<Date> settled = root.get("settled");
 
-        List<Predicate> predicates = new LinkedList<>();
+        var predicates = new LinkedList<Predicate>();
         side.ifPresent(val -> predicates.add(builder.equal(root.get("price").get("side"), val)));
         from.ifPresent(val -> predicates.add(builder.greaterThanOrEqualTo(settled, val)));
         to.ifPresent(val -> predicates.add(builder.lessThanOrEqualTo(settled, val)));
         if (!predicates.isEmpty()) {
             criteria.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
         }
-        Query<SettledBet> query = getSession().createQuery(criteria);
+        var query = getSession().createQuery(criteria);
         maxResults.ifPresent(query::setMaxResults);
         return query.getResultList();
     }

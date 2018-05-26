@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.Duration;
 
@@ -31,7 +30,7 @@ class TestTask implements PeriodicMaintenanceTask {
 
     @Override
     public ConfigUpdate execute() {
-        ConfigUpdate command = ConfigUpdate.empty(Duration.ofHours(12));
+        var command = ConfigUpdate.empty(Duration.ofHours(12));
         command.getDeletePrefixes().add("test_delete");
         return command;
     }
@@ -48,12 +47,12 @@ public class MaintenanceControllerTest extends AbstractControllerTest {
 
     @Test
     public void testRunTask() throws Exception {
-        MvcResult result = mvc.perform(post(
+        var result = mvc.perform(post(
                 "/maintenance/{name}", "testTask")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
-        String content = result.getResponse().getContentAsString();
+        var content = result.getResponse().getContentAsString();
         assertThat(content, CoreMatchers.containsString("test_delete"));
     }
 

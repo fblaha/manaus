@@ -4,12 +4,9 @@ import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import cz.fb.manaus.reactor.ReactorTestFactory;
-import cz.fb.manaus.reactor.betting.BetContext;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.OptionalDouble;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -24,30 +21,30 @@ public class _AbstractFairnessProposerTest extends AbstractLocalTestCase {
     private ReactorTestFactory factory;
 
     @Test
-    public void testLayByLayPropose() throws Exception {
-        BetContext ctx = factory.createContext(Side.LAY, 2.5, 3.2);
-        OptionalDouble proposedPrice = layProposer.getProposedPrice(ctx);
+    public void testLayByLayPropose() {
+        var ctx = factory.createContext(Side.LAY, 2.5, 3.2);
+        var proposedPrice = layProposer.getProposedPrice(ctx);
         assertThat(Price.round(proposedPrice.getAsDouble()), is(2.96d));
     }
 
     @Test
-    public void testBackByLayPropose() throws Exception {
-        BetContext ctx = factory.createContext(Side.BACK, 2.5, 3.5);
-        OptionalDouble proposedPrice = layProposer.getProposedPrice(ctx);
+    public void testBackByLayPropose() {
+        var ctx = factory.createContext(Side.BACK, 2.5, 3.5);
+        var proposedPrice = layProposer.getProposedPrice(ctx);
         assertThat(Price.round(proposedPrice.getAsDouble()), is(3.041d));
     }
 
     @Test
-    public void testBackByBackPropose() throws Exception {
-        BetContext ctx = factory.createContext(Side.BACK, 2.8, 3.5);
-        OptionalDouble proposedPrice = backProposer.getProposedPrice(ctx);
+    public void testBackByBackPropose() {
+        var ctx = factory.createContext(Side.BACK, 2.8, 3.5);
+        var proposedPrice = backProposer.getProposedPrice(ctx);
         assertThat(Price.round(proposedPrice.getAsDouble()), is(3.041d));
     }
 
     @Test
-    public void testLayByBackPropose() throws Exception {
-        BetContext ctx = factory.createContext(Side.LAY, 2.2, 3.7);
-        OptionalDouble proposedPrice = backProposer.getProposedPrice(ctx);
+    public void testLayByBackPropose() {
+        var ctx = factory.createContext(Side.LAY, 2.2, 3.7);
+        var proposedPrice = backProposer.getProposedPrice(ctx);
         assertThat(Price.round(proposedPrice.getAsDouble()), is(2.96d));
     }
 

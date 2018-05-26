@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -45,7 +44,7 @@ public class MarketController {
     ResponseEntity<?> addOrUpdateMarket(@RequestBody Market market) {
         validateMarket(market);
         marketDao.saveOrUpdate(market);
-        URI location = ServletUriComponentsBuilder
+        var location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(market.getId()).toUri();
         return ResponseEntity.created(location).build();

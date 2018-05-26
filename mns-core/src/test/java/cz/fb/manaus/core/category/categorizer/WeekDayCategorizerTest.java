@@ -16,8 +16,8 @@ public class WeekDayCategorizerTest extends AbstractLocalTestCase {
     private WeekDayCategorizer categorizer;
 
     @Test
-    public void testCategory() throws Exception {
-        Calendar cal = Calendar.getInstance();
+    public void testCategory() {
+        var cal = Calendar.getInstance();
         cal.set(2012, Calendar.OCTOBER, 22, 9, 40);
         assertThat(categorizer.getCategory(cal.getTime()), is(Set.of("mon")));
         cal.set(Calendar.DAY_OF_MONTH, 23);
@@ -35,6 +35,4 @@ public class WeekDayCategorizerTest extends AbstractLocalTestCase {
         cal.set(Calendar.DAY_OF_MONTH, 29);
         assertThat(categorizer.getCategory(cal.getTime()), is(Set.of("mon")));
     }
-
-
 }

@@ -36,11 +36,9 @@ public class Category {
     }
 
     private Matcher getMatcher() {
-        Matcher matcher = PATTERN.matcher(category);
+        var matcher = PATTERN.matcher(category);
         checkState(matcher.matches());
         checkState(!MARKET_PREFIX.equals(matcher.group(1)));
         return matcher;
     }
-
-
 }

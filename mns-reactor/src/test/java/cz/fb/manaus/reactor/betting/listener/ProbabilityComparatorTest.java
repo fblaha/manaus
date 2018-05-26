@@ -18,9 +18,9 @@ public class ProbabilityComparatorTest extends AbstractLocalTestCase {
     private ReactorTestFactory testFactory;
 
     @Test
-    public void testCompare() throws Exception {
-        RunnerPrices first = testFactory.newRP(1, 1.4d, 1.6d);
-        RunnerPrices second = testFactory.newRP(2, 2.8d, 3.3d);
+    public void testCompare() {
+        var first = testFactory.newRP(1, 1.4d, 1.6d);
+        var second = testFactory.newRP(2, 2.8d, 3.3d);
         assertThat(getFirstSelection(List.of(first, first)), is(1L));
         assertThat(getFirstSelection(List.of(first, second)), is(1L));
         assertThat(getFirstSelection(List.of(second, first)), is(1L));

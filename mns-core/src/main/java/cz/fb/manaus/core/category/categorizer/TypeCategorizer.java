@@ -3,6 +3,7 @@ package cz.fb.manaus.core.category.categorizer;
 import cz.fb.manaus.core.model.Market;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Component
@@ -17,11 +18,8 @@ final public class TypeCategorizer extends AbstractDelegatingCategorizer {
 
     @Override
     public Set<String> getCategoryRaw(Market market) {
-        String type = market.getType();
-        if (type == null) {
-            return Set.of("unknown");
-        }
-        return Set.of(type.toLowerCase());
+        var type = market.getType();
+        return Set.of(Optional.ofNullable(type).map(String::toLowerCase).orElse("unknown"));
 
     }
 }

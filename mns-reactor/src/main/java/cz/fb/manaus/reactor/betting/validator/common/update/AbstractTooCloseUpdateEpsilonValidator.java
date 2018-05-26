@@ -14,10 +14,10 @@ public abstract class AbstractTooCloseUpdateEpsilonValidator implements Validato
 
     @Override
     public ValidationResult validate(BetContext context) {
-        double oldOne = context.getOldBet().get().getRequestedPrice().getPrice();
-        double newOne = context.getNewPrice().get().getPrice();
-        double epsilon = (oldOne - 1) * this.epsilon;
-        Range<Double> closeRange = Range.closed(oldOne - epsilon, oldOne + epsilon);
+        var oldOne = context.getOldBet().get().getRequestedPrice().getPrice();
+        var newOne = context.getNewPrice().get().getPrice();
+        var epsilon = (oldOne - 1) * this.epsilon;
+        var closeRange = Range.closed(oldOne - epsilon, oldOne + epsilon);
         return ValidationResult.of(!closeRange.contains(newOne));
     }
 

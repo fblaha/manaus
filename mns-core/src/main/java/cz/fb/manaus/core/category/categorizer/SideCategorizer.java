@@ -11,7 +11,7 @@ public class SideCategorizer implements SettledBetCategorizer {
 
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
-        String side = settledBet.getPrice().getSide().name().toLowerCase();
+        var side = settledBet.getPrice().getSide().name().toLowerCase();
         return Set.of("side_" + side);
     }
 

@@ -20,12 +20,12 @@ public class CancelCategorizer implements RelatedActionsAwareCategorizer {
     @Override
     public Set<String> getCategories(List<BetAction> actions, Market market) {
         if (actions.isEmpty()) return Set.of();
-        LinkedList<BetActionType> types = actions.stream().map(BetAction::getBetActionType)
+        var types = actions.stream().map(BetAction::getBetActionType)
                 .collect(Collectors.toCollection(LinkedList::new));
         if (types.getFirst() == BetActionType.PLACE) {
             types.removeFirst();
         }
-        boolean cancel = indexOfSubList(types, List.of(BetActionType.UPDATE, BetActionType.PLACE)) != -1;
+        var cancel = indexOfSubList(types, List.of(BetActionType.UPDATE, BetActionType.PLACE)) != -1;
         return Set.of(PREFIX + Boolean.toString(cancel));
     }
 

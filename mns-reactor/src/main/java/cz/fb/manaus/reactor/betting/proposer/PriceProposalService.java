@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.OptionalDouble;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparingDouble;
@@ -30,10 +28,10 @@ public class PriceProposalService {
     private PriceService priceService;
 
     public ProposedPrice reducePrices(BetContext context, List<PriceProposer> proposers, Side side) {
-        List<ProposedPrice> prices = new LinkedList<>();
+        var prices = new LinkedList<ProposedPrice>();
         Preconditions.checkState(!proposers.isEmpty());
-        for (PriceProposer proposer : proposers) {
-            OptionalDouble proposedPrice = proposer.getProposedPrice(context);
+        for (var proposer : proposers) {
+            var proposedPrice = proposer.getProposedPrice(context);
             if (proposer.isMandatory()) {
                 Preconditions.checkState(proposedPrice.isPresent(), proposer.getClass());
             }
@@ -52,7 +50,7 @@ public class PriceProposalService {
             result = ORDERING.min(values);
         }
 
-        Set<String> proposers = values.stream()
+        var proposers = values.stream()
                 .filter(v -> Price.priceEq(v.getPrice(), result.getPrice()))
                 .map(ProposedPrice::getProposers)
                 .flatMap(Collection::stream)

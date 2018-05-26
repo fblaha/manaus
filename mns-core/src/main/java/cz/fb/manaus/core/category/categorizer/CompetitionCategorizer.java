@@ -2,7 +2,6 @@ package cz.fb.manaus.core.category.categorizer;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Strings;
-import cz.fb.manaus.core.model.Competition;
 import cz.fb.manaus.core.model.Market;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +18,7 @@ final public class CompetitionCategorizer extends AbstractDelegatingCategorizer 
 
     @Override
     public Set<String> getCategoryRaw(Market market) {
-        Competition competition = market.getCompetition();
+        var competition = market.getCompetition();
         if (competition == null || Strings.isNullOrEmpty(competition.getName())) {
             return Set.of("none");
         } else {

@@ -35,27 +35,27 @@ public class _AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
 
 
     private void checkValidation(BetActionType actionType, int beforeMinutes, Side lay, ValidationResult validationResult) {
-        Market market = newMarket();
+        var market = newMarket();
         marketDao.saveOrUpdate(market);
-        BetAction place = new BetAction(actionType, DateUtils.addMinutes(new Date(), -beforeMinutes), new Price(2d, 30d, lay), market, CoreTestFactory.HOME);
+        var place = new BetAction(actionType, DateUtils.addMinutes(new Date(), -beforeMinutes), new Price(2d, 30d, lay), market, CoreTestFactory.HOME);
         place.setBetId(ReactorTestFactory.BET_ID);
         betActionDao.saveOrUpdate(place);
-        RunnerPrices runnerPrices = new RunnerPrices();
+        var runnerPrices = new RunnerPrices();
         runnerPrices.setSelectionId(CoreTestFactory.HOME);
 
-        MarketPrices marketPrices = new MarketPrices(1, market, List.of(runnerPrices), new Date());
-        ValidationResult result = validator.validate(factory.newUpdateBetContext(marketPrices, runnerPrices, lay));
+        var marketPrices = new MarketPrices(1, market, List.of(runnerPrices), new Date());
+        var result = validator.validate(factory.newUpdateBetContext(marketPrices, runnerPrices, lay));
         Assert.assertThat(result, is(validationResult));
     }
 
     @Test(expected = NoSuchElementException.class)
     public void testNoBetAction() {
-        Market market = newMarket();
+        var market = newMarket();
         marketDao.saveOrUpdate(market);
-        MarketPrices marketPrices = new MarketPrices(1, market, List.of(), new Date());
-        RunnerPrices runnerPrices = new RunnerPrices();
+        var marketPrices = new MarketPrices(1, market, List.of(), new Date());
+        var runnerPrices = new RunnerPrices();
         runnerPrices.setSelectionId(CoreTestFactory.DRAW);
-        ValidationResult result = validator.validate(factory.newUpdateBetContext(marketPrices, runnerPrices, Side.LAY));
+        var result = validator.validate(factory.newUpdateBetContext(marketPrices, runnerPrices, Side.LAY));
         Assert.assertThat(result, is(ValidationResult.REJECT));
     }
 

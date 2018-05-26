@@ -43,17 +43,17 @@ public class ValidationService {
     }
 
     public ValidationResult validate(BetContext context, List<Validator> validators) {
-        List<Validator> filteredValidators = validators.stream()
+        var filteredValidators = validators.stream()
                 .filter(createPredicate(context)).collect(Collectors.toList());
         Preconditions.checkState(!filteredValidators.isEmpty());
 
-        Optional<Price> newPrice = context.getNewPrice();
-        List<ValidationResult> collected = new LinkedList<>();
-        for (Validator validator : filteredValidators) {
+        var newPrice = context.getNewPrice();
+        var collected = new LinkedList<ValidationResult>();
+        for (var validator : filteredValidators) {
             if (validator.isUpdateOnly()) {
                 Preconditions.checkState(context.getOldBet().isPresent());
             }
-            ValidationResult validationResult = handleDowngrade(newPrice, context.getOldBet(), validator)
+            var validationResult = handleDowngrade(newPrice, context.getOldBet(), validator)
                     .orElse(requireNonNull(validator.validate(context)));
             recorder.updateMetrics(validationResult, context.getSide(), validator.getName());
             collected.add(validationResult);
@@ -62,7 +62,7 @@ public class ValidationService {
     }
 
     private Predicate<Validator> createPredicate(BetContext context) {
-        List<Predicate<Validator>> predicates = new LinkedList<>();
+        var predicates = new LinkedList<Predicate<Validator>>();
         if (!context.getOldBet().isPresent()) {
             Predicate<Validator> updateOnly = Validator::isUpdateOnly;
             predicates.add(updateOnly.negate());

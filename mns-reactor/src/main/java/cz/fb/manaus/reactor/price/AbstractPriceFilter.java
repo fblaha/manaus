@@ -8,7 +8,6 @@ import cz.fb.manaus.core.model.Side;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,16 +28,16 @@ public abstract class AbstractPriceFilter {
     }
 
     List<Price> getSignificantPrices(int minCount, List<Price> prices) {
-        Map<Side, List<Price>> bySide = prices.stream().filter(this::priceRangeFilter)
+        var bySide = prices.stream().filter(this::priceRangeFilter)
                 .collect(Collectors.groupingBy(Price::getSide));
-        List<Price> sortedBack = PriceComparator.ORDERING.immutableSortedCopy(
+        var sortedBack = PriceComparator.ORDERING.immutableSortedCopy(
                 bySide.getOrDefault(Side.BACK, List.of()));
-        List<Price> sortedLay = PriceComparator.ORDERING.immutableSortedCopy(
+        var sortedLay = PriceComparator.ORDERING.immutableSortedCopy(
                 bySide.getOrDefault(Side.LAY, List.of()));
-        List<Price> bulldozedBack = bulldozer.bulldoze(bulldozeThreshold, sortedBack);
-        List<Price> bulldozedLay = bulldozer.bulldoze(bulldozeThreshold, sortedLay);
-        Stream<Price> topBack = bulldozedBack.stream().limit(minCount);
-        Stream<Price> topLay = bulldozedLay.stream().limit(minCount);
+        var bulldozedBack = bulldozer.bulldoze(bulldozeThreshold, sortedBack);
+        var bulldozedLay = bulldozer.bulldoze(bulldozeThreshold, sortedLay);
+        var topBack = bulldozedBack.stream().limit(minCount);
+        var topLay = bulldozedLay.stream().limit(minCount);
         return Stream.concat(topBack, topLay).collect(Collectors.toList());
     }
 

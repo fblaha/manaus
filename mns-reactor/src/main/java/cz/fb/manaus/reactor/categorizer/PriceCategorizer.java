@@ -29,7 +29,7 @@ public class PriceCategorizer implements SettledBetCategorizer {
             .put(downTo(5d, BoundType.CLOSED), "5.0+").build();
 
     String getCategory(double price) {
-        String suffix = requireNonNull(CATEGORY_STEPS.get(price));
+        var suffix = requireNonNull(CATEGORY_STEPS.get(price));
         return "priceRange_" + suffix;
     }
 

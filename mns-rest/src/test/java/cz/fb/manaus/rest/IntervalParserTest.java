@@ -16,23 +16,23 @@ public class IntervalParserTest extends AbstractLocalTestCase {
     private IntervalParser intervalParser;
 
     @Test
-    public void testSubtract() throws Exception {
-        Instant now = Instant.now();
+    public void testSubtract() {
+        var now = Instant.now();
         assertThat(intervalParser.parse(now, "2h").lowerEndpoint(), is(now.minus(2, ChronoUnit.HOURS)));
         assertThat(intervalParser.parse(now, "10d").lowerEndpoint(), is(now.minus(10, ChronoUnit.DAYS)));
         assertThat(intervalParser.parse(now, "5m").lowerEndpoint(), is(now.minus(5, ChronoUnit.MINUTES)));
     }
 
     @Test
-    public void testOffsetLowerEndpoint() throws Exception {
-        Instant now = Instant.now();
+    public void testOffsetLowerEndpoint() {
+        var now = Instant.now();
         assertThat(intervalParser.parse(now, "2h-4").lowerEndpoint(), is(now.minus(6, ChronoUnit.HOURS)));
         assertThat(intervalParser.parse(now, "10d-2").lowerEndpoint(), is(now.minus(12, ChronoUnit.DAYS)));
     }
 
     @Test
-    public void testOffsetUpperEndpoint() throws Exception {
-        Instant now = Instant.now();
+    public void testOffsetUpperEndpoint() {
+        var now = Instant.now();
         assertThat(intervalParser.parse(now, "2h-4").upperEndpoint(), is(now.minus(4, ChronoUnit.HOURS)));
         assertThat(intervalParser.parse(now, "10d-2").upperEndpoint(), is(now.minus(2, ChronoUnit.DAYS)));
     }

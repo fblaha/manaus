@@ -10,7 +10,7 @@ public class TotalMatchedFunction implements ProgressFunction {
 
     @Override
     public OptionalDouble apply(SettledBet bet) {
-        Double matchedAmount = bet.getBetAction().getMarket().getMatchedAmount();
+        var matchedAmount = bet.getBetAction().getMarket().getMatchedAmount();
         return matchedAmount == null ? OptionalDouble.empty() : OptionalDouble.of(matchedAmount);
     }
 

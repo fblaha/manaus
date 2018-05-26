@@ -55,16 +55,16 @@ public class ReactorTestFactory {
     }
 
     public BetContext newUpdateBetContext(MarketPrices marketPrices, RunnerPrices runnerPrices, Side side) {
-        Bet oldBet = newBet(new Price(5d, 5d, side));
+        var oldBet = newBet(new Price(5d, 5d, side));
         return newBetContext(side, marketPrices, runnerPrices, of(oldBet)).withNewPrice(oldBet.getRequestedPrice());
     }
 
     public BetContext newBetContext(Side side, MarketPrices marketPrices, RunnerPrices runnerPrices, Optional<Bet> oldBet) {
-        Fairness fairness = new Fairness(OptionalDouble.of(0.9d), OptionalDouble.of(1.1));
+        var fairness = new Fairness(OptionalDouble.of(0.9d), OptionalDouble.of(1.1));
 
-        List<Bet> bets = new LinkedList<>();
+        var bets = new LinkedList<Bet>();
         oldBet.ifPresent(bet -> bets.add(bet));
-        MarketSnapshot snapshot = new MarketSnapshot(marketPrices, bets, empty());
+        var snapshot = new MarketSnapshot(marketPrices, bets, empty());
 
         return contextFactory.create(side, CoreTestFactory.HOME, snapshot, fairness,
                 empty(), Set.of());
@@ -76,30 +76,30 @@ public class ReactorTestFactory {
     }
 
     public BetContext createContext(Side side, double bestBack, double bestLay) {
-        MarketPrices marketPrices = createMarket(bestBack, bestLay, OptionalDouble.of(3d), 1);
-        RunnerPrices runnerPrices = marketPrices.getRunnerPrices().iterator().next();
-        long selectionId = runnerPrices.getSelectionId();
-        Optional<Price> bestPrice = runnerPrices.getHomogeneous(side.getOpposite()).getBestPrice();
-        List<Bet> bets = new LinkedList<>();
+        var marketPrices = createMarket(bestBack, bestLay, OptionalDouble.of(3d), 1);
+        var runnerPrices = marketPrices.getRunnerPrices().iterator().next();
+        var selectionId = runnerPrices.getSelectionId();
+        var bestPrice = runnerPrices.getHomogeneous(side.getOpposite()).getBestPrice();
+        var bets = new LinkedList<Bet>();
         if (bestPrice.isPresent()) {
-            String marketId = CoreTestFactory.MARKET_ID;
+            var marketId = CoreTestFactory.MARKET_ID;
             double price = bestPrice.get().getPrice();
-            Price requestedPrice = new Price(price, provider.getMinAmount(), side.getOpposite());
-            Instant date = Instant.now().minus(2, ChronoUnit.HOURS);
-            Bet counterBet = new Bet(BET_ID, marketId, selectionId, requestedPrice,
+            var requestedPrice = new Price(price, provider.getMinAmount(), side.getOpposite());
+            var date = Instant.now().minus(2, ChronoUnit.HOURS);
+            var counterBet = new Bet(BET_ID, marketId, selectionId, requestedPrice,
                     Date.from(date), provider.getMinAmount());
             bets.add(counterBet);
         }
-        MarketSnapshot snapshot = new MarketSnapshot(marketPrices, bets, empty());
+        var snapshot = new MarketSnapshot(marketPrices, bets, empty());
         return contextFactory.create(side, selectionId, snapshot,
                 calculator.getFairness(marketPrices), empty(), Set.of());
 
     }
 
     public List<RunnerPrices> createRP(List<Double> unfairPrices) {
-        List<RunnerPrices> runnerPrices = new LinkedList<>();
-        for (int i = 0; i < unfairPrices.size(); i++) {
-            double unfairPrice = unfairPrices.get(i);
+        var runnerPrices = new LinkedList<RunnerPrices>();
+        for (var i = 0; i < unfairPrices.size(); i++) {
+            var unfairPrice = unfairPrices.get(i);
             runnerPrices.add(newRP(i, unfairPrice, 10d));
         }
         return runnerPrices;
@@ -109,8 +109,8 @@ public class ReactorTestFactory {
         if (!lastMatchedPrice.isPresent()) {
             lastMatchedPrice = roundingService.roundBet((bestBack + bestLay) / 2);
         }
-        Price backBestPrice = new Price(bestBack, 100d, Side.BACK);
-        Price layBestPrice = new Price(bestLay, 100d, Side.LAY);
+        var backBestPrice = new Price(bestBack, 100d, Side.BACK);
+        var layBestPrice = new Price(bestLay, 100d, Side.LAY);
         return new RunnerPrices(selectionId, List.of(
                 backBestPrice,
                 layBestPrice,
@@ -122,33 +122,33 @@ public class ReactorTestFactory {
     }
 
     public MarketPrices createMarket(double betBack, double bestLay, OptionalDouble lastMatched, int winnerCount) {
-        Market market = createMarket();
-        RunnerPrices home = newRP(CoreTestFactory.HOME, betBack, bestLay, lastMatched);
-        RunnerPrices draw = newRP(CoreTestFactory.DRAW, betBack, bestLay, lastMatched);
-        RunnerPrices away = newRP(CoreTestFactory.AWAY, betBack, bestLay, lastMatched);
+        var market = createMarket();
+        var home = newRP(CoreTestFactory.HOME, betBack, bestLay, lastMatched);
+        var draw = newRP(CoreTestFactory.DRAW, betBack, bestLay, lastMatched);
+        var away = newRP(CoreTestFactory.AWAY, betBack, bestLay, lastMatched);
         return new MarketPrices(winnerCount, market, List.of(home, draw, away), new Date());
     }
 
     public MarketPrices createMarket(double downgradeFraction, List<Double> probabilities) {
-        Market market = createMarket();
-        List<RunnerPrices> runnerPrices = new LinkedList<>();
-        for (int i = 0; i < probabilities.size(); i++) {
-            double fairPrice = 1 / probabilities.get(i);
-            double backPrice = priceService.downgrade(fairPrice, downgradeFraction, Side.LAY);
-            double backRounded = roundingService.roundBet(backPrice).getAsDouble();
-            double layPrice = priceService.downgrade(fairPrice, downgradeFraction, Side.BACK);
-            double layRounded = roundingService.roundBet(layPrice).getAsDouble();
-            long selectionId = CoreTestFactory.HOME + i;
-            double lastMatched = roundingService.roundBet(fairPrice).getAsDouble();
+        var market = createMarket();
+        var runnerPrices = new LinkedList<RunnerPrices>();
+        for (var i = 0; i < probabilities.size(); i++) {
+            var fairPrice = 1 / probabilities.get(i);
+            var backPrice = priceService.downgrade(fairPrice, downgradeFraction, Side.LAY);
+            var backRounded = roundingService.roundBet(backPrice).getAsDouble();
+            var layPrice = priceService.downgrade(fairPrice, downgradeFraction, Side.BACK);
+            var layRounded = roundingService.roundBet(layPrice).getAsDouble();
+            var selectionId = CoreTestFactory.HOME + i;
+            var lastMatched = roundingService.roundBet(fairPrice).getAsDouble();
             runnerPrices.add(newRP(selectionId, backRounded, layRounded, OptionalDouble.of(lastMatched)));
         }
         return new MarketPrices(1, market, runnerPrices, new Date());
     }
 
     private Market createMarket() {
-        Event event = new Event("1", "Vischya Liga", addHours(new Date(), 2), CoreTestFactory.COUNTRY_CODE);
+        var event = new Event("1", "Vischya Liga", addHours(new Date(), 2), CoreTestFactory.COUNTRY_CODE);
         event.setId("1");
-        Market market = CoreTestFactory.newMarket();
+        var market = CoreTestFactory.newMarket();
         market.setEvent(event);
         return market;
     }

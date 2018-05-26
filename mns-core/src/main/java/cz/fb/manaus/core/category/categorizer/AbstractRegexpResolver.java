@@ -3,7 +3,6 @@ package cz.fb.manaus.core.category.categorizer;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 abstract public class AbstractRegexpResolver {
@@ -22,13 +21,13 @@ abstract public class AbstractRegexpResolver {
         if (name == null) {
             return Set.of();
         }
-        Set<String> result = new HashSet<>();
-        for (Map.Entry<String, Pattern> entry : patterns.entrySet()) {
-            Pattern pattern = entry.getValue();
-            Matcher matcher = pattern.matcher(name);
+        var result = new HashSet<String>();
+        for (var entry : patterns.entrySet()) {
+            var pattern = entry.getValue();
+            var matcher = pattern.matcher(name);
             if (matcher.matches()) {
-                String key = entry.getKey();
-                for (int i = 1; i <= matcher.groupCount(); i++) {
+                var key = entry.getKey();
+                for (var i = 1; i <= matcher.groupCount(); i++) {
                     key = key.replace("{" + i + "}", matcher.group(i));
                 }
                 result.add(key);

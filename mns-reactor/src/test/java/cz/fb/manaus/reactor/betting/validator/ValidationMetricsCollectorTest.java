@@ -6,7 +6,6 @@ import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -20,10 +19,10 @@ public class ValidationMetricsCollectorTest extends AbstractLocalTestCase {
     private MetricRegistry metricRegistry;
 
     @Test
-    public void testMetrics() throws Exception {
+    public void testMetrics() {
         metricsCollector.updateMetrics(ValidationResult.ACCEPT, Side.BACK, VALIDATOR.getName());
         metricsCollector.updateMetrics(ValidationResult.REJECT, Side.BACK, VALIDATOR.getName());
-        List<String> keys = metricRegistry.getCounters().keySet().stream()
+        var keys = metricRegistry.getCounters().keySet().stream()
                 .filter(key -> key.startsWith(ValidationMetricsCollector.PREFIX))
                 .filter(key -> key.contains(VALIDATOR.getName()))
                 .collect(Collectors.toList());

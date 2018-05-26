@@ -38,8 +38,8 @@ public class LegacyFairnessCalculator {
 
     private double getFairness(double winnerCount, double low, double high, List<Double> prices) {
         while (true) {
-            double pivot = (low + high) / 2;
-            double rightHandSide = getLayFairnessRightHandSide(pivot, prices);
+            var pivot = (low + high) / 2;
+            var rightHandSide = getLayFairnessRightHandSide(pivot, prices);
             if (Precision.equals(rightHandSide, winnerCount, FAIR_EPS)) {
                 return pivot;
             } else if (rightHandSide > winnerCount) {

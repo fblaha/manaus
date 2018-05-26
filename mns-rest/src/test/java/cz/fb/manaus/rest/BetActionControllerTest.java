@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Collections;
 import java.util.Date;
@@ -30,7 +29,7 @@ public class BetActionControllerTest extends AbstractControllerTest {
     private SettledBet bet;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         bet = createMarketWithSingleSettledBet();
     }
 
@@ -42,11 +41,11 @@ public class BetActionControllerTest extends AbstractControllerTest {
 
     @Test
     public void testPostAction() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        BetAction original = createBetAction();
+        var mapper = new ObjectMapper();
+        var original = createBetAction();
         int priceId = marketPricesDao.getPrices(MARKET_ID).get(0).getId();
-        String serialized = mapper.writer().writeValueAsString(original);
-        MvcResult result = mvc.perform(post(
+        var serialized = mapper.writer().writeValueAsString(original);
+        var result = mvc.perform(post(
                 "/markets/{id}/actions?priceId={priceId}", MARKET_ID, priceId)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -58,8 +57,7 @@ public class BetActionControllerTest extends AbstractControllerTest {
 
     @Test
     public void testSetBetId() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        int actionId = bet.getBetAction().getId();
+        var actionId = bet.getBetAction().getId();
         mvc.perform(put(
                 "/actions/{id}/betId", actionId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -69,7 +67,7 @@ public class BetActionControllerTest extends AbstractControllerTest {
     }
 
     private BetAction createBetAction() {
-        BetAction betAction = new BetAction(BetActionType.UPDATE, new Date(),
+        var betAction = new BetAction(BetActionType.UPDATE, new Date(),
                 new Price(2d, 3d, Side.LAY), null, CoreTestFactory.DRAW);
         betAction.setProperties(Collections.singletonMap("key", "val"));
         betAction.setBetId("150");

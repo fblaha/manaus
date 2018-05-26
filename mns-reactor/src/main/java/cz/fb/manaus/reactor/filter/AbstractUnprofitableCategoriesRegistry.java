@@ -82,33 +82,33 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
 
     public void updateBlacklists(ConfigUpdate configUpdate) {
         log.log(Level.INFO, getLogPrefix() + "black list update started");
-        Date now = new Date();
-        List<SettledBet> settledBets = settledBetDao.getSettledBets(
+        var now = new Date();
+        var settledBets = settledBetDao.getSettledBets(
                 Optional.of(addDays(now, -(int) period.toDays())), Optional.of(now), side,
                 OptionalInt.empty());
         betActionDao.fetchMarketPrices(settledBets.stream().map(SettledBet::getBetAction));
         if (settledBets.isEmpty()) return;
-        double chargeRate = provider.getChargeRate();
-        List<ProfitRecord> profitRecords = profitService.getProfitRecords(settledBets, Optional.empty(), true, chargeRate);
+        var chargeRate = provider.getChargeRate();
+        var profitRecords = profitService.getProfitRecords(settledBets, Optional.empty(), true, chargeRate);
 
         log.log(Level.INFO, getLogPrefix() + "updating registry ''{0}''", name);
         updateBlacklists(profitRecords, configUpdate);
     }
 
     void updateBlacklists(List<ProfitRecord> profitRecords, ConfigUpdate configUpdate) {
-        ProfitRecord all = profitRecords.stream().filter(ProfitRecord::isAllCategory).findAny()
+        var all = profitRecords.stream().filter(ProfitRecord::isAllCategory).findAny()
                 .orElseThrow(() -> new IllegalStateException("missing: " + MarketCategories.ALL));
-        List<ProfitRecord> filtered = getFiltered(profitRecords);
-        int totalCount = all.getTotalCount();
+        var filtered = getFiltered(profitRecords);
+        var totalCount = all.getTotalCount();
 
         configUpdate.getDeletePrefixes().add(getPropertyPrefix());
 
-        Set<String> totalBlacklist = new HashSet<>();
-        for (Map.Entry<Integer, Integer> entry : thresholds.entrySet()) {
+        var totalBlacklist = new HashSet<String>();
+        for (var entry : thresholds.entrySet()) {
             int thresholdPct = entry.getKey();
-            double threshold = getThreshold(thresholdPct);
+            var threshold = getThreshold(thresholdPct);
             int blackCount = entry.getValue();
-            Set<String> blacklist = getBlacklist(threshold, blackCount, totalCount, filtered.stream(), totalBlacklist);
+            var blacklist = getBlacklist(threshold, blackCount, totalCount, filtered.stream(), totalBlacklist);
             totalBlacklist.addAll(blacklist);
             saveBlacklist(thresholdPct, blacklist, configUpdate);
         }
@@ -136,13 +136,13 @@ abstract public class AbstractUnprofitableCategoriesRegistry {
 
     Set<String> getBlacklist(double threshold, int blackCount, int totalCount, Stream<ProfitRecord> profitRecords,
                              Set<String> blacklist) {
-        Set<String> currentBlacklist = new LinkedHashSet<>();
+        var currentBlacklist = new LinkedHashSet<String>();
 
-        List<ProfitRecord> sorted = profitRecords.filter(record -> (double) record.getTotalCount() / totalCount <= threshold)
+        var sorted = profitRecords.filter(record -> (double) record.getTotalCount() / totalCount <= threshold)
                 .sorted(comparingDouble(ProfitRecord::getProfit)).collect(toList());
 
-        int i = 0;
-        for (ProfitRecord weak : sorted) {
+        var i = 0;
+        for (var weak : sorted) {
             if (i >= blackCount || weak.getProfit() >= maximalProfit) break;
             if (blacklist.contains(weak.getCategory())) continue;
             if (whitelist.stream().anyMatch(prefix -> weak.getCategory().startsWith(prefix))) continue;

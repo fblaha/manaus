@@ -11,8 +11,8 @@ import static org.junit.Assert.assertThat;
 public class NameAwareTest {
 
     @Test
-    public void testName() throws Exception {
-        VeryProfitableProposer proposer = new VeryProfitableProposer();
+    public void testName() {
+        var proposer = new VeryProfitableProposer();
         assertThat(proposer.getName(), is("veryProfitableProposer"));
     }
 

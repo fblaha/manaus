@@ -63,7 +63,7 @@ public class MarketPrices implements SideMixed<MarketPrices> {
 
     @JsonIgnore
     public OptionalDouble getOverround(Side type) {
-        List<Optional<Price>> bestPrices = getSideBestPrices(requireNonNull(type));
+        var bestPrices = getSideBestPrices(requireNonNull(type));
         if (bestPrices.stream().allMatch(Optional::isPresent)) {
             Preconditions.checkState(bestPrices.stream().allMatch(price -> price.get().getSide() == type));
             return OptionalDouble.of(getOverround(bestPrices.stream()
@@ -101,7 +101,7 @@ public class MarketPrices implements SideMixed<MarketPrices> {
 
     @JsonIgnore
     public OptionalDouble getReciprocal(Side side) {
-        OptionalDouble overround = getOverround(side);
+        var overround = getOverround(side);
         if (overround.isPresent()) {
             return OptionalDouble.of(winnerCount / overround.getAsDouble());
         } else {
@@ -111,10 +111,10 @@ public class MarketPrices implements SideMixed<MarketPrices> {
 
     @JsonIgnore
     public OptionalDouble getLastMatchedReciprocal() {
-        for (RunnerPrices runnerPrices : getRunnerPrices()) {
+        for (var runnerPrices : getRunnerPrices()) {
             if (runnerPrices.getLastMatchedPrice() == null) return OptionalDouble.empty();
         }
-        List<Double> prices = getRunnerPrices().stream()
+        var prices = getRunnerPrices().stream()
                 .map(RunnerPrices::getLastMatchedPrice)
                 .collect(Collectors.toList());
         return OptionalDouble.of(winnerCount / getOverround(prices));
@@ -130,8 +130,8 @@ public class MarketPrices implements SideMixed<MarketPrices> {
 
     @Override
     public MarketPrices getHomogeneous(Side side) {
-        List<RunnerPrices> newList = new LinkedList<>();
-        for (RunnerPrices runnerPrices : getRunnerPrices()) {
+        var newList = new LinkedList<RunnerPrices>();
+        for (var runnerPrices : getRunnerPrices()) {
             newList.add(runnerPrices.getHomogeneous(side));
         }
         return new MarketPrices(winnerCount, market, newList, getTime());

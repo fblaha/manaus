@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
-import java.util.OptionalDouble;
 import java.util.Set;
 
 @Component
@@ -24,7 +23,7 @@ public class BetContextFactory {
                              Fairness fairness,
                              Optional<AccountMoney> accountMoney,
                              Set<String> categoryBlacklist) {
-        OptionalDouble forecast = forecaster.getForecast(selectionId, side, snapshot, fairness);
+        var forecast = forecaster.getForecast(selectionId, side, snapshot, fairness);
         return new BetContext(side, selectionId, accountMoney, forecast, snapshot, fairness,
                 categoryBlacklist);
     }

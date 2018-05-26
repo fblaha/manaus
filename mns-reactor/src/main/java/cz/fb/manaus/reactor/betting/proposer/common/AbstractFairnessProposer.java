@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting.proposer.common;
 
-import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.reactor.betting.BetContext;
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer;
@@ -30,10 +29,10 @@ public abstract class AbstractFairnessProposer implements PriceProposer {
 
     @Override
     public OptionalDouble getProposedPrice(BetContext context) {
-        OptionalDouble fairness = context.getFairness().get(side);
-        Price bestPrice = context.getRunnerPrices().getHomogeneous(side).getBestPrice().get();
-        double fairPrice = priceService.getFairnessFairPrice(bestPrice.getPrice(), fairness.getAsDouble());
-        double downgradeFraction = downgradeStrategy.apply(context);
+        var fairness = context.getFairness().get(side);
+        var bestPrice = context.getRunnerPrices().getHomogeneous(side).getBestPrice().get();
+        var fairPrice = priceService.getFairnessFairPrice(bestPrice.getPrice(), fairness.getAsDouble());
+        var downgradeFraction = downgradeStrategy.apply(context);
         return OptionalDouble.of(priceService.downgrade(fairPrice, downgradeFraction, context.getSide()));
     }
 }

@@ -18,12 +18,12 @@ abstract public class AbstractLastMatchedValidator implements Validator {
 
     @Override
     public ValidationResult validate(BetContext context) {
-        Double lastMatchedPrice = context.getRunnerPrices().getLastMatchedPrice();
+        var lastMatchedPrice = context.getRunnerPrices().getLastMatchedPrice();
         if (lastMatchedPrice == null) return ValidationResult.REJECT;
         if (Price.priceEq(context.getNewPrice().get().getPrice(), lastMatchedPrice)) {
             return ValidationResult.of(passEqual);
         }
-        Side side = requireNonNull(context.getSide());
+        var side = requireNonNull(context.getSide());
         if (side == Side.LAY) {
             return ValidationResult.of(context.getNewPrice().get().getPrice() < lastMatchedPrice);
         } else {

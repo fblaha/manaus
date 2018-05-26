@@ -11,7 +11,7 @@ public class MatchedAmountFilter implements MarketFilter {
 
     @Override
     public boolean accept(Market market, Set<String> categoryBlacklist) {
-        Double matchedAmount = market.getMatchedAmount();
+        var matchedAmount = market.getMatchedAmount();
         return matchedAmount == null || !Price.amountEq(matchedAmount, 0d);
     }
 

@@ -26,9 +26,9 @@ public class BetUtils {
 
     public List<BetAction> getCurrentActions(List<BetAction> betActions) {
         Preconditions.checkArgument(!betActions.isEmpty(), "missing bet actions");
-        LinkedList<BetAction> lastUpdates = new LinkedList<>();
-        BetAction first = betActions.get(0);
-        for (BetAction bet : betActions) {
+        var lastUpdates = new LinkedList<BetAction>();
+        var first = betActions.get(0);
+        for (var bet : betActions) {
             validate(first, bet);
             if (bet.getBetActionType() != BetActionType.UPDATE) lastUpdates.clear();
             lastUpdates.addLast(bet);
@@ -51,13 +51,13 @@ public class BetUtils {
     }
 
     public SettledBet limitBetAmount(double ceiling, SettledBet bet) {
-        Optional<Price> newPrice = limitPriceAmount(ceiling, bet.getPrice());
+        var newPrice = limitPriceAmount(ceiling, bet.getPrice());
         if (newPrice.isPresent()) {
-            SettledBet copy = new SettledBet();
+            var copy = new SettledBet();
             BeanUtils.copyProperties(bet, copy);
 
-            double amount = bet.getPrice().getAmount();
-            double rate = ceiling / amount;
+            var amount = bet.getPrice().getAmount();
+            var rate = ceiling / amount;
             copy.setProfitAndLoss(rate * bet.getProfitAndLoss());
             limitActionAmount(ceiling, copy);
 
@@ -71,7 +71,7 @@ public class BetUtils {
     private Optional<Price> limitPriceAmount(double ceiling, Price origPrice) {
         double amount = origPrice.getAmount();
         if (ceiling < amount) {
-            Price newPrice = new Price();
+            var newPrice = new Price();
             BeanUtils.copyProperties(origPrice, newPrice);
             newPrice.setAmount(ceiling);
             return Optional.of(newPrice);
@@ -80,11 +80,11 @@ public class BetUtils {
     }
 
     public void limitActionAmount(double ceiling, SettledBet betCopy) {
-        BetAction orig = betCopy.getBetAction();
+        var orig = betCopy.getBetAction();
         if (orig != null) {
-            BetAction actionCopy = new BetAction();
+            var actionCopy = new BetAction();
             BeanUtils.copyProperties(orig, actionCopy);
-            Optional<Price> newPrice = limitPriceAmount(ceiling, orig.getPrice());
+            var newPrice = limitPriceAmount(ceiling, orig.getPrice());
             newPrice.ifPresent(actionCopy::setPrice);
             betCopy.setBetAction(actionCopy);
         }

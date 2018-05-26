@@ -5,14 +5,10 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 import cz.fb.manaus.core.manager.MarketFilterService;
 import cz.fb.manaus.core.model.AccountMoney;
-import cz.fb.manaus.core.model.Bet;
-import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.CollectedBets;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.MarketSnapshot;
-import cz.fb.manaus.core.model.Price;
-import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.reactor.betting.action.ActionSaver;
 import cz.fb.manaus.reactor.betting.action.BetActionListener;
@@ -77,20 +73,20 @@ public class BetManager {
                               Set<String> myBets,
                               Optional<AccountMoney> accountMoney,
                               Set<String> categoryBlacklist) {
-        MarketPrices marketPrices = snapshot.getMarketPrices();
+        var marketPrices = snapshot.getMarketPrices();
         filterPrices(marketPrices);
 
-        OptionalDouble reciprocal = marketPrices.getReciprocal(Side.BACK);
-        Market market = marketPrices.getMarket();
-        BetCollector collector = new BetCollector();
+        var reciprocal = marketPrices.getReciprocal(Side.BACK);
+        var market = marketPrices.getMarket();
+        var collector = new BetCollector();
 
         if (checkMarket(myBets, market, reciprocal, categoryBlacklist)) {
             validateOpenDate(market);
 
-            List<Bet> unknownBets = betUtils.getUnknownBets(snapshot.getCurrentBets(), myBets);
+            var unknownBets = betUtils.getUnknownBets(snapshot.getCurrentBets(), myBets);
             unknownBets.forEach(bet -> log.log(Level.WARNING, "unknown bet ''{0}''", bet));
             if (unknownBets.isEmpty()) {
-                for (MarketSnapshotListener listener : marketSnapshotListeners) {
+                for (var listener : marketSnapshotListeners) {
                     if (!disabledListeners.contains(listener.getClass().getSimpleName())) {
                         listener.onMarketSnapshot(snapshot, collector, accountMoney, categoryBlacklist);
                     }
@@ -103,14 +99,14 @@ public class BetManager {
     }
 
     public void validateOpenDate(Market market) {
-        Date currDate = new Date();
-        Date openDate = market.getEvent().getOpenDate();
+        var currDate = new Date();
+        var openDate = market.getEvent().getOpenDate();
         checkState(currDate.before(openDate),
                 "current %s, open date %s", currDate, openDate);
     }
 
     private void saveActions(List<BetCommand> commands) {
-        List<BetAction> actions = commands.stream().map(BetCommand::getAction).collect(toList());
+        var actions = commands.stream().map(BetCommand::getAction).collect(toList());
         actions.forEach(actionSaver::saveAction);
         actionListeners.forEach(listener -> actions.forEach(listener::onAction));
         commands.forEach(c -> c.getBet().setActionId(c.getAction().getId()));
@@ -118,9 +114,9 @@ public class BetManager {
 
     private void filterPrices(MarketPrices marketPrices) {
         if (priceFilter.isPresent()) {
-            for (RunnerPrices runnerPrices : marketPrices.getRunnerPrices()) {
-                List<Price> prices = runnerPrices.getPrices().stream().collect(toList());
-                List<Price> filtered = priceFilter.get().filter(prices);
+            for (var runnerPrices : marketPrices.getRunnerPrices()) {
+                var prices = runnerPrices.getPrices().stream().collect(toList());
+                var filtered = priceFilter.get().filter(prices);
                 runnerPrices.setPrices(filtered);
             }
         } else {

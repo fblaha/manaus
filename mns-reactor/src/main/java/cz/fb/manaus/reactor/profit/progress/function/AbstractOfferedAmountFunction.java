@@ -10,8 +10,8 @@ public abstract class AbstractOfferedAmountFunction implements ProgressFunction 
 
     @Override
     public OptionalDouble apply(SettledBet bet) {
-        RunnerPrices runnerPrices = getRunnerPrices(bet);
-        double sum = runnerPrices.getPrices().stream().mapToDouble(Price::getAmount).sum();
+        var runnerPrices = getRunnerPrices(bet);
+        var sum = runnerPrices.getPrices().stream().mapToDouble(Price::getAmount).sum();
         return OptionalDouble.of(sum);
     }
 

@@ -36,7 +36,7 @@ public class RestLocalConfiguration implements WebMvcConfigurer {
 
     @Bean
     public ObjectMapper objectMapper() {
-        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+        var builder = new Jackson2ObjectMapperBuilder();
         builder.indentOutput(true).dateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         builder.timeZone(TimeZone.getDefault());
         return builder.build();

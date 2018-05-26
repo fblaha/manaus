@@ -31,7 +31,7 @@ public class Fairness {
 
     public Optional<Side> getMoreCredibleSide() {
         if (lay.isPresent() && back.isPresent()) {
-            double layInverted = 1 / lay.getAsDouble();
+            var layInverted = 1 / lay.getAsDouble();
             if (back.getAsDouble() > layInverted) {
                 return Optional.of(Side.BACK);
             } else {

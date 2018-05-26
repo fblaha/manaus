@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class SettledBetControllerTest extends AbstractControllerTest {
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         createMarketWithSingleSettledBet();
     }
 
@@ -38,10 +38,10 @@ public class SettledBetControllerTest extends AbstractControllerTest {
 
     @Test
     public void testPostSettledBet() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        SettledBet original = new SettledBet(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
+        var mapper = new ObjectMapper();
+        var original = new SettledBet(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
                 5d, new Date(), new Price(5d, 3d, Side.BACK));
-        String serialized = mapper.writer().writeValueAsString(original);
+        var serialized = mapper.writer().writeValueAsString(original);
         checkPost(serialized, BET_ID, 202);
         checkPost(serialized, BET_ID + "55", 204);
     }

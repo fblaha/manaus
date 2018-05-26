@@ -19,10 +19,11 @@ public class DowngradeCategorizer implements RelatedActionsAwareCategorizer {
 
     @Override
     public Set<String> getCategories(List<BetAction> actions, Market market) {
-        Set<String> result = new HashSet<>();
+        var result = new HashSet<String>();
+        // TODO optional
         BetAction last = null;
-        boolean lastDowngrade = false;
-        for (BetAction action : actions) {
+        var lastDowngrade = false;
+        for (var action : actions) {
             lastDowngrade = false;
             if (last != null) {
                 checkState(last.getPrice().getSide() == action.getPrice().getSide());

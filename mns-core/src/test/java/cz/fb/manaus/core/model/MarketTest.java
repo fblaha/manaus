@@ -10,11 +10,11 @@ public class MarketTest {
 
     @Test
     public void testDoubleSerialization() throws Exception {
-        Market market = CoreTestFactory.newMarket();
-        ObjectMapper mapper = new ObjectMapper();
-        String serialized = mapper.writer().writeValueAsString(market);
+        var market = CoreTestFactory.newMarket();
+        var mapper = new ObjectMapper();
+        var serialized = mapper.writer().writeValueAsString(market);
         market = mapper.readerFor(Market.class).readValue(serialized);
-        String doubleSerialized = mapper.writer().writeValueAsString(market);
+        var doubleSerialized = mapper.writer().writeValueAsString(market);
         assertEquals(serialized, doubleSerialized);
     }
 

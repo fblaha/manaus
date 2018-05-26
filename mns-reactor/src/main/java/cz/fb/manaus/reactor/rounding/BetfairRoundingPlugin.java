@@ -55,15 +55,15 @@ public class BetfairRoundingPlugin implements RoundingPlugin {
     @Override
     public OptionalDouble shift(double price, int steps) {
         Preconditions.checkArgument(steps != 0);
-        boolean increment = steps > 0;
+        var increment = steps > 0;
         return shift(price, Math.abs(steps), increment);
     }
 
     private OptionalDouble shift(double price, int steps, boolean increment) {
         checkArgument(steps >= 1);
-        OptionalDouble step = getStep(price, increment);
+        var step = getStep(price, increment);
         if (step.isPresent()) {
-            double result = Price.round(price + step.getAsDouble());
+            var result = Price.round(price + step.getAsDouble());
             if (steps == 1) {
                 return OptionalDouble.of(result);
             } else {
@@ -76,10 +76,10 @@ public class BetfairRoundingPlugin implements RoundingPlugin {
 
     @Override
     public OptionalDouble round(double price) {
-        OptionalDouble step = getStep(price, true);
+        var step = getStep(price, true);
         if (step.isPresent()) {
-            double rest = Precision.round(price % step.getAsDouble(), 6);
-            double complement = step.getAsDouble() - rest;
+            var rest = Precision.round(price % step.getAsDouble(), 6);
+            var complement = step.getAsDouble() - rest;
             if (rest >= complement) {
                 price += complement;
             } else {

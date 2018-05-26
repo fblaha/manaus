@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.categorizer;
 
-import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.SettledBet;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +13,7 @@ public class NotMatchedCountCategorizer extends AbstractCountCategorizer {
 
     @Override
     protected int getCount(SettledBet bet) {
-        MarketPrices marketPrices = bet.getBetAction().getMarketPrices();
+        var marketPrices = bet.getBetAction().getMarketPrices();
         return (int) marketPrices.getRunnerPrices().stream()
                 .filter(rp -> rp.getLastMatchedPrice() == null).count();
     }

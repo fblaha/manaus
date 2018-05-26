@@ -32,20 +32,20 @@ public class _AbstractLastMatchedValidatorTest extends AbstractLocalTestCase {
     private ReactorTestFactory factory;
 
     @Test
-    public void testAcceptLay() throws Exception {
+    public void testAcceptLay() {
         checkValidator(Side.LAY, ValidationResult.ACCEPT, ValidationResult.REJECT);
     }
 
     @Test
-    public void testAcceptBack() throws Exception {
+    public void testAcceptBack() {
         checkValidator(Side.BACK, ValidationResult.REJECT, ValidationResult.ACCEPT);
     }
 
     private void checkValidator(Side side, ValidationResult lowerResult, ValidationResult higherResult) {
-        RunnerPrices runnerPrices = mock(RunnerPrices.class);
+        var runnerPrices = mock(RunnerPrices.class);
         when(runnerPrices.getLastMatchedPrice()).thenReturn(2.1d);
         when(runnerPrices.getSelectionId()).thenReturn(CoreTestFactory.HOME);
-        MarketPrices marketPrices = mock(MarketPrices.class);
+        var marketPrices = mock(MarketPrices.class);
         when(marketPrices.getRunnerPrices(anyLong())).thenReturn(runnerPrices);
         when(marketPrices.getReciprocal(Side.BACK)).thenReturn(OptionalDouble.of(0.9d));
         assertThat(validator.validate(factory.newBetContext(side, marketPrices, runnerPrices, Optional.empty())

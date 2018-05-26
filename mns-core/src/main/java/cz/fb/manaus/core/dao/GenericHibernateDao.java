@@ -42,7 +42,7 @@ public abstract class GenericHibernateDao<T, ID extends Serializable> {
     }
 
     protected <T> T clearProxy(T proxied) {
-        T entity = proxied;
+        var entity = proxied;
         if (entity != null && entity instanceof HibernateProxy) {
             Hibernate.initialize(entity);
             entity = (T) ((HibernateProxy) entity)

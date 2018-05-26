@@ -12,8 +12,8 @@ public class AgeDaysFunction implements ProgressFunction {
 
     @Override
     public OptionalDouble apply(SettledBet bet) {
-        Instant openDate = bet.getBetAction().getMarket().getEvent().getOpenDate().toInstant();
-        long days = Duration.between(openDate, Instant.now()).toDays();
+        var openDate = bet.getBetAction().getMarket().getEvent().getOpenDate().toInstant();
+        var days = Duration.between(openDate, Instant.now()).toDays();
         return OptionalDouble.of(days);
     }
 }

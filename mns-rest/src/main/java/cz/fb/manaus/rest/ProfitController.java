@@ -64,7 +64,7 @@ public class ProfitController {
                                                @RequestParam(required = false) Optional<Double> charge,
                                                @RequestParam(required = false) Optional<Double> ceiling,
                                                @RequestParam(defaultValue = "true") boolean cache) {
-        List<SettledBet> settledBets = loadBets(interval, cache);
+        var settledBets = loadBets(interval, cache);
 
         double ceil = ceiling.orElse(-1d);
         if (ceil > 0) {
@@ -72,12 +72,12 @@ public class ProfitController {
                     .map(b -> betUtils.limitBetAmount(ceil, b))
                     .collect(Collectors.toList());
         }
-        Stopwatch stopwatch = Stopwatch.createStarted();
-        List<ProfitRecord> profitRecords = profitService.getProfitRecords(settledBets, projection,
+        var stopwatch = Stopwatch.createStarted();
+        var profitRecords = profitService.getProfitRecords(settledBets, projection,
                 false, getChargeRate(charge));
         logTime(stopwatch, "Profit records computed");
         if (filter.isPresent()) {
-            List<String> filters = parseFilter(filter.get());
+            var filters = parseFilter(filter.get());
             profitRecords = profitRecords.stream()
                     .filter(profitRecord -> filters.stream().anyMatch(token -> profitRecord.getCategory().contains(token)))
                     .collect(Collectors.toList());
@@ -96,10 +96,10 @@ public class ProfitController {
                                                  @RequestParam(required = false) Optional<Double> charge,
                                                  @RequestParam(required = false) Optional<String> projection,
                                                  @RequestParam(defaultValue = "true") boolean cache) {
-        List<SettledBet> bets = loadBets(interval, cache);
-        Stopwatch stopwatch = Stopwatch.createStarted();
-        double chargeRate = getChargeRate(charge);
-        List<ProfitRecord> records = progressProfitService.getProfitRecords(bets, function, chunkCount, chargeRate, projection);
+        var bets = loadBets(interval, cache);
+        var stopwatch = Stopwatch.createStarted();
+        var chargeRate = getChargeRate(charge);
+        var records = progressProfitService.getProfitRecords(bets, function, chunkCount, chargeRate, projection);
         logTime(stopwatch, "Profit records computed");
         return records;
     }
@@ -111,17 +111,17 @@ public class ProfitController {
                                                  @RequestParam(required = false) Optional<Double> charge,
                                                  @RequestParam(required = false) Optional<String> projection,
                                                  @RequestParam(defaultValue = "true") boolean cache) {
-        List<SettledBet> bets = loadBets(interval, cache);
-        Stopwatch stopwatch = Stopwatch.createStarted();
-        double chargeRate = getChargeRate(charge);
-        List<ProfitRecord> records = coverageService.getProfitRecords(bets, function, chargeRate, projection);
+        var bets = loadBets(interval, cache);
+        var stopwatch = Stopwatch.createStarted();
+        var chargeRate = getChargeRate(charge);
+        var records = coverageService.getProfitRecords(bets, function, chargeRate, projection);
         logTime(stopwatch, "Profit records computed");
         return records;
     }
 
     private List<SettledBet> loadBets(@PathVariable String interval, @RequestParam(defaultValue = "true") boolean cache) {
-        Stopwatch stopwatch = Stopwatch.createStarted();
-        List<SettledBet> bets = betLoader.load(interval, cache);
+        var stopwatch = Stopwatch.createStarted();
+        var bets = betLoader.load(interval, cache);
         logTime(stopwatch, "Bets fetched");
         return bets;
     }

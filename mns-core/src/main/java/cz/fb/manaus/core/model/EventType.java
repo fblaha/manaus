@@ -50,7 +50,7 @@ public class EventType {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Competition other = (Competition) obj;
+        var other = (Competition) obj;
         return new EqualsBuilder().append(getId(), other.getId()).isEquals();
     }
 

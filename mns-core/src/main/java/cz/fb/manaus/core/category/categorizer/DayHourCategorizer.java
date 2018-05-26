@@ -29,10 +29,10 @@ final public class DayHourCategorizer extends AbstractDelegatingCategorizer {
 
     @Override
     public Set<String> getCategoryRaw(Market market) {
-        Calendar startTime = Calendar.getInstance();
+        var startTime = Calendar.getInstance();
         startTime.setTime(market.getEvent().getOpenDate());
-        int hour = startTime.get(Calendar.HOUR_OF_DAY);
-        for (Range<Integer> range : RANGES) {
+        var hour = startTime.get(Calendar.HOUR_OF_DAY);
+        for (var range : RANGES) {
             if (range.contains(hour)) {
                 return Set.of(range.lowerEndpoint() + "_" + range.upperEndpoint());
             }

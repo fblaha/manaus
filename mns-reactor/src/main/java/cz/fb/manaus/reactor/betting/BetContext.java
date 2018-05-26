@@ -106,12 +106,12 @@ public class BetContext {
     public BetContext withNewPrice(Price newPrice) {
         Side newSide = requireNonNull(newPrice.getSide());
         checkState(side == newSide);
-        Optional<Bet> oldBet = getOldBet();
+        var oldBet = getOldBet();
         if (oldBet.isPresent()) {
-            Side oldSide = requireNonNull(oldBet.get().getRequestedPrice().getSide());
+            var oldSide = requireNonNull(oldBet.get().getRequestedPrice().getSide());
             checkState(oldSide == newSide);
         }
-        Optional<Bet> counterBet = getCounterBet();
+        var counterBet = getCounterBet();
         counterBet.ifPresent(bet -> {
             Side otherSide = requireNonNull(bet.getRequestedPrice().getSide());
             checkState(otherSide == newSide.getOpposite());
@@ -121,24 +121,24 @@ public class BetContext {
     }
 
     public BetAction createBetAction() {
-        BetActionType type = getOldBet().isPresent() ? BetActionType.UPDATE : BetActionType.PLACE;
-        MarketPrices marketPrices = marketSnapshot.getMarketPrices();
-        BetAction action = new BetAction(type, new Date(), newPrice.get(), marketPrices.getMarket(), selectionId);
+        var type = getOldBet().isPresent() ? BetActionType.UPDATE : BetActionType.PLACE;
+        var marketPrices = marketSnapshot.getMarketPrices();
+        var action = new BetAction(type, new Date(), newPrice.get(), marketPrices.getMarket(), selectionId);
         action.setMarketPrices(marketPrices);
         action.setProperties(properties);
         return action;
     }
 
     public SettledBet simulateSettledBet() {
-        BetAction action = createBetAction();
-        SettledBet bet = new SettledBet(action.getSelectionId(), null, 0d, null, action.getPrice());
+        var action = createBetAction();
+        var bet = new SettledBet(action.getSelectionId(), null, 0d, null, action.getPrice());
         bet.setBetAction(action);
         bet.setPlaced(action.getActionDate());
         return bet;
     }
 
     public boolean isCounterHalfMatched() {
-        Optional<Bet> counterBet = getCounterBet();
+        var counterBet = getCounterBet();
         return counterBet.map(Bet::isHalfMatched).orElse(false);
     }
 

@@ -25,8 +25,8 @@ public class _AbstractBestPriceProposerTest extends AbstractLocalTestCase {
     private ReactorTestFactory factory;
 
     @Test
-    public void testLayPropose() throws Exception {
-        BetContext context = mock(BetContext.class);
+    public void testLayPropose() {
+        var context = mock(BetContext.class);
         when(context.getSide()).thenReturn(Side.LAY);
         when(context.getRunnerPrices()).thenReturn(factory.newRP(CoreTestFactory.HOME, 2d, 4.5d));
         assertThat(layProposer.validate(context), is(ValidationResult.ACCEPT));
@@ -34,8 +34,8 @@ public class _AbstractBestPriceProposerTest extends AbstractLocalTestCase {
     }
 
     @Test
-    public void testCheck() throws Exception {
-        BetContext context = mock(BetContext.class);
+    public void testCheck() {
+        var context = mock(BetContext.class);
         when(context.getSide()).thenReturn(Side.LAY, Side.BACK);
         when(context.getRunnerPrices()).thenReturn(CoreTestFactory.newBackRP(2d, CoreTestFactory.HOME, 2d));
         assertThat(layProposer.validate(context), is(ValidationResult.ACCEPT));
@@ -43,8 +43,8 @@ public class _AbstractBestPriceProposerTest extends AbstractLocalTestCase {
     }
 
     @Test
-    public void testBackPropose() throws Exception {
-        BetContext context = mock(BetContext.class);
+    public void testBackPropose() {
+        var context = mock(BetContext.class);
         when(context.getSide()).thenReturn(Side.BACK);
         when(context.getRunnerPrices()).thenReturn(factory.newRP(CoreTestFactory.HOME, 2.5d, 3.5d));
         assertThat(backProposer.validate(context), is(ValidationResult.ACCEPT));

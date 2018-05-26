@@ -21,7 +21,7 @@ public class RandomCategorizer implements SettledBetCategorizer {
 
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
-        int randInt = random.nextInt(5);
+        var randInt = random.nextInt(5);
         return Set.of("random_" + randInt);
     }
 

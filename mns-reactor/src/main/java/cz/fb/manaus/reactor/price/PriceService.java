@@ -23,8 +23,8 @@ public class PriceService {
     private ExchangeProvider provider;
 
     public double downgrade(double price, double downgradeFraction, Side side) {
-        double aboveOne = price - 1;
-        double targetFairness = 1 - downgradeFraction;
+        var aboveOne = price - 1;
+        var targetFairness = 1 - downgradeFraction;
         Preconditions.checkState(Range.closed(0d, 1d).contains(targetFairness));
 
         if (requireNonNull(side) == Side.LAY) {
@@ -55,7 +55,7 @@ public class PriceService {
      * http://stats.stackexchange.com/questions/140269/how-to-convert-sport-odds-into-percentage
      */
     public double getOverroundFairPrice(double unfairPrice, double overround, int winnerCount, int runnerCount) {
-        double probability = 1 / unfairPrice - (overround - winnerCount) / runnerCount;
+        var probability = 1 / unfairPrice - (overround - winnerCount) / runnerCount;
         Preconditions.checkArgument(probability > 0, List.of(unfairPrice, overround, winnerCount, runnerCount));
         return 1 / probability;
     }

@@ -4,13 +4,11 @@ import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
 import com.google.common.net.HttpHeaders;
-import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.util.NestedServletException;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -35,8 +33,8 @@ public class MarketControllerTest extends AbstractControllerTest {
 
     @Test
     public void testMarketCreate() throws Exception {
-        String market = new ObjectMapper().writer().writeValueAsString(CoreTestFactory.newMarket());
-        MvcResult result = mvc.perform(post("/markets")
+        var market = new ObjectMapper().writer().writeValueAsString(CoreTestFactory.newMarket());
+        var result = mvc.perform(post("/markets")
                 .content(market)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -46,10 +44,10 @@ public class MarketControllerTest extends AbstractControllerTest {
 
     @Test(expected = NullPointerException.class)
     public void tesMissingID() throws Throwable {
-        Market market = CoreTestFactory.newMarket();
-        long originalExceptionCount = getExceptionCount();
+        var market = CoreTestFactory.newMarket();
+        var originalExceptionCount = getExceptionCount();
         market.setId(null);
-        String payload = new ObjectMapper().writer().writeValueAsString(market);
+        var payload = new ObjectMapper().writer().writeValueAsString(market);
         try {
             mvc.perform(post("/markets")
                     .content(payload)

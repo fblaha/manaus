@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.profit.progress.function;
 
-import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator;
@@ -17,7 +16,7 @@ public class FairnessLayFunction implements ProgressFunction {
 
     @Override
     public OptionalDouble apply(SettledBet bet) {
-        MarketPrices marketPrices = bet.getBetAction().getMarketPrices();
+        var marketPrices = bet.getBetAction().getMarketPrices();
         return calculator.getFairness(marketPrices.getWinnerCount(), marketPrices.getBestPrices(Side.LAY));
     }
 

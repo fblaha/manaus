@@ -2,7 +2,6 @@ package cz.fb.manaus.reactor.profit.progress;
 
 import com.google.common.collect.ImmutableList;
 import cz.fb.manaus.core.category.BetCoverage;
-import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.ProfitRecord;
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.reactor.profit.progress.function.ProgressFunction;
@@ -32,17 +31,17 @@ public class CoverageFunctionProfitService extends AbstractFunctionProfitService
                                                BetCoverage coverage, Map<String, Double> charges) {
         Predicate<SettledBet> coveredPredicate = bet -> coverage.isCovered(bet.getBetAction().getMarket().getId(),
                 bet.getSelectionId());
-        Map<Boolean, List<SettledBet>> coverSeparation = bets.stream()
+        var coverSeparation = bets.stream()
                 .collect(Collectors.partitioningBy(coveredPredicate));
-        List<SettledBet> covered = coverSeparation.get(true);
-        List<SettledBet> solo = coverSeparation.get(false);
+        var covered = coverSeparation.get(true);
+        var solo = coverSeparation.get(false);
 
-        Map<Boolean, List<SettledBet>> growthSeparation = covered.stream()
+        var growthSeparation = covered.stream()
                 .collect(Collectors.partitioningBy(this::isChargeGrowth));
-        List<SettledBet> head = growthSeparation.get(true);
-        List<SettledBet> tail = growthSeparation.get(false);
+        var head = growthSeparation.get(true);
+        var tail = growthSeparation.get(false);
 
-        ImmutableList.Builder<ProfitRecord> builder = ImmutableList.builder();
+        var builder = ImmutableList.<ProfitRecord>builder();
 
         addRecord("solo", solo, function, coverage, charges)
                 .ifPresent(builder::add);
@@ -57,8 +56,8 @@ public class CoverageFunctionProfitService extends AbstractFunctionProfitService
 
     private Optional<ProfitRecord> addRecord(String categoryName, List<SettledBet> bets, ProgressFunction function,
                                              BetCoverage coverage, Map<String, Double> charges) {
-        OptionalDouble average = getAverage(bets, function);
-        String category = getValueCategory(function.getName() + "_" + categoryName, average);
+        var average = getAverage(bets, function);
+        var category = getValueCategory(function.getName() + "_" + categoryName, average);
         if (average.isPresent()) {
             return Optional.of(computeFunctionRecord(category, bets.stream(), charges, coverage));
         }
@@ -66,8 +65,8 @@ public class CoverageFunctionProfitService extends AbstractFunctionProfitService
     }
 
     private boolean isChargeGrowth(SettledBet bet) {
-        BetAction action = bet.getBetAction();
-        OptionalDouble chargeGrowth = action.getDoubleProperty("chargeGrowth");
+        var action = bet.getBetAction();
+        var chargeGrowth = action.getDoubleProperty("chargeGrowth");
         return chargeGrowth.orElse(Double.MAX_VALUE) > 1;
     }
 

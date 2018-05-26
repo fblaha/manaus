@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.OptionalDouble;
 import java.util.Set;
 
 import static com.google.common.collect.Range.closedOpen;
@@ -57,7 +56,7 @@ public class ReciprocalCategorizer implements SettledBetCategorizer {
 
     private void handleCustomRange(double reciprocal, Set<String> result) {
         if (customReciprocalRangeSupplier != null) {
-            String customRange = customReciprocalRangeSupplier.getCustomRanges().get(reciprocal);
+            var customRange = customReciprocalRangeSupplier.getCustomRanges().get(reciprocal);
             if (customRange != null) {
                 result.add(RECIPROCAL + customRange);
             }
@@ -66,12 +65,12 @@ public class ReciprocalCategorizer implements SettledBetCategorizer {
 
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
-        OptionalDouble reciprocal = settledBet.getBetAction().getMarketPrices().getReciprocal(Side.BACK);
+        var reciprocal = settledBet.getBetAction().getMarketPrices().getReciprocal(Side.BACK);
         if (reciprocal.isPresent()) {
-            Set<String> result = new HashSet<>();
+            var result = new HashSet<String>();
             handleCustomRange(reciprocal.getAsDouble(), result);
-            double rounded = Precision.round(reciprocal.getAsDouble(), 2);
-            String strRange = Objects.requireNonNull(RANGES.get(rounded), reciprocal.toString());
+            var rounded = Precision.round(reciprocal.getAsDouble(), 2);
+            var strRange = Objects.requireNonNull(RANGES.get(rounded), reciprocal.toString());
             result.add(RECIPROCAL + strRange);
             return result;
         }

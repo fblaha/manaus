@@ -4,7 +4,6 @@ import cz.fb.manaus.core.category.categorizer.Categorizer;
 import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer;
 import cz.fb.manaus.core.category.categorizer.SimulationAware;
 import cz.fb.manaus.core.model.Market;
-import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.SettledBet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,20 +24,20 @@ final public class CategoryService {
     private List<SettledBetCategorizer> settledBetCategorizers = new LinkedList<>();
 
     public Set<String> getMarketCategories(Market market, boolean simulationAwareOnly) {
-        Set<String> result = new HashSet<>();
-        for (Categorizer categorizer : filterCategorizers(categorizers, simulationAwareOnly)) {
-            Set<String> categories = categorizer.getCategories(market);
+        var result = new HashSet<String>();
+        for (var categorizer : filterCategorizers(categorizers, simulationAwareOnly)) {
+            var categories = categorizer.getCategories(market);
             if (categories != null) result.addAll(categories);
         }
         return copyOf(result);
     }
 
     public Set<String> getSettledBetCategories(SettledBet settledBet, boolean simulationAwareOnly, BetCoverage coverage) {
-        Set<String> result = new HashSet<>();
-        for (SettledBetCategorizer categorizer : filterCategorizers(settledBetCategorizers, simulationAwareOnly)) {
-            MarketPrices prices = settledBet.getBetAction().getMarketPrices();
+        var result = new HashSet<String>();
+        for (var categorizer : filterCategorizers(settledBetCategorizers, simulationAwareOnly)) {
+            var prices = settledBet.getBetAction().getMarketPrices();
             if (prices == null && categorizer.isMarketSnapshotRequired()) continue;
-            Set<String> categories = categorizer.getCategories(settledBet, coverage);
+            var categories = categorizer.getCategories(settledBet, coverage);
             if (categories != null) result.addAll(categories);
         }
         return copyOf(result);
@@ -46,7 +45,7 @@ final public class CategoryService {
 
     public List<SettledBet> filterBets(List<SettledBet> settledBets, String projection, BetCoverage coverage) {
         return settledBets.parallelStream().filter(input -> {
-            Set<String> categories = getSettledBetCategories(input, false, coverage);
+            var categories = getSettledBetCategories(input, false, coverage);
             return categories.stream().anyMatch(category -> category.contains(projection));
         }).collect(Collectors.toList());
     }
@@ -59,5 +58,4 @@ final public class CategoryService {
         }
         return categorizers;
     }
-
 }

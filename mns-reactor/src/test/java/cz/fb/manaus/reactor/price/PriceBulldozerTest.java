@@ -25,24 +25,24 @@ public class PriceBulldozerTest extends AbstractLocalTestCase {
             new Price(2.8, 10d, Side.BACK));
 
     @Test
-    public void testBulldozeSimple() throws Exception {
+    public void testBulldozeSimple() {
         checkResult(3, List.of(new Price(3, 2, Side.LAY), new Price(4, 2, Side.LAY)), 1, 3.5, 4);
-        List<Price> three = List.of(new Price(3, 2, Side.LAY),
+        var three = List.of(new Price(3, 2, Side.LAY),
                 new Price(4, 2, Side.LAY), new Price(5, 2, Side.LAY));
         checkResult(3, three, 2, 3.5, 4);
         checkResult(5, three, 1, 4, 6);
     }
 
     @Test
-    public void testBulldozeSingle() throws Exception {
+    public void testBulldozeSingle() {
         checkResult(3, List.of(new Price(3, 2, Side.LAY)), 1, 3, 2);
         checkResult(1, List.of(new Price(3, 2, Side.LAY)), 1, 3, 2);
     }
 
     @Test
-    public void testBulldozeBoundary() throws Exception {
-        List<Price> two = List.of(new Price(4, 2, Side.BACK), new Price(3, 2, Side.BACK));
-        List<Price> three = List.of(new Price(5, 2, Side.BACK), new Price(4, 2, Side.BACK),
+    public void testBulldozeBoundary() {
+        var two = List.of(new Price(4, 2, Side.BACK), new Price(3, 2, Side.BACK));
+        var three = List.of(new Price(5, 2, Side.BACK), new Price(4, 2, Side.BACK),
                 new Price(3, 2, Side.BACK));
 
         checkResult(2, two, 2, 4, 2);
@@ -50,7 +50,7 @@ public class PriceBulldozerTest extends AbstractLocalTestCase {
     }
 
     @Test
-    public void testReal() throws Exception {
+    public void testReal() {
         checkResult(1, SAMPLE, 3, 6, 2);
         checkResult(2, SAMPLE, 3, 6, 2);
         checkResult(3, SAMPLE, 2, 4, 6);
@@ -62,19 +62,19 @@ public class PriceBulldozerTest extends AbstractLocalTestCase {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testBadOrderBack() throws Exception {
-        List<Price> badOrder = PriceComparator.ORDERING.reverse().sortedCopy(SAMPLE);
+    public void testBadOrderBack() {
+        var badOrder = PriceComparator.ORDERING.reverse().sortedCopy(SAMPLE);
         bulldozer.bulldoze(10, badOrder);
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testBadOrderLay() throws Exception {
+    public void testBadOrderLay() {
         bulldozer.bulldoze(10, List.of(new Price(5d, 2, Side.LAY), new Price(4d, 2, Side.LAY)));
     }
 
     private void checkResult(double threshold, List<Price> prices, int expectedCount,
                              double expectedPrice, double expectedAmount) {
-        List<Price> bulldozed = bulldozer.bulldoze(threshold, prices);
+        var bulldozed = bulldozer.bulldoze(threshold, prices);
         assertThat(bulldozed.size(), is(expectedCount));
         assertEquals(expectedPrice, bulldozed.get(0).getPrice(), 0.0001);
         assertEquals(expectedAmount, bulldozed.get(0).getAmount(), 0.0001);

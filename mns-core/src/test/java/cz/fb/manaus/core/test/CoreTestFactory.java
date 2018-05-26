@@ -49,7 +49,7 @@ public class CoreTestFactory {
 
 
     public static Market newMarket(String id, Date curr, String name) {
-        Market market = new Market();
+        var market = new Market();
         market.setId(id);
         market.setName(name);
         market.setMatchedAmount(AMOUNT);
@@ -65,16 +65,16 @@ public class CoreTestFactory {
     }
 
     public static BetAction newBetAction(String betId, Market market) {
-        BetAction betAction = new BetAction(BetActionType.PLACE, DateUtils.addHours(new Date(), -5), new Price(2d, 2d, Side.LAY), market, 11);
+        var betAction = new BetAction(BetActionType.PLACE, DateUtils.addHours(new Date(), -5), new Price(2d, 2d, Side.LAY), market, 11);
         betAction.setProperties(new HashMap<>());
         betAction.setBetId(betId);
         return betAction;
     }
 
     private static Collection<Runner> getRunners() {
-        Runner home = new Runner(HOME, HOME_NAME, 0, 1);
-        Runner draw = new Runner(DRAW, DRAW_NAME, 0, 2);
-        Runner away = new Runner(AWAY, AWAY_NAME, 0, 3);
+        var home = new Runner(HOME, HOME_NAME, 0, 1);
+        var draw = new Runner(DRAW, DRAW_NAME, 0, 2);
+        var away = new Runner(AWAY, AWAY_NAME, 0, 3);
         return List.of(draw, home, away);
     }
 
@@ -94,8 +94,8 @@ public class CoreTestFactory {
     }
 
     public static MarketPrices newMarketPrices(int winnerCount, double bestBackPrice) {
-        Market market = newMarket();
-        List<RunnerPrices> runnerPrices = List.of(
+        var market = newMarket();
+        var runnerPrices = List.of(
                 newBackRP(bestBackPrice, 1, 2.5d),
                 newBackRP(bestBackPrice, 2, 2.5d),
                 newBackRP(bestBackPrice, 3, 2.5d));
@@ -103,23 +103,23 @@ public class CoreTestFactory {
     }
 
     public static MarketPrices newMarketPrices(Market market) {
-        RunnerPrices home = newBackRP(2.5d, HOME, 3d);
-        RunnerPrices draw = newBackRP(2.5d, DRAW, 3d);
-        RunnerPrices away = newBackRP(2.5d, AWAY, 3d);
+        var home = newBackRP(2.5d, HOME, 3d);
+        var draw = newBackRP(2.5d, DRAW, 3d);
+        var away = newBackRP(2.5d, AWAY, 3d);
         return new MarketPrices(1, market, List.of(home, draw, away), new Date());
     }
 
     public static SettledBet newSettledBet(double price, Side side) {
-        SettledBet bet = new SettledBet(CoreTestFactory.HOME, "Home", 2d, new Date(), new Price(price, 2d, side));
-        Market market = newMarket();
-        BetAction action = newBetAction("1", market);
+        var bet = new SettledBet(CoreTestFactory.HOME, "Home", 2d, new Date(), new Price(price, 2d, side));
+        var market = newMarket();
+        var action = newBetAction("1", market);
         action.setMarketPrices(CoreTestFactory.newMarketPrices(market));
         bet.setBetAction(action);
         return bet;
     }
 
     public BetAction savePlaceAction(Bet unmatched, Market market) {
-        BetAction betAction = new BetAction(BetActionType.PLACE, unmatched.getPlacedDate(),
+        var betAction = new BetAction(BetActionType.PLACE, unmatched.getPlacedDate(),
                 unmatched.getRequestedPrice(), market, unmatched.getSelectionId(), unmatched.getBetId());
         betActionDao.saveOrUpdate(betAction);
         return betAction;

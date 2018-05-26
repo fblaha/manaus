@@ -30,10 +30,10 @@ abstract public class AbstractTooCloseUpdateValidator implements Validator {
 
     @Override
     public ValidationResult validate(BetContext context) {
-        double oldOne = context.getOldBet().get().getRequestedPrice().getPrice();
-        double newOne = context.getNewPrice().get().getPrice();
+        var oldOne = context.getOldBet().get().getRequestedPrice().getPrice();
+        var newOne = context.getNewPrice().get().getPrice();
         if (Price.priceEq(newOne, oldOne)) return ValidationResult.REJECT;
-        for (Integer step : closeSteps) {
+        for (var step : closeSteps) {
             Preconditions.checkArgument(step != 0);
             OptionalDouble closePrice;
             if (step > 0) {

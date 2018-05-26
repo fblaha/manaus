@@ -20,12 +20,12 @@ public class MatchbookRoundingPluginTest extends AbstractLocalTestCase {
 
 
     @Test
-    public void testShift() throws Exception {
+    public void testShift() {
         assertEquals(2.02, plugin.shift(2, 1).getAsDouble(), 0.0001d);
     }
 
     @Test
-    public void testInc1x() throws Exception {
+    public void testInc1x() {
         assertEquals(1.227, plugin.shift(1.222d, 1).getAsDouble(), 0.001d);
         assertEquals(1.128, plugin.shift(1.125d, 1).getAsDouble(), 0.001d);
         assertEquals(1.131, plugin.shift(1.128d, 1).getAsDouble(), 0.001d);
@@ -34,31 +34,31 @@ public class MatchbookRoundingPluginTest extends AbstractLocalTestCase {
     }
 
     @Test
-    public void testDec2x() throws Exception {
+    public void testDec2x() {
         assertEquals(1.98d, plugin.shift(2d, -1).getAsDouble(), 0.0001d);
         assertEquals(2.764d, plugin.shift(2.8d, -1).getAsDouble(), 0.0001d);
     }
 
     @Test
-    public void testDec3x() throws Exception {
+    public void testDec3x() {
         assertEquals(2.96d, plugin.shift(3d, -1).getAsDouble(), 0.0001d);
     }
 
     @Test
-    public void testInc3x() throws Exception {
+    public void testInc3x() {
         assertEquals(3.55d, plugin.shift(3.5d, 1).getAsDouble(), 0.0001d);
     }
 
     @Test
-    public void testInc4x() throws Exception {
+    public void testInc4x() {
         assertEquals(5.08d, plugin.shift(5d, 1).getAsDouble(), 0.0001d);
     }
 
     @Test
-    public void testRoundBigTest() throws Exception {
-        double previous = -1;
-        for (double price = provider.getMinPrice(); price < 5; price += 0.001) {
-            double current = plugin.round(price).getAsDouble();
+    public void testRoundBigTest() {
+        var previous = -1d;
+        for (var price = provider.getMinPrice(); price < 5; price += 0.001) {
+            var current = plugin.round(price).getAsDouble();
             assertTrue(previous <= current);
             previous = current;
         }

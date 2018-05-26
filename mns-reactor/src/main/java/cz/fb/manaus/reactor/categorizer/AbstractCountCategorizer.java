@@ -23,7 +23,7 @@ abstract public class AbstractCountCategorizer implements SettledBetCategorizer 
 
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
-        int count = getCount(settledBet);
+        var count = getCount(settledBet);
         return Set.of(prefix + toCategory(count));
     }
 

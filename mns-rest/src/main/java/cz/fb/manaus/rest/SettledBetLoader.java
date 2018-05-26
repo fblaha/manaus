@@ -4,7 +4,6 @@ import com.google.common.base.Stopwatch;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.collect.Range;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.SettledBetDao;
 import cz.fb.manaus.core.model.SettledBet;
@@ -39,7 +38,7 @@ public class SettledBetLoader {
             .expireAfterWrite(30, TimeUnit.MINUTES)
             .build(new CacheLoader<>() {
                 @Override
-                public List<SettledBet> load(String key) throws Exception {
+                public List<SettledBet> load(String key) {
                     return loadFromDatabase(key);
                 }
             });
@@ -57,13 +56,13 @@ public class SettledBetLoader {
     }
 
     private List<SettledBet> loadFromDatabase(String interval) {
-        Range<Instant> range = intervalParser.parse(Instant.now(), interval);
-        Stopwatch stopwatch = Stopwatch.createStarted();
-        List<SettledBet> settledBets = settledBetDao.getSettledBets(
+        var range = intervalParser.parse(Instant.now(), interval);
+        var stopwatch = Stopwatch.createStarted();
+        var settledBets = settledBetDao.getSettledBets(
                 Optional.of(Date.from(range.lowerEndpoint())),
                 Optional.of(Date.from(range.upperEndpoint())),
                 empty(), OptionalInt.empty());
-        long elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS);
+        var elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS);
         log.log(Level.INFO, "Settle bets loaded {0} in ''{1}'' seconds", elapsed);
         stopwatch.reset().start();
         betActionDao.fetchMarketPrices(settledBets.stream().map(SettledBet::getBetAction));

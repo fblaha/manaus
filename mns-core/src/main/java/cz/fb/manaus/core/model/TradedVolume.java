@@ -23,8 +23,8 @@ public class TradedVolume {
         if (volume.isEmpty()) {
             return OptionalDouble.empty();
         } else {
-            List<Double> prices = volume.stream().map(Price::getPrice).collect(toList());
-            List<Double> amounts = volume.stream().map(Price::getAmount).collect(toList());
+            var prices = volume.stream().map(Price::getPrice).collect(toList());
+            var amounts = volume.stream().map(Price::getAmount).collect(toList());
             return OptionalDouble.of(new Mean().evaluate(Doubles.toArray(prices), Doubles.toArray(amounts)));
         }
     }

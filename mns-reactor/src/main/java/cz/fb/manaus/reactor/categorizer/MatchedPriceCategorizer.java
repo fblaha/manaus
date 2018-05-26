@@ -27,9 +27,9 @@ public class MatchedPriceCategorizer implements SettledBetCategorizer {
 
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
-        double matched = settledBet.getPrice().getPrice();
-        double requested = settledBet.getBetAction().getPrice().getPrice();
-        Side side = settledBet.getPrice().getSide();
+        var matched = settledBet.getPrice().getPrice();
+        var requested = settledBet.getBetAction().getPrice().getPrice();
+        var side = settledBet.getPrice().getSide();
         return Set.of(getCategory(matched, requested, side));
     }
 

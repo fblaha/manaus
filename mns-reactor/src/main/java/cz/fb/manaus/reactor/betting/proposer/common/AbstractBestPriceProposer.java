@@ -1,8 +1,6 @@
 package cz.fb.manaus.reactor.betting.proposer.common;
 
 import com.google.common.base.Preconditions;
-import cz.fb.manaus.core.model.Price;
-import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.reactor.betting.BetContext;
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer;
@@ -10,7 +8,6 @@ import cz.fb.manaus.reactor.betting.validator.ValidationResult;
 import cz.fb.manaus.reactor.rounding.RoundingService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Optional;
 import java.util.OptionalDouble;
 
 import static java.util.Objects.requireNonNull;
@@ -26,9 +23,9 @@ public abstract class AbstractBestPriceProposer implements PriceProposer {
 
     @Override
     public ValidationResult validate(BetContext context) {
-        RunnerPrices runnerPrices = context.getRunnerPrices();
-        RunnerPrices homogeneous = runnerPrices.getHomogeneous(context.getSide().getOpposite());
-        Optional<Price> bestPrice = homogeneous.getBestPrice();
+        var runnerPrices = context.getRunnerPrices();
+        var homogeneous = runnerPrices.getHomogeneous(context.getSide().getOpposite());
+        var bestPrice = homogeneous.getBestPrice();
         if (bestPrice.isPresent()) {
             return PriceProposer.super.validate(context);
         } else {
@@ -38,9 +35,9 @@ public abstract class AbstractBestPriceProposer implements PriceProposer {
 
     @Override
     public OptionalDouble getProposedPrice(BetContext context) {
-        Side side = requireNonNull(context.getSide());
-        double bestPrice = context.getRunnerPrices().getHomogeneous(side.getOpposite()).getBestPrice().get().getPrice();
-        int step = getStep();
+        var side = requireNonNull(context.getSide());
+        var bestPrice = context.getRunnerPrices().getHomogeneous(side.getOpposite()).getBestPrice().get().getPrice();
+        var step = getStep();
         Preconditions.checkState(step >= 0);
         if (step == 0) {
             return OptionalDouble.of(bestPrice);

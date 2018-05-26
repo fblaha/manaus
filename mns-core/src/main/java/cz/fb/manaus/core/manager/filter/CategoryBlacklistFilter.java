@@ -24,7 +24,7 @@ public class CategoryBlacklistFilter implements MarketFilter {
     @Override
     public boolean accept(Market market, Set<String> blacklist) {
         Set<String> categories = categoryService.getMarketCategories(market, false);
-        Sets.SetView<String> intersection = Sets.intersection(categories, blacklist);
+        var intersection = Sets.intersection(categories, blacklist);
         if (!intersection.isEmpty()) {
             metricRegistry.counter("blacklist.market").inc();
             log.log(Level.INFO, "blacklist category ''{0}'' for market ''{1}''",

@@ -28,25 +28,25 @@ public class CoverageCategorizer implements SettledBetCategorizer {
 
     @Override
     public Set<String> getCategories(SettledBet settledBet, BetCoverage coverage) {
-        String marketId = settledBet.getBetAction().getMarket().getId();
-        long selectionId = settledBet.getSelectionId();
-        Set<Side> sides = coverage.getSides(marketId, selectionId);
+        var marketId = settledBet.getBetAction().getMarket().getId();
+        var selectionId = settledBet.getSelectionId();
+        var sides = coverage.getSides(marketId, selectionId);
         Preconditions.checkState(sides.size() > 0);
-        ImmutableMap.Builder<Side, Double> builder = ImmutableMap.builder();
-        for (Side side : sides) {
+        var builder = ImmutableMap.<Side, Double>builder();
+        for (var side : sides) {
             builder.put(side, coverage.getAmount(marketId, selectionId, side));
         }
-        Map<Side, Double> amounts = builder.build();
+        var amounts = builder.build();
         return getCategories(settledBet.getPrice().getSide(), amounts);
     }
 
     Set<String> getCategories(Side mySide, Map<Side, Double> amounts) {
-        String sideFormatted = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, mySide.name());
+        var sideFormatted = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, mySide.name());
         if (EnumSet.of(mySide).equals(amounts.keySet())) {
-            String soloSide = "solo" + sideFormatted;
+            var soloSide = "solo" + sideFormatted;
             return Set.of(PREFIX + soloSide, PREFIX + "solo");
         } else if (EnumSet.of(mySide, mySide.getOpposite()).equals(amounts.keySet())) {
-            ImmutableSet.Builder<String> builder = ImmutableSet.<String>builder().add(PREFIX + "both");
+            var builder = ImmutableSet.<String>builder().add(PREFIX + "both");
             builder.add(PREFIX + "both");
             builder.add(PREFIX + "both" + sideFormatted);
             if (Price.amountEq(amounts.get(Side.LAY), amounts.get(Side.BACK))) {

@@ -20,14 +20,14 @@ final public class WeekDayCategorizer extends AbstractDelegatingCategorizer {
 
     @Override
     public Set<String> getCategoryRaw(Market market) {
-        Date date = market.getEvent().getOpenDate();
+        var date = market.getEvent().getOpenDate();
         return getCategory(date);
     }
 
     Set<String> getCategory(Date date) {
-        Calendar calendar = Calendar.getInstance();
+        var calendar = Calendar.getInstance();
         calendar.setTime(date);
-        String weekDay = new SimpleDateFormat("E", Locale.US).format(date).toLowerCase();
+        var weekDay = new SimpleDateFormat("E", Locale.US).format(date).toLowerCase();
         return Set.of(weekDay);
     }
 }

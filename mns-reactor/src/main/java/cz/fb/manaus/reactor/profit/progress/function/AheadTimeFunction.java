@@ -11,10 +11,10 @@ public interface AheadTimeFunction extends ProgressFunction {
 
     @Override
     default OptionalDouble apply(SettledBet bet) {
-        Optional<Instant> eventTime = getRelatedTime(bet);
+        var eventTime = getRelatedTime(bet);
         if (eventTime.isPresent()) {
-            Instant openDate = bet.getBetAction().getMarket().getEvent().getOpenDate().toInstant();
-            double minutes = eventTime.get().until(openDate, ChronoUnit.MINUTES);
+            var openDate = bet.getBetAction().getMarket().getEvent().getOpenDate().toInstant();
+            var minutes = eventTime.get().until(openDate, ChronoUnit.MINUTES);
             return OptionalDouble.of(minutes / 60d);
         } else {
             return OptionalDouble.empty();

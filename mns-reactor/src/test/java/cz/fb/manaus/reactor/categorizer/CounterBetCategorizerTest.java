@@ -19,28 +19,28 @@ public class CounterBetCategorizerTest extends AbstractLocalTestCase {
     private CounterBetCategorizer categorizer;
 
     @Test
-    public void testCategoryEq() throws Exception {
-        BetCoverage coverage = BetCoverage.from(List.of(newSettledBet(2d, Side.BACK)));
+    public void testCategoryEq() {
+        var coverage = BetCoverage.from(List.of(newSettledBet(2d, Side.BACK)));
         assertThat(categorizer.getCategories(newSettledBet(2d, Side.LAY), coverage),
                 is(Set.of("counter_zero")));
     }
 
     @Test
-    public void testCategoryGt() throws Exception {
+    public void testCategoryGt() {
         BetCoverage coverage = BetCoverage.from(List.of(newSettledBet(2.5d, Side.BACK)));
         assertThat(categorizer.getCategories(newSettledBet(2d, Side.LAY), coverage),
                 is(Set.of("counter_profit")));
     }
 
     @Test
-    public void testCategoryLt() throws Exception {
+    public void testCategoryLt() {
         BetCoverage coverage = BetCoverage.from(List.of(newSettledBet(1.5d, Side.BACK)));
         assertThat(categorizer.getCategories(newSettledBet(2d, Side.LAY), coverage),
                 is(Set.of("counter_loss")));
     }
 
     @Test
-    public void testCategoryNone() throws Exception {
+    public void testCategoryNone() {
         BetCoverage coverage = BetCoverage.from(List.of(newSettledBet(2d, Side.LAY)));
         assertThat(categorizer.getCategories(newSettledBet(2d, Side.LAY), coverage),
                 is(Set.of("counter_none")));

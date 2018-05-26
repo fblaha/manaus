@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -22,11 +21,11 @@ abstract public class AbstractControllerTest extends AbstractDaoTest {
     private WebApplicationContext context;
 
     protected void checkResponse(String url, String... substrings) throws Exception {
-        MvcResult result = mvc.perform(get(url).accept(MediaType.APPLICATION_JSON))
+        var result = mvc.perform(get(url).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
-        String content = result.getResponse().getContentAsString();
-        for (String substring : substrings) {
+        var content = result.getResponse().getContentAsString();
+        for (var substring : substrings) {
             assertThat(content, containsString(substring));
         }
     }
@@ -37,6 +36,4 @@ abstract public class AbstractControllerTest extends AbstractDaoTest {
                 .webAppContextSetup(context)
                 .build();
     }
-
-
 }

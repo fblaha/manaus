@@ -15,9 +15,9 @@ public class ProfitRecordTest {
     public static final String COUNTRY_PREFIX = Category.MARKET_PREFIX + CountryCodeCategorizer.PREFIX;
 
     @Test
-    public void testLayAllPredicate() throws Exception {
-        ProfitRecord cze = new ProfitRecord(COUNTRY_PREFIX + "cze", 100d, 1, 1, 2d, 0.06);
-        ProfitRecord all = new ProfitRecord(MarketCategories.ALL, 100d, 1, 1, 2d, 0.06);
+    public void testLayAllPredicate() {
+        var cze = new ProfitRecord(COUNTRY_PREFIX + "cze", 100d, 1, 1, 2d, 0.06);
+        var all = new ProfitRecord(MarketCategories.ALL, 100d, 1, 1, 2d, 0.06);
         assertThat(List.of(cze, all).stream().filter(ProfitRecord::isAllCategory).count(), is(1L));
         assertThat(List.of(all).stream().filter(ProfitRecord::isAllCategory).count(), is(1L));
         assertThat(List.of(cze).stream().filter(ProfitRecord::isAllCategory).count(), is(0L));

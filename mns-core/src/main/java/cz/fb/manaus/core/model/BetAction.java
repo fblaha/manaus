@@ -150,13 +150,13 @@ public class BetAction {
     }
 
     public OptionalDouble getDoubleProperty(String propertyName) {
-        String strVal = properties.get(propertyName);
+        var strVal = properties.get(propertyName);
         if (strVal == null) return OptionalDouble.empty();
         return OptionalDouble.of(Double.parseDouble(strVal));
     }
 
     public OptionalInt getIntegerProperty(String propertyName) {
-        String strVal = properties.get(propertyName);
+        var strVal = properties.get(propertyName);
         if (strVal == null) return OptionalInt.empty();
         return OptionalInt.of(Integer.parseInt(strVal));
     }
