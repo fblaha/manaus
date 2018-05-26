@@ -4,15 +4,12 @@ import com.google.common.collect.ImmutableSet;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.Side;
 import org.hibernate.Hibernate;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,7 +39,7 @@ public class BetActionDao extends GenericHibernateDao<BetAction, Integer> {
 
     @Transactional
     public int updateBetId(String oldOne, String newOne) {
-        Query query = getSession().getNamedQuery(BetAction.UPDATE_BET_ID);
+        var query = getSession().getNamedQuery(BetAction.UPDATE_BET_ID);
         query.setParameter("newOne", newOne);
         query.setParameter("oldOne", oldOne);
         return query.executeUpdate();
@@ -50,7 +47,7 @@ public class BetActionDao extends GenericHibernateDao<BetAction, Integer> {
 
     @Transactional
     public int setBetId(int actionId, String betId) {
-        Query query = getSession().getNamedQuery(BetAction.SET_BET_ID);
+        var query = getSession().getNamedQuery(BetAction.SET_BET_ID);
         query.setParameter("actionId", actionId);
         query.setParameter("betId", betId);
         return query.executeUpdate();
@@ -58,16 +55,16 @@ public class BetActionDao extends GenericHibernateDao<BetAction, Integer> {
 
     @Transactional(readOnly = true)
     public Set<String> getBetActionIds(String marketId, OptionalLong selId, Optional<Side> side) {
-        List<String> result = listActionQuery(marketId, selId, side, String.class,
+        var result = listActionQuery(marketId, selId, side, String.class,
                 Optional.of("betId"), Optional.empty());
         return ImmutableSet.copyOf(result);
     }
 
     private <E> List<E> listActionQuery(String marketId, OptionalLong selId, Optional<Side> side,
                                         Class<E> clazz, Optional<String> field, Optional<String> orderField) {
-        CriteriaBuilder builder = entityManagerFactory.getCriteriaBuilder();
-        CriteriaQuery<E> criteria = builder.createQuery(clazz);
-        Root<BetAction> root = criteria.from(BetAction.class);
+        var builder = entityManagerFactory.getCriteriaBuilder();
+        var criteria = builder.createQuery(clazz);
+        var root = criteria.from(BetAction.class);
 
         orderField.ifPresent(val -> criteria.orderBy(builder.asc(root.get(val))));
         field.ifPresent(val -> criteria.select(root.get(val)));
@@ -83,16 +80,16 @@ public class BetActionDao extends GenericHibernateDao<BetAction, Integer> {
 
     @Transactional(readOnly = true)
     public List<BetAction> getBetActions(OptionalInt maxResults) {
-        CriteriaBuilder builder = entityManagerFactory.getCriteriaBuilder();
-        CriteriaQuery<BetAction> criteriaQuery = builder.createQuery(BetAction.class);
-        Root<BetAction> root = criteriaQuery.from(BetAction.class);
+        var builder = entityManagerFactory.getCriteriaBuilder();
+        var criteriaQuery = builder.createQuery(BetAction.class);
+        var root = criteriaQuery.from(BetAction.class);
 
         criteriaQuery.select(root);
         criteriaQuery.orderBy(builder.desc(root.get("actionDate")));
 
         TypedQuery<BetAction> query = getSession().createQuery(criteriaQuery);
         maxResults.ifPresent(query::setMaxResults);
-        List<BetAction> result = query.getResultList();
+        var result = query.getResultList();
         checkState(from(comparing(BetAction::getActionDate)).reverse().isOrdered(result));
         return result;
     }
@@ -100,10 +97,10 @@ public class BetActionDao extends GenericHibernateDao<BetAction, Integer> {
     @Transactional(readOnly = true)
     public Optional<BetAction> getBetAction(String betId) {
         CriteriaBuilder builder = entityManagerFactory.getCriteriaBuilder();
-        CriteriaQuery<BetAction> criteriaQuery = builder.createQuery(BetAction.class);
-        Root<BetAction> actionRoot = criteriaQuery.from(BetAction.class);
+        var criteriaQuery = builder.createQuery(BetAction.class);
+        var actionRoot = criteriaQuery.from(BetAction.class);
         criteriaQuery.where(builder.equal(actionRoot.get("betId"), betId));
-        Query<BetAction> query = getSession().createQuery(criteriaQuery);
+        var query = getSession().createQuery(criteriaQuery);
         return query.uniqueResultOptional();
     }
 
@@ -121,12 +118,12 @@ public class BetActionDao extends GenericHibernateDao<BetAction, Integer> {
 
     @Transactional(readOnly = true)
     public Optional<Date> getBetActionDate(String betId) {
-        CriteriaBuilder builder = entityManagerFactory.getCriteriaBuilder();
-        CriteriaQuery<Date> criteriaQuery = builder.createQuery(Date.class);
-        Root<BetAction> actionRoot = criteriaQuery.from(BetAction.class);
+        var builder = entityManagerFactory.getCriteriaBuilder();
+        var criteriaQuery = builder.createQuery(Date.class);
+        var actionRoot = criteriaQuery.from(BetAction.class);
         criteriaQuery.where(builder.equal(actionRoot.get("betId"), betId));
         criteriaQuery.select(actionRoot.get("actionDate"));
-        Query<Date> sessionQuery = getSession().createQuery(criteriaQuery);
+        var sessionQuery = getSession().createQuery(criteriaQuery);
         return sessionQuery.uniqueResultOptional();
     }
 

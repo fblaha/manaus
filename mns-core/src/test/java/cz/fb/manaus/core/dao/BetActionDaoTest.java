@@ -3,7 +3,6 @@ package cz.fb.manaus.core.dao;
 import com.google.common.collect.Ordering;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
-import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.RunnerPrices;
@@ -40,7 +39,7 @@ public class BetActionDaoTest extends AbstractDaoTest {
 
     @Test
     public void testBetIds() {
-        Market market = newMarket();
+        var market = newMarket();
         marketDao.saveOrUpdate(market);
         createAndSaveBetAction(market, new Date(), singletonMap("k1", "XXX"), BET_ID);
         Set<String> ids = betActionDao.getBetActionIds(market.getId(), OptionalLong.empty(), empty());
@@ -49,11 +48,10 @@ public class BetActionDaoTest extends AbstractDaoTest {
 
     @Test
     public void testUpdateBetId() {
-        Market market = newMarket();
+        var market = newMarket();
         marketDao.saveOrUpdate(market);
-        BetAction action = createAndSaveBetAction(market, new Date(), Collections.emptyMap(), BET_ID);
-        String newId = BET_ID + "_1";
-        String marketId = action.getMarket().getId();
+        createAndSaveBetAction(market, new Date(), Collections.emptyMap(), BET_ID);
+        var newId = BET_ID + "_1";
         assertThat(betActionDao.updateBetId(BET_ID, newId), is(1));
         assertThat(betActionDao.updateBetId(BET_ID, newId), is(0));
         assertTrue(betActionDao.getBetAction(newId).isPresent());
@@ -62,17 +60,17 @@ public class BetActionDaoTest extends AbstractDaoTest {
 
     @Test
     public void testSetBetId() {
-        Market market = newMarket();
+        var market = newMarket();
         marketDao.saveOrUpdate(market);
-        BetAction action = createAndSaveBetAction(market, new Date(), Collections.emptyMap(), null);
-        Integer actionId = action.getId();
+        var action = createAndSaveBetAction(market, new Date(), Collections.emptyMap(), null);
+        var actionId = action.getId();
         assertThat(betActionDao.setBetId(actionId, "111"), is(1));
         assertThat(betActionDao.get(actionId).get().getBetId(), is("111"));
     }
 
     @Test
     public void testBetAction() {
-        Market market = newMarket();
+        var market = newMarket();
         marketDao.saveOrUpdate(market);
         createAndSaveBetAction(market, new Date(), singletonMap("k1", "XXX"), BET_ID);
         checkCount(market.getId(), OptionalLong.empty(), empty(), 1);
@@ -91,11 +89,11 @@ public class BetActionDaoTest extends AbstractDaoTest {
 
     @Test
     public void testBetActionProperties() {
-        Market market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
+        var market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);
 
         createAndSaveBetAction(market, new Date(), singletonMap("k1", "newer"), BET_ID);
-        BetAction action = betActionDao.getBetActions("33", OptionalLong.of(CoreTestFactory.DRAW), Optional.of(Side.LAY)).get(0);
+        var action = betActionDao.getBetActions("33", OptionalLong.of(CoreTestFactory.DRAW), Optional.of(Side.LAY)).get(0);
         betActionDao.getBetActions(OptionalInt.empty());
         assertThat(action.getProperties().size(), is(1));
         assertThat(action.getProperties().get("k1"), is("newer"));
@@ -104,11 +102,11 @@ public class BetActionDaoTest extends AbstractDaoTest {
 
     @Test
     public void testBetActionPropertiesOrder() {
-        Market market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
+        var market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);
         createAndSaveBetAction(market, new Date(), singletonMap("k1", "newer"), BET_ID);
         createAndSaveBetAction(market, addHours(new Date(), -1), singletonMap("k1", "older"), BET_ID + 1);
-        BetAction action = betActionDao.getBetActions("33", OptionalLong.of(CoreTestFactory.DRAW), Optional.of(Side.LAY)).get(0);
+        var action = betActionDao.getBetActions("33", OptionalLong.of(CoreTestFactory.DRAW), Optional.of(Side.LAY)).get(0);
         assertThat(action.getProperties().size(), is(1));
         assertThat(action.getProperties().get("k1"), is("older"));
 
@@ -121,7 +119,7 @@ public class BetActionDaoTest extends AbstractDaoTest {
 
     @Test
     public void testBetActionPropertiesDelete() {
-        Market market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
+        var market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);
         createAndSaveBetAction(market, addHours(new Date(), -1), singletonMap("k1", "older"), BET_ID);
 
@@ -132,7 +130,7 @@ public class BetActionDaoTest extends AbstractDaoTest {
 
     @Test
     public void testBetActionPropertiesDuplicity() {
-        Market market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
+        var market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);
         createAndSaveBetAction(market, new Date(), of("k1", "v1", "k2", "v2"), BET_ID);
         assertThat(betActionDao.getBetActions(OptionalInt.empty()).size(), is(1));
@@ -141,7 +139,7 @@ public class BetActionDaoTest extends AbstractDaoTest {
 
     @Test
     public void testMaxResults() {
-        Market market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
+        var market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);
         createAndSaveBetAction(market, new Date(), of("k1", "v1", "k2", "v2"), BET_ID);
         createAndSaveBetAction(market, new Date(), of("k1", "v1", "k2", "v2"), BET_ID + 1);
@@ -167,21 +165,21 @@ public class BetActionDaoTest extends AbstractDaoTest {
     @Test
     public void testMarketPrices() {
         createMarketWithSingleAction();
-        BetAction betAction = betActionDao.getBetAction(BET_ID).get();
+        var betAction = betActionDao.getBetAction(BET_ID).get();
         assertThat(betAction.getMarketPrices(), notNullValue());
     }
 
     @Test(expected = LazyInitializationException.class)
     public void testMarketPricesLazy() {
         createMarketWithSingleAction();
-        BetAction betAction = betActionDao.getBetAction(BET_ID).get();
+        var betAction = betActionDao.getBetAction(BET_ID).get();
         betAction.getMarketPrices().getReciprocal(Side.BACK);
     }
 
     @Test
     public void testMarketPricesLazyFetch() {
         createMarketWithSingleAction();
-        BetAction action = betActionDao.getBetAction(BET_ID).get();
+        var action = betActionDao.getBetAction(BET_ID).get();
         betActionDao.fetchMarketPrices(action);
         assertThat(action.getMarketPrices().getTime(), notNullValue());
         assertThat(action.getMarketPrices().getReciprocal(Side.BACK).getAsDouble(), is(0.8333333333333333d));
@@ -191,16 +189,16 @@ public class BetActionDaoTest extends AbstractDaoTest {
     @Test(expected = LazyInitializationException.class)
     public void testMarketLazy() {
         createMarketWithSingleAction();
-        BetAction action = betActionDao.getBetAction(BET_ID).get();
+        var action = betActionDao.getBetAction(BET_ID).get();
         action.getMarketPrices().getMarket().getName();
     }
 
     @Test
     public void testRunnerCount() {
-        Market market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
+        var market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);
         createAndSaveBetAction(market, addHours(new Date(), -1), PROPS, BET_ID);
-        BetAction stored = betActionDao.getBetAction(BET_ID).get();
+        var stored = betActionDao.getBetAction(BET_ID).get();
         assertThat(stored.getMarket().getRunners().size(), is(market.getRunners().size()));
     }
 
@@ -215,13 +213,13 @@ public class BetActionDaoTest extends AbstractDaoTest {
     }
 
     private void saveActionsAndCheckOrder(Comparator<BetAction> comparator) {
-        Market market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
+        var market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);
-        BetAction betActionEarlier = new BetAction(BetActionType.PLACE, DateUtils.addDays(new Date(), -1), new Price(2d, 30d, Side.LAY), market, CoreTestFactory.DRAW, BET_ID);
-        BetAction betActionLater = new BetAction(BetActionType.PLACE, new Date(), new Price(3d, 33d, Side.LAY), market, CoreTestFactory.DRAW, BET_ID + 1);
-        List<BetAction> actions = List.of(betActionLater, betActionEarlier);
+        var betActionEarlier = new BetAction(BetActionType.PLACE, DateUtils.addDays(new Date(), -1), new Price(2d, 30d, Side.LAY), market, CoreTestFactory.DRAW, BET_ID);
+        var betActionLater = new BetAction(BetActionType.PLACE, new Date(), new Price(3d, 33d, Side.LAY), market, CoreTestFactory.DRAW, BET_ID + 1);
+        var actions = List.of(betActionLater, betActionEarlier);
         Ordering.from(comparator).immutableSortedCopy(actions).forEach(betActionDao::saveOrUpdate);
-        List<BetAction> betActionsForMarket = betActionDao.getBetActions(market.getId(), OptionalLong.empty(), empty());
+        var betActionsForMarket = betActionDao.getBetActions(market.getId(), OptionalLong.empty(), empty());
         assertThat(betActionsForMarket.size(), is(2));
         assertThat(2d, is(betActionsForMarket.get(0).getPrice().getPrice()));
         assertThat(3d, is(betActionsForMarket.get(1).getPrice().getPrice()));
@@ -229,34 +227,34 @@ public class BetActionDaoTest extends AbstractDaoTest {
 
     @Test
     public void testBetActionWithRunnerPrices() {
-        Market market = newMarket();
-        RunnerPrices runnerPrices = new RunnerPrices(232, List.of(new Price(2.3d, 22, Side.BACK)), 5d, 2.5d);
-        MarketPrices marketPrices = new MarketPrices(1, market, List.of(runnerPrices), new Date());
+        var market = newMarket();
+        var runnerPrices = new RunnerPrices(232, List.of(new Price(2.3d, 22, Side.BACK)), 5d, 2.5d);
+        var marketPrices = new MarketPrices(1, market, List.of(runnerPrices), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
-        BetAction betAction = CoreTestFactory.newBetAction("1", market);
+        var betAction = CoreTestFactory.newBetAction("1", market);
         betAction.setMarketPrices(marketPrices);
         betActionDao.saveOrUpdate(betAction);
 
-        List<BetAction> actions = betActionDao.getBetActions(market.getId(), OptionalLong.empty(), empty());
+        var actions = betActionDao.getBetActions(market.getId(), OptionalLong.empty(), empty());
         assertThat(actions.size(), is(1));
     }
 
     @Test
     public void testSharedPrices() {
-        Market market = newMarket();
-        RunnerPrices runnerPrices = new RunnerPrices(232, List.of(new Price(2.3d, 22, Side.BACK)), 5d, 2.5d);
-        MarketPrices marketPrices = new MarketPrices(1, market, List.of(runnerPrices), new Date());
+        var market = newMarket();
+        var runnerPrices = new RunnerPrices(232, List.of(new Price(2.3d, 22, Side.BACK)), 5d, 2.5d);
+        var marketPrices = new MarketPrices(1, market, List.of(runnerPrices), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
 
-        BetAction betAction1 = CoreTestFactory.newBetAction("1", market);
+        var betAction1 = CoreTestFactory.newBetAction("1", market);
         betAction1.setMarketPrices(marketPrices);
         betActionDao.saveOrUpdate(betAction1);
 
-        BetAction betAction2 = CoreTestFactory.newBetAction("2", market);
+        var betAction2 = CoreTestFactory.newBetAction("2", market);
         betAction2.setMarketPrices(marketPrices);
         betActionDao.saveOrUpdate(betAction2);
 
