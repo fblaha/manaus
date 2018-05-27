@@ -17,6 +17,9 @@
         <module>mns-core</module>
         <module>mns-reactor</module>
         <module>mns-rest</module>
+        <module>ischia</module>
+        <module>manila</module>
+        <module>mns-boot</module>
     </modules>
 
     <properties>
@@ -40,6 +43,7 @@
                     <configuration>
                         <source>1.10</source>
                         <target>1.10</target>
+                        <release>10</release>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -85,6 +89,27 @@
                 <scope>compile</scope>
                 <version>${project.version}</version>
             </dependency>
+
+
+            <dependency>
+                <groupId>cz.fb.manaus</groupId>
+                <artifactId>ischia</artifactId>
+                <scope>compile</scope>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cz.fb.manaus</groupId>
+                <artifactId>manila</artifactId>
+                <scope>compile</scope>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cz.fb.manaus</groupId>
+                <artifactId>manaus-boot</artifactId>
+                <scope>compile</scope>
+                <version>${project.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>org.apache.commons</groupId>
