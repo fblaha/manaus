@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -20,24 +21,27 @@ public class DowngradeCategorizer implements RelatedActionsAwareCategorizer {
     @Override
     public Set<String> getCategories(List<BetAction> actions, Market market) {
         var result = new HashSet<String>();
-        // TODO optional
-        BetAction last = null;
+        Optional<BetAction> last = Optional.empty();
         var lastDowngrade = false;
         for (var action : actions) {
             lastDowngrade = false;
-            if (last != null) {
-                checkState(last.getPrice().getSide() == action.getPrice().getSide());
-                checkState(last.getActionDate().before(action.getActionDate()));
-                if (ORDERING.reverse().isStrictlyOrdered(List.of(last.getPrice(), action.getPrice()))) {
+            if (last.isPresent()) {
+                validate(last.get(), action);
+                if (ORDERING.reverse().isStrictlyOrdered(List.of(last.get().getPrice(), action.getPrice()))) {
                     lastDowngrade = true;
                     result.add(DOWNGRADE);
                 }
             }
-            last = action;
+            last = Optional.of(action);
         }
         if (lastDowngrade) {
             result.add(DOWNGRADE_LAST);
         }
         return result;
+    }
+
+    private void validate(BetAction last, BetAction action) {
+        checkState(last.getPrice().getSide() == action.getPrice().getSide());
+        checkState(last.getActionDate().before(action.getActionDate()));
     }
 }
