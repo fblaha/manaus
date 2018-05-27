@@ -29,7 +29,7 @@ public class DowngradeCategorizer implements RelatedActionsAwareCategorizer {
         if (hasDowngrade(actions.stream())) {
             result.add(DOWNGRADE);
         }
-        int actionCount = actions.size();
+        var actionCount = actions.size();
         if (actionCount >= 2 && hasDowngrade(actions.stream().skip(actionCount - 2))) {
             result.add(DOWNGRADE_LAST);
         }
