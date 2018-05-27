@@ -1,16 +1,20 @@
 package cz.fb.manaus.reactor.categorizer;
 
+import com.google.common.collect.Ordering;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.Market;
+import cz.fb.manaus.core.model.Price;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkState;
 import static cz.fb.manaus.core.model.PriceComparator.ORDERING;
+import static java.util.Comparator.comparing;
 
 @Component
 public class DowngradeCategorizer implements RelatedActionsAwareCategorizer {
@@ -20,28 +24,27 @@ public class DowngradeCategorizer implements RelatedActionsAwareCategorizer {
 
     @Override
     public Set<String> getCategories(List<BetAction> actions, Market market) {
+        validate(actions);
         var result = new HashSet<String>();
-        Optional<BetAction> last = Optional.empty();
-        var lastDowngrade = false;
-        for (var action : actions) {
-            lastDowngrade = false;
-            if (last.isPresent()) {
-                validate(last.get(), action);
-                if (ORDERING.reverse().isStrictlyOrdered(List.of(last.get().getPrice(), action.getPrice()))) {
-                    lastDowngrade = true;
-                    result.add(DOWNGRADE);
-                }
-            }
-            last = Optional.of(action);
+        if (hasDowngrade(actions.stream())) {
+            result.add(DOWNGRADE);
         }
-        if (lastDowngrade) {
+        int actionCount = actions.size();
+        if (actionCount >= 2 && hasDowngrade(actions.stream().skip(actionCount - 2))) {
             result.add(DOWNGRADE_LAST);
         }
         return result;
     }
 
-    private void validate(BetAction last, BetAction action) {
-        checkState(last.getPrice().getSide() == action.getPrice().getSide());
-        checkState(last.getActionDate().before(action.getActionDate()));
+    private boolean hasDowngrade(Stream<BetAction> actions) {
+        return !ORDERING.isOrdered(actions.map(BetAction::getPrice).collect(Collectors.toList()));
+    }
+
+    private void validate(List<BetAction> actions) {
+        checkState(actions.stream()
+                .map(BetAction::getPrice)
+                .map(Price::getSide)
+                .distinct().count() <= 1);
+        checkState(Ordering.from(comparing(BetAction::getActionDate)).isStrictlyOrdered(actions));
     }
 }
