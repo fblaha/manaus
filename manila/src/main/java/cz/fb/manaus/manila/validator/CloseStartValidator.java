@@ -16,8 +16,8 @@ public class CloseStartValidator implements Validator {
 
     @Override
     public ValidationResult validate(BetContext context) {
-        Date openDate = context.getMarketPrices().getMarket().getEvent().getOpenDate();
-        long seconds = Instant.now().until(openDate.toInstant(), ChronoUnit.SECONDS);
+        var openDate = context.getMarketPrices().getMarket().getEvent().getOpenDate();
+        var seconds = Instant.now().until(openDate.toInstant(), ChronoUnit.SECONDS);
         return ValidationResult.of(seconds > 30);
     }
 

@@ -24,7 +24,7 @@ public class MinimizeChargeStrategy {
     }
 
     public double getReductionRate(BetContext context) {
-        double rawRate = getRawRate(context);
+        var rawRate = getRawRate(context);
         Preconditions.checkArgument(Range.closed(fairnessReductionLow, getUpperBoundary(context.getSide())).contains(rawRate));
         return rawRate;
     }
@@ -34,13 +34,13 @@ public class MinimizeChargeStrategy {
     }
 
     private double getRawRate(BetContext context) {
-        OptionalDouble growthForecast = context.getChargeGrowthForecast();
-        double upper = getUpperBoundary(context.getSide());
+        var growthForecast = context.getChargeGrowthForecast();
+        var upper = getUpperBoundary(context.getSide());
         if (growthForecast.isPresent()) {
-            double growth = growthForecast.getAsDouble();
+            var growth = growthForecast.getAsDouble();
             if (Doubles.isFinite(growth)) {
                 setActionProperty(context, growth);
-                double result = Math.min(upper, upper * growth);
+                var result = Math.min(upper, upper * growth);
                 return Math.max(fairnessReductionLow, result);
             }
         }
@@ -48,7 +48,7 @@ public class MinimizeChargeStrategy {
     }
 
     private void setActionProperty(BetContext context, double growth) {
-        double rounded = Precision.round(growth, 4);
+        var rounded = Precision.round(growth, 4);
         context.getProperties().put("chargeGrowth", Double.toString(rounded));
     }
 

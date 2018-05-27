@@ -43,7 +43,6 @@
                     <configuration>
                         <source>1.10</source>
                         <target>1.10</target>
-                        <release>10</release>
                     </configuration>
                 </plugin>
                 <plugin>

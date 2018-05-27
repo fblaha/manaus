@@ -27,12 +27,12 @@ public class MinimizeChargeStrategyTest extends AbstractLocalTestCase {
 
     @Test
     public void testStrategy() throws Exception {
-        BetContext context = Mockito.mock(BetContext.class);
+        var context = Mockito.mock(BetContext.class);
         when(context.getSide()).thenReturn(Side.BACK);
-        MarketPrices marketPrices = Mockito.mock(MarketPrices.class);
-        Market market = Mockito.mock(Market.class);
-        Event event = Mockito.mock(Event.class);
-        Date openDate = Date.from(Instant.now().plus(30, ChronoUnit.MINUTES));
+        var marketPrices = Mockito.mock(MarketPrices.class);
+        var market = Mockito.mock(Market.class);
+        var event = Mockito.mock(Event.class);
+        var openDate = Date.from(Instant.now().plus(30, ChronoUnit.MINUTES));
         when(event.getOpenDate()).thenReturn(openDate);
         when(market.getEvent()).thenReturn(event);
         when(marketPrices.getMarket()).thenReturn(market);

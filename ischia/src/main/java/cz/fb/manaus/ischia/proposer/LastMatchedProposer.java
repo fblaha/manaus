@@ -27,13 +27,13 @@ public class LastMatchedProposer implements PriceProposer {
 
     @Override
     public ValidationResult validate(BetContext context) {
-        Optional<Double> lastMatchedPrice = ofNullable(context.getRunnerPrices().getLastMatchedPrice());
+        var lastMatchedPrice = ofNullable(context.getRunnerPrices().getLastMatchedPrice());
         return ValidationResult.of(lastMatchedPrice.isPresent() && getProposedPrice(context).isPresent());
     }
 
     @Override
     public OptionalDouble getProposedPrice(BetContext context) {
-        double lastMatchedPrice = context.getRunnerPrices().getLastMatchedPrice();
+        var lastMatchedPrice = context.getRunnerPrices().getLastMatchedPrice();
         return OptionalDouble.of(priceService.downgrade(lastMatchedPrice,
                 TradedVolumeProposer.REDUCTION_RATE, context.getSide()));
     }

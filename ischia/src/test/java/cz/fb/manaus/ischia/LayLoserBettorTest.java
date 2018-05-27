@@ -33,7 +33,7 @@ public class LayLoserBettorTest extends AbstractBettorTest<LayLoserBettor> {
 
     @Test
     public void testCloseUpdate() {
-        MarketPrices market = persistMarket(reactorTestFactory.createMarket(2.90d, 3.2d, of(3d), 1));
+        var market = persistMarket(reactorTestFactory.createMarket(2.90d, 3.2d, of(3d), 1));
 
         checkUpdate(market, 2.86, Side.LAY, 0, 0);
         checkUpdate(market, 2.88, Side.LAY, 0, 0);

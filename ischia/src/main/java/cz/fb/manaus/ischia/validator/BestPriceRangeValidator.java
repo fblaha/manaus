@@ -24,11 +24,11 @@ public class BestPriceRangeValidator implements Validator {
 
     @Override
     public ValidationResult validate(BetContext context) {
-        Optional<Price> bestLay = context.getRunnerPrices().getHomogeneous(Side.LAY).getBestPrice();
-        Optional<Price> bestBack = context.getRunnerPrices().getHomogeneous(Side.BACK).getBestPrice();
+        var bestLay = context.getRunnerPrices().getHomogeneous(Side.LAY).getBestPrice();
+        var bestBack = context.getRunnerPrices().getHomogeneous(Side.BACK).getBestPrice();
         if (bestBack.isPresent() && bestLay.isPresent()) {
-            double backPrice = bestBack.get().getPrice();
-            double layPrice = bestLay.get().getPrice();
+            var backPrice = bestBack.get().getPrice();
+            var layPrice = bestLay.get().getPrice();
             return ValidationResult.of(RANGE.containsAll(List.of(backPrice, layPrice)));
         } else {
             return REJECT;

@@ -21,7 +21,7 @@ public class BestPriceRangeValidator implements Validator {
 
     @Override
     public ValidationResult validate(BetContext context) {
-        Optional<Price> bestBack = context.getRunnerPrices().getHomogeneous(Side.BACK).getBestPrice();
+        var bestBack = context.getRunnerPrices().getHomogeneous(Side.BACK).getBestPrice();
         return bestBack
                 .map(price -> ValidationResult.of(RANGE.contains(price.getPrice())))
                 .orElse(REJECT);

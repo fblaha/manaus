@@ -33,7 +33,7 @@ public class BackLoserBettorTest extends AbstractBettorTest<BackLoserBettor> {
 
     @Test
     public void testCloseUpdate() {
-        MarketPrices market = persistMarket(reactorTestFactory.createMarket(2.8d, 3.4d, of(3d), 1));
+        var market = persistMarket(reactorTestFactory.createMarket(2.8d, 3.4d, of(3d), 1));
         checkUpdate(market, 3.4d, Side.BACK, 0, 0);
         checkUpdate(market, 3.35d, Side.BACK, 0, 0);
         checkUpdate(market, 3.5d, Side.BACK, 0, 3);

@@ -34,7 +34,7 @@ public class TradedVolumeProposer implements PriceProposer {
 
     @Override
     public OptionalDouble getProposedPrice(BetContext context) {
-        double weightedMean = context.getActualTradedVolume().get().getWeightedMean().getAsDouble();
+        var weightedMean = context.getActualTradedVolume().get().getWeightedMean().getAsDouble();
         return OptionalDouble.of(priceService.downgrade(weightedMean, REDUCTION_RATE, context.getSide()));
     }
 
