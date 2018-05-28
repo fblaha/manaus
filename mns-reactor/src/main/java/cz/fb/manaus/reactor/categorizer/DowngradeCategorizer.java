@@ -44,7 +44,8 @@ public class DowngradeCategorizer implements RelatedActionsAwareCategorizer {
         checkState(actions.stream()
                 .map(BetAction::getPrice)
                 .map(Price::getSide)
-                .distinct().count() <= 1);
-        checkState(Ordering.from(comparing(BetAction::getActionDate)).isStrictlyOrdered(actions));
+                .distinct().count() <= 1, "mixed sides");
+        checkState(Ordering.from(comparing(BetAction::getActionDate)).isStrictlyOrdered(actions),
+                "time disorder");
     }
 }
