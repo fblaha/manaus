@@ -84,11 +84,10 @@ public class CoreDatabaseConfiguration {
         } else {
             properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
 
-            // hibernate.dialect=org.hibernate.dialect.MySQLInnoDBDialect
+            // hibernate.dialect=org.hibernate.dialect.MariaDBDialect
             // hibernate.hbm2ddl.auto=create
             // hibernate.show_sql=true
         }
-        // cache related
         return properties;
     }
 
