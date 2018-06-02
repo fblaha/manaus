@@ -7,7 +7,9 @@ import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.dao.SettledBetDao;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.SettledBet;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Repository
+@Profile(ManausProfiles.DB_PROFILE)
 public class SettledBetSaver {
     private static final Logger log = Logger.getLogger(SettledBetSaver.class.getSimpleName());
     @Autowired

@@ -5,8 +5,10 @@ import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.reactor.betting.action.BetUtils;
-import cz.fb.manaus.spring.DatabaseComponent;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
@@ -17,7 +19,8 @@ import java.util.logging.Logger;
 
 import static java.util.Optional.of;
 
-@DatabaseComponent
+@Component
+@Profile(ManausProfiles.DB_PROFILE)
 public class RelatedActionsCategorizer implements SettledBetCategorizer {
 
     private static final Logger log = Logger.getLogger(RelatedActionsCategorizer.class.getSimpleName());

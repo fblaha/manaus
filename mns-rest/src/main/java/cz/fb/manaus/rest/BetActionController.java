@@ -7,7 +7,9 @@ import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.dao.MarketPricesDao;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.reactor.betting.action.ActionSaver;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +27,7 @@ import java.util.OptionalLong;
 import static java.util.Optional.empty;
 
 @Controller
+@Profile(ManausProfiles.DB_PROFILE)
 public class BetActionController {
 
     @Autowired

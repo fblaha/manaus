@@ -11,11 +11,12 @@ import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import cz.fb.manaus.reactor.ReactorTestFactory;
 import cz.fb.manaus.reactor.betting.validator.ValidationResult;
-import cz.fb.manaus.spring.DatabaseComponent;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Duration;
@@ -23,10 +24,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static cz.fb.manaus.spring.CoreLocalConfiguration.TEST_PROFILE;
+import static cz.fb.manaus.spring.ManausProfiles.DB_PROFILE;
+import static cz.fb.manaus.spring.ManausProfiles.TEST_PROFILE;
 import static org.hamcrest.CoreMatchers.is;
 
-@ActiveProfiles(value = {"matchbook", TEST_PROFILE}, inheritProfiles = false)
+@ActiveProfiles(value = {"matchbook", TEST_PROFILE, DB_PROFILE}, inheritProfiles = false)
 public class _AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
     @Autowired
     private TestValidator validator;
@@ -96,7 +98,8 @@ public class _AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
         return CoreTestFactory.newMarket("33", DateUtils.addHours(new Date(), 2), CoreTestFactory.MATCH_ODDS);
     }
 
-    @DatabaseComponent
+    @Component
+    @Profile(DB_PROFILE)
     private static class TestValidator extends AbstractDelayUpdateValidator {
 
         public TestValidator() {

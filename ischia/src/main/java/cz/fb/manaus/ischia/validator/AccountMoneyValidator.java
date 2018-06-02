@@ -6,7 +6,7 @@ import cz.fb.manaus.reactor.betting.validator.common.AbstractAccountMoneyValidat
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import static cz.fb.manaus.spring.CoreLocalConfiguration.PRODUCTION_PROFILE;
+import static cz.fb.manaus.spring.ManausProfiles.PRODUCTION_PROFILE;
 
 @BackLoserBet
 @LayLoserBet

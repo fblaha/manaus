@@ -5,7 +5,9 @@ import cz.fb.manaus.core.category.categorizer.CompetitionCategorizer;
 import cz.fb.manaus.ischia.BackLoserBet;
 import cz.fb.manaus.ischia.LayLoserBet;
 import cz.fb.manaus.reactor.filter.AbstractUnprofitableCategoriesRegistry;
-import cz.fb.manaus.spring.DatabaseComponent;
+import cz.fb.manaus.spring.ManausProfiles;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.Map;
@@ -13,7 +15,8 @@ import java.util.Optional;
 
 @LayLoserBet
 @BackLoserBet
-@DatabaseComponent
+@Component
+@Profile(ManausProfiles.DB_PROFILE)
 public class CompetitionUnprofitableCategoriesFilter extends AbstractUnprofitableCategoriesRegistry {
 
     public static final String PREFIX = Category.MARKET_PREFIX + CompetitionCategorizer.PREFIX;

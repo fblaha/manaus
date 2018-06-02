@@ -2,15 +2,18 @@ package cz.fb.manaus.reactor.filter;
 
 import cz.fb.manaus.core.maintanance.ConfigUpdate;
 import cz.fb.manaus.core.maintanance.PeriodicMaintenanceTask;
-import cz.fb.manaus.spring.DatabaseComponent;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.LinkedList;
 import java.util.List;
 
-@DatabaseComponent
+@Component
+@Profile(ManausProfiles.DB_PROFILE)
 public class UnprofitableCategoriesRefresher implements PeriodicMaintenanceTask {
 
     public static final String REFRESH_PERIOD_EL = "#{systemEnvironment['MNS_UNPROFITABLE_REFRESH_PERIOD_HRS'] ?: 8}";

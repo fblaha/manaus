@@ -16,16 +16,19 @@ import cz.fb.manaus.core.model.Runner;
 import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
-import cz.fb.manaus.spring.DatabaseComponent;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-@DatabaseComponent
+@Repository
+@Profile(ManausProfiles.DB_PROFILE)
 public class CoreTestFactory {
 
     public static final String MARKET_ID = "44";

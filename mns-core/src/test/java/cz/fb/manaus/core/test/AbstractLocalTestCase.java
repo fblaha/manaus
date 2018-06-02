@@ -7,7 +7,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static cz.fb.manaus.spring.CoreLocalConfiguration.TEST_PROFILE;
+import static cz.fb.manaus.spring.ManausProfiles.TEST_PROFILE;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)

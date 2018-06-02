@@ -11,7 +11,9 @@ import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.MarketSnapshot;
 import cz.fb.manaus.reactor.betting.BetManager;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +31,7 @@ import java.util.logging.Logger;
 
 
 @Controller
+@Profile(ManausProfiles.DB_PROFILE)
 public class MarketSnapshotController {
 
     private static final Logger log = Logger.getLogger(MarketSnapshotController.class.getSimpleName());

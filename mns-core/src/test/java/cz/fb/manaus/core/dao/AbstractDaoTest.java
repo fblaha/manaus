@@ -20,7 +20,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static cz.fb.manaus.core.test.CoreTestFactory.newMarket;
 import static org.apache.commons.lang3.time.DateUtils.addHours;
@@ -31,7 +30,6 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
 
     public static final String BET_ID = "99999";
     public static final String SPARTA = "Sparta Praha - Banik Ostrava";
-    public static final Set<String> TAGS = Set.of("tag1", "tag2", "tag3");
     public static final Map<String, String> PROPS = Map.of("reciprocal", "0.9", "lastMatched", "2");
     public static final String MARKET_ID = "33";
 

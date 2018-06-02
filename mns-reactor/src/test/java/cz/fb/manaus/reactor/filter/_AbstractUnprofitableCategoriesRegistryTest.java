@@ -5,11 +5,13 @@ import cz.fb.manaus.core.maintanance.ConfigUpdate;
 import cz.fb.manaus.core.model.ProfitRecord;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase;
-import cz.fb.manaus.spring.DatabaseComponent;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.List;
@@ -135,7 +137,8 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
         assertThat(properties.get("unprofitable.black.list.test.5"), is("weak5_1,weak5_2,weak5_3"));
     }
 
-    @DatabaseComponent
+    @Component
+    @Profile(ManausProfiles.DB_PROFILE)
     private static class TestUnprofitableCategoriesRegistry extends AbstractUnprofitableCategoriesRegistry {
         public TestUnprofitableCategoriesRegistry() {
             super("test", Duration.ofDays(30), Optional.of(Side.LAY), 0,
@@ -143,7 +146,8 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
         }
     }
 
-    @DatabaseComponent
+    @Component
+    @Profile(ManausProfiles.DB_PROFILE)
     private static class Test2UnprofitableCategoriesRegistry extends AbstractUnprofitableCategoriesRegistry {
         public Test2UnprofitableCategoriesRegistry() {
             super("test2", Duration.ofDays(30), Optional.of(Side.LAY), 0,

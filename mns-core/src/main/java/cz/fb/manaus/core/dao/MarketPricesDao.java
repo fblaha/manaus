@@ -2,7 +2,9 @@ package cz.fb.manaus.core.dao;
 
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.RunnerPrices;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.hibernate.query.Query;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.OptionalInt;
 
 @Repository
+@Profile(ManausProfiles.DB_PROFILE)
 public class MarketPricesDao extends GenericHibernateDao<MarketPrices, Integer> {
 
     public MarketPricesDao() {

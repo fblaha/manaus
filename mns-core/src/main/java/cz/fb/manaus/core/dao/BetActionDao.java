@@ -3,7 +3,9 @@ package cz.fb.manaus.core.dao;
 import com.google.common.collect.ImmutableSet;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.Side;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.hibernate.Hibernate;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Ordering.from;
 import static java.util.Comparator.comparing;
 
+@Profile(ManausProfiles.DB_PROFILE)
 @Repository
 public class BetActionDao extends GenericHibernateDao<BetAction, Integer> {
 

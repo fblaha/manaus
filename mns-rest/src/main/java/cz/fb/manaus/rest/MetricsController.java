@@ -5,7 +5,9 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SlidingWindowReservoir;
 import cz.fb.manaus.core.metrics.MetricRecord;
 import cz.fb.manaus.core.metrics.MetricsService;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
+@Profile(ManausProfiles.DB_PROFILE)
 public class MetricsController {
 
     @Autowired

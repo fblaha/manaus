@@ -15,11 +15,13 @@ import cz.fb.manaus.reactor.betting.action.BetActionListener;
 import cz.fb.manaus.reactor.betting.action.BetUtils;
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener;
 import cz.fb.manaus.reactor.price.AbstractPriceFilter;
-import cz.fb.manaus.spring.DatabaseComponent;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -36,7 +38,8 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 @Lazy
-@DatabaseComponent
+@Service
+@Profile(ManausProfiles.DB_PROFILE)
 public class BetManager {
 
     public static final String DISABLED_LISTENERS_EL = "#{systemEnvironment['MNS_DISABLED_LISTENERS']}";

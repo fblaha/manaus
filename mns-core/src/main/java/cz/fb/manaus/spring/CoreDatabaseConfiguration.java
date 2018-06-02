@@ -20,6 +20,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -29,6 +30,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 
+@Profile(ManausProfiles.DB_PROFILE)
 @Configuration
 @EnableTransactionManagement
 @ComponentScan("cz.fb.manaus.core")

@@ -8,14 +8,17 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = {
-        // TODO allow all auto configs
+        // TODO remove hibernate
         HibernateJpaAutoConfiguration.class,
         JpaRepositoriesAutoConfiguration.class
 })
 public class ManausApplication {
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(ManausApplication.class).run(args);
+        var builder = new SpringApplicationBuilder(ManausApplication.class);
+        var application = builder.application();
+        ManausProfiles.PRODUCTION_REQUIRED.forEach(application::setAdditionalProfiles);
+        builder.run(args);
     }
 
 }

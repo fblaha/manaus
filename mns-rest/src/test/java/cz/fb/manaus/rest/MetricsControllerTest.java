@@ -4,7 +4,6 @@ import com.codahale.metrics.MetricRegistry;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -12,7 +11,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@ContextConfiguration(classes = MetricsController.class)
 public class MetricsControllerTest extends AbstractControllerTest {
 
     @Autowired

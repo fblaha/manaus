@@ -3,8 +3,10 @@ package cz.fb.manaus.reactor.betting.action;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.MarketPricesDao;
 import cz.fb.manaus.core.model.BetAction;
-import cz.fb.manaus.spring.DatabaseComponent;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -13,7 +15,8 @@ import java.util.logging.Logger;
 
 import static java.util.Objects.requireNonNull;
 
-@DatabaseComponent
+@Repository
+@Profile(ManausProfiles.DB_PROFILE)
 public class ActionSaver {
 
     private static final Logger log = Logger.getLogger(ActionSaver.class.getSimpleName());

@@ -2,6 +2,8 @@ package cz.fb.manaus.core.dao;
 
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
+import cz.fb.manaus.spring.ManausProfiles;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +18,7 @@ import java.util.OptionalInt;
 import java.util.OptionalLong;
 
 @Repository
+@Profile(ManausProfiles.DB_PROFILE)
 public class SettledBetDao extends GenericHibernateDao<SettledBet, Long> {
 
     public SettledBetDao() {

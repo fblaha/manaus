@@ -9,7 +9,9 @@ import cz.fb.manaus.reactor.betting.action.BetUtils;
 import cz.fb.manaus.reactor.profit.ProfitService;
 import cz.fb.manaus.reactor.profit.progress.CoverageFunctionProfitService;
 import cz.fb.manaus.reactor.profit.progress.ProgressProfitService;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +34,7 @@ import static java.util.Comparator.comparing;
 import static java.util.Comparator.comparingDouble;
 
 @Controller
+@Profile(ManausProfiles.DB_PROFILE)
 public class ProfitController {
 
     public static final Map<String, Comparator<ProfitRecord>> COMPARATORS = of(

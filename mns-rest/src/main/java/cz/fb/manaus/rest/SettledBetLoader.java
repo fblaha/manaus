@@ -7,8 +7,10 @@ import com.google.common.cache.LoadingCache;
 import cz.fb.manaus.core.dao.BetActionDao;
 import cz.fb.manaus.core.dao.SettledBetDao;
 import cz.fb.manaus.core.model.SettledBet;
-import cz.fb.manaus.spring.DatabaseComponent;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.util.Date;
@@ -22,7 +24,8 @@ import java.util.logging.Logger;
 
 import static java.util.Optional.empty;
 
-@DatabaseComponent
+@Repository
+@Profile(ManausProfiles.DB_PROFILE)
 public class SettledBetLoader {
 
     private static final Logger log = Logger.getLogger(SettledBetLoader.class.getSimpleName());

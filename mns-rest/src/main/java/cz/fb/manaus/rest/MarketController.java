@@ -3,7 +3,9 @@ package cz.fb.manaus.rest;
 import com.google.common.base.Preconditions;
 import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.model.Market;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +24,7 @@ import java.util.OptionalInt;
 import static java.util.Optional.empty;
 
 @Controller
+@Profile(ManausProfiles.DB_PROFILE)
 public class MarketController {
 
     @Autowired

@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 
-import static cz.fb.manaus.spring.CoreLocalConfiguration.TEST_PROFILE;
+import static cz.fb.manaus.spring.ManausProfiles.TEST_PROFILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

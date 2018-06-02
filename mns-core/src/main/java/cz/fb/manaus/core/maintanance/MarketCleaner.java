@@ -3,9 +3,11 @@ package cz.fb.manaus.core.maintanance;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.base.Stopwatch;
 import cz.fb.manaus.core.dao.MarketDao;
-import cz.fb.manaus.spring.DatabaseComponent;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -16,7 +18,8 @@ import java.util.logging.Logger;
 
 import static java.util.Date.from;
 
-@DatabaseComponent
+@Repository
+@Profile(ManausProfiles.DB_PROFILE)
 public class MarketCleaner implements PeriodicMaintenanceTask {
     private static final Logger log = Logger.getLogger(MarketCleaner.class.getSimpleName());
     public static final String HIST_DAYS_EL = "#{systemEnvironment['MNS_MARKET_HISTORY_DAYS'] ?: 200}";

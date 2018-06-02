@@ -1,7 +1,9 @@
 package cz.fb.manaus.core.dao;
 
 import cz.fb.manaus.core.model.Market;
+import cz.fb.manaus.spring.ManausProfiles;
 import org.hibernate.Session;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +16,7 @@ import java.util.Optional;
 import java.util.OptionalInt;
 
 @Repository
+@Profile(ManausProfiles.DB_PROFILE)
 public class MarketDao extends GenericHibernateDao<Market, String> {
 
     public MarketDao() {

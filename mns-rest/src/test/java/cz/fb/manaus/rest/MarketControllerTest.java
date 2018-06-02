@@ -8,7 +8,6 @@ import cz.fb.manaus.core.test.CoreTestFactory;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.util.NestedServletException;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -18,7 +17,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@ContextConfiguration(classes = MarketController.class)
 public class MarketControllerTest extends AbstractControllerTest {
 
     @Autowired
