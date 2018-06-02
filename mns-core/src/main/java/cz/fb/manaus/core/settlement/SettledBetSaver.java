@@ -20,7 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Repository
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class SettledBetSaver {
     private static final Logger log = Logger.getLogger(SettledBetSaver.class.getSimpleName());
     @Autowired

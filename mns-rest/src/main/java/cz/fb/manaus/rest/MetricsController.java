@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class MetricsController {
 
     @Autowired

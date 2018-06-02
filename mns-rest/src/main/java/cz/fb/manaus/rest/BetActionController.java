@@ -27,7 +27,7 @@ import java.util.OptionalLong;
 import static java.util.Optional.empty;
 
 @Controller
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class BetActionController {
 
     @Autowired

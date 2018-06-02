@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Repository
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class CoreTestFactory {
 
     public static final String MARKET_ID = "44";

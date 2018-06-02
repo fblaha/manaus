@@ -13,7 +13,7 @@ class IschiaCondition implements Condition {
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
         Environment environment = context.getEnvironment();
         return environment.acceptsProfiles("ischia")
-                && environment.acceptsProfiles(ManausProfiles.DB_PROFILE);
+                && environment.acceptsProfiles(ManausProfiles.DB);
     }
 }
 

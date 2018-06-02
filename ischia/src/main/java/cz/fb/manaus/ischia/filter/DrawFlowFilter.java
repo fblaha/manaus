@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 
 @Component
-@Profile(ManausProfiles.PRODUCTION_PROFILE)
+@Profile(ManausProfiles.PRODUCTION)
 public class DrawFlowFilter extends FlowFilter {
 
     public DrawFlowFilter() {

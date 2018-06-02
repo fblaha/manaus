@@ -30,7 +30,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 @Configuration
 @EnableTransactionManagement
 @ComponentScan("cz.fb.manaus.core")

@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import static java.util.Optional.empty;
 
 @Repository
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class SettledBetLoader {
 
     private static final Logger log = Logger.getLogger(SettledBetLoader.class.getSimpleName());

@@ -12,7 +12,7 @@ import java.time.Duration;
 @BackLoserBet
 @LayLoserBet
 @Component
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class DelayUpdateValidator extends AbstractDelayUpdateValidator {
 
     public DelayUpdateValidator() {

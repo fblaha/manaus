@@ -138,7 +138,7 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
     }
 
     @Component
-    @Profile(ManausProfiles.DB_PROFILE)
+    @Profile(ManausProfiles.DB)
     private static class TestUnprofitableCategoriesRegistry extends AbstractUnprofitableCategoriesRegistry {
         public TestUnprofitableCategoriesRegistry() {
             super("test", Duration.ofDays(30), Optional.of(Side.LAY), 0,
@@ -147,7 +147,7 @@ public class _AbstractUnprofitableCategoriesRegistryTest extends AbstractDatabas
     }
 
     @Component
-    @Profile(ManausProfiles.DB_PROFILE)
+    @Profile(ManausProfiles.DB)
     private static class Test2UnprofitableCategoriesRegistry extends AbstractUnprofitableCategoriesRegistry {
         public Test2UnprofitableCategoriesRegistry() {
             super("test2", Duration.ofDays(30), Optional.of(Side.LAY), 0,

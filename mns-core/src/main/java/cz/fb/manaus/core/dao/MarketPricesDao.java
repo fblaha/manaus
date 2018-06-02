@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.OptionalInt;
 
 @Repository
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class MarketPricesDao extends GenericHibernateDao<MarketPrices, Integer> {
 
     public MarketPricesDao() {

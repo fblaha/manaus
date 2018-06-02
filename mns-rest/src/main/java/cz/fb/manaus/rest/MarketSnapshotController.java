@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 
 
 @Controller
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class MarketSnapshotController {
 
     private static final Logger log = Logger.getLogger(MarketSnapshotController.class.getSimpleName());

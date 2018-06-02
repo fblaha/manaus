@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 import static java.util.Date.from;
 
 @Repository
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class MarketCleaner implements PeriodicMaintenanceTask {
     private static final Logger log = Logger.getLogger(MarketCleaner.class.getSimpleName());
     public static final String HIST_DAYS_EL = "#{systemEnvironment['MNS_MARKET_HISTORY_DAYS'] ?: 200}";

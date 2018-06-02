@@ -24,11 +24,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static cz.fb.manaus.spring.ManausProfiles.DB_PROFILE;
-import static cz.fb.manaus.spring.ManausProfiles.TEST_PROFILE;
+import static cz.fb.manaus.spring.ManausProfiles.DB;
+import static cz.fb.manaus.spring.ManausProfiles.TEST;
 import static org.hamcrest.CoreMatchers.is;
 
-@ActiveProfiles(value = {"matchbook", TEST_PROFILE, DB_PROFILE}, inheritProfiles = false)
+@ActiveProfiles(value = {"matchbook", TEST, DB}, inheritProfiles = false)
 public class _AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
     @Autowired
     private TestValidator validator;
@@ -99,7 +99,7 @@ public class _AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
     }
 
     @Component
-    @Profile(DB_PROFILE)
+    @Profile(DB)
     private static class TestValidator extends AbstractDelayUpdateValidator {
 
         public TestValidator() {

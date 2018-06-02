@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 import static java.util.Optional.of;
 
 @Component
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class RelatedActionsCategorizer implements SettledBetCategorizer {
 
     private static final Logger log = Logger.getLogger(RelatedActionsCategorizer.class.getSimpleName());

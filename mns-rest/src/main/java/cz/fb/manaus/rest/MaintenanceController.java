@@ -16,7 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Controller
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class MaintenanceController {
 
     @Autowired

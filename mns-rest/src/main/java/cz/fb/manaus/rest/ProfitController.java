@@ -34,7 +34,7 @@ import static java.util.Comparator.comparing;
 import static java.util.Comparator.comparingDouble;
 
 @Controller
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class ProfitController {
 
     public static final Map<String, Comparator<ProfitRecord>> COMPARATORS = of(

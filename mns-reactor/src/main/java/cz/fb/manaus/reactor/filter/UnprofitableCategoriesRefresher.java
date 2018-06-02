@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Component
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class UnprofitableCategoriesRefresher implements PeriodicMaintenanceTask {
 
     public static final String REFRESH_PERIOD_EL = "#{systemEnvironment['MNS_UNPROFITABLE_REFRESH_PERIOD_HRS'] ?: 8}";

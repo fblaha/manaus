@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.OptionalInt;
 
 @Controller
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class MarketPricesController {
 
     @Autowired

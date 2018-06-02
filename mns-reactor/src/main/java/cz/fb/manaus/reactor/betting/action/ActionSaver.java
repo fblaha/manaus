@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import static java.util.Objects.requireNonNull;
 
 @Repository
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class ActionSaver {
 
     private static final Logger log = Logger.getLogger(ActionSaver.class.getSimpleName());

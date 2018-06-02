@@ -6,10 +6,10 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 
-import static cz.fb.manaus.spring.ManausProfiles.TEST_PROFILE;
+import static cz.fb.manaus.spring.ManausProfiles.TEST;
 import static org.junit.Assert.assertEquals;
 
-@ActiveProfiles(value = {"matchbook", TEST_PROFILE}, inheritProfiles = false)
+@ActiveProfiles(value = {"matchbook", TEST}, inheritProfiles = false)
 public class MatchbookProfitPluginTest extends AbstractLocalTestCase {
 
     @Autowired

@@ -18,7 +18,7 @@ import java.util.OptionalInt;
 import java.util.OptionalLong;
 
 @Repository
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class SettledBetDao extends GenericHibernateDao<SettledBet, Long> {
 
     public SettledBetDao() {

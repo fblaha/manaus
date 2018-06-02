@@ -39,7 +39,7 @@ import static java.util.stream.Collectors.toList;
 
 @Lazy
 @Service
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class BetManager {
 
     public static final String DISABLED_LISTENERS_EL = "#{systemEnvironment['MNS_DISABLED_LISTENERS']}";

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @ComponentScan("cz.fb.manaus.reactor")
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class ReactorDatabaseConfiguration {
 
 }

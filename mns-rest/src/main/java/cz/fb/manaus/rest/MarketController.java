@@ -24,7 +24,7 @@ import java.util.OptionalInt;
 import static java.util.Optional.empty;
 
 @Controller
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class MarketController {
 
     @Autowired

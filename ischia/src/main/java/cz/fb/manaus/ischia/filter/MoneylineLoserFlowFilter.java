@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 
 @Component
-@Profile(ManausProfiles.PRODUCTION_PROFILE)
+@Profile(ManausProfiles.PRODUCTION)
 public class MoneylineLoserFlowFilter extends FlowFilter {
 
     public MoneylineLoserFlowFilter() {

@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.OptionalInt;
 
 @Repository
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class MarketDao extends GenericHibernateDao<Market, String> {
 
     public MarketDao() {

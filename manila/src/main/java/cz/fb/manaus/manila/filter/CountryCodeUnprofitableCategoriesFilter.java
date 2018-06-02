@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @ManilaBet
 @Component
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class CountryCodeUnprofitableCategoriesFilter extends AbstractUnprofitableCategoriesRegistry {
 
     public static final String PREFIX = Category.MARKET_PREFIX + CountryCodeCategorizer.PREFIX;

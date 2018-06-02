@@ -16,14 +16,14 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
-import static cz.fb.manaus.spring.ManausProfiles.TEST_PROFILE;
+import static cz.fb.manaus.spring.ManausProfiles.TEST;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ActiveProfiles(value = {"matchbook", TEST_PROFILE}, inheritProfiles = false)
+@ActiveProfiles(value = {"matchbook", TEST}, inheritProfiles = false)
 public class _AbstractLastMatchedValidatorTest extends AbstractLocalTestCase {
 
     @Autowired

@@ -10,7 +10,7 @@ import java.time.Duration;
 
 @ManilaBet
 @Component
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 public class DelayUpdateValidator extends AbstractDelayUpdateValidator {
 
     public DelayUpdateValidator() {

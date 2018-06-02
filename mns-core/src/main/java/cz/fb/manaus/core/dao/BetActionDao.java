@@ -26,7 +26,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Ordering.from;
 import static java.util.Comparator.comparing;
 
-@Profile(ManausProfiles.DB_PROFILE)
+@Profile(ManausProfiles.DB)
 @Repository
 public class BetActionDao extends GenericHibernateDao<BetAction, Integer> {
 
