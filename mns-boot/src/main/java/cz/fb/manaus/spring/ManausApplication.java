@@ -17,7 +17,7 @@ public class ManausApplication {
     public static void main(String[] args) {
         var builder = new SpringApplicationBuilder(ManausApplication.class);
         var application = builder.application();
-        ManausProfiles.PRODUCTION_REQUIRED.forEach(application::setAdditionalProfiles);
+        application.setAdditionalProfiles(ManausProfiles.PRODUCTION_REQUIRED);
         builder.run(args);
     }
 

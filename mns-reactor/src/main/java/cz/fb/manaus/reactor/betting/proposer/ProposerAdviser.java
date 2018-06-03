@@ -66,7 +66,7 @@ public class ProposerAdviser implements PriceAdviser {
     public void logConfig() {
         var proposerList = proposers.stream().map(Validator::getClass)
                 .map(Class::getSimpleName).sorted().collect(Collectors.joining(","));
-        log.log(Level.INFO, "Proposer coordinator class: ''{0}'', proposers: ''{2}''",
+        log.log(Level.INFO, "Proposer coordinator class: ''{0}'', proposers: ''{1}''",
                 new Object[]{this.getClass().getSimpleName(), proposerList});
     }
 }
