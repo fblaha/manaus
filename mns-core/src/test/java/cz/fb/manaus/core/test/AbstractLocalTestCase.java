@@ -15,8 +15,10 @@ import static cz.fb.manaus.spring.ManausProfiles.TEST;
 @Configuration
 @ComponentScan(
         useDefaultFilters = false,
-        includeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "^cz\\.fb\\.manaus\\.spring\\.\\w+Configuration$"),
-        basePackages = {"cz.fb.manaus"}
+        includeFilters = @ComponentScan.Filter(
+                type = FilterType.ANNOTATION,
+                classes = Configuration.class),
+        basePackages = {"cz.fb.manaus.spring"}
 )
 class TestConfiguration {
 }

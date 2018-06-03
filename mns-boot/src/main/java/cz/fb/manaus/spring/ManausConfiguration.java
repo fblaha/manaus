@@ -10,11 +10,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan(
         useDefaultFilters = false,
         includeFilters =
-        @ComponentScan.Filter(
-                type = FilterType.REGEX,
-                pattern = "^cz\\.fb\\.manaus\\.spring\\.\\w+Configuration$")
-        ,
-        basePackages = {"cz.fb.manaus"}
+        @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Configuration.class),
+        basePackages = {"cz.fb.manaus.spring"}
 )
 public class ManausConfiguration {
 }
