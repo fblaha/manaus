@@ -25,7 +25,6 @@ public class Bet {
         this.betId = betId;
         this.placedDate = placedDate;
         this.matchedAmount = matchedAmount;
-
     }
 
     public Bet() {

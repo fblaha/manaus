@@ -103,7 +103,7 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final RunnerPrices other = (RunnerPrices) obj;
+        var other = (RunnerPrices) obj;
         return new EqualsBuilder()
                 .append(getPricesSorted(), other.getPricesSorted())
                 .append(getLastMatchedPrice(), other.getLastMatchedPrice())
