@@ -73,7 +73,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     public void testRunnerPricesDelete() {
         var market = newMarket();
         var marketPrices = new MarketPrices(1, market, List.of(
-                RunnerPrices.create(232, List.of(new Price(2.3d, 22, Side.BACK)), 5d, 2.5d)), new Date());
+                new RunnerPrices(232, List.of(new Price(2.3d, 22, Side.BACK)), 5d, 2.5d)), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
@@ -86,7 +86,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         var better = new Price(2.3d, 22, Side.BACK);
         var worse = new Price(2.2d, CoreTestFactory.DRAW, Side.BACK);
         var marketPrices = new MarketPrices(1, market, List.of(
-                RunnerPrices.create(232, List.of(better, worse), 5d, 2.5d)), new Date());
+                new RunnerPrices(232, List.of(better, worse), 5d, 2.5d)), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
@@ -104,7 +104,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         var worse = new Price(2.2d, 22, Side.LAY);
         var selId = 232;
         var marketPrices = new MarketPrices(1, market, List.of(
-                RunnerPrices.create(selId, List.of(better, worse), 5d, 2.5d)), new Date());
+                new RunnerPrices(selId, List.of(better, worse), 5d, 2.5d)), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
@@ -121,7 +121,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         var worse = new Price(2.4d, CoreTestFactory.DRAW, Side.LAY);
         var selId = 232;
         var marketPrices = new MarketPrices(1, market, List.of(
-                RunnerPrices.create(selId, List.of(better, worse), 5d, 2.5d)), new Date());
+                new RunnerPrices(selId, List.of(better, worse), 5d, 2.5d)), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
@@ -140,7 +140,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         var backWorse = new Price(2.2d, CoreTestFactory.DRAW, Side.BACK);
         var selId = 232;
         var prices = new MarketPrices(1, market, List.of(
-                RunnerPrices.create(selId, List.of(layWorse, backWorse, backBetter, layBetter), 5d, 2.5d)), new Date());
+                new RunnerPrices(selId, List.of(layWorse, backWorse, backBetter, layBetter), 5d, 2.5d)), new Date());
         prices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(prices);
@@ -228,15 +228,15 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     }
 
     private MarketPrices getPrices(Market market, double bestPrice) {
-        var home = RunnerPrices.create(22, List.of(
+        var home = new RunnerPrices(22, List.of(
                 new Price(2d, 100d, Side.BACK),
                 new Price(bestPrice, 100d, Side.BACK),
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
-        var draw = RunnerPrices.create(22, List.of(
+        var draw = new RunnerPrices(22, List.of(
                 new Price(2d, 100d, Side.BACK),
                 new Price(bestPrice, 100d, Side.BACK),
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
-        var away = RunnerPrices.create(22, List.of(
+        var away = new RunnerPrices(22, List.of(
                 new Price(bestPrice, 100d, Side.BACK),
                 new Price(2d, 100d, Side.BACK),
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
@@ -284,15 +284,15 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     public void testReciprocalBack2() {
         var market = newMarket();
         marketDao.saveOrUpdate(market);
-        var home = RunnerPrices.create(22, List.of(
+        var home = new RunnerPrices(22, List.of(
                 new Price(2d, 100d, Side.BACK),
                 new Price(4d, 100d, Side.BACK),
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
-        var draw = RunnerPrices.create(33, List.of(
+        var draw = new RunnerPrices(33, List.of(
                 new Price(2d, 100d, Side.BACK),
                 new Price(4d, 100d, Side.BACK),
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
-        var away = RunnerPrices.create(44, List.of(
+        var away = new RunnerPrices(44, List.of(
                 new Price(2d, 100d, Side.BACK),
                 new Price(2d, 100d, Side.BACK),
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
@@ -308,13 +308,13 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     public void testReciprocalLay() {
         var market = newMarket();
         marketDao.saveOrUpdate(market);
-        var home = RunnerPrices.create(22, List.of(
+        var home = new RunnerPrices(22, List.of(
                 new Price(4d, 100d, Side.LAY),
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
-        var draw = RunnerPrices.create(22, List.of(
+        var draw = new RunnerPrices(22, List.of(
                 new Price(4d, 100d, Side.LAY),
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
-        var away = RunnerPrices.create(22, List.of(
+        var away = new RunnerPrices(22, List.of(
                 new Price(2d, 100d, Side.LAY),
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
         var marketPrices = new MarketPrices(1, market, List.of(home, draw, away), new Date());
@@ -328,12 +328,12 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     public void testReciprocalNull() {
         var market = newMarket();
         marketDao.saveOrUpdate(market);
-        var home = RunnerPrices.create(22, List.of(
+        var home = new RunnerPrices(22, List.of(
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
-        var draw = RunnerPrices.create(22, List.of(
+        var draw = new RunnerPrices(22, List.of(
                 new Price(4d, 100d, Side.LAY),
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
-        var away = RunnerPrices.create(22, List.of(
+        var away = new RunnerPrices(22, List.of(
                 new Price(1.5d, 100d, Side.LAY)), 2d, 2d);
         var marketPrices = new MarketPrices(1, market, List.of(home, draw, away), new Date());
         marketPricesDao.saveOrUpdate(marketPrices);

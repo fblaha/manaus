@@ -187,8 +187,8 @@ public class PriceServiceTest extends AbstractLocalTestCase {
     public void testFairnessHighProbability() {
         var lowPrice = 1.04d;
         var highPrice = 15d;
-        var home = RunnerPrices.create(CoreTestFactory.HOME, List.of(new Price(lowPrice, 10d, Side.BACK)), 50d, lowPrice);
-        var away = RunnerPrices.create(CoreTestFactory.AWAY, List.of(new Price(highPrice, 10d, Side.BACK)), 50d, highPrice);
+        var home = new RunnerPrices(CoreTestFactory.HOME, List.of(new Price(lowPrice, 10d, Side.BACK)), 50d, lowPrice);
+        var away = new RunnerPrices(CoreTestFactory.AWAY, List.of(new Price(highPrice, 10d, Side.BACK)), 50d, highPrice);
         var marketPrices = new MarketPrices(1, null, List.of(home, away), new Date());
         var fairness = getFairness(Side.BACK, marketPrices);
         var lowFairPrice = priceService.getFairnessFairPrice(lowPrice, fairness);

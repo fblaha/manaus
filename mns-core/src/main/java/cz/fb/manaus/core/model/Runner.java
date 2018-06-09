@@ -21,13 +21,14 @@ public class Runner {
     @Column(nullable = false)
     private int sortPriority;
 
-    public static Runner create(long selectionId, String name, double handicap, int sortPriority) {
-        Runner runner = new Runner();
-        runner.setSelectionId(selectionId);
-        runner.setName(name);
-        runner.setHandicap(handicap);
-        runner.setSortPriority(sortPriority);
-        return runner;
+    public Runner(long selectionId, String name, double handicap, int sortPriority) {
+        this.selectionId = selectionId;
+        this.name = name;
+        this.handicap = handicap;
+        this.sortPriority = sortPriority;
+    }
+
+    public Runner() {
     }
 
     public long getSelectionId() {
