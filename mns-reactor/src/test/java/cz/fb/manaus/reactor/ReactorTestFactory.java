@@ -111,7 +111,7 @@ public class ReactorTestFactory {
         }
         var backBestPrice = new Price(bestBack, 100d, Side.BACK);
         var layBestPrice = new Price(bestLay, 100d, Side.LAY);
-        return new RunnerPrices(selectionId, List.of(
+        return RunnerPrices.create(selectionId, List.of(
                 backBestPrice,
                 layBestPrice,
                 roundingService.decrement(backBestPrice, 1).get(),

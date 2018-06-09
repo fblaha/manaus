@@ -75,9 +75,9 @@ public class CoreTestFactory {
     }
 
     private static Collection<Runner> getRunners() {
-        var home = new Runner(HOME, HOME_NAME, 0, 1);
-        var draw = new Runner(DRAW, DRAW_NAME, 0, 2);
-        var away = new Runner(AWAY, AWAY_NAME, 0, 3);
+        var home = Runner.create(HOME, HOME_NAME, 0, 1);
+        var draw = Runner.create(DRAW, DRAW_NAME, 0, 2);
+        var away = Runner.create(AWAY, AWAY_NAME, 0, 3);
         return List.of(draw, home, away);
     }
 
@@ -90,7 +90,7 @@ public class CoreTestFactory {
     }
 
     public static RunnerPrices newBackRP(double currPrice, long selectionId, Double lastMatchedPrice) {
-        return new RunnerPrices(selectionId, List.of(
+        return RunnerPrices.create(selectionId, List.of(
                 new Price(currPrice, 100d, Side.BACK),
                 new Price(1.4d, 100d, Side.BACK),
                 new Price(1.3d, 100d, Side.BACK)), 10d, lastMatchedPrice);

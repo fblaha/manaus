@@ -30,8 +30,7 @@ import static cz.fb.manaus.core.model.PriceComparator.ORDERING;
         @NamedQuery(name = RunnerPrices.BY_MARKET_AND_SELECTION,
                 query = "select rp from MarketPrices mp inner join mp.runnerPrices rp " +
                         "where mp.market.id = :marketId and rp.selectionId = :selectionId order by mp.time desc")
-}
-)
+})
 public class RunnerPrices implements SideMixed<RunnerPrices> {
 
     public static final String BY_MARKET_AND_SELECTION = "byMarketAndSelection";
@@ -50,19 +49,18 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
 
     private Double matchedAmount;
 
-    public RunnerPrices(long selectionId, Collection<Price> prices, Double matched, Double lastMatchedPrice) {
-        this.selectionId = selectionId;
-        this.prices = prices;
-        this.lastMatchedPrice = lastMatchedPrice;
-        this.matchedAmount = matched;
-    }
-
-    public RunnerPrices() {
+    public static RunnerPrices create(long selectionId, Collection<Price> prices, Double matched, Double lastMatchedPrice) {
+        RunnerPrices runnerPrices = new RunnerPrices();
+        runnerPrices.setSelectionId(selectionId);
+        runnerPrices.setPrices(prices);
+        runnerPrices.setMatchedAmount(matched);
+        runnerPrices.setLastMatchedPrice(lastMatchedPrice);
+        return runnerPrices;
     }
 
     @JsonIgnore
     public Optional<Price> getBestPrice() {
-        return prices.isEmpty() ? Optional.empty() : Optional.of(ORDERING.min(prices));
+        return prices.stream().min(PriceComparator.INSTANCE);
     }
 
     public Integer getId() {
@@ -89,6 +87,24 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
     public void setSelectionId(long selectionId) {
         this.selectionId = selectionId;
     }
+
+
+    public Double getLastMatchedPrice() {
+        return lastMatchedPrice;
+    }
+
+    public void setLastMatchedPrice(Double lastMatchedPrice) {
+        this.lastMatchedPrice = lastMatchedPrice;
+    }
+
+    public Double getMatchedAmount() {
+        return matchedAmount;
+    }
+
+    public void setMatchedAmount(Double matchedAmount) {
+        this.matchedAmount = matchedAmount;
+    }
+
 
     @Override
     public String toString() {
@@ -124,15 +140,6 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
     public RunnerPrices getHomogeneous(Side side) {
         var prices = this.prices.stream().filter(price -> price.getSide() == side)
                 .collect(Collectors.toList());
-        return new RunnerPrices(getSelectionId(), prices, matchedAmount, lastMatchedPrice);
+        return create(getSelectionId(), prices, matchedAmount, lastMatchedPrice);
     }
-
-    public Double getLastMatchedPrice() {
-        return lastMatchedPrice;
-    }
-
-    public Double getMatchedAmount() {
-        return matchedAmount;
-    }
-
 }

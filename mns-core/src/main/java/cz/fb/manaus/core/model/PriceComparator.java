@@ -8,7 +8,8 @@ import static com.google.common.collect.ComparisonChain.start;
 
 public class PriceComparator implements Comparator<Price> {
 
-    public static final Ordering<Price> ORDERING = Ordering.from(new PriceComparator());
+    public static final PriceComparator INSTANCE = new PriceComparator();
+    public static final Ordering<Price> ORDERING = Ordering.from(INSTANCE);
 
     @Override
     public int compare(Price o1, Price o2) {
