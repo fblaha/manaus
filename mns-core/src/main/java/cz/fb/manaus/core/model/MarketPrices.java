@@ -18,7 +18,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.Collection;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
@@ -33,10 +32,8 @@ public class MarketPrices implements SideMixed<MarketPrices> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     @Column(nullable = false)
     private int winnerCount;
-
     @Column(nullable = false)
     private Date time;
     @JsonIgnore
@@ -102,11 +99,7 @@ public class MarketPrices implements SideMixed<MarketPrices> {
     @JsonIgnore
     public OptionalDouble getReciprocal(Side side) {
         var overround = getOverround(side);
-        if (overround.isPresent()) {
-            return OptionalDouble.of(winnerCount / overround.getAsDouble());
-        } else {
-            return OptionalDouble.empty();
-        }
+        return overround.stream().map(o -> winnerCount / o).findAny();
     }
 
     @JsonIgnore
@@ -130,11 +123,10 @@ public class MarketPrices implements SideMixed<MarketPrices> {
 
     @Override
     public MarketPrices getHomogeneous(Side side) {
-        var newList = new LinkedList<RunnerPrices>();
-        for (var runnerPrices : getRunnerPrices()) {
-            newList.add(runnerPrices.getHomogeneous(side));
-        }
-        return new MarketPrices(winnerCount, market, newList, getTime());
+        var prices = getRunnerPrices().stream()
+                .map(rp -> rp.getHomogeneous(side))
+                .collect(Collectors.toList());
+        return new MarketPrices(winnerCount, market, prices, getTime());
     }
 
     public List<OptionalDouble> getBestPrices(Side type) {
@@ -144,11 +136,8 @@ public class MarketPrices implements SideMixed<MarketPrices> {
     }
 
     private OptionalDouble getOptionalPrice(Optional<Price> price) {
-        if (price.isPresent()) {
-            return OptionalDouble.of(price.get().getPrice());
-        } else {
-            return OptionalDouble.empty();
-        }
+        return price.map(p -> OptionalDouble.of(p.getPrice()))
+                .orElse(OptionalDouble.empty());
     }
 
     private List<Optional<Price>> getSideBestPrices(Side type) {

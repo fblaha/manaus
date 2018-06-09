@@ -1,5 +1,6 @@
 package cz.fb.manaus.ischia.proposer;
 
+import cz.fb.manaus.core.model.TradedVolume;
 import cz.fb.manaus.ischia.BackLoserBet;
 import cz.fb.manaus.ischia.LayLoserBet;
 import cz.fb.manaus.reactor.betting.BetContext;
@@ -25,7 +26,8 @@ public class TradedVolumeProposer implements PriceProposer {
 
     @Override
     public ValidationResult validate(BetContext context) {
-        if (context.getActualTradedVolume().get().getVolume().size() == 0 || context.getActualTradedVolume().get().getWeightedMean().getAsDouble() > 100) {
+        TradedVolume tradedVolume = context.getActualTradedVolume().get();
+        if (tradedVolume.getVolume().size() == 0 || tradedVolume.getWeightedMean().getAsDouble() > 100) {
             return ValidationResult.REJECT;
         } else {
             return PriceProposer.super.validate(context);
