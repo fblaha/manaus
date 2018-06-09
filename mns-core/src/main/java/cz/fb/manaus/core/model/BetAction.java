@@ -21,8 +21,8 @@ import javax.persistence.NamedQuery;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.OptionalInt;
 
 @Entity
 @NamedQueries({
@@ -150,15 +150,8 @@ public class BetAction {
     }
 
     public OptionalDouble getDoubleProperty(String propertyName) {
-        var strVal = properties.get(propertyName);
-        if (strVal == null) return OptionalDouble.empty();
-        return OptionalDouble.of(Double.parseDouble(strVal));
-    }
-
-    public OptionalInt getIntegerProperty(String propertyName) {
-        var strVal = properties.get(propertyName);
-        if (strVal == null) return OptionalInt.empty();
-        return OptionalInt.of(Integer.parseInt(strVal));
+        var strVal = Optional.ofNullable(properties.get(propertyName));
+        return strVal.stream().mapToDouble(Double::parseDouble).findAny();
     }
 
     @Override

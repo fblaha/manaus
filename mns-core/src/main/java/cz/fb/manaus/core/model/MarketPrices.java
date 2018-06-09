@@ -136,8 +136,7 @@ public class MarketPrices implements SideMixed<MarketPrices> {
     }
 
     private OptionalDouble getOptionalPrice(Optional<Price> price) {
-        return price.map(p -> OptionalDouble.of(p.getPrice()))
-                .orElse(OptionalDouble.empty());
+        return price.stream().mapToDouble(Price::getPrice).findAny();
     }
 
     private List<Optional<Price>> getSideBestPrices(Side type) {
