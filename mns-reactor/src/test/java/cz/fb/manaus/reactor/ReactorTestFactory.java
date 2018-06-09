@@ -146,7 +146,7 @@ public class ReactorTestFactory {
     }
 
     private Market createMarket() {
-        var event = new Event("1", "Vischya Liga", addHours(new Date(), 2), CoreTestFactory.COUNTRY_CODE);
+        var event = Event.create("1", "Vischya Liga", addHours(new Date(), 2), CoreTestFactory.COUNTRY_CODE);
         event.setId("1");
         var market = CoreTestFactory.newMarket();
         market.setEvent(event);

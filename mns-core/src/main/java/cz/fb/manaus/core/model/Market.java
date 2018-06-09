@@ -59,9 +59,6 @@ public class Market {
     @Fetch(FetchMode.SELECT)
     private Collection<Runner> runners;
 
-    public Market() {
-    }
-
     public String getName() {
         return name;
     }

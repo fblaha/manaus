@@ -75,14 +75,14 @@ public class CoreTestFactory {
     }
 
     private static Collection<Runner> getRunners() {
-        var home = new Runner(HOME, HOME_NAME, 0, 1);
-        var draw = new Runner(DRAW, DRAW_NAME, 0, 2);
-        var away = new Runner(AWAY, AWAY_NAME, 0, 3);
+        var home = Runner.create(HOME, HOME_NAME, 0, 1);
+        var draw = Runner.create(DRAW, DRAW_NAME, 0, 2);
+        var away = Runner.create(AWAY, AWAY_NAME, 0, 3);
         return List.of(draw, home, away);
     }
 
     public static Event newEvent(Date curr) {
-        return new Event("77", EVENT_NAME, curr, COUNTRY_CODE);
+        return Event.create("77", EVENT_NAME, curr, COUNTRY_CODE);
     }
 
     public static Market newMarket() {

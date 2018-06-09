@@ -73,11 +73,11 @@ public class MarketDaoTest extends AbstractDaoTest {
     @Test
     public void testMarketMerge() {
         var market = newMarket();
-        var childA = new Event("55", "childA", new Date(), CoreTestFactory.COUNTRY_CODE);
+        var childA = Event.create("55", "childA", new Date(), CoreTestFactory.COUNTRY_CODE);
         market.setEvent(childA);
         marketDao.saveOrUpdate(market);
         var toBeMerged = newMarket(CoreTestFactory.MARKET_ID, new Date(), SPARTA);
-        var childB = new Event("55", "childB", new Date(), CoreTestFactory.COUNTRY_CODE);
+        var childB = Event.create("55", "childB", new Date(), CoreTestFactory.COUNTRY_CODE);
         toBeMerged.setEvent(childB);
         marketDao.saveOrUpdate(toBeMerged);
         market = marketDao.get(CoreTestFactory.MARKET_ID).get();

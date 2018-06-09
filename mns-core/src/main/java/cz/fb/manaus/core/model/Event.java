@@ -13,35 +13,29 @@ import java.util.Date;
 @Embeddable
 public class Event {
 
-
     @Column(name = "eventId", nullable = false)
     private String id;
 
     @Column(name = "eventName", nullable = false)
     private String name;
 
-
     @Column
     private String countryCode;
 
-
     private String timezone;
 
-
     private String venue;
-
 
     @Column(nullable = false)
     private Date openDate;
 
-    public Event(String id, String name, Date openDate, String countryCode) {
-        this.id = id;
-        this.name = name;
-        this.countryCode = countryCode;
-        this.openDate = openDate;
-    }
-
-    public Event() {
+    public static Event create(String id, String name, Date openDate, String countryCode) {
+        var event = new Event();
+        event.setId(id);
+        event.setName(name);
+        event.setOpenDate(openDate);
+        event.setCountryCode(countryCode);
+        return event;
     }
 
     public String getId() {
