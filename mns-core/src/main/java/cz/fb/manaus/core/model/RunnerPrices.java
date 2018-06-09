@@ -62,7 +62,7 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
 
     @JsonIgnore
     public Optional<Price> getBestPrice() {
-        return prices.isEmpty() ? Optional.empty() : Optional.of(ORDERING.min(prices));
+        return prices.stream().min(PriceComparator.INSTANCE);
     }
 
     public Integer getId() {
