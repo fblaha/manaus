@@ -26,7 +26,7 @@ public class JsonMarshallerTest extends AbstractLocalTestCase {
 
     @Test
     public void testBetActionList() throws Exception {
-        var action = new BetAction(BetActionType.PLACE, new Date(), new Price(2d, 5d, Side.LAY), null, 10);
+        var action = BetAction.create(BetActionType.PLACE, new Date(), new Price(2d, 5d, Side.LAY), null, 10);
         var props = Map.of("property1", "value1", "reciprocal", "0.92");
         action.setProperties(props);
         var json = mapper.writer().writeValueAsString(List.of(action));

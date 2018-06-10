@@ -50,7 +50,7 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
     }
 
     protected BetAction createAndSaveBetAction(Market market, Date date, Map<String, String> values, String betId) {
-        var betAction = new BetAction(BetActionType.PLACE, date, new Price(2d, 3d, Side.LAY), market, CoreTestFactory.DRAW);
+        var betAction = BetAction.create(BetActionType.PLACE, date, new Price(2d, 3d, Side.LAY), market, CoreTestFactory.DRAW);
         var marketPrices = CoreTestFactory.newMarketPrices(market);
         marketPricesDao.saveOrUpdate(marketPrices);
         betAction.setMarketPrices(marketPrices);
@@ -95,8 +95,9 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
     }
 
     private BetAction createAction(Market market, MarketPrices prices, String betId) {
-        var place = new BetAction(BetActionType.PLACE, new Date(), new Price(2.2d, 2.1d, Side.LAY),
-                market, CoreTestFactory.HOME, betId);
+        var place = BetAction.create(BetActionType.PLACE, new Date(), new Price(2.2d, 2.1d, Side.LAY),
+                market, CoreTestFactory.HOME);
+        place.setBetId(betId);
         place.setMarketPrices(prices);
         return place;
     }

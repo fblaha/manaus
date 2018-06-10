@@ -40,7 +40,7 @@ public class BetUtilsTest extends AbstractLocalTestCase {
         bet = new SettledBet(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
                 5d, new Date(), price);
 
-        var action = new BetAction(BetActionType.PLACE, new Date(), price, null, 1000);
+        var action = BetAction.create(BetActionType.PLACE, new Date(), price, null, 1000);
         bet.setBetAction(action);
     }
 
@@ -50,17 +50,17 @@ public class BetUtilsTest extends AbstractLocalTestCase {
         var priceBack = new Price(2d, 2d, Side.BACK);
         var priceLay = new Price(1.8d, 2d, Side.LAY);
         var selectionId = 1;
-        var back1 = new BetAction(BetActionType.PLACE, DateUtils.addHours(currDate, -10), priceBack,
+        var back1 = BetAction.create(BetActionType.PLACE, DateUtils.addHours(currDate, -10), priceBack,
                 mock(Market.class), selectionId);
-        var back2 = new BetAction(BetActionType.PLACE, DateUtils.addHours(currDate, -9), priceBack,
+        var back2 = BetAction.create(BetActionType.PLACE, DateUtils.addHours(currDate, -9), priceBack,
                 mock(Market.class), selectionId);
-        var back3 = new BetAction(BetActionType.PLACE, DateUtils.addHours(currDate, -8), priceBack,
+        var back3 = BetAction.create(BetActionType.PLACE, DateUtils.addHours(currDate, -8), priceBack,
                 mock(Market.class), selectionId);
-        var lay1 = new BetAction(BetActionType.PLACE, DateUtils.addHours(currDate, -6), priceLay,
+        var lay1 = BetAction.create(BetActionType.PLACE, DateUtils.addHours(currDate, -6), priceLay,
                 mock(Market.class), selectionId);
-        var lay2 = new BetAction(BetActionType.UPDATE, DateUtils.addHours(currDate, -5), priceLay,
+        var lay2 = BetAction.create(BetActionType.UPDATE, DateUtils.addHours(currDate, -5), priceLay,
                 mock(Market.class), selectionId);
-        var lay3 = new BetAction(BetActionType.PLACE, DateUtils.addHours(currDate, -4), priceLay,
+        var lay3 = BetAction.create(BetActionType.PLACE, DateUtils.addHours(currDate, -4), priceLay,
                 mock(Market.class), selectionId);
         var filtered = betUtils.getCurrentActions(List.of(back1, back2, back3));
         assertThat(filtered.size(), is(1));

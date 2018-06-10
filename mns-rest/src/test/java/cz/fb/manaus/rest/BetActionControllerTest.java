@@ -67,7 +67,7 @@ public class BetActionControllerTest extends AbstractControllerTest {
     }
 
     private BetAction createBetAction() {
-        var betAction = new BetAction(BetActionType.UPDATE, new Date(),
+        var betAction = BetAction.create(BetActionType.UPDATE, new Date(),
                 new Price(2d, 3d, Side.LAY), null, CoreTestFactory.DRAW);
         betAction.setProperties(Collections.singletonMap("key", "val"));
         betAction.setBetId("150");

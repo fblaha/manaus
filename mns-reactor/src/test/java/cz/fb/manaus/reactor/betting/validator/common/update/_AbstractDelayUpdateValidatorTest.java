@@ -39,7 +39,7 @@ public class _AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
     private void checkValidation(BetActionType actionType, int beforeMinutes, Side lay, ValidationResult validationResult) {
         var market = newMarket();
         marketDao.saveOrUpdate(market);
-        var place = new BetAction(actionType, DateUtils.addMinutes(new Date(), -beforeMinutes), new Price(2d, 30d, lay), market, CoreTestFactory.HOME);
+        var place = BetAction.create(actionType, DateUtils.addMinutes(new Date(), -beforeMinutes), new Price(2d, 30d, lay), market, CoreTestFactory.HOME);
         place.setBetId(ReactorTestFactory.BET_ID);
         betActionDao.saveOrUpdate(place);
         var runnerPrices = new RunnerPrices();

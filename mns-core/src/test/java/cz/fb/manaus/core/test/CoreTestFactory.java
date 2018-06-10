@@ -68,7 +68,7 @@ public class CoreTestFactory {
     }
 
     public static BetAction newBetAction(String betId, Market market) {
-        var betAction = new BetAction(BetActionType.PLACE, DateUtils.addHours(new Date(), -5), new Price(2d, 2d, Side.LAY), market, 11);
+        var betAction = BetAction.create(BetActionType.PLACE, DateUtils.addHours(new Date(), -5), new Price(2d, 2d, Side.LAY), market, 11);
         betAction.setProperties(new HashMap<>());
         betAction.setBetId(betId);
         return betAction;
@@ -122,8 +122,9 @@ public class CoreTestFactory {
     }
 
     public BetAction savePlaceAction(Bet unmatched, Market market) {
-        var betAction = new BetAction(BetActionType.PLACE, unmatched.getPlacedDate(),
-                unmatched.getRequestedPrice(), market, unmatched.getSelectionId(), unmatched.getBetId());
+        var betAction = BetAction.create(BetActionType.PLACE, unmatched.getPlacedDate(),
+                unmatched.getRequestedPrice(), market, unmatched.getSelectionId());
+        betAction.setBetId(unmatched.getBetId());
         betActionDao.saveOrUpdate(betAction);
         return betAction;
     }

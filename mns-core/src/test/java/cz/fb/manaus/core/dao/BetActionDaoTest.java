@@ -215,9 +215,11 @@ public class BetActionDaoTest extends AbstractDaoTest {
     private void saveActionsAndCheckOrder(Comparator<BetAction> comparator) {
         var market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);
-        var betActionEarlier = new BetAction(BetActionType.PLACE, DateUtils.addDays(new Date(), -1), new Price(2d, 30d, Side.LAY), market, CoreTestFactory.DRAW, BET_ID);
-        var betActionLater = new BetAction(BetActionType.PLACE, new Date(), new Price(3d, 33d, Side.LAY), market, CoreTestFactory.DRAW, BET_ID + 1);
-        var actions = List.of(betActionLater, betActionEarlier);
+        var earlier = BetAction.create(BetActionType.PLACE, DateUtils.addDays(new Date(), -1), new Price(2d, 30d, Side.LAY), market, CoreTestFactory.DRAW);
+        earlier.setBetId(BET_ID);
+        var later = BetAction.create(BetActionType.PLACE, new Date(), new Price(3d, 33d, Side.LAY), market, CoreTestFactory.DRAW);
+        later.setBetId(BET_ID + 1);
+        var actions = List.of(later, earlier);
         Ordering.from(comparator).immutableSortedCopy(actions).forEach(betActionDao::saveOrUpdate);
         var betActionsForMarket = betActionDao.getBetActions(market.getId(), OptionalLong.empty(), empty());
         assertThat(betActionsForMarket.size(), is(2));

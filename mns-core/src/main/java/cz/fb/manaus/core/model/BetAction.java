@@ -61,20 +61,15 @@ public class BetAction {
     @ManyToOne(fetch = FetchType.LAZY)
     private MarketPrices marketPrices;
 
-    public BetAction(BetActionType betActionType, Date actionDate, Price price, Market market, long selectionId) {
-        this(betActionType, actionDate, price, market, selectionId, null);
-    }
-
-    public BetAction(BetActionType betActionType, Date actionDate, Price price, Market market, long selectionId, String betId) {
-        this.betActionType = betActionType;
-        this.actionDate = actionDate;
-        this.price = price;
-        this.market = market;
-        this.selectionId = selectionId;
-        this.betId = betId;
-    }
-
-    public BetAction() {
+    public static BetAction create(BetActionType betActionType, Date actionDate, Price price,
+                                   Market market, long selectionId) {
+        var ba = new BetAction();
+        ba.setBetActionType(betActionType);
+        ba.setActionDate(actionDate);
+        ba.setPrice(price);
+        ba.setMarket(market);
+        ba.setSelectionId(selectionId);
+        return ba;
     }
 
     public Integer getId() {
