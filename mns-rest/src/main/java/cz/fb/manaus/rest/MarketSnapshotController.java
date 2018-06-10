@@ -58,7 +58,7 @@ public class MarketSnapshotController {
             logMarket(marketPrices);
             var bets = Optional.ofNullable(snapshotCrate.getBets()).orElse(List.of());
             betMetricUpdater.update(snapshotCrate.getScanTime(), bets);
-            var marketSnapshot = new MarketSnapshot(marketPrices, bets,
+            var marketSnapshot = MarketSnapshot.from(marketPrices, bets,
                     Optional.empty());
             var myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty());
             var collectedBets = manager.fire(marketSnapshot, myBets,

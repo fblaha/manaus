@@ -23,11 +23,12 @@ public class MarketSnapshot {
     private final Optional<Map<Long, TradedVolume>> tradedVolume;
 
     public MarketSnapshot(MarketPrices marketPrices, List<Bet> currentBets,
+                          Table<Side, Long, Bet> coverage,
                           Optional<Map<Long, TradedVolume>> tradedVolume) {
         this.marketPrices = marketPrices;
         this.currentBets = currentBets;
+        this.coverage = coverage;
         this.tradedVolume = tradedVolume;
-        this.coverage = getMarketCoverage(currentBets);
     }
 
     static Table<Side, Long, Bet> getMarketCoverage(List<Bet> bets) {
@@ -46,6 +47,12 @@ public class MarketSnapshot {
             result.put(side, bet.getSelectionId(), bet);
         }
         return result;
+    }
+
+    public static MarketSnapshot from(MarketPrices marketPrices, List<Bet> currentBets,
+                                      Optional<Map<Long, TradedVolume>> tradedVolume) {
+        var coverage = getMarketCoverage(currentBets);
+        return new MarketSnapshot(marketPrices, currentBets, coverage, tradedVolume);
     }
 
     public List<Bet> getCurrentBets() {

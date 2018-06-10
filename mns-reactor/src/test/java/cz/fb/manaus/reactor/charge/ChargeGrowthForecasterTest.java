@@ -39,7 +39,7 @@ public class ChargeGrowthForecasterTest extends AbstractLocalTestCase {
     public void testForecast() {
         var market = factory.createMarket(0.05, List.of(0.5, 0.3, 0.2));
         var currentBets = new LinkedList<Bet>();
-        var marketSnapshot = new MarketSnapshot(market, currentBets, Optional.empty());
+        var marketSnapshot = MarketSnapshot.from(market, currentBets, Optional.empty());
         var fairness = calculator.getFairness(market);
         var forecast = forecaster.getForecast(CoreTestFactory.DRAW, Side.BACK, marketSnapshot, fairness);
         assertTrue(forecast.getAsDouble() > 1);

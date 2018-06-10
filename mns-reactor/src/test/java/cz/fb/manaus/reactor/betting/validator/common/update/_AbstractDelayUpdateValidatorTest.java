@@ -45,7 +45,7 @@ public class _AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
         var runnerPrices = new RunnerPrices();
         runnerPrices.setSelectionId(CoreTestFactory.HOME);
 
-        var marketPrices = new MarketPrices(1, market, List.of(runnerPrices), new Date());
+        var marketPrices = MarketPrices.create(1, market, List.of(runnerPrices), new Date());
         var result = validator.validate(factory.newUpdateBetContext(marketPrices, runnerPrices, lay));
         Assert.assertThat(result, is(validationResult));
     }
@@ -54,7 +54,7 @@ public class _AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
     public void testNoBetAction() {
         var market = newMarket();
         marketDao.saveOrUpdate(market);
-        var marketPrices = new MarketPrices(1, market, List.of(), new Date());
+        var marketPrices = MarketPrices.create(1, market, List.of(), new Date());
         var runnerPrices = new RunnerPrices();
         runnerPrices.setSelectionId(CoreTestFactory.DRAW);
         var result = validator.validate(factory.newUpdateBetContext(marketPrices, runnerPrices, Side.LAY));

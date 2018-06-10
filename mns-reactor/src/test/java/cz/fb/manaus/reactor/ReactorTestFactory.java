@@ -64,7 +64,7 @@ public class ReactorTestFactory {
 
         var bets = new LinkedList<Bet>();
         oldBet.ifPresent(bet -> bets.add(bet));
-        var snapshot = new MarketSnapshot(marketPrices, bets, empty());
+        var snapshot = MarketSnapshot.from(marketPrices, bets, empty());
 
         return contextFactory.create(side, CoreTestFactory.HOME, snapshot, fairness,
                 empty(), Set.of());
@@ -90,7 +90,7 @@ public class ReactorTestFactory {
                     Date.from(date), provider.getMinAmount());
             bets.add(counterBet);
         }
-        var snapshot = new MarketSnapshot(marketPrices, bets, empty());
+        var snapshot = MarketSnapshot.from(marketPrices, bets, empty());
         return contextFactory.create(side, selectionId, snapshot,
                 calculator.getFairness(marketPrices), empty(), Set.of());
 
@@ -111,7 +111,7 @@ public class ReactorTestFactory {
         }
         var backBestPrice = new Price(bestBack, 100d, Side.BACK);
         var layBestPrice = new Price(bestLay, 100d, Side.LAY);
-        return new RunnerPrices(selectionId, List.of(
+        return RunnerPrices.create(selectionId, List.of(
                 backBestPrice,
                 layBestPrice,
                 roundingService.decrement(backBestPrice, 1).get(),
@@ -126,7 +126,7 @@ public class ReactorTestFactory {
         var home = newRP(CoreTestFactory.HOME, betBack, bestLay, lastMatched);
         var draw = newRP(CoreTestFactory.DRAW, betBack, bestLay, lastMatched);
         var away = newRP(CoreTestFactory.AWAY, betBack, bestLay, lastMatched);
-        return new MarketPrices(winnerCount, market, List.of(home, draw, away), new Date());
+        return MarketPrices.create(winnerCount, market, List.of(home, draw, away), new Date());
     }
 
     public MarketPrices createMarket(double downgradeFraction, List<Double> probabilities) {
@@ -142,7 +142,7 @@ public class ReactorTestFactory {
             var lastMatched = roundingService.roundBet(fairPrice).getAsDouble();
             runnerPrices.add(newRP(selectionId, backRounded, layRounded, OptionalDouble.of(lastMatched)));
         }
-        return new MarketPrices(1, market, runnerPrices, new Date());
+        return MarketPrices.create(1, market, runnerPrices, new Date());
     }
 
     private Market createMarket() {

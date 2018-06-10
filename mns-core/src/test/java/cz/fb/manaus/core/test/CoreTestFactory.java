@@ -90,7 +90,7 @@ public class CoreTestFactory {
     }
 
     public static RunnerPrices newBackRP(double currPrice, long selectionId, Double lastMatchedPrice) {
-        return new RunnerPrices(selectionId, List.of(
+        return RunnerPrices.create(selectionId, List.of(
                 new Price(currPrice, 100d, Side.BACK),
                 new Price(1.4d, 100d, Side.BACK),
                 new Price(1.3d, 100d, Side.BACK)), 10d, lastMatchedPrice);
@@ -102,14 +102,14 @@ public class CoreTestFactory {
                 newBackRP(bestBackPrice, 1, 2.5d),
                 newBackRP(bestBackPrice, 2, 2.5d),
                 newBackRP(bestBackPrice, 3, 2.5d));
-        return new MarketPrices(winnerCount, market, runnerPrices, new Date());
+        return MarketPrices.create(winnerCount, market, runnerPrices, new Date());
     }
 
     public static MarketPrices newMarketPrices(Market market) {
         var home = newBackRP(2.5d, HOME, 3d);
         var draw = newBackRP(2.5d, DRAW, 3d);
         var away = newBackRP(2.5d, AWAY, 3d);
-        return new MarketPrices(1, market, List.of(home, draw, away), new Date());
+        return MarketPrices.create(1, market, List.of(home, draw, away), new Date());
     }
 
     public static SettledBet newSettledBet(double price, Side side) {

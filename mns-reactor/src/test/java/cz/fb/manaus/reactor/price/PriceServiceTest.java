@@ -72,7 +72,7 @@ public class PriceServiceTest extends AbstractLocalTestCase {
 
     @Test
     public void testFairPrice() {
-        var marketPrices = new MarketPrices(1, null, List.of(factory.newRP(1, 4.2, 6), factory.newRP(2, 2.87, 4), factory.newRP(1, 1.8, 3)), new Date());
+        var marketPrices = MarketPrices.create(1, null, List.of(factory.newRP(1, 4.2, 6), factory.newRP(2, 2.87, 4), factory.newRP(1, 1.8, 3)), new Date());
         var layFairness = getFairness(Side.LAY, marketPrices);
         assertEquals(1.5d, layFairness, 0.1d);
         var backFairness = getFairness(Side.BACK, marketPrices);
@@ -142,7 +142,7 @@ public class PriceServiceTest extends AbstractLocalTestCase {
     }
 
     private void checkFairPrices(int winnerCount, double... unfairPrices) {
-        var marketPrices = new MarketPrices(winnerCount, null, factory.createRP(Doubles.asList(unfairPrices)), new Date());
+        var marketPrices = MarketPrices.create(winnerCount, null, factory.createRP(Doubles.asList(unfairPrices)), new Date());
         var overround = marketPrices.getOverround(Side.BACK);
         var reciprocal = marketPrices.getReciprocal(Side.BACK).getAsDouble();
         var fairness = getFairness(Side.BACK, marketPrices);
@@ -167,8 +167,8 @@ public class PriceServiceTest extends AbstractLocalTestCase {
                 })
                 .boxed().collect(Collectors.toList());
 
-        var overFairnessBased = new MarketPrices(winnerCount, null, factory.createRP(fairnessPrices), new Date()).getOverround(Side.BACK);
-        var overOverroundBased = new MarketPrices(winnerCount, null, factory.createRP(overroundPrices), new Date()).getOverround(Side.BACK);
+        var overFairnessBased = MarketPrices.create(winnerCount, null, factory.createRP(fairnessPrices), new Date()).getOverround(Side.BACK);
+        var overOverroundBased = MarketPrices.create(winnerCount, null, factory.createRP(overroundPrices), new Date()).getOverround(Side.BACK);
 
         assertEquals((double) winnerCount, overFairnessBased.getAsDouble(), 0.001);
         assertEquals((double) winnerCount, overOverroundBased.getAsDouble(), 0.001);
@@ -187,9 +187,9 @@ public class PriceServiceTest extends AbstractLocalTestCase {
     public void testFairnessHighProbability() {
         var lowPrice = 1.04d;
         var highPrice = 15d;
-        var home = new RunnerPrices(CoreTestFactory.HOME, List.of(new Price(lowPrice, 10d, Side.BACK)), 50d, lowPrice);
-        var away = new RunnerPrices(CoreTestFactory.AWAY, List.of(new Price(highPrice, 10d, Side.BACK)), 50d, highPrice);
-        var marketPrices = new MarketPrices(1, null, List.of(home, away), new Date());
+        var home = RunnerPrices.create(CoreTestFactory.HOME, List.of(new Price(lowPrice, 10d, Side.BACK)), 50d, lowPrice);
+        var away = RunnerPrices.create(CoreTestFactory.AWAY, List.of(new Price(highPrice, 10d, Side.BACK)), 50d, highPrice);
+        var marketPrices = MarketPrices.create(1, null, List.of(home, away), new Date());
         var fairness = getFairness(Side.BACK, marketPrices);
         var lowFairPrice = priceService.getFairnessFairPrice(lowPrice, fairness);
         var highFairPrice = priceService.getFairnessFairPrice(highPrice, fairness);

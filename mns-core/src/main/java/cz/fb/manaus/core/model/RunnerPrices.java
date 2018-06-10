@@ -50,14 +50,13 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
 
     private Double matchedAmount;
 
-    public RunnerPrices(long selectionId, Collection<Price> prices, Double matched, Double lastMatchedPrice) {
-        this.selectionId = selectionId;
-        this.prices = prices;
-        this.lastMatchedPrice = lastMatchedPrice;
-        this.matchedAmount = matched;
-    }
-
-    public RunnerPrices() {
+    public static RunnerPrices create(long selectionId, Collection<Price> prices, Double matched, Double lastMatchedPrice) {
+        var rp = new RunnerPrices();
+        rp.setSelectionId(selectionId);
+        rp.setPrices(prices);
+        rp.setMatchedAmount(matched);
+        rp.setLastMatchedPrice(lastMatchedPrice);
+        return rp;
     }
 
     @JsonIgnore
@@ -124,7 +123,7 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
     public RunnerPrices getHomogeneous(Side side) {
         var prices = this.prices.stream().filter(price -> price.getSide() == side)
                 .collect(Collectors.toList());
-        return new RunnerPrices(getSelectionId(), prices, matchedAmount, lastMatchedPrice);
+        return create(getSelectionId(), prices, matchedAmount, lastMatchedPrice);
     }
 
     public Double getLastMatchedPrice() {
@@ -135,4 +134,11 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
         return matchedAmount;
     }
 
+    public void setLastMatchedPrice(Double lastMatchedPrice) {
+        this.lastMatchedPrice = lastMatchedPrice;
+    }
+
+    public void setMatchedAmount(Double matchedAmount) {
+        this.matchedAmount = matchedAmount;
+    }
 }
