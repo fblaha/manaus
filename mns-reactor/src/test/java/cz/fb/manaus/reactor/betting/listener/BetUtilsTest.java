@@ -37,7 +37,7 @@ public class BetUtilsTest extends AbstractLocalTestCase {
     @Before
     public void setUp() {
         var price = new Price(5d, 3d, Side.BACK);
-        bet = new SettledBet(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
+        bet = SettledBet.create(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
                 5d, new Date(), price);
 
         var action = BetAction.create(BetActionType.PLACE, new Date(), price, null, 1000);

@@ -39,7 +39,7 @@ public class SettledBetControllerTest extends AbstractControllerTest {
     @Test
     public void testPostSettledBet() throws Exception {
         var mapper = new ObjectMapper();
-        var original = new SettledBet(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
+        var original = SettledBet.create(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
                 5d, new Date(), new Price(5d, 3d, Side.BACK));
         var serialized = mapper.writer().writeValueAsString(original);
         checkPost(serialized, BET_ID, 202);

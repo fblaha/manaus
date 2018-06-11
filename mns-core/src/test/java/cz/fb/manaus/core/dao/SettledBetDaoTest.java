@@ -31,7 +31,7 @@ public class SettledBetDaoTest extends AbstractDaoTest {
         var market = newMarket(MARKET_ID, curr, CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);
         var fooAction = createAndSaveBetAction(market, curr, PROPS, "foo");
-        var settledBet = new SettledBet(555, CoreTestFactory.DRAW_NAME, 5d,
+        var settledBet = SettledBet.create(555, CoreTestFactory.DRAW_NAME, 5d,
                 curr, new Price(3d, 5d, Side.LAY));
         settledBet.setBetAction(fooAction);
         settledBetDao.saveOrUpdate(settledBet);
@@ -89,10 +89,10 @@ public class SettledBetDaoTest extends AbstractDaoTest {
         marketDao.saveOrUpdate(market);
         var fooAction = createAndSaveBetAction(market, new Date(), PROPS, "foo");
         var barAction = createAndSaveBetAction(market, new Date(), PROPS, "bar");
-        var fooBet = new SettledBet(555, CoreTestFactory.DRAW_NAME, 5d,
+        var fooBet = SettledBet.create(555, CoreTestFactory.DRAW_NAME, 5d,
                 new Date(), new Price(3d, 5d, Side.LAY));
         fooBet.setBetAction(fooAction);
-        var barBet = new SettledBet(556, CoreTestFactory.DRAW_NAME, 5d,
+        var barBet = SettledBet.create(556, CoreTestFactory.DRAW_NAME, 5d,
                 new Date(), new Price(3d, 5d, Side.LAY));
         barBet.setBetAction(barAction);
         settledBetDao.saveOrUpdate(fooBet);
@@ -106,7 +106,7 @@ public class SettledBetDaoTest extends AbstractDaoTest {
         var market = newMarket(MARKET_ID, new Date(), CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);
         var fooAction = createAndSaveBetAction(market, new Date(), PROPS, BET_ID);
-        var settledBet = new SettledBet(555, CoreTestFactory.DRAW_NAME, 5d,
+        var settledBet = SettledBet.create(555, CoreTestFactory.DRAW_NAME, 5d,
                 new Date(), new Price(3d, 5d, Side.LAY));
         settledBet.setBetAction(fooAction);
         settledBetDao.saveOrUpdate(settledBet);

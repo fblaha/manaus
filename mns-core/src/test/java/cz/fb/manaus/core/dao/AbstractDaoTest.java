@@ -73,7 +73,7 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
         marketDao.saveOrUpdate(market);
         var actionDate = Date.from(Instant.now().minus(1, ChronoUnit.HOURS));
         var action = createAndSaveBetAction(market, actionDate, PROPS, BET_ID);
-        var bet = new SettledBet(action.getSelectionId(), "x", 5, now, action.getPrice());
+        var bet = SettledBet.create(action.getSelectionId(), "x", 5, now, action.getPrice());
         bet.setBetAction(action);
         settledBetDao.saveOrUpdate(bet);
         return bet;

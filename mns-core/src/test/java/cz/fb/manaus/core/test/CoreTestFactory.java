@@ -113,7 +113,7 @@ public class CoreTestFactory {
     }
 
     public static SettledBet newSettledBet(double price, Side side) {
-        var bet = new SettledBet(CoreTestFactory.HOME, "Home", 2d, new Date(), new Price(price, 2d, side));
+        var bet = SettledBet.create(CoreTestFactory.HOME, "Home", 2d, new Date(), new Price(price, 2d, side));
         var market = newMarket();
         var action = newBetAction("1", market);
         action.setMarketPrices(CoreTestFactory.newMarketPrices(market));

@@ -35,7 +35,7 @@ public class JsonMarshallerTest extends AbstractLocalTestCase {
 
     @Test
     public void testSettledBetList() throws Exception {
-        var bet = new SettledBet(555, "The Draw", 5.23d, new Date(), new Price(2.02d, 2.35d, Side.LAY));
+        var bet = SettledBet.create(555, "The Draw", 5.23d, new Date(), new Price(2.02d, 2.35d, Side.LAY));
         bet.setBetAction(newBetAction("1", newMarket()));
         var json = mapper.writer().writeValueAsString(List.of(bet));
         assertThat(json, CoreMatchers.containsString("The Draw"));

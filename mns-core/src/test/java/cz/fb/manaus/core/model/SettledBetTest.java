@@ -15,7 +15,7 @@ public class SettledBetTest {
 
     @Test
     public void testSerialization() throws Exception {
-        var original = new SettledBet(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
+        var original = SettledBet.create(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
                 5d, new Date(), new Price(5d, 3d, Side.BACK));
 
         var serialized = mapper.writer().writeValueAsString(original);

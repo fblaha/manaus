@@ -34,18 +34,18 @@ public class ProfitServiceTest extends AbstractProfitTest {
 
     @Test
     public void testSingleSelection() {
-        var lay = new SettledBet(CoreTestFactory.DRAW, "The Draw", 5d, marketDate, new Price(2d, 4d, Side.LAY));
-        var back = new SettledBet(CoreTestFactory.DRAW, "The Draw", -4.5d, marketDate, new Price(2.2d, 3.5d, Side.BACK));
+        var lay = SettledBet.create(CoreTestFactory.DRAW, "The Draw", 5d, marketDate, new Price(2d, 4d, Side.LAY));
+        var back = SettledBet.create(CoreTestFactory.DRAW, "The Draw", -4.5d, marketDate, new Price(2.2d, 3.5d, Side.BACK));
         setBetAction(lay, back);
         checkRecords(0.47d, null, lay, back);
     }
 
     @Test
     public void testMultiSelection() {
-        var layDraw = new SettledBet(CoreTestFactory.DRAW, "The Draw", 5d, marketDate, new Price(2d, 4d, Side.LAY));
-        var backDraw = new SettledBet(CoreTestFactory.DRAW, "The Draw", -4.9d, marketDate, new Price(2.2d, 3.5d, Side.BACK));
-        var layHome = new SettledBet(CoreTestFactory.HOME, "Home", 5d, marketDate, new Price(2d, 4d, Side.LAY));
-        var backHome = new SettledBet(CoreTestFactory.HOME, "Home", -4.1d, marketDate, new Price(2.2d, 3.5d, Side.BACK));
+        var layDraw = SettledBet.create(CoreTestFactory.DRAW, "The Draw", 5d, marketDate, new Price(2d, 4d, Side.LAY));
+        var backDraw = SettledBet.create(CoreTestFactory.DRAW, "The Draw", -4.9d, marketDate, new Price(2.2d, 3.5d, Side.BACK));
+        var layHome = SettledBet.create(CoreTestFactory.HOME, "Home", 5d, marketDate, new Price(2d, 4d, Side.LAY));
+        var backHome = SettledBet.create(CoreTestFactory.HOME, "Home", -4.1d, marketDate, new Price(2.2d, 3.5d, Side.BACK));
         setBetAction(layDraw, backDraw, layHome, backHome);
         checkRecords(0.935d, of("selectionRegexp_draw", 0.067), layHome, backHome, layDraw, backDraw);
     }
@@ -54,9 +54,9 @@ public class ProfitServiceTest extends AbstractProfitTest {
     @Test
     public void testRealBackWin() {
 //22263	2012-04-26 15:37:47.0	2012-04-26 06:11:23.0	6.4	    2.14	1	-7.3	47973	Over 2.5 Goals	105524600	105524600	RUS	2012-04-26 16:00:00.0	1524.3	Over/Under 2.5 goals	26837433
-        var lay = new SettledBet(CoreTestFactory.DRAW, "Over 2.5 Goals", -7.3, marketDate, new Price(2.14d, 6.4d, Side.LAY));
+        var lay = SettledBet.create(CoreTestFactory.DRAW, "Over 2.5 Goals", -7.3, marketDate, new Price(2.14d, 6.4d, Side.LAY));
 //22264	2012-04-26 15:53:26.0	2012-04-26 15:53:07.0	5.44	2.34	0	7.29	47973	Over 2.5 Goals	105524600	105524600	RUS	2012-04-26 16:00:00.0	1524.3	Over/Under 2.5 goals	26837433
-        var back = new SettledBet(CoreTestFactory.DRAW, "Over 2.5 Goals", 7.29d, marketDate, new Price(2.34d, 5.44d, Side.BACK));
+        var back = SettledBet.create(CoreTestFactory.DRAW, "Over 2.5 Goals", 7.29d, marketDate, new Price(2.34d, 5.44d, Side.BACK));
         setBetAction(lay, back);
         checkRecords(-0.01d, null, lay, back);
     }
@@ -71,12 +71,12 @@ public class ProfitServiceTest extends AbstractProfitTest {
 
     private SettledBet createKamazBack() {
         //22256	2012-04-26 12:40:33.0	2012-04-26 12:14:07.0	4.22	2.98	0	-4.22	2460921	Kamaz	105486372	105486372	RUS	2012-04-26 16:00:00.0	4314.43	Match Odds	26836220
-        return new SettledBet(CoreTestFactory.DRAW, "Kamaz", -4.22, marketDate, new Price(2.98d, 4.22d, Side.BACK));
+        return SettledBet.create(CoreTestFactory.DRAW, "Kamaz", -4.22, marketDate, new Price(2.98d, 4.22d, Side.BACK));
     }
 
     private SettledBet createKamazLay() {
         //22255	2012-04-26 06:56:08.0	2012-04-26 02:00:51.0	5.27	2.92	1	5.27	2460921	Kamaz	105486372	105486372	RUS	2012-04-26 16:00:00.0	4314.43	Match Odds	26836220
-        return new SettledBet(CoreTestFactory.DRAW, "Kamaz", 5.27, marketDate, new Price(2.92d, 5.27d, Side.LAY));
+        return SettledBet.create(CoreTestFactory.DRAW, "Kamaz", 5.27, marketDate, new Price(2.92d, 5.27d, Side.LAY));
     }
 
     @Test
@@ -115,10 +115,10 @@ public class ProfitServiceTest extends AbstractProfitTest {
 
     @Test
     public void testGetProfitRecords() {
-        var bet1 = new SettledBet(CoreTestFactory.HOME, "The Draw", 5d,
+        var bet1 = SettledBet.create(CoreTestFactory.HOME, "The Draw", 5d,
                 addDays(marketDate, 1), new Price(2d, 4d, Side.LAY));
         bet1.setPlaced(addDays(marketDate, -1));
-        var bet2 = new SettledBet(CoreTestFactory.HOME, "The Draw", -2d,
+        var bet2 = SettledBet.create(CoreTestFactory.HOME, "The Draw", -2d,
                 addDays(marketDate, 1), new Price(2d, 5d, Side.BACK));
         bet2.setPlaced(addHours(marketDate, -1));
         setBetAction(bet1, bet2);

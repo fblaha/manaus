@@ -23,42 +23,32 @@ public class SettledBet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     @Column(nullable = false)
     private long selectionId;
-
     @Column(nullable = false)
     private String selectionName;
-
     @Column(nullable = false)
     private double profitAndLoss;
-
     @Column
     private Date placed;
-
     @Column
     private Date matched;
-
     @Column(nullable = false)
     private Date settled;
     @Embedded
     private Price price;
-
-
     @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToOne(fetch = FetchType.EAGER, optional = false)
     private BetAction betAction;
 
-
-    public SettledBet(long selectionId, String selectionName, double profitAndLoss, Date settled, Price price) {
-        this.selectionId = selectionId;
-        this.selectionName = selectionName;
-        this.profitAndLoss = profitAndLoss;
-        this.settled = settled;
-        this.price = price;
-    }
-
-    public SettledBet() {
+    public static SettledBet create(long selectionId, String selectionName, double profitAndLoss, Date settled, Price price) {
+        var bet = new SettledBet();
+        bet.setSelectionId(selectionId);
+        bet.setSelectionName(selectionName);
+        bet.setProfitAndLoss(profitAndLoss);
+        bet.setSettled(settled);
+        bet.setPrice(price);
+        return bet;
     }
 
     public Integer getId() {

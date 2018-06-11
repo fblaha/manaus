@@ -49,9 +49,9 @@ public abstract class AbstractProfitTest extends AbstractLocalTestCase {
 
     private void addSideBets(List<SettledBet> result, double price, Side side, Optional<Side> requestedSide) {
         if (requestedSide.orElse(side) == side) {
-            result.add(new SettledBet(CoreTestFactory.DRAW, "The Draw", 5d, marketDate,
+            result.add(SettledBet.create(CoreTestFactory.DRAW, "The Draw", 5d, marketDate,
                     new Price(price, 4d, side)));
-            result.add(new SettledBet(CoreTestFactory.HOME, "Home", 5d, marketDate,
+            result.add(SettledBet.create(CoreTestFactory.HOME, "Home", 5d, marketDate,
                     new Price(price, 4d, side)));
         }
     }
