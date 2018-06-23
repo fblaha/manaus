@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.betting.validator.common.update;
 
 import cz.fb.manaus.core.dao.AbstractDaoTest;
-import cz.fb.manaus.core.model.BetAction;
+import cz.fb.manaus.core.model.BetActionTest;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPricesTest;
@@ -39,7 +39,7 @@ public class _AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
     private void checkValidation(BetActionType actionType, int beforeMinutes, Side lay, ValidationResult validationResult) {
         var market = newMarket();
         marketDao.saveOrUpdate(market);
-        var place = BetAction.create(actionType, DateUtils.addMinutes(new Date(), -beforeMinutes), new Price(2d, 30d, lay), market, CoreTestFactory.HOME);
+        var place = BetActionTest.create(actionType, DateUtils.addMinutes(new Date(), -beforeMinutes), new Price(2d, 30d, lay), market, CoreTestFactory.HOME);
         place.setBetId(ReactorTestFactory.BET_ID);
         betActionDao.saveOrUpdate(place);
         var runnerPrices = new RunnerPrices();

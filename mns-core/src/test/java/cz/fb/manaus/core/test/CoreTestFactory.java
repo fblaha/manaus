@@ -5,6 +5,7 @@ import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.dao.MarketPricesDao;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
+import cz.fb.manaus.core.model.BetActionTest;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Competition;
 import cz.fb.manaus.core.model.Event;
@@ -72,7 +73,7 @@ public class CoreTestFactory {
     }
 
     public static BetAction newBetAction(String betId, Market market) {
-        var betAction = BetAction.create(BetActionType.PLACE, DateUtils.addHours(new Date(), -5), new Price(2d, 2d, Side.LAY), market, 11);
+        var betAction = BetActionTest.create(BetActionType.PLACE, DateUtils.addHours(new Date(), -5), new Price(2d, 2d, Side.LAY), market, 11);
         betAction.setProperties(new HashMap<>());
         betAction.setBetId(betId);
         return betAction;
@@ -126,7 +127,7 @@ public class CoreTestFactory {
     }
 
     public BetAction savePlaceAction(Bet unmatched, Market market) {
-        var betAction = BetAction.create(BetActionType.PLACE, unmatched.getPlacedDate(),
+        var betAction = BetActionTest.create(BetActionType.PLACE, unmatched.getPlacedDate(),
                 unmatched.getRequestedPrice(), market, unmatched.getSelectionId());
         betAction.setBetId(unmatched.getBetId());
         betActionDao.saveOrUpdate(betAction);

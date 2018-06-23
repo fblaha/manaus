@@ -1,7 +1,7 @@
 package cz.fb.manaus.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cz.fb.manaus.core.model.BetAction;
+import cz.fb.manaus.core.model.BetActionTest;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.ProfitRecord;
@@ -26,7 +26,7 @@ public class JsonMarshallerTest extends AbstractLocalTestCase {
 
     @Test
     public void testBetActionList() throws Exception {
-        var action = BetAction.create(BetActionType.PLACE, new Date(), new Price(2d, 5d, Side.LAY), null, 10);
+        var action = BetActionTest.create(BetActionType.PLACE, new Date(), new Price(2d, 5d, Side.LAY), null, 10);
         var props = Map.of("property1", "value1", "reciprocal", "0.92");
         action.setProperties(props);
         var json = mapper.writer().writeValueAsString(List.of(action));

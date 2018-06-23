@@ -1,6 +1,7 @@
 package cz.fb.manaus.core.dao;
 
 import cz.fb.manaus.core.model.BetAction;
+import cz.fb.manaus.core.model.BetActionTest;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
@@ -51,7 +52,7 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
     }
 
     protected BetAction createAndSaveBetAction(Market market, Date date, Map<String, String> values, String betId) {
-        var betAction = BetAction.create(BetActionType.PLACE, date, new Price(2d, 3d, Side.LAY), market, CoreTestFactory.DRAW);
+        var betAction = BetActionTest.create(BetActionType.PLACE, date, new Price(2d, 3d, Side.LAY), market, CoreTestFactory.DRAW);
         var marketPrices = CoreTestFactory.newMarketPrices(market);
         marketPricesDao.saveOrUpdate(marketPrices);
         betAction.setMarketPrices(marketPrices);
@@ -96,7 +97,7 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
     }
 
     private BetAction createAction(Market market, MarketPrices prices, String betId) {
-        var place = BetAction.create(BetActionType.PLACE, new Date(), new Price(2.2d, 2.1d, Side.LAY),
+        var place = BetActionTest.create(BetActionType.PLACE, new Date(), new Price(2.2d, 2.1d, Side.LAY),
                 market, CoreTestFactory.HOME);
         place.setBetId(betId);
         place.setMarketPrices(prices);

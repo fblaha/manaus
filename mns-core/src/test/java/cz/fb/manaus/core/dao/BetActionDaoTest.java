@@ -2,6 +2,7 @@ package cz.fb.manaus.core.dao;
 
 import com.google.common.collect.Ordering;
 import cz.fb.manaus.core.model.BetAction;
+import cz.fb.manaus.core.model.BetActionTest;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.MarketPricesTest;
 import cz.fb.manaus.core.model.Price;
@@ -215,9 +216,9 @@ public class BetActionDaoTest extends AbstractDaoTest {
     private void saveActionsAndCheckOrder(Comparator<BetAction> comparator) {
         var market = newMarket("33", new Date(), CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);
-        var earlier = BetAction.create(BetActionType.PLACE, DateUtils.addDays(new Date(), -1), new Price(2d, 30d, Side.LAY), market, CoreTestFactory.DRAW);
+        var earlier = BetActionTest.create(BetActionType.PLACE, DateUtils.addDays(new Date(), -1), new Price(2d, 30d, Side.LAY), market, CoreTestFactory.DRAW);
         earlier.setBetId(BET_ID);
-        var later = BetAction.create(BetActionType.PLACE, new Date(), new Price(3d, 33d, Side.LAY), market, CoreTestFactory.DRAW);
+        var later = BetActionTest.create(BetActionType.PLACE, new Date(), new Price(3d, 33d, Side.LAY), market, CoreTestFactory.DRAW);
         later.setBetId(BET_ID + 1);
         var actions = List.of(later, earlier);
         Ordering.from(comparator).immutableSortedCopy(actions).forEach(betActionDao::saveOrUpdate);

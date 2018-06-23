@@ -26,6 +26,5 @@ public class EventTest {
         Event event = create("100", "Sparta vs Ostrava", new Date(), "cz");
         String json = MAPPER.writeValueAsString(event);
         assertThat(json, containsString("Ostrava"));
-
     }
 }

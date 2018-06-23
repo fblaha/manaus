@@ -123,9 +123,14 @@ public class BetContext {
     public BetAction createBetAction() {
         var type = getOldBet().isPresent() ? BetActionType.UPDATE : BetActionType.PLACE;
         var marketPrices = marketSnapshot.getMarketPrices();
-        var action = BetAction.create(type, new Date(), newPrice.get(), marketPrices.getMarket(), selectionId);
+        var action = new BetAction();
+        action.setBetActionType(type);
+        action.setActionDate(new Date());
+        action.setMarket(marketPrices.getMarket());
+        action.setSelectionId(selectionId);
         action.setMarketPrices(marketPrices);
         action.setProperties(properties);
+        action.setPrice(newPrice.get());
         return action;
     }
 
