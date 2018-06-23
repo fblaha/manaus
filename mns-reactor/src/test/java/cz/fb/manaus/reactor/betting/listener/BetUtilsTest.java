@@ -7,6 +7,7 @@ import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.SettledBet;
+import cz.fb.manaus.core.model.SettledBetTest;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import cz.fb.manaus.core.test.CoreTestFactory;
@@ -38,7 +39,7 @@ public class BetUtilsTest extends AbstractLocalTestCase {
     @Before
     public void setUp() {
         var price = new Price(5d, 3d, Side.BACK);
-        bet = SettledBet.create(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
+        bet = SettledBetTest.create(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
                 5d, new Date(), price);
 
         var action = BetActionTest.create(BetActionType.PLACE, new Date(), price, null, 1000);

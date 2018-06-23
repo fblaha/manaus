@@ -5,7 +5,7 @@ import cz.fb.manaus.core.model.BetActionTest;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.ProfitRecord;
-import cz.fb.manaus.core.model.SettledBet;
+import cz.fb.manaus.core.model.SettledBetTest;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import org.hamcrest.CoreMatchers;
@@ -35,7 +35,7 @@ public class JsonMarshallerTest extends AbstractLocalTestCase {
 
     @Test
     public void testSettledBetList() throws Exception {
-        var bet = SettledBet.create(555, "The Draw", 5.23d, new Date(), new Price(2.02d, 2.35d, Side.LAY));
+        var bet = SettledBetTest.create(555, "The Draw", 5.23d, new Date(), new Price(2.02d, 2.35d, Side.LAY));
         bet.setBetAction(newBetAction("1", newMarket()));
         var json = mapper.writer().writeValueAsString(List.of(bet));
         assertThat(json, CoreMatchers.containsString("The Draw"));

@@ -9,6 +9,7 @@ import cz.fb.manaus.core.model.MarketPricesTest;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.SettledBet;
+import cz.fb.manaus.core.model.SettledBetTest;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase;
 import cz.fb.manaus.core.test.CoreTestFactory;
@@ -75,7 +76,7 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
         marketDao.saveOrUpdate(market);
         var actionDate = Date.from(Instant.now().minus(1, ChronoUnit.HOURS));
         var action = createAndSaveBetAction(market, actionDate, PROPS, BET_ID);
-        var bet = SettledBet.create(action.getSelectionId(), "x", 5, now, action.getPrice());
+        var bet = SettledBetTest.create(action.getSelectionId(), "x", 5, now, action.getPrice());
         bet.setBetAction(action);
         settledBetDao.saveOrUpdate(bet);
         return bet;

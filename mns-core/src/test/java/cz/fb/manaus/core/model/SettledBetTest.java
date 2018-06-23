@@ -13,9 +13,19 @@ public class SettledBetTest {
 
     private ObjectMapper mapper = new ObjectMapper();
 
+    public static SettledBet create(long selectionId, String selectionName, double profitAndLoss, Date settled, Price price) {
+        var bet = new SettledBet();
+        bet.setSelectionId(selectionId);
+        bet.setSelectionName(selectionName);
+        bet.setProfitAndLoss(profitAndLoss);
+        bet.setSettled(settled);
+        bet.setPrice(price);
+        return bet;
+    }
+
     @Test
     public void testSerialization() throws Exception {
-        var original = SettledBet.create(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
+        var original = create(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
                 5d, new Date(), new Price(5d, 3d, Side.BACK));
 
         var serialized = mapper.writer().writeValueAsString(original);

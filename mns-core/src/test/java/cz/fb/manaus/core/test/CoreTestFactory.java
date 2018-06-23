@@ -20,6 +20,7 @@ import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.RunnerPricesTest;
 import cz.fb.manaus.core.model.RunnerTest;
 import cz.fb.manaus.core.model.SettledBet;
+import cz.fb.manaus.core.model.SettledBetTest;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.spring.ManausProfiles;
 import org.apache.commons.lang3.time.DateUtils;
@@ -118,7 +119,7 @@ public class CoreTestFactory {
     }
 
     public static SettledBet newSettledBet(double price, Side side) {
-        var bet = SettledBet.create(CoreTestFactory.HOME, "Home", 2d, new Date(), new Price(price, 2d, side));
+        var bet = SettledBetTest.create(CoreTestFactory.HOME, "Home", 2d, new Date(), new Price(price, 2d, side));
         var market = newMarket();
         var action = newBetAction("1", market);
         action.setMarketPrices(CoreTestFactory.newMarketPrices(market));

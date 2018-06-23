@@ -3,6 +3,7 @@ package cz.fb.manaus.core.settlement;
 import cz.fb.manaus.core.dao.AbstractDaoTest;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.SettledBet;
+import cz.fb.manaus.core.model.SettledBetTest;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import org.junit.Test;
@@ -27,7 +28,7 @@ public class SettledBetSaverTest extends AbstractDaoTest {
     }
 
     private SettledBet createAction() {
-        return SettledBet.create(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME, 5, new Date(), new Price(3, 3, Side.LAY));
+        return SettledBetTest.create(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME, 5, new Date(), new Price(3, 3, Side.LAY));
     }
 
 }
