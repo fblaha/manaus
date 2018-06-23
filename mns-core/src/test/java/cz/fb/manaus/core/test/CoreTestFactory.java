@@ -11,6 +11,7 @@ import cz.fb.manaus.core.model.Event;
 import cz.fb.manaus.core.model.EventType;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
+import cz.fb.manaus.core.model.MarketPricesTest;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.Runner;
 import cz.fb.manaus.core.model.RunnerPrices;
@@ -102,14 +103,14 @@ public class CoreTestFactory {
                 newBackRP(bestBackPrice, 1, 2.5d),
                 newBackRP(bestBackPrice, 2, 2.5d),
                 newBackRP(bestBackPrice, 3, 2.5d));
-        return MarketPrices.create(winnerCount, market, runnerPrices, new Date());
+        return MarketPricesTest.create(winnerCount, market, runnerPrices, new Date());
     }
 
     public static MarketPrices newMarketPrices(Market market) {
         var home = newBackRP(2.5d, HOME, 3d);
         var draw = newBackRP(2.5d, DRAW, 3d);
         var away = newBackRP(2.5d, AWAY, 3d);
-        return MarketPrices.create(1, market, List.of(home, draw, away), new Date());
+        return MarketPricesTest.create(1, market, List.of(home, draw, away), new Date());
     }
 
     public static SettledBet newSettledBet(double price, Side side) {

@@ -2,6 +2,7 @@ package cz.fb.manaus.core.dao;
 
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
+import cz.fb.manaus.core.model.MarketPricesTest;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.Side;
@@ -29,7 +30,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     @Test
     public void testMarketPrices() {
         var market = newMarket();
-        var marketPrices = MarketPrices.create(1, market, List.of(), new Date());
+        var marketPrices = MarketPricesTest.create(1, market, List.of(), new Date());
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
         assertThat(marketPricesDao.getPrices(CoreTestFactory.MARKET_ID).size(), is(1));
@@ -38,7 +39,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     @Test(expected = LazyInitializationException.class)
     public void testMarketMarketFetch() {
         var market = newMarket();
-        var marketPrices = MarketPrices.create(1, market, List.of(), new Date());
+        var marketPrices = MarketPricesTest.create(1, market, List.of(), new Date());
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
         marketPricesDao.getPrices(CoreTestFactory.MARKET_ID).get(0).getMarket().getName();
@@ -47,10 +48,10 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     @Test
     public void testMarketPrices2() {
         var market = newMarket();
-        var marketPrices = MarketPrices.create(1, market, List.of(), new Date());
+        var marketPrices = MarketPricesTest.create(1, market, List.of(), new Date());
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
-        var marketPrices2 = MarketPrices.create(1, market, List.of(), new Date());
+        var marketPrices2 = MarketPricesTest.create(1, market, List.of(), new Date());
         marketPricesDao.saveOrUpdate(marketPrices2);
         assertThat(marketPricesDao.getPrices(CoreTestFactory.MARKET_ID).size(), is(2));
     }
@@ -72,7 +73,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     @Test
     public void testRunnerPricesDelete() {
         var market = newMarket();
-        var marketPrices = MarketPrices.create(1, market, List.of(
+        var marketPrices = MarketPricesTest.create(1, market, List.of(
                 RunnerPrices.create(232, List.of(new Price(2.3d, 22, Side.BACK)), 5d, 2.5d)), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
@@ -85,7 +86,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         var market = newMarket();
         var better = new Price(2.3d, 22, Side.BACK);
         var worse = new Price(2.2d, CoreTestFactory.DRAW, Side.BACK);
-        var marketPrices = MarketPrices.create(1, market, List.of(
+        var marketPrices = MarketPricesTest.create(1, market, List.of(
                 RunnerPrices.create(232, List.of(better, worse), 5d, 2.5d)), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
@@ -103,7 +104,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         var better = new Price(2.2d, 22, Side.BACK);
         var worse = new Price(2.2d, 22, Side.LAY);
         var selId = 232;
-        var marketPrices = MarketPrices.create(1, market, List.of(
+        var marketPrices = MarketPricesTest.create(1, market, List.of(
                 RunnerPrices.create(selId, List.of(better, worse), 5d, 2.5d)), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
@@ -120,7 +121,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         var better = new Price(2.3d, 22, Side.LAY);
         var worse = new Price(2.4d, CoreTestFactory.DRAW, Side.LAY);
         var selId = 232;
-        var marketPrices = MarketPrices.create(1, market, List.of(
+        var marketPrices = MarketPricesTest.create(1, market, List.of(
                 RunnerPrices.create(selId, List.of(better, worse), 5d, 2.5d)), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
@@ -139,7 +140,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         var backBetter = new Price(2.3d, 22, Side.BACK);
         var backWorse = new Price(2.2d, CoreTestFactory.DRAW, Side.BACK);
         var selId = 232;
-        var prices = MarketPrices.create(1, market, List.of(
+        var prices = MarketPricesTest.create(1, market, List.of(
                 RunnerPrices.create(selId, List.of(layWorse, backWorse, backBetter, layBetter), 5d, 2.5d)), new Date());
         prices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
@@ -168,11 +169,11 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     @Test
     public void testMarketPriceOrder2() {
         var market = newMarket();
-        var marketPrices = MarketPrices.create(1, market, List.of(), new Date());
+        var marketPrices = MarketPricesTest.create(1, market, List.of(), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(marketPrices);
-        var marketPrices2 = MarketPrices.create(1, market, List.of(), new Date());
+        var marketPrices2 = MarketPricesTest.create(1, market, List.of(), new Date());
         marketPrices2.setTime(DateUtils.addMonths(new Date(), -2));
         marketPricesDao.saveOrUpdate(marketPrices2);
         assertThat(marketPricesDao.getPrices(CoreTestFactory.MARKET_ID).size(), is(2));
@@ -183,9 +184,9 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
     public void testMarketDelete() {
         var market = newMarket("55", new Date(), CoreTestFactory.MATCH_ODDS);
         marketDao.saveOrUpdate(market);
-        var marketPrices = MarketPrices.create(1, market, List.of(), new Date());
+        var marketPrices = MarketPricesTest.create(1, market, List.of(), new Date());
         marketPricesDao.saveOrUpdate(marketPrices);
-        var marketPrices2 = MarketPrices.create(1, market, List.of(), new Date());
+        var marketPrices2 = MarketPricesTest.create(1, market, List.of(), new Date());
         marketPricesDao.saveOrUpdate(marketPrices2);
         assertThat(marketPricesDao.getPrices("55").size(), is(2));
         marketDao.delete("55");
@@ -240,7 +241,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
                 new Price(bestPrice, 100d, Side.BACK),
                 new Price(2d, 100d, Side.BACK),
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
-        var result = MarketPrices.create(1, market, List.of(home, draw, away), new Date());
+        var result = MarketPricesTest.create(1, market, List.of(home, draw, away), new Date());
         result.setTime(new Date());
         return result;
     }
@@ -296,7 +297,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
                 new Price(2d, 100d, Side.BACK),
                 new Price(2d, 100d, Side.BACK),
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
-        var marketPrices = MarketPrices.create(1, market, List.of(home, draw, away), new Date());
+        var marketPrices = MarketPricesTest.create(1, market, List.of(home, draw, away), new Date());
         marketPricesDao.saveOrUpdate(marketPrices);
         var latest = marketPricesDao.getPrices(market.getId(), OptionalInt.of(1));
         assertThat(getMarketReciprocal(latest, Side.BACK).getAsDouble(), is(1d));
@@ -317,7 +318,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
         var away = RunnerPrices.create(22, List.of(
                 new Price(2d, 100d, Side.LAY),
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
-        var marketPrices = MarketPrices.create(1, market, List.of(home, draw, away), new Date());
+        var marketPrices = MarketPricesTest.create(1, market, List.of(home, draw, away), new Date());
         marketPricesDao.saveOrUpdate(marketPrices);
         var latest = marketPricesDao.getPrices(market.getId(), OptionalInt.of(1));
         assertThat(getMarketReciprocal(latest, Side.LAY).getAsDouble(), is(1d));
@@ -335,7 +336,7 @@ public class MarketPricesDaoTest extends AbstractDaoTest {
                 new Price(1.5d, 100d, Side.BACK)), 2d, 2d);
         var away = RunnerPrices.create(22, List.of(
                 new Price(1.5d, 100d, Side.LAY)), 2d, 2d);
-        var marketPrices = MarketPrices.create(1, market, List.of(home, draw, away), new Date());
+        var marketPrices = MarketPricesTest.create(1, market, List.of(home, draw, away), new Date());
         marketPricesDao.saveOrUpdate(marketPrices);
         var latest = marketPricesDao.getPrices(market.getId(), OptionalInt.of(1));
         assertFalse(getMarketReciprocal(latest, Side.LAY).isPresent());

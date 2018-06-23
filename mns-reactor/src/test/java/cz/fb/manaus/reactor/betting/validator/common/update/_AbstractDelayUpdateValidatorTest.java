@@ -4,7 +4,7 @@ import cz.fb.manaus.core.dao.AbstractDaoTest;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Market;
-import cz.fb.manaus.core.model.MarketPrices;
+import cz.fb.manaus.core.model.MarketPricesTest;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.Side;
@@ -45,7 +45,7 @@ public class _AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
         var runnerPrices = new RunnerPrices();
         runnerPrices.setSelectionId(CoreTestFactory.HOME);
 
-        var marketPrices = MarketPrices.create(1, market, List.of(runnerPrices), new Date());
+        var marketPrices = MarketPricesTest.create(1, market, List.of(runnerPrices), new Date());
         var result = validator.validate(factory.newUpdateBetContext(marketPrices, runnerPrices, lay));
         Assert.assertThat(result, is(validationResult));
     }
@@ -54,7 +54,7 @@ public class _AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
     public void testNoBetAction() {
         var market = newMarket();
         marketDao.saveOrUpdate(market);
-        var marketPrices = MarketPrices.create(1, market, List.of(), new Date());
+        var marketPrices = MarketPricesTest.create(1, market, List.of(), new Date());
         var runnerPrices = new RunnerPrices();
         runnerPrices.setSelectionId(CoreTestFactory.DRAW);
         var result = validator.validate(factory.newUpdateBetContext(marketPrices, runnerPrices, Side.LAY));

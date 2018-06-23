@@ -44,15 +44,6 @@ public class MarketPrices implements SideMixed<MarketPrices> {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Collection<RunnerPrices> runnerPrices;
 
-    public static MarketPrices create(int winnerCount, Market market, Collection<RunnerPrices> runnerPrices, Date time) {
-        var mp = new MarketPrices();
-        mp.setWinnerCount(winnerCount);
-        mp.setMarket(market);
-        mp.setRunnerPrices(runnerPrices);
-        mp.setTime(time);
-        return mp;
-    }
-
     public static double getOverround(List<Double> bestPrices) {
         return bestPrices.stream().mapToDouble(p -> 1 / p).sum();
     }
@@ -134,7 +125,12 @@ public class MarketPrices implements SideMixed<MarketPrices> {
         var prices = getRunnerPrices().stream()
                 .map(rp -> rp.getHomogeneous(side))
                 .collect(Collectors.toList());
-        return create(winnerCount, market, prices, getTime());
+        var mp = new MarketPrices();
+        mp.setWinnerCount(winnerCount);
+        mp.setMarket(market);
+        mp.setRunnerPrices(prices);
+        mp.setTime(time);
+        return mp;
     }
 
     public List<OptionalDouble> getBestPrices(Side type) {

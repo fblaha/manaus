@@ -5,6 +5,9 @@ import cz.fb.manaus.core.test.CoreTestFactory;
 import org.apache.commons.math3.util.Precision;
 import org.junit.Test;
 
+import java.util.Collection;
+import java.util.Date;
+
 import static com.google.common.collect.ImmutableList.of;
 import static cz.fb.manaus.core.model.MarketPrices.getOverround;
 import static org.hamcrest.CoreMatchers.is;
@@ -14,6 +17,15 @@ import static org.junit.Assert.assertTrue;
 
 public class MarketPricesTest {
 
+
+    public static MarketPrices create(int winnerCount, Market market, Collection<RunnerPrices> runnerPrices, Date time) {
+        var mp = new MarketPrices();
+        mp.setWinnerCount(winnerCount);
+        mp.setMarket(market);
+        mp.setRunnerPrices(runnerPrices);
+        mp.setTime(time);
+        return mp;
+    }
 
     @Test
     public void testSerialization() throws Exception {

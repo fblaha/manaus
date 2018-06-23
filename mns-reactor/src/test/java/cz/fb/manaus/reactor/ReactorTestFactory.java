@@ -4,6 +4,7 @@ import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.Event;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
+import cz.fb.manaus.core.model.MarketPricesTest;
 import cz.fb.manaus.core.model.MarketSnapshot;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.RunnerPrices;
@@ -126,7 +127,7 @@ public class ReactorTestFactory {
         var home = newRP(CoreTestFactory.HOME, betBack, bestLay, lastMatched);
         var draw = newRP(CoreTestFactory.DRAW, betBack, bestLay, lastMatched);
         var away = newRP(CoreTestFactory.AWAY, betBack, bestLay, lastMatched);
-        return MarketPrices.create(winnerCount, market, List.of(home, draw, away), new Date());
+        return MarketPricesTest.create(winnerCount, market, List.of(home, draw, away), new Date());
     }
 
     public MarketPrices createMarket(double downgradeFraction, List<Double> probabilities) {
@@ -142,7 +143,7 @@ public class ReactorTestFactory {
             var lastMatched = roundingService.roundBet(fairPrice).getAsDouble();
             runnerPrices.add(newRP(selectionId, backRounded, layRounded, OptionalDouble.of(lastMatched)));
         }
-        return MarketPrices.create(1, market, runnerPrices, new Date());
+        return MarketPricesTest.create(1, market, runnerPrices, new Date());
     }
 
     private Market createMarket() {
