@@ -50,15 +50,6 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
 
     private Double matchedAmount;
 
-    public static RunnerPrices create(long selectionId, Collection<Price> prices, Double matched, Double lastMatchedPrice) {
-        var rp = new RunnerPrices();
-        rp.setSelectionId(selectionId);
-        rp.setPrices(prices);
-        rp.setMatchedAmount(matched);
-        rp.setLastMatchedPrice(lastMatchedPrice);
-        return rp;
-    }
-
     @JsonIgnore
     public Optional<Price> getBestPrice() {
         return prices.stream().min(PriceComparator.INSTANCE);
@@ -123,7 +114,12 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
     public RunnerPrices getHomogeneous(Side side) {
         var prices = this.prices.stream().filter(price -> price.getSide() == side)
                 .collect(Collectors.toList());
-        return create(getSelectionId(), prices, matchedAmount, lastMatchedPrice);
+        var rp = new RunnerPrices();
+        rp.setSelectionId(selectionId);
+        rp.setPrices(prices);
+        rp.setMatchedAmount(matchedAmount);
+        rp.setMatchedAmount(lastMatchedPrice);
+        return rp;
     }
 
     public Double getLastMatchedPrice() {

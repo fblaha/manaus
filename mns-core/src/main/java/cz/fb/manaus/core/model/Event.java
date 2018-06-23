@@ -29,15 +29,6 @@ public class Event {
     @Column(nullable = false)
     private Date openDate;
 
-    public static Event create(String id, String name, Date openDate, String countryCode) {
-        var event = new Event();
-        event.setId(id);
-        event.setName(name);
-        event.setOpenDate(openDate);
-        event.setCountryCode(countryCode);
-        return event;
-    }
-
     public String getId() {
         return id;
     }

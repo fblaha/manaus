@@ -4,7 +4,7 @@ import com.google.common.primitives.Doubles;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.MarketPricesTest;
 import cz.fb.manaus.core.model.Price;
-import cz.fb.manaus.core.model.RunnerPrices;
+import cz.fb.manaus.core.model.RunnerPricesTest;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.provider.ExchangeProvider;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
@@ -188,8 +188,8 @@ public class PriceServiceTest extends AbstractLocalTestCase {
     public void testFairnessHighProbability() {
         var lowPrice = 1.04d;
         var highPrice = 15d;
-        var home = RunnerPrices.create(CoreTestFactory.HOME, List.of(new Price(lowPrice, 10d, Side.BACK)), 50d, lowPrice);
-        var away = RunnerPrices.create(CoreTestFactory.AWAY, List.of(new Price(highPrice, 10d, Side.BACK)), 50d, highPrice);
+        var home = RunnerPricesTest.create(CoreTestFactory.HOME, List.of(new Price(lowPrice, 10d, Side.BACK)), 50d, lowPrice);
+        var away = RunnerPricesTest.create(CoreTestFactory.AWAY, List.of(new Price(highPrice, 10d, Side.BACK)), 50d, highPrice);
         var marketPrices = MarketPricesTest.create(1, null, List.of(home, away), new Date());
         var fairness = getFairness(Side.BACK, marketPrices);
         var lowFairPrice = priceService.getFairnessFairPrice(lowPrice, fairness);

@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.dao;
 
-import cz.fb.manaus.core.model.Event;
+import cz.fb.manaus.core.model.EventTest;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import org.apache.commons.lang3.time.DateUtils;
@@ -73,11 +73,11 @@ public class MarketDaoTest extends AbstractDaoTest {
     @Test
     public void testMarketMerge() {
         var market = newMarket();
-        var childA = Event.create("55", "childA", new Date(), CoreTestFactory.COUNTRY_CODE);
+        var childA = EventTest.create("55", "childA", new Date(), CoreTestFactory.COUNTRY_CODE);
         market.setEvent(childA);
         marketDao.saveOrUpdate(market);
         var toBeMerged = newMarket(CoreTestFactory.MARKET_ID, new Date(), SPARTA);
-        var childB = Event.create("55", "childB", new Date(), CoreTestFactory.COUNTRY_CODE);
+        var childB = EventTest.create("55", "childB", new Date(), CoreTestFactory.COUNTRY_CODE);
         toBeMerged.setEvent(childB);
         marketDao.saveOrUpdate(toBeMerged);
         market = marketDao.get(CoreTestFactory.MARKET_ID).get();

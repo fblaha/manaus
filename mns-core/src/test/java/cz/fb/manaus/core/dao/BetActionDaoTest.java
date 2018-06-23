@@ -5,7 +5,7 @@ import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.MarketPricesTest;
 import cz.fb.manaus.core.model.Price;
-import cz.fb.manaus.core.model.RunnerPrices;
+import cz.fb.manaus.core.model.RunnerPricesTest;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import org.apache.commons.lang3.time.DateUtils;
@@ -230,7 +230,7 @@ public class BetActionDaoTest extends AbstractDaoTest {
     @Test
     public void testBetActionWithRunnerPrices() {
         var market = newMarket();
-        var runnerPrices = RunnerPrices.create(232, List.of(new Price(2.3d, 22, Side.BACK)), 5d, 2.5d);
+        var runnerPrices = RunnerPricesTest.create(232, List.of(new Price(2.3d, 22, Side.BACK)), 5d, 2.5d);
         var marketPrices = MarketPricesTest.create(1, market, List.of(runnerPrices), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);
@@ -246,7 +246,7 @@ public class BetActionDaoTest extends AbstractDaoTest {
     @Test
     public void testSharedPrices() {
         var market = newMarket();
-        var runnerPrices = RunnerPrices.create(232, List.of(new Price(2.3d, 22, Side.BACK)), 5d, 2.5d);
+        var runnerPrices = RunnerPricesTest.create(232, List.of(new Price(2.3d, 22, Side.BACK)), 5d, 2.5d);
         var marketPrices = MarketPricesTest.create(1, market, List.of(runnerPrices), new Date());
         marketPrices.setTime(DateUtils.addMonths(new Date(), -1));
         marketDao.saveOrUpdate(market);

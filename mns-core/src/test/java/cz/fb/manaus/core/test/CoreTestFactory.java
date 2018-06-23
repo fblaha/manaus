@@ -8,6 +8,7 @@ import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Competition;
 import cz.fb.manaus.core.model.Event;
+import cz.fb.manaus.core.model.EventTest;
 import cz.fb.manaus.core.model.EventType;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
@@ -15,6 +16,7 @@ import cz.fb.manaus.core.model.MarketPricesTest;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.Runner;
 import cz.fb.manaus.core.model.RunnerPrices;
+import cz.fb.manaus.core.model.RunnerPricesTest;
 import cz.fb.manaus.core.model.RunnerTest;
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
@@ -84,7 +86,7 @@ public class CoreTestFactory {
     }
 
     public static Event newEvent(Date curr) {
-        return Event.create("77", EVENT_NAME, curr, COUNTRY_CODE);
+        return EventTest.create("77", EVENT_NAME, curr, COUNTRY_CODE);
     }
 
     public static Market newMarket() {
@@ -92,7 +94,7 @@ public class CoreTestFactory {
     }
 
     public static RunnerPrices newBackRP(double currPrice, long selectionId, Double lastMatchedPrice) {
-        return RunnerPrices.create(selectionId, List.of(
+        return RunnerPricesTest.create(selectionId, List.of(
                 new Price(currPrice, 100d, Side.BACK),
                 new Price(1.4d, 100d, Side.BACK),
                 new Price(1.3d, 100d, Side.BACK)), 10d, lastMatchedPrice);
