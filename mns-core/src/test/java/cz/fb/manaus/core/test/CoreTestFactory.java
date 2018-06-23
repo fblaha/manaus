@@ -15,6 +15,7 @@ import cz.fb.manaus.core.model.MarketPricesTest;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.Runner;
 import cz.fb.manaus.core.model.RunnerPrices;
+import cz.fb.manaus.core.model.RunnerTest;
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.spring.ManausProfiles;
@@ -76,9 +77,9 @@ public class CoreTestFactory {
     }
 
     private static Collection<Runner> getRunners() {
-        var home = Runner.create(HOME, HOME_NAME, 0, 1);
-        var draw = Runner.create(DRAW, DRAW_NAME, 0, 2);
-        var away = Runner.create(AWAY, AWAY_NAME, 0, 3);
+        var home = RunnerTest.create(HOME, HOME_NAME, 0, 1);
+        var draw = RunnerTest.create(DRAW, DRAW_NAME, 0, 2);
+        var away = RunnerTest.create(AWAY, AWAY_NAME, 0, 3);
         return List.of(draw, home, away);
     }
 

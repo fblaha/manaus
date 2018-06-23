@@ -21,15 +21,6 @@ public class Runner {
     @Column(nullable = false)
     private int sortPriority;
 
-    public static Runner create(long selectionId, String name, double handicap, int sortPriority) {
-        var runner = new Runner();
-        runner.setSelectionId(selectionId);
-        runner.setName(name);
-        runner.setHandicap(handicap);
-        runner.setSortPriority(sortPriority);
-        return runner;
-    }
-
     public long getSelectionId() {
         return selectionId;
     }
