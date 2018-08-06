@@ -18,7 +18,9 @@ import java.util.logging.Logger;
 import static com.google.common.collect.Range.closedOpen;
 import static com.google.common.collect.Range.downTo;
 import static com.google.common.collect.Range.upTo;
-import static java.time.Duration.between;
+import static java.time.temporal.ChronoUnit.DAYS;
+import static java.time.temporal.ChronoUnit.HOURS;
+import static java.time.temporal.ChronoUnit.MINUTES;
 import static java.util.Objects.requireNonNull;
 
 public abstract class AbstractBeforeCategorizer implements SettledBetCategorizer {
@@ -43,7 +45,7 @@ public abstract class AbstractBeforeCategorizer implements SettledBetCategorizer
         if (date.after(market.getEvent().getOpenDate())) {
             log.log(Level.WARNING, "BEFORE_RESOLVER: ''{0}'' date ''{1}'' after market start  ''{2}''", new Object[]{category, date, market});
         }
-        var diffDay = between(date.toInstant(), market.getEvent().getOpenDate().toInstant()).toDays();
+        var diffDay = DAYS.between(date.toInstant(), market.getEvent().getOpenDate().toInstant());
         var result = new HashSet<String>();
         result.add(requireNonNull(getDayMap().get(diffDay)));
         if (diffDay == 0) {
@@ -53,7 +55,7 @@ public abstract class AbstractBeforeCategorizer implements SettledBetCategorizer
     }
 
     private void handleDay(Date date, Market market, Set<String> result) {
-        var diffHours = between(date.toInstant(), market.getEvent().getOpenDate().toInstant()).toHours();
+        var diffHours = HOURS.between(date.toInstant(), market.getEvent().getOpenDate().toInstant());
         result.add(requireNonNull(getHourMap().get(diffHours)));
         if (diffHours == 0) {
             handleMin(date, market, result);
@@ -62,7 +64,7 @@ public abstract class AbstractBeforeCategorizer implements SettledBetCategorizer
     }
 
     private void handleMin(Date date, Market market, Set<String> result) {
-        var diffMin = between(date.toInstant(), market.getEvent().getOpenDate().toInstant()).toMinutes();
+        var diffMin = MINUTES.between(date.toInstant(), market.getEvent().getOpenDate().toInstant());
         result.add(requireNonNull(getMinMap().get(diffMin)));
     }
 
