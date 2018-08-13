@@ -26,7 +26,7 @@ public class MatchbookValues {
 
     private double strategy(BetContext context) {
         var type = context.getMarketPrices().getMarket().getType();
-        return RATES.getOrDefault(type, 0.07);
+        return RATES.getOrDefault(type, 0.08);
     }
 
 }
