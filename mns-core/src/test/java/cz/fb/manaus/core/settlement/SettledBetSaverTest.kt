@@ -17,7 +17,6 @@ class SettledBetSaverTest : AbstractDaoTest() {
     private lateinit var saver: SettledBetSaver
 
     @Test
-    @Throws(Exception::class)
     fun testSaver() {
         createMarketWithSingleAction()
         assertEquals(SaveStatus.OK, saver.saveBet(AbstractDaoTest.BET_ID, createAction()))

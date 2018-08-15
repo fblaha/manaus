@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 
 class MarketFilterServiceTest : AbstractMarketDataAwareTestCase() {
     @Autowired
-    private val filterService: MarketFilterService? = null
+    private lateinit var filterService: MarketFilterService
 
     @Test
     fun testFilterService() {
@@ -16,7 +16,7 @@ class MarketFilterServiceTest : AbstractMarketDataAwareTestCase() {
     }
 
     fun checkFilterCount(expectedRange: Range<Int>, hasBets: Boolean) {
-        val cnt = markets.filter { it -> filterService!!.accept(it, hasBets, setOf()) }
+        val cnt = markets.filter { it -> filterService.accept(it, hasBets, setOf()) }
                 .count()
         assertTrue(expectedRange.contains(cnt))
     }
