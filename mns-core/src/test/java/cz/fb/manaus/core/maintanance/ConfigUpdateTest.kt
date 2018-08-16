@@ -9,7 +9,7 @@ import java.time.Duration
 class ConfigUpdateTest {
 
     @Test
-    fun testJson() {
+    fun `json marshalling`() {
         val configUpdate = ConfigUpdate.empty(Duration.ofHours(8))
         configUpdate.deletePrefixes.add("test_delete")
         configUpdate.setProperties["test_key"] = "test value"

@@ -10,7 +10,7 @@ class MarketFilterServiceTest : AbstractMarketDataAwareTestCase() {
     private lateinit var filterService: MarketFilterService
 
     @Test
-    fun testFilterService() {
+    fun `filtering`() {
         checkFilterCount(Range.closed(1000, 1500), false)
         checkFilterCount(Range.singleton(6700), true)
     }

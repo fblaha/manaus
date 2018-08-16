@@ -7,20 +7,24 @@ import cz.fb.manaus.core.test.CoreTestFactory
 import cz.fb.manaus.core.test.CoreTestFactory.newMarket
 import org.apache.commons.lang3.time.DateUtils
 import org.apache.commons.lang3.time.DateUtils.addHours
-import org.hamcrest.CoreMatchers.*
+import org.hamcrest.CoreMatchers.hasItem
 import org.hibernate.LazyInitializationException
-import org.junit.Assert.*
+import org.junit.Assert
+import org.junit.Assert.assertThat
 import org.junit.Test
 import java.util.*
 import java.util.Collections.singletonMap
 import java.util.Comparator.comparing
 import java.util.Optional.empty
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class BetActionDaoTest : AbstractDaoTest() {
 
     @Test
-    fun testBetIds() {
+    fun `get action IDs for given market`() {
         val market = newMarket()
         marketDao.saveOrUpdate(market)
         createAndSaveBetAction(market, Date(), singletonMap("k1", "XXX"), AbstractDaoTest.BET_ID)
@@ -29,29 +33,29 @@ class BetActionDaoTest : AbstractDaoTest() {
     }
 
     @Test
-    fun testUpdateBetId() {
+    fun `update bet id`() {
         val market = newMarket()
         marketDao.saveOrUpdate(market)
         createAndSaveBetAction(market, Date(), emptyMap(), AbstractDaoTest.BET_ID)
         val newId = AbstractDaoTest.BET_ID + "_1"
-        assertThat(betActionDao.updateBetId(AbstractDaoTest.BET_ID, newId), `is`(1))
-        assertThat(betActionDao.updateBetId(AbstractDaoTest.BET_ID, newId), `is`(0))
+        assertEquals(1, betActionDao.updateBetId(AbstractDaoTest.BET_ID, newId))
+        assertEquals(0, betActionDao.updateBetId(AbstractDaoTest.BET_ID, newId))
         assertTrue(betActionDao.getBetAction(newId).isPresent)
         assertFalse(betActionDao.getBetAction(AbstractDaoTest.BET_ID).isPresent)
     }
 
     @Test
-    fun testSetBetId() {
+    fun `set bet id`() {
         val market = newMarket()
         marketDao.saveOrUpdate(market)
         val action = createAndSaveBetAction(market, Date(), emptyMap(), null)
         val actionId = action.id
-        assertThat(betActionDao.setBetId(actionId!!, "111"), `is`(1))
-        assertThat(betActionDao.get(actionId).get().betId, `is`("111"))
+        assertEquals(1, betActionDao.setBetId(actionId!!, "111"))
+        assertEquals("111", betActionDao.get(actionId).get().betId)
     }
 
     @Test
-    fun testBetAction() {
+    fun `get criteria`() {
         val market = newMarket()
         marketDao.saveOrUpdate(market)
         createAndSaveBetAction(market, Date(), singletonMap("k1", "XXX"), AbstractDaoTest.BET_ID)
@@ -64,43 +68,43 @@ class BetActionDaoTest : AbstractDaoTest() {
         checkCount(market.id, OptionalLong.empty(), Optional.of(Side.BACK), 0)
     }
 
-    private fun checkCount(marketId: String, selId: OptionalLong, side: Optional<Side>, expectedCount: Long) {
-        assertThat(betActionDao.getBetActions(marketId, selId, side).size, `is`(expectedCount.toInt()))
-        assertThat(betActionDao.getBetActionIds(marketId, selId, side).size, `is`(expectedCount.toInt()))
+    private fun checkCount(marketId: String, selId: OptionalLong, side: Optional<Side>, expectedCount: Int) {
+        assertEquals(expectedCount, betActionDao.getBetActions(marketId, selId, side).size)
+        assertEquals(expectedCount, betActionDao.getBetActionIds(marketId, selId, side).size)
     }
 
     @Test
-    fun testBetActionProperties() {
+    fun `action properties`() {
         val market = newMarket("33", Date(), CoreTestFactory.MATCH_ODDS)
         marketDao.saveOrUpdate(market)
 
         createAndSaveBetAction(market, Date(), singletonMap("k1", "newer"), AbstractDaoTest.BET_ID)
         val action = betActionDao.getBetActions("33", OptionalLong.of(CoreTestFactory.DRAW), Optional.of(Side.LAY))[0]
         betActionDao.getBetActions(OptionalInt.empty())
-        assertThat(action.properties.size, `is`(1))
-        assertThat<String>(action.properties["k1"], `is`("newer"))
+        assertEquals(1, action.properties.size)
+        assertEquals("newer", action.properties["k1"])
     }
 
 
     @Test
-    fun testBetActionPropertiesOrder() {
+    fun `action properties order`() {
         val market = newMarket("33", Date(), CoreTestFactory.MATCH_ODDS)
         marketDao.saveOrUpdate(market)
         createAndSaveBetAction(market, Date(), singletonMap("k1", "newer"), AbstractDaoTest.BET_ID)
         createAndSaveBetAction(market, addHours(Date(), -1), singletonMap("k1", "older"), AbstractDaoTest.BET_ID + 1)
         var action = betActionDao.getBetActions("33", OptionalLong.of(CoreTestFactory.DRAW), Optional.of(Side.LAY))[0]
-        assertThat(action.properties.size, `is`(1))
-        assertThat<String>(action.properties["k1"], `is`("older"))
+        assertEquals(1, action.properties.size)
+        assertEquals("older", action.properties["k1"])
 
         action = betActionDao.getBetActions("33", OptionalLong.of(CoreTestFactory.DRAW), Optional.of(Side.LAY))[1]
-        assertThat(action.properties.size, `is`(1))
-        assertThat<String>(action.properties["k1"], `is`("newer"))
+        assertEquals(1, action.properties.size)
+        assertEquals("newer", action.properties["k1"])
         // delete with properties
         marketDao.delete(market.id)
     }
 
     @Test
-    fun testBetActionPropertiesDelete() {
+    fun `action with properties delete`() {
         val market = newMarket("33", Date(), CoreTestFactory.MATCH_ODDS)
         marketDao.saveOrUpdate(market)
         createAndSaveBetAction(market, addHours(Date(), -1), singletonMap("k1", "older"), AbstractDaoTest.BET_ID)
@@ -111,26 +115,26 @@ class BetActionDaoTest : AbstractDaoTest() {
     }
 
     @Test
-    fun testBetActionPropertiesDuplicity() {
+    fun `no duplicate actions with multiple properties in result set`() {
         val market = newMarket("33", Date(), CoreTestFactory.MATCH_ODDS)
         marketDao.saveOrUpdate(market)
         createAndSaveBetAction(market, Date(), of("k1", "v1", "k2", "v2"), AbstractDaoTest.BET_ID)
-        assertThat(betActionDao.getBetActions(OptionalInt.empty()).size, `is`(1))
-        assertThat(betActionDao.getBetActions("33", OptionalLong.of(CoreTestFactory.DRAW), Optional.of(Side.LAY)).size, `is`(1))
+        assertEquals(1, betActionDao.getBetActions(OptionalInt.empty()).size)
+        assertEquals(1, betActionDao.getBetActions("33", OptionalLong.of(CoreTestFactory.DRAW), Optional.of(Side.LAY)).size)
     }
 
     @Test
-    fun testMaxResults() {
+    fun `maximal results limit`() {
         val market = newMarket("33", Date(), CoreTestFactory.MATCH_ODDS)
         marketDao.saveOrUpdate(market)
         createAndSaveBetAction(market, Date(), of("k1", "v1", "k2", "v2"), AbstractDaoTest.BET_ID)
         createAndSaveBetAction(market, Date(), of("k1", "v1", "k2", "v2"), AbstractDaoTest.BET_ID + 1)
-        assertThat(betActionDao.getBetActions(OptionalInt.of(1)).size, `is`(1))
-        assertThat(betActionDao.getBetActions(OptionalInt.of(2)).size, `is`(2))
+        assertEquals(1, betActionDao.getBetActions(OptionalInt.of(1)).size)
+        assertEquals(2, betActionDao.getBetActions(OptionalInt.of(2)).size)
     }
 
     @Test
-    fun testBetActionByBetId() {
+    fun `get action by bet ID`() {
         createMarketWithSingleAction()
         assertTrue(betActionDao.getBetAction(AbstractDaoTest.BET_ID).isPresent)
         assertFalse(betActionDao.getBetAction(AbstractDaoTest.BET_ID + 1).isPresent)
@@ -138,60 +142,60 @@ class BetActionDaoTest : AbstractDaoTest() {
 
 
     @Test
-    fun testBetActionDateByBetId() {
+    fun `get action date by bet ID`() {
         createMarketWithSingleAction()
         assertTrue(betActionDao.getBetActionDate(AbstractDaoTest.BET_ID).isPresent)
         assertFalse(betActionDao.getBetActionDate(AbstractDaoTest.BET_ID + 1).isPresent)
     }
 
     @Test
-    fun testMarketPrices() {
+    fun `market prices field`() {
         createMarketWithSingleAction()
         val betAction = betActionDao.getBetAction(AbstractDaoTest.BET_ID).get()
         assertNotNull(betAction.marketPrices)
     }
 
     @Test(expected = LazyInitializationException::class)
-    fun testMarketPricesLazy() {
+    fun `lazy fetching market prices - negative`() {
         createMarketWithSingleAction()
         val betAction = betActionDao.getBetAction(AbstractDaoTest.BET_ID).get()
         betAction.marketPrices.getReciprocal(Side.BACK)
     }
 
     @Test
-    fun testMarketPricesLazyFetch() {
+    fun `lazy fetching market prices - positive`() {
         createMarketWithSingleAction()
         val action = betActionDao.getBetAction(AbstractDaoTest.BET_ID).get()
         betActionDao.fetchMarketPrices(action)
-        assertThat(action.marketPrices.time, notNullValue())
-        assertThat(action.marketPrices.getReciprocal(Side.BACK).asDouble, `is`(0.8333333333333333))
-        assertEquals(1.2, action.marketPrices.getOverround(Side.BACK).asDouble, 0.0001)
+        assertNotNull(action.marketPrices.time)
+        assertEquals(0.8333333333333333, action.marketPrices.getReciprocal(Side.BACK).asDouble)
+        Assert.assertEquals(1.2, action.marketPrices.getOverround(Side.BACK).asDouble, 0.0001)
     }
 
     @Test(expected = LazyInitializationException::class)
-    fun testMarketLazy() {
+    fun `lazy fetching market - negative`() {
         createMarketWithSingleAction()
         val action = betActionDao.getBetAction(AbstractDaoTest.BET_ID).get()
         action.marketPrices.market.name
     }
 
     @Test
-    fun testRunnerCount() {
+    fun `runner count`() {
         val market = newMarket("33", Date(), CoreTestFactory.MATCH_ODDS)
         marketDao.saveOrUpdate(market)
         createAndSaveBetAction(market, addHours(Date(), -1), AbstractDaoTest.PROPS, AbstractDaoTest.BET_ID)
         val stored = betActionDao.getBetAction(AbstractDaoTest.BET_ID).get()
-        assertThat(stored.market.runners.size, `is`(market.runners.size))
+        assertEquals(market.runners.size, stored.market.runners.size)
     }
 
     @Test
-    fun testBetActionSortAsc() {
-        saveActionsAndCheckOrder(comparing<BetAction, Date>({ it.getActionDate() }))
+    fun `no impact of save order - asc`() {
+        saveActionsAndCheckOrder(comparing<BetAction, Date> { it.actionDate })
     }
 
     @Test
-    fun testBetActionSortDesc() {
-        saveActionsAndCheckOrder(comparing<BetAction, Date>({ it.getActionDate() }).reversed())
+    fun `no impact of save order - desc`() {
+        saveActionsAndCheckOrder(comparing<BetAction, Date> { it.actionDate }.reversed())
     }
 
     private fun saveActionsAndCheckOrder(comparator: Comparator<BetAction>) {
@@ -204,13 +208,13 @@ class BetActionDaoTest : AbstractDaoTest() {
         val actions = listOf(later, earlier)
         Ordering.from(comparator).immutableSortedCopy<BetAction>(actions).forEach { betActionDao.saveOrUpdate(it) }
         val betActionsForMarket = betActionDao.getBetActions(market.id, OptionalLong.empty(), empty())
-        assertThat(betActionsForMarket.size, `is`(2))
-        assertThat(2.0, `is`(betActionsForMarket[0].price.price))
-        assertThat(3.0, `is`(betActionsForMarket[1].price.price))
+        assertEquals(2, betActionsForMarket.size)
+        assertEquals(2.0, betActionsForMarket[0].price.price)
+        assertEquals(3.0, betActionsForMarket[1].price.price)
     }
 
     @Test
-    fun testBetActionWithRunnerPrices() {
+    fun `no duplicates due to multiple runner prices`() {
         val market = newMarket()
         val runnerPrices = RunnerPricesTest.create(232, listOf(Price(2.3, 22.0, Side.BACK)), 5.0, 2.5)
         val marketPrices = MarketPricesTest.create(1, market, listOf(runnerPrices), Date())
@@ -222,11 +226,11 @@ class BetActionDaoTest : AbstractDaoTest() {
         betActionDao.saveOrUpdate(betAction)
 
         val actions = betActionDao.getBetActions(market.id, OptionalLong.empty(), empty())
-        assertThat(actions.size, `is`(1))
+        assertEquals(1, actions.size)
     }
 
     @Test
-    fun testSharedPrices() {
+    fun `market prices entity is shared by 2 actions`() {
         val market = newMarket()
         val runnerPrices = RunnerPricesTest.create(232, listOf(Price(2.3, 22.0, Side.BACK)), 5.0, 2.5)
         val marketPrices = MarketPricesTest.create(1, market, listOf(runnerPrices), Date())
@@ -245,7 +249,6 @@ class BetActionDaoTest : AbstractDaoTest() {
         betActionDao.fetchMarketPrices(betAction1)
         betActionDao.fetchMarketPrices(betAction2)
 
-        assertThat(betAction1.marketPrices.id, `is`(betAction2.marketPrices.id))
+        assertEquals(betAction1.marketPrices.id, betAction2.marketPrices.id)
     }
-
 }
