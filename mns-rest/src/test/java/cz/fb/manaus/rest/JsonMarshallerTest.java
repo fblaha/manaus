@@ -1,12 +1,12 @@
 package cz.fb.manaus.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cz.fb.manaus.core.model.BetActionFactory;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.ProfitRecord;
-import cz.fb.manaus.core.model.SettledBetFactory;
 import cz.fb.manaus.core.model.Side;
+import cz.fb.manaus.core.model.factory.BetActionFactory;
+import cz.fb.manaus.core.model.factory.SettledBetFactory;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;

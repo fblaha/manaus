@@ -1,4 +1,8 @@
-package cz.fb.manaus.core.model;
+package cz.fb.manaus.core.model.factory;
+
+import cz.fb.manaus.core.model.Market;
+import cz.fb.manaus.core.model.MarketPrices;
+import cz.fb.manaus.core.model.RunnerPrices;
 
 import java.util.Collection;
 import java.util.Date;

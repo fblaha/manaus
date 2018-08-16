@@ -1,13 +1,13 @@
 package cz.fb.manaus.reactor.betting.validator.common.update;
 
 import cz.fb.manaus.core.dao.AbstractDaoTest;
-import cz.fb.manaus.core.model.BetActionFactory;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Market;
-import cz.fb.manaus.core.model.MarketPricesFactory;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.Side;
+import cz.fb.manaus.core.model.factory.BetActionFactory;
+import cz.fb.manaus.core.model.factory.MarketPricesFactory;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import cz.fb.manaus.reactor.ReactorTestFactory;
 import cz.fb.manaus.reactor.betting.validator.ValidationResult;

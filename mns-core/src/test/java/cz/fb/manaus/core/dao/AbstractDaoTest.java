@@ -1,16 +1,16 @@
 package cz.fb.manaus.core.dao;
 
 import cz.fb.manaus.core.model.BetAction;
-import cz.fb.manaus.core.model.BetActionFactory;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
-import cz.fb.manaus.core.model.MarketPricesFactory;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.SettledBet;
-import cz.fb.manaus.core.model.SettledBetFactory;
 import cz.fb.manaus.core.model.Side;
+import cz.fb.manaus.core.model.factory.BetActionFactory;
+import cz.fb.manaus.core.model.factory.MarketPricesFactory;
+import cz.fb.manaus.core.model.factory.SettledBetFactory;
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import org.apache.commons.lang3.time.DateUtils;

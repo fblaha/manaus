@@ -1,6 +1,7 @@
 package cz.fb.manaus.core.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import cz.fb.manaus.core.model.factory.RunnerFactory
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert.assertThat
 import org.junit.Test

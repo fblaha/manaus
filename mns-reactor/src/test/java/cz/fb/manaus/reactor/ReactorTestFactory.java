@@ -1,15 +1,15 @@
 package cz.fb.manaus.reactor;
 
 import cz.fb.manaus.core.model.Bet;
-import cz.fb.manaus.core.model.EventTest;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
-import cz.fb.manaus.core.model.MarketPricesFactory;
 import cz.fb.manaus.core.model.MarketSnapshot;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.RunnerPrices;
-import cz.fb.manaus.core.model.RunnerPricesFactory;
 import cz.fb.manaus.core.model.Side;
+import cz.fb.manaus.core.model.factory.EventFactory;
+import cz.fb.manaus.core.model.factory.MarketPricesFactory;
+import cz.fb.manaus.core.model.factory.RunnerPricesFactory;
 import cz.fb.manaus.core.provider.ExchangeProvider;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import cz.fb.manaus.reactor.betting.BetContext;
@@ -148,7 +148,7 @@ public class ReactorTestFactory {
     }
 
     private Market createMarket() {
-        var event = EventTest.create("1", "Vischya Liga", addHours(new Date(), 2), CoreTestFactory.COUNTRY_CODE);
+        var event = EventFactory.create("1", "Vischya Liga", addHours(new Date(), 2), CoreTestFactory.COUNTRY_CODE);
         event.setId("1");
         var market = CoreTestFactory.newMarket();
         market.setEvent(event);

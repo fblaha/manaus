@@ -2,10 +2,10 @@ package cz.fb.manaus.reactor.price;
 
 import com.google.common.primitives.Doubles;
 import cz.fb.manaus.core.model.MarketPrices;
-import cz.fb.manaus.core.model.MarketPricesFactory;
 import cz.fb.manaus.core.model.Price;
-import cz.fb.manaus.core.model.RunnerPricesFactory;
 import cz.fb.manaus.core.model.Side;
+import cz.fb.manaus.core.model.factory.MarketPricesFactory;
+import cz.fb.manaus.core.model.factory.RunnerPricesFactory;
 import cz.fb.manaus.core.provider.ExchangeProvider;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import cz.fb.manaus.core.test.CoreTestFactory;

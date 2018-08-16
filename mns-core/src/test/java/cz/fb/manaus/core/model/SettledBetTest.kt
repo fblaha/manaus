@@ -1,11 +1,11 @@
 package cz.fb.manaus.core.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import cz.fb.manaus.core.model.factory.SettledBetFactory
 import cz.fb.manaus.core.test.CoreTestFactory
-import org.hamcrest.CoreMatchers.`is`
-import org.junit.Assert.assertThat
 import org.junit.Test
 import java.util.*
+import kotlin.test.assertEquals
 
 class SettledBetTest {
 
@@ -16,8 +16,7 @@ class SettledBetTest {
 
         val serialized = ObjectMapper().writer().writeValueAsString(original)
         val restored = ObjectMapper().readerFor(SettledBet::class.java).readValue<SettledBet>(serialized)
-        assertThat(restored.price, `is`(original.price))
-        assertThat(restored.settled, `is`(original.settled))
+        assertEquals(original.price, restored.price)
+        assertEquals(original.settled, restored.settled)
     }
-
 }

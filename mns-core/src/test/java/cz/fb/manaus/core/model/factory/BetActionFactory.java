@@ -1,4 +1,9 @@
-package cz.fb.manaus.core.model;
+package cz.fb.manaus.core.model.factory;
+
+import cz.fb.manaus.core.model.BetAction;
+import cz.fb.manaus.core.model.BetActionType;
+import cz.fb.manaus.core.model.Market;
+import cz.fb.manaus.core.model.Price;
 
 import java.util.Date;
 

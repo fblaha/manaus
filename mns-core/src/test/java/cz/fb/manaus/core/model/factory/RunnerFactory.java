@@ -1,4 +1,6 @@
-package cz.fb.manaus.core.model;
+package cz.fb.manaus.core.model.factory;
+
+import cz.fb.manaus.core.model.Runner;
 
 public class RunnerFactory {
     public static Runner create(long selectionId, String name, double handicap, int sortPriority) {

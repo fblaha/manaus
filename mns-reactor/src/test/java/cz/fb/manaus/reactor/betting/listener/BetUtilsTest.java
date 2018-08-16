@@ -2,13 +2,13 @@ package cz.fb.manaus.reactor.betting.listener;
 
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
-import cz.fb.manaus.core.model.BetActionFactory;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.SettledBet;
-import cz.fb.manaus.core.model.SettledBetFactory;
 import cz.fb.manaus.core.model.Side;
+import cz.fb.manaus.core.model.factory.BetActionFactory;
+import cz.fb.manaus.core.model.factory.SettledBetFactory;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import cz.fb.manaus.reactor.betting.action.BetUtils;

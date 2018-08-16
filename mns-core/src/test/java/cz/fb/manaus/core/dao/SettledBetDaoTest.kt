@@ -1,8 +1,8 @@
 package cz.fb.manaus.core.dao
 
 import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.core.model.SettledBetFactory
 import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.factory.SettledBetFactory
 import cz.fb.manaus.core.test.CoreTestFactory
 import cz.fb.manaus.core.test.CoreTestFactory.DRAW_NAME
 import cz.fb.manaus.core.test.CoreTestFactory.newMarket
