@@ -3,7 +3,7 @@ package cz.fb.manaus.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.net.HttpHeaders;
 import cz.fb.manaus.core.model.BetAction;
-import cz.fb.manaus.core.model.BetActionTest;
+import cz.fb.manaus.core.model.BetActionFactory;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.SettledBet;
@@ -68,7 +68,7 @@ public class BetActionControllerTest extends AbstractControllerTest {
     }
 
     private BetAction createBetAction() {
-        var betAction = BetActionTest.create(BetActionType.UPDATE, new Date(),
+        var betAction = BetActionFactory.create(BetActionType.UPDATE, new Date(),
                 new Price(2d, 3d, Side.LAY), null, CoreTestFactory.DRAW);
         betAction.setProperties(Collections.singletonMap("key", "val"));
         betAction.setBetId("150");

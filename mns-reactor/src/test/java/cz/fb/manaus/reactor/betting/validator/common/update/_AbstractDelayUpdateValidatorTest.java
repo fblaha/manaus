@@ -1,10 +1,10 @@
 package cz.fb.manaus.reactor.betting.validator.common.update;
 
 import cz.fb.manaus.core.dao.AbstractDaoTest;
-import cz.fb.manaus.core.model.BetActionTest;
+import cz.fb.manaus.core.model.BetActionFactory;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Market;
-import cz.fb.manaus.core.model.MarketPricesTest;
+import cz.fb.manaus.core.model.MarketPricesFactory;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.Side;
@@ -39,13 +39,13 @@ public class _AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
     private void checkValidation(BetActionType actionType, int beforeMinutes, Side lay, ValidationResult validationResult) {
         var market = newMarket();
         marketDao.saveOrUpdate(market);
-        var place = BetActionTest.create(actionType, DateUtils.addMinutes(new Date(), -beforeMinutes), new Price(2d, 30d, lay), market, CoreTestFactory.HOME);
+        var place = BetActionFactory.create(actionType, DateUtils.addMinutes(new Date(), -beforeMinutes), new Price(2d, 30d, lay), market, CoreTestFactory.HOME);
         place.setBetId(ReactorTestFactory.BET_ID);
         betActionDao.saveOrUpdate(place);
         var runnerPrices = new RunnerPrices();
         runnerPrices.setSelectionId(CoreTestFactory.HOME);
 
-        var marketPrices = MarketPricesTest.create(1, market, List.of(runnerPrices), new Date());
+        var marketPrices = MarketPricesFactory.create(1, market, List.of(runnerPrices), new Date());
         var result = validator.validate(factory.newUpdateBetContext(marketPrices, runnerPrices, lay));
         Assert.assertThat(result, is(validationResult));
     }
@@ -54,7 +54,7 @@ public class _AbstractDelayUpdateValidatorTest extends AbstractDaoTest {
     public void testNoBetAction() {
         var market = newMarket();
         marketDao.saveOrUpdate(market);
-        var marketPrices = MarketPricesTest.create(1, market, List.of(), new Date());
+        var marketPrices = MarketPricesFactory.create(1, market, List.of(), new Date());
         var runnerPrices = new RunnerPrices();
         runnerPrices.setSelectionId(CoreTestFactory.DRAW);
         var result = validator.validate(factory.newUpdateBetContext(marketPrices, runnerPrices, Side.LAY));

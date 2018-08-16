@@ -2,9 +2,9 @@ package cz.fb.manaus.reactor.price;
 
 import com.google.common.primitives.Doubles;
 import cz.fb.manaus.core.model.MarketPrices;
-import cz.fb.manaus.core.model.MarketPricesTest;
+import cz.fb.manaus.core.model.MarketPricesFactory;
 import cz.fb.manaus.core.model.Price;
-import cz.fb.manaus.core.model.RunnerPricesTest;
+import cz.fb.manaus.core.model.RunnerPricesFactory;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.provider.ExchangeProvider;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
@@ -73,7 +73,7 @@ public class PriceServiceTest extends AbstractLocalTestCase {
 
     @Test
     public void testFairPrice() {
-        var marketPrices = MarketPricesTest.create(1, null, List.of(factory.newRP(1, 4.2, 6), factory.newRP(2, 2.87, 4), factory.newRP(1, 1.8, 3)), new Date());
+        var marketPrices = MarketPricesFactory.create(1, null, List.of(factory.newRP(1, 4.2, 6), factory.newRP(2, 2.87, 4), factory.newRP(1, 1.8, 3)), new Date());
         var layFairness = getFairness(Side.LAY, marketPrices);
         assertEquals(1.5d, layFairness, 0.1d);
         var backFairness = getFairness(Side.BACK, marketPrices);
@@ -143,7 +143,7 @@ public class PriceServiceTest extends AbstractLocalTestCase {
     }
 
     private void checkFairPrices(int winnerCount, double... unfairPrices) {
-        var marketPrices = MarketPricesTest.create(winnerCount, null, factory.createRP(Doubles.asList(unfairPrices)), new Date());
+        var marketPrices = MarketPricesFactory.create(winnerCount, null, factory.createRP(Doubles.asList(unfairPrices)), new Date());
         var overround = marketPrices.getOverround(Side.BACK);
         var reciprocal = marketPrices.getReciprocal(Side.BACK).getAsDouble();
         var fairness = getFairness(Side.BACK, marketPrices);
@@ -168,8 +168,8 @@ public class PriceServiceTest extends AbstractLocalTestCase {
                 })
                 .boxed().collect(Collectors.toList());
 
-        var overFairnessBased = MarketPricesTest.create(winnerCount, null, factory.createRP(fairnessPrices), new Date()).getOverround(Side.BACK);
-        var overOverroundBased = MarketPricesTest.create(winnerCount, null, factory.createRP(overroundPrices), new Date()).getOverround(Side.BACK);
+        var overFairnessBased = MarketPricesFactory.create(winnerCount, null, factory.createRP(fairnessPrices), new Date()).getOverround(Side.BACK);
+        var overOverroundBased = MarketPricesFactory.create(winnerCount, null, factory.createRP(overroundPrices), new Date()).getOverround(Side.BACK);
 
         assertEquals((double) winnerCount, overFairnessBased.getAsDouble(), 0.001);
         assertEquals((double) winnerCount, overOverroundBased.getAsDouble(), 0.001);
@@ -188,9 +188,9 @@ public class PriceServiceTest extends AbstractLocalTestCase {
     public void testFairnessHighProbability() {
         var lowPrice = 1.04d;
         var highPrice = 15d;
-        var home = RunnerPricesTest.create(CoreTestFactory.HOME, List.of(new Price(lowPrice, 10d, Side.BACK)), 50d, lowPrice);
-        var away = RunnerPricesTest.create(CoreTestFactory.AWAY, List.of(new Price(highPrice, 10d, Side.BACK)), 50d, highPrice);
-        var marketPrices = MarketPricesTest.create(1, null, List.of(home, away), new Date());
+        var home = RunnerPricesFactory.create(CoreTestFactory.HOME, List.of(new Price(lowPrice, 10d, Side.BACK)), 50d, lowPrice);
+        var away = RunnerPricesFactory.create(CoreTestFactory.AWAY, List.of(new Price(highPrice, 10d, Side.BACK)), 50d, highPrice);
+        var marketPrices = MarketPricesFactory.create(1, null, List.of(home, away), new Date());
         var fairness = getFairness(Side.BACK, marketPrices);
         var lowFairPrice = priceService.getFairnessFairPrice(lowPrice, fairness);
         var highFairPrice = priceService.getFairnessFairPrice(highPrice, fairness);

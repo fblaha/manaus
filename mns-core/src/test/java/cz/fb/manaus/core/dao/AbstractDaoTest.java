@@ -1,15 +1,15 @@
 package cz.fb.manaus.core.dao;
 
 import cz.fb.manaus.core.model.BetAction;
-import cz.fb.manaus.core.model.BetActionTest;
+import cz.fb.manaus.core.model.BetActionFactory;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
-import cz.fb.manaus.core.model.MarketPricesTest;
+import cz.fb.manaus.core.model.MarketPricesFactory;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.SettledBet;
-import cz.fb.manaus.core.model.SettledBetTest;
+import cz.fb.manaus.core.model.SettledBetFactory;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase;
 import cz.fb.manaus.core.test.CoreTestFactory;
@@ -53,7 +53,7 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
     }
 
     protected BetAction createAndSaveBetAction(Market market, Date date, Map<String, String> values, String betId) {
-        var betAction = BetActionTest.create(BetActionType.PLACE, date, new Price(2d, 3d, Side.LAY), market, CoreTestFactory.DRAW);
+        var betAction = BetActionFactory.create(BetActionType.PLACE, date, new Price(2d, 3d, Side.LAY), market, CoreTestFactory.DRAW);
         var marketPrices = CoreTestFactory.newMarketPrices(market);
         marketPricesDao.saveOrUpdate(marketPrices);
         betAction.setMarketPrices(marketPrices);
@@ -76,7 +76,7 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
         marketDao.saveOrUpdate(market);
         var actionDate = Date.from(Instant.now().minus(1, ChronoUnit.HOURS));
         var action = createAndSaveBetAction(market, actionDate, PROPS, BET_ID);
-        var bet = SettledBetTest.create(action.getSelectionId(), "x", 5, now, action.getPrice());
+        var bet = SettledBetFactory.create(action.getSelectionId(), "x", 5, now, action.getPrice());
         bet.setBetAction(action);
         settledBetDao.saveOrUpdate(bet);
         return bet;
@@ -85,12 +85,12 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
     protected void createBet() {
         var current = new Date();
         var market = newMarket();
-        var prices = MarketPricesTest.create(1, market, createRPs(2.1d, 2.2d), new Date());
+        var prices = MarketPricesFactory.create(1, market, createRPs(2.1d, 2.2d), new Date());
         prices.setTime(DateUtils.addHours(current, -1));
         marketDao.saveOrUpdate(market);
         marketPricesDao.saveOrUpdate(prices);
         betActionDao.saveOrUpdate(createAction(market, prices, "1"));
-        var prices2 = MarketPricesTest.create(1, market, createRPs(2.3d, 2.5d), new Date());
+        var prices2 = MarketPricesFactory.create(1, market, createRPs(2.3d, 2.5d), new Date());
         prices2.setTime(current);
         marketPricesDao.saveOrUpdate(prices2);
         betActionDao.saveOrUpdate(createAction(market, prices2, "2"));
@@ -98,7 +98,7 @@ abstract public class AbstractDaoTest extends AbstractDatabaseTestCase {
     }
 
     private BetAction createAction(Market market, MarketPrices prices, String betId) {
-        var place = BetActionTest.create(BetActionType.PLACE, new Date(), new Price(2.2d, 2.1d, Side.LAY),
+        var place = BetActionFactory.create(BetActionType.PLACE, new Date(), new Price(2.2d, 2.1d, Side.LAY),
                 market, CoreTestFactory.HOME);
         place.setBetId(betId);
         place.setMarketPrices(prices);

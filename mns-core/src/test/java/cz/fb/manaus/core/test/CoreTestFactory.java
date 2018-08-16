@@ -5,7 +5,7 @@ import cz.fb.manaus.core.dao.MarketDao;
 import cz.fb.manaus.core.dao.MarketPricesDao;
 import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
-import cz.fb.manaus.core.model.BetActionTest;
+import cz.fb.manaus.core.model.BetActionFactory;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Competition;
 import cz.fb.manaus.core.model.Event;
@@ -13,14 +13,14 @@ import cz.fb.manaus.core.model.EventTest;
 import cz.fb.manaus.core.model.EventType;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
-import cz.fb.manaus.core.model.MarketPricesTest;
+import cz.fb.manaus.core.model.MarketPricesFactory;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.Runner;
+import cz.fb.manaus.core.model.RunnerFactory;
 import cz.fb.manaus.core.model.RunnerPrices;
-import cz.fb.manaus.core.model.RunnerPricesTest;
-import cz.fb.manaus.core.model.RunnerTest;
+import cz.fb.manaus.core.model.RunnerPricesFactory;
 import cz.fb.manaus.core.model.SettledBet;
-import cz.fb.manaus.core.model.SettledBetTest;
+import cz.fb.manaus.core.model.SettledBetFactory;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.spring.ManausProfiles;
 import org.apache.commons.lang3.time.DateUtils;
@@ -74,16 +74,16 @@ public class CoreTestFactory {
     }
 
     public static BetAction newBetAction(String betId, Market market) {
-        var betAction = BetActionTest.create(BetActionType.PLACE, DateUtils.addHours(new Date(), -5), new Price(2d, 2d, Side.LAY), market, 11);
+        var betAction = BetActionFactory.create(BetActionType.PLACE, DateUtils.addHours(new Date(), -5), new Price(2d, 2d, Side.LAY), market, 11);
         betAction.setProperties(new HashMap<>());
         betAction.setBetId(betId);
         return betAction;
     }
 
     private static Collection<Runner> getRunners() {
-        var home = RunnerTest.create(HOME, HOME_NAME, 0, 1);
-        var draw = RunnerTest.create(DRAW, DRAW_NAME, 0, 2);
-        var away = RunnerTest.create(AWAY, AWAY_NAME, 0, 3);
+        var home = RunnerFactory.create(HOME, HOME_NAME, 0, 1);
+        var draw = RunnerFactory.create(DRAW, DRAW_NAME, 0, 2);
+        var away = RunnerFactory.create(AWAY, AWAY_NAME, 0, 3);
         return List.of(draw, home, away);
     }
 
@@ -96,7 +96,7 @@ public class CoreTestFactory {
     }
 
     public static RunnerPrices newBackRP(double currPrice, long selectionId, Double lastMatchedPrice) {
-        return RunnerPricesTest.create(selectionId, List.of(
+        return RunnerPricesFactory.create(selectionId, List.of(
                 new Price(currPrice, 100d, Side.BACK),
                 new Price(1.4d, 100d, Side.BACK),
                 new Price(1.3d, 100d, Side.BACK)), 10d, lastMatchedPrice);
@@ -108,18 +108,18 @@ public class CoreTestFactory {
                 newBackRP(bestBackPrice, 1, 2.5d),
                 newBackRP(bestBackPrice, 2, 2.5d),
                 newBackRP(bestBackPrice, 3, 2.5d));
-        return MarketPricesTest.create(winnerCount, market, runnerPrices, new Date());
+        return MarketPricesFactory.create(winnerCount, market, runnerPrices, new Date());
     }
 
     public static MarketPrices newMarketPrices(Market market) {
         var home = newBackRP(2.5d, HOME, 3d);
         var draw = newBackRP(2.5d, DRAW, 3d);
         var away = newBackRP(2.5d, AWAY, 3d);
-        return MarketPricesTest.create(1, market, List.of(home, draw, away), new Date());
+        return MarketPricesFactory.create(1, market, List.of(home, draw, away), new Date());
     }
 
     public static SettledBet newSettledBet(double price, Side side) {
-        var bet = SettledBetTest.create(CoreTestFactory.HOME, "Home", 2d, new Date(), new Price(price, 2d, side));
+        var bet = SettledBetFactory.create(CoreTestFactory.HOME, "Home", 2d, new Date(), new Price(price, 2d, side));
         var market = newMarket();
         var action = newBetAction("1", market);
         action.setMarketPrices(CoreTestFactory.newMarketPrices(market));
@@ -128,7 +128,7 @@ public class CoreTestFactory {
     }
 
     public BetAction savePlaceAction(Bet unmatched, Market market) {
-        var betAction = BetActionTest.create(BetActionType.PLACE, unmatched.getPlacedDate(),
+        var betAction = BetActionFactory.create(BetActionType.PLACE, unmatched.getPlacedDate(),
                 unmatched.getRequestedPrice(), market, unmatched.getSelectionId());
         betAction.setBetId(unmatched.getBetId());
         betActionDao.saveOrUpdate(betAction);

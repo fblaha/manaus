@@ -201,9 +201,9 @@ class BetActionDaoTest : AbstractDaoTest() {
     private fun saveActionsAndCheckOrder(comparator: Comparator<BetAction>) {
         val market = newMarket("33", Date(), CoreTestFactory.MATCH_ODDS)
         marketDao.saveOrUpdate(market)
-        val earlier = BetActionTest.create(BetActionType.PLACE, DateUtils.addDays(Date(), -1), Price(2.0, 30.0, Side.LAY), market, CoreTestFactory.DRAW)
+        val earlier = BetActionFactory.create(BetActionType.PLACE, DateUtils.addDays(Date(), -1), Price(2.0, 30.0, Side.LAY), market, CoreTestFactory.DRAW)
         earlier.betId = AbstractDaoTest.BET_ID
-        val later = BetActionTest.create(BetActionType.PLACE, Date(), Price(3.0, 33.0, Side.LAY), market, CoreTestFactory.DRAW)
+        val later = BetActionFactory.create(BetActionType.PLACE, Date(), Price(3.0, 33.0, Side.LAY), market, CoreTestFactory.DRAW)
         later.betId = AbstractDaoTest.BET_ID + 1
         val actions = listOf(later, earlier)
         Ordering.from(comparator).immutableSortedCopy<BetAction>(actions).forEach { betActionDao.saveOrUpdate(it) }
@@ -216,8 +216,8 @@ class BetActionDaoTest : AbstractDaoTest() {
     @Test
     fun `no duplicates due to multiple runner prices`() {
         val market = newMarket()
-        val runnerPrices = RunnerPricesTest.create(232, listOf(Price(2.3, 22.0, Side.BACK)), 5.0, 2.5)
-        val marketPrices = MarketPricesTest.create(1, market, listOf(runnerPrices), Date())
+        val runnerPrices = RunnerPricesFactory.create(232, listOf(Price(2.3, 22.0, Side.BACK)), 5.0, 2.5)
+        val marketPrices = MarketPricesFactory.create(1, market, listOf(runnerPrices), Date())
         marketPrices.time = DateUtils.addMonths(Date(), -1)
         marketDao.saveOrUpdate(market)
         marketPricesDao.saveOrUpdate(marketPrices)
@@ -232,8 +232,8 @@ class BetActionDaoTest : AbstractDaoTest() {
     @Test
     fun `market prices entity is shared by 2 actions`() {
         val market = newMarket()
-        val runnerPrices = RunnerPricesTest.create(232, listOf(Price(2.3, 22.0, Side.BACK)), 5.0, 2.5)
-        val marketPrices = MarketPricesTest.create(1, market, listOf(runnerPrices), Date())
+        val runnerPrices = RunnerPricesFactory.create(232, listOf(Price(2.3, 22.0, Side.BACK)), 5.0, 2.5)
+        val marketPrices = MarketPricesFactory.create(1, market, listOf(runnerPrices), Date())
         marketPrices.time = DateUtils.addMonths(Date(), -1)
         marketDao.saveOrUpdate(market)
         marketPricesDao.saveOrUpdate(marketPrices)

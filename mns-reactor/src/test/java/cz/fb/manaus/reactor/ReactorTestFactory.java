@@ -4,11 +4,11 @@ import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.EventTest;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
-import cz.fb.manaus.core.model.MarketPricesTest;
+import cz.fb.manaus.core.model.MarketPricesFactory;
 import cz.fb.manaus.core.model.MarketSnapshot;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.RunnerPrices;
-import cz.fb.manaus.core.model.RunnerPricesTest;
+import cz.fb.manaus.core.model.RunnerPricesFactory;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.provider.ExchangeProvider;
 import cz.fb.manaus.core.test.CoreTestFactory;
@@ -113,7 +113,7 @@ public class ReactorTestFactory {
         }
         var backBestPrice = new Price(bestBack, 100d, Side.BACK);
         var layBestPrice = new Price(bestLay, 100d, Side.LAY);
-        return RunnerPricesTest.create(selectionId, List.of(
+        return RunnerPricesFactory.create(selectionId, List.of(
                 backBestPrice,
                 layBestPrice,
                 roundingService.decrement(backBestPrice, 1).get(),
@@ -128,7 +128,7 @@ public class ReactorTestFactory {
         var home = newRP(CoreTestFactory.HOME, betBack, bestLay, lastMatched);
         var draw = newRP(CoreTestFactory.DRAW, betBack, bestLay, lastMatched);
         var away = newRP(CoreTestFactory.AWAY, betBack, bestLay, lastMatched);
-        return MarketPricesTest.create(winnerCount, market, List.of(home, draw, away), new Date());
+        return MarketPricesFactory.create(winnerCount, market, List.of(home, draw, away), new Date());
     }
 
     public MarketPrices createMarket(double downgradeFraction, List<Double> probabilities) {
@@ -144,7 +144,7 @@ public class ReactorTestFactory {
             var lastMatched = roundingService.roundBet(fairPrice).getAsDouble();
             runnerPrices.add(newRP(selectionId, backRounded, layRounded, OptionalDouble.of(lastMatched)));
         }
-        return MarketPricesTest.create(1, market, runnerPrices, new Date());
+        return MarketPricesFactory.create(1, market, runnerPrices, new Date());
     }
 
     private Market createMarket() {

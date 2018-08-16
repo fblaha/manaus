@@ -4,7 +4,7 @@ import cz.fb.manaus.core.model.EventType;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.SettledBet;
-import cz.fb.manaus.core.model.SettledBetTest;
+import cz.fb.manaus.core.model.SettledBetFactory;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import cz.fb.manaus.core.test.CoreTestFactory;
@@ -50,9 +50,9 @@ public abstract class AbstractProfitTest extends AbstractLocalTestCase {
 
     private void addSideBets(List<SettledBet> result, double price, Side side, Optional<Side> requestedSide) {
         if (requestedSide.orElse(side) == side) {
-            result.add(SettledBetTest.create(CoreTestFactory.DRAW, "The Draw", 5d, marketDate,
+            result.add(SettledBetFactory.create(CoreTestFactory.DRAW, "The Draw", 5d, marketDate,
                     new Price(price, 4d, side)));
-            result.add(SettledBetTest.create(CoreTestFactory.HOME, "Home", 5d, marketDate,
+            result.add(SettledBetFactory.create(CoreTestFactory.HOME, "Home", 5d, marketDate,
                     new Price(price, 4d, side)));
         }
     }
