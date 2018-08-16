@@ -2,69 +2,65 @@ package cz.fb.manaus.core.dao
 
 import cz.fb.manaus.core.model.EventTest
 import cz.fb.manaus.core.test.CoreTestFactory
-import cz.fb.manaus.core.test.CoreTestFactory.newMarket
+import cz.fb.manaus.core.test.CoreTestFactory.*
 import org.apache.commons.lang3.time.DateUtils
 import org.apache.commons.lang3.time.DateUtils.addHours
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.nullValue
-import org.junit.Assert.assertThat
 import org.junit.Test
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.Date.from
 import java.util.Optional.of
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class MarketDaoTest : AbstractDaoTest() {
 
     @Test
-    fun testMarketGet() {
+    fun `get criteria`() {
         val curr = Date()
         marketDao.saveOrUpdate(newMarket(CoreTestFactory.MARKET_ID, curr, CoreTestFactory.MATCH_ODDS))
-        assertThat(marketDao.getMarkets(Optional.empty(), Optional.empty(), OptionalInt.empty()).size, `is`(1))
-        assertThat(marketDao.getMarkets(of(addHours(curr, -1)), Optional.empty(), OptionalInt.empty()).size, `is`(1))
-        assertThat(marketDao.getMarkets(of(addHours(curr, -1)), of(addHours(curr, 1)), OptionalInt.empty()).size, `is`(1))
-        assertThat(marketDao.getMarkets(of(curr), of(curr), OptionalInt.empty()).size, `is`(1))
-        assertThat(marketDao.getMarkets(of(addHours(curr, 1)), Optional.empty(), OptionalInt.empty()).size, `is`(0))
+        assertEquals(1, marketDao.getMarkets(Optional.empty(), Optional.empty(), OptionalInt.empty()).size)
+        assertEquals(1, marketDao.getMarkets(of(addHours(curr, -1)), Optional.empty(), OptionalInt.empty()).size)
+        assertEquals(1, marketDao.getMarkets(of(addHours(curr, -1)), of(addHours(curr, 1)), OptionalInt.empty()).size)
+        assertEquals(1, marketDao.getMarkets(of(curr), of(curr), OptionalInt.empty()).size)
+        assertEquals(0, marketDao.getMarkets(of(addHours(curr, 1)), Optional.empty(), OptionalInt.empty()).size)
 
-        assertThat(marketDao.getMarkets(Optional.empty(), of(addHours(curr, 1)), OptionalInt.empty()).size, `is`(1))
-        assertThat(marketDao.getMarkets(Optional.empty(), of(curr), OptionalInt.empty()).size, `is`(1))
-        assertThat(marketDao.getMarkets(Optional.empty(), of(addHours(curr, -1)), OptionalInt.empty()).size, `is`(0))
+        assertEquals(1, marketDao.getMarkets(Optional.empty(), of(addHours(curr, 1)), OptionalInt.empty()).size)
+        assertEquals(1, marketDao.getMarkets(Optional.empty(), of(curr), OptionalInt.empty()).size)
+        assertEquals(0, marketDao.getMarkets(Optional.empty(), of(addHours(curr, -1)), OptionalInt.empty()).size)
     }
 
     @Test
-    fun testMarketOrder() {
+    fun `get market order`() {
         val date = DateUtils.truncate(Date(), Calendar.MONTH)
         marketDao.saveOrUpdate(newMarket("33", addHours(date, 2), CoreTestFactory.MATCH_ODDS))
         marketDao.saveOrUpdate(newMarket("22", addHours(date, 2), CoreTestFactory.MATCH_ODDS))
         marketDao.saveOrUpdate(newMarket("44", addHours(date, 1), CoreTestFactory.MATCH_ODDS))
         val markets = marketDao.getMarkets(Optional.empty(), Optional.empty(), OptionalInt.empty())
-        assertThat(markets[0].id, `is`("44"))
-        assertThat(markets[1].id, `is`("22"))
-        assertThat(markets[2].id, `is`("33"))
+        assertEquals("44", markets[0].id)
+        assertEquals("22", markets[1].id)
+        assertEquals("33", markets[2].id)
     }
 
     @Test
-    fun testMarketSave() {
+    fun `market save`() {
         marketDao.saveOrUpdate(newMarket())
     }
 
     @Test
-    fun testRunner() {
+    fun `runner saved`() {
         marketDao.saveOrUpdate(newMarket())
         val market = marketDao.get(CoreTestFactory.MARKET_ID).get()
-        assertThat(market.runners.size, `is`(3))
+        assertEquals(3, market.runners.size)
 
-        assertThat(market.runners.stream().findFirst().get().name,
-                `is`(CoreTestFactory.HOME_NAME))
-        assertThat(market.runners.stream().skip(1).findFirst().get().name,
-                `is`(CoreTestFactory.DRAW_NAME))
-        assertThat(market.runners.stream().skip(2).findFirst().get().name,
-                `is`(CoreTestFactory.AWAY_NAME))
+        assertEquals(HOME_NAME, market.runners.stream().findFirst().get().name)
+        assertEquals(DRAW_NAME, market.runners.stream().skip(1).findFirst().get().name)
+        assertEquals(AWAY_NAME, market.runners.stream().skip(2).findFirst().get().name)
     }
 
     @Test
-    fun testMarketMerge() {
+    fun `market merge`() {
         var market = newMarket()
         val childA = EventTest.create("55", "childA", Date(), CoreTestFactory.COUNTRY_CODE)
         market.event = childA
@@ -74,45 +70,44 @@ class MarketDaoTest : AbstractDaoTest() {
         toBeMerged.event = childB
         marketDao.saveOrUpdate(toBeMerged)
         market = marketDao.get(CoreTestFactory.MARKET_ID).get()
-        assertThat(market.event.id, `is`("55"))
-        assertThat(market.event.name, `is`("childB"))
-        assertThat(market.name, `is`(AbstractDaoTest.SPARTA))
-        assertThat(market.event.countryCode, `is`(CoreTestFactory.COUNTRY_CODE))
+        assertEquals("55", market.event.id)
+        assertEquals("childB", market.event.name)
+        assertEquals(AbstractDaoTest.SPARTA, market.name)
+        assertEquals(CoreTestFactory.COUNTRY_CODE, market.event.countryCode)
     }
 
     @Test
-    fun testMarketSaveSubsequentUpdate() {
+    fun `market save and then update`() {
         var market = newMarket()
         marketDao.saveOrUpdate(market)
-        assertThat(marketDao.get(CoreTestFactory.MARKET_ID).get().runners.size, `is`(3))
+        assertEquals(3, marketDao.get(CoreTestFactory.MARKET_ID).get().runners.size)
         market = newMarket(CoreTestFactory.MARKET_ID, Date(), "new name")
         marketDao.saveOrUpdate(market)
-        assertThat(marketDao.get(CoreTestFactory.MARKET_ID).get().name, `is`("new name"))
-        assertThat(marketDao.get(CoreTestFactory.MARKET_ID).get().event.countryCode, `is`(CoreTestFactory.COUNTRY_CODE))
+        assertEquals("new name", marketDao.get(CoreTestFactory.MARKET_ID).get().name)
+        assertEquals(CoreTestFactory.COUNTRY_CODE, marketDao.get(CoreTestFactory.MARKET_ID).get().event.countryCode)
     }
 
     @Test
-    fun testMarketVersion() {
+    fun `market version`() {
         var market = newMarket()
         marketDao.saveOrUpdate(market)
-        assertThat(marketDao.get(CoreTestFactory.MARKET_ID).get().version, `is`(0))
+        assertEquals(0, marketDao.get(CoreTestFactory.MARKET_ID).get().version)
         market = newMarket(CoreTestFactory.MARKET_ID, Date(), AbstractDaoTest.SPARTA)
         marketDao.saveOrUpdate(market)
-        assertThat(marketDao.get(CoreTestFactory.MARKET_ID).get().version, `is`(1))
+        assertEquals(1, marketDao.get(CoreTestFactory.MARKET_ID).get().version)
         market = newMarket(CoreTestFactory.MARKET_ID, Date(), "yet another")
         marketDao.saveOrUpdate(market)
-        assertThat(marketDao.get(CoreTestFactory.MARKET_ID).get().version, `is`(2))
+        assertEquals(2, marketDao.get(CoreTestFactory.MARKET_ID).get().version)
     }
 
     @Test
-    fun testMarketBulkDelete() {
+    fun `market bulk delete`() {
         createBet()
         var count = marketDao.deleteMarkets(from(Instant.now().minus(1, ChronoUnit.HOURS)))
-        assertThat(count, `is`(0))
+        assertEquals(0, count)
         count = marketDao.deleteMarkets(from(Instant.now().plus(3, ChronoUnit.HOURS)))
-        assertThat(count, `is`(1))
-        assertThat(marketPricesDao.getPrices(CoreTestFactory.MARKET_ID).size, `is`(0))
-        assertThat(marketDao.get(CoreTestFactory.MARKET_ID).orElse(null), nullValue())
+        assertEquals(1, count)
+        assertEquals(0, marketPricesDao.getPrices(CoreTestFactory.MARKET_ID).size)
+        assertNull(marketDao.get(CoreTestFactory.MARKET_ID).orElse(null))
     }
-
 }
