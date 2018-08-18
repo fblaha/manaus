@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.core.test.CoreTestFactory
-import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.*
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -41,8 +40,8 @@ class BetTest : AbstractLocalTestCase() {
 
         val serialized = mapper.writer().writeValueAsString(original)
         val restored = mapper.readerFor(Bet::class.java).readValue<Bet>(serialized)
-        assertThat(restored.requestedPrice, `is`(original.requestedPrice))
-        assertThat(restored.placedDate, `is`(original.placedDate))
+        assertEquals(original.requestedPrice, restored.requestedPrice)
+        assertEquals(original.placedDate, restored.placedDate)
         val doubleSerialized = mapper.writer().writeValueAsString(restored)
         assertEquals(serialized, doubleSerialized)
     }
