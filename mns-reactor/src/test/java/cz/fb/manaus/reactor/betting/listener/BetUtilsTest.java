@@ -4,11 +4,10 @@ import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
 import cz.fb.manaus.core.model.Market;
+import cz.fb.manaus.core.model.ModelFactory;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
-import cz.fb.manaus.core.model.factory.BetActionFactory;
-import cz.fb.manaus.core.model.factory.SettledBetFactory;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import cz.fb.manaus.reactor.betting.action.BetUtils;
@@ -39,10 +38,10 @@ public class BetUtilsTest extends AbstractLocalTestCase {
     @Before
     public void setUp() {
         var price = new Price(5d, 3d, Side.BACK);
-        bet = SettledBetFactory.create(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
+        bet = ModelFactory.newSettled(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
                 5d, new Date(), price);
 
-        var action = BetActionFactory.create(BetActionType.PLACE, new Date(), price, null, 1000);
+        var action = ModelFactory.newAction(BetActionType.PLACE, new Date(), price, null, 1000);
         bet.setBetAction(action);
     }
 
@@ -52,17 +51,17 @@ public class BetUtilsTest extends AbstractLocalTestCase {
         var priceBack = new Price(2d, 2d, Side.BACK);
         var priceLay = new Price(1.8d, 2d, Side.LAY);
         var selectionId = 1;
-        var back1 = BetActionFactory.create(BetActionType.PLACE, DateUtils.addHours(currDate, -10), priceBack,
+        var back1 = ModelFactory.newAction(BetActionType.PLACE, DateUtils.addHours(currDate, -10), priceBack,
                 mock(Market.class), selectionId);
-        var back2 = BetActionFactory.create(BetActionType.PLACE, DateUtils.addHours(currDate, -9), priceBack,
+        var back2 = ModelFactory.newAction(BetActionType.PLACE, DateUtils.addHours(currDate, -9), priceBack,
                 mock(Market.class), selectionId);
-        var back3 = BetActionFactory.create(BetActionType.PLACE, DateUtils.addHours(currDate, -8), priceBack,
+        var back3 = ModelFactory.newAction(BetActionType.PLACE, DateUtils.addHours(currDate, -8), priceBack,
                 mock(Market.class), selectionId);
-        var lay1 = BetActionFactory.create(BetActionType.PLACE, DateUtils.addHours(currDate, -6), priceLay,
+        var lay1 = ModelFactory.newAction(BetActionType.PLACE, DateUtils.addHours(currDate, -6), priceLay,
                 mock(Market.class), selectionId);
-        var lay2 = BetActionFactory.create(BetActionType.UPDATE, DateUtils.addHours(currDate, -5), priceLay,
+        var lay2 = ModelFactory.newAction(BetActionType.UPDATE, DateUtils.addHours(currDate, -5), priceLay,
                 mock(Market.class), selectionId);
-        var lay3 = BetActionFactory.create(BetActionType.PLACE, DateUtils.addHours(currDate, -4), priceLay,
+        var lay3 = ModelFactory.newAction(BetActionType.PLACE, DateUtils.addHours(currDate, -4), priceLay,
                 mock(Market.class), selectionId);
         var filtered = betUtils.getCurrentActions(List.of(back1, back2, back3));
         assertThat(filtered.size(), is(1));

@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.net.HttpHeaders;
 import cz.fb.manaus.core.model.BetAction;
 import cz.fb.manaus.core.model.BetActionType;
+import cz.fb.manaus.core.model.ModelFactory;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.SettledBet;
 import cz.fb.manaus.core.model.Side;
-import cz.fb.manaus.core.model.factory.BetActionFactory;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,7 +68,7 @@ public class BetActionControllerTest extends AbstractControllerTest {
     }
 
     private BetAction createBetAction() {
-        var betAction = BetActionFactory.create(BetActionType.UPDATE, new Date(),
+        var betAction = ModelFactory.newAction(BetActionType.UPDATE, new Date(),
                 new Price(2d, 3d, Side.LAY), null, CoreTestFactory.DRAW);
         betAction.setProperties(Collections.singletonMap("key", "val"));
         betAction.setBetId("150");

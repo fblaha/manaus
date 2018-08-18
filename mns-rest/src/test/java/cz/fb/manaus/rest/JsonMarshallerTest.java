@@ -2,11 +2,10 @@ package cz.fb.manaus.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.fb.manaus.core.model.BetActionType;
+import cz.fb.manaus.core.model.ModelFactory;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.ProfitRecord;
 import cz.fb.manaus.core.model.Side;
-import cz.fb.manaus.core.model.factory.BetActionFactory;
-import cz.fb.manaus.core.model.factory.SettledBetFactory;
 import cz.fb.manaus.core.test.AbstractLocalTestCase;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
@@ -26,7 +25,7 @@ public class JsonMarshallerTest extends AbstractLocalTestCase {
 
     @Test
     public void testBetActionList() throws Exception {
-        var action = BetActionFactory.create(BetActionType.PLACE, new Date(), new Price(2d, 5d, Side.LAY), null, 10);
+        var action = ModelFactory.newAction(BetActionType.PLACE, new Date(), new Price(2d, 5d, Side.LAY), null, 10);
         var props = Map.of("property1", "value1", "reciprocal", "0.92");
         action.setProperties(props);
         var json = mapper.writer().writeValueAsString(List.of(action));
@@ -35,7 +34,7 @@ public class JsonMarshallerTest extends AbstractLocalTestCase {
 
     @Test
     public void testSettledBetList() throws Exception {
-        var bet = SettledBetFactory.create(555, "The Draw", 5.23d, new Date(), new Price(2.02d, 2.35d, Side.LAY));
+        var bet = ModelFactory.newSettled(555, "The Draw", 5.23d, new Date(), new Price(2.02d, 2.35d, Side.LAY));
         bet.setBetAction(newBetAction("1", newMarket()));
         var json = mapper.writer().writeValueAsString(List.of(bet));
         assertThat(json, CoreMatchers.containsString("The Draw"));

@@ -2,13 +2,7 @@ package cz.fb.manaus.core.dao
 
 import com.google.common.collect.ImmutableMap.of
 import com.google.common.collect.Ordering
-import cz.fb.manaus.core.model.BetAction
-import cz.fb.manaus.core.model.BetActionType
-import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.model.factory.BetActionFactory
-import cz.fb.manaus.core.model.factory.MarketPricesFactory
-import cz.fb.manaus.core.model.factory.RunnerPricesFactory
+import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.CoreTestFactory
 import cz.fb.manaus.core.test.CoreTestFactory.newMarket
 import org.apache.commons.lang3.time.DateUtils
@@ -207,9 +201,9 @@ class BetActionDaoTest : AbstractDaoTest() {
     private fun saveActionsAndCheckOrder(comparator: Comparator<BetAction>) {
         val market = newMarket("33", Date(), CoreTestFactory.MATCH_ODDS)
         marketDao.saveOrUpdate(market)
-        val earlier = BetActionFactory.create(BetActionType.PLACE, DateUtils.addDays(Date(), -1), Price(2.0, 30.0, Side.LAY), market, CoreTestFactory.DRAW)
+        val earlier = ModelFactory.newAction(BetActionType.PLACE, DateUtils.addDays(Date(), -1), Price(2.0, 30.0, Side.LAY), market, CoreTestFactory.DRAW)
         earlier.betId = AbstractDaoTest.BET_ID
-        val later = BetActionFactory.create(BetActionType.PLACE, Date(), Price(3.0, 33.0, Side.LAY), market, CoreTestFactory.DRAW)
+        val later = ModelFactory.newAction(BetActionType.PLACE, Date(), Price(3.0, 33.0, Side.LAY), market, CoreTestFactory.DRAW)
         later.betId = AbstractDaoTest.BET_ID + 1
         val actions = listOf(later, earlier)
         Ordering.from(comparator).immutableSortedCopy<BetAction>(actions).forEach { betActionDao.saveOrUpdate(it) }
@@ -222,8 +216,8 @@ class BetActionDaoTest : AbstractDaoTest() {
     @Test
     fun `no duplicates due to multiple runner prices`() {
         val market = newMarket()
-        val runnerPrices = RunnerPricesFactory.create(232, listOf(Price(2.3, 22.0, Side.BACK)), 5.0, 2.5)
-        val marketPrices = MarketPricesFactory.create(1, market, listOf(runnerPrices), Date())
+        val runnerPrices = ModelFactory.newRunnerPrices(232, listOf(Price(2.3, 22.0, Side.BACK)), 5.0, 2.5)
+        val marketPrices = ModelFactory.newPrices(1, market, listOf(runnerPrices), Date())
         marketPrices.time = DateUtils.addMonths(Date(), -1)
         marketDao.saveOrUpdate(market)
         marketPricesDao.saveOrUpdate(marketPrices)
@@ -238,8 +232,8 @@ class BetActionDaoTest : AbstractDaoTest() {
     @Test
     fun `market prices entity is shared by 2 actions`() {
         val market = newMarket()
-        val runnerPrices = RunnerPricesFactory.create(232, listOf(Price(2.3, 22.0, Side.BACK)), 5.0, 2.5)
-        val marketPrices = MarketPricesFactory.create(1, market, listOf(runnerPrices), Date())
+        val runnerPrices = ModelFactory.newRunnerPrices(232, listOf(Price(2.3, 22.0, Side.BACK)), 5.0, 2.5)
+        val marketPrices = ModelFactory.newPrices(1, market, listOf(runnerPrices), Date())
         marketPrices.time = DateUtils.addMonths(Date(), -1)
         marketDao.saveOrUpdate(market)
         marketPricesDao.saveOrUpdate(marketPrices)

@@ -1,8 +1,8 @@
 package cz.fb.manaus.core.dao
 
+import cz.fb.manaus.core.model.ModelFactory
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.model.factory.SettledBetFactory
 import cz.fb.manaus.core.test.CoreTestFactory
 import cz.fb.manaus.core.test.CoreTestFactory.DRAW_NAME
 import cz.fb.manaus.core.test.CoreTestFactory.newMarket
@@ -24,7 +24,7 @@ class SettledBetDaoTest : AbstractDaoTest() {
         val market = newMarket(MARKET_ID, curr, CoreTestFactory.MATCH_ODDS)
         marketDao.saveOrUpdate(market)
         val fooAction = createAndSaveBetAction(market, curr, AbstractDaoTest.PROPS, "foo")
-        val settledBet = SettledBetFactory.create(555, DRAW_NAME, 5.0,
+        val settledBet = ModelFactory.newSettled(555, DRAW_NAME, 5.0,
                 curr, Price(3.0, 5.0, Side.LAY))
         settledBet.betAction = fooAction
         settledBetDao.saveOrUpdate(settledBet)
@@ -81,10 +81,10 @@ class SettledBetDaoTest : AbstractDaoTest() {
         marketDao.saveOrUpdate(market)
         val fooAction = createAndSaveBetAction(market, Date(), AbstractDaoTest.PROPS, "foo")
         val barAction = createAndSaveBetAction(market, Date(), AbstractDaoTest.PROPS, "bar")
-        val fooBet = SettledBetFactory.create(555, DRAW_NAME, 5.0,
+        val fooBet = ModelFactory.newSettled(555, DRAW_NAME, 5.0,
                 Date(), Price(3.0, 5.0, Side.LAY))
         fooBet.betAction = fooAction
-        val barBet = SettledBetFactory.create(556, DRAW_NAME, 5.0,
+        val barBet = ModelFactory.newSettled(556, DRAW_NAME, 5.0,
                 Date(), Price(3.0, 5.0, Side.LAY))
         barBet.betAction = barAction
         settledBetDao.saveOrUpdate(fooBet)
@@ -98,7 +98,7 @@ class SettledBetDaoTest : AbstractDaoTest() {
         val market = newMarket(MARKET_ID, Date(), CoreTestFactory.MATCH_ODDS)
         marketDao.saveOrUpdate(market)
         val fooAction = createAndSaveBetAction(market, Date(), AbstractDaoTest.PROPS, AbstractDaoTest.BET_ID)
-        val settledBet = SettledBetFactory.create(555, DRAW_NAME, 5.0,
+        val settledBet = ModelFactory.newSettled(555, DRAW_NAME, 5.0,
                 Date(), Price(3.0, 5.0, Side.LAY))
         settledBet.betAction = fooAction
         settledBetDao.saveOrUpdate(settledBet)

@@ -1,10 +1,10 @@
 package cz.fb.manaus.core.settlement
 
 import cz.fb.manaus.core.dao.AbstractDaoTest
+import cz.fb.manaus.core.model.ModelFactory
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.model.factory.SettledBetFactory
 import cz.fb.manaus.core.test.CoreTestFactory
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,7 +25,7 @@ class SettledBetSaverTest : AbstractDaoTest() {
     }
 
     private fun createAction(): SettledBet {
-        return SettledBetFactory.create(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME, 5.0, Date(), Price(3.0, 3.0, Side.LAY))
+        return ModelFactory.newSettled(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME, 5.0, Date(), Price(3.0, 3.0, Side.LAY))
     }
 
 }

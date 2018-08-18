@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.dao
 
-import cz.fb.manaus.core.model.factory.EventFactory
+import cz.fb.manaus.core.model.ModelFactory
 import cz.fb.manaus.core.test.CoreTestFactory
 import cz.fb.manaus.core.test.CoreTestFactory.*
 import org.apache.commons.lang3.time.DateUtils
@@ -62,11 +62,11 @@ class MarketDaoTest : AbstractDaoTest() {
     @Test
     fun `market merge`() {
         var market = newMarket()
-        val childA = EventFactory.create("55", "childA", Date(), COUNTRY_CODE)
+        val childA = ModelFactory.newEvent("55", "childA", Date(), COUNTRY_CODE)
         market.event = childA
         marketDao.saveOrUpdate(market)
         val toBeMerged = newMarket(CoreTestFactory.MARKET_ID, Date(), AbstractDaoTest.SPARTA)
-        val childB = EventFactory.create("55", "childB", Date(), COUNTRY_CODE)
+        val childB = ModelFactory.newEvent("55", "childB", Date(), COUNTRY_CODE)
         toBeMerged.event = childB
         marketDao.saveOrUpdate(toBeMerged)
         market = marketDao.get(CoreTestFactory.MARKET_ID).get()

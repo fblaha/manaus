@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 class TradedVolumeTest {
 
     @Test
-    fun testMean() {
+    fun `weighted mean`() {
         assertEquals(2.0, TradedVolume(listOf(Price(2.0, 5.0, null))).weightedMean.asDouble)
         assertEquals(2.0, TradedVolume(listOf(
                 Price(2.0, 5.0, null),

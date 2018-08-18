@@ -4,12 +4,10 @@ import cz.fb.manaus.core.model.Bet;
 import cz.fb.manaus.core.model.Market;
 import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.MarketSnapshot;
+import cz.fb.manaus.core.model.ModelFactory;
 import cz.fb.manaus.core.model.Price;
 import cz.fb.manaus.core.model.RunnerPrices;
 import cz.fb.manaus.core.model.Side;
-import cz.fb.manaus.core.model.factory.EventFactory;
-import cz.fb.manaus.core.model.factory.MarketPricesFactory;
-import cz.fb.manaus.core.model.factory.RunnerPricesFactory;
 import cz.fb.manaus.core.provider.ExchangeProvider;
 import cz.fb.manaus.core.test.CoreTestFactory;
 import cz.fb.manaus.reactor.betting.BetContext;
@@ -113,7 +111,7 @@ public class ReactorTestFactory {
         }
         var backBestPrice = new Price(bestBack, 100d, Side.BACK);
         var layBestPrice = new Price(bestLay, 100d, Side.LAY);
-        return RunnerPricesFactory.create(selectionId, List.of(
+        return ModelFactory.newRunnerPrices(selectionId, List.of(
                 backBestPrice,
                 layBestPrice,
                 roundingService.decrement(backBestPrice, 1).get(),
@@ -128,7 +126,7 @@ public class ReactorTestFactory {
         var home = newRP(CoreTestFactory.HOME, betBack, bestLay, lastMatched);
         var draw = newRP(CoreTestFactory.DRAW, betBack, bestLay, lastMatched);
         var away = newRP(CoreTestFactory.AWAY, betBack, bestLay, lastMatched);
-        return MarketPricesFactory.create(winnerCount, market, List.of(home, draw, away), new Date());
+        return ModelFactory.newPrices(winnerCount, market, List.of(home, draw, away), new Date());
     }
 
     public MarketPrices createMarket(double downgradeFraction, List<Double> probabilities) {
@@ -144,11 +142,11 @@ public class ReactorTestFactory {
             var lastMatched = roundingService.roundBet(fairPrice).getAsDouble();
             runnerPrices.add(newRP(selectionId, backRounded, layRounded, OptionalDouble.of(lastMatched)));
         }
-        return MarketPricesFactory.create(1, market, runnerPrices, new Date());
+        return ModelFactory.newPrices(1, market, runnerPrices, new Date());
     }
 
     private Market createMarket() {
-        var event = EventFactory.create("1", "Vischya Liga", addHours(new Date(), 2), CoreTestFactory.COUNTRY_CODE);
+        var event = ModelFactory.newEvent("1", "Vischya Liga", addHours(new Date(), 2), CoreTestFactory.COUNTRY_CODE);
         event.setId("1");
         var market = CoreTestFactory.newMarket();
         market.setEvent(event);
