@@ -12,7 +12,7 @@ class SelectionRegexpCategorizerTest : AbstractLocalTestCase() {
     private lateinit var categorizer: SelectionRegexpCategorizer
 
     @Test
-    fun testMatchOdds() {
+    fun `draw category`() {
         assertThat(categorizer.getCategories("The Draw"), hasItem("selectionRegexp_draw"))
     }
 

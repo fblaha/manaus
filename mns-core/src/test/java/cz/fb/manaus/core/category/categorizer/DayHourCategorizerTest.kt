@@ -1,5 +1,7 @@
 package cz.fb.manaus.core.category.categorizer
 
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
 import cz.fb.manaus.core.model.Event
 import cz.fb.manaus.core.model.Market
 import cz.fb.manaus.core.test.AbstractLocalTestCase
@@ -9,8 +11,6 @@ import org.apache.commons.lang3.time.DateUtils.addMinutes
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert.assertThat
 import org.junit.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.*
 
@@ -20,21 +20,21 @@ class DayHourCategorizerTest : AbstractLocalTestCase() {
     private lateinit var categorizer: DayHourCategorizer
 
     @Test
-    fun testGetCategories() {
+    fun `hout categories`() {
         val dayStart = DateUtils.truncate(Date(), Calendar.MONTH)
-        val market = mock(Market::class.java)
-        val event = mock(Event::class.java)
-        `when`(market.event).thenReturn(event)
-        `when`(event.openDate).thenReturn(dayStart)
+        val market = mock<Market>()
+        val event = mock<Event>()
+        whenever(market.event).thenReturn(event)
+        whenever(event.openDate).thenReturn(dayStart)
         assertThat(categorizer.getCategories(market).iterator().next(), containsString("0_4"))
 
-        `when`(event.openDate).thenReturn(addMinutes(dayStart, 3 * 60 + 59))
+        whenever(event.openDate).thenReturn(addMinutes(dayStart, 3 * 60 + 59))
         assertThat(categorizer.getCategories(market).iterator().next(), containsString("0_4"))
 
-        `when`(event.openDate).thenReturn(addHours(dayStart, 4))
+        whenever(event.openDate).thenReturn(addHours(dayStart, 4))
         assertThat(categorizer.getCategories(market).iterator().next(), containsString("4_8"))
 
-        `when`(event.openDate).thenReturn(addHours(dayStart, 23))
+        whenever(event.openDate).thenReturn(addHours(dayStart, 23))
         assertThat(categorizer.getCategories(market).iterator().next(), containsString("20_24"))
     }
 }

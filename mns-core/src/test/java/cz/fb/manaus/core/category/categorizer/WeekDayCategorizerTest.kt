@@ -12,7 +12,7 @@ class WeekDayCategorizerTest : AbstractLocalTestCase() {
     private lateinit var categorizer: WeekDayCategorizer
 
     @Test
-    fun testCategory() {
+    fun `week day - mon, tue, wed, thu, fri, sat, sun`() {
         val cal = Calendar.getInstance()
         cal.set(2012, Calendar.OCTOBER, 22, 9, 40)
         assertEquals(setOf("mon"), categorizer.getCategory(cal.time))
