@@ -14,7 +14,7 @@ class ProbabilityComparatorTest : AbstractLocalTestCase() {
     private lateinit var testFactory: ReactorTestFactory
 
     @Test
-    fun testCompare() {
+    fun `probability comparison`() {
         val first = testFactory.newRP(1, 1.4, 1.6)
         val second = testFactory.newRP(2, 2.8, 3.3)
         assertEquals(1L, getFirstSelection(listOf(first, first)))

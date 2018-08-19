@@ -17,13 +17,13 @@ class BetContextTest : AbstractLocalTestCase() {
     private lateinit var testFactory: ReactorTestFactory
 
     @Test
-    fun testHalfMatched() {
+    fun `counter half matched`() {
         assertTrue(testFactory.createContext(Side.BACK, 3.5, 4.6).isCounterHalfMatched)
         assertTrue(testFactory.createContext(Side.LAY, 3.5, 4.6).isCounterHalfMatched)
     }
 
     @Test
-    fun testSimulate() {
+    fun `simulate settled bet`() {
         val context = testFactory.createContext(Side.LAY, 3.5, 4.6)
         val settledBet = context.withNewPrice(Price(3.0, 5.0, Side.LAY)).simulateSettledBet()
         assertEquals(context.side, settledBet.price.side)
