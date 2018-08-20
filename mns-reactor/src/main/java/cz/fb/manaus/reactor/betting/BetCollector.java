@@ -55,7 +55,7 @@ public class BetCollector {
         return bets;
     }
 
-    public Optional<Bet> findBet(String marketId, int selId, final Side side) {
+    public Optional<Bet> findBet(String marketId, long selId, final Side side) {
         var placeOrUpdate = concat(toPlace.stream(), toUpdate.stream())
                 .map(BetCommand::getBet);
         return concat(placeOrUpdate, toCancel.stream())
