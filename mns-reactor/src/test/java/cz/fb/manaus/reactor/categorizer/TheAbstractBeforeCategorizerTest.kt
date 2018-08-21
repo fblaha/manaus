@@ -15,7 +15,7 @@ class TheAbstractBeforeCategorizerTest : AbstractLocalTestCase() {
     private lateinit var categorizer: TestBeforeCategorizer
 
     @Test
-    fun testBeforeResolver() {
+    fun `before category`() {
         val cat = categorizer.dayMap.get(2L)
         assertEquals("test_day_2-3", cat)
     }

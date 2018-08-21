@@ -1,6 +1,5 @@
 package cz.fb.manaus.ischia;
 
-import cz.fb.manaus.core.model.MarketPrices;
 import cz.fb.manaus.core.model.Side;
 import cz.fb.manaus.reactor.betting.AbstractBettorTest;
 import org.junit.Test;
