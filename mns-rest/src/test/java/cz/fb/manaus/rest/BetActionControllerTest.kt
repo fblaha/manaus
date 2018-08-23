@@ -5,8 +5,6 @@ import com.google.common.net.HttpHeaders
 import cz.fb.manaus.core.dao.AbstractDaoTest
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.CoreTestFactory
-import org.hamcrest.CoreMatchers.notNullValue
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.springframework.http.MediaType
@@ -15,6 +13,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.util.*
+import kotlin.test.assertNotNull
 
 
 @ContextConfiguration(classes = [BetActionController::class])
@@ -46,7 +45,7 @@ class BetActionControllerTest : AbstractControllerTest() {
                 .content(serialized))
                 .andExpect(status().isCreated)
                 .andReturn()
-        assertThat(result.response.getHeader(HttpHeaders.LOCATION), notNullValue())
+        assertNotNull(result.response.getHeader(HttpHeaders.LOCATION))
     }
 
     @Test
