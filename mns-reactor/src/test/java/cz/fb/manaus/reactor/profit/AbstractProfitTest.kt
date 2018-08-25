@@ -3,6 +3,7 @@ package cz.fb.manaus.reactor.profit
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.core.test.CoreTestFactory
+import cz.fb.manaus.core.test.ModelFactory
 import org.apache.commons.lang3.time.DateUtils
 import org.apache.commons.lang3.time.DateUtils.addDays
 import org.junit.Before

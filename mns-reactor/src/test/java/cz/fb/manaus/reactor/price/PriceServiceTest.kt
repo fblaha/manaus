@@ -2,14 +2,14 @@ package cz.fb.manaus.reactor.price
 
 import com.google.common.primitives.Doubles
 import cz.fb.manaus.core.model.MarketPrices
-import cz.fb.manaus.core.model.ModelFactory
-import cz.fb.manaus.core.model.ModelFactory.Companion.newPrices
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.core.test.CoreTestFactory
 import cz.fb.manaus.core.test.CoreTestFactory.Companion.newTestMarket
+import cz.fb.manaus.core.test.ModelFactory
+import cz.fb.manaus.core.test.ModelFactory.Companion.newPrices
 import cz.fb.manaus.reactor.ReactorTestFactory
 import org.junit.Assert.assertEquals
 import org.junit.Test

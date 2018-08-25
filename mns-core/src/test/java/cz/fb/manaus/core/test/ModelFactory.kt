@@ -1,5 +1,6 @@
-package cz.fb.manaus.core.model
+package cz.fb.manaus.core.test
 
+import cz.fb.manaus.core.model.*
 import java.util.*
 
 interface ModelFactory {

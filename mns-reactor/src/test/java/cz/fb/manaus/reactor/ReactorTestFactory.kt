@@ -3,6 +3,7 @@ package cz.fb.manaus.reactor
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.CoreTestFactory
+import cz.fb.manaus.core.test.ModelFactory
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.BetContextFactory
 import cz.fb.manaus.reactor.price.Fairness

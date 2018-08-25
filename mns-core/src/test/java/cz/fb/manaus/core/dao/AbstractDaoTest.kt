@@ -5,6 +5,7 @@ import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import cz.fb.manaus.core.test.CoreTestFactory
 import cz.fb.manaus.core.test.CoreTestFactory.Companion.newMarket
 import cz.fb.manaus.core.test.CoreTestFactory.Companion.newTestMarket
+import cz.fb.manaus.core.test.ModelFactory
 import org.apache.commons.lang3.time.DateUtils
 import org.apache.commons.lang3.time.DateUtils.addHours
 import org.hamcrest.CoreMatchers.`is`

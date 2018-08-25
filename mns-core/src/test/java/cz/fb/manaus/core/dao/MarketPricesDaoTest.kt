@@ -1,9 +1,13 @@
 package cz.fb.manaus.core.dao
 
-import cz.fb.manaus.core.model.*
+import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.model.MarketPrices
+import cz.fb.manaus.core.model.Price
+import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.CoreTestFactory
 import cz.fb.manaus.core.test.CoreTestFactory.Companion.newMarket
 import cz.fb.manaus.core.test.CoreTestFactory.Companion.newTestMarket
+import cz.fb.manaus.core.test.ModelFactory
 import org.apache.commons.lang3.time.DateUtils
 import org.apache.commons.math3.util.Precision
 import org.hibernate.LazyInitializationException

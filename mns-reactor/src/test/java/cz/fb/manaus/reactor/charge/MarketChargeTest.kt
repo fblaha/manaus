@@ -3,9 +3,13 @@ package cz.fb.manaus.reactor.charge
 import com.google.common.collect.ImmutableMap.of
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
-import cz.fb.manaus.core.model.*
+import cz.fb.manaus.core.model.BetAction
+import cz.fb.manaus.core.model.Price
+import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.ModelFactory
 import org.junit.Assert
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired

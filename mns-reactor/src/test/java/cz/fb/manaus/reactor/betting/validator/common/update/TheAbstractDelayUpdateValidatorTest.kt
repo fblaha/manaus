@@ -3,6 +3,7 @@ package cz.fb.manaus.reactor.betting.validator.common.update
 import cz.fb.manaus.core.dao.AbstractDaoTest
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.CoreTestFactory
+import cz.fb.manaus.core.test.ModelFactory
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.spring.ManausProfiles.DB

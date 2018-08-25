@@ -1,11 +1,11 @@
 package cz.fb.manaus.core.settlement
 
 import cz.fb.manaus.core.dao.AbstractDaoTest
-import cz.fb.manaus.core.model.ModelFactory
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.CoreTestFactory
+import cz.fb.manaus.core.test.ModelFactory
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.*

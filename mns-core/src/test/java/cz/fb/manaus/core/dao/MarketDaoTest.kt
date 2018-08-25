@@ -1,6 +1,5 @@
 package cz.fb.manaus.core.dao
 
-import cz.fb.manaus.core.model.ModelFactory
 import cz.fb.manaus.core.test.CoreTestFactory
 import cz.fb.manaus.core.test.CoreTestFactory.Companion.AWAY_NAME
 import cz.fb.manaus.core.test.CoreTestFactory.Companion.COUNTRY_CODE
@@ -8,6 +7,7 @@ import cz.fb.manaus.core.test.CoreTestFactory.Companion.DRAW_NAME
 import cz.fb.manaus.core.test.CoreTestFactory.Companion.HOME_NAME
 import cz.fb.manaus.core.test.CoreTestFactory.Companion.newMarket
 import cz.fb.manaus.core.test.CoreTestFactory.Companion.newTestMarket
+import cz.fb.manaus.core.test.ModelFactory
 import org.apache.commons.lang3.time.DateUtils
 import org.apache.commons.lang3.time.DateUtils.addHours
 import org.junit.Test

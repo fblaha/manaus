@@ -6,6 +6,7 @@ import cz.fb.manaus.core.dao.AbstractDaoTest
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.CoreTestFactory
 import cz.fb.manaus.core.test.CoreTestFactory.Companion.newTestMarket
+import cz.fb.manaus.core.test.ModelFactory
 import org.junit.Before
 import org.junit.Test
 import org.springframework.http.MediaType

@@ -1,10 +1,14 @@
 package cz.fb.manaus.rest
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import cz.fb.manaus.core.model.*
+import cz.fb.manaus.core.model.BetActionType
+import cz.fb.manaus.core.model.Price
+import cz.fb.manaus.core.model.ProfitRecord
+import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.core.test.CoreTestFactory.Companion.newBetAction
 import cz.fb.manaus.core.test.CoreTestFactory.Companion.newTestMarket
+import cz.fb.manaus.core.test.ModelFactory
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.*

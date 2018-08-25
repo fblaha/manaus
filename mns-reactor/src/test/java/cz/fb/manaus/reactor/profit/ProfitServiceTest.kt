@@ -1,13 +1,13 @@
 package cz.fb.manaus.reactor.profit
 
 import com.google.common.collect.ImmutableMap.of
-import cz.fb.manaus.core.model.ModelFactory.Companion.newSettled
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.CoreTestFactory
+import cz.fb.manaus.core.test.ModelFactory.Companion.newSettled
 import org.apache.commons.lang3.time.DateUtils.addDays
 import org.apache.commons.lang3.time.DateUtils.addHours
 import org.junit.Assert

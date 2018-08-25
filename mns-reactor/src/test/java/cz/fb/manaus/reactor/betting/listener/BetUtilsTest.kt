@@ -5,6 +5,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.core.test.CoreTestFactory
+import cz.fb.manaus.core.test.ModelFactory
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import org.apache.commons.lang3.time.DateUtils
 import org.hamcrest.Matchers.closeTo

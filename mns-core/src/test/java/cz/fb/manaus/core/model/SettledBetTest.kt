@@ -2,6 +2,7 @@ package cz.fb.manaus.core.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import cz.fb.manaus.core.test.CoreTestFactory
+import cz.fb.manaus.core.test.ModelFactory
 import org.junit.Test
 import java.util.*
 import kotlin.test.assertEquals

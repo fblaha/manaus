@@ -1,11 +1,11 @@
 package cz.fb.manaus.core.dao
 
-import cz.fb.manaus.core.model.ModelFactory
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.CoreTestFactory
 import cz.fb.manaus.core.test.CoreTestFactory.Companion.DRAW_NAME
 import cz.fb.manaus.core.test.CoreTestFactory.Companion.newMarket
+import cz.fb.manaus.core.test.ModelFactory
 import org.apache.commons.lang3.time.DateUtils.addDays
 import org.apache.commons.lang3.time.DateUtils.addHours
 import org.junit.Test
