@@ -3,11 +3,13 @@ package cz.fb.manaus.reactor.price
 import com.google.common.primitives.Doubles
 import cz.fb.manaus.core.model.MarketPrices
 import cz.fb.manaus.core.model.ModelFactory
+import cz.fb.manaus.core.model.ModelFactory.Companion.newPrices
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.core.test.CoreTestFactory
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.newTestMarket
 import cz.fb.manaus.reactor.ReactorTestFactory
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -64,7 +66,7 @@ class PriceServiceTest : AbstractLocalTestCase() {
 
     @Test
     fun `fair price`() {
-        val marketPrices = ModelFactory.newPrices(1, null, listOf(factory.newRP(1, 4.2, 6.0), factory.newRP(2, 2.87, 4.0), factory.newRP(1, 1.8, 3.0)), Date())
+        val marketPrices = newPrices(1, newTestMarket(), listOf(factory.newRP(1, 4.2, 6.0), factory.newRP(2, 2.87, 4.0), factory.newRP(1, 1.8, 3.0)), Date())
         val layFairness = getFairness(Side.LAY, marketPrices)
         assertEquals(1.5, layFairness, 0.1)
         val backFairness = getFairness(Side.BACK, marketPrices)
@@ -132,7 +134,7 @@ class PriceServiceTest : AbstractLocalTestCase() {
     }
 
     private fun checkFairPrices(winnerCount: Int, vararg unfairPrices: Double) {
-        val marketPrices = ModelFactory.newPrices(winnerCount, null, factory.createRP(Doubles.asList(*unfairPrices)), Date())
+        val marketPrices = newPrices(winnerCount, newTestMarket(), factory.createRP(Doubles.asList(*unfairPrices)), Date())
         val overround = marketPrices.getOverround(Side.BACK)
         val reciprocal = marketPrices.getReciprocal(Side.BACK).asDouble
         val fairness = getFairness(Side.BACK, marketPrices)
@@ -156,8 +158,8 @@ class PriceServiceTest : AbstractLocalTestCase() {
                     fair
                 }
 
-        val overFairnessBased = ModelFactory.newPrices(winnerCount, null, factory.createRP(fairnessPrices), Date()).getOverround(Side.BACK)
-        val overOverroundBased = ModelFactory.newPrices(winnerCount, null, factory.createRP(overroundPrices), Date()).getOverround(Side.BACK)
+        val overFairnessBased = newPrices(winnerCount, newTestMarket(), factory.createRP(fairnessPrices), Date()).getOverround(Side.BACK)
+        val overOverroundBased = newPrices(winnerCount, newTestMarket(), factory.createRP(overroundPrices), Date()).getOverround(Side.BACK)
 
         assertEquals(winnerCount.toDouble(), overFairnessBased.asDouble, 0.001)
         assertEquals(winnerCount.toDouble(), overOverroundBased.asDouble, 0.001)
@@ -178,7 +180,7 @@ class PriceServiceTest : AbstractLocalTestCase() {
         val highPrice = 15.0
         val home = ModelFactory.newRunnerPrices(CoreTestFactory.HOME, listOf(Price(lowPrice, 10.0, Side.BACK)), 50.0, lowPrice)
         val away = ModelFactory.newRunnerPrices(CoreTestFactory.AWAY, listOf(Price(highPrice, 10.0, Side.BACK)), 50.0, highPrice)
-        val marketPrices = ModelFactory.newPrices(1, null, listOf(home, away), Date())
+        val marketPrices = newPrices(1, newTestMarket(), listOf(home, away), Date())
         val fairness = getFairness(Side.BACK, marketPrices)
         val lowFairPrice = priceService.getFairnessFairPrice(lowPrice, fairness)
         val highFairPrice = priceService.getFairnessFairPrice(highPrice, fairness)

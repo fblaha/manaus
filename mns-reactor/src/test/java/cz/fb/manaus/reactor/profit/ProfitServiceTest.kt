@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.profit
 
 import com.google.common.collect.ImmutableMap.of
-import cz.fb.manaus.core.model.ModelFactory.newSettled
+import cz.fb.manaus.core.model.ModelFactory.Companion.newSettled
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.SettledBet

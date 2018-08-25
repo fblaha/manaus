@@ -17,7 +17,7 @@ import java.time.Duration
 import java.util.*
 import kotlin.test.assertEquals
 
-@ActiveProfiles(value = *arrayOf("matchbook", TEST, DB), inheritProfiles = false)
+@ActiveProfiles(value = ["matchbook", TEST, DB], inheritProfiles = false)
 class TheAbstractDelayUpdateValidatorTest : AbstractDaoTest() {
     @Autowired
     private lateinit var validator: TestValidator
@@ -35,7 +35,7 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDaoTest() {
         runnerPrices.selectionId = CoreTestFactory.HOME
 
         val marketPrices = ModelFactory.newPrices(1, market, listOf(runnerPrices), Date())
-        val result = validator.validate(reactorTestFactory.newUpdateBetContext(marketPrices, runnerPrices, lay))
+        val result = validator.validate(reactorTestFactory.newUpdateBetContext(marketPrices, lay))
         assertEquals(validationResult, result)
     }
 
@@ -46,7 +46,7 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDaoTest() {
         val marketPrices = ModelFactory.newPrices(1, market, listOf(), Date())
         val runnerPrices = RunnerPrices()
         runnerPrices.selectionId = CoreTestFactory.DRAW
-        val result = validator.validate(reactorTestFactory.newUpdateBetContext(marketPrices, runnerPrices, Side.LAY))
+        val result = validator.validate(reactorTestFactory.newUpdateBetContext(marketPrices, Side.LAY))
         assertEquals(ValidationResult.REJECT, result)
     }
 

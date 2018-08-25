@@ -29,7 +29,7 @@ class BetUtilsTest : AbstractLocalTestCase() {
         val price = Price(5.0, 3.0, Side.BACK)
         bet = ModelFactory.newSettled(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
                 5.0, Date(), price)
-        bet.betAction = ModelFactory.newAction(BetActionType.PLACE, Date(), price, null, 1000)
+        bet.betAction = ModelFactory.newAction(BetActionType.PLACE, Date(), price, CoreTestFactory.newTestMarket(), 1000)
     }
 
     @Test

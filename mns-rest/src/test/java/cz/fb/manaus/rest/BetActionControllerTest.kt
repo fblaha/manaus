@@ -5,6 +5,7 @@ import com.google.common.net.HttpHeaders
 import cz.fb.manaus.core.dao.AbstractDaoTest
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.CoreTestFactory
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.newTestMarket
 import org.junit.Before
 import org.junit.Test
 import org.springframework.http.MediaType
@@ -36,7 +37,7 @@ class BetActionControllerTest : AbstractControllerTest() {
     fun `post action`() {
         val mapper = ObjectMapper()
         val original = createBetAction()
-        val priceId = marketPricesDao.getPrices(AbstractDaoTest.MARKET_ID)[0].id!!
+        val priceId = marketPricesDao.getPrices(AbstractDaoTest.MARKET_ID)[0].id
         val serialized = mapper.writer().writeValueAsString(original)
         val result = mvc.perform(post(
                 "/markets/{id}/actions?priceId={priceId}", AbstractDaoTest.MARKET_ID, priceId)
@@ -50,9 +51,9 @@ class BetActionControllerTest : AbstractControllerTest() {
 
     @Test
     fun `set bet ID`() {
-        val actionId = bet!!.betAction.id
+        val actionId = bet.betAction.id
         mvc.perform(put(
-                "/actions/{id}/betId", actionId!!)
+                "/actions/{id}/betId", actionId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("100"))
                 .andExpect(status().isOk)
@@ -61,7 +62,7 @@ class BetActionControllerTest : AbstractControllerTest() {
 
     private fun createBetAction(): BetAction {
         val betAction = ModelFactory.newAction(BetActionType.UPDATE, Date(),
-                Price(2.0, 3.0, Side.LAY), null, CoreTestFactory.DRAW)
+                Price(2.0, 3.0, Side.LAY), newTestMarket(), CoreTestFactory.DRAW)
         betAction.properties = Collections.singletonMap("key", "val")
         betAction.betId = "150"
         return betAction

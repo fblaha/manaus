@@ -41,16 +41,16 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
         val oldPrice = Price(2.5, 5.0, Side.BACK)
         val oldBet = ReactorTestFactory.newBet(oldPrice)
 
-        assertEquals(ValidationResult.REJECT, validator.validate(factory.newBetContext(Side.BACK, prices, runnerPrices, of(oldBet))
+        assertEquals(ValidationResult.REJECT, validator.validate(factory.newBetContext(Side.BACK, prices, of(oldBet))
                 .withNewPrice(oldPrice)))
 
-        assertEquals(ValidationResult.REJECT, validator.validate(factory.newBetContext(Side.BACK, prices, runnerPrices, of(oldBet))
+        assertEquals(ValidationResult.REJECT, validator.validate(factory.newBetContext(Side.BACK, prices, of(oldBet))
                 .withNewPrice(roundingService.decrement(oldPrice, 1).get())))
 
-        assertEquals(ValidationResult.REJECT, validator.validate(factory.newBetContext(Side.BACK, prices, runnerPrices, of(oldBet))
+        assertEquals(ValidationResult.REJECT, validator.validate(factory.newBetContext(Side.BACK, prices, of(oldBet))
                 .withNewPrice(roundingService.decrement(oldPrice, 2).get())))
 
-        assertEquals(ValidationResult.ACCEPT, validator.validate(factory.newBetContext(Side.BACK, prices, runnerPrices, of(oldBet))
+        assertEquals(ValidationResult.ACCEPT, validator.validate(factory.newBetContext(Side.BACK, prices, of(oldBet))
                 .withNewPrice(roundingService.decrement(oldPrice, 3).get())))
     }
 
@@ -64,7 +64,7 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
         whenever(oldOne.price).thenReturn(3.1)
         val oldBet = ReactorTestFactory.newBet(oldOne)
 
-        val context = factory.newBetContext(Side.LAY, prices, runnerPrices, of<Bet>(oldBet)).withNewPrice(newOne)
+        val context = factory.newBetContext(Side.LAY, prices, of<Bet>(oldBet)).withNewPrice(newOne)
         assertEquals(ValidationResult.REJECT, validator.validate(context))
         whenever(newOne.price).thenReturn(3.2)
         assertEquals(ValidationResult.REJECT, validator.validate(context))
@@ -84,7 +84,7 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
         whenever(newOne.price).thenReturn(1.04)
         val oldBet = ReactorTestFactory.newBet(oldOne)
 
-        val context = factory.newBetContext(Side.LAY, prices, runnerPrices, of<Bet>(oldBet)).withNewPrice(newOne)
+        val context = factory.newBetContext(Side.LAY, prices, of<Bet>(oldBet)).withNewPrice(newOne)
         assertEquals(ValidationResult.ACCEPT, validator.validate(context))
     }
 

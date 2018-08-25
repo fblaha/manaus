@@ -16,7 +16,8 @@ class JsonMarshallerTest : AbstractLocalTestCase() {
 
     @Test
     fun `bet action list`() {
-        val action = ModelFactory.newAction(BetActionType.PLACE, Date(), Price(2.0, 5.0, Side.LAY), null, 10)
+        val action = ModelFactory.newAction(BetActionType.PLACE, Date(), Price(2.0, 5.0, Side.LAY),
+                newTestMarket(), 10)
         val props = mapOf("property1" to "value1", "reciprocal" to "0.92")
         action.properties = props
         val json = mapper.writer().writeValueAsString(listOf(action))

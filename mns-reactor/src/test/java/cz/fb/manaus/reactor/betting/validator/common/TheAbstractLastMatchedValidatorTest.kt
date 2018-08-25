@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles
 import java.util.*
 import kotlin.test.assertEquals
 
-@ActiveProfiles(value = *arrayOf("matchbook", TEST), inheritProfiles = false)
+@ActiveProfiles(value = ["matchbook", TEST], inheritProfiles = false)
 class TheAbstractLastMatchedValidatorTest : AbstractLocalTestCase() {
 
     @Autowired
@@ -41,9 +41,9 @@ class TheAbstractLastMatchedValidatorTest : AbstractLocalTestCase() {
         val marketPrices = mock<MarketPrices>()
         whenever(marketPrices.getRunnerPrices(ArgumentMatchers.anyLong())).thenReturn(runnerPrices)
         whenever(marketPrices.getReciprocal(Side.BACK)).thenReturn(OptionalDouble.of(0.9))
-        assertEquals(lowerResult, validator.validate(factory.newBetContext(side, marketPrices, runnerPrices, Optional.empty<Bet>())
+        assertEquals(lowerResult, validator.validate(factory.newBetContext(side, marketPrices, Optional.empty<Bet>())
                 .withNewPrice(Price(2.0, 2.0, side))))
-        assertEquals(higherResult, validator.validate(factory.newBetContext(side, marketPrices, runnerPrices, Optional.empty<Bet>())
+        assertEquals(higherResult, validator.validate(factory.newBetContext(side, marketPrices, Optional.empty<Bet>())
                 .withNewPrice(Price(2.2, 2.0, side))))
     }
 
