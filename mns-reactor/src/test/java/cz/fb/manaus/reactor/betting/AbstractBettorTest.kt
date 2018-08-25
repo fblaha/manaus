@@ -5,7 +5,9 @@ import com.google.common.collect.Maps
 import cz.fb.manaus.core.dao.AbstractDaoTest
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.CoreTestFactory
-import cz.fb.manaus.core.test.CoreTestFactory.*
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.AWAY
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.DRAW
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.HOME
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.listener.AbstractUpdatingBettor
 import cz.fb.manaus.reactor.rounding.RoundingService

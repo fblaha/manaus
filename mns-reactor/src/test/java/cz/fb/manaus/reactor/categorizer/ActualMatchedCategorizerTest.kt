@@ -15,7 +15,7 @@ class ActualMatchedCategorizerTest : AbstractLocalTestCase() {
 
     @Test
     fun category() {
-        assertEquals(setOf("actualMatchedMarket_10-100"), categorizer!!.getCategories(CoreTestFactory.newSettledBet(2.0, Side.LAY), BetCoverage.EMPTY))
+        assertEquals(setOf("actualMatchedMarket_10-100"), categorizer.getCategories(CoreTestFactory.newSettledBet(2.0, Side.LAY), BetCoverage.EMPTY))
     }
 
 }

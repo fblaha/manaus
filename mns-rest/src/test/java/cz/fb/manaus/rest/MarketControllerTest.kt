@@ -33,7 +33,7 @@ class MarketControllerTest : AbstractControllerTest() {
 
     @Test
     fun `market create`() {
-        val market = ObjectMapper().writer().writeValueAsString(CoreTestFactory.newMarket())
+        val market = ObjectMapper().writer().writeValueAsString(CoreTestFactory.newTestMarket())
         val result = mvc.perform(post("/markets")
                 .content(market)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -44,7 +44,7 @@ class MarketControllerTest : AbstractControllerTest() {
 
     @Test(expected = NullPointerException::class)
     fun `missing id`() {
-        val market = CoreTestFactory.newMarket()
+        val market = CoreTestFactory.newTestMarket()
         val originalExceptionCount = exceptionCount
         market.id = null
         val payload = ObjectMapper().writer().writeValueAsString(market)

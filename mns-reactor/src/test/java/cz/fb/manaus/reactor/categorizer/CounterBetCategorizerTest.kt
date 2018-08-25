@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.categorizer
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.core.test.CoreTestFactory.newSettledBet
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.newSettledBet
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals

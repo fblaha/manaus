@@ -15,7 +15,7 @@ class ReciprocalCategorizerTest : AbstractLocalTestCase() {
 
     @Test
     fun category() {
-        assertEquals(setOf("reciprocal_0.80-0.85"), categorizer!!.getCategories(CoreTestFactory.newSettledBet(2.0, Side.LAY), BetCoverage.EMPTY))
+        assertEquals(setOf("reciprocal_0.80-0.85"), categorizer.getCategories(CoreTestFactory.newSettledBet(2.0, Side.LAY), BetCoverage.EMPTY))
     }
 
 }

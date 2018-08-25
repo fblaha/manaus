@@ -41,6 +41,11 @@
             <type>test-jar</type>
         </dependency>
 
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+        </dependency>
+
         <!--test-support-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

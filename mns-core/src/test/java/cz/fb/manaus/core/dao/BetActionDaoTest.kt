@@ -4,7 +4,8 @@ import com.google.common.collect.ImmutableMap.of
 import com.google.common.collect.Ordering
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.CoreTestFactory
-import cz.fb.manaus.core.test.CoreTestFactory.newMarket
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.newMarket
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.newTestMarket
 import org.apache.commons.lang3.time.DateUtils
 import org.apache.commons.lang3.time.DateUtils.addHours
 import org.hamcrest.CoreMatchers.hasItem
@@ -25,7 +26,7 @@ class BetActionDaoTest : AbstractDaoTest() {
 
     @Test
     fun `get action IDs for given market`() {
-        val market = newMarket()
+        val market = newTestMarket()
         marketDao.saveOrUpdate(market)
         createAndSaveBetAction(market, Date(), singletonMap("k1", "XXX"), AbstractDaoTest.BET_ID)
         val ids = betActionDao.getBetActionIds(market.id, OptionalLong.empty(), empty())
@@ -34,7 +35,7 @@ class BetActionDaoTest : AbstractDaoTest() {
 
     @Test
     fun `update bet id`() {
-        val market = newMarket()
+        val market = newTestMarket()
         marketDao.saveOrUpdate(market)
         createAndSaveBetAction(market, Date(), emptyMap(), AbstractDaoTest.BET_ID)
         val newId = AbstractDaoTest.BET_ID + "_1"
@@ -46,7 +47,7 @@ class BetActionDaoTest : AbstractDaoTest() {
 
     @Test
     fun `set bet id`() {
-        val market = newMarket()
+        val market = newTestMarket()
         marketDao.saveOrUpdate(market)
         val action = createAndSaveBetAction(market, Date(), emptyMap(), null)
         val actionId = action.id
@@ -56,7 +57,7 @@ class BetActionDaoTest : AbstractDaoTest() {
 
     @Test
     fun `get criteria`() {
-        val market = newMarket()
+        val market = newTestMarket()
         marketDao.saveOrUpdate(market)
         createAndSaveBetAction(market, Date(), singletonMap("k1", "XXX"), AbstractDaoTest.BET_ID)
         checkCount(market.id, OptionalLong.empty(), empty(), 1)
@@ -215,7 +216,7 @@ class BetActionDaoTest : AbstractDaoTest() {
 
     @Test
     fun `no duplicates due to multiple runner prices`() {
-        val market = newMarket()
+        val market = newTestMarket()
         val runnerPrices = ModelFactory.newRunnerPrices(232, listOf(Price(2.3, 22.0, Side.BACK)), 5.0, 2.5)
         val marketPrices = ModelFactory.newPrices(1, market, listOf(runnerPrices), Date())
         marketPrices.time = DateUtils.addMonths(Date(), -1)
@@ -231,7 +232,7 @@ class BetActionDaoTest : AbstractDaoTest() {
 
     @Test
     fun `market prices entity is shared by 2 actions`() {
-        val market = newMarket()
+        val market = newTestMarket()
         val runnerPrices = ModelFactory.newRunnerPrices(232, listOf(Price(2.3, 22.0, Side.BACK)), 5.0, 2.5)
         val marketPrices = ModelFactory.newPrices(1, market, listOf(runnerPrices), Date())
         marketPrices.time = DateUtils.addMonths(Date(), -1)

@@ -22,7 +22,7 @@ class CategoryServiceTest : AbstractLocalTestCase() {
 
     @Before
     fun createMarket() {
-        market = CoreTestFactory.newMarket()
+        market = CoreTestFactory.newTestMarket()
         eventType = EventType("1", "Y")
         market.eventType = eventType
     }
@@ -30,7 +30,7 @@ class CategoryServiceTest : AbstractLocalTestCase() {
     @Test
     fun testCategory() {
         eventType.name = "Soccer"
-        var categories = categoryService!!.getMarketCategories(market, false)
+        var categories = categoryService.getMarketCategories(market, false)
         assertThat(categories, hasItem(SPORT_SOCCER))
 
         eventType.name = "Tennis"

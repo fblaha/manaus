@@ -3,8 +3,8 @@ package cz.fb.manaus.rest
 import com.fasterxml.jackson.databind.ObjectMapper
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.core.test.CoreTestFactory.newBetAction
-import cz.fb.manaus.core.test.CoreTestFactory.newMarket
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.newBetAction
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.newTestMarket
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.*
@@ -26,7 +26,7 @@ class JsonMarshallerTest : AbstractLocalTestCase() {
     @Test
     fun `settled bet list`() {
         val bet = ModelFactory.newSettled(555, "The Draw", 5.23, Date(), Price(2.02, 2.35, Side.LAY))
-        bet.betAction = newBetAction("1", newMarket())
+        bet.betAction = newBetAction("1", newTestMarket())
         val json = mapper.writer().writeValueAsString(listOf(bet))
         assertTrue { "The Draw" in json }
     }

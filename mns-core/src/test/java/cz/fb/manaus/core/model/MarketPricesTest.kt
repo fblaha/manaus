@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.collect.ImmutableList.of
 import cz.fb.manaus.core.model.MarketPrices.getOverround
 import cz.fb.manaus.core.test.CoreTestFactory
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.newTestMarket
 import org.apache.commons.math3.util.Precision
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -34,7 +35,7 @@ class MarketPricesTest {
 
     @Test
     fun `last matched reciprocal`() {
-        assertEquals(1.0, CoreTestFactory.newMarketPrices(null).lastMatchedReciprocal.asDouble)
+        assertEquals(1.0, CoreTestFactory.newTestMarketPrices(newTestMarket()).lastMatchedReciprocal.asDouble)
     }
 
     @Test

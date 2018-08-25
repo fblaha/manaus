@@ -3,7 +3,8 @@ package cz.fb.manaus.core.dao
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import cz.fb.manaus.core.test.CoreTestFactory
-import cz.fb.manaus.core.test.CoreTestFactory.newMarket
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.newMarket
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.newTestMarket
 import org.apache.commons.lang3.time.DateUtils
 import org.apache.commons.lang3.time.DateUtils.addHours
 import org.hamcrest.CoreMatchers.`is`
@@ -35,7 +36,7 @@ abstract class AbstractDaoTest : AbstractDatabaseTestCase() {
 
     protected fun createAndSaveBetAction(market: Market, date: Date, values: Map<String, String>, betId: String?): BetAction {
         val betAction = ModelFactory.newAction(BetActionType.PLACE, date, Price(2.0, 3.0, Side.LAY), market, CoreTestFactory.DRAW)
-        val marketPrices = CoreTestFactory.newMarketPrices(market)
+        val marketPrices = CoreTestFactory.newTestMarketPrices(market)
         marketPricesDao.saveOrUpdate(marketPrices)
         betAction.marketPrices = marketPrices
         betAction.properties = values
@@ -65,7 +66,7 @@ abstract class AbstractDaoTest : AbstractDatabaseTestCase() {
 
     protected fun createBet() {
         val current = Date()
-        val market = newMarket()
+        val market = newTestMarket()
         val prices = ModelFactory.newPrices(1, market, createRPs(2.1, 2.2), Date())
         prices.time = DateUtils.addHours(current, -1)
         marketDao.saveOrUpdate(market)

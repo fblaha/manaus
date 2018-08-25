@@ -124,7 +124,7 @@ class ReactorTestFactory {
     private fun createMarket(): Market {
         val event = ModelFactory.newEvent("1", "Vischya Liga", addHours(Date(), 2), CoreTestFactory.COUNTRY_CODE)
         event.id = "1"
-        val market = CoreTestFactory.newMarket()
+        val market = CoreTestFactory.newTestMarket()
         market.event = event
         return market
     }

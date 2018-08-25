@@ -10,7 +10,7 @@ class MarketTest {
 
     @Test
     fun testDoubleSerialization() {
-        var market = CoreTestFactory.newMarket()
+        var market = CoreTestFactory.newTestMarket()
         val mapper = ObjectMapper()
         val serialized = mapper.writer().writeValueAsString(market)
         market = mapper.readerFor(Market::class.java).readValue(serialized)

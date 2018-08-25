@@ -29,7 +29,7 @@ class PriceServiceTest : AbstractLocalTestCase() {
 
     @Test
     fun `price downgrading`() {
-        assertEquals(3.0, priceService!!.downgrade(3.0, 0.0, Side.BACK), 0.000001)
+        assertEquals(3.0, priceService.downgrade(3.0, 0.0, Side.BACK), 0.000001)
         assertEquals(3.0, priceService.downgrade(3.0, 0.0, Side.LAY), 0.000001)
         assertEquals(1.0, priceService.downgrade(3.0, 1.0, Side.LAY), 0.000001)
         assertEquals(2.0, priceService.downgrade(3.0, 0.5, Side.LAY), 0.000001)

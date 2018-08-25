@@ -7,7 +7,7 @@ import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.CoreTestFactory
-import cz.fb.manaus.core.test.CoreTestFactory.newMarketPrices
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.newMarketPrices
 import org.junit.Test
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration

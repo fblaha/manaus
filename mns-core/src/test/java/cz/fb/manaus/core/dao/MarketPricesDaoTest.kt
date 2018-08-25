@@ -2,7 +2,8 @@ package cz.fb.manaus.core.dao
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.CoreTestFactory
-import cz.fb.manaus.core.test.CoreTestFactory.newMarket
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.newMarket
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.newTestMarket
 import org.apache.commons.lang3.time.DateUtils
 import org.apache.commons.math3.util.Precision
 import org.hibernate.LazyInitializationException
@@ -16,7 +17,7 @@ class MarketPricesDaoTest : AbstractDaoTest() {
 
     @Test
     fun `save and get`() {
-        val market = newMarket()
+        val market = newTestMarket()
         val marketPrices = ModelFactory.newPrices(1, market, listOf(), Date())
         marketDao.saveOrUpdate(market)
         marketPricesDao.saveOrUpdate(marketPrices)
@@ -25,7 +26,7 @@ class MarketPricesDaoTest : AbstractDaoTest() {
 
     @Test(expected = LazyInitializationException::class)
     fun `market fetched lazily`() {
-        val market = newMarket()
+        val market = newTestMarket()
         val marketPrices = ModelFactory.newPrices(1, market, listOf(), Date())
         marketDao.saveOrUpdate(market)
         marketPricesDao.saveOrUpdate(marketPrices)
@@ -34,7 +35,7 @@ class MarketPricesDaoTest : AbstractDaoTest() {
 
     @Test
     fun `save and get - 2 prices for the same market`() {
-        val market = newMarket()
+        val market = newTestMarket()
         val marketPrices = ModelFactory.newPrices(1, market, listOf(), Date())
         marketDao.saveOrUpdate(market)
         marketPricesDao.saveOrUpdate(marketPrices)
@@ -59,7 +60,7 @@ class MarketPricesDaoTest : AbstractDaoTest() {
 
     @Test
     fun `runner prices delete`() {
-        val market = newMarket()
+        val market = newTestMarket()
         val marketPrices = ModelFactory.newPrices(1, market, listOf(
                 ModelFactory.newRunnerPrices(232, listOf(Price(2.3, 22.0, Side.BACK)), 5.0, 2.5)), Date())
         marketPrices.time = DateUtils.addMonths(Date(), -1)
@@ -70,7 +71,7 @@ class MarketPricesDaoTest : AbstractDaoTest() {
 
     @Test
     fun `runner prices sort`() {
-        val market = newMarket()
+        val market = newTestMarket()
         val better = Price(2.3, 22.0, Side.BACK)
         val worse = Price(2.2, CoreTestFactory.DRAW.toDouble(), Side.BACK)
         val marketPrices = ModelFactory.newPrices(1, market, listOf(
@@ -85,7 +86,7 @@ class MarketPricesDaoTest : AbstractDaoTest() {
 
     @Test
     fun `runner prices sort - part 2`() {
-        val market = newMarket()
+        val market = newTestMarket()
         val better = Price(2.2, 22.0, Side.BACK)
         val worse = Price(2.2, 22.0, Side.LAY)
         val selId = 232
@@ -101,7 +102,7 @@ class MarketPricesDaoTest : AbstractDaoTest() {
 
     @Test
     fun `runner prices sort - part 3`() {
-        val market = newMarket()
+        val market = newTestMarket()
         val better = Price(2.3, 22.0, Side.LAY)
         val worse = Price(2.4, CoreTestFactory.DRAW.toDouble(), Side.LAY)
         val selId = 232
@@ -117,7 +118,7 @@ class MarketPricesDaoTest : AbstractDaoTest() {
 
     @Test
     fun `runner prices sort - part 4`() {
-        val market = newMarket()
+        val market = newTestMarket()
         val layBetter = Price(2.3, 22.0, Side.LAY)
         val layWorse = Price(2.4, CoreTestFactory.DRAW.toDouble(), Side.LAY)
         val backBetter = Price(2.3, 22.0, Side.BACK)
@@ -151,7 +152,7 @@ class MarketPricesDaoTest : AbstractDaoTest() {
 
     @Test
     fun `price list order - part 2`() {
-        val market = newMarket()
+        val market = newTestMarket()
         val marketPrices = ModelFactory.newPrices(1, market, listOf(), Date())
         marketPrices.time = DateUtils.addMonths(Date(), -1)
         marketDao.saveOrUpdate(market)
@@ -202,7 +203,7 @@ class MarketPricesDaoTest : AbstractDaoTest() {
 
     @Test
     fun `reciprocal back`() {
-        val market = newMarket()
+        val market = newTestMarket()
         marketDao.saveOrUpdate(market)
         val marketPrices = newPrices(market, 3.0)
         marketPricesDao.saveOrUpdate(marketPrices)
@@ -232,7 +233,7 @@ class MarketPricesDaoTest : AbstractDaoTest() {
     @Test
     fun `reciprocal time sort`() {
         val currDate = Date()
-        val market = newMarket()
+        val market = newTestMarket()
         marketDao.saveOrUpdate(market)
         savePrices(currDate, market, 3.0)
         savePrices(DateUtils.addDays(currDate, -1), market, 2.7)
@@ -244,7 +245,7 @@ class MarketPricesDaoTest : AbstractDaoTest() {
     @Test
     fun `reciprocal time sort - part 2`() {
         val currDate = Date()
-        val market = newMarket()
+        val market = newTestMarket()
         marketDao.saveOrUpdate(market)
 
         savePrices(DateUtils.addDays(currDate, -1), market, 2.7)
@@ -266,7 +267,7 @@ class MarketPricesDaoTest : AbstractDaoTest() {
 
     @Test
     fun `reciprocal back - part 2`() {
-        val market = newMarket()
+        val market = newTestMarket()
         marketDao.saveOrUpdate(market)
         val home = ModelFactory.newRunnerPrices(22, listOf(
                 Price(2.0, 100.0, Side.BACK),
@@ -290,7 +291,7 @@ class MarketPricesDaoTest : AbstractDaoTest() {
 
     @Test
     fun `reciprocal lay`() {
-        val market = newMarket()
+        val market = newTestMarket()
         marketDao.saveOrUpdate(market)
         val home = ModelFactory.newRunnerPrices(22, listOf(
                 Price(4.0, 100.0, Side.LAY),
@@ -310,7 +311,7 @@ class MarketPricesDaoTest : AbstractDaoTest() {
 
     @Test
     fun `reciprocal absent`() {
-        val market = newMarket()
+        val market = newTestMarket()
         marketDao.saveOrUpdate(market)
         val home = ModelFactory.newRunnerPrices(22, listOf(
                 Price(1.5, 100.0, Side.BACK)), 2.0, 2.0)

@@ -15,7 +15,7 @@ class MetricsServiceTest : AbstractLocalTestCase() {
 
     private val recordMap: Map<String, MetricRecord<*>>
         get() {
-            val collectedMetrics = service!!.getCollectedMetrics("test")
+            val collectedMetrics = service.getCollectedMetrics("test")
             return collectedMetrics.map { it.name to it }.toMap()
         }
 

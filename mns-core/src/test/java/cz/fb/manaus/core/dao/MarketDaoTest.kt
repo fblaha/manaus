@@ -2,7 +2,12 @@ package cz.fb.manaus.core.dao
 
 import cz.fb.manaus.core.model.ModelFactory
 import cz.fb.manaus.core.test.CoreTestFactory
-import cz.fb.manaus.core.test.CoreTestFactory.*
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.AWAY_NAME
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.COUNTRY_CODE
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.DRAW_NAME
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.HOME_NAME
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.newMarket
+import cz.fb.manaus.core.test.CoreTestFactory.Companion.newTestMarket
 import org.apache.commons.lang3.time.DateUtils
 import org.apache.commons.lang3.time.DateUtils.addHours
 import org.junit.Test
@@ -45,12 +50,12 @@ class MarketDaoTest : AbstractDaoTest() {
 
     @Test
     fun `market save`() {
-        marketDao.saveOrUpdate(newMarket())
+        marketDao.saveOrUpdate(newTestMarket())
     }
 
     @Test
     fun `runner saved`() {
-        marketDao.saveOrUpdate(newMarket())
+        marketDao.saveOrUpdate(newTestMarket())
         val market = marketDao.get(CoreTestFactory.MARKET_ID).get()
         assertEquals(3, market.runners.size)
 
@@ -61,7 +66,7 @@ class MarketDaoTest : AbstractDaoTest() {
 
     @Test
     fun `market merge`() {
-        var market = newMarket()
+        var market = newTestMarket()
         val childA = ModelFactory.newEvent("55", "childA", Date(), COUNTRY_CODE)
         market.event = childA
         marketDao.saveOrUpdate(market)
@@ -78,7 +83,7 @@ class MarketDaoTest : AbstractDaoTest() {
 
     @Test
     fun `market save and then update`() {
-        var market = newMarket()
+        var market = newTestMarket()
         marketDao.saveOrUpdate(market)
         assertEquals(3, marketDao.get(CoreTestFactory.MARKET_ID).get().runners.size)
         market = newMarket(CoreTestFactory.MARKET_ID, Date(), "new name")
@@ -89,7 +94,7 @@ class MarketDaoTest : AbstractDaoTest() {
 
     @Test
     fun `market version`() {
-        var market = newMarket()
+        var market = newTestMarket()
         marketDao.saveOrUpdate(market)
         assertEquals(0, marketDao.get(CoreTestFactory.MARKET_ID).get().version)
         market = newMarket(CoreTestFactory.MARKET_ID, Date(), AbstractDaoTest.SPARTA)

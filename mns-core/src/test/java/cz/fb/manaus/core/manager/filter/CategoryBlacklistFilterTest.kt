@@ -18,7 +18,7 @@ class CategoryBlacklistFilterTest : AbstractLocalTestCase() {
 
     @Before
     fun setUp() {
-        market = CoreTestFactory.newMarket()
+        market = CoreTestFactory.newTestMarket()
         eventType = EventType("1", "Soccer")
         market.eventType = eventType
     }
