@@ -15,7 +15,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class _AbstractBestPriceProposerTest extends AbstractLocalTestCase {
+public class TheAbstractBestPriceProposerTest extends AbstractLocalTestCase {
 
     @Autowired
     private LayProposer layProposer;
