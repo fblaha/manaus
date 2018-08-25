@@ -26,17 +26,17 @@ class CoreTestFactory {
 
     companion object {
 
-        val MARKET_ID = "44"
-        val HOME: Long = 1000
-        val DRAW: Long = 1001
-        val AWAY: Long = 1002
-        val MATCH_ODDS = "Match Odds"
-        val HOME_NAME = "Home"
-        val DRAW_NAME = "Draw"
-        val AWAY_NAME = "Away"
-        val AMOUNT = 44.0
-        val EVENT_NAME = "Manaus FC  Rio Negro AM"
-        val COUNTRY_CODE = "BR"
+        const val MARKET_ID = "44"
+        const val HOME: Long = 1000
+        const val DRAW: Long = 1001
+        const val AWAY: Long = 1002
+        const val MATCH_ODDS = "Match Odds"
+        const val HOME_NAME = "Home"
+        const val DRAW_NAME = "Draw"
+        const val AWAY_NAME = "Away"
+        const val AMOUNT = 44.0
+        const val EVENT_NAME = "Manaus FC  Rio Negro AM"
+        const val COUNTRY_CODE = "BR"
 
 
         fun newMarket(id: String, curr: Date, name: String): Market {
