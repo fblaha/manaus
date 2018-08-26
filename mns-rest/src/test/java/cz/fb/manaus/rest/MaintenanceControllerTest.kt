@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 class MaintenanceControllerTest : AbstractControllerTest() {
 
     @Test
-    fun tasks() {
+    fun `list tasks`() {
         checkResponse("/maintenance", "testTask", "777")
     }
 
