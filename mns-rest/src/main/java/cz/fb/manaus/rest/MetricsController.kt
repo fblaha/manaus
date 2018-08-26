@@ -37,8 +37,7 @@ class MetricsController {
     fun updateHistogram(@PathVariable name: String,
                         @RequestParam(defaultValue = "100") reservoirSize: Int,
                         @RequestBody value: Long) {
-        metricRegistry.histogram(name
-        ) { Histogram(SlidingWindowReservoir(reservoirSize)) }
+        metricRegistry.histogram(name) { Histogram(SlidingWindowReservoir(reservoirSize)) }
                 .update(value)
     }
 

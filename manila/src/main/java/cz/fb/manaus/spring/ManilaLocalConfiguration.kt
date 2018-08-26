@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile
 
 @Configuration
 @Profile("manila")
-@ComponentScan(value = "cz.fb.manaus.manila")
+@ComponentScan(value = ["cz.fb.manaus.manila"])
 open class ManilaLocalConfiguration {
 
     @Bean
