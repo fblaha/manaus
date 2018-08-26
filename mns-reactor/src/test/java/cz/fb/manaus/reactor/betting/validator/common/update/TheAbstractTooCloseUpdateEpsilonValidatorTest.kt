@@ -53,7 +53,6 @@ class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
         val oldBet = Optional.of<Bet>(ReactorTestFactory.newBet(oldOne))
 
         val prices = factory.createMarket(0.1, listOf(0.4, 0.3, 0.3))
-        val runnerPrices = prices.getRunnerPrices(CoreTestFactory.HOME)
 
         val context = factory.newBetContext(Side.LAY, prices, oldBet).withNewPrice(newOne)
         whenever(newOne.price).thenReturn(3.65)
