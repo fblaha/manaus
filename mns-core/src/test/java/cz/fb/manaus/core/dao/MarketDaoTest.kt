@@ -59,9 +59,9 @@ class MarketDaoTest : AbstractDaoTest() {
         val market = marketDao.get(CoreTestFactory.MARKET_ID).get()
         assertEquals(3, market.runners.size)
 
-        assertEquals(HOME_NAME, market.runners.stream().findFirst().get().name)
-        assertEquals(DRAW_NAME, market.runners.stream().skip(1).findFirst().get().name)
-        assertEquals(AWAY_NAME, market.runners.stream().skip(2).findFirst().get().name)
+        assertEquals(HOME_NAME, market.runners.first().name)
+        assertEquals(DRAW_NAME, market.runners.drop(1).first().name)
+        assertEquals(AWAY_NAME, market.runners.drop(2).first().name)
     }
 
     @Test

@@ -93,8 +93,8 @@ class ProfitServiceTest : AbstractProfitTest() {
                 false, provider.chargeRate)
         val all = result.find { ProfitRecord.isAllCategory(it) }!!
         Assert.assertEquals(expectedAllProfit, all.profit, 0.01)
-        val backCount = betList.stream().filter({ bet -> bet.price.side === Side.BACK }).count().toInt()
-        val layCount = betList.stream().filter({ bet -> bet.price.side === Side.LAY }).count().toInt()
+        val backCount = betList.filter { bet -> bet.price.side === Side.BACK }.count()
+        val layCount = betList.filter { bet -> bet.price.side === Side.LAY }.count()
         assertEquals(backCount, all.backCount)
         assertEquals(layCount, all.layCount)
         assertEquals(layCount + backCount, all.totalCount)

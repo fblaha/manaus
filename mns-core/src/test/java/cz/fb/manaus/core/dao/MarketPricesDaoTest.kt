@@ -58,8 +58,7 @@ class MarketPricesDaoTest : AbstractDaoTest() {
         assertTrue(longFirst.time.after(marketPricesList[1].time))
         val shortFirst = shortList[0]
         assertEquals(longFirst.time, shortFirst.time)
-        assertEquals(longFirst.runnerPrices.stream().findFirst().get(),
-                shortFirst.runnerPrices.stream().findFirst().get())
+        assertEquals(longFirst.runnerPrices.first(), shortFirst.runnerPrices.first())
     }
 
     @Test
