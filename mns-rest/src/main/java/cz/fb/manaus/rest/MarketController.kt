@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.util.*
-import java.util.Optional.empty
 
 @Controller
 @Profile(ManausProfiles.DB)
@@ -23,7 +22,7 @@ class MarketController {
     val markets: List<Market>
         @ResponseBody
         @RequestMapping(value = ["/markets"], method = [RequestMethod.GET])
-        get() = marketDao.getMarkets(Optional.of(Date()), empty(), OptionalInt.empty())
+        get() = marketDao.getMarkets(Optional.of(Date()), Optional.empty(), OptionalInt.empty())
 
     @ResponseBody
     @RequestMapping(value = ["/markets/{id}"], method = [RequestMethod.GET])

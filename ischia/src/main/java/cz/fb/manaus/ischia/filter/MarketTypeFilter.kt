@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 @Component
 class MarketTypeFilter : MarketFilter {
 
-    private val ALLOWED_TYPES = setOf(
+    private val allowedTypes = setOf(
             "three_way",
             "match_odds",
             "rt_match_odds",
@@ -16,6 +16,6 @@ class MarketTypeFilter : MarketFilter {
 
     override fun accept(market: Market, blacklist: Set<String>): Boolean {
         val type = Strings.nullToEmpty(market.type).toLowerCase()
-        return ALLOWED_TYPES.contains(type)
+        return allowedTypes.contains(type)
     }
 }
