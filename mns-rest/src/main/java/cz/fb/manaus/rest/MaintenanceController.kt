@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 class MaintenanceController {
 
     @Autowired
-    private val metricRegistry: MetricRegistry? = null
+    private lateinit var metricRegistry: MetricRegistry
 
     @Autowired(required = false)
     @get:ResponseBody
@@ -28,7 +28,7 @@ class MaintenanceController {
     @ResponseBody
     @RequestMapping(value = ["/maintenance/{name}"], method = [RequestMethod.POST])
     fun runTask(@PathVariable name: String): ResponseEntity<*> {
-        metricRegistry!!.counter("maintenance.$name").inc()
+        metricRegistry.counter("maintenance.$name").inc()
         val task = tasks.find { t -> name == t.name }
         val update = task?.execute()
         return if (update == null) {
