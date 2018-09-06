@@ -85,6 +85,7 @@ class MarketSnapshotController {
     }
 }
 
+// TODO use data class
 class MarketSnapshotCrate {
     lateinit var prices: MarketPrices
     lateinit var bets: List<Bet>
