@@ -85,6 +85,7 @@ class MarketSnapshotController {
     }
 }
 
+// 2018-09-07 21:50:11.063  WARN 9964 --- [kground-preinit] o.s.h.c.j.Jackson2ObjectMapperBuilder    : For Jackson Kotlin classes support please add "com.fasterxml.jackson.module:jackson-module-kotlin" to the classpath
 // TODO use data class
 class MarketSnapshotCrate {
     lateinit var prices: MarketPrices

@@ -5,7 +5,6 @@ import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.CategoryService
 import cz.fb.manaus.core.dao.BetActionDao
 import cz.fb.manaus.core.dao.SettledBetDao
-import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.settlement.SaveStatus
@@ -71,14 +70,6 @@ class SettledBetController {
         return settledBets.reversed()
     }
 
-    @ResponseBody
-    @RequestMapping(value = ["/stories/{betId}"], method = [RequestMethod.GET])
-    fun getBetStory(@PathVariable betId: String): BetStory {
-        val action = betActionDao.getBetAction(betId).get()
-        betActionDao.fetchMarketPrices(action)
-        return toBetStory(action)
-    }
-
     @RequestMapping(value = ["/bets"], method = [RequestMethod.POST])
     fun addBet(@RequestParam betId: String, @RequestBody bet: SettledBet): ResponseEntity<*> {
         Objects.requireNonNull(betId, "betId==null")
@@ -90,12 +81,4 @@ class SettledBetController {
         }
     }
 
-    private fun toBetStory(head: BetAction): BetStory {
-        var previous = betActionDao.getBetActions(head.market.id,
-                OptionalLong.of(head.selectionId),
-                Optional.of<Side>(head.price.side))
-        previous = previous.filter { action -> head.actionDate.after(action.actionDate) }
-        previous.forEach { betActionDao.fetchMarketPrices(it) }
-        return BetStory(head, null, previous)
-    }
 }

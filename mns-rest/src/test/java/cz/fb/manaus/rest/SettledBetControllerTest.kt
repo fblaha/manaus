@@ -31,11 +31,6 @@ class SettledBetControllerTest : AbstractControllerTest() {
     }
 
     @Test
-    fun story() {
-        checkResponse("/stories/" + AbstractDaoTest.BET_ID, "previousActions")
-    }
-
-    @Test
     fun `post settled bet`() {
         val mapper = ObjectMapper()
         val original = ModelFactory.newSettled(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME,
