@@ -23,17 +23,15 @@ class MarketSnapshotControllerTest : AbstractControllerTest() {
     fun `push snapshot`() {
         createMarketWithSingleAction()
         val marketPrices = newMarketPrices(3, 2.8)
-        val crate = MarketSnapshotCrate()
-        crate.prices = marketPrices
         val accountMoney = AccountMoney()
         accountMoney.available = 1000.0
         accountMoney.total = 2000.0
-        crate.money = accountMoney
-        crate.scanTime = 1000
-        crate.categoryBlacklist = setOf("bad")
+        val categoryBlacklist = setOf("bad")
         val bet = Bet("1", marketPrices.market.id, CoreTestFactory.DRAW,
                 Price(3.0, 5.0, Side.BACK), Date(), 0.0)
-        crate.bets = listOf(bet)
+        val crate = MarketSnapshotCrate(marketPrices, listOf(bet),
+                categoryBlacklist, accountMoney, 1000)
+
         val snapshot = ObjectMapper().writer().writeValueAsString(crate)
         mvc.perform(post("/markets/{id}/snapshot", AbstractDaoTest.MARKET_ID)
                 .content(snapshot)

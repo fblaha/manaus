@@ -81,17 +81,16 @@ class MarketSnapshotController {
     }
 
     companion object {
+        // TODO kotlin logging ?
         private val log = Logger.getLogger(MarketSnapshotController::class.java.simpleName)
     }
 }
 
-// 2018-09-07 21:50:11.063  WARN 9964 --- [kground-preinit] o.s.h.c.j.Jackson2ObjectMapperBuilder    : For Jackson Kotlin classes support please add "com.fasterxml.jackson.module:jackson-module-kotlin" to the classpath
-// TODO use data class
-class MarketSnapshotCrate {
-    lateinit var prices: MarketPrices
-    lateinit var bets: List<Bet>
-    lateinit var categoryBlacklist: Set<String>
-    lateinit var money: AccountMoney
-    var scanTime: Int = 0
-}
+data class MarketSnapshotCrate(
+        var prices: MarketPrices,
+        var bets: List<Bet>,
+        var categoryBlacklist: Set<String>,
+        var money: AccountMoney,
+        var scanTime: Int = 0
+)
 
