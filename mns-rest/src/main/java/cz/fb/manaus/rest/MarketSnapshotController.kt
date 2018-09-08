@@ -21,6 +21,14 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 
+data class MarketSnapshotCrate(
+        var prices: MarketPrices,
+        var bets: List<Bet>,
+        var categoryBlacklist: Set<String>,
+        var money: AccountMoney,
+        var scanTime: Int = 0
+)
+
 @Controller
 @Profile(ManausProfiles.DB)
 class MarketSnapshotController {
@@ -44,23 +52,24 @@ class MarketSnapshotController {
             val marketPrices = snapshotCrate.prices
             marketDao.get(id).ifPresent { marketPrices.market = it }
             logMarket(marketPrices)
-            val bets = Optional.ofNullable(snapshotCrate.bets).orElse(listOf())
+            val bets = snapshotCrate.bets
             betMetricUpdater.update(snapshotCrate.scanTime.toLong(), bets)
             val marketSnapshot = MarketSnapshot.from(marketPrices, bets,
                     Optional.empty<Map<Long, TradedVolume>>())
             val myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty<Side>())
             val collectedBets = manager.fire(marketSnapshot, myBets,
                     Optional.ofNullable(snapshotCrate.money),
-                    Optional.ofNullable(snapshotCrate.categoryBlacklist).orElse(setOf()))
-            return if (!collectedBets.isEmpty) {
+                    snapshotCrate.categoryBlacklist)
+            return if (collectedBets.isEmpty) {
+                ResponseEntity.noContent().build<Any>()
+            } else {
                 ResponseEntity.ok<CollectedBets>(collectedBets)
-            } else ResponseEntity.noContent().build<Any>()
+            }
         } catch (e: RuntimeException) {
             metricRegistry.counter("_SNAPSHOT_ERROR_").inc()
             logException(snapshotCrate, e)
             throw e
         }
-
     }
 
     private fun logMarket(marketPrices: MarketPrices) {
@@ -70,8 +79,6 @@ class MarketSnapshotController {
     }
 
     private fun validateMarket(snapshotCrate: MarketSnapshotCrate) {
-        Objects.requireNonNull<MarketPrices>(snapshotCrate.prices)
-        Objects.requireNonNull<Collection<RunnerPrices>>(snapshotCrate.prices.runnerPrices)
         Preconditions.checkState(!snapshotCrate.prices.runnerPrices.isEmpty())
     }
 
@@ -81,16 +88,6 @@ class MarketSnapshotController {
     }
 
     companion object {
-        // TODO kotlin logging ?
         private val log = Logger.getLogger(MarketSnapshotController::class.java.simpleName)
     }
 }
-
-data class MarketSnapshotCrate(
-        var prices: MarketPrices,
-        var bets: List<Bet>,
-        var categoryBlacklist: Set<String>,
-        var money: AccountMoney,
-        var scanTime: Int = 0
-)
-

@@ -12,21 +12,20 @@ import java.time.temporal.ChronoUnit
 class IntervalParser {
 
     internal fun parse(date: Instant, interval: String): Range<Instant> {
-        var date = date
-        var interval = interval
+        var shiftedDate = date
         val split = Splitter.on('-').splitToList(interval)
-        interval = split[0]
+        val intervalOnly = split[0]
 
-        val count = Integer.parseInt(CharMatcher.digit().retainFrom(interval))
-        val unitChar = CharMatcher.digit().removeFrom(interval)[0]
+        val count = Integer.parseInt(CharMatcher.digit().retainFrom(intervalOnly))
+        val unitChar = CharMatcher.digit().removeFrom(intervalOnly)[0]
         val unit = UNITS[unitChar]
 
         if (split.size == 2) {
             val offsetDays = Integer.parseInt(split[1])
-            date = date.minus(offsetDays.toLong(), unit)
+            shiftedDate = shiftedDate.minus(offsetDays.toLong(), unit)
         }
 
-        return Range.closed(date.minus(count.toLong(), unit), date)
+        return Range.closed(shiftedDate.minus(count.toLong(), unit), shiftedDate)
     }
 
     companion object {

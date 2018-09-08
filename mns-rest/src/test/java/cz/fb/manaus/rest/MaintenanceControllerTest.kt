@@ -1,12 +1,11 @@
 package cz.fb.manaus.rest
 
-import org.hamcrest.CoreMatchers
-import org.junit.Assert.assertThat
 import org.junit.Test
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import kotlin.test.assertTrue
 
 
 @ContextConfiguration(classes = [MaintenanceController::class])
@@ -24,8 +23,7 @@ class MaintenanceControllerTest : AbstractControllerTest() {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
                 .andReturn()
-        val content = result.response.contentAsString
-        assertThat(content, CoreMatchers.containsString("test_delete"))
+        assertTrue("test_delete" in result.response.contentAsString)
     }
 
     @Test
