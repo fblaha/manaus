@@ -10,25 +10,24 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
-import org.springframework.stereotype.Repository
+import org.springframework.stereotype.Component
 import java.time.Instant
 import java.util.*
 import java.util.Optional.empty
-import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 import java.util.logging.Logger
 
-@Repository
+@Component
 @Profile(ManausProfiles.DB)
-open class SettledBetLoader {
+class SettledBetLoader {
     @Autowired
     private lateinit var intervalParser: IntervalParser
     @Autowired
     private lateinit var settledBetDao: SettledBetDao
     @Autowired
     private lateinit var betActionDao: BetActionDao
-    private val cache = CacheBuilder.newBuilder()
+    private var cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .expireAfterAccess(10, TimeUnit.MINUTES)
             .expireAfterWrite(30, TimeUnit.MINUTES)
@@ -38,14 +37,9 @@ open class SettledBetLoader {
                 }
             })
 
-    fun load(interval: String, cache: Boolean): List<SettledBet> {
-        return if (cache) {
-            try {
-                this.cache.get(interval)
-            } catch (e: ExecutionException) {
-                throw RuntimeException(e)
-            }
-
+    fun load(interval: String, useCache: Boolean): List<SettledBet> {
+        return if (useCache) {
+            cache.getUnchecked(interval)
         } else {
             loadFromDatabase(interval)
         }
