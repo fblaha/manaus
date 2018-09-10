@@ -36,7 +36,7 @@ public abstract class AbstractMatchedCategorizer implements SettledBetCategorize
         return amount.isPresent() ? Set.of(getCategory(amount.getAsDouble())) : Set.of();
     }
 
-    protected abstract OptionalDouble getAmount(SettledBet settledBet);
+    abstract public OptionalDouble getAmount(SettledBet settledBet);
 
     String getCategory(double matchedAmount) {
         return prefix + CATEGORY_STEPS.get(matchedAmount);
