@@ -51,9 +51,9 @@ class TheAbstractBestPriceProposerTest : AbstractLocalTestCase() {
     }
 
     @Component
-    private class LayProposer : AbstractBestPriceProposer()
+    private class LayProposer : AbstractBestPriceProposer(1)
 
     @Component
-    private class BackProposer : AbstractBestPriceProposer()
+    private class BackProposer : AbstractBestPriceProposer(1)
 
 }

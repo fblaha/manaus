@@ -8,10 +8,8 @@ import cz.fb.manaus.reactor.betting.proposer.common.AbstractFairnessProposer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
-import java.util.function.Function
-
 @Component
 @BackLoserBet
 @LayLoserBet
 class FairnessBackProposer @Autowired
-constructor(downgradeStrategy: Function<BetContext, Double>) : AbstractFairnessProposer(Side.BACK, downgradeStrategy)
+constructor(downgradeStrategy: (BetContext) -> Double) : AbstractFairnessProposer(Side.BACK, downgradeStrategy)

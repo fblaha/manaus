@@ -6,8 +6,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 
-import java.util.function.Function
-
 @Configuration
 @Profile("betfair")
 open class BetfairValues {
@@ -18,8 +16,8 @@ open class BetfairValues {
     }
 
     @Bean
-    open fun downgradeStrategy(): Function<BetContext, Double> {
-        return Function { minimizeChargeStrategy().getReductionRate(it) }
+    open fun downgradeStrategy(): (BetContext) -> Double {
+        return { minimizeChargeStrategy().getReductionRate(it) }
     }
 
     @Bean

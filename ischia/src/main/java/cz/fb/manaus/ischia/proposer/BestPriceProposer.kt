@@ -8,4 +8,4 @@ import org.springframework.stereotype.Component
 @Component
 @BackLoserBet
 @LayLoserBet
-class BestPriceProposer : AbstractBestPriceProposer()
+class BestPriceProposer : AbstractBestPriceProposer(1)

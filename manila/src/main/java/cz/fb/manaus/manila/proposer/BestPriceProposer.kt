@@ -6,4 +6,4 @@ import org.springframework.stereotype.Component
 
 @Component
 @ManilaBet
-class BestPriceProposer : AbstractBestPriceProposer()
+class BestPriceProposer : AbstractBestPriceProposer(1)
