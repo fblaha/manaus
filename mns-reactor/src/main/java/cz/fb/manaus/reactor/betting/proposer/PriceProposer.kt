@@ -13,13 +13,14 @@ interface PriceProposer : Validator, NameAware {
 
     fun getProposedPrice(context: BetContext): OptionalDouble
 
-    override fun isPriceRequired(): Boolean {
-        return false
-    }
 
-    override fun isDowngradeAccepting(): Boolean {
-        return false
-    }
+    override val isDowngradeAccepting: Boolean
+        get() = false
+
+
+    override val isPriceRequired: Boolean
+        get() = false
+
 
     override fun validate(context: BetContext): ValidationResult {
         return ValidationResult.ACCEPT

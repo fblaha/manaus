@@ -16,9 +16,7 @@ abstract class AbstractTooCloseUpdateValidator(private val closeSteps: Set<Int>)
     @Autowired
     private lateinit var priceService: PriceService
 
-    override fun isUpdateOnly(): Boolean {
-        return true
-    }
+    override val isUpdateOnly: Boolean = true
 
     override fun validate(context: BetContext): ValidationResult {
         val oldOne = context.oldBet.get().requestedPrice.price

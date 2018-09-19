@@ -17,29 +17,26 @@ import java.util.logging.Logger
 
 abstract class AbstractBeforeCategorizer protected constructor(private val category: String) : SettledBetCategorizer {
 
-    val dayMap: RangeMap<Long, String>
-        get() = ImmutableRangeMap.builder<Long, String>()
-                .put(Range.upTo(0L, BoundType.OPEN), category + DAY + NEGATIVE)
-                .put(Range.singleton(0L), category + DAY + "0-1")
-                .put(Range.singleton(1L), category + DAY + "1-2")
-                .put(Range.singleton(2L), category + DAY + "2-3")
-                .put(closedOpen(3L, 6L), category + DAY + "3-6")
-                .put(downTo(6L, BoundType.CLOSED), category + DAY + "6d+")
-                .build()
+    val dayMap: RangeMap<Long, String> = ImmutableRangeMap.builder<Long, String>()
+            .put(Range.upTo(0L, BoundType.OPEN), category + DAY + NEGATIVE)
+            .put(Range.singleton(0L), category + DAY + "0-1")
+            .put(Range.singleton(1L), category + DAY + "1-2")
+            .put(Range.singleton(2L), category + DAY + "2-3")
+            .put(closedOpen(3L, 6L), category + DAY + "3-6")
+            .put(downTo(6L, BoundType.CLOSED), category + DAY + "6d+")
+            .build()
 
-    private val hourMap: RangeMap<Long, String>
-        get() = ImmutableRangeMap.builder<Long, String>()
-                .put(Range.upTo(0L, BoundType.OPEN), category + HOUR + NEGATIVE)
-                .put(Range.singleton(0L), category + HOUR + "0-1")
-                .put(Range.singleton(1L), category + HOUR + "1-2")
-                .put(Range.singleton(2L), category + HOUR + "2-3")
-                .put(closedOpen(3L, 6L), category + HOUR + "3-6")
-                .put(closedOpen(6L, 12L), category + HOUR + "6-12")
-                .put(downTo(12L, BoundType.CLOSED), category + HOUR + "12-24")
-                .build()
+    private val hourMap: RangeMap<Long, String> = ImmutableRangeMap.builder<Long, String>()
+            .put(Range.upTo(0L, BoundType.OPEN), category + HOUR + NEGATIVE)
+            .put(Range.singleton(0L), category + HOUR + "0-1")
+            .put(Range.singleton(1L), category + HOUR + "1-2")
+            .put(Range.singleton(2L), category + HOUR + "2-3")
+            .put(closedOpen(3L, 6L), category + HOUR + "3-6")
+            .put(closedOpen(6L, 12L), category + HOUR + "6-12")
+            .put(downTo(12L, BoundType.CLOSED), category + HOUR + "12-24")
+            .build()
 
-    private val minMap: RangeMap<Long, String>
-        get() = ImmutableRangeMap.builder<Long, String>()
+    private val minMap: RangeMap<Long, String> = ImmutableRangeMap.builder<Long, String>()
                 .put(upTo(0L, BoundType.OPEN), category + MIN + NEGATIVE)
                 .put(closedOpen(0L, 10L), category + MIN + "0-10")
                 .put(closedOpen(10L, 20L), category + MIN + "10-20")

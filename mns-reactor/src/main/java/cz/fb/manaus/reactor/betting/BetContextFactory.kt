@@ -22,7 +22,6 @@ class BetContextFactory {
                accountMoney: Optional<AccountMoney>,
                categoryBlacklist: Set<String>): BetContext {
         val forecast = forecaster.getForecast(selectionId, side, snapshot, fairness)
-        return BetContext(side, selectionId, accountMoney, forecast, snapshot, fairness,
-                categoryBlacklist)
+        return BetContext(side, selectionId, accountMoney, forecast, snapshot, fairness)
     }
 }

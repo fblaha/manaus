@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component
 @Profile("matchbook")
 class TheSamePriceUpdateEpsilonValidator : AbstractTooCloseUpdateEpsilonValidator(0.025) {
 
-    override fun isDowngradeAccepting(): Boolean {
-        return false
-    }
+    override val isDowngradeAccepting: Boolean = false
+
 }

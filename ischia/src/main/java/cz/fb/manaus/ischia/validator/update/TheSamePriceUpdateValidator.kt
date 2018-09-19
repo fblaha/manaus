@@ -15,7 +15,5 @@ import org.springframework.stereotype.Component
 @Profile("betfair")
 class TheSamePriceUpdateValidator : AbstractTooCloseUpdateValidator(emptySet()) {
 
-    override fun isDowngradeAccepting(): Boolean {
-        return false
-    }
+    override val isDowngradeAccepting: Boolean = false
 }

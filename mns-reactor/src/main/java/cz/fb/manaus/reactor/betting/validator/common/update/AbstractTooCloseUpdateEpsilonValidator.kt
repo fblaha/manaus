@@ -15,8 +15,6 @@ abstract class AbstractTooCloseUpdateEpsilonValidator protected constructor(priv
         return ValidationResult.of(!closeRange.contains(newOne))
     }
 
-    override fun isUpdateOnly(): Boolean {
-        return true
-    }
+    override val isUpdateOnly: Boolean = true
 
 }
