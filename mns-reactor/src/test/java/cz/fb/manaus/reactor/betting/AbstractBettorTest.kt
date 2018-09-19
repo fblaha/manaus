@@ -30,9 +30,9 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDaoTest(
         val collector = BetCollector()
         val snapshot = MarketSnapshot.from(marketPrices, bets,
                 Optional.of(createTradedVolume(marketPrices)))
-        bettor.onMarketSnapshot(snapshot, collector, Optional.empty<AccountMoney>(), setOf())
-        assertEquals(placeCount, collector.toPlace.size)
-        assertEquals(updateCount, collector.toUpdate.size)
+        bettor.onMarketSnapshot(snapshot, collector, Optional.empty(), setOf())
+        assertEquals(placeCount, collector.getToPlace().size)
+        assertEquals(updateCount, collector.getToUpdate().size)
         return collector
     }
 
@@ -51,7 +51,7 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDaoTest(
 
     protected fun checkPlace(marketPrices: MarketPrices, expectedCount: Int, expectedPrice: OptionalDouble): BetCollector {
         val result = check(marketPrices, listOf(), expectedCount, 0)
-        val toPlace = result.toPlace
+        val toPlace = result.getToPlace()
         if (expectedPrice.isPresent) {
             for (command in toPlace) {
                 assertEquals(expectedPrice.asDouble, command.bet.requestedPrice.price)

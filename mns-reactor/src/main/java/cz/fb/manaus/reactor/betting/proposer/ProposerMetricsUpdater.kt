@@ -16,7 +16,7 @@ class ProposerMetricsUpdater : BetActionListener {
     private val metricRegistry: MetricRegistry? = null
 
     override fun onAction(action: BetAction) {
-        val proposers = action.properties[BetAction.PROPOSER_PROP]
+        val proposers = action.properties[BetAction.PROPOSER_PROP]!!
         val side = action.price.side.name.toLowerCase()
         for (proposer in betUtils.parseProposers(proposers)) {
             val key = Joiner.on('.').join(PROPOSER_METRIC, side, proposer)

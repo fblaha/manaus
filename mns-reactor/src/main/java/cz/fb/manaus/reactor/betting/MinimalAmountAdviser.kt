@@ -10,7 +10,6 @@ class MinimalAmountAdviser : AmountAdviser {
     @Autowired
     private lateinit var provider: ExchangeProvider
 
-    override fun getAmount(): Double {
-        return provider.minAmount
-    }
+    override val amount: Double
+        get() = provider.minAmount
 }

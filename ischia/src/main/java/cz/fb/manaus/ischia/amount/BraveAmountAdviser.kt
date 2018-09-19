@@ -13,7 +13,6 @@ class BraveAmountAdviser : AmountAdviser {
     @Autowired
     private lateinit var minimalAmountAdviser: MinimalAmountAdviser
 
-    override fun getAmount(): Double {
-        return minimalAmountAdviser.amount + 1.0
-    }
+    override val amount: Double
+        get() = minimalAmountAdviser.amount + 1.0
 }

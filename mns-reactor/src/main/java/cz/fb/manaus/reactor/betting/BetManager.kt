@@ -78,8 +78,8 @@ constructor(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
                         listener.onMarketSnapshot(snapshot, collector, accountMoney, categoryBlacklist)
                     }
                 }
-                saveActions(collector.toPlace)
-                saveActions(collector.toUpdate)
+                saveActions(collector.getToPlace())
+                saveActions(collector.getToUpdate())
             }
         }
         return collector.toCollectedBets()
