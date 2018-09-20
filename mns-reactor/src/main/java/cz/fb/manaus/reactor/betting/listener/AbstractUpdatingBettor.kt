@@ -4,7 +4,7 @@ import com.codahale.metrics.MetricRegistry
 import com.google.common.base.Preconditions.checkState
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.betting.*
-import cz.fb.manaus.reactor.betting.listener.ProbabilityComparator.COMPARATORS
+import cz.fb.manaus.reactor.betting.listener.ProbabilityComparator.Companion.COMPARATORS
 import cz.fb.manaus.reactor.betting.validator.ValidationService
 import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
@@ -48,7 +48,7 @@ abstract class AbstractUpdatingBettor protected constructor(private val side: Si
                 val selectionId = runnerPrices.selectionId
                 val runner = market.getRunner(selectionId)
                 val activeSelection = coverage.contains(side, selectionId) || coverage.contains(side.opposite, selectionId)
-                val accepted = flowFilter.indexRange.contains(i) && flowFilter.runnerPredicate.test(market, runner)
+                val accepted = flowFilter.indexRange.contains(i) && flowFilter.runnerPredicate(market, runner)
                 if (activeSelection || accepted) {
                     val oldBet = ofNullable(coverage.get(side, selectionId))
                     val ctx = contextFactory.create(side, selectionId,
