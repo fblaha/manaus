@@ -67,8 +67,8 @@ class MarketChargeTest : AbstractLocalTestCase() {
 
     private fun checkCharge(charge: MarketCharge, totalCharge: Double, totalProfit: Double,
                             expectedContributions: Map<String, Double>) {
-        assertEquals(totalCharge, charge.totalCharge)
-        assertEquals(totalProfit, charge.totalProfit)
+        assertEquals(totalCharge, charge.getTotalCharge())
+        assertEquals(totalProfit, charge.getTotalProfit())
         for ((key, value) in expectedContributions) {
             Assert.assertEquals(value, charge.getChargeContribution(key), 0.01)
         }

@@ -6,14 +6,14 @@ import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
-import org.springframework.stereotype.Repository
+import org.springframework.stereotype.Component
 import java.time.Instant
 import java.util.*
 import java.util.Objects.requireNonNull
 import java.util.logging.Level
 import java.util.logging.Logger
 
-@Repository
+@Component
 @Profile(ManausProfiles.DB)
 class ActionSaver {
     @Autowired

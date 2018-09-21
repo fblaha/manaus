@@ -131,10 +131,7 @@ class ReactorTestFactory {
     }
 
     companion object {
-
         const val BET_ID = "111156454"
-
-
         fun newBet(oldOne: Price): Bet {
             return Bet(BET_ID, "1", CoreTestFactory.HOME, oldOne, Date(), 5.0)
         }
