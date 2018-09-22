@@ -52,10 +52,9 @@ abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) 
         }
     }
 
-    protected fun computeChunkRecord(name: String, chunk: List<Pair<SettledBet, OptionalDouble>>,
+    protected fun computeChunkRecord(name: String, chunk: List<Pair<SettledBet, Double?>>,
                                      charges: Map<String, Double>, coverage: BetCoverage): ProfitRecord {
-        val average = chunk.map { it.second }
-                .map { it.asDouble }.average()
+        val average = chunk.mapNotNull { it.second }.average()
         val category = getValueCategory(name, average)
         val bets = chunk.map { it.first }
         return computeFunctionRecord(category, bets, charges, coverage)

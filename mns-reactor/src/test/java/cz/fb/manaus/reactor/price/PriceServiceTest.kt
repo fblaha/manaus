@@ -61,7 +61,7 @@ class PriceServiceTest : AbstractLocalTestCase() {
     }
 
     private fun getFairness(side: Side, marketPrices: MarketPrices): Double {
-        return calculator.getFairness(marketPrices.winnerCount.toDouble(), marketPrices.getBestPrices(side)).asDouble
+        return calculator.getFairness(marketPrices.winnerCount.toDouble(), marketPrices.getBestPrices(side))!!
     }
 
     @Test
@@ -194,8 +194,8 @@ class PriceServiceTest : AbstractLocalTestCase() {
         val fairness = calculator.getFairness(market)
         val bestBack = market.getBestPrices(Side.BACK)[0].asDouble
         val bestLay = market.getBestPrices(Side.LAY)[0].asDouble
-        val fairnessBackFairPrice = priceService.getFairnessFairPrice(bestBack, fairness.get(Side.BACK).asDouble)
-        val fairnessLayFairPrice = priceService.getFairnessFairPrice(bestLay, fairness.get(Side.LAY).asDouble)
+        val fairnessBackFairPrice = priceService.getFairnessFairPrice(bestBack, fairness[Side.BACK]!!)
+        val fairnessLayFairPrice = priceService.getFairnessFairPrice(bestLay, fairness[Side.LAY]!!)
         assertEquals(fairnessBackFairPrice, fairnessLayFairPrice, 0.01)
     }
 

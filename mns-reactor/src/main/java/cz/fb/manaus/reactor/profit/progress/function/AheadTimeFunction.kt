@@ -7,14 +7,14 @@ import java.util.*
 
 interface AheadTimeFunction : ProgressFunction {
 
-    override fun apply(bet: SettledBet): OptionalDouble {
+    override fun invoke(bet: SettledBet): Double? {
         val eventTime = getRelatedTime(bet)
         return if (eventTime.isPresent) {
             val openDate = bet.betAction.market.event.openDate.toInstant()
             val minutes = eventTime.get().until(openDate, ChronoUnit.MINUTES)
-            OptionalDouble.of(minutes / 60.0)
+            minutes / 60.0
         } else {
-            OptionalDouble.empty()
+            null
         }
     }
 

@@ -31,22 +31,22 @@ constructor(functions: List<ProgressFunction>) : AbstractFunctionProfitService(f
 
     private fun computeProfitRecords(function: ProgressFunction, chunkCount: Int, coverage: BetCoverage,
                                      bets: List<SettledBet>, charges: Map<String, Double>): List<ProfitRecord> {
-        val computed = bets.map { bet -> Pair(bet, function.apply(bet)) }
+        val computed = bets.map { bet -> Pair(bet, function(bet)) }
 
-        val (hasValue, noValues) = computed.partition { p -> p.second.isPresent }
+        val (hasValue, noValues) = computed.partition { p -> p.second != null }
 
-        val sortedCopy = hasValue.sortedBy { it.second.asDouble }
+        val sortedCopy = hasValue.sortedBy { it.second }
 
         val chunkSize = IntMath.divide(sortedCopy.size, chunkCount, RoundingMode.CEILING)
 
         if (sortedCopy.isEmpty()) return emptyList()
 
-        val chunks = Lists.partition<Pair<SettledBet, OptionalDouble>>(sortedCopy, chunkSize)
+        val chunks = Lists.partition<Pair<SettledBet, Double?>>(sortedCopy, chunkSize)
 
         // TODO parallel stream was here
         val result = chunks
                 .map { chunk -> computeChunkRecord(function.name, chunk, charges, coverage) }
-                .filter { Objects.nonNull(it) }.toMutableList()
+                .toMutableList()
 
 
         if (!noValues.isEmpty()) {

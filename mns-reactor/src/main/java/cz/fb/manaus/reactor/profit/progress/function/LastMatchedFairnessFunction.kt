@@ -13,7 +13,7 @@ class LastMatchedFairnessFunction : ProgressFunction {
     @Autowired
     private lateinit var calculator: FairnessPolynomialCalculator
 
-    override fun apply(bet: SettledBet): OptionalDouble {
+    override fun invoke(bet: SettledBet): Double? {
         val marketPrices = bet.betAction.marketPrices
         val lastMatched = marketPrices.runnerPrices.map { this.getLastMatched(it) }
         return calculator.getFairness(marketPrices.winnerCount.toDouble(), lastMatched)

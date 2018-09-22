@@ -5,26 +5,26 @@ import cz.fb.manaus.core.model.Side
 import java.util.*
 import java.util.Objects.requireNonNull
 
-class Fairness(val back: OptionalDouble, val lay: OptionalDouble) {
+class Fairness(val back: Double?, val lay: Double?) {
 
     val moreCredibleSide: Optional<Side>
         get() {
-            if (lay.isPresent && back.isPresent) {
-                val layInverted = 1 / lay.asDouble
-                return if (back.asDouble > layInverted) {
+            if (lay != null && back != null) {
+                val layInverted = 1 / lay
+                return if (back > layInverted) {
                     Optional.of(Side.BACK)
                 } else {
                     Optional.of(Side.LAY)
                 }
-            } else if (lay.isPresent) {
+            } else if (lay != null) {
                 return Optional.of(Side.LAY)
-            } else if (back.isPresent) {
+            } else if (back != null) {
                 return Optional.of(Side.BACK)
             }
             return Optional.empty()
         }
 
-    operator fun get(side: Side): OptionalDouble {
+    operator fun get(side: Side): Double? {
         return if (requireNonNull(side) === Side.BACK) back else lay
     }
 

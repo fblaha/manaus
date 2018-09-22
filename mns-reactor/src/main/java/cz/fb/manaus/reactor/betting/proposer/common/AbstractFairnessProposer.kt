@@ -12,13 +12,13 @@ abstract class AbstractFairnessProposer(private val side: Side, private val down
     private lateinit var priceService: PriceService
 
     override fun validate(context: BetContext): ValidationResult {
-        return ValidationResult.of(context.fairness.get(side).isPresent)
+        return ValidationResult.of(context.fairness[side] != null)
     }
 
     override fun getProposedPrice(context: BetContext): Double {
-        val fairness = context.fairness.get(side)
+        val fairness = context.fairness[side]!!
         val bestPrice = context.runnerPrices.getHomogeneous(side).bestPrice.get()
-        val fairPrice = priceService.getFairnessFairPrice(bestPrice.price, fairness.asDouble)
+        val fairPrice = priceService.getFairnessFairPrice(bestPrice.price, fairness)
         val downgradeFraction = downgradeStrategy(context)
         return priceService.downgrade(fairPrice, downgradeFraction, context.side)
     }

@@ -57,9 +57,7 @@ class CoverageFunctionProfitService(functions: List<ProgressFunction>) : Abstrac
         return if (bets.isEmpty())
             return null
         else
-            bets.map { function.apply(it) }
-                    .filter { it.isPresent }
-                    .map { it.asDouble }
+            bets.mapNotNull { function(it) }
                     .average()
     }
 

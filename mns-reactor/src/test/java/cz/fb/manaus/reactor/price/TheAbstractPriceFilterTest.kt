@@ -13,7 +13,6 @@ import kotlin.test.assertEquals
 
 class TheAbstractPriceFilterTest : AbstractLocalTestCase() {
 
-
     @Autowired
     private lateinit var filter: TestFilter
     @Autowired

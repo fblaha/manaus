@@ -27,8 +27,8 @@ class FairnessCategorizer : SettledBetCategorizer {
     override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
         val marketPrices = settledBet.betAction.marketPrices
         val fairness = calculator.getFairness(marketPrices.winnerCount.toDouble(),
-                marketPrices.getBestPrices(Side.BACK)).asDouble
-        return setOf(getCategory(fairness))
+                marketPrices.getBestPrices(Side.BACK))
+        return setOf(getCategory(fairness!!))
     }
 
     internal fun getCategory(fairness: Double): String {

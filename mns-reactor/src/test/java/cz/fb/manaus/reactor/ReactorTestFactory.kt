@@ -40,7 +40,7 @@ class ReactorTestFactory {
     }
 
     fun newBetContext(side: Side, marketPrices: MarketPrices, oldBet: Optional<Bet>): BetContext {
-        val fairness = Fairness(OptionalDouble.of(0.9), OptionalDouble.of(1.1))
+        val fairness = Fairness(0.9, 1.1)
 
         val bets = LinkedList<Bet>()
         oldBet.ifPresent { bet -> bets.add(bet) }

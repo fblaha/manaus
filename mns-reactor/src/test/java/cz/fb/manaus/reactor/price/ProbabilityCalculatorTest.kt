@@ -32,7 +32,7 @@ class ProbabilityCalculatorTest : AbstractLocalTestCase() {
             val prices = factory.createMarket(rate, probabilities)
             val fairness = fairnessPolynomialCalculator.getFairness(prices)
             for (side in Side.values()) {
-                val probability = calculator.fromFairness(fairness.get(side).asDouble, side, prices)
+                val probability = calculator.fromFairness(fairness[side]!!, side, prices)
                 for (i in probabilities.indices) {
                     val expected = probabilities[i]
                     val selection = CoreTestFactory.HOME + i

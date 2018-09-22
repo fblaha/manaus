@@ -15,7 +15,7 @@ class FairnessPolynomialCalculator {
         return PolynomialFunction(doubleArrayOf(1.0, price - 1))
     }
 
-    fun getFairness(winnerCount: Double, prices: List<OptionalDouble>): OptionalDouble {
+    fun getFairness(winnerCount: Double, prices: List<OptionalDouble>): Double? {
         if (prices.all { it.isPresent }) {
             val presentPrices = prices.map { it.asDouble }
             var rightSide = multiplyPolynomials(presentPrices)
@@ -37,12 +37,12 @@ class FairnessPolynomialCalculator {
             val laguerreSolver = LaguerreSolver()
             return try {
                 val root = laguerreSolver.solve(100, equation, 0.0, 1000.0)
-                OptionalDouble.of(1 / root)
+                1 / root
             } catch (exception: NoBracketingException) {
-                OptionalDouble.empty()
+                null
             }
         } else {
-            return OptionalDouble.empty()
+            return null
         }
     }
 
