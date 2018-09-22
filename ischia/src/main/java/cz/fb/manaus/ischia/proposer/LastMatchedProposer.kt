@@ -23,7 +23,7 @@ class LastMatchedProposer : PriceProposer {
 
     override fun validate(context: BetContext): ValidationResult {
         val lastMatchedPrice = ofNullable(context.runnerPrices.lastMatchedPrice)
-        return ValidationResult.of(lastMatchedPrice.isPresent && getProposedPrice(context) != null)
+        return ValidationResult.of(lastMatchedPrice.isPresent)
     }
 
     override fun getProposedPrice(context: BetContext): Double {

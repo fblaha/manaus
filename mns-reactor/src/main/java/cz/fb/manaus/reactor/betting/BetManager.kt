@@ -85,7 +85,7 @@ constructor(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
         return collector.toCollectedBets()
     }
 
-    fun validateOpenDate(market: Market) {
+    private fun validateOpenDate(market: Market) {
         val currDate = Date()
         val openDate = market.event.openDate
         checkState(currDate.before(openDate),

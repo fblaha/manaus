@@ -22,15 +22,15 @@ class ProfitService {
 
     fun getProfitRecords(bets: List<SettledBet>, projection: Optional<String>,
                          simulationAwareOnly: Boolean, chargeRate: Double): List<ProfitRecord> {
-        var bets = bets
-        val coverage = BetCoverage.from(bets)
-        val charges = profitPlugin.getCharges(bets, chargeRate)
+        var filtered = bets
+        val coverage = BetCoverage.from(filtered)
+        val charges = profitPlugin.getCharges(filtered, chargeRate)
 
         if (projection.isPresent) {
-            bets = categoryService.filterBets(bets, projection.get(), coverage)
+            filtered = categoryService.filterBets(filtered, projection.get(), coverage)
         }
 
-        val betRecords = computeProfitRecords(bets, simulationAwareOnly, charges, coverage)
+        val betRecords = computeProfitRecords(filtered, simulationAwareOnly, charges, coverage)
         return mergeProfitRecords(betRecords)
     }
 

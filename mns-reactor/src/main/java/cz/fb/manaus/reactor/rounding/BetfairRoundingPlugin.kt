@@ -45,17 +45,17 @@ class BetfairRoundingPlugin : RoundingPlugin {
     }
 
     override fun round(price: Double): Double? {
-        var price = price
-        val step = getStep(price, true)
+        var result = price
+        val step = getStep(result, true)
         return if (step != null) {
-            val rest = Precision.round(price % step, 6)
+            val rest = Precision.round(result % step, 6)
             val complement = step - rest
             if (rest >= complement) {
-                price += complement
+                result += complement
             } else {
-                price -= rest
+                result -= rest
             }
-            Price.round(price)
+            Price.round(result)
         } else {
             null
         }

@@ -10,10 +10,10 @@ class SelectionActualMatchedCategorizer : AbstractMatchedCategorizer("actualMatc
         return true
     }
 
-    override fun getAmount(bet: SettledBet): Double? {
-        return bet.betAction
+    override fun getAmount(settledBet: SettledBet): Double? {
+        return settledBet.betAction
                 .marketPrices
-                .getRunnerPrices(bet.selectionId)
+                .getRunnerPrices(settledBet.selectionId)
                 .matchedAmount
     }
 

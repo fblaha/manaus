@@ -27,17 +27,17 @@ abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) 
 
     protected fun getProfitRecords(calculator: FunctionProfitRecordCalculator, bets: List<SettledBet>,
                                    chargeRate: Double, funcName: Optional<String>, projection: Optional<String>): List<ProfitRecord> {
-        var bets = bets
-        val charges = profitPlugin.getCharges(bets, chargeRate)
-        val coverage = BetCoverage.from(bets)
+        var filtered = bets
+        val charges = profitPlugin.getCharges(filtered, chargeRate)
+        val coverage = BetCoverage.from(filtered)
 
         if (projection.isPresent) {
-            bets = categoryService.filterBets(bets, projection.get(), coverage)
+            filtered = categoryService.filterBets(filtered, projection.get(), coverage)
         }
 
         val profitRecords = LinkedList<ProfitRecord>()
         for (function in getProgressFunctions(funcName)) {
-            profitRecords.addAll(calculator.getProfitRecords(function, bets, coverage, charges))
+            profitRecords.addAll(calculator.getProfitRecords(function, filtered, coverage, charges))
         }
         return profitRecords
     }

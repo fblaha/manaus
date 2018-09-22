@@ -39,7 +39,7 @@ class MinimizeChargeStrategyTest : AbstractLocalTestCase() {
 
         whenever(context.chargeGrowthForecast).thenReturn(
                 null,
-                1.0 / 0.0,
+                Double.NaN,
                 1.5,
                 0.1)
         assertEquals(strategy.getUpperBoundary(context.side), strategy.getReductionRate(context), 0.000001)

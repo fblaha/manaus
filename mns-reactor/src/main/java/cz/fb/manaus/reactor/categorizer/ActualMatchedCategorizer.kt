@@ -10,8 +10,8 @@ class ActualMatchedCategorizer : AbstractMatchedCategorizer("actualMatchedMarket
         return true
     }
 
-    override fun getAmount(bet: SettledBet): Double? {
-        val runnerPrices = bet.betAction
+    override fun getAmount(settledBet: SettledBet): Double? {
+        val runnerPrices = settledBet.betAction
                 .marketPrices.runnerPrices.filter { p -> p.matchedAmount != null }
         return if (runnerPrices.isEmpty()) {
             null
