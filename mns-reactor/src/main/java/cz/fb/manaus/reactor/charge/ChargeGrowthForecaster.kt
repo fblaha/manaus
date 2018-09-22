@@ -11,7 +11,6 @@ import cz.fb.manaus.reactor.price.Fairness
 import cz.fb.manaus.reactor.price.ProbabilityCalculator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 class ChargeGrowthForecaster {
@@ -38,7 +37,7 @@ class ChargeGrowthForecaster {
     }
 
     fun getForecast(selectionId: Long, betSide: Side,
-                    snapshot: MarketSnapshot, fairness: Fairness): OptionalDouble {
+                    snapshot: MarketSnapshot, fairness: Fairness): Double? {
         if (exchangeProvider.isPerMarketCharge) {
             val fairnessSide = fairness.moreCredibleSide
             if (fairnessSide.isPresent) {
@@ -57,11 +56,11 @@ class ChargeGrowthForecaster {
                     bets.put(selectionId, Price(price, amount, betSide))
                     val newCharge = simulator.getChargeMean(winnerCount, exchangeProvider.chargeRate, probabilities, bets)
                     val result = newCharge / oldCharge
-                    return OptionalDouble.of(result)
+                    return result
                 }
             }
         }
-        return OptionalDouble.empty()
+        return null
     }
 
 }

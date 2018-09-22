@@ -31,17 +31,17 @@ class ChargeGrowthForecasterTest : AbstractLocalTestCase() {
         val marketSnapshot = MarketSnapshot.from(market, currentBets, Optional.empty<Map<Long, TradedVolume>>())
         val fairness = calculator.getFairness(market)
         var forecast = forecaster.getForecast(CoreTestFactory.DRAW, Side.BACK, marketSnapshot, fairness)
-        assertTrue(forecast.asDouble > 1)
+        assertTrue(forecast!! > 1)
         val betAmount = adviser.amount
         currentBets.add(Bet("1", CoreTestFactory.MARKET_ID, CoreTestFactory.DRAW,
                 Price(3.0, betAmount, Side.LAY), Date(), betAmount))
         forecast = forecaster.getForecast(CoreTestFactory.DRAW, Side.BACK, marketSnapshot, fairness)
-        assertFalse(forecast.asDouble > 1)
+        assertFalse(forecast!! > 1)
 
         forecast = forecaster.getForecast(CoreTestFactory.HOME, Side.BACK, marketSnapshot, fairness)
-        assertTrue(forecast.asDouble > 1)
+        assertTrue(forecast!! > 1)
 
         forecast = forecaster.getForecast(CoreTestFactory.HOME, Side.LAY, marketSnapshot, fairness)
-        assertFalse(forecast.asDouble > 1)
+        assertFalse(forecast!! > 1)
     }
 }

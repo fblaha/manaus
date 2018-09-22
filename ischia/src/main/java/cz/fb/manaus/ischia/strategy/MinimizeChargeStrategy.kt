@@ -23,8 +23,8 @@ class MinimizeChargeStrategy(internal val fairnessReductionLow: Double, internal
     private fun getRawRate(context: BetContext): Double {
         val growthForecast = context.chargeGrowthForecast
         val upper = getUpperBoundary(context.side)
-        if (growthForecast.isPresent) {
-            val growth = growthForecast.asDouble
+        if (growthForecast != null) {
+            val growth = growthForecast
             if (Doubles.isFinite(growth)) {
                 setActionProperty(context, growth)
                 val result = Math.min(upper, upper * growth)
