@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.profit.progress
 
-import com.google.common.collect.Ordering.from
-import cz.fb.manaus.core.model.ProfitRecord
+import com.google.common.collect.Comparators
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.reactor.profit.AbstractProfitTest
@@ -9,7 +8,6 @@ import junit.framework.TestCase.assertTrue
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.*
-import java.util.Comparator.comparingDouble
 import kotlin.test.assertEquals
 
 class ProgressProfitServiceTest : AbstractProfitTest() {
@@ -37,6 +35,6 @@ class ProgressProfitServiceTest : AbstractProfitTest() {
         val records = service.getProfitRecords(bets,
                 Optional.of("price"), 10, provider.chargeRate, Optional.empty())
         assertEquals(10, records.size)
-        assertTrue(from(comparingDouble<ProfitRecord>({ it.avgPrice })).isStrictlyOrdered(records))
+        assertTrue(Comparators.isInStrictOrder(records, compareBy { it.avgPrice }))
     }
 }

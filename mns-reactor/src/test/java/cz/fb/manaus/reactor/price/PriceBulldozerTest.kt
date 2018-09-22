@@ -58,7 +58,7 @@ class PriceBulldozerTest : AbstractLocalTestCase() {
 
     @Test(expected = IllegalStateException::class)
     fun `bulldozed prices are in wrong order - back`() {
-        val badOrder = PriceComparator.ORDERING.reverse<Price>().sortedCopy<Price>(realSample)
+        val badOrder = realSample.sortedWith(PriceComparator.CMP).reversed()
         bulldozer.bulldoze(10.0, badOrder)
     }
 

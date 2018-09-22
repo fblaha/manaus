@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.profit.progress
 
 import com.google.common.base.Joiner
-import com.google.common.collect.Ordering.from
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.CategoryService
 import cz.fb.manaus.core.model.ProfitRecord
@@ -12,7 +11,6 @@ import cz.fb.manaus.reactor.profit.progress.function.ProgressFunction
 import org.apache.commons.math3.util.Precision
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.*
-import java.util.Comparator.comparing
 import java.util.Objects.requireNonNull
 
 abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) {
@@ -47,8 +45,7 @@ abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) 
             listOf(requireNonNull<ProgressFunction>(functions[funcName.get()],
                     String.format("No such function '%s'", funcName)))
         } else {
-            from(comparing<ProgressFunction, String>({ it.name }))
-                    .immutableSortedCopy(functions.values)
+            functions.values.sortedBy { it.name }
         }
     }
 

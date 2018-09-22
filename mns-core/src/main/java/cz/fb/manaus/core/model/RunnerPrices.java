@@ -1,6 +1,7 @@
 package cz.fb.manaus.core.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Ordering;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -22,8 +23,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static cz.fb.manaus.core.model.PriceComparator.ORDERING;
 
 @Entity
 @NamedQueries({
@@ -52,7 +51,7 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
 
     @JsonIgnore
     public Optional<Price> getBestPrice() {
-        return prices.stream().min(PriceComparator.INSTANCE);
+        return prices.stream().min(PriceComparator.CMP);
     }
 
     public Integer getId() {
@@ -61,7 +60,7 @@ public class RunnerPrices implements SideMixed<RunnerPrices> {
 
     @JsonIgnore
     public List<Price> getPricesSorted() {
-        return ORDERING.sortedCopy(prices);
+        return Ordering.from(PriceComparator.CMP).sortedCopy(prices);
     }
 
     public Collection<Price> getPrices() {

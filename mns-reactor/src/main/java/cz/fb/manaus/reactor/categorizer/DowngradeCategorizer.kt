@@ -1,13 +1,11 @@
 package cz.fb.manaus.reactor.categorizer
 
 import com.google.common.base.Preconditions.checkState
-import com.google.common.collect.Ordering
+import com.google.common.collect.Comparators
 import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.model.Market
-import cz.fb.manaus.core.model.PriceComparator.ORDERING
+import cz.fb.manaus.core.model.PriceComparator
 import org.springframework.stereotype.Component
-import java.util.*
-import java.util.Comparator.comparing
 
 @Component
 class DowngradeCategorizer : RelatedActionsAwareCategorizer {
@@ -26,15 +24,16 @@ class DowngradeCategorizer : RelatedActionsAwareCategorizer {
     }
 
     private fun hasDowngrade(actions: List<BetAction>): Boolean {
-        return !ORDERING.isOrdered(actions.map { it.price })
+        return !Comparators.isInOrder(actions.map { it.price }, PriceComparator.CMP)
     }
 
     private fun validate(actions: List<BetAction>) {
+
         checkState(actions
                 .map { it.price }
                 .map { it.side }
                 .distinct().count() <= 1, "mixed sides")
-        checkState(Ordering.from(comparing<BetAction, Date>({ it.actionDate })).isStrictlyOrdered(actions),
+        checkState(Comparators.isInStrictOrder(actions, compareBy { it.actionDate }),
                 "time disorder")
     }
 

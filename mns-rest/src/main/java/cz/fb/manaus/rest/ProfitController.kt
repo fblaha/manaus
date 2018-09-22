@@ -16,8 +16,6 @@ import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import java.util.*
-import java.util.Comparator.comparing
-import java.util.Comparator.comparingDouble
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -123,9 +121,9 @@ class ProfitController {
 
     companion object {
         val COMPARATORS: Map<String, Comparator<ProfitRecord>> = mapOf(
-                "category" to comparing<ProfitRecord, String> { it.category },
-                "betProfit" to comparingDouble { it.betProfit },
-                "profit" to comparingDouble { it.profit })
+                "category" to compareBy { it.category },
+                "betProfit" to compareBy { it.betProfit },
+                "profit" to compareBy { it.profit })
         private val log = Logger.getLogger(ProfitController::class.java.simpleName)
     }
 }

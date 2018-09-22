@@ -19,7 +19,6 @@ import org.junit.Assert.assertThat
 import org.junit.Test
 import java.util.*
 import java.util.Collections.singletonMap
-import java.util.Comparator.comparing
 import java.util.Optional.empty
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -195,12 +194,12 @@ class BetActionDaoTest : AbstractDaoTest() {
 
     @Test
     fun `no impact of save order - asc`() {
-        saveActionsAndCheckOrder(comparing<BetAction, Date> { it.actionDate })
+        saveActionsAndCheckOrder(compareBy { it.actionDate })
     }
 
     @Test
     fun `no impact of save order - desc`() {
-        saveActionsAndCheckOrder(comparing<BetAction, Date> { it.actionDate }.reversed())
+        saveActionsAndCheckOrder(compareByDescending { it.actionDate })
     }
 
     private fun saveActionsAndCheckOrder(comparator: Comparator<BetAction>) {

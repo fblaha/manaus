@@ -15,10 +15,10 @@ abstract class AbstractPriceFilter(private val minCount: Int,
 
     internal fun getSignificantPrices(minCount: Int, prices: List<Price>): List<Price> {
         val bySide = prices.filter { this.priceRangeFilter(it) }.groupBy { it.side }
-        val sortedBack = PriceComparator.ORDERING.immutableSortedCopy(
-                bySide.getOrDefault(Side.BACK, emptyList()))
-        val sortedLay = PriceComparator.ORDERING.immutableSortedCopy(
-                bySide.getOrDefault(Side.LAY, emptyList()))
+        val sortedBack = bySide.getOrDefault(Side.BACK, emptyList())
+                .sortedWith(PriceComparator.CMP)
+        val sortedLay = bySide.getOrDefault(Side.LAY, emptyList())
+                .sortedWith(PriceComparator.CMP)
         val bulldozedBack = bulldozer.bulldoze(bulldozeThreshold, sortedBack)
         val bulldozedLay = bulldozer.bulldoze(bulldozeThreshold, sortedLay)
         val topBack = bulldozedBack.take(minCount)

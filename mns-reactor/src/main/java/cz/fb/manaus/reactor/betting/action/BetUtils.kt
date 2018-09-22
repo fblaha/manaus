@@ -4,12 +4,11 @@ import com.google.common.base.Preconditions
 import com.google.common.base.Preconditions.checkArgument
 import com.google.common.base.Preconditions.checkState
 import com.google.common.base.Splitter
-import com.google.common.collect.Ordering
+import com.google.common.collect.Comparators
 import cz.fb.manaus.core.model.*
 import org.springframework.beans.BeanUtils
 import org.springframework.stereotype.Component
 import java.util.*
-import java.util.Comparator.comparing
 
 @Component
 class BetUtils {
@@ -23,7 +22,7 @@ class BetUtils {
             if (bet.betActionType != BetActionType.UPDATE) lastUpdates.clear()
             lastUpdates.addLast(bet)
         }
-        checkState(Ordering.from(comparing<BetAction, Date> { it.actionDate }).isStrictlyOrdered(lastUpdates))
+        checkState(Comparators.isInStrictOrder(lastUpdates, compareBy { it.actionDate }))
         return lastUpdates
     }
 

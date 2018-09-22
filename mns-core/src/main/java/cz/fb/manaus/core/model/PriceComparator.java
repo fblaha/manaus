@@ -1,15 +1,12 @@
 package cz.fb.manaus.core.model;
 
-import com.google.common.collect.Ordering;
-
 import java.util.Comparator;
 
 import static com.google.common.collect.ComparisonChain.start;
 
 public class PriceComparator implements Comparator<Price> {
 
-    public static final PriceComparator INSTANCE = new PriceComparator();
-    public static final Ordering<Price> ORDERING = Ordering.from(INSTANCE);
+    public static final PriceComparator CMP = new PriceComparator();
 
     @Override
     public int compare(Price o1, Price o2) {

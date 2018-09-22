@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import java.time.Duration
 import java.util.*
-import java.util.Comparator.comparingDouble
 import java.util.logging.Level
 import java.util.logging.Logger
 import java.util.stream.Stream
@@ -107,7 +106,7 @@ abstract class AbstractUnprofitableCategoriesRegistry protected constructor(
         val currentBlacklist = LinkedHashSet<String>()
 
         val sorted = profitRecords.filter { record -> record.totalCount.toDouble() / totalCount <= threshold }
-                .sorted(comparingDouble({ it.profit }))
+                .sorted(compareBy { it.profit })
 
 
         var i = 0
