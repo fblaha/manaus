@@ -15,9 +15,9 @@ class FairnessPolynomialCalculator {
         return PolynomialFunction(doubleArrayOf(1.0, price - 1))
     }
 
-    fun getFairness(winnerCount: Double, prices: List<OptionalDouble>): Double? {
-        if (prices.all { it.isPresent }) {
-            val presentPrices = prices.map { it.asDouble }
+    fun getFairness(winnerCount: Double, prices: List<Double?>): Double? {
+        if (prices.all { it != null }) {
+            val presentPrices = prices.mapNotNull { it }
             var rightSide = multiplyPolynomials(presentPrices)
             rightSide = rightSide.multiply(PolynomialFunction(doubleArrayOf(winnerCount)))
 
@@ -48,12 +48,13 @@ class FairnessPolynomialCalculator {
 
     fun getFairness(marketPrices: MarketPrices): Fairness {
         return Fairness(
-                getFairness(marketPrices.winnerCount.toDouble(), marketPrices.getBestPrices(Side.BACK)),
-                getFairness(marketPrices.winnerCount.toDouble(), marketPrices.getBestPrices(Side.LAY)))
+                getFairness(marketPrices.winnerCount.toDouble(), Fairness.toKotlin(marketPrices.getBestPrices(Side.BACK))),
+                getFairness(marketPrices.winnerCount.toDouble(), Fairness.toKotlin(marketPrices.getBestPrices(Side.LAY))))
     }
 
     private fun multiplyPolynomials(prices: List<Double>): PolynomialFunction {
         val polynomials = prices.map { this.toPolynomial(it) }
         return polynomials.reduce { obj, p -> obj.multiply(p) }
     }
+
 }

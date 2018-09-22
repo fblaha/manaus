@@ -34,4 +34,11 @@ class Fairness(val back: Double?, val lay: Double?) {
                 .add("lay", lay)
                 .toString()
     }
+
+    companion object {
+        fun toKotlin(values: List<OptionalDouble>): List<Double?> {
+            return values.map { if (it.isPresent) it.asDouble else null }
+        }
+    }
+
 }

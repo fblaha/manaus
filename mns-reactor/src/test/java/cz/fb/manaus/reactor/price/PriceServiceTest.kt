@@ -61,7 +61,7 @@ class PriceServiceTest : AbstractLocalTestCase() {
     }
 
     private fun getFairness(side: Side, marketPrices: MarketPrices): Double {
-        return calculator.getFairness(marketPrices.winnerCount.toDouble(), marketPrices.getBestPrices(side))!!
+        return calculator.getFairness(marketPrices.winnerCount.toDouble(), Fairness.toKotlin(marketPrices.getBestPrices(side)))!!
     }
 
     @Test

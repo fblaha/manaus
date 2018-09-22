@@ -1,14 +1,12 @@
 package cz.fb.manaus.reactor.profit.progress.function
 
-import com.google.common.base.CaseFormat
 import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.reactor.betting.NameAware
 
-interface ProgressFunction : (SettledBet) -> Double? {
+interface ProgressFunction : NameAware, (SettledBet) -> Double? {
 
-    val name: String
+    override val name: String
         get() {
-            val simpleName = this.javaClass.simpleName
-            return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, simpleName).removeSuffix("Function")
+            return super.name.removeSuffix("Function")
         }
-
 }

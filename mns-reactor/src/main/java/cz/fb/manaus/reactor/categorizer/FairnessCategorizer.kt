@@ -9,6 +9,7 @@ import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.reactor.price.Fairness
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -27,7 +28,7 @@ class FairnessCategorizer : SettledBetCategorizer {
     override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
         val marketPrices = settledBet.betAction.marketPrices
         val fairness = calculator.getFairness(marketPrices.winnerCount.toDouble(),
-                marketPrices.getBestPrices(Side.BACK))
+                Fairness.toKotlin(marketPrices.getBestPrices(Side.BACK)))
         return setOf(getCategory(fairness!!))
     }
 
