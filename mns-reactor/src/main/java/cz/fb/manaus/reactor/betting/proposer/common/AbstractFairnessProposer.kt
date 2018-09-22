@@ -6,7 +6,6 @@ import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
 
 abstract class AbstractFairnessProposer(private val side: Side, private val downgradeStrategy: (BetContext) -> Double) : PriceProposer {
     @Autowired
@@ -16,11 +15,11 @@ abstract class AbstractFairnessProposer(private val side: Side, private val down
         return ValidationResult.of(context.fairness.get(side).isPresent)
     }
 
-    override fun getProposedPrice(context: BetContext): OptionalDouble {
+    override fun getProposedPrice(context: BetContext): Double {
         val fairness = context.fairness.get(side)
         val bestPrice = context.runnerPrices.getHomogeneous(side).bestPrice.get()
         val fairPrice = priceService.getFairnessFairPrice(bestPrice.price, fairness.asDouble)
         val downgradeFraction = downgradeStrategy(context)
-        return OptionalDouble.of(priceService.downgrade(fairPrice, downgradeFraction, context.side))
+        return priceService.downgrade(fairPrice, downgradeFraction, context.side)
     }
 }

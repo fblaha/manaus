@@ -7,18 +7,17 @@ import com.google.common.collect.RangeMap
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer
 import cz.fb.manaus.core.model.SettledBet
-import java.util.*
 
 abstract class AbstractMatchedCategorizer protected constructor(private val prefix: String) : SettledBetCategorizer {
 
     override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
         val amount = getAmount(settledBet)
-        return if (amount.isPresent) setOf(getCategory(amount.asDouble)) else emptySet()
+        return if (amount != null) setOf(getCategory(amount)) else emptySet()
     }
 
-    abstract fun getAmount(settledBet: SettledBet): OptionalDouble
+    abstract fun getAmount(settledBet: SettledBet): Double?
 
-    internal fun getCategory(matchedAmount: Double): String {
+    private fun getCategory(matchedAmount: Double): String {
         return prefix + CATEGORY_STEPS.get(matchedAmount)!!
     }
 

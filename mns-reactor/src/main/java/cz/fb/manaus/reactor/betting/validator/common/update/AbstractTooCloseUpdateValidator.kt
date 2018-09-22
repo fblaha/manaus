@@ -8,7 +8,6 @@ import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.reactor.price.PriceService
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
 
 abstract class AbstractTooCloseUpdateValidator(private val closeSteps: Set<Int>) : Validator {
     @Autowired
@@ -24,11 +23,11 @@ abstract class AbstractTooCloseUpdateValidator(private val closeSteps: Set<Int>)
         if (Price.priceEq(newOne, oldOne)) return ValidationResult.REJECT
         for (step in closeSteps) {
             Preconditions.checkArgument(step != 0)
-            val closePrice: OptionalDouble = when {
+            val closePrice: Double? = when {
                 step > 0 -> roundingService.increment(oldOne, step)
                 else -> roundingService.decrement(oldOne, -step)
             }
-            if (closePrice.isPresent && Price.priceEq(newOne, closePrice.asDouble))
+            if (closePrice != null && Price.priceEq(newOne, closePrice))
                 return ValidationResult.REJECT
         }
         return ValidationResult.ACCEPT

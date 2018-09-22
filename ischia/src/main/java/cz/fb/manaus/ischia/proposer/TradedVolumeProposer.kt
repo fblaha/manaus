@@ -9,7 +9,6 @@ import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
-import java.util.*
 
 
 @Component
@@ -29,10 +28,10 @@ class TradedVolumeProposer : PriceProposer {
         }
     }
 
-    override fun getProposedPrice(context: BetContext): OptionalDouble {
+    override fun getProposedPrice(context: BetContext): Double {
         val weightedMean = context.actualTradedVolume.get().weightedMean.asDouble
-        return OptionalDouble.of(priceService!!.downgrade(weightedMean, REDUCTION_RATE,
-                context.side))
+        return priceService!!.downgrade(weightedMean, REDUCTION_RATE,
+                context.side)
     }
 
     companion object {

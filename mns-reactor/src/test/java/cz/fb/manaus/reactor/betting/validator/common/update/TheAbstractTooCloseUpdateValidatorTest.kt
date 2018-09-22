@@ -45,13 +45,13 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
                 .withNewPrice(oldPrice)))
 
         assertEquals(ValidationResult.REJECT, validator.validate(factory.newBetContext(Side.BACK, prices, of(oldBet))
-                .withNewPrice(roundingService.decrement(oldPrice, 1).get())))
+                .withNewPrice(roundingService.decrement(oldPrice, 1)!!)))
 
         assertEquals(ValidationResult.REJECT, validator.validate(factory.newBetContext(Side.BACK, prices, of(oldBet))
-                .withNewPrice(roundingService.decrement(oldPrice, 2).get())))
+                .withNewPrice(roundingService.decrement(oldPrice, 2)!!)))
 
         assertEquals(ValidationResult.ACCEPT, validator.validate(factory.newBetContext(Side.BACK, prices, of(oldBet))
-                .withNewPrice(roundingService.decrement(oldPrice, 3).get())))
+                .withNewPrice(roundingService.decrement(oldPrice, 3)!!)))
     }
 
     @Test

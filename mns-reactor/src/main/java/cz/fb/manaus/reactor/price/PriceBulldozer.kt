@@ -31,8 +31,8 @@ class PriceBulldozer {
         val priceMean = TradedVolume.getWeightedMean(convicts)
         if (priceMean.isPresent) {
             val amount = convicts.map { it.amount }.sum()
-            val price = roundingService.roundBet(priceMean.asDouble).asDouble
-            untouched.addFirst(Price(price, amount, prices[0].side))
+            val price = roundingService.roundBet(priceMean.asDouble)
+            untouched.addFirst(Price(price!!, amount, prices[0].side))
         }
         return untouched
     }

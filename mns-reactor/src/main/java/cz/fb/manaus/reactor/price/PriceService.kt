@@ -8,7 +8,6 @@ import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.util.*
 import java.util.Objects.requireNonNull
 
 @Service
@@ -57,7 +56,7 @@ class PriceService {
         return 1 / probability
     }
 
-    fun getRoundedFairnessFairPrice(unfairPrice: Double, fairness: Double): OptionalDouble {
+    fun getRoundedFairnessFairPrice(unfairPrice: Double, fairness: Double): Double? {
         return roundingService.roundBet(getFairnessFairPrice(unfairPrice, fairness))
     }
 

@@ -27,8 +27,8 @@ class PriceProposalServiceTest : AbstractLocalTestCase() {
     @Test(expected = IllegalStateException::class)
     fun `mandatory price`() {
         val proposer: PriceProposer = object : PriceProposer {
-            override fun getProposedPrice(context: BetContext): OptionalDouble {
-                return OptionalDouble.empty()
+            override fun getProposedPrice(context: BetContext): Double? {
+                return null
             }
         }
         service.reducePrices(mock(), listOf(proposer), Side.LAY)
@@ -43,15 +43,15 @@ class PriceProposalServiceTest : AbstractLocalTestCase() {
 
     private class TestProposer1 : PriceProposer {
 
-        override fun getProposedPrice(context: BetContext): OptionalDouble {
-            return OptionalDouble.of(MIN_PRICE)
+        override fun getProposedPrice(context: BetContext): Double {
+            return MIN_PRICE
         }
     }
 
     private open class TestProposer2 : PriceProposer {
 
-        override fun getProposedPrice(context: BetContext): OptionalDouble {
-            return OptionalDouble.of(MAX_PRICE)
+        override fun getProposedPrice(context: BetContext): Double {
+            return MAX_PRICE
         }
     }
 

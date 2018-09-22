@@ -7,7 +7,6 @@ import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
 import java.util.Objects.requireNonNull
 
 abstract class AbstractBestPriceProposer protected constructor(private val step: Int) : PriceProposer {
@@ -26,18 +25,19 @@ abstract class AbstractBestPriceProposer protected constructor(private val step:
         }
     }
 
-    override fun getProposedPrice(context: BetContext): OptionalDouble {
+    override fun getProposedPrice(context: BetContext): Double? {
         val side = requireNonNull(context.side)
         val bestPrice = context.runnerPrices.getHomogeneous(side.opposite).bestPrice.get().price
         Preconditions.checkState(step >= 0)
         return if (step == 0) {
-            OptionalDouble.of(bestPrice)
+            bestPrice
         } else {
-            if (side === Side.LAY) {
+            val shiftedPrice = if (side === Side.LAY) {
                 roundingService.increment(bestPrice, step)
             } else {
                 roundingService.decrement(bestPrice, step)
             }
+            if (shiftedPrice != null) shiftedPrice else null
         }
     }
 }

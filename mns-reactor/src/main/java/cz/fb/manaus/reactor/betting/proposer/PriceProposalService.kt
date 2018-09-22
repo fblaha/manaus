@@ -26,10 +26,10 @@ class PriceProposalService {
         for (proposer in proposers) {
             val proposedPrice = proposer.getProposedPrice(context)
             if (proposer.isMandatory) {
-                Preconditions.checkState(proposedPrice.isPresent, proposer.javaClass)
+                Preconditions.checkState(proposedPrice != null, proposer.javaClass)
             }
-            if (proposedPrice.isPresent) {
-                prices.add(ProposedPrice(proposedPrice.asDouble, proposer.name))
+            if (proposedPrice != null) {
+                prices.add(ProposedPrice(proposedPrice, proposer.name))
             }
         }
         return reduce(side, prices)

@@ -22,8 +22,8 @@ class TheOnlySelectionMatchedCategorizer : SettledBetCategorizer {
     override fun getCategories(bet: SettledBet, coverage: BetCoverage): Set<String> {
         val selectionMatched = selectionActualMatchedCategorizer.getAmount(bet)
         val allMatched = actualMatchedCategorizer.getAmount(bet)
-        return if (selectionMatched.isPresent && allMatched.isPresent) {
-            val theOnlyMatched = Price.amountEq(allMatched.asDouble, selectionMatched.asDouble)
+        return if (selectionMatched != null && allMatched != null) {
+            val theOnlyMatched = Price.amountEq(allMatched, selectionMatched)
             setOf("theOnlyMatched_$theOnlyMatched")
         } else {
             emptySet()

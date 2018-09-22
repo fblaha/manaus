@@ -6,7 +6,6 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.util.*
 import java.util.Objects.requireNonNull
 
 @Service
@@ -17,24 +16,24 @@ class RoundingService {
     @Autowired
     private lateinit var provider: ExchangeProvider
 
-    fun increment(price: Double, stepNum: Int): OptionalDouble {
+    fun increment(price: Double, stepNum: Int): Double? {
         val result = plugin.shift(price, stepNum)
-        if (result.isPresent) checkState(result.asDouble > price)
+        if (result != null) checkState(result > price)
         return result
     }
 
-    fun decrement(price: Double, stepNum: Int): OptionalDouble {
+    fun decrement(price: Double, stepNum: Int): Double? {
         val result = plugin.shift(price, -stepNum)
-        if (result.isPresent) {
-            checkState(result.asDouble < price)
-            if (result.asDouble < provider.minPrice) {
-                return OptionalDouble.empty()
+        if (result != null) {
+            checkState(result < price)
+            if (result < provider.minPrice) {
+                return null
             }
         }
         return result
     }
 
-    fun downgrade(price: Double, stepNum: Int, side: Side): OptionalDouble {
+    fun downgrade(price: Double, stepNum: Int, side: Side): Double? {
         if (requireNonNull(side) === Side.LAY) {
             return decrement(price, stepNum)
         } else if (side === Side.BACK) {
@@ -43,25 +42,25 @@ class RoundingService {
         throw IllegalStateException()
     }
 
-    fun increment(price: Price, stepNum: Int): Optional<Price> {
+    fun increment(price: Price, stepNum: Int): Price? {
         val newPrice = increment(price.price, stepNum)
-        return if (newPrice.isPresent) {
-            Optional.of(Price(newPrice.asDouble, price.amount, price.side))
+        return if (newPrice != null) {
+            Price(newPrice, price.amount, price.side)
         } else {
-            Optional.empty()
+            null
         }
     }
 
-    fun decrement(price: Price, stepNum: Int): Optional<Price> {
+    fun decrement(price: Price, stepNum: Int): Price? {
         val newPrice = decrement(price.price, stepNum)
-        return if (newPrice.isPresent) {
-            Optional.of(Price(newPrice.asDouble, price.amount, price.side))
+        return if (newPrice != null) {
+            Price(newPrice, price.amount, price.side)
         } else {
-            Optional.empty()
+            null
         }
     }
 
-    fun roundBet(price: Double): OptionalDouble {
+    fun roundBet(price: Double): Double? {
         return plugin.round(price)
     }
 

@@ -27,23 +27,23 @@ open class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAd
 
     override fun getNewPrice(betContext: BetContext): Optional<Price> {
         val proposedPrice = reducePrices(betContext)
-        return if (proposedPrice.isPresent) {
+        return if (proposedPrice != null) {
             var amount = adviser.amount
             val counterBet = betContext.counterBet
             if (counterBet.isPresent && counterBet.get().matchedAmount > 0) {
                 amount = counterBet.get().requestedPrice.amount
             }
-            Optional.of(Price(proposedPrice.asDouble,
+            Optional.of(Price(proposedPrice,
                     Math.max(amount, provider.minAmount), betContext.side))
         } else {
             Optional.empty()
         }
     }
 
-    private fun reducePrices(context: BetContext): OptionalDouble {
+    private fun reducePrices(context: BetContext): Double? {
         val proposedPrice = proposalService.reducePrices(context, proposers, context.side)
         val rounded = roundingService.roundBet(proposedPrice.price)
-        if (rounded.isPresent) {
+        if (rounded != null) {
             context.properties[BetAction.PROPOSER_PROP] = Joiner.on(',').join(proposedPrice.proposers)
         }
         return rounded

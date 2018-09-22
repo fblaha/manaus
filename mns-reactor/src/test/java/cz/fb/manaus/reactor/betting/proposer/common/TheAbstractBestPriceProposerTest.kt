@@ -29,7 +29,7 @@ class TheAbstractBestPriceProposerTest : AbstractLocalTestCase() {
         whenever(context.side).thenReturn(Side.LAY)
         whenever(context.runnerPrices).thenReturn(factory.newRP(CoreTestFactory.HOME, 2.0, 4.5))
         assertEquals(ValidationResult.ACCEPT, layProposer.validate(context))
-        assertEquals(2.02, layProposer.getProposedPrice(context).asDouble)
+        assertEquals(2.02, layProposer.getProposedPrice(context))
     }
 
     @Test
@@ -47,7 +47,7 @@ class TheAbstractBestPriceProposerTest : AbstractLocalTestCase() {
         whenever(context.side).thenReturn(Side.BACK)
         whenever(context.runnerPrices).thenReturn(factory.newRP(CoreTestFactory.HOME, 2.5, 3.5))
         assertEquals(ValidationResult.ACCEPT, backProposer.validate(context))
-        assertEquals(3.45, backProposer.getProposedPrice(context).asDouble)
+        assertEquals(3.45, backProposer.getProposedPrice(context))
     }
 
     @Component

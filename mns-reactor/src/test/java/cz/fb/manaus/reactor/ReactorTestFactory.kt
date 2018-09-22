@@ -51,7 +51,7 @@ class ReactorTestFactory {
     }
 
     fun createContext(side: Side, bestBack: Double, bestLay: Double): BetContext {
-        val marketPrices = createMarket(bestBack, bestLay, OptionalDouble.of(3.0), 1)
+        val marketPrices = createMarket(bestBack, bestLay, 3.0, 1)
         val runnerPrices = marketPrices.runnerPrices.iterator().next()
         val selectionId = runnerPrices.selectionId
         val bestPrice = runnerPrices.getHomogeneous(side.opposite).bestPrice
@@ -81,24 +81,24 @@ class ReactorTestFactory {
     }
 
     @JvmOverloads
-    fun newRP(selectionId: Long, bestBack: Double, bestLay: Double, lastMatchedPrice: OptionalDouble = OptionalDouble.empty()): RunnerPrices {
+    fun newRP(selectionId: Long, bestBack: Double, bestLay: Double, lastMatchedPrice: Double? = null): RunnerPrices {
         var lastMatched = lastMatchedPrice
-        if (!lastMatched.isPresent) {
-            lastMatched = roundingService.roundBet((bestBack + bestLay) / 2)
+        if (lastMatched == null) {
+            lastMatched = roundingService.roundBet((bestBack + bestLay) / 2)!!
         }
         val backBestPrice = Price(bestBack, 100.0, Side.BACK)
         val layBestPrice = Price(bestLay, 100.0, Side.LAY)
         return ModelFactory.newRunnerPrices(selectionId, listOf(
                 backBestPrice,
                 layBestPrice,
-                roundingService.decrement(backBestPrice, 1).get(),
-                roundingService.decrement(backBestPrice, 2).get(),
-                roundingService.increment(layBestPrice, 1).get(),
-                roundingService.increment(layBestPrice, 2).get()),
-                100.0, lastMatched.asDouble)
+                roundingService.decrement(backBestPrice, 1)!!,
+                roundingService.decrement(backBestPrice, 2)!!,
+                roundingService.increment(layBestPrice, 1)!!,
+                roundingService.increment(layBestPrice, 2)!!),
+                100.0, lastMatched)
     }
 
-    fun createMarket(betBack: Double, bestLay: Double, lastMatched: OptionalDouble, winnerCount: Int): MarketPrices {
+    fun createMarket(betBack: Double, bestLay: Double, lastMatched: Double?, winnerCount: Int): MarketPrices {
         val market = createMarket()
         val home = newRP(CoreTestFactory.HOME, betBack, bestLay, lastMatched)
         val draw = newRP(CoreTestFactory.DRAW, betBack, bestLay, lastMatched)
@@ -112,12 +112,12 @@ class ReactorTestFactory {
         for (i in probabilities.indices) {
             val fairPrice = 1 / probabilities[i]
             val backPrice = priceService.downgrade(fairPrice, downgradeFraction, Side.LAY)
-            val backRounded = roundingService.roundBet(backPrice).asDouble
+            val backRounded = roundingService.roundBet(backPrice)
             val layPrice = priceService.downgrade(fairPrice, downgradeFraction, Side.BACK)
-            val layRounded = roundingService.roundBet(layPrice).asDouble
+            val layRounded = roundingService.roundBet(layPrice)
             val selectionId = CoreTestFactory.HOME + i
-            val lastMatched = roundingService.roundBet(fairPrice).asDouble
-            runnerPrices.add(newRP(selectionId, backRounded, layRounded, OptionalDouble.of(lastMatched)))
+            val lastMatched = roundingService.roundBet(fairPrice)
+            runnerPrices.add(newRP(selectionId, backRounded!!, layRounded!!, lastMatched!!))
         }
         return ModelFactory.newPrices(1, market, runnerPrices, Date())
     }

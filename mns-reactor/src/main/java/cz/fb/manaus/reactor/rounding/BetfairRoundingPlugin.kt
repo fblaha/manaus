@@ -10,56 +10,54 @@ import cz.fb.manaus.core.model.Price
 import org.apache.commons.math3.util.Precision
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 @Profile("betfair")
 class BetfairRoundingPlugin : RoundingPlugin {
 
-    private fun getStep(price: Double, increment: Boolean): OptionalDouble {
-        val step: Double? = if (increment) {
+    private fun getStep(price: Double, increment: Boolean): Double? {
+        return if (increment) {
             INCREMENT_STEPS.get(price)
         } else {
             DECREMENT_STEPS.get(price)
         }
-        return if (step == null) OptionalDouble.empty() else OptionalDouble.of(step)
     }
 
-    override fun shift(price: Double, steps: Int): OptionalDouble {
+    override fun shift(price: Double, steps: Int): Double? {
         Preconditions.checkArgument(steps != 0)
         val increment = steps > 0
         return shift(price, Math.abs(steps), increment)
     }
 
-    private fun shift(price: Double, steps: Int, increment: Boolean): OptionalDouble {
+    private fun shift(price: Double, steps: Int, increment: Boolean): Double? {
         checkArgument(steps >= 1)
         val step = getStep(price, increment)
-        return if (step.isPresent) {
-            val result = Price.round(price + step.asDouble)
+        return if (step != null) {
+            val result = Price.round(price + step)
             if (steps == 1) {
-                OptionalDouble.of(result)
+                result
             } else {
                 shift(result, steps - 1, increment)
             }
         } else {
-            OptionalDouble.empty()
+            null
         }
     }
 
-    override fun round(price: Double): OptionalDouble {
+    override fun round(price: Double): Double? {
         var price = price
         val step = getStep(price, true)
-        return if (step.isPresent) {
-            val rest = Precision.round(price % step.asDouble, 6)
-            val complement = step.asDouble - rest
+        return if (step != null) {
+            val rest = Precision.round(price % step, 6)
+            val complement = step - rest
             if (rest >= complement) {
                 price += complement
             } else {
                 price -= rest
             }
-            OptionalDouble.of(Price.round(price))
+            Price.round(price)
         } else {
-            OptionalDouble.empty()
+            null
         }
     }
 

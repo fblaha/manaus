@@ -2,7 +2,6 @@ package cz.fb.manaus.reactor.betting
 
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import org.junit.Test
-import java.util.*
 import kotlin.test.assertEquals
 
 class NameAwareTest {
@@ -14,8 +13,8 @@ class NameAwareTest {
 
     private class VeryProfitableProposer : PriceProposer {
 
-        override fun getProposedPrice(context: BetContext): OptionalDouble {
-            return OptionalDouble.of(5.0)
+        override fun getProposedPrice(context: BetContext): Double {
+            return 5.0
         }
     }
 

@@ -42,19 +42,19 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDaoTest(
             val lastMatchedPrice = runnerPrices.lastMatchedPrice
             result.put(runnerPrices.selectionId, Price(lastMatchedPrice, 5.0, null))
             result.put(runnerPrices.selectionId,
-                    Price(roundingService.increment(lastMatchedPrice, 1).asDouble, 5.0, null))
+                    Price(roundingService.increment(lastMatchedPrice, 1)!!, 5.0, null))
             result.put(runnerPrices.selectionId,
-                    Price(roundingService.decrement(lastMatchedPrice, 1).asDouble, 5.0, null))
+                    Price(roundingService.decrement(lastMatchedPrice, 1)!!, 5.0, null))
         }
         return Maps.transformValues(result.asMap(), { TradedVolume(it) })
     }
 
-    protected fun checkPlace(marketPrices: MarketPrices, expectedCount: Int, expectedPrice: OptionalDouble): BetCollector {
+    protected fun checkPlace(marketPrices: MarketPrices, expectedCount: Int, expectedPrice: Double?): BetCollector {
         val result = check(marketPrices, listOf(), expectedCount, 0)
         val toPlace = result.getToPlace()
-        if (expectedPrice.isPresent) {
+        if (expectedPrice != null) {
             for (command in toPlace) {
-                assertEquals(expectedPrice.asDouble, command.bet.requestedPrice.price)
+                assertEquals(expectedPrice, command.bet.requestedPrice.price)
             }
         }
         return result
