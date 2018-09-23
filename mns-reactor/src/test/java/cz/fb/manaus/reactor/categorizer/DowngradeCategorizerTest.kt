@@ -11,7 +11,6 @@ import org.apache.commons.lang3.time.DateUtils.addHours
 import org.hamcrest.CoreMatchers.hasItems
 import org.junit.Assert.assertThat
 import org.junit.Test
-import org.mockito.Mockito.mock
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.*
 import kotlin.test.assertEquals
@@ -29,7 +28,7 @@ class DowngradeCategorizerTest : AbstractLocalTestCase() {
         whenever(place.price).thenReturn(Price(2.0, 5.0, Side.LAY))
         val curr = Date()
         whenever(place.actionDate).thenReturn(addHours(curr, -5))
-        val update = mock(BetAction::class.java)
+        val update = mock<BetAction>()
         whenever(update.price).thenReturn(Price(2.1, 5.0, Side.LAY))
         whenever(update.actionDate).thenReturn(addHours(curr, -2))
 
@@ -39,7 +38,7 @@ class DowngradeCategorizerTest : AbstractLocalTestCase() {
         assertThat(categorizer.getCategories(listOf(place, update), market), hasItems(DowngradeCategorizer.DOWNGRADE, DowngradeCategorizer.DOWNGRADE_LAST))
 
 
-        val update2 = mock(BetAction::class.java)
+        val update2 = mock<BetAction>()
         whenever(update2.price).thenReturn(Price(2.1, 5.0, Side.LAY))
         whenever(update2.actionDate).thenReturn(addHours(curr, -1))
         assertEquals(setOf(DowngradeCategorizer.DOWNGRADE), categorizer.getCategories(listOf(place, update, update2),
@@ -50,11 +49,11 @@ class DowngradeCategorizerTest : AbstractLocalTestCase() {
     fun `actions mixed sides - illegal state`() {
         val market = CoreTestFactory.newTestMarket()
 
-        val place = mock(BetAction::class.java)
+        val place = mock<BetAction>()
         whenever(place.price).thenReturn(Price(2.0, 5.0, Side.LAY))
         val curr = Date()
         whenever(place.actionDate).thenReturn(addHours(curr, -5))
-        val update = mock(BetAction::class.java)
+        val update = mock<BetAction>()
         whenever(update.price).thenReturn(Price(2.1, 5.0, Side.BACK))
         whenever(update.actionDate).thenReturn(addHours(curr, -2))
 
@@ -64,12 +63,12 @@ class DowngradeCategorizerTest : AbstractLocalTestCase() {
 
     @Test
     fun `actions unordered - illegal state`() {
-        val place = mock(BetAction::class.java)
+        val place = mock<BetAction>()
         val price = Price(2.0, 5.0, Side.LAY)
         whenever(place.price).thenReturn(price)
         val curr = Date()
         whenever(place.actionDate).thenReturn(addHours(curr, -1))
-        val update = mock(BetAction::class.java)
+        val update = mock<BetAction>()
         whenever(update.price).thenReturn(price)
         whenever(update.actionDate).thenReturn(addHours(curr, -2))
         assertFailsWith<IllegalStateException> {

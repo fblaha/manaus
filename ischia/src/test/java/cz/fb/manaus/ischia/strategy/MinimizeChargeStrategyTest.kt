@@ -10,7 +10,6 @@ import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.betting.BetContext
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ActiveProfiles
 import java.time.Instant
@@ -27,9 +26,9 @@ class MinimizeChargeStrategyTest : AbstractLocalTestCase() {
     fun strategy() {
         val context = mock<BetContext>()
         whenever(context.side).thenReturn(Side.BACK)
-        val marketPrices = Mockito.mock(MarketPrices::class.java)
-        val market = Mockito.mock(Market::class.java)
-        val event = Mockito.mock(Event::class.java)
+        val marketPrices = mock<MarketPrices>()
+        val market = mock<Market>()
+        val event = mock<Event>()
         val openDate = Date.from(Instant.now().plus(30, ChronoUnit.MINUTES))
         whenever(event.openDate).thenReturn(openDate)
         whenever(market.event).thenReturn(event)
