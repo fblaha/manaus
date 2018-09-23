@@ -9,9 +9,9 @@ import java.util.Objects.requireNonNull
 import java.util.Optional.ofNullable
 
 open class BetContext internal constructor(open val side: Side, val selectionId: Long,
-                                           val accountMoney: Optional<AccountMoney>,
+                                           val accountMoney: AccountMoney?,
                                            open val chargeGrowthForecast: Double?,
-                                           val marketSnapshot: MarketSnapshot,
+                                           private val marketSnapshot: MarketSnapshot,
                                            val fairness: Fairness) {
     open val properties: MutableMap<String, String> = mutableMapOf()
     var newPrice = Optional.empty<Price>()

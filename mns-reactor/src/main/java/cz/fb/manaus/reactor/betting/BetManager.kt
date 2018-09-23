@@ -51,7 +51,7 @@ constructor(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
 
     fun fire(snapshot: MarketSnapshot,
              myBets: Set<String>,
-             accountMoney: Optional<AccountMoney>,
+             accountMoney: AccountMoney?,
              categoryBlacklist: Set<String>): CollectedBets {
         val marketPrices = snapshot.marketPrices
         filterPrices(marketPrices)

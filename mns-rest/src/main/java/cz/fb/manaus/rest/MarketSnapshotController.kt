@@ -25,7 +25,7 @@ data class MarketSnapshotCrate(
         var prices: MarketPrices,
         var bets: List<Bet>,
         var categoryBlacklist: Set<String>,
-        var money: AccountMoney,
+        var money: AccountMoney?,
         var scanTime: Int = 0
 )
 
@@ -58,8 +58,7 @@ class MarketSnapshotController {
                     Optional.empty<Map<Long, TradedVolume>>())
             val myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty<Side>())
             val collectedBets = manager.fire(marketSnapshot, myBets,
-                    Optional.ofNullable(snapshotCrate.money),
-                    snapshotCrate.categoryBlacklist)
+                    snapshotCrate.money, snapshotCrate.categoryBlacklist)
             return if (collectedBets.isEmpty) {
                 ResponseEntity.noContent().build<Any>()
             } else {

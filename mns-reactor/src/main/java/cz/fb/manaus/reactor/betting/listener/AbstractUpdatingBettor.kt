@@ -29,7 +29,7 @@ abstract class AbstractUpdatingBettor protected constructor(private val side: Si
     private lateinit var metricRegistry: MetricRegistry
 
     override fun onMarketSnapshot(snapshot: MarketSnapshot, betCollector: BetCollector,
-                                  accountMoney: Optional<AccountMoney>, categoryBlacklist: Set<String>) {
+                                  accountMoney: AccountMoney?, categoryBlacklist: Set<String>) {
         val marketPrices = snapshot.marketPrices
         val market = marketPrices.market
         val winnerCount = marketPrices.winnerCount
@@ -52,7 +52,7 @@ abstract class AbstractUpdatingBettor protected constructor(private val side: Si
                 if (activeSelection || accepted) {
                     val oldBet = ofNullable(coverage.get(side, selectionId))
                     val ctx = contextFactory.create(side, selectionId,
-                            snapshot, fairness, accountMoney, categoryBlacklist)
+                            snapshot, fairness, accountMoney)
                     setTradedVolumeMean(ctx)
                     val pricelessValidation = validationService.validate(ctx, validators)
                     if (!pricelessValidation.isSuccess) {

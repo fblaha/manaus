@@ -30,7 +30,7 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDaoTest(
         val collector = BetCollector()
         val snapshot = MarketSnapshot.from(marketPrices, bets,
                 Optional.of(createTradedVolume(marketPrices)))
-        bettor.onMarketSnapshot(snapshot, collector, Optional.empty(), setOf())
+        bettor.onMarketSnapshot(snapshot, collector, null, setOf())
         assertEquals(placeCount, collector.getToPlace().size)
         assertEquals(updateCount, collector.getToUpdate().size)
         return collector
