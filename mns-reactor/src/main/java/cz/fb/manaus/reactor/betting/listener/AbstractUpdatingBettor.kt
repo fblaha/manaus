@@ -39,7 +39,7 @@ abstract class AbstractUpdatingBettor protected constructor(private val side: Si
             val fairness = calculator.getFairness(marketPrices)
             val credibleSide = requireNonNull(fairness.moreCredibleSide)
             val ordering = COMPARATORS[credibleSide.get()]!!
-            val prices = ordering.immutableSortedCopy(marketPrices.runnerPrices)
+            val prices = marketPrices.runnerPrices.sortedWith(ordering)
             checkState(prices.map { it.selectionId }.distinct().count() ==
                     prices.map { it.selectionId }.count())
 

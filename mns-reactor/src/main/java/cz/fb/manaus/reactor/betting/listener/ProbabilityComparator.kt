@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting.listener
 
-import com.google.common.collect.Ordering
 import com.google.common.primitives.Doubles
 import cz.fb.manaus.core.model.RunnerPrices
 import cz.fb.manaus.core.model.Side
@@ -18,8 +17,8 @@ class ProbabilityComparator private constructor(private val side: Side) : Compar
 
     companion object {
         var COMPARATORS = mapOf(
-                Side.BACK to Ordering.from(ProbabilityComparator(Side.BACK)),
-                Side.LAY to Ordering.from(ProbabilityComparator(Side.LAY)))
+                Side.BACK to ProbabilityComparator(Side.BACK),
+                Side.LAY to ProbabilityComparator(Side.LAY))
     }
 
 }

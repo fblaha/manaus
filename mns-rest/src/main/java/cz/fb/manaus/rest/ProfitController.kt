@@ -2,7 +2,6 @@ package cz.fb.manaus.rest
 
 import com.google.common.base.Splitter
 import com.google.common.base.Stopwatch
-import com.google.common.collect.Ordering.from
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.provider.ExchangeProvider
@@ -63,7 +62,7 @@ class ProfitController {
                     .filter { filters.any { token -> token in it.category } }
         }
         if (sort.isPresent) {
-            profitRecords = from(COMPARATORS[sort.get()]!!).sortedCopy(profitRecords)
+            profitRecords = profitRecords.sortedWith(COMPARATORS[sort.get()]!!)
         }
         return profitRecords
     }

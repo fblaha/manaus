@@ -24,6 +24,6 @@ class ProbabilityComparatorTest : AbstractLocalTestCase() {
     }
 
     private fun getFirstSelection(lists: List<RunnerPrices>): Long {
-        return ProbabilityComparator.COMPARATORS[Side.BACK]!!.immutableSortedCopy(lists)[0].selectionId
+        return lists.sortedWith(ProbabilityComparator.COMPARATORS[Side.BACK]!!)[0].selectionId
     }
 }

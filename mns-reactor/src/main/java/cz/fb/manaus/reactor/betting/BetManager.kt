@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions.checkState
 import com.google.common.base.Splitter
 import com.google.common.base.Strings
 import com.google.common.collect.ImmutableSet
-import com.google.common.collect.Ordering.from
 import cz.fb.manaus.core.manager.MarketFilterService
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.betting.action.ActionSaver
@@ -53,7 +52,7 @@ constructor(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
     @Autowired(required = false)
     fun setMarketSnapshotListeners(marketSnapshotListeners: List<MarketSnapshotListener>) {
         requireNonNull(marketSnapshotListeners)
-        this.marketSnapshotListeners = from(AnnotationAwareOrderComparator()).sortedCopy(marketSnapshotListeners)
+        this.marketSnapshotListeners = marketSnapshotListeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
     }
 
     fun fire(snapshot: MarketSnapshot,

@@ -1,7 +1,6 @@
 package cz.fb.manaus.core.dao
 
 import com.google.common.collect.ImmutableMap.of
-import com.google.common.collect.Ordering
 import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.model.BetActionType
 import cz.fb.manaus.core.model.Price
@@ -210,7 +209,7 @@ class BetActionDaoTest : AbstractDaoTest() {
         val later = ModelFactory.newAction(BetActionType.PLACE, Date(), Price(3.0, 33.0, Side.LAY), market, CoreTestFactory.DRAW)
         later.betId = AbstractDaoTest.BET_ID + 1
         val actions = listOf(later, earlier)
-        Ordering.from(comparator).immutableSortedCopy<BetAction>(actions).forEach { betActionDao.saveOrUpdate(it) }
+        actions.sortedWith(comparator).forEach { betActionDao.saveOrUpdate(it) }
         val betActionsForMarket = betActionDao.getBetActions(market.id, OptionalLong.empty(), empty())
         assertEquals(2, betActionsForMarket.size)
         assertEquals(2.0, betActionsForMarket[0].price.price)
