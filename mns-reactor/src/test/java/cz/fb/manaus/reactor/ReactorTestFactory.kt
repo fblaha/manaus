@@ -42,7 +42,7 @@ class ReactorTestFactory {
     fun newBetContext(side: Side, marketPrices: MarketPrices, oldBet: Optional<Bet>): BetContext {
         val fairness = Fairness(0.9, 1.1)
 
-        val bets = LinkedList<Bet>()
+        val bets = mutableListOf<Bet>()
         oldBet.ifPresent { bet -> bets.add(bet) }
         val snapshot = MarketSnapshot.from(marketPrices, bets, empty<Map<Long, TradedVolume>>())
 
@@ -55,7 +55,7 @@ class ReactorTestFactory {
         val runnerPrices = marketPrices.runnerPrices.iterator().next()
         val selectionId = runnerPrices.selectionId
         val bestPrice = runnerPrices.getHomogeneous(side.opposite).bestPrice
-        val bets = LinkedList<Bet>()
+        val bets = mutableListOf<Bet>()
         if (bestPrice.isPresent) {
             val marketId = CoreTestFactory.MARKET_ID
             val price = bestPrice.get().price
@@ -72,7 +72,7 @@ class ReactorTestFactory {
     }
 
     fun createRP(unfairPrices: List<Double>): List<RunnerPrices> {
-        val runnerPrices = LinkedList<RunnerPrices>()
+        val runnerPrices = mutableListOf<RunnerPrices>()
         for (i in unfairPrices.indices) {
             val unfairPrice = unfairPrices[i]
             runnerPrices.add(newRP(i.toLong(), unfairPrice, 10.0))
@@ -108,7 +108,7 @@ class ReactorTestFactory {
 
     fun createMarket(downgradeFraction: Double, probabilities: List<Double>): MarketPrices {
         val market = createMarket()
-        val runnerPrices = LinkedList<RunnerPrices>()
+        val runnerPrices = mutableListOf<RunnerPrices>()
         for (i in probabilities.indices) {
             val fairPrice = 1 / probabilities[i]
             val backPrice = priceService.downgrade(fairPrice, downgradeFraction, Side.LAY)

@@ -33,7 +33,7 @@ abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) 
             filtered = categoryService.filterBets(filtered, projection.get(), coverage)
         }
 
-        val profitRecords = LinkedList<ProfitRecord>()
+        val profitRecords = mutableListOf<ProfitRecord>()
         for (function in getProgressFunctions(funcName)) {
             profitRecords.addAll(calculator.getProfitRecords(function, filtered, coverage, charges))
         }

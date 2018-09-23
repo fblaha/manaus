@@ -8,7 +8,6 @@ import cz.fb.manaus.core.model.TradedVolume
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 class PriceBulldozer {
@@ -19,8 +18,8 @@ class PriceBulldozer {
     fun bulldoze(threshold: Double, prices: List<Price>): List<Price> {
         var sum = 0.0
         Preconditions.checkState(Comparators.isInStrictOrder(prices, PriceComparator.CMP))
-        val convicts = LinkedList<Price>()
-        val untouched = LinkedList<Price>()
+        val convicts = mutableListOf<Price>()
+        val untouched = mutableListOf<Price>()
         for (price in prices) {
             if (sum >= threshold) {
                 untouched.add(price)
@@ -33,7 +32,7 @@ class PriceBulldozer {
         if (priceMean.isPresent) {
             val amount = convicts.map { it.amount }.sum()
             val price = roundingService.roundBet(priceMean.asDouble)
-            untouched.addFirst(Price(price!!, amount, prices[0].side))
+            untouched.add(0, Price(price!!, amount, prices[0].side))
         }
         return untouched
     }

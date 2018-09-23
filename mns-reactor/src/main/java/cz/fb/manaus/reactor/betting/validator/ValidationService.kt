@@ -42,7 +42,7 @@ class ValidationService {
         Preconditions.checkState(!filteredValidators.isEmpty())
 
         val newPrice = context.newPrice
-        val collected = LinkedList<ValidationResult>()
+        val collected = mutableListOf<ValidationResult>()
         for (validator in filteredValidators) {
             if (validator.isUpdateOnly) {
                 Preconditions.checkState(context.oldBet.isPresent)
@@ -56,7 +56,7 @@ class ValidationService {
     }
 
     private fun createPredicate(context: BetContext): (Validator) -> Boolean {
-        val predicates = LinkedList<(Validator) -> Boolean>()
+        val predicates = mutableListOf<(Validator) -> Boolean>()
         if (!context.oldBet.isPresent) {
             val updateOnly: (Validator) -> Boolean = { it.isUpdateOnly }
             predicates.add { !updateOnly(it) }

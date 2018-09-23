@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.time.Duration
-import java.util.*
 
 @Component
 @Profile(ManausProfiles.DB)
@@ -16,7 +15,7 @@ class UnprofitableCategoriesRefresher @Autowired
 constructor(@param:Value(REFRESH_PERIOD_EL) private val refreshPeriodHours: Int) : PeriodicMaintenanceTask {
 
     @Autowired(required = false)
-    private val unprofitableCategoriesRegistries = LinkedList<AbstractUnprofitableCategoriesRegistry>()
+    private val unprofitableCategoriesRegistries = mutableListOf<AbstractUnprofitableCategoriesRegistry>()
 
     override fun getName(): String {
         return "unprofitableCategoriesRefresh"

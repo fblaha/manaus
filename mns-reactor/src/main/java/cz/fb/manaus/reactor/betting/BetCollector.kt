@@ -10,26 +10,26 @@ import java.util.Objects.requireNonNull
 
 class BetCollector {
 
-    private val toUpdate = LinkedList<BetCommand>()
-    private val toPlace = LinkedList<BetCommand>()
-    private val toCancel = LinkedList<Bet>()
+    private val toUpdate = mutableListOf<BetCommand>()
+    private val toPlace = mutableListOf<BetCommand>()
+    private val toCancel = mutableListOf<Bet>()
 
     val isEmpty: Boolean
         get() = toPlace.isEmpty() && toUpdate.isEmpty() && toCancel.isEmpty()
 
     fun updateBet(command: BetCommand) {
         requireNonNull(command.bet.betId)
-        toUpdate.addLast(command)
+        toUpdate.add(command)
     }
 
     fun placeBet(betCommand: BetCommand) {
         checkState(betCommand.bet.betId == null)
-        toPlace.addLast(betCommand)
+        toPlace.add(betCommand)
     }
 
     fun cancelBet(oldBet: Bet) {
         requireNonNull(oldBet.betId)
-        toCancel.addLast(oldBet)
+        toCancel.add(oldBet)
     }
 
 

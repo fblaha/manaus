@@ -3,14 +3,13 @@ package cz.fb.manaus.reactor.betting.validator
 import com.google.common.base.Preconditions
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import java.util.*
 import javax.annotation.PostConstruct
 
 @Component
 class ValidatorConfigurationChecker {
 
     @Autowired(required = false)
-    private val validators = LinkedList<Validator>()
+    private val validators = mutableListOf<Validator>()
 
     @PostConstruct
     fun checkValidators() {

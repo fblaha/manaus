@@ -27,7 +27,7 @@ class ChargeGrowthForecasterTest : AbstractLocalTestCase() {
     @Test
     fun forecast() {
         val market = factory.createMarket(0.05, listOf(0.5, 0.3, 0.2))
-        val currentBets = LinkedList<Bet>()
+        val currentBets = mutableListOf<Bet>()
         val marketSnapshot = MarketSnapshot.from(market, currentBets, Optional.empty<Map<Long, TradedVolume>>())
         val fairness = calculator.getFairness(market)
         var forecast = forecaster.getForecast(CoreTestFactory.DRAW, Side.BACK, marketSnapshot, fairness)

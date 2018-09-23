@@ -6,7 +6,6 @@ import org.apache.commons.math3.analysis.polynomials.PolynomialFunction
 import org.apache.commons.math3.analysis.solvers.LaguerreSolver
 import org.apache.commons.math3.exception.NoBracketingException
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 class FairnessPolynomialCalculator {
@@ -21,9 +20,9 @@ class FairnessPolynomialCalculator {
             var rightSide = multiplyPolynomials(presentPrices)
             rightSide = rightSide.multiply(PolynomialFunction(doubleArrayOf(winnerCount)))
 
-            val leftSideItems = LinkedList<PolynomialFunction>()
+            val leftSideItems = mutableListOf<PolynomialFunction>()
             for (i in presentPrices.indices) {
-                val otherPrices = LinkedList<Double>()
+                val otherPrices = mutableListOf<Double>()
                 for (j in presentPrices.indices) {
                     if (i != j) {
                         otherPrices.add(presentPrices[j])

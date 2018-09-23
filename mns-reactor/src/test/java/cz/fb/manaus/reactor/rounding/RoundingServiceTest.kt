@@ -3,7 +3,6 @@ package cz.fb.manaus.reactor.rounding
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
 import kotlin.test.assertEquals
 
 
@@ -14,8 +13,8 @@ class RoundingServiceTest : AbstractLocalTestCase() {
     @Test
     fun `increment decrement`() {
         var price = START
-        val upList = LinkedList<Double>()
-        val downList = LinkedList<Double>()
+        val upList = mutableListOf<Double>()
+        val downList = mutableListOf<Double>()
         for (i in 0 until REPEAT) {
             price = service.increment(price, 1)!!
             upList.add(price)

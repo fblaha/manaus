@@ -15,20 +15,20 @@ class BetUtils {
 
     fun getCurrentActions(betActions: List<BetAction>): List<BetAction> {
         Preconditions.checkArgument(!betActions.isEmpty(), "missing bet actions")
-        val lastUpdates = LinkedList<BetAction>()
+        val lastUpdates = mutableListOf<BetAction>()
         val first = betActions[0]
         for (bet in betActions) {
             validate(first, bet)
             if (bet.betActionType != BetActionType.UPDATE) lastUpdates.clear()
-            lastUpdates.addLast(bet)
+            lastUpdates.add(bet)
         }
         checkState(Comparators.isInStrictOrder(lastUpdates, compareBy { it.actionDate }))
         return lastUpdates
     }
 
-    private fun validate(first: BetAction, bet: BetAction) {
-        checkArgument(first.price.side === bet.price.side)
-        checkArgument(first.selectionId == bet.selectionId)
+    private fun validate(first: BetAction, second: BetAction) {
+        checkArgument(first.price.side === second.price.side)
+        checkArgument(first.selectionId == second.selectionId)
     }
 
     fun getUnknownBets(bets: List<Bet>, myBets: Set<String>): List<Bet> {
