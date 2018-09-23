@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.betting
 
 import com.google.common.base.Preconditions.checkState
-import com.google.common.collect.ImmutableList
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.CollectedBets
 import cz.fb.manaus.core.model.Side
@@ -34,15 +33,15 @@ class BetCollector {
 
 
     fun getToPlace(): List<BetCommand> {
-        return ImmutableList.copyOf(toPlace)
+        return toPlace.toList()
     }
 
     fun getToUpdate(): List<BetCommand> {
-        return ImmutableList.copyOf(toUpdate)
+        return toUpdate.toList()
     }
 
     fun getToCancel(): List<Bet> {
-        return ImmutableList.copyOf(toCancel)
+        return toCancel.toList()
     }
 
     fun toCollectedBets(): CollectedBets {

@@ -1,9 +1,6 @@
 package cz.fb.manaus.reactor.betting
 
 import com.google.common.base.Preconditions.checkState
-import com.google.common.base.Splitter
-import com.google.common.base.Strings
-import com.google.common.collect.ImmutableSet
 import cz.fb.manaus.core.manager.MarketFilterService
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.betting.action.ActionSaver
@@ -39,14 +36,11 @@ constructor(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
     private lateinit var actionSaver: ActionSaver
     @Autowired(required = false)
     private val actionListeners = emptyList<BetActionListener>()
-    private var marketSnapshotListeners: List<MarketSnapshotListener> = LinkedList()
+    private var marketSnapshotListeners: List<MarketSnapshotListener> = mutableListOf()
 
 
     init {
-        this.disabledListeners = ImmutableSet.copyOf(Splitter.on(',')
-                .omitEmptyStrings()
-                .trimResults()
-                .split(Strings.nullToEmpty(rawDisabledListeners)))
+        this.disabledListeners = rawDisabledListeners?.split(',')?.toSet() ?: emptySet()
     }
 
     @Autowired(required = false)
