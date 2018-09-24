@@ -5,7 +5,6 @@ import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.reactor.profit.AbstractProfitTest
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
 import kotlin.test.assertEquals
 
 
@@ -18,9 +17,9 @@ class CoverageFunctionProfitServiceTest : AbstractProfitTest() {
 
     @Test
     fun `covered price`() {
-        val bets = generateBets(Optional.empty())
+        val bets = generateBets(null)
         val records = service.getProfitRecords(bets,
-                Optional.of("price"), provider.chargeRate, Optional.empty())
+                "price", provider.chargeRate, null)
         assertEquals(2, records.size)
         assertEquals("price_covered: 2.79", records[0].category)
         assertEquals(bets.size, records[0].totalCount)
@@ -29,9 +28,9 @@ class CoverageFunctionProfitServiceTest : AbstractProfitTest() {
 
     @Test
     fun `solo price`() {
-        val bets = generateBets(Optional.of(Side.BACK))
+        val bets = generateBets(Side.BACK)
         val records = service.getProfitRecords(bets,
-                Optional.of("price"), provider.chargeRate, Optional.empty())
+                "price", provider.chargeRate, null)
         assertEquals(1, records.size)
         assertEquals("price_solo: 2.84", records[0].category)
         assertEquals(bets.size, records[0].totalCount)

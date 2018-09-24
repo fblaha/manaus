@@ -11,8 +11,8 @@ import java.util.*
 @Component
 class CoverageFunctionProfitService(functions: List<ProgressFunction>) : AbstractFunctionProfitService(functions), FunctionProfitRecordCalculator {
 
-    fun getProfitRecords(bets: List<SettledBet>, funcName: Optional<String>,
-                         chargeRate: Double, projection: Optional<String>): List<ProfitRecord> {
+    fun getProfitRecords(bets: List<SettledBet>, funcName: String?,
+                         chargeRate: Double, projection: String?): List<ProfitRecord> {
         return getProfitRecords(this, bets, chargeRate, funcName, projection)
     }
 

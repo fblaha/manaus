@@ -71,9 +71,9 @@ class ProfitController {
     @RequestMapping(value = ["/fc-progress/" + IntervalParser.INTERVAL], method = [RequestMethod.GET])
     fun getProgressRecords(@PathVariable interval: String,
                            @RequestParam(defaultValue = "5") chunkCount: Int,
-                           @RequestParam(required = false) function: Optional<String>,
+                           @RequestParam(required = false) function: String?,
                            @RequestParam(required = false) charge: Optional<Double>,
-                           @RequestParam(required = false) projection: Optional<String>,
+                           @RequestParam(required = false) projection: String?,
                            @RequestParam(defaultValue = "true") cache: Boolean): List<ProfitRecord> {
         val bets = loadBets(interval, cache)
         val stopwatch = Stopwatch.createStarted()
@@ -86,9 +86,9 @@ class ProfitController {
     @ResponseBody
     @RequestMapping(value = ["/fc-coverage/" + IntervalParser.INTERVAL], method = [RequestMethod.GET])
     fun getCoverageRecords(@PathVariable interval: String,
-                           @RequestParam(required = false) function: Optional<String>,
+                           @RequestParam(required = false) function: String?,
                            @RequestParam(required = false) charge: Optional<Double>,
-                           @RequestParam(required = false) projection: Optional<String>,
+                           @RequestParam(required = false) projection: String?,
                            @RequestParam(defaultValue = "true") cache: Boolean): List<ProfitRecord> {
         val bets = loadBets(interval, cache)
         val stopwatch = Stopwatch.createStarted()

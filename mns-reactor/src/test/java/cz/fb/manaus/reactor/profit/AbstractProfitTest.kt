@@ -27,7 +27,7 @@ abstract class AbstractProfitTest : AbstractLocalTestCase() {
     }
 
     // TODO not use java Optional in kotlin code
-    protected fun generateBets(requestedSide: Optional<Side>): List<SettledBet> {
+    protected fun generateBets(requestedSide: Side?): List<SettledBet> {
         val result = mutableListOf<SettledBet>()
         var price = 1.5
         while (price < 4) {
@@ -39,8 +39,8 @@ abstract class AbstractProfitTest : AbstractLocalTestCase() {
         return result
     }
 
-    private fun addSideBets(result: MutableList<SettledBet>, price: Double, side: Side, requestedSide: Optional<Side>) {
-        if (requestedSide.orElse(side) === side) {
+    private fun addSideBets(result: MutableList<SettledBet>, price: Double, side: Side, requestedSide: Side?) {
+        if (requestedSide == null || requestedSide == side) {
             result.add(ModelFactory.newSettled(CoreTestFactory.DRAW, "The Draw", 5.0, marketDate,
                     Price(price, 4.0, side)))
             result.add(ModelFactory.newSettled(CoreTestFactory.HOME, "Home", 5.0, marketDate,

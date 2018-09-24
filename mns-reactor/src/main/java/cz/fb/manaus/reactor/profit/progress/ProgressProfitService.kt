@@ -9,14 +9,13 @@ import cz.fb.manaus.reactor.profit.progress.function.ProgressFunction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.math.RoundingMode
-import java.util.*
 
 @Component
 class ProgressProfitService @Autowired
 constructor(functions: List<ProgressFunction>) : AbstractFunctionProfitService(functions) {
 
-    fun getProfitRecords(bets: List<SettledBet>, funcName: Optional<String>,
-                         chunkCount: Int, chargeRate: Double, projection: Optional<String>): List<ProfitRecord> {
+    fun getProfitRecords(bets: List<SettledBet>, funcName: String?,
+                         chunkCount: Int, chargeRate: Double, projection: String?): List<ProfitRecord> {
         val calculator = getCalculator(chunkCount)
         return getProfitRecords(calculator, bets, chargeRate, funcName, projection)
     }

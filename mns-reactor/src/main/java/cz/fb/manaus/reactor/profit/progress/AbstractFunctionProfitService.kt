@@ -10,7 +10,6 @@ import cz.fb.manaus.reactor.profit.ProfitService
 import cz.fb.manaus.reactor.profit.progress.function.ProgressFunction
 import org.apache.commons.math3.util.Precision
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
 import java.util.Objects.requireNonNull
 
 abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) {
@@ -24,13 +23,13 @@ abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) 
 
 
     protected fun getProfitRecords(calculator: FunctionProfitRecordCalculator, bets: List<SettledBet>,
-                                   chargeRate: Double, funcName: Optional<String>, projection: Optional<String>): List<ProfitRecord> {
+                                   chargeRate: Double, funcName: String?, projection: String?): List<ProfitRecord> {
         var filtered = bets
         val charges = profitPlugin.getCharges(filtered, chargeRate)
         val coverage = BetCoverage.from(filtered)
 
-        if (projection.isPresent) {
-            filtered = categoryService.filterBets(filtered, projection.get(), coverage)
+        if (projection != null) {
+            filtered = categoryService.filterBets(filtered, projection, coverage)
         }
 
         val profitRecords = mutableListOf<ProfitRecord>()
@@ -40,9 +39,9 @@ abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) 
         return profitRecords
     }
 
-    private fun getProgressFunctions(funcName: Optional<String>): Iterable<ProgressFunction> {
-        return if (funcName.isPresent) {
-            listOf(requireNonNull<ProgressFunction>(functions[funcName.get()],
+    private fun getProgressFunctions(funcName: String?): Iterable<ProgressFunction> {
+        return if (funcName != null) {
+            listOf(requireNonNull<ProgressFunction>(functions[funcName],
                     String.format("No such function '%s'", funcName)))
         } else {
             functions.values.sortedBy { it.name }

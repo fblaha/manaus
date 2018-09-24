@@ -1,13 +1,11 @@
 package cz.fb.manaus.reactor.profit.progress
 
 import com.google.common.collect.Comparators
-import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.reactor.profit.AbstractProfitTest
 import junit.framework.TestCase.assertTrue
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
 import kotlin.test.assertEquals
 
 class ProgressProfitServiceTest : AbstractProfitTest() {
@@ -20,9 +18,9 @@ class ProgressProfitServiceTest : AbstractProfitTest() {
 
     @Test
     fun `single chunk`() {
-        val bets = generateBets(Optional.empty<Side>())
+        val bets = generateBets(null)
         val records = service.getProfitRecords(bets,
-                Optional.of("price"), 1, provider.chargeRate, Optional.empty())
+                "price", 1, provider.chargeRate, null)
         assertEquals(1, records.size)
         assertEquals("price: 2.79", records[0].category)
         assertEquals(bets.size, records[0].totalCount)
@@ -31,9 +29,9 @@ class ProgressProfitServiceTest : AbstractProfitTest() {
 
     @Test
     fun `multiple chunks`() {
-        val bets = generateBets(Optional.empty<Side>())
+        val bets = generateBets(null)
         val records = service.getProfitRecords(bets,
-                Optional.of("price"), 10, provider.chargeRate, Optional.empty())
+                "price", 10, provider.chargeRate, null)
         assertEquals(10, records.size)
         assertTrue(Comparators.isInStrictOrder(records, compareBy { it.avgPrice }))
     }
