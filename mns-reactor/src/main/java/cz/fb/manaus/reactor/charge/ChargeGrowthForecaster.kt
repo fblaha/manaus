@@ -40,10 +40,10 @@ class ChargeGrowthForecaster {
                     snapshot: MarketSnapshot, fairness: Fairness): Double? {
         if (exchangeProvider.isPerMarketCharge) {
             val fairnessSide = fairness.moreCredibleSide
-            if (fairnessSide.isPresent) {
-                val sideFairness = fairness[fairnessSide.get()]!!
+            if (fairnessSide != null) {
+                val sideFairness = fairness[fairnessSide]!!
                 val probabilities = probabilityCalculator.fromFairness(
-                        sideFairness, fairnessSide.get(), snapshot.marketPrices)
+                        sideFairness, fairnessSide, snapshot.marketPrices)
                 val marketPrices = snapshot.marketPrices
                 val bets = convertBetData(snapshot.currentBets)
                 val runnerPrices = marketPrices.getRunnerPrices(selectionId)
@@ -55,8 +55,7 @@ class ChargeGrowthForecaster {
                     val amount = amountAdviser.amount
                     bets.put(selectionId, Price(price, amount, betSide))
                     val newCharge = simulator.getChargeMean(winnerCount, exchangeProvider.chargeRate, probabilities, bets)
-                    val result = newCharge / oldCharge
-                    return result
+                    return newCharge / oldCharge
                 }
             }
         }

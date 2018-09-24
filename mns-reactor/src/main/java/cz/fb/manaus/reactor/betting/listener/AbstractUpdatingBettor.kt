@@ -10,9 +10,6 @@ import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.apache.commons.math3.util.Precision
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
-import java.util.Objects.requireNonNull
-import java.util.Optional.ofNullable
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -37,8 +34,8 @@ abstract class AbstractUpdatingBettor protected constructor(private val side: Si
         if (flowFilter.winnerCountRange.contains(winnerCount)) {
             val coverage = snapshot.coverage
             val fairness = calculator.getFairness(marketPrices)
-            val credibleSide = requireNonNull(fairness.moreCredibleSide)
-            val ordering = COMPARATORS[credibleSide.get()]!!
+            val credibleSide = fairness.moreCredibleSide!!
+            val ordering = COMPARATORS[credibleSide]!!
             val prices = marketPrices.runnerPrices.sortedWith(ordering)
             checkState(prices.map { it.selectionId }.distinct().count() ==
                     prices.map { it.selectionId }.count())
@@ -50,7 +47,7 @@ abstract class AbstractUpdatingBettor protected constructor(private val side: Si
                 val activeSelection = coverage.contains(side, selectionId) || coverage.contains(side.opposite, selectionId)
                 val accepted = flowFilter.indexRange.contains(i) && flowFilter.runnerPredicate(market, runner)
                 if (activeSelection || accepted) {
-                    val oldBet = ofNullable(coverage.get(side, selectionId))
+                    val oldBet = coverage.get(side, selectionId)
                     val ctx = contextFactory.create(side, selectionId,
                             snapshot, fairness, accountMoney)
                     setTradedVolumeMean(ctx)
@@ -68,7 +65,7 @@ abstract class AbstractUpdatingBettor protected constructor(private val side: Si
 
                     val priceCtx = ctx.withNewPrice(newPrice.get())
 
-                    if (oldBet.isPresent && oldBet.get().isMatched) continue
+                    if (oldBet != null && oldBet.isMatched) continue
 
                     val priceValidation = validationService.validate(priceCtx, validators)
 
@@ -95,13 +92,12 @@ abstract class AbstractUpdatingBettor protected constructor(private val side: Si
         log.log(Level.INFO, "{0}_BET:  new bet ''{1}''", arrayOf(action.betActionType, action))
     }
 
-    private fun cancelBet(oldBet: Optional<Bet>, betCollector: BetCollector) {
-        oldBet.ifPresent { bet ->
-            if (!bet.isMatched) {
-                metricRegistry.counter("bet.cancel").inc()
-                betCollector.cancelBet(bet)
-                log.log(Level.INFO, "CANCEL_BET: unable propose price for bet ''{0}''", bet)
-            }
+    private fun cancelBet(oldBet: Bet?, betCollector: BetCollector) {
+        if (oldBet != null && !oldBet.isMatched) {
+            metricRegistry.counter("bet.cancel").inc()
+            betCollector.cancelBet(oldBet)
+            log.log(Level.INFO, "CANCEL_BET: unable propose price for bet ''{0}''", oldBet)
+
         }
     }
 
@@ -120,7 +116,6 @@ abstract class AbstractUpdatingBettor protected constructor(private val side: Si
     }
 
     companion object {
-
         private val log = Logger.getLogger(AbstractUpdatingBettor::class.java.simpleName)
     }
 }

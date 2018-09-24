@@ -7,21 +7,21 @@ import java.util.Objects.requireNonNull
 
 class Fairness(val back: Double?, val lay: Double?) {
 
-    val moreCredibleSide: Optional<Side>
+    val moreCredibleSide: Side?
         get() {
             if (lay != null && back != null) {
                 val layInverted = 1 / lay
                 return if (back > layInverted) {
-                    Optional.of(Side.BACK)
+                    Side.BACK
                 } else {
-                    Optional.of(Side.LAY)
+                    Side.LAY
                 }
             } else if (lay != null) {
-                return Optional.of(Side.LAY)
+                return Side.LAY
             } else if (back != null) {
-                return Optional.of(Side.BACK)
+                return Side.BACK
             }
-            return Optional.empty()
+            return null
         }
 
     operator fun get(side: Side): Double? {
