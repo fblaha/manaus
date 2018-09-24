@@ -30,8 +30,8 @@ open class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAd
         return if (proposedPrice != null) {
             var amount = adviser.amount
             val counterBet = betContext.counterBet
-            if (counterBet.isPresent && counterBet.get().matchedAmount > 0) {
-                amount = counterBet.get().requestedPrice.amount
+            if (counterBet != null && counterBet.matchedAmount > 0) {
+                amount = counterBet.requestedPrice.amount
             }
             Optional.of(Price(proposedPrice,
                     Math.max(amount, provider.minAmount), betContext.side))

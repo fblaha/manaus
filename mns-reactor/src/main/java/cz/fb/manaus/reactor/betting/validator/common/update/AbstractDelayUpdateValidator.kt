@@ -16,7 +16,7 @@ abstract class AbstractDelayUpdateValidator protected constructor(private val pa
     override val isUpdateOnly: Boolean = true
 
     override fun validate(context: BetContext): ValidationResult {
-        val betId = context.oldBet.get().betId
+        val betId = context.oldBet!!.betId
         val actionDate = actionDao.getBetActionDate(betId).get()
         val untilNow = actionDate.toInstant().until(Instant.now(), ChronoUnit.MILLIS)
         return ValidationResult.of(untilNow > pausePeriod.toMillis())

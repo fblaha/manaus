@@ -18,8 +18,8 @@ abstract class AbstractTooCloseUpdateValidator(private val closeSteps: Set<Int>)
     override val isUpdateOnly: Boolean = true
 
     override fun validate(context: BetContext): ValidationResult {
-        val oldOne = context.oldBet.get().requestedPrice.price
-        val newOne = context.newPrice.get().price
+        val oldOne = context.oldBet!!.requestedPrice.price
+        val newOne = context.newPrice!!.price
         if (Price.priceEq(newOne, oldOne)) return ValidationResult.REJECT
         for (step in closeSteps) {
             Preconditions.checkArgument(step != 0)

@@ -8,7 +8,6 @@ import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.util.*
 import java.util.Objects.requireNonNull
 
 @Service
@@ -19,16 +18,16 @@ class ValidationService {
     @Autowired
     private lateinit var recorder: ValidationMetricsCollector
 
-    internal fun handleDowngrade(newOne: Optional<Price>, oldOne: Optional<Bet>, validator: Validator): Optional<ValidationResult> {
-        if (oldOne.isPresent && newOne.isPresent) {
-            val oldPrice = oldOne.get().requestedPrice
-            checkState(newOne.get().side === requireNonNull(oldPrice.side), validator.javaClass)
-            if (priceService.isDowngrade(newOne.get().price, oldPrice.price,
-                            newOne.get().side) && validator.isDowngradeAccepting) {
-                return Optional.of(ValidationResult.ACCEPT)
+    internal fun handleDowngrade(newOne: Price?, oldOne: Bet?, validator: Validator): ValidationResult? {
+        if (oldOne != null && newOne != null) {
+            val oldPrice = oldOne.requestedPrice
+            checkState(newOne.side === requireNonNull(oldPrice.side), validator.javaClass)
+            if (priceService.isDowngrade(newOne.price, oldPrice.price,
+                            newOne.side) && validator.isDowngradeAccepting) {
+                return ValidationResult.ACCEPT
             }
         }
-        return Optional.empty()
+        return null
     }
 
     internal fun reduce(results: List<ValidationResult>): ValidationResult {
@@ -45,10 +44,9 @@ class ValidationService {
         val collected = mutableListOf<ValidationResult>()
         for (validator in filteredValidators) {
             if (validator.isUpdateOnly) {
-                Preconditions.checkState(context.oldBet.isPresent)
+                Preconditions.checkState(context.oldBet != null)
             }
-            val validationResult = handleDowngrade(newPrice, context.oldBet, validator)
-                    .orElse(requireNonNull(validator.validate(context)))
+            val validationResult = handleDowngrade(newPrice, context.oldBet, validator) ?: validator.validate(context)
             recorder.updateMetrics(validationResult, context.side, validator.name)
             collected.add(validationResult)
         }
@@ -57,12 +55,12 @@ class ValidationService {
 
     private fun createPredicate(context: BetContext): (Validator) -> Boolean {
         val predicates = mutableListOf<(Validator) -> Boolean>()
-        if (!context.oldBet.isPresent) {
+        if (context.oldBet == null) {
             val updateOnly: (Validator) -> Boolean = { it.isUpdateOnly }
             predicates.add { !updateOnly(it) }
         }
         val priceRequired: (Validator) -> Boolean = { it.isPriceRequired }
-        if (context.newPrice.isPresent) {
+        if (context.newPrice != null) {
             predicates.add(priceRequired)
         } else {
             predicates.add { !priceRequired(it) }

@@ -12,14 +12,14 @@ abstract class AbstractLastMatchedValidator protected constructor(private val pa
 
     override fun validate(context: BetContext): ValidationResult {
         val lastMatchedPrice = context.runnerPrices.lastMatchedPrice ?: return ValidationResult.REJECT
-        if (Price.priceEq(context.newPrice.get().price, lastMatchedPrice)) {
+        if (Price.priceEq(context.newPrice!!.price, lastMatchedPrice)) {
             return ValidationResult.of(passEqual)
         }
         val side = requireNonNull(context.side)
         return if (side === Side.LAY) {
-            ValidationResult.of(context.newPrice.get().price < lastMatchedPrice)
+            ValidationResult.of(context.newPrice!!.price < lastMatchedPrice)
         } else {
-            ValidationResult.of(context.newPrice.get().price > lastMatchedPrice)
+            ValidationResult.of(context.newPrice!!.price > lastMatchedPrice)
         }
     }
 

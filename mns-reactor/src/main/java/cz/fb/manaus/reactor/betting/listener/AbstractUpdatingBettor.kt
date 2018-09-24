@@ -82,10 +82,11 @@ abstract class AbstractUpdatingBettor protected constructor(private val side: Si
 
     private fun bet(ctx: BetContext, betCollector: BetCollector) {
         val action = ctx.createBetAction()
-        val newPrice = ctx.newPrice.get()
+        val newPrice = ctx.newPrice!!
 
-        if (ctx.oldBet.isPresent) {
-            betCollector.updateBet(BetCommand(ctx.oldBet.get().replacePrice(newPrice.price), action))
+        val oldBet = ctx.oldBet
+        if (oldBet != null) {
+            betCollector.updateBet(BetCommand(oldBet.replacePrice(newPrice.price), action))
         } else {
             val market = ctx.marketPrices.market
             val bet = Bet(null, market.id, ctx.runnerPrices.selectionId, newPrice, null, 0.0)

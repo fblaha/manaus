@@ -6,7 +6,6 @@ import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.price.Fairness
 import java.util.*
 import java.util.Objects.requireNonNull
-import java.util.Optional.ofNullable
 
 open class BetContext internal constructor(open val side: Side, val selectionId: Long,
                                            val accountMoney: AccountMoney?,
@@ -14,8 +13,7 @@ open class BetContext internal constructor(open val side: Side, val selectionId:
                                            private val marketSnapshot: MarketSnapshot,
                                            val fairness: Fairness) {
     open val properties: MutableMap<String, String> = mutableMapOf()
-    var newPrice = Optional.empty<Price>()
-        private set
+    var newPrice: Price? = null
 
     open val runnerPrices: RunnerPrices = marketSnapshot.marketPrices.getRunnerPrices(selectionId)
 
@@ -28,37 +26,37 @@ open class BetContext internal constructor(open val side: Side, val selectionId:
                 Optional.empty()
             }
 
-    open val oldBet: Optional<Bet> = ofNullable(marketSnapshot.coverage.get(side, selectionId))
+    open val oldBet: Bet? = marketSnapshot.coverage.get(side, selectionId)
 
-    open val counterBet: Optional<Bet> = ofNullable(marketSnapshot.coverage.get(side.opposite, selectionId))
+    open val counterBet: Bet? = marketSnapshot.coverage.get(side.opposite, selectionId)
 
     open val coverage: Table<Side, Long, Bet> = marketSnapshot.coverage
 
     val isCounterHalfMatched: Boolean
         get() {
-            val counterBet = counterBet
-            return counterBet.map { it.isHalfMatched }.orElse(false)
+            return counterBet?.isHalfMatched ?: false
         }
 
     fun withNewPrice(newPrice: Price): BetContext {
         val newSide = requireNonNull(newPrice.side)
         checkState(side === newSide)
         val oldBet = oldBet
-        if (oldBet.isPresent) {
-            val oldSide = requireNonNull(oldBet.get().requestedPrice.side)
+        if (oldBet != null) {
+            val oldSide = requireNonNull(oldBet.requestedPrice.side)
             checkState(oldSide === newSide)
         }
         val counterBet = counterBet
-        counterBet.ifPresent { bet ->
-            val otherSide = requireNonNull(bet.requestedPrice.side)
+        if (counterBet != null) {
+            val otherSide = counterBet.requestedPrice.side
             checkState(otherSide === newSide.opposite)
+
         }
-        this.newPrice = Optional.of(newPrice)
+        this.newPrice = newPrice
         return this
     }
 
     fun createBetAction(): BetAction {
-        val type = if (oldBet.isPresent) BetActionType.UPDATE else BetActionType.PLACE
+        val type = if (oldBet != null) BetActionType.UPDATE else BetActionType.PLACE
         val marketPrices = marketSnapshot.marketPrices
         val action = BetAction()
         action.betActionType = type
@@ -67,7 +65,7 @@ open class BetContext internal constructor(open val side: Side, val selectionId:
         action.selectionId = selectionId
         action.marketPrices = marketPrices
         action.properties = properties
-        action.price = newPrice.get()
+        action.price = newPrice
         return action
     }
 

@@ -9,7 +9,6 @@ import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.betting.BetContext
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -43,9 +42,9 @@ class ValidationServiceTest : AbstractLocalTestCase() {
         whenever(oldBet.requestedPrice).thenReturn(Price(2.2, 2.0, Side.LAY))
         val rejecting = TestValidator(ValidationResult.REJECT)
         val result = service.handleDowngrade(
-                Optional.of(Price(newPrice, 2.0, Side.LAY)),
-                Optional.of(oldBet), rejecting)
-        assertEquals(expected, result.orElse(null))
+                Price(newPrice, 2.0, Side.LAY),
+                oldBet, rejecting)
+        assertEquals(expected, result)
         assertEquals(ValidationResult.REJECT, rejecting.validate(mock()))
     }
 
