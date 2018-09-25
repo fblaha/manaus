@@ -72,7 +72,6 @@ class SettledBetController {
 
     @RequestMapping(value = ["/bets"], method = [RequestMethod.POST])
     fun addBet(@RequestParam betId: String, @RequestBody bet: SettledBet): ResponseEntity<*> {
-        Objects.requireNonNull(betId, "betId==null")
         metricRegistry.counter("settled.bet.post").inc()
         return if (betSaver.saveBet(betId, bet) == SaveStatus.NO_ACTION) {
             ResponseEntity.noContent().build<Any>()

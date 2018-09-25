@@ -8,7 +8,6 @@ import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.model.Side
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.util.*
 import java.util.Objects.requireNonNull
 
 
@@ -20,14 +19,14 @@ class ProfitService {
     @Autowired
     private lateinit var profitPlugin: ProfitPlugin
 
-    fun getProfitRecords(bets: List<SettledBet>, projection: Optional<String>,
+    fun getProfitRecords(bets: List<SettledBet>, projection: String?,
                          simulationAwareOnly: Boolean, chargeRate: Double): List<ProfitRecord> {
         var filtered = bets
         val coverage = BetCoverage.from(filtered)
         val charges = profitPlugin.getCharges(filtered, chargeRate)
 
-        if (projection.isPresent) {
-            filtered = categoryService.filterBets(filtered, projection.get(), coverage)
+        if (projection != null) {
+            filtered = categoryService.filterBets(filtered, projection, coverage)
         }
 
         val betRecords = computeProfitRecords(filtered, simulationAwareOnly, charges, coverage)

@@ -13,8 +13,6 @@ import org.apache.commons.lang3.time.DateUtils.addHours
 import org.junit.Assert
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
-import java.util.Optional.empty
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -79,9 +77,9 @@ class ProfitServiceTest : AbstractProfitTest() {
         val kamazLay = createKamazLay()
         setBetAction(kamazBack, kamazLay)
         val bets = listOf(kamazBack, kamazLay)
-        val simulationOnly = profitService.getProfitRecords(bets, empty(), true,
+        val simulationOnly = profitService.getProfitRecords(bets, null, true,
                 provider.chargeRate)
-        val all = profitService.getProfitRecords(bets, empty(), false,
+        val all = profitService.getProfitRecords(bets, null, false,
                 provider.chargeRate)
         assertTrue(simulationOnly.size < all.size)
         assertTrue(simulationOnly.size > 0)
@@ -89,7 +87,7 @@ class ProfitServiceTest : AbstractProfitTest() {
 
     private fun checkRecords(expectedAllProfit: Double, otherProfits: Map<String, Double>?, vararg bets: SettledBet) {
         val betList = listOf(*bets)
-        val result = profitService.getProfitRecords(betList, empty(),
+        val result = profitService.getProfitRecords(betList, null,
                 false, provider.chargeRate)
         val all = result.find { ProfitRecord.isAllCategory(it) }!!
         Assert.assertEquals(expectedAllProfit, all.profit, 0.01)
@@ -116,7 +114,7 @@ class ProfitServiceTest : AbstractProfitTest() {
                 addDays(marketDate, 1), Price(2.0, 5.0, Side.BACK))
         bet2.placed = addHours(marketDate, -1)
         setBetAction(bet1, bet2)
-        val records = profitService.getProfitRecords(listOf(bet1, bet2), empty(), true,
+        val records = profitService.getProfitRecords(listOf(bet1, bet2), null, true,
                 provider.chargeRate)
 
         val byCategory = byCategory(records)
@@ -131,9 +129,9 @@ class ProfitServiceTest : AbstractProfitTest() {
         assertEquals(1, byCategory["placedBefore_day_1-2"]!!.layCount)
         Assert.assertEquals(4.8, byCategory["placedBefore_day_1-2"]!!.profit, 0.01)
 
-        assertTrue(profitService.getProfitRecords(listOf(bet1, bet2), Optional.of("market_country_ua"), true,
+        assertTrue(profitService.getProfitRecords(listOf(bet1, bet2), "market_country_ua", true,
                 provider.chargeRate).isEmpty())
-        assertFalse(profitService.getProfitRecords(listOf(bet1, bet2), Optional.of("market_country_br"), true,
+        assertFalse(profitService.getProfitRecords(listOf(bet1, bet2), "market_country_br", true,
                 provider.chargeRate).isEmpty())
 
     }

@@ -61,7 +61,7 @@ abstract class AbstractUnprofitableCategoriesRegistry protected constructor(
         betActionDao.fetchMarketPrices(settledBets.stream().map { it.betAction })
         if (settledBets.isEmpty()) return
         val chargeRate = provider.chargeRate
-        val profitRecords = profitService.getProfitRecords(settledBets, Optional.empty(), true, chargeRate)
+        val profitRecords = profitService.getProfitRecords(settledBets, null, true, chargeRate)
 
         log.log(Level.INFO, logPrefix + "updating registry ''{0}''", name)
         updateBlacklists(profitRecords, configUpdate)
