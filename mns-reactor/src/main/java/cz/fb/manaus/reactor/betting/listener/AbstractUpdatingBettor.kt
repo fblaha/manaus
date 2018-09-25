@@ -58,12 +58,12 @@ abstract class AbstractUpdatingBettor protected constructor(private val side: Si
                     }
 
                     val newPrice = priceAdviser.getNewPrice(ctx)
-                    if (!newPrice.isPresent) {
+                    if (newPrice == null) {
                         cancelBet(oldBet, betCollector)
                         continue
                     }
 
-                    val priceCtx = ctx.withNewPrice(newPrice.get())
+                    val priceCtx = ctx.withNewPrice(newPrice)
 
                     if (oldBet != null && oldBet.isMatched) continue
 

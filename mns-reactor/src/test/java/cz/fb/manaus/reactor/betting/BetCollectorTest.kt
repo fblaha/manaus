@@ -5,7 +5,8 @@ import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import org.junit.Test
-import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class BetCollectorTest {
@@ -25,10 +26,10 @@ class BetCollectorTest {
     }
 
     private fun checkCollector(collector: BetCollector) {
-        assertTrue(collector.findBet(marketId, selectionId, Side.LAY).isPresent)
-        assertFalse(collector.findBet(marketId, selectionId, Side.BACK).isPresent)
-        assertFalse(collector.findBet(marketId + 1, selectionId, Side.LAY).isPresent)
-        assertFalse(collector.findBet(marketId, selectionId + 1, Side.LAY).isPresent)
+        assertNotNull(collector.findBet(marketId, selectionId, Side.LAY))
+        assertNull(collector.findBet(marketId, selectionId, Side.BACK))
+        assertNull(collector.findBet(marketId + 1, selectionId, Side.LAY))
+        assertNull(collector.findBet(marketId, selectionId + 1, Side.LAY))
     }
 
     @Test

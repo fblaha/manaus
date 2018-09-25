@@ -8,7 +8,6 @@ import com.google.common.collect.Comparators
 import cz.fb.manaus.core.model.*
 import org.springframework.beans.BeanUtils
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 class BetUtils {
@@ -41,7 +40,7 @@ class BetUtils {
 
     fun limitBetAmount(ceiling: Double, bet: SettledBet): SettledBet {
         val newPrice = limitPriceAmount(ceiling, bet.price)
-        if (newPrice.isPresent) {
+        if (newPrice != null) {
             val copy = SettledBet()
             BeanUtils.copyProperties(bet, copy)
 
@@ -50,22 +49,22 @@ class BetUtils {
             copy.profitAndLoss = rate * bet.profitAndLoss
             limitActionAmount(ceiling, copy)
 
-            newPrice.ifPresent { copy.price = it }
+            copy.price = newPrice
             return copy
         }
         limitActionAmount(ceiling, bet)
         return bet
     }
 
-    private fun limitPriceAmount(ceiling: Double, origPrice: Price): Optional<Price> {
+    private fun limitPriceAmount(ceiling: Double, origPrice: Price): Price? {
         val amount = origPrice.amount
         if (ceiling < amount) {
             val newPrice = Price()
             BeanUtils.copyProperties(origPrice, newPrice)
             newPrice.amount = ceiling
-            return Optional.of(newPrice)
+            return newPrice
         }
-        return Optional.empty()
+        return null
     }
 
     fun limitActionAmount(ceiling: Double, betCopy: SettledBet) {
@@ -74,7 +73,7 @@ class BetUtils {
             val actionCopy = BetAction()
             BeanUtils.copyProperties(orig, actionCopy)
             val newPrice = limitPriceAmount(ceiling, orig.price)
-            newPrice.ifPresent { actionCopy.price = it }
+            newPrice?.let { actionCopy.price = it }
             betCopy.betAction = actionCopy
         }
     }

@@ -9,7 +9,6 @@ import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.PriceAdviser
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
 import javax.annotation.PostConstruct
@@ -25,7 +24,7 @@ open class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAd
     @Autowired
     private lateinit var roundingService: RoundingService
 
-    override fun getNewPrice(betContext: BetContext): Optional<Price> {
+    override fun getNewPrice(betContext: BetContext): Price? {
         val proposedPrice = reducePrices(betContext)
         return if (proposedPrice != null) {
             var amount = adviser.amount
@@ -33,10 +32,10 @@ open class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAd
             if (counterBet != null && counterBet.matchedAmount > 0) {
                 amount = counterBet.requestedPrice.amount
             }
-            Optional.of(Price(proposedPrice,
-                    Math.max(amount, provider.minAmount), betContext.side))
+            Price(proposedPrice,
+                    Math.max(amount, provider.minAmount), betContext.side)
         } else {
-            Optional.empty()
+            null
         }
     }
 

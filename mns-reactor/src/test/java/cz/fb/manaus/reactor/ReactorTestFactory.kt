@@ -17,7 +17,6 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.Optional.empty
-import java.util.Optional.of
 
 
 @Component
@@ -36,14 +35,14 @@ class ReactorTestFactory {
 
     fun newUpdateBetContext(marketPrices: MarketPrices, side: Side): BetContext {
         val oldBet = newBet(Price(5.0, 5.0, side))
-        return newBetContext(side, marketPrices, of(oldBet)).withNewPrice(oldBet.requestedPrice)
+        return newBetContext(side, marketPrices, oldBet).withNewPrice(oldBet.requestedPrice)
     }
 
-    fun newBetContext(side: Side, marketPrices: MarketPrices, oldBet: Optional<Bet>): BetContext {
+    fun newBetContext(side: Side, marketPrices: MarketPrices, oldBet: Bet?): BetContext {
         val fairness = Fairness(0.9, 1.1)
 
         val bets = mutableListOf<Bet>()
-        oldBet.ifPresent { bet -> bets.add(bet) }
+        oldBet?.let { bet -> bets.add(bet) }
         val snapshot = MarketSnapshot.from(marketPrices, bets, empty<Map<Long, TradedVolume>>())
 
         return contextFactory.create(side, CoreTestFactory.HOME, snapshot, fairness, null)

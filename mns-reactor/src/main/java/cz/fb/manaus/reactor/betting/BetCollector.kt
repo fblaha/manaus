@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions.checkState
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.CollectedBets
 import cz.fb.manaus.core.model.Side
-import java.util.*
 import java.util.Objects.requireNonNull
 
 class BetCollector {
@@ -52,14 +51,13 @@ class BetCollector {
         return bets
     }
 
-    fun findBet(marketId: String, selId: Long, side: Side): Optional<Bet> {
+    fun findBet(marketId: String, selId: Long, side: Side): Bet? {
         val placeOrUpdate = (toPlace + toUpdate).map { it.bet }
 
-        val bet = (placeOrUpdate + toCancel).find { bet ->
+        return (placeOrUpdate + toCancel).find { bet ->
             bet.marketId == marketId
                     && bet.selectionId == selId
                     && bet.requestedPrice.side === side
         }
-        return Optional.ofNullable(bet)
     }
 }

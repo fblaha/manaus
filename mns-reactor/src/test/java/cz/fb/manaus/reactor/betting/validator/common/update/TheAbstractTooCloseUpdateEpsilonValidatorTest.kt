@@ -2,7 +2,6 @@ package cz.fb.manaus.reactor.betting.validator.common.update
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
-import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
@@ -13,7 +12,6 @@ import cz.fb.manaus.reactor.rounding.RoundingService
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import java.util.*
 import kotlin.test.assertEquals
 
 class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
@@ -29,7 +27,7 @@ class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
     @Test
     fun `accept back`() {
         val oldPrice = Price(2.5, 5.0, Side.BACK)
-        val oldBet = Optional.of(ReactorTestFactory.newBet(oldPrice))
+        val oldBet = ReactorTestFactory.newBet(oldPrice)
 
         val prices = factory.createMarket(0.1, listOf(0.4, 0.3, 0.3))
         prices.getRunnerPrices(CoreTestFactory.HOME)
@@ -50,7 +48,7 @@ class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
         whenever(newOne.side).thenReturn(Side.LAY)
         whenever(oldOne.side).thenReturn(Side.LAY)
         whenever(oldOne.price).thenReturn(3.6)
-        val oldBet = Optional.of<Bet>(ReactorTestFactory.newBet(oldOne))
+        val oldBet = ReactorTestFactory.newBet(oldOne)
 
         val prices = factory.createMarket(0.1, listOf(0.4, 0.3, 0.3))
 

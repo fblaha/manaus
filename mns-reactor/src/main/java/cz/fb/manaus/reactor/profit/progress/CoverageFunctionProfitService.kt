@@ -6,7 +6,6 @@ import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.reactor.profit.progress.function.ProgressFunction
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 class CoverageFunctionProfitService(functions: List<ProgressFunction>) : AbstractFunctionProfitService(functions), FunctionProfitRecordCalculator {
@@ -26,24 +25,20 @@ class CoverageFunctionProfitService(functions: List<ProgressFunction>) : Abstrac
 
         val builder = ImmutableList.builder<ProfitRecord>()
 
-        addRecord("solo", solo, function, coverage, charges)
-                .ifPresent { builder.add(it) }
-        addRecord("covered", covered, function, coverage, charges)
-                .ifPresent { builder.add(it) }
-        addRecord("covHead", head, function, coverage, charges)
-                .ifPresent { builder.add(it) }
-        addRecord("covTail", tail, function, coverage, charges)
-                .ifPresent { builder.add(it) }
+        addRecord("solo", solo, function, coverage, charges)?.let { builder.add(it) }
+        addRecord("covered", covered, function, coverage, charges)?.let { builder.add(it) }
+        addRecord("covHead", head, function, coverage, charges)?.let { builder.add(it) }
+        addRecord("covTail", tail, function, coverage, charges)?.let { builder.add(it) }
         return builder.build()
     }
 
     private fun addRecord(categoryName: String, bets: List<SettledBet>, function: ProgressFunction,
-                          coverage: BetCoverage, charges: Map<String, Double>): Optional<ProfitRecord> {
+                          coverage: BetCoverage, charges: Map<String, Double>): ProfitRecord? {
         val average = getAverage(bets, function)
         val category = getValueCategory(function.name + "_" + categoryName, average)
         return when (average) {
-            null -> Optional.empty()
-            else -> Optional.of(computeFunctionRecord(category, bets, charges, coverage))
+            null -> null
+            else -> computeFunctionRecord(category, bets, charges, coverage)
         }
     }
 

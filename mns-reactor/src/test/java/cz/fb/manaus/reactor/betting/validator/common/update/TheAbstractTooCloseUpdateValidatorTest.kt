@@ -2,7 +2,10 @@ package cz.fb.manaus.reactor.betting.validator.common.update
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
-import cz.fb.manaus.core.model.*
+import cz.fb.manaus.core.model.MarketPrices
+import cz.fb.manaus.core.model.Price
+import cz.fb.manaus.core.model.RunnerPrices
+import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.core.test.CoreTestFactory
@@ -13,7 +16,6 @@ import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import java.util.Optional.of
 import kotlin.test.assertEquals
 
 class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
@@ -41,16 +43,16 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
         val oldPrice = Price(2.5, 5.0, Side.BACK)
         val oldBet = ReactorTestFactory.newBet(oldPrice)
 
-        assertEquals(ValidationResult.REJECT, validator.validate(factory.newBetContext(Side.BACK, prices, of(oldBet))
+        assertEquals(ValidationResult.REJECT, validator.validate(factory.newBetContext(Side.BACK, prices, oldBet)
                 .withNewPrice(oldPrice)))
 
-        assertEquals(ValidationResult.REJECT, validator.validate(factory.newBetContext(Side.BACK, prices, of(oldBet))
+        assertEquals(ValidationResult.REJECT, validator.validate(factory.newBetContext(Side.BACK, prices, oldBet)
                 .withNewPrice(roundingService.decrement(oldPrice, 1)!!)))
 
-        assertEquals(ValidationResult.REJECT, validator.validate(factory.newBetContext(Side.BACK, prices, of(oldBet))
+        assertEquals(ValidationResult.REJECT, validator.validate(factory.newBetContext(Side.BACK, prices, oldBet)
                 .withNewPrice(roundingService.decrement(oldPrice, 2)!!)))
 
-        assertEquals(ValidationResult.ACCEPT, validator.validate(factory.newBetContext(Side.BACK, prices, of(oldBet))
+        assertEquals(ValidationResult.ACCEPT, validator.validate(factory.newBetContext(Side.BACK, prices, oldBet)
                 .withNewPrice(roundingService.decrement(oldPrice, 3)!!)))
     }
 
@@ -64,7 +66,7 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
         whenever(oldOne.price).thenReturn(3.1)
         val oldBet = ReactorTestFactory.newBet(oldOne)
 
-        val context = factory.newBetContext(Side.LAY, prices, of<Bet>(oldBet)).withNewPrice(newOne)
+        val context = factory.newBetContext(Side.LAY, prices, oldBet).withNewPrice(newOne)
         assertEquals(ValidationResult.REJECT, validator.validate(context))
         whenever(newOne.price).thenReturn(3.2)
         assertEquals(ValidationResult.REJECT, validator.validate(context))
@@ -84,7 +86,7 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
         whenever(newOne.price).thenReturn(1.04)
         val oldBet = ReactorTestFactory.newBet(oldOne)
 
-        val context = factory.newBetContext(Side.LAY, prices, of<Bet>(oldBet)).withNewPrice(newOne)
+        val context = factory.newBetContext(Side.LAY, prices, oldBet).withNewPrice(newOne)
         assertEquals(ValidationResult.ACCEPT, validator.validate(context))
     }
 

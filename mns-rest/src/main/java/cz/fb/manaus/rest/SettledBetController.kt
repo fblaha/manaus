@@ -57,14 +57,14 @@ class SettledBetController {
     @ResponseBody
     @RequestMapping(value = ["/bets/" + IntervalParser.INTERVAL], method = [RequestMethod.GET])
     fun getSettledBets(@PathVariable interval: String,
-                       @RequestParam(required = false) projection: Optional<String>): List<SettledBet> {
+                       @RequestParam(required = false) projection: String?): List<SettledBet> {
         val range = intervalParser.parse(Instant.now(), interval)
         val from = Date.from(range.lowerEndpoint())
         val to = Date.from(range.upperEndpoint())
         var settledBets = settledBetDao.getSettledBets(Optional.of(from), Optional.of(to), empty<Side>(),
                 OptionalInt.empty())
-        if (projection.isPresent) {
-            settledBets = categoryService.filterBets(settledBets, projection.get(), BetCoverage.from(settledBets))
+        if (projection != null) {
+            settledBets = categoryService.filterBets(settledBets, projection, BetCoverage.from(settledBets))
         }
         betActionDao.fetchMarketPrices(settledBets.stream().map { it.betAction })
         return settledBets.reversed()
