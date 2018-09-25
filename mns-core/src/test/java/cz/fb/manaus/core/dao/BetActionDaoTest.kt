@@ -17,7 +17,6 @@ import org.junit.Assert
 import org.junit.Assert.assertThat
 import org.junit.Test
 import java.util.*
-import java.util.Collections.singletonMap
 import java.util.Optional.empty
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -30,7 +29,7 @@ class BetActionDaoTest : AbstractDaoTest() {
     fun `get action IDs for given market`() {
         val market = newTestMarket()
         marketDao.saveOrUpdate(market)
-        createAndSaveBetAction(market, Date(), singletonMap("k1", "XXX"), AbstractDaoTest.BET_ID)
+        createAndSaveBetAction(market, Date(), mapOf("k1" to "XXX"), AbstractDaoTest.BET_ID)
         val ids = betActionDao.getBetActionIds(market.id, OptionalLong.empty(), empty())
         assertThat(ids, hasItem(AbstractDaoTest.BET_ID))
     }
@@ -61,7 +60,7 @@ class BetActionDaoTest : AbstractDaoTest() {
     fun `get criteria`() {
         val market = newTestMarket()
         marketDao.saveOrUpdate(market)
-        createAndSaveBetAction(market, Date(), singletonMap("k1", "XXX"), AbstractDaoTest.BET_ID)
+        createAndSaveBetAction(market, Date(), mapOf("k1" to "XXX"), AbstractDaoTest.BET_ID)
         checkCount(market.id, OptionalLong.empty(), empty(), 1)
         checkCount(market.id, OptionalLong.of(CoreTestFactory.DRAW), empty(), 1)
         checkCount(market.id, OptionalLong.of(CoreTestFactory.DRAW + 1), empty(), 0)
@@ -81,7 +80,7 @@ class BetActionDaoTest : AbstractDaoTest() {
         val market = newMarket("33", Date(), CoreTestFactory.MATCH_ODDS)
         marketDao.saveOrUpdate(market)
 
-        createAndSaveBetAction(market, Date(), singletonMap("k1", "newer"), AbstractDaoTest.BET_ID)
+        createAndSaveBetAction(market, Date(), mapOf("k1" to "newer"), AbstractDaoTest.BET_ID)
         val action = betActionDao.getBetActions("33", OptionalLong.of(CoreTestFactory.DRAW), Optional.of(Side.LAY))[0]
         betActionDao.getBetActions(OptionalInt.empty())
         assertEquals(1, action.properties.size)
@@ -93,8 +92,8 @@ class BetActionDaoTest : AbstractDaoTest() {
     fun `action properties order`() {
         val market = newMarket("33", Date(), CoreTestFactory.MATCH_ODDS)
         marketDao.saveOrUpdate(market)
-        createAndSaveBetAction(market, Date(), singletonMap("k1", "newer"), AbstractDaoTest.BET_ID)
-        createAndSaveBetAction(market, addHours(Date(), -1), singletonMap("k1", "older"), AbstractDaoTest.BET_ID + 1)
+        createAndSaveBetAction(market, Date(), mapOf("k1" to "newer"), AbstractDaoTest.BET_ID)
+        createAndSaveBetAction(market, addHours(Date(), -1), mapOf("k1" to "older"), AbstractDaoTest.BET_ID + 1)
         var action = betActionDao.getBetActions("33", OptionalLong.of(CoreTestFactory.DRAW), Optional.of(Side.LAY))[0]
         assertEquals(1, action.properties.size)
         assertEquals("older", action.properties["k1"])
@@ -110,7 +109,7 @@ class BetActionDaoTest : AbstractDaoTest() {
     fun `action with properties delete`() {
         val market = newMarket("33", Date(), CoreTestFactory.MATCH_ODDS)
         marketDao.saveOrUpdate(market)
-        createAndSaveBetAction(market, addHours(Date(), -1), singletonMap("k1", "older"), AbstractDaoTest.BET_ID)
+        createAndSaveBetAction(market, addHours(Date(), -1), mapOf("k1" to "older"), AbstractDaoTest.BET_ID)
 
         assertTrue(betActionDao.getBetAction(AbstractDaoTest.BET_ID).isPresent)
         marketDao.delete(market.id)

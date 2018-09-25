@@ -25,7 +25,7 @@ import java.util.logging.Logger
 @Profile(ManausProfiles.DB)
 class BetManager @Autowired
 constructor(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
-    private val disabledListeners: Set<String>
+    private val disabledListeners: Set<String> = rawDisabledListeners?.split(',')?.toSet() ?: emptySet()
     @Autowired
     private lateinit var betUtils: BetUtils
     @Autowired
@@ -38,10 +38,6 @@ constructor(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
     private val actionListeners = emptyList<BetActionListener>()
     private var marketSnapshotListeners: List<MarketSnapshotListener> = mutableListOf()
 
-
-    init {
-        this.disabledListeners = rawDisabledListeners?.split(',')?.toSet() ?: emptySet()
-    }
 
     @Autowired(required = false)
     fun setMarketSnapshotListeners(marketSnapshotListeners: List<MarketSnapshotListener>) {
