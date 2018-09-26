@@ -11,7 +11,6 @@ import cz.fb.manaus.reactor.price.AbstractPriceFilter
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Lazy
 import org.springframework.context.annotation.Profile
 import org.springframework.core.annotation.AnnotationAwareOrderComparator
 import org.springframework.stereotype.Service
@@ -20,7 +19,6 @@ import java.util.Objects.requireNonNull
 import java.util.logging.Level
 import java.util.logging.Logger
 
-@Lazy
 @Service
 @Profile(ManausProfiles.DB)
 class BetManager @Autowired
@@ -31,7 +29,7 @@ constructor(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
     @Autowired
     private lateinit var filterService: MarketFilterService
     @Autowired
-    private lateinit var priceFilter: Optional<AbstractPriceFilter>
+    private var priceFilter: AbstractPriceFilter? = null
     @Autowired
     private lateinit var actionSaver: ActionSaver
     @Autowired(required = false)
@@ -89,14 +87,15 @@ constructor(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
     }
 
     private fun filterPrices(marketPrices: MarketPrices) {
-        if (priceFilter.isPresent) {
+        if (priceFilter == null) {
+            log.log(Level.WARNING, "No price filtering configured.")
+        }
+        priceFilter?.let {
             for (runnerPrices in marketPrices.runnerPrices) {
                 val prices = runnerPrices.prices.toList()
-                val filtered = priceFilter.get().filter(prices)
+                val filtered = it.filter(prices)
                 runnerPrices.prices = filtered
             }
-        } else {
-            log.log(Level.WARNING, "No price filtering configured.")
         }
     }
 
