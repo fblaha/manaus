@@ -19,11 +19,11 @@ open class BetContext internal constructor(open val side: Side, val selectionId:
 
     open val marketPrices: MarketPrices = marketSnapshot.marketPrices
 
-    open val actualTradedVolume: Optional<TradedVolume> =
+    open val actualTradedVolume: TradedVolume? =
             if (marketSnapshot.tradedVolume.isPresent) {
-                Optional.of(marketSnapshot.tradedVolume.get()[selectionId]!!)
+                marketSnapshot.tradedVolume.get()[selectionId]!!
             } else {
-                Optional.empty()
+                null
             }
 
     open val oldBet: Bet? = marketSnapshot.coverage.get(side, selectionId)

@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.time.Duration
-import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -134,7 +133,7 @@ class TheAbstractUnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase()
     @Profile(ManausProfiles.DB)
     private class TestUnprofitableCategoriesRegistry :
             AbstractUnprofitableCategoriesRegistry("test",
-                    Duration.ofDays(30), Optional.of(Side.LAY), 0.0, "weak",
+                    Duration.ofDays(30), Side.LAY, 0.0, "weak",
                     mapOf(5 to 2, 2 to 7))
 
 }

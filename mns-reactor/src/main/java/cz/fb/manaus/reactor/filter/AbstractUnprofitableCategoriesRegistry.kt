@@ -22,7 +22,7 @@ import java.util.stream.Stream
 
 abstract class AbstractUnprofitableCategoriesRegistry protected constructor(
         private val name: String, private val period: Duration,
-        private val side: Optional<Side>,
+        private val side: Side?,
         private val maximalProfit: Double,
         private val filterPrefix: String,
         private val thresholds: Map<Int, Int>) {
@@ -56,8 +56,8 @@ abstract class AbstractUnprofitableCategoriesRegistry protected constructor(
         log.log(Level.INFO, logPrefix + "black list update started")
         val now = Date()
         val settledBets = settledBetDao.getSettledBets(
-                Optional.of(addDays(now, -period.toDays().toInt())), Optional.of(now), side,
-                OptionalInt.empty())
+                Optional.of(addDays(now, -period.toDays().toInt())), Optional.of(now),
+                Optional.ofNullable(side), OptionalInt.empty())
         betActionDao.fetchMarketPrices(settledBets.stream().map { it.betAction })
         if (settledBets.isEmpty()) return
         val chargeRate = provider.chargeRate

@@ -103,8 +103,8 @@ abstract class AbstractUpdatingBettor protected constructor(private val side: Si
 
     private fun setTradedVolumeMean(context: BetContext) {
         val tradedVolume = context.actualTradedVolume
-        if (tradedVolume.isPresent) {
-            val weightedMean = tradedVolume.get().weightedMean
+        if (tradedVolume != null) {
+            val weightedMean = tradedVolume.weightedMean
             if (weightedMean.isPresent) {
                 setProperty(BetAction.TRADED_VOL_MEAN, weightedMean.asDouble, context.properties)
             }

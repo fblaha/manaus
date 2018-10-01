@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.time.Instant
-import java.util.*
 import java.util.Objects.requireNonNull
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -28,7 +27,7 @@ class ActionSaver {
 
     fun saveAction(action: BetAction) {
         val prices = action.marketPrices
-        if (!Optional.ofNullable(prices.id).isPresent) {
+        if (prices.id != null) {
             pricesDao.saveOrUpdate(prices)
             requireNonNull(prices.id)
         }

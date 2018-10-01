@@ -20,7 +20,7 @@ class TradedVolumeProposer : PriceProposer {
     private val priceService: PriceService? = null
 
     override fun validate(context: BetContext): ValidationResult {
-        val tradedVolume = context.actualTradedVolume.get()
+        val tradedVolume = context.actualTradedVolume!!
         return if (tradedVolume.volume.size == 0 || tradedVolume.weightedMean.asDouble > 100) {
             ValidationResult.REJECT
         } else {
@@ -29,7 +29,7 @@ class TradedVolumeProposer : PriceProposer {
     }
 
     override fun getProposedPrice(context: BetContext): Double {
-        val weightedMean = context.actualTradedVolume.get().weightedMean.asDouble
+        val weightedMean = context.actualTradedVolume!!.weightedMean.asDouble
         return priceService!!.downgrade(weightedMean, REDUCTION_RATE,
                 context.side)
     }

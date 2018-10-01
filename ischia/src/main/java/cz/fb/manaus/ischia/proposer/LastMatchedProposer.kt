@@ -9,7 +9,6 @@ import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
-import java.util.Optional.ofNullable
 
 
 @Component
@@ -22,8 +21,8 @@ class LastMatchedProposer : PriceProposer {
     private lateinit var priceService: PriceService
 
     override fun validate(context: BetContext): ValidationResult {
-        val lastMatchedPrice = ofNullable(context.runnerPrices.lastMatchedPrice)
-        return ValidationResult.of(lastMatchedPrice.isPresent)
+        val lastMatchedPrice = context.runnerPrices.lastMatchedPrice
+        return ValidationResult.of(lastMatchedPrice != null)
     }
 
     override fun getProposedPrice(context: BetContext): Double {

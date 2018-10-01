@@ -15,6 +15,6 @@ import org.springframework.stereotype.Component
 class TradedVolumeValidator : Validator {
 
     override fun validate(context: BetContext): ValidationResult {
-        return ValidationResult.of(context.actualTradedVolume.get().volume.size >= 3)
+        return ValidationResult.of(context.actualTradedVolume!!.volume.size >= 3)
     }
 }
