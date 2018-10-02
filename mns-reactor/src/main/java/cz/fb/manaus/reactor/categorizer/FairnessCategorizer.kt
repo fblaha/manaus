@@ -21,9 +21,7 @@ class FairnessCategorizer : SettledBetCategorizer {
     @Autowired
     private lateinit var calculator: FairnessPolynomialCalculator
 
-    override fun isMarketSnapshotRequired(): Boolean {
-        return true
-    }
+    override val isMarketSnapshotRequired: Boolean = true
 
     override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
         val marketPrices = settledBet.betAction.marketPrices

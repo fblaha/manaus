@@ -21,9 +21,7 @@ class ReciprocalCategorizer : SettledBetCategorizer {
     @Autowired(required = false)
     private val customReciprocalRangeSupplier: CustomReciprocalRangeSupplier? = null
 
-    override fun isMarketSnapshotRequired(): Boolean {
-        return true
-    }
+    override val isMarketSnapshotRequired: Boolean = true
 
     private fun handleCustomRange(reciprocal: Double, result: MutableSet<String>) {
         if (customReciprocalRangeSupplier != null) {

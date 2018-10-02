@@ -1,6 +1,5 @@
 package cz.fb.manaus.core.category.categorizer
 
-import java.util.*
 import java.util.regex.Pattern
 
 
@@ -15,7 +14,8 @@ abstract class AbstractRegexpResolver protected constructor(private val prefix: 
         if (name == null) {
             return emptySet()
         }
-        val result = HashSet<String>()
+        val result = mutableSetOf<String>()
+        // TODO key, val destruct
         for (entry in patterns.entries) {
             val pattern = entry.value
             val matcher = pattern.matcher(name)

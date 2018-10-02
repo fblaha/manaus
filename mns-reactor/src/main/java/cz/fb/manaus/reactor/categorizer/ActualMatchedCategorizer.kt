@@ -6,9 +6,7 @@ import org.springframework.stereotype.Component
 @Component
 class ActualMatchedCategorizer : AbstractMatchedCategorizer("actualMatchedMarket_") {
 
-    override fun isMarketSnapshotRequired(): Boolean {
-        return true
-    }
+    override val isMarketSnapshotRequired: Boolean = true
 
     override fun getAmount(settledBet: SettledBet): Double? {
         val runnerPrices = settledBet.betAction

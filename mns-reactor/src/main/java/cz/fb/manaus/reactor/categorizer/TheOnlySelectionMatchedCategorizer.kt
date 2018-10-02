@@ -15,13 +15,11 @@ class TheOnlySelectionMatchedCategorizer : SettledBetCategorizer {
     @Autowired
     private lateinit var actualMatchedCategorizer: ActualMatchedCategorizer
 
-    override fun isMarketSnapshotRequired(): Boolean {
-        return true
-    }
+    override val isMarketSnapshotRequired: Boolean = true
 
-    override fun getCategories(bet: SettledBet, coverage: BetCoverage): Set<String> {
-        val selectionMatched = selectionActualMatchedCategorizer.getAmount(bet)
-        val allMatched = actualMatchedCategorizer.getAmount(bet)
+    override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
+        val selectionMatched = selectionActualMatchedCategorizer.getAmount(settledBet)
+        val allMatched = actualMatchedCategorizer.getAmount(settledBet)
         return if (selectionMatched != null && allMatched != null) {
             val theOnlyMatched = Price.amountEq(allMatched, selectionMatched)
             setOf("theOnlyMatched_$theOnlyMatched")

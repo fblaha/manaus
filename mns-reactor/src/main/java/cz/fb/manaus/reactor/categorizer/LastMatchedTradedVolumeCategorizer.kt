@@ -18,9 +18,7 @@ class LastMatchedTradedVolumeCategorizer : SettledBetCategorizer {
         }
     }
 
-    override fun isMarketSnapshotRequired(): Boolean {
-        return true
-    }
+    override val isMarketSnapshotRequired: Boolean = true
 
     override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
         val action = settledBet.betAction

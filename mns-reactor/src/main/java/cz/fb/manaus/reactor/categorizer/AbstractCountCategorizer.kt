@@ -6,9 +6,7 @@ import cz.fb.manaus.core.model.SettledBet
 
 abstract class AbstractCountCategorizer protected constructor(private val prefix: String, private val maxCount: Int) : SettledBetCategorizer {
 
-    override fun isMarketSnapshotRequired(): Boolean {
-        return true
-    }
+    override val isMarketSnapshotRequired: Boolean = true
 
     override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
         val count = getCount(settledBet)
