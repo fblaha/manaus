@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
-import java.util.Optional.empty
 
 
 @Component
@@ -43,7 +42,7 @@ class ReactorTestFactory {
 
         val bets = mutableListOf<Bet>()
         oldBet?.let { bet -> bets.add(bet) }
-        val snapshot = MarketSnapshot.from(marketPrices, bets, empty<Map<Long, TradedVolume>>())
+        val snapshot = MarketSnapshot.from(marketPrices, bets, null)
 
         return contextFactory.create(side, CoreTestFactory.HOME, snapshot, fairness, null)
     }
@@ -63,7 +62,7 @@ class ReactorTestFactory {
                     Date.from(date), provider.minAmount)
             bets.add(counterBet)
         }
-        val snapshot = MarketSnapshot.from(marketPrices, bets, empty<Map<Long, TradedVolume>>())
+        val snapshot = MarketSnapshot.from(marketPrices, bets, null)
         return contextFactory.create(side, selectionId, snapshot,
                 calculator.getFairness(marketPrices), null)
 

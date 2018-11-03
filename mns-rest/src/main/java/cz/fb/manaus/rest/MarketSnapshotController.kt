@@ -54,8 +54,7 @@ class MarketSnapshotController {
             logMarket(marketPrices)
             val bets = snapshotCrate.bets
             betMetricUpdater.update(snapshotCrate.scanTime.toLong(), bets)
-            val marketSnapshot = MarketSnapshot.from(marketPrices, bets,
-                    Optional.empty<Map<Long, TradedVolume>>())
+            val marketSnapshot = MarketSnapshot.from(marketPrices, bets, null)
             val myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty<Side>())
             val collectedBets = manager.fire(marketSnapshot, myBets,
                     snapshotCrate.money, snapshotCrate.categoryBlacklist)

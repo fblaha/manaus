@@ -1,6 +1,9 @@
 package cz.fb.manaus.reactor.charge
 
-import cz.fb.manaus.core.model.*
+import cz.fb.manaus.core.model.Bet
+import cz.fb.manaus.core.model.MarketSnapshot
+import cz.fb.manaus.core.model.Price
+import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.core.test.CoreTestFactory
 import cz.fb.manaus.reactor.ReactorTestFactory
@@ -28,7 +31,7 @@ class ChargeGrowthForecasterTest : AbstractLocalTestCase() {
     fun forecast() {
         val market = factory.createMarket(0.05, listOf(0.5, 0.3, 0.2))
         val currentBets = mutableListOf<Bet>()
-        val marketSnapshot = MarketSnapshot.from(market, currentBets, Optional.empty<Map<Long, TradedVolume>>())
+        val marketSnapshot = MarketSnapshot.from(market, currentBets, null)
         val fairness = calculator.getFairness(market)
         var forecast = forecaster.getForecast(CoreTestFactory.DRAW, Side.BACK, marketSnapshot, fairness)
         assertTrue(forecast!! > 1)

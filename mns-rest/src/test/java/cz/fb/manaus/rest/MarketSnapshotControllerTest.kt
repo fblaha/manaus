@@ -23,9 +23,7 @@ class MarketSnapshotControllerTest : AbstractControllerTest() {
     fun `push snapshot`() {
         createMarketWithSingleAction()
         val marketPrices = newMarketPrices(3, 2.8)
-        val accountMoney = AccountMoney()
-        accountMoney.available = 1000.0
-        accountMoney.total = 2000.0
+        val accountMoney = AccountMoney(1000.0, 2000.0)
         val categoryBlacklist = setOf("bad")
         val bet = Bet("1", marketPrices.market.id, CoreTestFactory.DRAW,
                 Price(3.0, 5.0, Side.BACK), Date(), 0.0)
