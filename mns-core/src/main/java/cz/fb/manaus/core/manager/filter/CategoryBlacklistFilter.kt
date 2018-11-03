@@ -16,9 +16,9 @@ class CategoryBlacklistFilter : MarketFilter {
     @Autowired
     private lateinit var metricRegistry: MetricRegistry
 
-    override fun accept(market: Market, blacklist: Set<String>): Boolean {
+    override fun accept(market: Market, categoryBlacklist: Set<String>): Boolean {
         val categories = categoryService.getMarketCategories(market, false)
-        val intersection = categories intersect blacklist
+        val intersection = categories intersect categoryBlacklist
         if (!intersection.isEmpty()) {
             metricRegistry.counter("blacklist.market").inc()
             log.log(Level.INFO, "blacklist category ''{0}'' for market ''{1}''",

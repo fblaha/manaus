@@ -17,15 +17,16 @@ class CompetitionCategorizer : AbstractDelegatingCategorizer(PREFIX) {
         }
     }
 
-    private fun normalize(name: String): String {
-        var name = name
-        name = CharMatcher.whitespace().or(CharMatcher.javaLetterOrDigit()).retainFrom(name)
-        name = CharMatcher.whitespace().replaceFrom(name, '_')
-        name = name.substring(0, Math.min(name.length, 30))
-        return name
-    }
 
     companion object {
         const val PREFIX = "competition_"
     }
+}
+
+private fun normalize(name: String): String {
+    var result = name
+    result = CharMatcher.whitespace().or(CharMatcher.javaLetterOrDigit()).retainFrom(result)
+    result = CharMatcher.whitespace().replaceFrom(result, '_')
+    result = result.substring(0, Math.min(result.length, 30))
+    return result
 }
