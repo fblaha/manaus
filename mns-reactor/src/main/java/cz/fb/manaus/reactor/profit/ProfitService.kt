@@ -63,7 +63,6 @@ class ProfitService {
 
     private fun computeProfitRecords(bets: List<SettledBet>, simulationAwareOnly: Boolean,
                                      charges: Map<String, Double>, coverage: BetCoverage): List<ProfitRecord> {
-        // TODO parallel stream was here
         return bets.flatMap { bet ->
             val categories = categoryService.getSettledBetCategories(bet, simulationAwareOnly, coverage)
             categories.map { category ->
@@ -77,8 +76,7 @@ class ProfitService {
     fun toProfitRecord(bet: SettledBet, category: String, chargeContribution: Double, coverage: BetCoverage): ProfitRecord {
         val type = requireNonNull(bet.price.side)
         val price = bet.price.price
-        val result: ProfitRecord
-        result = if (type === Side.BACK) {
+        val result = if (type === Side.BACK) {
             ProfitRecord(category, bet.profitAndLoss, price, chargeContribution, 0, 1)
         } else {
             ProfitRecord(category, bet.profitAndLoss, price, chargeContribution, 1, 0)

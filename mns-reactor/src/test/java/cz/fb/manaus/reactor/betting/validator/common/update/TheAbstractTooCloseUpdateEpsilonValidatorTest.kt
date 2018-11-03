@@ -31,14 +31,15 @@ class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
 
         val prices = factory.createMarket(0.1, listOf(0.4, 0.3, 0.3))
         prices.getRunnerPrices(CoreTestFactory.HOME)
-        assertEquals(ValidationResult.REJECT, validator.validate(factory.newBetContext(Side.BACK, prices, oldBet)
-                .withNewPrice(oldPrice)))
+        val context = factory.newBetContext(Side.BACK, prices, oldBet)
+        context.newPrice = oldPrice
+        assertEquals(ValidationResult.REJECT, validator.validate(context))
 
-        assertEquals(ValidationResult.REJECT, validator.validate(factory.newBetContext(Side.BACK, prices, oldBet)
-                .withNewPrice(roundingService.decrement(oldPrice, 1)!!)))
+        context.newPrice = roundingService.decrement(oldPrice, 1)
+        assertEquals(ValidationResult.REJECT, validator.validate(context))
 
-        assertEquals(ValidationResult.ACCEPT, validator.validate(factory.newBetContext(Side.BACK, prices, oldBet)
-                .withNewPrice(roundingService.decrement(oldPrice, 3)!!)))
+        context.newPrice = roundingService.decrement(oldPrice, 3)
+        assertEquals(ValidationResult.ACCEPT, validator.validate(context))
     }
 
     @Test
@@ -52,7 +53,8 @@ class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
 
         val prices = factory.createMarket(0.1, listOf(0.4, 0.3, 0.3))
 
-        val context = factory.newBetContext(Side.LAY, prices, oldBet).withNewPrice(newOne)
+        val context = factory.newBetContext(Side.LAY, prices, oldBet)
+        context.newPrice = newOne
         whenever(newOne.price).thenReturn(3.65)
         assertEquals(ValidationResult.REJECT, validator.validate(context))
         whenever(newOne.price).thenReturn(3.7)

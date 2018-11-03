@@ -25,7 +25,8 @@ class BetContextTest : AbstractLocalTestCase() {
     @Test
     fun `simulate settled bet`() {
         val context = testFactory.createContext(Side.LAY, 3.5, 4.6)
-        val settledBet = context.withNewPrice(Price(3.0, 5.0, Side.LAY)).simulateSettledBet()
+        context.newPrice = Price(3.0, 5.0, Side.LAY)
+        val settledBet = context.simulateSettledBet()
         assertEquals(context.side, settledBet.price.side)
         Assert.assertEquals(5.0, settledBet.price.amount, 0.0001)
         assertNotNull(settledBet.betAction)

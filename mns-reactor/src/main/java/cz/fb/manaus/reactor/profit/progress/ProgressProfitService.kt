@@ -42,7 +42,6 @@ constructor(functions: List<ProgressFunction>) : AbstractFunctionProfitService(f
 
         val chunks = Lists.partition<Pair<SettledBet, Double?>>(sortedCopy, chunkSize)
 
-        // TODO parallel stream was here
         val result = chunks
                 .map { chunk -> computeChunkRecord(function.name, chunk, charges, coverage) }
                 .toMutableList()

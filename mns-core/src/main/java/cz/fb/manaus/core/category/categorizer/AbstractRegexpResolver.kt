@@ -15,12 +15,10 @@ abstract class AbstractRegexpResolver protected constructor(private val prefix: 
             return emptySet()
         }
         val result = mutableSetOf<String>()
-        // TODO key, val destruct
-        for (entry in patterns.entries) {
-            val pattern = entry.value
+        for ((k, pattern) in patterns.entries) {
             val matcher = pattern.matcher(name)
             if (matcher.matches()) {
-                var key = entry.key
+                var key = k
                 for (i in 1..matcher.groupCount()) {
                     key = key.replace("{$i}", matcher.group(i))
                 }

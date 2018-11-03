@@ -5,18 +5,16 @@ import com.google.common.collect.Table
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.price.Fairness
 import java.util.*
-import java.util.Objects.requireNonNull
 
-open class BetContext internal constructor(open val side: Side, val selectionId: Long,
-                                           val accountMoney: AccountMoney?,
-                                           open val chargeGrowthForecast: Double?,
-                                           private val marketSnapshot: MarketSnapshot,
-                                           val fairness: Fairness) {
+open class BetContext(open val side: Side,
+                      val selectionId: Long,
+                      val accountMoney: AccountMoney?,
+                      open val chargeGrowthForecast: Double?,
+                      private val marketSnapshot: MarketSnapshot,
+                      val fairness: Fairness) {
+
     open val properties: MutableMap<String, String> = mutableMapOf()
-    var newPrice: Price? = null
-
     open val runnerPrices: RunnerPrices = marketSnapshot.marketPrices.getRunnerPrices(selectionId)
-
     open val marketPrices: MarketPrices = marketSnapshot.marketPrices
 
     open val actualTradedVolume: TradedVolume? =
@@ -37,23 +35,22 @@ open class BetContext internal constructor(open val side: Side, val selectionId:
             return counterBet?.isHalfMatched ?: false
         }
 
-    fun withNewPrice(newPrice: Price): BetContext {
-        val newSide = requireNonNull(newPrice.side)
-        checkState(side === newSide)
-        val oldBet = oldBet
-        if (oldBet != null) {
-            val oldSide = requireNonNull(oldBet.requestedPrice.side)
-            checkState(oldSide === newSide)
+    var newPrice: Price? = null
+        set(value) {
+            if (value != null) {
+                val newSide = value.side
+                checkState(side === newSide)
+                if (this.oldBet != null) {
+                    val oldSide = this.oldBet!!.requestedPrice.side
+                    checkState(oldSide === newSide)
+                }
+                if (this.counterBet != null) {
+                    val otherSide = this.counterBet!!.requestedPrice.side
+                    checkState(otherSide === newSide.opposite)
+                }
+            }
+            field = value
         }
-        val counterBet = counterBet
-        if (counterBet != null) {
-            val otherSide = counterBet.requestedPrice.side
-            checkState(otherSide === newSide.opposite)
-
-        }
-        this.newPrice = newPrice
-        return this
-    }
 
     fun createBetAction(): BetAction {
         val type = if (oldBet != null) BetActionType.UPDATE else BetActionType.PLACE
@@ -69,6 +66,7 @@ open class BetContext internal constructor(open val side: Side, val selectionId:
         return action
     }
 
+    // TODO not used
     fun simulateSettledBet(): SettledBet {
         val action = createBetAction()
         val bet = SettledBet()

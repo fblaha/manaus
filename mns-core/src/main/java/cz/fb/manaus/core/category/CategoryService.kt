@@ -38,7 +38,6 @@ class CategoryService {
     }
 
     fun filterBets(settledBets: List<SettledBet>, projection: String, coverage: BetCoverage): List<SettledBet> {
-        // TODO parallel stream was here
         return settledBets.filter { input ->
             val categories = getSettledBetCategories(input, false, coverage)
             categories.any { it.contains(projection) }

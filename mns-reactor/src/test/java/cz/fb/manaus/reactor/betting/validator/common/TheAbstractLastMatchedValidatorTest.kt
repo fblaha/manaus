@@ -44,10 +44,11 @@ class TheAbstractLastMatchedValidatorTest : AbstractLocalTestCase() {
         val marketPrices = mock<MarketPrices>()
         whenever(marketPrices.getRunnerPrices(ArgumentMatchers.anyLong())).thenReturn(runnerPrices)
         whenever(marketPrices.getReciprocal(Side.BACK)).thenReturn(OptionalDouble.of(0.9))
-        assertEquals(lowerResult, validator.validate(factory.newBetContext(side, marketPrices, null)
-                .withNewPrice(Price(2.0, 2.0, side))))
-        assertEquals(higherResult, validator.validate(factory.newBetContext(side, marketPrices, null)
-                .withNewPrice(Price(2.2, 2.0, side))))
+        val context = factory.newBetContext(side, marketPrices, null)
+        context.newPrice = Price(2.0, 2.0, side)
+        assertEquals(lowerResult, validator.validate(context))
+        context.newPrice = Price(2.2, 2.0, side)
+        assertEquals(higherResult, validator.validate(context))
     }
 
     @Component

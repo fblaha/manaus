@@ -63,14 +63,14 @@ abstract class AbstractUpdatingBettor protected constructor(private val side: Si
                         continue
                     }
 
-                    val priceCtx = ctx.withNewPrice(newPrice)
+                    ctx.newPrice = newPrice
 
                     if (oldBet != null && oldBet.isMatched) continue
 
-                    val priceValidation = validationService.validate(priceCtx, validators)
+                    val priceValidation = validationService.validate(ctx, validators)
 
                     if (priceValidation.isSuccess) {
-                        bet(priceCtx, betCollector)
+                        bet(ctx, betCollector)
                     }
                 }
             }
