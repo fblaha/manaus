@@ -27,9 +27,7 @@ class RelatedActionsCategorizer : SettledBetCategorizer {
     @Autowired
     private lateinit var relatedActionsAwareCategorizers: List<RelatedActionsAwareCategorizer>
 
-    override fun isSimulationSupported(): Boolean {
-        return false
-    }
+    override val isSimulationSupported: Boolean = false
 
     override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
         val market = settledBet.betAction.market

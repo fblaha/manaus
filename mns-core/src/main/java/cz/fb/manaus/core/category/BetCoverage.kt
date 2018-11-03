@@ -3,7 +3,7 @@ package cz.fb.manaus.core.category
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.model.Side
 
-class BetCoverage private constructor(private val coverage: Map<Pair<String, Long>, List<SettledBet>>) {
+data class BetCoverage(private val coverage: Map<Pair<String, Long>, List<SettledBet>>) {
 
     fun getBets(marketId: String, selectionId: Long, side: Side?): List<SettledBet> {
         var bets = coverage[Pair(marketId, selectionId)]!!

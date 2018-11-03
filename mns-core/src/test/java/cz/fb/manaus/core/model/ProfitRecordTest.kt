@@ -12,8 +12,8 @@ class ProfitRecordTest {
     @Test
     fun `all predicate`() {
         val czeCat = Category.MARKET_PREFIX + CountryCodeCategorizer.PREFIX + "cze"
-        val cze = ProfitRecord(czeCat, 100.0, 1, 1, 2.0, 0.06)
-        val all = ProfitRecord(MarketCategories.ALL, 100.0, 1, 1, 2.0, 0.06)
+        val cze = ProfitRecord(czeCat, 100.0, 2.0, 0.06, 1, 1)
+        val all = ProfitRecord(MarketCategories.ALL, 100.0, 2.0, 0.06, 1, 1)
         assertEquals(1, listOf(cze, all).filter { ProfitRecord.isAllCategory(it) }.count())
         assertEquals(1, listOf(all).filter { ProfitRecord.isAllCategory(it) }.count())
         assertEquals(0, listOf(cze).filter { ProfitRecord.isAllCategory(it) }.count())

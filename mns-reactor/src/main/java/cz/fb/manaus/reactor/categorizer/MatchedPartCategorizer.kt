@@ -10,9 +10,7 @@ import org.springframework.stereotype.Component
 @Component
 class MatchedPartCategorizer : SettledBetCategorizer {
 
-    override fun isSimulationSupported(): Boolean {
-        return false
-    }
+    override val isSimulationSupported: Boolean = false
 
     override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
         val matched = settledBet.price.amount

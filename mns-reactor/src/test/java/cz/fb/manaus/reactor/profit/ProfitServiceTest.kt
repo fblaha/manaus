@@ -142,11 +142,11 @@ class ProfitServiceTest : AbstractProfitTest() {
 
     @Test
     fun `merge category`() {
-        val r1 = ProfitRecord("test", 100.0, 1, 1, 2.0, 0.06)
+        val r1 = ProfitRecord("test", 100.0, 2.0, 0.06, 1, 1)
         r1.coverDiff = 0.2
         r1.coverCount = 1
-        val r2 = ProfitRecord("test", 100.0, 1, 1, 2.0, 0.06)
+        val r2 = ProfitRecord("test", 100.0, 2.0, 0.06, 1, 1)
         val record = profitService.mergeCategory("test", listOf(r1, r2))
-        Assert.assertEquals(record.coverDiff, r1.coverDiff, 0.00001)
+        Assert.assertEquals(record.coverDiff!!, r1.coverDiff!!, 0.00001)
     }
 }

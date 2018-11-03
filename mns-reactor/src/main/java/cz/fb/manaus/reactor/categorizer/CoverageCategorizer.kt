@@ -16,9 +16,7 @@ import java.util.*
 @Component
 class CoverageCategorizer : SettledBetCategorizer {
 
-    override fun isSimulationSupported(): Boolean {
-        return false
-    }
+    override val isSimulationSupported: Boolean = false
 
     override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
         val marketId = settledBet.betAction.market.id

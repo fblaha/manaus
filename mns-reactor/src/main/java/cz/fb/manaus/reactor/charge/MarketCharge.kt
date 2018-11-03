@@ -1,18 +1,12 @@
 package cz.fb.manaus.reactor.charge
 
-import com.google.common.collect.ImmutableMap
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.SettledBet
 import java.lang.Math.max
 import java.util.*
 
-class MarketCharge private constructor(private val totalProfit: Double, private val totalPositiveProfit: Double,
-                                       private val totalCharge: Double, profits: Map<String, Double>) {
-    private val profits: Map<String, Double>
-
-    init {
-        this.profits = ImmutableMap.copyOf(profits)
-    }
+data class MarketCharge(private val totalProfit: Double, private val totalPositiveProfit: Double,
+                        private val totalCharge: Double, private val profits: Map<String, Double>) {
 
     fun getChargeContribution(betId: String): Double {
         if (Price.amountEq(totalCharge, 0.0)) return 0.0

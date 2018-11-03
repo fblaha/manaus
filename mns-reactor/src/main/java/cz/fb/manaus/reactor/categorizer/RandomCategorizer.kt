@@ -12,9 +12,7 @@ class RandomCategorizer : SettledBetCategorizer {
 
     private val random = Random(Clock.systemUTC().millis())
 
-    override fun isSimulationSupported(): Boolean {
-        return false
-    }
+    override val isSimulationSupported: Boolean = false
 
     override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
         val randInt = random.nextInt(5)

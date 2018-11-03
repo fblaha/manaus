@@ -27,7 +27,7 @@ class TheAbstractUnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase()
     private lateinit var registry: TestUnprofitableCategoriesRegistry
 
     private fun pr(category: String, profitAndLoss: Double, betCount: Int): ProfitRecord {
-        return ProfitRecord(category, profitAndLoss, betCount, 0, 2.0, 0.06)
+        return ProfitRecord(category, profitAndLoss, 2.0, 0.06, betCount, 0)
     }
 
     @Before

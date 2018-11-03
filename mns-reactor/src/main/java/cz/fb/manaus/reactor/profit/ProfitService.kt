@@ -51,10 +51,10 @@ class ProfitService {
         val layCount = records.map { it.layCount }.sum()
         val backCount = records.map { it.backCount }.sum()
         val coverCount = records.map { it.coverCount }.sum()
-        val result = ProfitRecord(category, theoreticalProfit, layCount, backCount, avgPrice, charge)
+        val result = ProfitRecord(category, theoreticalProfit, avgPrice, charge, layCount, backCount)
         if (coverCount > 0) {
             val diff = records.filter { profitRecord -> profitRecord.coverDiff != null }
-                    .map { it.coverDiff }.average()
+                    .map { it.coverDiff }.filterNotNull().average()
             result.coverDiff = diff
             result.coverCount = coverCount
         }
@@ -79,9 +79,9 @@ class ProfitService {
         val price = bet.price.price
         val result: ProfitRecord
         result = if (type === Side.BACK) {
-            ProfitRecord(category, bet.profitAndLoss, 0, 1, price, chargeContribution)
+            ProfitRecord(category, bet.profitAndLoss, price, chargeContribution, 0, 1)
         } else {
-            ProfitRecord(category, bet.profitAndLoss, 1, 0, price, chargeContribution)
+            ProfitRecord(category, bet.profitAndLoss, price, chargeContribution, 1, 0)
         }
         val marketId = bet.betAction.market.id
         val selectionId = bet.selectionId

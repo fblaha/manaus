@@ -1,7 +1,5 @@
 package cz.fb.manaus.reactor.betting
 
-import com.google.common.collect.LinkedListMultimap
-import com.google.common.collect.Maps
 import cz.fb.manaus.core.dao.AbstractDaoTest
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.CoreTestFactory
@@ -37,16 +35,18 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDaoTest(
     }
 
     private fun createTradedVolume(marketPrices: MarketPrices): Map<Long, TradedVolume> {
-        val result = LinkedListMultimap.create<Long, Price>()
+        val result = mutableMapOf<Long, MutableList<Price>>()
         for (runnerPrices in marketPrices.runnerPrices) {
             val lastMatchedPrice = runnerPrices.lastMatchedPrice
-            result.put(runnerPrices.selectionId, Price(lastMatchedPrice, 5.0, null))
-            result.put(runnerPrices.selectionId,
-                    Price(roundingService.increment(lastMatchedPrice, 1)!!, 5.0, null))
-            result.put(runnerPrices.selectionId,
-                    Price(roundingService.decrement(lastMatchedPrice, 1)!!, 5.0, null))
+            result.getOrPut(runnerPrices.selectionId) { mutableListOf() }
+                    .add(Price(lastMatchedPrice, 5.0, null))
+            result.getOrPut(runnerPrices.selectionId) { mutableListOf() }
+                    .add(Price(roundingService.increment(lastMatchedPrice, 1)!!, 5.0, null))
+            result.getOrPut(runnerPrices.selectionId) { mutableListOf() }
+                    .add(Price(roundingService.decrement(lastMatchedPrice, 1)!!, 5.0, null))
         }
-        return Maps.transformValues(result.asMap(), { TradedVolume(it) })
+        return result.mapValues { TradedVolume(it.value) }
+
     }
 
     protected fun checkPlace(marketPrices: MarketPrices, expectedCount: Int, expectedPrice: Double?): BetCollector {

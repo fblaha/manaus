@@ -16,9 +16,7 @@ class MatchedPriceCategorizer : SettledBetCategorizer {
     @Autowired
     private lateinit var priceService: PriceService
 
-    override fun isSimulationSupported(): Boolean {
-        return false
-    }
+    override val isSimulationSupported: Boolean = false
 
     override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
         val matched = settledBet.price.price
