@@ -9,13 +9,9 @@ import java.time.Duration
 @Component
 internal class TestTask : PeriodicMaintenanceTask {
 
-    override fun getName(): String {
-        return "testTask"
-    }
+    override val name: String = "testTask"
 
-    override fun getPausePeriod(): Duration {
-        return Duration.ofNanos(777)
-    }
+    override val pausePeriod: Duration = Duration.ofNanos(777)
 
     override fun execute(): ConfigUpdate {
         val command = ConfigUpdate.empty(Duration.ofHours(12))

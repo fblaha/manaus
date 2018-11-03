@@ -17,13 +17,9 @@ constructor(@param:Value(REFRESH_PERIOD_EL) private val refreshPeriodHours: Int)
     @Autowired(required = false)
     private val unprofitableCategoriesRegistries = mutableListOf<AbstractUnprofitableCategoriesRegistry>()
 
-    override fun getName(): String {
-        return "unprofitableCategoriesRefresh"
-    }
+    override val name: String = "unprofitableCategoriesRefresh"
 
-    override fun getPausePeriod(): Duration {
-        return Duration.ofHours(8)
-    }
+    override val pausePeriod: Duration = Duration.ofHours(8)
 
     override fun execute(): ConfigUpdate {
         val configUpdate = ConfigUpdate.empty(Duration.ofDays(1))
