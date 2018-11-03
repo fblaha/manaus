@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions
 import com.google.common.collect.Comparators
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.PriceComparator
-import cz.fb.manaus.core.model.TradedVolume
+import cz.fb.manaus.core.model.getWeightedMean
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -28,10 +28,10 @@ class PriceBulldozer {
             }
             sum += price.amount
         }
-        val priceMean = TradedVolume.getWeightedMean(convicts)
-        if (priceMean.isPresent) {
+        val priceMean = getWeightedMean(convicts)
+        if (priceMean != null) {
             val amount = convicts.map { it.amount }.sum()
-            val price = roundingService.roundBet(priceMean.asDouble)
+            val price = roundingService.roundBet(priceMean)
             untouched.add(0, Price(price!!, amount, prices[0].side))
         }
         return untouched

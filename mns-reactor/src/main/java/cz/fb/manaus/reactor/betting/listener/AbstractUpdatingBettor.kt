@@ -105,8 +105,8 @@ abstract class AbstractUpdatingBettor protected constructor(private val side: Si
         val tradedVolume = context.actualTradedVolume
         if (tradedVolume != null) {
             val weightedMean = tradedVolume.weightedMean
-            if (weightedMean.isPresent) {
-                setProperty(BetAction.TRADED_VOL_MEAN, weightedMean.asDouble, context.properties)
+            if (weightedMean != null) {
+                setProperty(BetAction.TRADED_VOL_MEAN, weightedMean, context.properties)
             }
         }
     }

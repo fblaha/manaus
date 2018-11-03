@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.price
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.PriceComparator
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.model.TradedVolume
+import cz.fb.manaus.core.model.getWeightedMean
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -76,8 +76,8 @@ class PriceBulldozerTest : AbstractLocalTestCase() {
 
         assertEquals(prices.map { it.amount }.sum(),
                 bulldozed.map { it.amount }.sum(), 0.0001)
-        assertEquals(TradedVolume.getWeightedMean(prices).asDouble,
-                TradedVolume.getWeightedMean(bulldozed).asDouble, 0.0001)
+        assertEquals(getWeightedMean(prices)!!,
+                getWeightedMean(bulldozed)!!, 0.0001)
     }
 
 }
