@@ -18,7 +18,7 @@ import java.util.logging.Logger
 
 @Repository
 @Profile(ManausProfiles.DB)
-class MarketCleaner @Autowired
+open class MarketCleaner @Autowired
 constructor(@param:Value(HIST_DAYS_EL) private val marketHistoryDays: Int) : PeriodicMaintenanceTask {
     @Autowired
     private lateinit var marketDao: MarketDao

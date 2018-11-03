@@ -16,7 +16,7 @@ import java.util.logging.Logger
 
 @Repository
 @Profile(ManausProfiles.DB)
-class SettledBetSaver {
+open class SettledBetSaver {
     @Autowired
     private lateinit var settledBetDao: SettledBetDao
     @Autowired
