@@ -7,22 +7,17 @@ import cz.fb.manaus.core.dao.SettledBetDao
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
-import org.springframework.stereotype.Repository
+import org.springframework.stereotype.Component
 import java.time.temporal.ChronoUnit
 import java.util.logging.Level
 import java.util.logging.Logger
 
-@Repository
+@Component
 @Profile(ManausProfiles.DB)
-open class SettledBetSaver {
-    @Autowired
-    private lateinit var settledBetDao: SettledBetDao
-    @Autowired
-    private lateinit var betActionDao: BetActionDao
-    @Autowired
-    private lateinit var metricRegistry: MetricRegistry
+class SettledBetSaver(private val settledBetDao: SettledBetDao,
+                      private val betActionDao: BetActionDao,
+                      private val metricRegistry: MetricRegistry) {
 
     fun saveBet(betId: String, settledBet: SettledBet): SaveStatus {
         if (!settledBetDao.getSettledBet(betId).isPresent) {
