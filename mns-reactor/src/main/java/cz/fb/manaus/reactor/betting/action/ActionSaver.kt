@@ -33,7 +33,7 @@ class ActionSaver(
         template.execute(object : TransactionCallbackWithoutResult() {
             override fun doInTransactionWithoutResult(status: TransactionStatus) {
                 val prices = action.marketPrices
-                if (prices.id != null) {
+                if (prices.id == null) {
                     pricesDao.saveOrUpdate(prices)
                     requireNonNull(prices.id)
                 }
