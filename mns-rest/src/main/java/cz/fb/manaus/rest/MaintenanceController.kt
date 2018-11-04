@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.ResponseBody
 
+data class PeriodicTaskDescriptor(val name: String, val pausePeriodNanos: Long)
+
 @Controller
 @Profile(ManausProfiles.DB)
 class MaintenanceController {
@@ -21,9 +23,13 @@ class MaintenanceController {
     private lateinit var metricRegistry: MetricRegistry
 
     @Autowired(required = false)
+    private val tasks: List<PeriodicMaintenanceTask> = mutableListOf()
+
     @get:ResponseBody
     @get:RequestMapping(value = ["/maintenance"], method = [RequestMethod.GET])
-    val tasks: List<PeriodicMaintenanceTask> = mutableListOf()
+    val taskDescriptors: List<PeriodicTaskDescriptor>
+        get() = tasks.map { PeriodicTaskDescriptor(it.name, it.pausePeriod.toNanos()) }
+
 
     @ResponseBody
     @RequestMapping(value = ["/maintenance/{name}"], method = [RequestMethod.POST])
