@@ -11,8 +11,7 @@ import java.time.Duration
 
 @Component
 @Profile(ManausProfiles.DB)
-class UnprofitableCategoriesRefresher @Autowired
-constructor(@param:Value(REFRESH_PERIOD_EL) private val refreshPeriodHours: Int) : PeriodicMaintenanceTask {
+class UnprofitableCategoriesRefresher(@param:Value(REFRESH_PERIOD_EL) private val refreshPeriodHours: Int) : PeriodicMaintenanceTask {
 
     @Autowired(required = false)
     private val unprofitableCategoriesRegistries = mutableListOf<AbstractUnprofitableCategoriesRegistry>()

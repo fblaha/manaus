@@ -7,7 +7,7 @@ fun compile(regex: String): Pattern {
     return Pattern.compile(regex, Pattern.CASE_INSENSITIVE)
 }
 
-abstract class AbstractRegexpResolver protected constructor(private val prefix: String) {
+abstract class AbstractRegexpResolver(private val prefix: String) {
 
 
     protected fun getCategories(name: String?, patterns: Map<String, Pattern>): Set<String> {

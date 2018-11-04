@@ -6,13 +6,11 @@ import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.reactor.profit.progress.function.ProgressFunction
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.math.RoundingMode
 
 @Component
-class ProgressProfitService @Autowired
-constructor(functions: List<ProgressFunction>) : AbstractFunctionProfitService(functions) {
+class ProgressProfitService(functions: List<ProgressFunction>) : AbstractFunctionProfitService(functions) {
 
     fun getProfitRecords(bets: List<SettledBet>, funcName: String?,
                          chunkCount: Int, chargeRate: Double, projection: String?): List<ProfitRecord> {

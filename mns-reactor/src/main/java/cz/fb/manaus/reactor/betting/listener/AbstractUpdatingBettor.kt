@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import java.util.logging.Level
 import java.util.logging.Logger
 
-abstract class AbstractUpdatingBettor protected constructor(private val side: Side, private val validators: List<Validator>, private val priceAdviser: PriceAdviser) : MarketSnapshotListener {
+abstract class AbstractUpdatingBettor(private val side: Side, private val validators: List<Validator>, private val priceAdviser: PriceAdviser) : MarketSnapshotListener {
     @Autowired
     private lateinit var validationService: ValidationService
     @Autowired

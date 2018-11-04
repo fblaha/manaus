@@ -12,7 +12,7 @@ import java.time.Duration
 @ManilaBet
 @Component
 @Profile(ManausProfiles.DB)
-class CountryCodeUnprofitableCategoriesFilter protected constructor() : AbstractUnprofitableCategoriesRegistry("countryCodeLay",
+class CountryCodeUnprofitableCategoriesFilter : AbstractUnprofitableCategoriesRegistry("countryCodeLay",
         Duration.ofDays(30), null, -30.0, PREFIX, mapOf(20 to 3)) {
     companion object {
         const val PREFIX = Category.MARKET_PREFIX + CountryCodeCategorizer.PREFIX

@@ -5,11 +5,9 @@ import cz.fb.manaus.ischia.BackLoserBet
 import cz.fb.manaus.ischia.LayLoserBet
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.proposer.common.AbstractFairnessProposer
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
 @BackLoserBet
 @LayLoserBet
-class FairnessBackProposer @Autowired
-constructor(downgradeStrategy: (BetContext) -> Double) : AbstractFairnessProposer(Side.BACK, downgradeStrategy)
+class FairnessBackProposer(downgradeStrategy: (BetContext) -> Double) : AbstractFairnessProposer(Side.BACK, downgradeStrategy)

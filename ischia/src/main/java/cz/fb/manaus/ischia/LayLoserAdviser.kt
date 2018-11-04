@@ -7,6 +7,4 @@ import org.springframework.stereotype.Component
 
 @LayLoserBet
 @Component
-class LayLoserAdviser @LayLoserBet
-@Autowired
-constructor(proposers: List<PriceProposer>) : ProposerAdviser(proposers)
+class LayLoserAdviser @LayLoserBet @Autowired constructor(proposers: List<PriceProposer>) : ProposerAdviser(proposers)

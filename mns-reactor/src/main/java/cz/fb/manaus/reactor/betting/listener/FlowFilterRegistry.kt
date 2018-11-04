@@ -1,14 +1,12 @@
 package cz.fb.manaus.reactor.betting.listener
 
 import com.google.common.collect.ImmutableMap
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 
 @Lazy
 @Component
-class FlowFilterRegistry @Autowired
-constructor(flowFilters: List<FlowFilter>) {
+class FlowFilterRegistry(flowFilters: List<FlowFilter>) {
 
     private val byMarketType: Map<String, FlowFilter>
     private val defaultFilter: FlowFilter

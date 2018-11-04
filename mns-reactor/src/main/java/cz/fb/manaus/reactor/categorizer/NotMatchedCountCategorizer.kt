@@ -4,7 +4,7 @@ import cz.fb.manaus.core.model.SettledBet
 import org.springframework.stereotype.Component
 
 @Component
-class NotMatchedCountCategorizer private constructor() : AbstractCountCategorizer("notMatchedCount_", 4) {
+class NotMatchedCountCategorizer : AbstractCountCategorizer("notMatchedCount_", 4) {
 
     override fun getCount(bet: SettledBet): Int {
         val marketPrices = bet.betAction.marketPrices

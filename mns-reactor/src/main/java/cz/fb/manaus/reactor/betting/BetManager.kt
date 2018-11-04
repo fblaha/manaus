@@ -21,8 +21,7 @@ import java.util.logging.Logger
 
 @Service
 @Profile(ManausProfiles.DB)
-class BetManager @Autowired
-constructor(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
+class BetManager(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
     private val disabledListeners: Set<String> = rawDisabledListeners?.split(',')?.toSet() ?: emptySet()
     @Autowired
     private lateinit var betUtils: BetUtils

@@ -5,7 +5,7 @@ import cz.fb.manaus.core.model.RunnerPrices
 import cz.fb.manaus.core.model.Side
 import java.util.*
 
-class ProbabilityComparator private constructor(private val side: Side) : Comparator<RunnerPrices> {
+class ProbabilityComparator(private val side: Side) : Comparator<RunnerPrices> {
 
     override fun compare(list1: RunnerPrices, list2: RunnerPrices): Int {
         val backList1 = list1.getHomogeneous(side)

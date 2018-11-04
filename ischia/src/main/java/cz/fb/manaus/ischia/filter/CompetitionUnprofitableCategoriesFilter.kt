@@ -14,7 +14,7 @@ import java.time.Duration
 @BackLoserBet
 @Component
 @Profile(ManausProfiles.DB)
-open class CompetitionUnprofitableCategoriesFilter protected constructor() : AbstractUnprofitableCategoriesRegistry("competition", Duration.ofDays(120), null, -30.0, PREFIX, mapOf(20 to 2, 15 to 2, 10 to 2)) {
+class CompetitionUnprofitableCategoriesFilter : AbstractUnprofitableCategoriesRegistry("competition", Duration.ofDays(120), null, -30.0, PREFIX, mapOf(20 to 2, 15 to 2, 10 to 2)) {
     companion object {
         const val PREFIX = Category.MARKET_PREFIX + CompetitionCategorizer.PREFIX
     }

@@ -4,7 +4,7 @@ import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer
 import cz.fb.manaus.core.model.SettledBet
 
-abstract class AbstractCountCategorizer protected constructor(private val prefix: String, private val maxCount: Int) : SettledBetCategorizer {
+abstract class AbstractCountCategorizer(private val prefix: String, private val maxCount: Int) : SettledBetCategorizer {
 
     override val isMarketSnapshotRequired: Boolean = true
 

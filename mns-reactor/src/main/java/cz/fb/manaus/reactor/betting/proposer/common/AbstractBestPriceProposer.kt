@@ -9,7 +9,7 @@ import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.Objects.requireNonNull
 
-abstract class AbstractBestPriceProposer protected constructor(private val step: Int) : PriceProposer {
+abstract class AbstractBestPriceProposer(private val step: Int) : PriceProposer {
 
     @Autowired
     private lateinit var roundingService: RoundingService

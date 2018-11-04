@@ -8,7 +8,7 @@ import cz.fb.manaus.reactor.betting.validator.Validator
 
 import java.util.Objects.requireNonNull
 
-abstract class AbstractLastMatchedValidator protected constructor(private val passEqual: Boolean) : Validator {
+abstract class AbstractLastMatchedValidator(private val passEqual: Boolean) : Validator {
 
     override fun validate(context: BetContext): ValidationResult {
         val lastMatchedPrice = context.runnerPrices.lastMatchedPrice ?: return ValidationResult.REJECT

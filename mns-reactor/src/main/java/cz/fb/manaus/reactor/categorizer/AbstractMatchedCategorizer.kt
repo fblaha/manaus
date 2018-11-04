@@ -8,7 +8,7 @@ import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer
 import cz.fb.manaus.core.model.SettledBet
 
-abstract class AbstractMatchedCategorizer protected constructor(private val prefix: String) : SettledBetCategorizer {
+abstract class AbstractMatchedCategorizer(private val prefix: String) : SettledBetCategorizer {
 
     override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
         val amount = getAmount(settledBet)

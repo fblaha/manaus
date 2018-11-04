@@ -20,7 +20,7 @@ import java.util.logging.Logger
 import java.util.stream.Stream
 
 
-abstract class AbstractUnprofitableCategoriesRegistry protected constructor(
+abstract class AbstractUnprofitableCategoriesRegistry(
         private val name: String, private val period: Duration,
         private val side: Side?,
         private val maximalProfit: Double,

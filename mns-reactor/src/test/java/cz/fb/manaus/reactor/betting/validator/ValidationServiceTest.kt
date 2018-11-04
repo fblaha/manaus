@@ -49,7 +49,7 @@ class ValidationServiceTest : AbstractLocalTestCase() {
     }
 
 
-    private class TestValidator constructor(private val result: ValidationResult) : Validator {
+    private class TestValidator(private val result: ValidationResult) : Validator {
 
         override fun validate(context: BetContext): ValidationResult {
             return result

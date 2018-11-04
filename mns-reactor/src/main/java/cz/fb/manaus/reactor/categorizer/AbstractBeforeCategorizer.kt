@@ -15,7 +15,7 @@ import java.util.Objects.requireNonNull
 import java.util.logging.Level
 import java.util.logging.Logger
 
-abstract class AbstractBeforeCategorizer protected constructor(private val category: String) : SettledBetCategorizer {
+abstract class AbstractBeforeCategorizer(private val category: String) : SettledBetCategorizer {
 
     val dayMap: RangeMap<Long, String> = ImmutableRangeMap.builder<Long, String>()
             .put(Range.upTo(0L, BoundType.OPEN), category + DAY + NEGATIVE)

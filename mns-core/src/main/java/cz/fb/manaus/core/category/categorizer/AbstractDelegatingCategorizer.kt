@@ -6,7 +6,7 @@ import cz.fb.manaus.core.model.Market
 import cz.fb.manaus.core.model.SettledBet
 
 
-abstract class AbstractDelegatingCategorizer protected constructor(private val prefix: String) : SettledBetCategorizer, Categorizer {
+abstract class AbstractDelegatingCategorizer(private val prefix: String) : SettledBetCategorizer, Categorizer {
 
     override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
         return getCategories(settledBet.betAction.market)
