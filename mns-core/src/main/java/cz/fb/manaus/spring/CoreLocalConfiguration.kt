@@ -1,11 +1,14 @@
 package cz.fb.manaus.spring
 
 import com.codahale.metrics.MetricRegistry
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import cz.fb.manaus.core.provider.ExchangeProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
+
 
 @Configuration
 @ComponentScan(value = ["cz.fb.manaus.core"])
@@ -26,5 +29,10 @@ open class CoreLocalConfiguration {
     @Profile("betfair")
     open fun betfairExchangeProvider(): ExchangeProvider {
         return ExchangeProvider("betfair", 2.0, 1.01, 0.065, true)
+    }
+
+    @Bean
+    open fun objectMapper(): ObjectMapper {
+        return ObjectMapper().registerModule(KotlinModule())
     }
 }

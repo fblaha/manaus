@@ -14,11 +14,13 @@ import java.util.*
 class BetTest : AbstractLocalTestCase() {
 
     @Autowired
-    private val provider: ExchangeProvider? = null
+    private lateinit var provider: ExchangeProvider
+    @Autowired
+    private lateinit var mapper: ObjectMapper
 
     @Test
     fun `half matched`() {
-        assertTrue(createBet(provider!!.minAmount).isHalfMatched)
+        assertTrue(createBet(provider.minAmount).isHalfMatched)
         assertTrue(createBet(1.5).isHalfMatched)
         assertFalse(createBet(0.0).isHalfMatched)
         assertFalse(createBet(0.8).isHalfMatched)
@@ -26,7 +28,7 @@ class BetTest : AbstractLocalTestCase() {
 
     @Test
     fun `fully matched`() {
-        assertTrue(createBet(provider!!.minAmount).isMatched)
+        assertTrue(createBet(provider.minAmount).isMatched)
         assertTrue(createBet(1.5).isMatched)
         assertFalse(createBet(0.0).isMatched)
         assertTrue(createBet(0.8).isMatched)
@@ -34,7 +36,6 @@ class BetTest : AbstractLocalTestCase() {
 
     @Test
     fun `json marshall`() {
-        val mapper = ObjectMapper()
         val original = Bet("111", "222", 333,
                 Price(3.0, 2.0, Side.BACK), Date(), 0.0)
 
@@ -49,7 +50,7 @@ class BetTest : AbstractLocalTestCase() {
     private fun createBet(matchedAmount: Double): Bet {
         val marketId = CoreTestFactory.MARKET_ID
         val selectionId = CoreTestFactory.DRAW
-        val requestedPrice = Price(3.0, provider!!.minAmount, Side.LAY)
+        val requestedPrice = Price(3.0, provider.minAmount, Side.LAY)
         val date = Instant.now().minus(2, ChronoUnit.HOURS)
         return Bet("1", marketId, selectionId, requestedPrice, Date.from(date), matchedAmount)
     }

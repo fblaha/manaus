@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.betting.validator
 
 import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.whenever
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
@@ -9,6 +8,7 @@ import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.betting.BetContext
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
+import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -38,8 +38,8 @@ class ValidationServiceTest : AbstractLocalTestCase() {
     }
 
     private fun checkDownGrade(newPrice: Double, expected: ValidationResult?) {
-        val oldBet = mock<Bet>()
-        whenever(oldBet.requestedPrice).thenReturn(Price(2.2, 2.0, Side.LAY))
+        val oldBet = Bet(null, "1", 1,
+                Price(2.2, 2.0, Side.LAY), Date(), 5.0)
         val rejecting = TestValidator(ValidationResult.REJECT)
         val result = service.handleDowngrade(
                 Price(newPrice, 2.0, Side.LAY),

@@ -45,7 +45,7 @@ class BetCollector {
 
     fun toCollectedBets(): CollectedBets {
         val bets = CollectedBets.create()
-        getToCancel().map { it.betId }.forEach { bets.cancel.add(it) }
+        getToCancel().map { it.betId }.filterNotNull().forEach { bets.cancel.add(it) }
         getToUpdate().map { it.bet }.forEach { bets.update.add(it) }
         getToPlace().map { it.bet }.forEach { bets.place.add(it) }
         return bets

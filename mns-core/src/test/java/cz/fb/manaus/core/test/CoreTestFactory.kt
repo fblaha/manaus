@@ -17,7 +17,7 @@ class CoreTestFactory {
     private lateinit var betActionDao: BetActionDao
 
     fun savePlaceAction(unmatched: Bet, market: Market): BetAction {
-        val betAction = ModelFactory.newAction(BetActionType.PLACE, unmatched.placedDate,
+        val betAction = ModelFactory.newAction(BetActionType.PLACE, unmatched.placedDate!!,
                 unmatched.requestedPrice, market, unmatched.selectionId)
         betAction.betId = unmatched.betId
         betActionDao.saveOrUpdate(betAction)
