@@ -61,18 +61,19 @@ class BetActionDaoTest : AbstractDaoTest() {
         val market = newTestMarket()
         marketDao.saveOrUpdate(market)
         createAndSaveBetAction(market, Date(), mapOf("k1" to "XXX"), AbstractDaoTest.BET_ID)
-        checkCount(market.id, OptionalLong.empty(), empty(), 1)
-        checkCount(market.id, OptionalLong.of(CoreTestFactory.DRAW), empty(), 1)
-        checkCount(market.id, OptionalLong.of(CoreTestFactory.DRAW + 1), empty(), 0)
-        checkCount(market.id, OptionalLong.of(CoreTestFactory.DRAW), Optional.of(Side.LAY), 1)
-        checkCount(market.id, OptionalLong.of(CoreTestFactory.DRAW), Optional.of(Side.BACK), 0)
-        checkCount(market.id, OptionalLong.empty(), Optional.of(Side.LAY), 1)
-        checkCount(market.id, OptionalLong.empty(), Optional.of(Side.BACK), 0)
+        checkCount(market.id, OptionalLong.empty(), null, 1)
+        checkCount(market.id, OptionalLong.of(CoreTestFactory.DRAW), null, 1)
+        checkCount(market.id, OptionalLong.of(CoreTestFactory.DRAW + 1), null, 0)
+        checkCount(market.id, OptionalLong.of(CoreTestFactory.DRAW), Side.LAY, 1)
+        checkCount(market.id, OptionalLong.of(CoreTestFactory.DRAW), Side.BACK, 0)
+        checkCount(market.id, OptionalLong.empty(), Side.LAY, 1)
+        checkCount(market.id, OptionalLong.empty(), Side.BACK, 0)
     }
 
-    private fun checkCount(marketId: String, selId: OptionalLong, side: Optional<Side>, expectedCount: Int) {
-        assertEquals(expectedCount, betActionDao.getBetActions(marketId, selId, side).size)
-        assertEquals(expectedCount, betActionDao.getBetActionIds(marketId, selId, side).size)
+    private fun checkCount(marketId: String, selId: OptionalLong, side: Side?, expectedCount: Int) {
+        val optSide = Optional.ofNullable(side)
+        assertEquals(expectedCount, betActionDao.getBetActions(marketId, selId, optSide).size)
+        assertEquals(expectedCount, betActionDao.getBetActionIds(marketId, selId, optSide).size)
     }
 
     @Test
