@@ -20,6 +20,7 @@
         <module>ischia</module>
         <module>manila</module>
         <module>mns-boot</module>
+        <module>mns-repository</module>
     </modules>
 
     <properties>
