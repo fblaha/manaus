@@ -35,7 +35,6 @@ class MarketRepositoryTest {
     fun setUp() {
         val db = nitrite {
             autoCommitBufferSize = 2048
-            compress = true
             autoCompact = false
         }
         marketRepository = MarketRepository(db)
@@ -43,14 +42,14 @@ class MarketRepositoryTest {
 
     @Test
     fun `save and read`() {
-        marketRepository.saveOrUpdate(market)
+        marketRepository.save(market)
         val fromDB = marketRepository.read("2")
         assertEquals(market, fromDB)
     }
 
     @Test
     fun `delete older then`() {
-        marketRepository.saveOrUpdate(market)
+        marketRepository.save(market)
         assertEquals(0, marketRepository.deleteMarkets(Instant.now().minusSeconds(10)))
         assertNotNull(marketRepository.read("2"))
         assertEquals(1, marketRepository.deleteMarkets(Instant.now().plusSeconds(10)))

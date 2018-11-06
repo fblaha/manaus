@@ -11,21 +11,17 @@ import java.time.Instant
 
 class MarketRepository(private val db: Nitrite) {
 
-    private val repository: ObjectRepository<Market>  by lazy { db.getRepository<Market> {} }
+    private val repository: ObjectRepository<Market> by lazy { db.getRepository<Market> {} }
 
-    fun saveOrUpdate(market: Market) {
+    fun save(market: Market) {
         repository.insert(market)
     }
 
     fun read(id: String): Market? {
-        for (market in repository.find(Market::id eq id)) {
-            return market
-        }
-        return null
+        return repository.find(Market::id eq id).firstOrDefault()
     }
 
     fun deleteMarkets(olderThan: Instant): Int {
-        val result = repository.remove(Market::openDate lt olderThan)
-        return result.affectedCount
+        return repository.remove(Market::openDate lt olderThan).affectedCount
     }
 }
