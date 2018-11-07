@@ -6,18 +6,13 @@ import cz.fb.manaus.core.category.CategoryService
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.model.Side
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.Objects.requireNonNull
 
 
 @Service
-class ProfitService {
-
-    @Autowired
-    private lateinit var categoryService: CategoryService
-    @Autowired
-    private lateinit var profitPlugin: ProfitPlugin
+class ProfitService(private val categoryService: CategoryService,
+                    private val profitPlugin: ProfitPlugin) {
 
     fun getProfitRecords(bets: List<SettledBet>, projection: String?,
                          simulationAwareOnly: Boolean, chargeRate: Double): List<ProfitRecord> {

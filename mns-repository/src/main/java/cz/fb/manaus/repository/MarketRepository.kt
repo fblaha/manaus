@@ -23,7 +23,7 @@ class MarketRepository(private val db: Nitrite) {
         return repository.find(Market::id eq id).firstOrDefault()
     }
 
-    fun deleteMarkets(olderThan: Instant): Int {
+    fun delete(olderThan: Instant): Int {
         return repository.remove(Market::openDate lt olderThan).affectedCount
     }
 
@@ -31,7 +31,7 @@ class MarketRepository(private val db: Nitrite) {
         repository.remove(Market::id eq id)
     }
 
-    fun getMarkets(from: Instant?, to: Instant?, maxResults: Int?): List<Market> {
+    fun find(from: Instant?, to: Instant?, maxResults: Int?): List<Market> {
         var filter = ObjectFilters.ALL
         if (from != null) {
             val fromFilter = Market::openDate gte from

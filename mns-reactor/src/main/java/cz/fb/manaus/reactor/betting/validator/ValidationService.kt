@@ -6,17 +6,13 @@ import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.price.PriceService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.Objects.requireNonNull
 
 @Service
-class ValidationService {
+class ValidationService(private val priceService: PriceService,
+                        private val recorder: ValidationMetricsCollector) {
 
-    @Autowired
-    private lateinit var priceService: PriceService
-    @Autowired
-    private lateinit var recorder: ValidationMetricsCollector
 
     internal fun handleDowngrade(newOne: Price?, oldOne: Bet?, validator: Validator): ValidationResult? {
         if (oldOne != null && newOne != null) {

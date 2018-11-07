@@ -45,3 +45,30 @@ data class Market(
 ) {
     internal val openDate: Instant = event.openDate
 }
+
+
+data class Price(
+        val price: Double,
+        val amount: Double,
+        val side: Side
+)
+
+data class RunnerPrices(
+        val selectionId: Long,
+        val prices: List<Price>,
+        val lastMatchedPrice: Double?,
+        val matchedAmount: Double?
+)
+
+@Index(value = "marketID", type = IndexType.NonUnique)
+data class MarketPrices(
+        @Id val id: Int,
+        val winnerCount: Int,
+        val time: Instant,
+        val marketID: String,
+        val runnerPrices: List<RunnerPrices>
+)
+
+enum class Side {
+    BACK, LAY
+}
