@@ -8,7 +8,6 @@ import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.action.ActionSaver
 import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -19,18 +18,12 @@ import java.util.Optional.empty
 
 @Controller
 @Profile(ManausProfiles.DB)
-class BetActionController {
+class BetActionController(private val betActionDao: BetActionDao,
+                          private val marketDao: MarketDao,
+                          private val marketPricesDao: MarketPricesDao,
+                          private val actionSaver: ActionSaver,
+                          private val metricRegistry: MetricRegistry) {
 
-    @Autowired
-    private lateinit var betActionDao: BetActionDao
-    @Autowired
-    private lateinit var marketDao: MarketDao
-    @Autowired
-    private lateinit var marketPricesDao: MarketPricesDao
-    @Autowired
-    private lateinit var actionSaver: ActionSaver
-    @Autowired
-    private lateinit var metricRegistry: MetricRegistry
 
     @ResponseBody
     @RequestMapping(value = ["/markets/{id}/actions"], method = [RequestMethod.GET])

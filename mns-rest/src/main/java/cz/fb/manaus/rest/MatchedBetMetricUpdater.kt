@@ -4,16 +4,12 @@ import com.codahale.metrics.Histogram
 import com.codahale.metrics.MetricRegistry
 import com.codahale.metrics.SlidingWindowReservoir
 import cz.fb.manaus.core.model.Bet
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.util.concurrent.atomic.AtomicLong
 
 @Component
-class MatchedBetMetricUpdater {
+class MatchedBetMetricUpdater(private val metricRegistry: MetricRegistry) {
     private val lastScan = AtomicLong(0)
-
-    @Autowired
-    private lateinit var metricRegistry: MetricRegistry
 
     private fun newHistogram(): Histogram {
         return Histogram(SlidingWindowReservoir(100))

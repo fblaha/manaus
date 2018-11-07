@@ -10,7 +10,6 @@ import cz.fb.manaus.reactor.profit.ProfitService
 import cz.fb.manaus.reactor.profit.progress.CoverageFunctionProfitService
 import cz.fb.manaus.reactor.profit.progress.ProgressProfitService
 import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -21,20 +20,13 @@ import java.util.logging.Logger
 
 @Controller
 @Profile(ManausProfiles.DB)
-class ProfitController {
+class ProfitController(private val profitService: ProfitService,
+                       private val progressProfitService: ProgressProfitService,
+                       private val coverageService: CoverageFunctionProfitService,
+                       private val provider: ExchangeProvider,
+                       private val betLoader: SettledBetLoader,
+                       private val betUtils: BetUtils) {
 
-    @Autowired
-    private lateinit var profitService: ProfitService
-    @Autowired
-    private lateinit var progressProfitService: ProgressProfitService
-    @Autowired
-    private lateinit var coverageService: CoverageFunctionProfitService
-    @Autowired
-    private lateinit var provider: ExchangeProvider
-    @Autowired
-    private lateinit var betLoader: SettledBetLoader
-    @Autowired
-    private lateinit var betUtils: BetUtils
 
     // TODO reduce arguments
     @ResponseBody

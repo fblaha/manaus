@@ -6,19 +6,15 @@ import com.codahale.metrics.SlidingWindowReservoir
 import cz.fb.manaus.core.metrics.MetricRecord
 import cz.fb.manaus.core.metrics.MetricsService
 import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 
 @Controller
 @Profile(ManausProfiles.DB)
-class MetricsController {
+class MetricsController(private val metricsService: MetricsService,
+                        private val metricRegistry: MetricRegistry) {
 
-    @Autowired
-    private lateinit var metricsService: MetricsService
-    @Autowired
-    private lateinit var metricRegistry: MetricRegistry
 
     val metrics: List<MetricRecord<*>>
         @ResponseBody

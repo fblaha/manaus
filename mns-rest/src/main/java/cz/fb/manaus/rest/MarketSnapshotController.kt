@@ -8,7 +8,6 @@ import cz.fb.manaus.core.dao.MarketDao
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.betting.BetManager
 import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -31,18 +30,12 @@ data class MarketSnapshotCrate(
 
 @Controller
 @Profile(ManausProfiles.DB)
-class MarketSnapshotController {
+class MarketSnapshotController(private val manager: BetManager,
+                               private val marketDao: MarketDao,
+                               private val actionDao: BetActionDao,
+                               private val metricRegistry: MetricRegistry,
+                               private val betMetricUpdater: MatchedBetMetricUpdater) {
 
-    @Autowired
-    private lateinit var manager: BetManager
-    @Autowired
-    private lateinit var marketDao: MarketDao
-    @Autowired
-    private lateinit var actionDao: BetActionDao
-    @Autowired
-    private lateinit var metricRegistry: MetricRegistry
-    @Autowired
-    private lateinit var betMetricUpdater: MatchedBetMetricUpdater
 
     @RequestMapping(value = ["/markets/{id}/snapshot"], method = [RequestMethod.POST])
     fun pushMarketSnapshot(@PathVariable id: String, @RequestBody snapshotCrate: MarketSnapshotCrate): ResponseEntity<*> {

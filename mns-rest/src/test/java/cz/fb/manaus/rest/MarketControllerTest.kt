@@ -22,7 +22,7 @@ class MarketControllerTest : AbstractControllerTest() {
     private lateinit var metricRegistry: MetricRegistry
 
     private val exceptionCount: Long
-        get() = metricRegistry.counter(ExceptionCounter.METRIC_NAME).count
+        get() = metricRegistry.counter("_ERROR_").count
 
     @Test
     fun `market list`() {

@@ -1,11 +1,9 @@
 package cz.fb.manaus.rest
 
-import cz.fb.manaus.core.dao.MarketDao
 import cz.fb.manaus.core.dao.MarketPricesDao
 import cz.fb.manaus.core.model.MarketPrices
 import cz.fb.manaus.core.model.RunnerPrices
 import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,12 +14,7 @@ import java.util.*
 
 @Controller
 @Profile(ManausProfiles.DB)
-class MarketPricesController {
-
-    @Autowired
-    private lateinit var marketPricesDao: MarketPricesDao
-    @Autowired
-    private lateinit var marketDao: MarketDao
+class MarketPricesController(private val marketPricesDao: MarketPricesDao) {
 
     @ResponseBody
     @RequestMapping(value = ["/markets/{id}/prices"], method = [RequestMethod.GET])

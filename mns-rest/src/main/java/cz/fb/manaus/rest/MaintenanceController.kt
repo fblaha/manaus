@@ -4,7 +4,6 @@ import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.maintanance.ConfigUpdate
 import cz.fb.manaus.core.maintanance.PeriodicMaintenanceTask
 import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -17,13 +16,9 @@ data class PeriodicTaskDescriptor(val name: String, val pausePeriodNanos: Long)
 
 @Controller
 @Profile(ManausProfiles.DB)
-class MaintenanceController {
+class MaintenanceController(private val metricRegistry: MetricRegistry,
+                            private val tasks: List<PeriodicMaintenanceTask> = mutableListOf()) {
 
-    @Autowired
-    private lateinit var metricRegistry: MetricRegistry
-
-    @Autowired(required = false)
-    private val tasks: List<PeriodicMaintenanceTask> = mutableListOf()
 
     @get:ResponseBody
     @get:RequestMapping(value = ["/maintenance"], method = [RequestMethod.GET])

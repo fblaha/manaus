@@ -10,7 +10,6 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.settlement.SaveStatus
 import cz.fb.manaus.core.settlement.SettledBetSaver
 import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -22,20 +21,12 @@ import java.util.Optional.empty
 
 @Controller
 @Profile(ManausProfiles.DB)
-class SettledBetController {
-
-    @Autowired
-    private lateinit var settledBetDao: SettledBetDao
-    @Autowired
-    private lateinit var betActionDao: BetActionDao
-    @Autowired
-    private lateinit var intervalParser: IntervalParser
-    @Autowired
-    private lateinit var categoryService: CategoryService
-    @Autowired
-    private lateinit var betSaver: SettledBetSaver
-    @Autowired
-    private lateinit var metricRegistry: MetricRegistry
+class SettledBetController(private val settledBetDao: SettledBetDao,
+                           private val betActionDao: BetActionDao,
+                           private val intervalParser: IntervalParser,
+                           private val categoryService: CategoryService,
+                           private val betSaver: SettledBetSaver,
+                           private val metricRegistry: MetricRegistry) {
 
 
     @ResponseBody

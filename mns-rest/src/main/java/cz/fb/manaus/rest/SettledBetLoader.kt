@@ -8,7 +8,6 @@ import cz.fb.manaus.core.dao.SettledBetDao
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.time.Instant
@@ -20,13 +19,10 @@ import java.util.logging.Logger
 
 @Component
 @Profile(ManausProfiles.DB)
-class SettledBetLoader {
-    @Autowired
-    private lateinit var intervalParser: IntervalParser
-    @Autowired
-    private lateinit var settledBetDao: SettledBetDao
-    @Autowired
-    private lateinit var betActionDao: BetActionDao
+class SettledBetLoader(private val intervalParser: IntervalParser,
+                       private val settledBetDao: SettledBetDao,
+                       private val betActionDao: BetActionDao) {
+
     private var cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .expireAfterAccess(10, TimeUnit.MINUTES)

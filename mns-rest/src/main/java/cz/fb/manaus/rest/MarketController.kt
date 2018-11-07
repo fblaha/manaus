@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions
 import cz.fb.manaus.core.dao.MarketDao
 import cz.fb.manaus.core.model.Market
 import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -14,10 +13,7 @@ import java.util.*
 
 @Controller
 @Profile(ManausProfiles.DB)
-class MarketController {
-
-    @Autowired
-    private lateinit var marketDao: MarketDao
+class MarketController(private val marketDao: MarketDao) {
 
     val markets: List<Market>
         @ResponseBody
