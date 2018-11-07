@@ -6,7 +6,6 @@ import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.price.PriceService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 
@@ -15,9 +14,7 @@ import org.springframework.stereotype.Component
 @BackLoserBet
 @LayLoserBet
 @Profile("betfair")
-class TradedVolumeProposer : PriceProposer {
-    @Autowired
-    private val priceService: PriceService? = null
+class TradedVolumeProposer(private val priceService: PriceService) : PriceProposer {
 
     override fun validate(context: BetContext): ValidationResult {
         val tradedVolume = context.actualTradedVolume!!
@@ -30,7 +27,7 @@ class TradedVolumeProposer : PriceProposer {
 
     override fun getProposedPrice(context: BetContext): Double {
         val weightedMean = context.actualTradedVolume!!.weightedMean!!
-        return priceService!!.downgrade(weightedMean, REDUCTION_RATE,
+        return priceService.downgrade(weightedMean, REDUCTION_RATE,
                 context.side)
     }
 
