@@ -3,6 +3,7 @@ package cz.fb.manaus.core.persistence
 import org.dizitart.no2.IndexType
 import org.dizitart.no2.objects.Id
 import org.dizitart.no2.objects.Index
+import org.dizitart.no2.objects.Indices
 import java.time.Instant
 
 data class Event(
@@ -60,15 +61,30 @@ data class RunnerPrices(
         val matchedAmount: Double?
 )
 
-@Index(value = "marketID", type = IndexType.NonUnique)
-data class MarketPrices(
-        @Id val id: Int,
-        val winnerCount: Int,
-        val time: Instant,
-        val marketID: String,
-        val runnerPrices: List<RunnerPrices>
-)
 
 enum class Side {
     BACK, LAY
 }
+
+enum class BetActionType {
+    PLACE,
+    UPDATE
+
+}
+
+
+@Indices(
+        Index(value = "marketID", type = IndexType.NonUnique),
+        Index(value = "betID", type = IndexType.NonUnique)
+)
+data class BetAction(
+        @Id val id: Int,
+        val betActionType: BetActionType,
+        val time: Instant,
+        val price: Price,
+        val marketID: String,
+        val selectionID: Long,
+        val betID: String?,
+        val runnerPrices: List<RunnerPrices>,
+        val properties: Map<String, String>
+)
