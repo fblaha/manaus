@@ -15,8 +15,8 @@ class MarketRepository(private val db: Nitrite) {
 
     private val repository: ObjectRepository<Market> by lazy { db.getRepository<Market> {} }
 
-    fun save(market: Market) {
-        repository.insert(market)
+    fun saveOrUpdate(market: Market) {
+        repository.update(market, true)
     }
 
     fun read(id: String): Market? {

@@ -6,6 +6,8 @@ import org.junit.Before
 import org.junit.Test
 import java.time.Instant
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 
 val runnerPrices = listOf(
@@ -21,7 +23,7 @@ val runnerPrices = listOf(
 )
 
 val betAction = BetAction(
-        id = 5,
+        id = 0,
         marketID = "2",
         time = Instant.now(),
         selectionID = 1000,
@@ -47,7 +49,16 @@ class BetActionRepositoryTest {
 
     @Test
     fun save() {
-        repository.save(betAction)
+        assertTrue(repository.save(betAction) != 0L)
+    }
+
+    @Test
+    fun `set bet ID`() {
+        val actionID = repository.save(betAction)
+        assertNull(repository.find("2").first().betID)
+        repository.setBetID(actionID, "100")
+        assertEquals(1, repository.find("2").size)
+        assertEquals("100", repository.find("2").first().betID)
     }
 
     @Test

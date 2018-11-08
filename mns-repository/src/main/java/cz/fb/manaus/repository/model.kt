@@ -78,7 +78,7 @@ enum class BetActionType {
         Index(value = "betID", type = IndexType.NonUnique)
 )
 data class BetAction(
-        @Id val id: Int,
+        @Id val id: Long,
         val betActionType: BetActionType,
         val time: Instant,
         val price: Price,

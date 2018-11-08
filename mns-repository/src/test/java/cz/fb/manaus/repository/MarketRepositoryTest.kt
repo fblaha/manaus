@@ -42,14 +42,14 @@ class MarketRepositoryTest {
 
     @Test
     fun `save - read`() {
-        marketRepository.save(market)
+        marketRepository.saveOrUpdate(market)
         val fromDB = marketRepository.read("2")
         assertEquals(market, fromDB)
     }
 
     @Test
     fun `save - delete - read`() {
-        marketRepository.save(market)
+        marketRepository.saveOrUpdate(market)
         assertNotNull(marketRepository.read("2"))
         marketRepository.delete("2")
         assertNull(marketRepository.read("2"))
@@ -57,7 +57,7 @@ class MarketRepositoryTest {
 
     @Test
     fun `delete older then`() {
-        marketRepository.save(market)
+        marketRepository.saveOrUpdate(market)
         assertEquals(0, marketRepository.delete(Instant.now().minusSeconds(10)))
         assertNotNull(marketRepository.read("2"))
         assertEquals(1, marketRepository.delete(Instant.now().plusSeconds(10)))
@@ -66,7 +66,7 @@ class MarketRepositoryTest {
 
     @Test
     fun `find markets from`() {
-        marketRepository.save(market)
+        marketRepository.saveOrUpdate(market)
         assertEquals(1, marketRepository.find(null, null, null).size)
         assertEquals(0, marketRepository.find(Instant.now().plusSeconds(30), null, null).size)
         assertEquals(1, marketRepository.find(Instant.now().minusSeconds(30), null, null).size)
@@ -74,7 +74,7 @@ class MarketRepositoryTest {
 
     @Test
     fun `find markets to`() {
-        marketRepository.save(market)
+        marketRepository.saveOrUpdate(market)
         val minus30 = Instant.now().minusSeconds(30)
         val plus30 = Instant.now().plusSeconds(30)
         assertEquals(1, marketRepository.find(minus30, plus30, null).size)
@@ -83,8 +83,8 @@ class MarketRepositoryTest {
 
     @Test
     fun `find markets limit`() {
-        marketRepository.save(market)
-        marketRepository.save(market.copy(id = "3"))
+        marketRepository.saveOrUpdate(market)
+        marketRepository.saveOrUpdate(market.copy(id = "3"))
         assertEquals(2, marketRepository.find(null, null, 2).size)
         assertEquals(1, marketRepository.find(null, null, 1).size)
     }
@@ -92,8 +92,8 @@ class MarketRepositoryTest {
     @Test
     fun `find markets sort`() {
         val laterEvent = market.event.copy(openDate = Instant.now().plusSeconds(30))
-        marketRepository.save(market.copy(id = "3", event = laterEvent))
-        marketRepository.save(market)
+        marketRepository.saveOrUpdate(market.copy(id = "3", event = laterEvent))
+        marketRepository.saveOrUpdate(market)
         val markets = marketRepository.find(null, null, null)
         assertEquals(2, markets.size)
         assertEquals("2", markets.first().id)
