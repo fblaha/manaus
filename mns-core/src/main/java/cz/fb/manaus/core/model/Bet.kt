@@ -3,12 +3,12 @@ package cz.fb.manaus.core.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.util.*
 
-data class Bet(val betId: String?,
+data class Bet(val betId: String? = null,
                val marketId: String,
                val selectionId: Long,
                val requestedPrice: Price,
-               val placedDate: Date?,
-               val matchedAmount: Double,
+               val placedDate: Date? = null,
+               val matchedAmount: Double = 0.0,
                var actionId: Int = 0) {
 
     val isMatched: Boolean

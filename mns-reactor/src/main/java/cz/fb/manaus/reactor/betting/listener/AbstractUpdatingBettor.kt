@@ -86,7 +86,8 @@ abstract class AbstractUpdatingBettor(private val side: Side, private val valida
             betCollector.updateBet(BetCommand(oldBet.replacePrice(newPrice.price), action))
         } else {
             val market = ctx.marketPrices.market
-            val bet = Bet(null, market.id, ctx.runnerPrices.selectionId, newPrice, null, 0.0)
+            val bet = Bet(marketId = market.id, selectionId = ctx.runnerPrices.selectionId,
+                    requestedPrice = newPrice)
             betCollector.placeBet(BetCommand(bet, action))
         }
         log.log(Level.INFO, "{0}_BET:  new bet ''{1}''", arrayOf(action.betActionType, action))

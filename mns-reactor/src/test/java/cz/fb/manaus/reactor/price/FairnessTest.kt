@@ -9,12 +9,12 @@ class FairnessTest {
 
     @Test
     fun `more credible side`() {
-        assertEquals(Side.BACK, Fairness(0.9, 1.2).moreCredibleSide)
-        assertEquals(Side.LAY, Fairness(0.9, 1.05).moreCredibleSide)
+        assertEquals(Side.BACK, Fairness(back = 0.9, lay = 1.2).moreCredibleSide)
+        assertEquals(Side.LAY, Fairness(back = 0.9, lay = 1.05).moreCredibleSide)
 
-        assertEquals(Side.BACK, Fairness(0.9, null).moreCredibleSide)
-        assertEquals(Side.LAY, Fairness(null, 1.2).moreCredibleSide)
+        assertEquals(Side.BACK, Fairness(back = 0.9).moreCredibleSide)
+        assertEquals(Side.LAY, Fairness(lay = 1.2).moreCredibleSide)
 
-        assertNull(Fairness(null, null).moreCredibleSide)
+        assertNull(Fairness().moreCredibleSide)
     }
 }

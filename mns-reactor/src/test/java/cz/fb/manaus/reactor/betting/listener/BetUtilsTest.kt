@@ -69,7 +69,7 @@ class BetUtilsTest : AbstractLocalTestCase() {
     fun `unknown bets`() {
         val action = mock<BetAction>()
         whenever(action.betId).thenReturn("1", "2")
-        val bet = Bet("1", "1", 1, Price(), null, 0.0)
+        val bet = Bet("1", "1", 1, Price())
         assertEquals(0, betUtils.getUnknownBets(listOf(bet), setOf("1")).size)
         assertEquals(1, betUtils.getUnknownBets(listOf(bet), setOf("2")).size)
     }

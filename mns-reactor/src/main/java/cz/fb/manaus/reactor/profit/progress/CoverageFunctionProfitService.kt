@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 class CoverageFunctionProfitService(functions: List<ProgressFunction>) : AbstractFunctionProfitService(functions), FunctionProfitRecordCalculator {
 
     fun getProfitRecords(bets: List<SettledBet>, funcName: String?,
-                         chargeRate: Double, projection: String?): List<ProfitRecord> {
+                         chargeRate: Double, projection: String? = null): List<ProfitRecord> {
         return getProfitRecords(this, bets, chargeRate, funcName, projection)
     }
 

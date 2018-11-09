@@ -36,8 +36,9 @@ class BetTest : AbstractLocalTestCase() {
 
     @Test
     fun `json marshall`() {
-        val original = Bet("111", "222", 333,
-                Price(3.0, 2.0, Side.BACK), Date(), 0.0)
+        val original = Bet(betId = "111", marketId = "222", selectionId = 333,
+                requestedPrice = Price(3.0, 2.0, Side.BACK),
+                placedDate = Date())
 
         val serialized = mapper.writer().writeValueAsString(original)
         val restored = mapper.readerFor(Bet::class.java).readValue<Bet>(serialized)
@@ -52,6 +53,7 @@ class BetTest : AbstractLocalTestCase() {
         val selectionId = CoreTestFactory.DRAW
         val requestedPrice = Price(3.0, provider.minAmount, Side.LAY)
         val date = Instant.now().minus(2, ChronoUnit.HOURS)
-        return Bet("1", marketId, selectionId, requestedPrice, Date.from(date), matchedAmount)
+        return Bet(betId = "1", marketId = marketId, selectionId = selectionId,
+                requestedPrice = requestedPrice, placedDate = Date.from(date), matchedAmount = matchedAmount)
     }
 }

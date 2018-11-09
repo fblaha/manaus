@@ -5,7 +5,7 @@ import cz.fb.manaus.core.model.Side
 import java.util.*
 import java.util.Objects.requireNonNull
 
-class Fairness(val back: Double?, val lay: Double?) {
+class Fairness(val back: Double? = null, val lay: Double? = null) {
 
     val moreCredibleSide: Side?
         get() {

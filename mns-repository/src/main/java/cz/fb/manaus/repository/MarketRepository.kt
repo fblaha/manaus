@@ -1,6 +1,5 @@
 package cz.fb.manaus.repository
 
-import cz.fb.manaus.core.persistence.Market
 import org.dizitart.kno2.filters.*
 import org.dizitart.kno2.getRepository
 import org.dizitart.no2.FindOptions
@@ -31,7 +30,7 @@ class MarketRepository(private val db: Nitrite) {
         repository.remove(Market::id eq id)
     }
 
-    fun find(from: Instant?, to: Instant?, maxResults: Int?): List<Market> {
+    fun find(from: Instant? = null, to: Instant? = null, maxResults: Int? = null): List<Market> {
         var filter = ObjectFilters.ALL
         if (from != null) {
             val fromFilter = Market::openDate gte from

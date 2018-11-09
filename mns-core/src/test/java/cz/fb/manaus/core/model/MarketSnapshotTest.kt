@@ -11,8 +11,10 @@ class MarketSnapshotTest {
     fun `market coverage`() {
         val selectionId = 1L
         val side = Side.LAY
-        val predecessor = Bet(null, "1", selectionId, Price(2.0, 2.0, side), DateUtils.addHours(Date(), -2), 1.0)
-        val successor = Bet(null, "1", selectionId, Price(2.0, 2.0, side), Date(), 1.0)
+        val predecessor = Bet(marketId = "1", selectionId = selectionId, requestedPrice = Price(2.0, 2.0, side),
+                placedDate = DateUtils.addHours(Date(), -2), matchedAmount = 1.0)
+        val successor = Bet(marketId = "1", selectionId = selectionId,
+                requestedPrice = Price(2.0, 2.0, side), placedDate = Date(), matchedAmount = 1.0)
         val coverage = MarketSnapshot.getMarketCoverage(listOf(successor, predecessor))
         assertEquals(1, coverage.size())
         assertEquals(successor, coverage.get(side, selectionId))

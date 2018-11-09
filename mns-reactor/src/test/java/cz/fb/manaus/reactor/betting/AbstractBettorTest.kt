@@ -68,9 +68,9 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDaoTest(
 
     protected fun checkUpdate(marketPrices: MarketPrices, oldPrice: Double, type: Side, placeCount: Int, updateCount: Int) {
         val oldOne = Price(oldPrice, 3.72, type)
-        val unmatchedHome = Bet(AbstractDaoTest.BET_ID, AbstractDaoTest.MARKET_ID, HOME, oldOne, PLACED_DATE, 0.0)
-        val unmatchedDraw = Bet(AbstractDaoTest.BET_ID + 1, AbstractDaoTest.MARKET_ID, DRAW, oldOne, PLACED_DATE, 0.0)
-        val unmatchedAway = Bet(AbstractDaoTest.BET_ID + 2, AbstractDaoTest.MARKET_ID, AWAY, oldOne, PLACED_DATE, 0.0)
+        val unmatchedHome = Bet(AbstractDaoTest.BET_ID, AbstractDaoTest.MARKET_ID, HOME, oldOne, PLACED_DATE)
+        val unmatchedDraw = Bet(AbstractDaoTest.BET_ID + 1, AbstractDaoTest.MARKET_ID, DRAW, oldOne, PLACED_DATE)
+        val unmatchedAway = Bet(AbstractDaoTest.BET_ID + 2, AbstractDaoTest.MARKET_ID, AWAY, oldOne, PLACED_DATE)
         val bets = listOf(unmatchedHome, unmatchedDraw, unmatchedAway)
         val actions = bets.map { bet -> coreTestFactory.savePlaceAction(bet, marketPrices.market) }
 

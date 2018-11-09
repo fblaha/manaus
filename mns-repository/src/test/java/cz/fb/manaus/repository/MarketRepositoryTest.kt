@@ -1,6 +1,5 @@
 package cz.fb.manaus.repository
 
-import cz.fb.manaus.core.persistence.*
 import org.dizitart.kno2.nitrite
 import org.junit.Before
 import org.junit.Test
@@ -67,9 +66,9 @@ class MarketRepositoryTest {
     @Test
     fun `find markets from`() {
         marketRepository.saveOrUpdate(market)
-        assertEquals(1, marketRepository.find(null, null, null).size)
-        assertEquals(0, marketRepository.find(Instant.now().plusSeconds(30), null, null).size)
-        assertEquals(1, marketRepository.find(Instant.now().minusSeconds(30), null, null).size)
+        assertEquals(1, marketRepository.find().size)
+        assertEquals(0, marketRepository.find(from = Instant.now().plusSeconds(30)).size)
+        assertEquals(1, marketRepository.find(from = Instant.now().minusSeconds(30)).size)
     }
 
     @Test
@@ -77,16 +76,16 @@ class MarketRepositoryTest {
         marketRepository.saveOrUpdate(market)
         val minus30 = Instant.now().minusSeconds(30)
         val plus30 = Instant.now().plusSeconds(30)
-        assertEquals(1, marketRepository.find(minus30, plus30, null).size)
-        assertEquals(0, marketRepository.find(minus30, minus30, null).size)
+        assertEquals(1, marketRepository.find(from = minus30, to = plus30).size)
+        assertEquals(0, marketRepository.find(from = minus30, to = minus30).size)
     }
 
     @Test
     fun `find markets limit`() {
         marketRepository.saveOrUpdate(market)
         marketRepository.saveOrUpdate(market.copy(id = "3"))
-        assertEquals(2, marketRepository.find(null, null, 2).size)
-        assertEquals(1, marketRepository.find(null, null, 1).size)
+        assertEquals(2, marketRepository.find(maxResults = 2).size)
+        assertEquals(1, marketRepository.find(maxResults = 1).size)
     }
 
     @Test
@@ -94,7 +93,7 @@ class MarketRepositoryTest {
         val laterEvent = market.event.copy(openDate = Instant.now().plusSeconds(30))
         marketRepository.saveOrUpdate(market.copy(id = "3", event = laterEvent))
         marketRepository.saveOrUpdate(market)
-        val markets = marketRepository.find(null, null, null)
+        val markets = marketRepository.find()
         assertEquals(2, markets.size)
         assertEquals("2", markets.first().id)
         assertEquals("3", markets.last().id)

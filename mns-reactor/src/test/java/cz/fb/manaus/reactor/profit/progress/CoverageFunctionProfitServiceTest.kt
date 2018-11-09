@@ -17,9 +17,9 @@ class CoverageFunctionProfitServiceTest : AbstractProfitTest() {
 
     @Test
     fun `covered price`() {
-        val bets = generateBets(null)
+        val bets = generateBets()
         val records = service.getProfitRecords(bets,
-                "price", provider.chargeRate, null)
+                "price", provider.chargeRate)
         assertEquals(2, records.size)
         assertEquals("price_covered: 2.79", records[0].category)
         assertEquals(bets.size, records[0].totalCount)
@@ -30,7 +30,7 @@ class CoverageFunctionProfitServiceTest : AbstractProfitTest() {
     fun `solo price`() {
         val bets = generateBets(Side.BACK)
         val records = service.getProfitRecords(bets,
-                "price", provider.chargeRate, null)
+                "price", provider.chargeRate)
         assertEquals(1, records.size)
         assertEquals("price_solo: 2.84", records[0].category)
         assertEquals(bets.size, records[0].totalCount)

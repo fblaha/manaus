@@ -1,6 +1,5 @@
 package cz.fb.manaus.repository
 
-import cz.fb.manaus.core.persistence.BetAction
 import org.dizitart.kno2.filters.eq
 import org.dizitart.kno2.getRepository
 import org.dizitart.no2.FindOptions
@@ -34,12 +33,12 @@ class BetActionRepository(private val db: Nitrite) {
         return repository.update(action.copy(betID = betID)).affectedCount
     }
 
-    fun getRecentBetAction(betID: String): BetAction? {
+    fun findRecentBetAction(betID: String): BetAction? {
         val options = FindOptions.sort("time", SortOrder.Descending).thenLimit(0, 1)
         return repository.find(BetAction::betID eq betID, options).first()
     }
 
-    fun getRecentBetActions(limit: Int): List<BetAction> {
+    fun findRecentBetActions(limit: Int): List<BetAction> {
         val options = FindOptions.sort("time", SortOrder.Descending).thenLimit(0, limit)
         return repository.find(options).toList()
     }

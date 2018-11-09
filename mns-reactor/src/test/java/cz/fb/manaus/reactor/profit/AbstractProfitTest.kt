@@ -27,7 +27,7 @@ abstract class AbstractProfitTest : AbstractLocalTestCase() {
     }
 
     // TODO not use java Optional in kotlin code
-    protected fun generateBets(requestedSide: Side?): List<SettledBet> {
+    protected fun generateBets(requestedSide: Side? = null): List<SettledBet> {
         val result = mutableListOf<SettledBet>()
         var price = 1.5
         while (price < 4) {

@@ -1,4 +1,4 @@
-package cz.fb.manaus.core.persistence
+package cz.fb.manaus.repository
 
 import org.dizitart.no2.IndexType
 import org.dizitart.no2.objects.Id
@@ -47,7 +47,6 @@ data class Market(
     internal val openDate: Instant = event.openDate
 }
 
-
 data class Price(
         val price: Double,
         val amount: Double,
@@ -60,7 +59,6 @@ data class RunnerPrices(
         val lastMatchedPrice: Double?,
         val matchedAmount: Double?
 )
-
 
 enum class Side {
     BACK, LAY
@@ -86,3 +84,20 @@ data class BetAction(
         val runnerPrices: List<RunnerPrices>,
         val properties: Map<String, String>
 )
+
+@Indices(
+        Index(value = "id", type = IndexType.Unique),
+        Index(value = "settled", type = IndexType.NonUnique)
+)
+data class SettledBet(
+        @Id var id: String,
+        val selectionId: Long,
+        val selectionName: String,
+        val profitAndLoss: Double,
+        val placed: Instant,
+        val matched: Instant,
+        val settled: Instant,
+        val price: Price
+) {
+    internal val side: Side = price.side
+}

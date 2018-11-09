@@ -18,7 +18,7 @@ class ProgressProfitServiceTest : AbstractProfitTest() {
 
     @Test
     fun `single chunk`() {
-        val bets = generateBets(null)
+        val bets = generateBets()
         val records = service.getProfitRecords(bets,
                 "price", 1, provider.chargeRate, null)
         assertEquals(1, records.size)
@@ -29,7 +29,7 @@ class ProgressProfitServiceTest : AbstractProfitTest() {
 
     @Test
     fun `multiple chunks`() {
-        val bets = generateBets(null)
+        val bets = generateBets()
         val records = service.getProfitRecords(bets,
                 "price", 10, provider.chargeRate, null)
         assertEquals(10, records.size)

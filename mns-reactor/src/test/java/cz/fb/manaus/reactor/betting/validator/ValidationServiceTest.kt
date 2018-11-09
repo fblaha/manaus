@@ -38,8 +38,8 @@ class ValidationServiceTest : AbstractLocalTestCase() {
     }
 
     private fun checkDownGrade(newPrice: Double, expected: ValidationResult?) {
-        val oldBet = Bet(null, "1", 1,
-                Price(2.2, 2.0, Side.LAY), Date(), 5.0)
+        val oldBet = Bet(marketId = "1", selectionId = 1, requestedPrice = Price(2.2, 2.0, Side.LAY),
+                placedDate = Date(), matchedAmount = 5.0)
         val rejecting = TestValidator(ValidationResult.REJECT)
         val result = service.handleDowngrade(
                 Price(newPrice, 2.0, Side.LAY),

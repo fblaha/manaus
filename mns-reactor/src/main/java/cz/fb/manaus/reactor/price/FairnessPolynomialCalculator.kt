@@ -46,9 +46,9 @@ class FairnessPolynomialCalculator {
     }
 
     fun getFairness(marketPrices: MarketPrices): Fairness {
-        return Fairness(
-                getFairness(marketPrices.winnerCount.toDouble(), Fairness.toKotlin(marketPrices.getBestPrices(Side.BACK))),
-                getFairness(marketPrices.winnerCount.toDouble(), Fairness.toKotlin(marketPrices.getBestPrices(Side.LAY))))
+        val back = getFairness(marketPrices.winnerCount.toDouble(), Fairness.toKotlin(marketPrices.getBestPrices(Side.BACK)))
+        val lay = getFairness(marketPrices.winnerCount.toDouble(), Fairness.toKotlin(marketPrices.getBestPrices(Side.LAY)))
+        return Fairness(back = back, lay = lay)
     }
 
     private fun multiplyPolynomials(prices: List<Double>): PolynomialFunction {

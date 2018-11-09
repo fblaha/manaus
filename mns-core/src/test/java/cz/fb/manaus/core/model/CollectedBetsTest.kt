@@ -10,8 +10,8 @@ class CollectedBetsTest {
     @Test
     fun testSerialization() {
         val mapper = ObjectMapper()
-        val original = Bet("111", "222", 333,
-                Price(3.0, 2.0, Side.BACK), Date(), 0.0)
+        val original = Bet(betId = "111", marketId = "222", selectionId = 333,
+                requestedPrice = Price(3.0, 2.0, Side.BACK), placedDate = Date())
 
         val bets = CollectedBets.create()
         bets.place.add(original)

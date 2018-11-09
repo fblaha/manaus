@@ -26,7 +26,7 @@ class MarketSnapshotControllerTest : AbstractControllerTest() {
         val accountMoney = AccountMoney(2000.0, 1000.0)
         val categoryBlacklist = setOf("bad")
         val bet = Bet("1", marketPrices.market.id, CoreTestFactory.DRAW,
-                Price(3.0, 5.0, Side.BACK), Date(), 0.0)
+                Price(3.0, 5.0, Side.BACK), Date())
         val crate = MarketSnapshotCrate(marketPrices, listOf(bet),
                 categoryBlacklist, accountMoney, 1000)
 

@@ -15,12 +15,14 @@ class BetCollectorTest {
 
     @Test
     fun `find bet`() {
-        val updateBet = Bet("777", marketId, selectionId, Price(5.0, 5.0, Side.LAY), null, 0.0)
+        val updateBet = Bet(betId = "777", marketId = marketId, selectionId = selectionId,
+                requestedPrice = Price(5.0, 5.0, Side.LAY))
         var collector = BetCollector()
         collector.updateBet(BetCommand(updateBet, BetAction()))
         checkCollector(collector)
         collector = BetCollector()
-        val placeBet = Bet(null, marketId, selectionId, Price(5.0, 5.0, Side.LAY), null, 0.0)
+        val placeBet = Bet(betId = null, marketId = marketId, selectionId = selectionId,
+                requestedPrice = Price(5.0, 5.0, Side.LAY))
         collector.placeBet(BetCommand(placeBet, BetAction()))
         checkCollector(collector)
     }
