@@ -75,4 +75,24 @@ class BetActionRepositoryTest {
         assertEquals(1, repository.delete("2"))
         assertEquals(0, repository.find("2").size)
     }
+
+    @Test
+    fun `get recent action`() {
+        val recent = repository.save(betAction)
+        repository.setBetID(recent, "100")
+        val older = repository.save(betAction.copy(time = Instant.now().minusSeconds(600)))
+        repository.setBetID(older, "100")
+        assertEquals(recent, repository.getRecentBetAction("100")!!.id)
+    }
+
+    @Test
+    fun `get recent actions`() {
+        val recent = repository.save(betAction)
+        val older = repository.save(betAction.copy(time = Instant.now().minusSeconds(600)))
+        val actions = repository.getRecentBetActions(100)
+        assertEquals(2, actions.size)
+        assertEquals(recent, actions.first().id)
+        assertEquals(older, actions.last().id)
+        assertEquals(1, repository.getRecentBetActions(1).size)
+    }
 }

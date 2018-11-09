@@ -69,9 +69,7 @@ enum class Side {
 enum class BetActionType {
     PLACE,
     UPDATE
-
 }
-
 
 @Indices(
         Index(value = "marketID", type = IndexType.NonUnique),

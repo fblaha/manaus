@@ -25,12 +25,22 @@ class BetActionRepository(private val db: Nitrite) {
     }
 
     fun find(marketID: String): List<BetAction> {
-        var options = FindOptions.sort("time", SortOrder.Ascending)
+        val options = FindOptions.sort("time", SortOrder.Ascending)
         return repository.find(BetAction::marketID eq marketID, options).toList()
     }
 
     fun setBetID(actionID: Long, betID: String): Int {
         val action = repository.find(BetAction::id eq actionID).first()
         return repository.update(action.copy(betID = betID)).affectedCount
+    }
+
+    fun getRecentBetAction(betID: String): BetAction? {
+        val options = FindOptions.sort("time", SortOrder.Descending).thenLimit(0, 1)
+        return repository.find(BetAction::betID eq betID, options).first()
+    }
+
+    fun getRecentBetActions(limit: Int): List<BetAction> {
+        val options = FindOptions.sort("time", SortOrder.Descending).thenLimit(0, limit)
+        return repository.find(options).toList()
     }
 }
