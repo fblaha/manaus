@@ -32,6 +32,10 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>org.dizitart</groupId>
+            <artifactId>potassium-nitrite</artifactId>
+        </dependency>
         <!-- TODO java9 workaround -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
