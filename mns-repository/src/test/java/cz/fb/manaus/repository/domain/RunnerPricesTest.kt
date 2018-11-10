@@ -24,14 +24,12 @@ class RunnerPricesTest {
 
     @Test
     fun `sorted prices`() {
-        val sorted = runnerPrices.sortedPrices
-        assertEquals(2, sorted.size)
-        assertEquals(Side.BACK, sorted.first().side)
+        assertEquals(2, runnerPrices.sortedPrices.size)
+        assertEquals(Side.BACK, runnerPrices.sortedPrices.first().side)
     }
 
     @Test
     fun `best price`() {
-        val back = runnerPrices.bestPrice
-        assertEquals(Side.BACK, back?.side)
+        assertEquals(Side.BACK, runnerPrices.bestPrice?.side)
     }
 }
