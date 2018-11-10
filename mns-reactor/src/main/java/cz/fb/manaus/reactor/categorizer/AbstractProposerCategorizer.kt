@@ -3,14 +3,14 @@ package cz.fb.manaus.reactor.categorizer
 import com.google.common.base.Joiner.on
 import com.google.common.base.MoreObjects
 import com.google.common.base.Strings.emptyToNull
-import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer
-import cz.fb.manaus.core.model.BetAction
-import cz.fb.manaus.core.model.SettledBet
-import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
+import cz.fb.manaus.core.repository.domain.BetAction
+import cz.fb.manaus.core.repository.domain.SettledBet
+import cz.fb.manaus.core.repository.domain.Side
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import org.springframework.beans.factory.annotation.Autowired
 
-abstract class AbstractProposerCategorizer : SettledBetCategorizer {
+abstract class AbstractProposerCategorizer : RealizedBetCategorizer {
     @Autowired
     private lateinit var betUtils: BetUtils
 

@@ -6,21 +6,21 @@ import com.google.common.base.Preconditions
 import com.google.common.collect.ImmutableMap
 import com.google.common.collect.ImmutableSet
 import cz.fb.manaus.core.category.BetCoverage
-import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer
-import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.core.model.SettledBet
-import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
+import cz.fb.manaus.core.repository.domain.Price
+import cz.fb.manaus.core.repository.domain.RealizedBet
+import cz.fb.manaus.core.repository.domain.Side
 import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class CoverageCategorizer : SettledBetCategorizer {
+class CoverageCategorizer : RealizedBetCategorizer {
 
     override val isSimulationSupported: Boolean = false
 
-    override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
-        val marketId = settledBet.betAction.market.id
-        val selectionId = settledBet.selectionId
+    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
+        val marketId = realizedBet.betAction.market.id
+        val selectionId = realizedBet.selectionId
         val sides = coverage.getSides(marketId, selectionId)
         Preconditions.checkState(sides.size > 0)
         val builder = ImmutableMap.builder<Side, Double>()
@@ -28,7 +28,7 @@ class CoverageCategorizer : SettledBetCategorizer {
             builder.put(side, coverage.getAmount(marketId, selectionId, side))
         }
         val amounts = builder.build()
-        return getCategories(settledBet.price.side, amounts)
+        return getCategories(realizedBet.price.side, amounts)
     }
 
     internal fun getCategories(mySide: Side, amounts: Map<Side, Double>): Set<String> {

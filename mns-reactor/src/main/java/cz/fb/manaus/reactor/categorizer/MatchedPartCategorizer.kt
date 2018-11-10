@@ -2,19 +2,19 @@ package cz.fb.manaus.reactor.categorizer
 
 
 import cz.fb.manaus.core.category.BetCoverage
-import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer
-import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
+import cz.fb.manaus.core.repository.domain.Price
+import cz.fb.manaus.core.repository.domain.RealizedBet
 import org.springframework.stereotype.Component
 
 @Component
-class MatchedPartCategorizer : SettledBetCategorizer {
+class MatchedPartCategorizer : RealizedBetCategorizer {
 
     override val isSimulationSupported: Boolean = false
 
-    override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
-        val matched = settledBet.price.amount
-        val requested = settledBet.betAction.price.amount
+    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
+        val matched = realizedBet.price.amount
+        val requested = realizedBet.betAction.price.amount
         return if (Price.amountEq(matched, requested)) {
             setOf(PREFIX + "full")
         } else {

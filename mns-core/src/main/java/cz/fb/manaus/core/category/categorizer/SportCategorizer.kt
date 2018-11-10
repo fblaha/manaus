@@ -1,7 +1,7 @@
 package cz.fb.manaus.core.category.categorizer
 
 import cz.fb.manaus.core.MarketCategories
-import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.repository.domain.Market
 import org.springframework.stereotype.Component
 import java.util.regex.Pattern
 

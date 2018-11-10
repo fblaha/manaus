@@ -2,8 +2,10 @@ package cz.fb.manaus.core.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import cz.fb.manaus.core.provider.ExchangeProvider
+import cz.fb.manaus.core.repository.domain.Price
+import cz.fb.manaus.core.repository.domain.Side
+import cz.fb.manaus.core.repository.domain.marketTemplate
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.core.test.CoreTestFactory
 import org.junit.Assert.*
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -49,11 +51,13 @@ class BetTest : AbstractLocalTestCase() {
     }
 
     private fun createBet(matchedAmount: Double): Bet {
-        val marketId = CoreTestFactory.MARKET_ID
-        val selectionId = CoreTestFactory.DRAW
         val requestedPrice = Price(3.0, provider.minAmount, Side.LAY)
         val date = Instant.now().minus(2, ChronoUnit.HOURS)
-        return Bet(betId = "1", marketId = marketId, selectionId = selectionId,
-                requestedPrice = requestedPrice, placedDate = Date.from(date), matchedAmount = matchedAmount)
+        return Bet(betId = "1",
+                marketId = marketTemplate.id,
+                selectionId = 1000L,
+                requestedPrice = requestedPrice,
+                placedDate = Date.from(date),
+                matchedAmount = matchedAmount)
     }
 }

@@ -12,6 +12,7 @@ import java.time.Instant
 )
 data class SettledBet(
         @Id var id: String,
+        // TODO ID
         val selectionId: Long,
         val selectionName: String,
         val profitAndLoss: Double,

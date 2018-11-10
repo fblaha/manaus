@@ -1,14 +1,11 @@
 package cz.fb.manaus.core.manager.filter
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.whenever
-import cz.fb.manaus.core.model.Event
-import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.repository.domain.marketTemplate
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import org.apache.commons.lang3.time.DateUtils.addDays
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -18,12 +15,10 @@ class LookAheadFilterTest : AbstractLocalTestCase() {
 
     @Test
     fun `look ahead filtering`() {
-        val currDate = Date()
-        val market = mock<Market>()
-        val event = mock<Event>()
-        whenever(market.event).thenReturn(event)
-        whenever(event.openDate).thenReturn(addDays(currDate, 50), addDays(currDate, 2))
-        assertFalse(lookAheadFilter.accept(market, setOf()))
-        assertTrue(lookAheadFilter.accept(market, setOf()))
+        val event = marketTemplate.event
+        val plus50d = Instant.now().plus(50, ChronoUnit.DAYS)
+        val plus5d = Instant.now().plus(5, ChronoUnit.DAYS)
+        assertFalse(lookAheadFilter.accept(marketTemplate.copy(event = event.copy(openDate = plus50d)), setOf()))
+        assertTrue(lookAheadFilter.accept(marketTemplate.copy(event = event.copy(openDate = plus5d)), setOf()))
     }
 }

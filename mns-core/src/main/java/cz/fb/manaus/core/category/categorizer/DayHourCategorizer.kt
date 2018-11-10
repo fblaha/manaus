@@ -3,7 +3,7 @@ package cz.fb.manaus.core.category.categorizer
 import com.google.common.collect.ImmutableList.of
 import com.google.common.collect.Range
 import com.google.common.collect.Range.closedOpen
-import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.repository.domain.Market
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -12,7 +12,7 @@ class DayHourCategorizer : AbstractDelegatingCategorizer("dayHour_") {
 
     public override fun getCategoryRaw(market: Market): Set<String> {
         val startTime = Calendar.getInstance()
-        startTime.time = market.event.openDate
+        startTime.time = Date.from(market.event.openDate)
         val hour = startTime.get(Calendar.HOUR_OF_DAY)
         for (range in RANGES) {
             if (range.contains(hour)) {

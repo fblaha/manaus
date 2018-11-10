@@ -1,5 +1,7 @@
 package cz.fb.manaus.core.model
 
+import cz.fb.manaus.core.repository.domain.Price
+import cz.fb.manaus.core.repository.domain.Side
 import org.apache.commons.lang3.time.DateUtils
 import org.junit.Test
 import java.util.*

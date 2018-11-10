@@ -2,13 +2,13 @@ package cz.fb.manaus.core.manager
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
-import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.repository.domain.Market
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import org.apache.commons.lang3.time.DateUtils
 import org.junit.Before
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.ResourceLoader
-import java.util.*
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.zip.ZipFile
 
 abstract class AbstractMarketDataAwareTestCase : AbstractLocalTestCase() {
@@ -22,7 +22,7 @@ abstract class AbstractMarketDataAwareTestCase : AbstractLocalTestCase() {
         val zipFile = ZipFile(resource.file)
         val zipEntry = zipFile.getEntry("markets.json")
         markets = ObjectMapper().readValue(zipFile.getInputStream(zipEntry), TYPE_REF)
-        markets.forEach { market -> market.event.openDate = DateUtils.addHours(Date(), 5) }
+        markets = markets.map { it.copy(event = it.event.copy(openDate = Instant.now().plus(5, ChronoUnit.HOURS))) }
     }
 
     companion object {

@@ -2,14 +2,14 @@ package cz.fb.manaus.reactor.categorizer
 
 import cz.fb.manaus.core.MarketCategories
 import cz.fb.manaus.core.category.BetCoverage
-import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
+import cz.fb.manaus.core.repository.domain.RealizedBet
 import org.springframework.stereotype.Component
 
 @Component
-class AllCategorizer : SettledBetCategorizer {
+class AllCategorizer : RealizedBetCategorizer {
 
-    override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
+    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
         return CATEGORIES
     }
 

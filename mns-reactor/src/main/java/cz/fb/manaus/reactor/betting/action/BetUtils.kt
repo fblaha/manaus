@@ -5,7 +5,11 @@ import com.google.common.base.Preconditions.checkArgument
 import com.google.common.base.Preconditions.checkState
 import com.google.common.base.Splitter
 import com.google.common.collect.Comparators
-import cz.fb.manaus.core.model.*
+import cz.fb.manaus.core.model.Bet
+import cz.fb.manaus.core.repository.domain.BetAction
+import cz.fb.manaus.core.repository.domain.BetActionType
+import cz.fb.manaus.core.repository.domain.Price
+import cz.fb.manaus.core.repository.domain.SettledBet
 import org.springframework.beans.BeanUtils
 import org.springframework.stereotype.Component
 
@@ -27,7 +31,7 @@ class BetUtils {
 
     private fun validate(first: BetAction, second: BetAction) {
         checkArgument(first.price.side === second.price.side)
-        checkArgument(first.selectionId == second.selectionId)
+        checkArgument(first.selectionID == second.selectionID)
     }
 
     fun getUnknownBets(bets: List<Bet>, myBets: Set<String>): List<Bet> {

@@ -4,8 +4,6 @@ import com.google.common.base.Preconditions
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.CategoryService
 import cz.fb.manaus.core.model.ProfitRecord
-import cz.fb.manaus.core.model.SettledBet
-import cz.fb.manaus.core.model.Side
 import org.springframework.stereotype.Service
 import java.util.Objects.requireNonNull
 
@@ -59,7 +57,7 @@ class ProfitService(private val categoryService: CategoryService,
     private fun computeProfitRecords(bets: List<SettledBet>, simulationAwareOnly: Boolean,
                                      charges: Map<String, Double>, coverage: BetCoverage): List<ProfitRecord> {
         return bets.flatMap { bet ->
-            val categories = categoryService.getSettledBetCategories(bet, simulationAwareOnly, coverage)
+            val categories = categoryService.getRealizedBetCategories(bet, simulationAwareOnly, coverage)
             categories.map { category ->
                 val charge = charges[bet.betAction.betId]!!
                 Preconditions.checkState(charge >= 0, charge)

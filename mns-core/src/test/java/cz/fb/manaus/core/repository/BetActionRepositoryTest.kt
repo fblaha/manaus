@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.repository
 
-import cz.fb.manaus.core.repository.domain.*
+import cz.fb.manaus.core.repository.domain.betAction
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.Before
@@ -11,30 +11,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-
-val runnerPrices = listOf(
-        RunnerPrices(
-                selectionId = 100,
-                matchedAmount = 100.0,
-                lastMatchedPrice = 3.0,
-                prices = listOf(
-                        Price(3.0, 100.0, Side.BACK),
-                        Price(3.5, 100.0, Side.LAY)
-                )
-        )
-)
-
-val betAction = BetAction(
-        id = 0,
-        marketID = "2",
-        time = Instant.now(),
-        selectionID = 1000,
-        betID = null,
-        betActionType = BetActionType.PLACE,
-        runnerPrices = runnerPrices,
-        price = Price(3.0, 3.0, Side.BACK),
-        properties = mapOf("x" to "y")
-)
 
 class BetActionRepositoryTest : AbstractDatabaseTestCase() {
 

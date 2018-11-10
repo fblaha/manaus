@@ -1,10 +1,8 @@
 package cz.fb.manaus.reactor.categorizer
 
 import cz.fb.manaus.core.category.BetCoverage
-import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer
-import cz.fb.manaus.core.dao.BetActionDao
-import cz.fb.manaus.core.model.SettledBet
-import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
+import cz.fb.manaus.core.repository.domain.RealizedBet
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,7 +15,7 @@ import java.util.logging.Logger
 
 @Component
 @Profile(ManausProfiles.DB)
-class RelatedActionsCategorizer : SettledBetCategorizer {
+class RelatedActionsCategorizer : RealizedBetCategorizer {
 
 
     @Autowired
@@ -29,12 +27,12 @@ class RelatedActionsCategorizer : SettledBetCategorizer {
 
     override val isSimulationSupported: Boolean = false
 
-    override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
-        val market = settledBet.betAction.market
+    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
+        val market = realizedBet.betAction.market
         val betActions = betActionDao.getBetActions(market.id,
-                OptionalLong.of(settledBet.selectionId), of<Side>(settledBet.price.side))
+                OptionalLong.of(realizedBet.selectionId), of<Side>(realizedBet.price.side))
         if (betActions.isEmpty()) {
-            log.log(Level.WARNING, "missing  bet actions ''{0}''", settledBet)
+            log.log(Level.WARNING, "missing  bet actions ''{0}''", realizedBet)
             return emptySet()
         }
         val current = betUtils.getCurrentActions(betActions)

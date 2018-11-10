@@ -2,16 +2,16 @@ package cz.fb.manaus.reactor.categorizer
 
 import com.google.common.collect.ImmutableSet
 import cz.fb.manaus.core.category.BetCoverage
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.repository.domain.RealizedBet
 import org.springframework.stereotype.Component
 
 @Component
 class ProposerCategorizer : AbstractProposerCategorizer() {
 
-    override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
-        val proposers = getProposers(settledBet)
+    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
+        val proposers = getProposers(realizedBet)
         val builder = ImmutableSet.builder<String>()
-        val side = settledBet.price.side
+        val side = realizedBet.price.side
         for (proposer in proposers) {
             builder.add(getSideAware("proposer_", side, proposer))
         }

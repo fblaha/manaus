@@ -1,20 +1,20 @@
 package cz.fb.manaus.core.category
 
-import cz.fb.manaus.core.model.SettledBet
-import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.repository.domain.RealizedBet
+import cz.fb.manaus.core.repository.domain.Side
 
-data class BetCoverage(private val coverage: Map<Pair<String, Long>, List<SettledBet>>) {
+data class BetCoverage(private val coverage: Map<Pair<String, Long>, List<RealizedBet>>) {
 
-    fun getBets(marketId: String, selectionId: Long, side: Side?): List<SettledBet> {
+    fun getBets(marketId: String, selectionId: Long, side: Side?): List<RealizedBet> {
         var bets = coverage[Pair(marketId, selectionId)]!!
         if (side != null) {
-            bets = bets.filter { it.price.side === side }
+            bets = bets.filter { it.settledBet.price.side === side }
         }
         return bets
     }
 
     fun getSides(marketId: String, selectionId: Long): Set<Side> {
-        return coverage[Pair(marketId, selectionId)]!!.map { it.price.side }.toSet()
+        return coverage[Pair(marketId, selectionId)]!!.map { it.settledBet.price.side }.toSet()
 
     }
 
@@ -25,21 +25,21 @@ data class BetCoverage(private val coverage: Map<Pair<String, Long>, List<Settle
 
     fun getAmount(marketId: String, selectionId: Long, side: Side): Double {
         return coverage[Pair(marketId, selectionId)]!!
-                .filter { it.price.side === side }.map { it.price.amount }.sum()
+                .filter { it.settledBet.price.side === side }.map { it.settledBet.price.amount }.sum()
     }
 
     fun getPrice(marketId: String, selectionId: Long, side: Side): Double {
         return coverage[Pair(marketId, selectionId)]!!
-                .filter { it.price.side === side }.map { it.price.price }.average()
+                .filter { it.settledBet.price.side === side }.map { it.settledBet.price.price }.average()
     }
 
     companion object {
         val EMPTY = BetCoverage(emptyMap())
-        private fun getCoverageKey(bet: SettledBet): Pair<String, Long> {
-            return Pair(bet.betAction.market.id, bet.selectionId)
+        private fun getCoverageKey(bet: RealizedBet): Pair<String, Long> {
+            return Pair(bet.market.id, bet.settledBet.selectionId)
         }
 
-        fun from(bets: List<SettledBet>): BetCoverage {
+        fun from(bets: List<RealizedBet>): BetCoverage {
             return BetCoverage(bets.groupBy { getCoverageKey(it) })
         }
     }

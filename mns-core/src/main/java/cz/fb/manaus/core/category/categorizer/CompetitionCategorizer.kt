@@ -2,15 +2,15 @@ package cz.fb.manaus.core.category.categorizer
 
 import com.google.common.base.CharMatcher
 import com.google.common.base.Strings
-import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.repository.domain.Market
 import org.springframework.stereotype.Component
 
 @Component
 class CompetitionCategorizer : AbstractDelegatingCategorizer(PREFIX) {
 
-    public override fun getCategoryRaw(market: Market): Set<String> {
+    override fun getCategoryRaw(market: Market): Set<String> {
         val competition = market.competition
-        return if (competition == null || Strings.isNullOrEmpty(competition.name)) {
+        return if (Strings.isNullOrEmpty(competition.name)) {
             setOf("none")
         } else {
             setOf(normalize(competition.name))

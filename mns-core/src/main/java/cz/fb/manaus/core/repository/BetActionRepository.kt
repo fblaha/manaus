@@ -41,7 +41,7 @@ class BetActionRepository(private val db: Nitrite) {
 
     fun findRecentBetAction(betID: String): BetAction? {
         val options = FindOptions.sort("time", SortOrder.Descending).thenLimit(0, 1)
-        return repository.find(BetAction::betID eq betID, options).first()
+        return repository.find(BetAction::betID eq betID, options).firstOrDefault()
     }
 
     fun findRecentBetActions(limit: Int): List<BetAction> {

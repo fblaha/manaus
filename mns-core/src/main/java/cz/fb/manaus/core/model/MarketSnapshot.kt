@@ -2,10 +2,12 @@ package cz.fb.manaus.core.model
 
 import com.google.common.collect.HashBasedTable
 import com.google.common.collect.Table
+import cz.fb.manaus.core.repository.domain.RunnerPrices
+import cz.fb.manaus.core.repository.domain.Side
 import java.util.logging.Level
 import java.util.logging.Logger
 
-data class MarketSnapshot(val marketPrices: MarketPrices, val currentBets: List<Bet>,
+data class MarketSnapshot(val runnerPrices: List<RunnerPrices>, val currentBets: List<Bet>,
                           val coverage: Table<Side, Long, Bet>,
                           val tradedVolume: Map<Long, TradedVolume>?) {
 
@@ -31,10 +33,10 @@ data class MarketSnapshot(val marketPrices: MarketPrices, val currentBets: List<
             return result
         }
 
-        fun from(marketPrices: MarketPrices, currentBets: List<Bet>,
+        fun from(runnerPrices: List<RunnerPrices>, currentBets: List<Bet>,
                  tradedVolume: Map<Long, TradedVolume>?): MarketSnapshot {
             val coverage = getMarketCoverage(currentBets)
-            return MarketSnapshot(marketPrices, currentBets, coverage, tradedVolume)
+            return MarketSnapshot(runnerPrices, currentBets, coverage, tradedVolume)
         }
     }
 

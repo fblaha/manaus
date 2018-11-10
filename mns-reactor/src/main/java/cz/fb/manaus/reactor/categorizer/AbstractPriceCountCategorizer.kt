@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.categorizer
 
-import cz.fb.manaus.core.model.SettledBet
-import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.repository.domain.SettledBet
+import cz.fb.manaus.core.repository.domain.Side
 
 abstract class AbstractPriceCountCategorizer(prefix: String, maxCount: Int, private val side: Side) : AbstractCountCategorizer(prefix, maxCount) {
 

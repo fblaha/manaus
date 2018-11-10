@@ -2,57 +2,43 @@ package cz.fb.manaus.core.category
 
 import cz.fb.manaus.core.MarketCategories
 import cz.fb.manaus.core.category.categorizer.SportCategorizer
-import cz.fb.manaus.core.model.EventType
-import cz.fb.manaus.core.model.Market
-import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.repository.domain.RealizedBet
+import cz.fb.manaus.core.repository.domain.betAction
+import cz.fb.manaus.core.repository.domain.marketTemplate
+import cz.fb.manaus.core.repository.domain.settledBet
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.core.test.CoreTestFactory
 import org.hamcrest.CoreMatchers.hasItem
 import org.hamcrest.CoreMatchers.hasItems
 import org.junit.Assert.assertThat
-import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 class CategoryServiceTest : AbstractLocalTestCase() {
     @Autowired
     private lateinit var categoryService: CategoryService
-    private lateinit var market: Market
-    private lateinit var eventType: EventType
 
-    @Before
-    fun createMarket() {
-        market = CoreTestFactory.newTestMarket()
-        eventType = EventType("1", "Y")
-        market.eventType = eventType
+    @Test
+    fun `market category`() {
+        val eventType = marketTemplate.eventType
+        var market = marketTemplate
+
+        market = market.copy(eventType = eventType.copy(name = "Soccer"))
+        assertThat(categoryService.getMarketCategories(market, false), hasItem(SPORT_SOCCER))
+
+        market = market.copy(eventType = eventType.copy(name = "Tennis"))
+        assertThat(categoryService.getMarketCategories(market, false), hasItem(SPORT_TENNIS))
+
+        market = market.copy(eventType = eventType.copy(name = "Golf"))
+        assertThat(categoryService.getMarketCategories(market, false),
+                hasItem(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.GOLF))
     }
 
     @Test
-    fun testCategory() {
-        eventType.name = "Soccer"
-        var categories = categoryService.getMarketCategories(market, false)
-        assertThat(categories, hasItem(SPORT_SOCCER))
-
-        eventType.name = "Tennis"
-        categories = categoryService.getMarketCategories(market, false)
-        assertThat(categories, hasItem(SPORT_TENNIS))
-
-        eventType.name = "Horse Racing"
-        categories = categoryService.getMarketCategories(market, false)
-        assertThat(categories, hasItem(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.HORSES))
-
-        eventType.name = "Golf"
-        categories = categoryService.getMarketCategories(market, false)
-        assertThat(categories, hasItem(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.GOLF))
-    }
-
-
-    @Test
-    fun testBetCategory() {
-        val categories = categoryService.getSettledBetCategories(
-                CoreTestFactory.newSettledBet(2.0, Side.LAY), false, BetCoverage.EMPTY)
+    fun `bet category`() {
+        val bet = RealizedBet(settledBet, betAction, marketTemplate)
+        val categories = categoryService.getRealizedBetCategories(bet, false, BetCoverage.EMPTY)
         assertThat(categories,
-                hasItems("market_country_br", "market_runnerCount_3", "market_sport_soccer", "market_type_match_odds"))
+                hasItems("market_country_cz", "market_sport_soccer", "market_type_match_odds"))
     }
 
     companion object {

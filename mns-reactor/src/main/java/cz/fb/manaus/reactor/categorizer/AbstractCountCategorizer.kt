@@ -1,15 +1,16 @@
 package cz.fb.manaus.reactor.categorizer
 
 import cz.fb.manaus.core.category.BetCoverage
-import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
+import cz.fb.manaus.core.repository.domain.RealizedBet
+import cz.fb.manaus.core.repository.domain.SettledBet
 
-abstract class AbstractCountCategorizer(private val prefix: String, private val maxCount: Int) : SettledBetCategorizer {
+abstract class AbstractCountCategorizer(private val prefix: String, private val maxCount: Int) : RealizedBetCategorizer {
 
     override val isMarketSnapshotRequired: Boolean = true
 
-    override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
-        val count = getCount(settledBet)
+    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
+        val count = getCount(realizedBet)
         return setOf(prefix + toCategory(count))
     }
 

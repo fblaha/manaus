@@ -5,21 +5,21 @@ import com.google.common.collect.ImmutableRangeMap
 import com.google.common.collect.Range.*
 import com.google.common.collect.RangeMap
 import cz.fb.manaus.core.category.BetCoverage
-import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
+import cz.fb.manaus.core.repository.domain.RealizedBet
 import org.springframework.stereotype.Component
 import java.util.Objects.requireNonNull
 
 @Component
-class PriceCategorizer : SettledBetCategorizer {
+class PriceCategorizer : RealizedBetCategorizer {
 
     internal fun getCategory(price: Double): String {
         val suffix = requireNonNull<String>(CATEGORY_STEPS.get(price))
         return "priceRange_$suffix"
     }
 
-    override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
-        return setOf(getCategory(settledBet.price.price))
+    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
+        return setOf(getCategory(realizedBet.price.price))
     }
 
     companion object {

@@ -23,7 +23,6 @@
     </modules>
 
     <properties>
-        <hibernate.version>5.3.1.Final</hibernate.version>
         <kotlin.version>1.2.61</kotlin.version>
         <jackson.version>2.9.6</jackson.version>
     </properties>
@@ -170,11 +169,6 @@
                 <version>3.6</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-dbcp2</artifactId>
-                <version>2.1.1</version>
-            </dependency>
-            <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>23.1-jre</version>
@@ -189,29 +183,6 @@
                 <artifactId>mockito-kotlin</artifactId>
                 <version>1.6.0</version>
                 <scope>test</scope>
-            </dependency>
-
-            <!--core dependencies-->
-            <dependency>
-                <groupId>com.h2database</groupId>
-                <artifactId>h2</artifactId>
-                <version>1.4.197</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-core</artifactId>
-                <version>${hibernate.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>5.1.44</version>
-                <scope>runtime</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-core</artifactId>
-                <version>4.2.0</version>
             </dependency>
 
         </dependencies>

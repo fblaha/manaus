@@ -1,6 +1,8 @@
 package cz.fb.manaus.core.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import cz.fb.manaus.core.repository.domain.Price
+import cz.fb.manaus.core.repository.domain.Side
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.util.*

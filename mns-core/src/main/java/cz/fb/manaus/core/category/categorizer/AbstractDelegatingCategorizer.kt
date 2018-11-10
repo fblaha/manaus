@@ -2,14 +2,14 @@ package cz.fb.manaus.core.category.categorizer
 
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.Category
-import cz.fb.manaus.core.model.Market
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.repository.domain.Market
+import cz.fb.manaus.core.repository.domain.RealizedBet
 
 
-abstract class AbstractDelegatingCategorizer(private val prefix: String) : SettledBetCategorizer, Categorizer {
+abstract class AbstractDelegatingCategorizer(private val prefix: String) : RealizedBetCategorizer, Categorizer {
 
-    override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
-        return getCategories(settledBet.betAction.market)
+    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
+        return getCategories(realizedBet.market)
     }
 
     override fun getCategories(market: Market): Set<String> {

@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.category.categorizer
 
-import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.repository.domain.Market
 import org.springframework.stereotype.Component
 import java.text.SimpleDateFormat
 import java.util.*
@@ -10,7 +10,7 @@ class WeekDayCategorizer : AbstractDelegatingCategorizer(PREFIX) {
 
     public override fun getCategoryRaw(market: Market): Set<String> {
         val date = market.event.openDate
-        return getCategory(date)
+        return getCategory(Date.from(date))
     }
 
     internal fun getCategory(date: Date): Set<String> {

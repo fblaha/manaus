@@ -2,7 +2,7 @@ package cz.fb.manaus.core.maintanance
 
 import com.codahale.metrics.MetricRegistry
 import com.google.common.base.Stopwatch
-import cz.fb.manaus.core.dao.MarketDao
+import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Profile
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import java.util.Date.from
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -19,7 +18,7 @@ import java.util.logging.Logger
 @Profile(ManausProfiles.DB)
 class MarketCleaner(
         @param:Value(HIST_DAYS_EL) private val marketHistoryDays: Long,
-        private val marketDao: MarketDao,
+        private val marketRepository: MarketRepository,
         private val metricRegistry: MetricRegistry) : PeriodicMaintenanceTask {
 
     override val name: String = "marketCleanup"
@@ -28,7 +27,7 @@ class MarketCleaner(
 
     override fun execute(): ConfigUpdate {
         val stopwatch = Stopwatch.createUnstarted().start()
-        val count = marketDao.deleteMarkets(from(Instant.now().minus(marketHistoryDays, ChronoUnit.DAYS)))
+        val count = marketRepository.delete(Instant.now().minus(marketHistoryDays, ChronoUnit.DAYS))
         metricRegistry.counter("purge.market").inc(count.toLong())
         val elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
         log.log(Level.INFO, "DELETE_MARKETS: ''{0}'' obsolete markets removed in ''{1}'' seconds", arrayOf(count, elapsed))

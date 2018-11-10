@@ -2,17 +2,17 @@ package cz.fb.manaus.core.category.categorizer
 
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.Category
-import cz.fb.manaus.core.model.Market
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.repository.domain.Market
+import cz.fb.manaus.core.repository.domain.RealizedBet
 import org.springframework.stereotype.Component
 
 
 @Component
-class MarketRegexpCategorizer : AbstractRegexpResolver(Category.MARKET_PREFIX + PREFIX), SettledBetCategorizer, Categorizer {
+class MarketRegexpCategorizer : AbstractRegexpResolver(Category.MARKET_PREFIX + PREFIX), RealizedBetCategorizer, Categorizer {
 
-    override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
-        val marketName = settledBet.betAction.market.name
-        val eventName = settledBet.betAction.market.event.name
+    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
+        val marketName = realizedBet.market.name
+        val eventName = realizedBet.market.event.name
         return getCategories(marketName, eventName)
     }
 

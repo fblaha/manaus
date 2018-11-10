@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.manager.filter
 
-import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.repository.domain.Market
 
 interface MarketFilter {
 

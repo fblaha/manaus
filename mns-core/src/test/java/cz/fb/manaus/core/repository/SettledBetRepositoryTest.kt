@@ -1,8 +1,8 @@
 package cz.fb.manaus.core.repository
 
 import cz.fb.manaus.core.repository.domain.Price
-import cz.fb.manaus.core.repository.domain.SettledBet
 import cz.fb.manaus.core.repository.domain.Side
+import cz.fb.manaus.core.repository.domain.settledBet
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.Before
@@ -10,18 +10,6 @@ import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import kotlin.test.assertEquals
-
-
-val settledBet: SettledBet = SettledBet(
-        id = "1",
-        selectionId = 100,
-        selectionName = "Banik",
-        profitAndLoss = 5.0,
-        matched = Instant.now(),
-        placed = Instant.now(),
-        settled = Instant.now(),
-        price = Price(3.0, 3.0, Side.BACK)
-)
 
 class SettledBetRepositoryTest : AbstractDatabaseTestCase() {
 

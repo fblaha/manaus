@@ -1,20 +1,20 @@
 package cz.fb.manaus.reactor.categorizer
 
 import cz.fb.manaus.core.category.BetCoverage
-import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
+import cz.fb.manaus.core.repository.domain.RealizedBet
 import org.springframework.stereotype.Component
 import java.time.Clock
 import java.util.*
 
 @Component
-class RandomCategorizer : SettledBetCategorizer {
+class RandomCategorizer : RealizedBetCategorizer {
 
     private val random = Random(Clock.systemUTC().millis())
 
     override val isSimulationSupported: Boolean = false
 
-    override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
+    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
         val randInt = random.nextInt(5)
         return setOf("random_$randInt")
     }

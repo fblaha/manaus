@@ -1,7 +1,7 @@
 package cz.fb.manaus.core.manager.filter
 
-import cz.fb.manaus.core.model.Market
-import cz.fb.manaus.core.model.Price
+import cz.fb.manaus.core.repository.domain.Market
+import cz.fb.manaus.core.repository.domain.Price
 import org.springframework.stereotype.Component
 
 @Component

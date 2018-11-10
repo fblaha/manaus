@@ -3,8 +3,8 @@ package cz.fb.manaus.reactor.categorizer
 import com.google.common.collect.BoundType
 import com.google.common.collect.ImmutableRangeMap
 import com.google.common.collect.Range
-import cz.fb.manaus.core.model.BetAction
-import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.repository.domain.BetAction
+import cz.fb.manaus.core.repository.domain.Market
 import org.springframework.stereotype.Component
 
 @Component

@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.categorizer
 
 
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.repository.domain.SettledBet
 import org.springframework.stereotype.Component
 import java.util.*
 

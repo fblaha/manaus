@@ -1,18 +1,18 @@
 package cz.fb.manaus.reactor.categorizer
 
 import cz.fb.manaus.core.category.BetCoverage
-import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer
-import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
+import cz.fb.manaus.core.repository.domain.Price
+import cz.fb.manaus.core.repository.domain.RealizedBet
 import org.springframework.stereotype.Component
 
 @Component
-class LastMatchedReciprocalCategorizer : SettledBetCategorizer {
+class LastMatchedReciprocalCategorizer : RealizedBetCategorizer {
 
     override val isMarketSnapshotRequired: Boolean = true
 
-    override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
-        val marketPrices = settledBet.betAction.marketPrices
+    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
+        val marketPrices = realizedBet.betAction.marketPrices
         val reciprocal = marketPrices.lastMatchedReciprocal
         return if (reciprocal.isPresent) {
             when {

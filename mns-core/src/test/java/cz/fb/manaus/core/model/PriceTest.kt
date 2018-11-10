@@ -1,5 +1,7 @@
 package cz.fb.manaus.core.model
 
+import cz.fb.manaus.core.repository.domain.Price
+import cz.fb.manaus.core.repository.domain.Side
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals

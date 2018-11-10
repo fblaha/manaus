@@ -10,10 +10,12 @@ import cz.fb.manaus.core.manager.AbstractMarketDataAwareTestCase
 import junit.framework.TestCase.assertTrue
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert.assertThat
+import org.junit.Ignore
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 
+@Ignore
 class CategoryServiceRealDataTest : AbstractMarketDataAwareTestCase() {
 
     @Autowired

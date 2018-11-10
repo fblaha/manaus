@@ -1,31 +1,32 @@
 package cz.fb.manaus.core.settlement
 
-import cz.fb.manaus.core.dao.AbstractDaoTest
-import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.core.model.SettledBet
-import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.CoreTestFactory
-import cz.fb.manaus.core.test.ModelFactory
+import cz.fb.manaus.core.repository.BetActionRepository
+import cz.fb.manaus.core.repository.MarketRepository
+import cz.fb.manaus.core.repository.domain.betAction
+import cz.fb.manaus.core.repository.domain.marketTemplate
+import cz.fb.manaus.core.repository.domain.settledBet
+import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
 import kotlin.test.assertEquals
 
-class SettledBetSaverTest : AbstractDaoTest() {
+class SettledBetSaverTest : AbstractDatabaseTestCase() {
 
     @Autowired
     private lateinit var saver: SettledBetSaver
+    @Autowired
+    private lateinit var marketRepository: MarketRepository
+    @Autowired
+    private lateinit var betActionRepository: BetActionRepository
 
     @Test
     fun testSaver() {
-        createMarketWithSingleAction()
-        assertEquals(SaveStatus.OK, saver.saveBet(AbstractDaoTest.BET_ID, createAction()))
-        assertEquals(SaveStatus.COLLISION, saver.saveBet(AbstractDaoTest.BET_ID, createAction()))
-        assertEquals(SaveStatus.NO_ACTION, saver.saveBet(AbstractDaoTest.BET_ID + "x", createAction()))
-    }
+        marketRepository.saveOrUpdate(marketTemplate)
+        betActionRepository.save(betAction.copy(betID = "testSaver"))
 
-    private fun createAction(): SettledBet {
-        return ModelFactory.newSettled(CoreTestFactory.DRAW, CoreTestFactory.DRAW_NAME, 5.0, Date(), Price(3.0, 3.0, Side.LAY))
+        val bet = settledBet.copy(id = "testSaver")
+        assertEquals(SaveStatus.OK, saver.saveBet(bet))
+        assertEquals(SaveStatus.COLLISION, saver.saveBet(bet))
+        assertEquals(SaveStatus.NO_ACTION, saver.saveBet(bet.copy(id = "missing")))
     }
-
 }

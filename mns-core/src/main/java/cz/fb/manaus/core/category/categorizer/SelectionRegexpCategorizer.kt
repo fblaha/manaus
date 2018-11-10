@@ -1,14 +1,14 @@
 package cz.fb.manaus.core.category.categorizer
 
 import cz.fb.manaus.core.category.BetCoverage
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.repository.domain.RealizedBet
 import org.springframework.stereotype.Component
 
 @Component
-class SelectionRegexpCategorizer : AbstractRegexpResolver("selectionRegexp_"), SettledBetCategorizer {
+class SelectionRegexpCategorizer : AbstractRegexpResolver("selectionRegexp_"), RealizedBetCategorizer {
 
-    override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
-        val selectionName = settledBet.selectionName
+    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
+        val selectionName = realizedBet.settledBet.selectionName
         return getCategories(selectionName)
     }
 

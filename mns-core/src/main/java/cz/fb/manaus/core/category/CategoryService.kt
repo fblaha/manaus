@@ -2,10 +2,10 @@ package cz.fb.manaus.core.category
 
 import com.google.common.collect.ImmutableSet.copyOf
 import cz.fb.manaus.core.category.categorizer.Categorizer
-import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer
+import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
 import cz.fb.manaus.core.category.categorizer.SimulationAware
-import cz.fb.manaus.core.model.Market
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.repository.domain.Market
+import cz.fb.manaus.core.repository.domain.RealizedBet
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
@@ -15,7 +15,7 @@ class CategoryService {
     @Autowired
     private val categorizers = mutableListOf<Categorizer>()
     @Autowired
-    private val settledBetCategorizers = mutableListOf<SettledBetCategorizer>()
+    private val settledBetCategorizers = mutableListOf<RealizedBetCategorizer>()
 
     fun getMarketCategories(market: Market, simulationAwareOnly: Boolean): Set<String> {
         val result = HashSet<String>()
@@ -26,20 +26,20 @@ class CategoryService {
         return copyOf(result)
     }
 
-    fun getSettledBetCategories(settledBet: SettledBet, simulationAwareOnly: Boolean, coverage: BetCoverage): Set<String> {
+    fun getRealizedBetCategories(realizedBet: RealizedBet, simulationAwareOnly: Boolean, coverage: BetCoverage): Set<String> {
         val result = HashSet<String>()
         for (categorizer in filterCategorizers(settledBetCategorizers, simulationAwareOnly)) {
-            val prices = settledBet.betAction.marketPrices
-            if (prices == null && categorizer.isMarketSnapshotRequired) continue
-            val categories = categorizer.getCategories(settledBet, coverage)
+            val prices = realizedBet.betAction.runnerPrices
+            if (prices.isEmpty() && categorizer.isMarketSnapshotRequired) continue
+            val categories = categorizer.getCategories(realizedBet, coverage)
             result.addAll(categories)
         }
         return copyOf(result)
     }
 
-    fun filterBets(settledBets: List<SettledBet>, projection: String, coverage: BetCoverage): List<SettledBet> {
-        return settledBets.filter { input ->
-            val categories = getSettledBetCategories(input, false, coverage)
+    fun filterBets(realizedBets: List<RealizedBet>, projection: String, coverage: BetCoverage): List<RealizedBet> {
+        return realizedBets.filter { input ->
+            val categories = getRealizedBetCategories(input, false, coverage)
             categories.any { it.contains(projection) }
         }
     }

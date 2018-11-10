@@ -7,16 +7,16 @@ import com.google.common.collect.Range.closedOpen
 import com.google.common.collect.Range.upTo
 import com.google.common.collect.RangeMap
 import cz.fb.manaus.core.category.BetCoverage
-import cz.fb.manaus.core.category.categorizer.SettledBetCategorizer
-import cz.fb.manaus.core.model.SettledBet
-import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
+import cz.fb.manaus.core.repository.domain.RealizedBet
+import cz.fb.manaus.core.repository.domain.Side
 import org.apache.commons.math3.util.Precision
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class ReciprocalCategorizer : SettledBetCategorizer {
+class ReciprocalCategorizer : RealizedBetCategorizer {
 
     @Autowired(required = false)
     private val customReciprocalRangeSupplier: CustomReciprocalRangeSupplier? = null
@@ -32,8 +32,8 @@ class ReciprocalCategorizer : SettledBetCategorizer {
         }
     }
 
-    override fun getCategories(settledBet: SettledBet, coverage: BetCoverage): Set<String> {
-        val reciprocal = settledBet.betAction.marketPrices.getReciprocal(Side.BACK)
+    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
+        val reciprocal = realizedBet.betAction.marketPrices.getReciprocal(Side.BACK)
         if (reciprocal.isPresent) {
             val result = mutableSetOf<String>()
             handleCustomRange(reciprocal.asDouble, result)
