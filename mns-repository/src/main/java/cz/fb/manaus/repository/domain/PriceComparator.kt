@@ -1,4 +1,4 @@
-package cz.fb.manaus.repository
+package cz.fb.manaus.repository.domain
 
 
 object PriceComparator : Comparator<Price> {

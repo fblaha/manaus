@@ -1,5 +1,6 @@
 package cz.fb.manaus.repository
 
+import cz.fb.manaus.repository.domain.BetAction
 import org.dizitart.kno2.filters.eq
 import org.dizitart.kno2.getRepository
 import org.dizitart.no2.FindOptions

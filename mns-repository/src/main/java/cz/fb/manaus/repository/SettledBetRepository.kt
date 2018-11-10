@@ -1,5 +1,7 @@
 package cz.fb.manaus.repository
 
+import cz.fb.manaus.repository.domain.SettledBet
+import cz.fb.manaus.repository.domain.Side
 import org.dizitart.kno2.filters.and
 import org.dizitart.kno2.filters.eq
 import org.dizitart.kno2.filters.gte

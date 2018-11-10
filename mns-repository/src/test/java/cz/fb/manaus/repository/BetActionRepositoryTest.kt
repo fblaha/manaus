@@ -1,5 +1,6 @@
 package cz.fb.manaus.repository
 
+import cz.fb.manaus.repository.domain.*
 import org.dizitart.kno2.nitrite
 import org.junit.Before
 import org.junit.Test

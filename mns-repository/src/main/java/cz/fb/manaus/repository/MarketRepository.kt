@@ -1,5 +1,6 @@
 package cz.fb.manaus.repository
 
+import cz.fb.manaus.repository.domain.Market
 import org.dizitart.kno2.filters.*
 import org.dizitart.kno2.getRepository
 import org.dizitart.no2.FindOptions
