@@ -18,4 +18,9 @@ data class Market(
         val runners: List<Runner>
 ) {
     internal val openDate: Instant = event.openDate
+
+    fun getRunner(selectionId: Long): Runner {
+        return runners.first { it.selectionId == selectionId }
+    }
+
 }
