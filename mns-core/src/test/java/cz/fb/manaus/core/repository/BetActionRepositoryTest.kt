@@ -1,9 +1,11 @@
 package cz.fb.manaus.core.repository
 
 import cz.fb.manaus.core.repository.domain.*
-import org.dizitart.kno2.nitrite
+import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.Before
 import org.junit.Test
+import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -34,19 +36,15 @@ val betAction = BetAction(
         properties = mapOf("x" to "y")
 )
 
-class BetActionRepositoryTest {
+class BetActionRepositoryTest : AbstractDatabaseTestCase() {
 
+    @Autowired
     private lateinit var repository: BetActionRepository
 
     @Before
     fun setUp() {
-        val db = nitrite {
-            autoCommitBufferSize = 2048
-            autoCompact = false
-        }
-        repository = BetActionRepository(db)
+        repository.repository.remove(ObjectFilters.ALL)
     }
-
     @Test
     fun save() {
         assertTrue(repository.save(betAction) != 0L)

@@ -1,9 +1,11 @@
 package cz.fb.manaus.core.repository
 
 import cz.fb.manaus.core.repository.domain.*
-import org.dizitart.kno2.nitrite
+import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.Before
 import org.junit.Test
+import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -27,17 +29,15 @@ val market = Market(id = "2",
 )
 
 
-class MarketRepositoryTest {
+class MarketRepositoryTest : AbstractDatabaseTestCase() {
 
+    @Autowired
     private lateinit var marketRepository: MarketRepository
+
 
     @Before
     fun setUp() {
-        val db = nitrite {
-            autoCommitBufferSize = 2048
-            autoCompact = false
-        }
-        marketRepository = MarketRepository(db)
+        marketRepository.repository.remove(ObjectFilters.ALL)
     }
 
     @Test

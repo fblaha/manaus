@@ -3,9 +3,11 @@ package cz.fb.manaus.core.repository
 import cz.fb.manaus.core.repository.domain.Price
 import cz.fb.manaus.core.repository.domain.SettledBet
 import cz.fb.manaus.core.repository.domain.Side
-import org.dizitart.kno2.nitrite
+import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.Before
 import org.junit.Test
+import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import kotlin.test.assertEquals
 
@@ -21,17 +23,15 @@ val settledBet: SettledBet = SettledBet(
         price = Price(3.0, 3.0, Side.BACK)
 )
 
-class SettledBetRepositoryTest {
+class SettledBetRepositoryTest : AbstractDatabaseTestCase() {
 
+    @Autowired
     private lateinit var settledBetRepository: SettledBetRepository
+
 
     @Before
     fun setUp() {
-        val db = nitrite {
-            autoCommitBufferSize = 2048
-            autoCompact = false
-        }
-        settledBetRepository = SettledBetRepository(db)
+        settledBetRepository.repository.remove(ObjectFilters.ALL)
     }
 
     @Test

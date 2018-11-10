@@ -3,6 +3,8 @@ package cz.fb.manaus.spring
 import com.google.common.collect.ImmutableSet
 import cz.fb.manaus.core.model.*
 import org.apache.commons.dbcp2.BasicDataSource
+import org.dizitart.kno2.nitrite
+import org.dizitart.no2.Nitrite
 import org.flywaydb.core.Flyway
 import org.hibernate.SessionFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -40,6 +42,14 @@ open class CoreDatabaseConfiguration {
         dataSource.password = password
         dataSource.validationQuery = "select 1"
         return dataSource
+    }
+
+    @Bean
+    open fun db(): Nitrite {
+        return nitrite {
+            autoCommitBufferSize = 2048
+            autoCompact = false
+        }
     }
 
     @Bean
