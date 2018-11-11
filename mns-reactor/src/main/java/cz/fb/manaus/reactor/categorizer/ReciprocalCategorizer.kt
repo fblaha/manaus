@@ -8,8 +8,9 @@ import com.google.common.collect.Range.upTo
 import com.google.common.collect.RangeMap
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
-import cz.fb.manaus.core.repository.domain.RealizedBet
-import cz.fb.manaus.core.repository.domain.Side
+import cz.fb.manaus.core.model.RealizedBet
+import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.getReciprocal
 import org.apache.commons.math3.util.Precision
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -33,11 +34,11 @@ class ReciprocalCategorizer : RealizedBetCategorizer {
     }
 
     override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
-        val reciprocal = realizedBet.betAction.marketPrices.getReciprocal(Side.BACK)
-        if (reciprocal.isPresent) {
+        val reciprocal = getReciprocal(realizedBet.betAction.runnerPrices, Side.BACK)
+        if (reciprocal != null) {
             val result = mutableSetOf<String>()
-            handleCustomRange(reciprocal.asDouble, result)
-            val rounded = Precision.round(reciprocal.asDouble, 2)
+            handleCustomRange(reciprocal, result)
+            val rounded = Precision.round(reciprocal, 2)
             val strRange = Objects.requireNonNull<String>(RANGES.get(rounded), reciprocal.toString())
             result.add(RECIPROCAL + strRange)
             return result

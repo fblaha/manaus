@@ -7,9 +7,9 @@ import com.google.common.collect.Range.*
 import com.google.common.collect.RangeMap
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
-import cz.fb.manaus.core.repository.domain.Market
-import cz.fb.manaus.core.repository.domain.RealizedBet
-import cz.fb.manaus.core.repository.domain.SettledBet
+import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.model.RealizedBet
+import java.time.Instant
 import java.time.temporal.ChronoUnit.*
 import java.util.*
 import java.util.Objects.requireNonNull
@@ -47,15 +47,15 @@ abstract class AbstractBeforeCategorizer(private val category: String) : Realize
             .put(downTo(50L, BoundType.CLOSED), category + MIN + "50-60")
             .build()
 
-    protected abstract fun getDate(settledBet: SettledBet): Date?
+    protected abstract fun getDate(realizedBet: RealizedBet): Instant?
 
     override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
-        val date = getDate(realizedBet.settledBet) ?: return setOf()
+        val date = getDate(realizedBet) ?: return setOf()
         val market = realizedBet.market
-        if (date.toInstant().isAfter(market.event.openDate)) {
+        if (date.isAfter(market.event.openDate)) {
             log.log(Level.WARNING, "BEFORE_RESOLVER: ''{0}'' date ''{1}'' after market start  ''{2}''", arrayOf(category, date, market))
         }
-        val diffDay = DAYS.between(date.toInstant(), market.event.openDate)
+        val diffDay = DAYS.between(date, market.event.openDate)
         val result = HashSet<String>()
         result.add(requireNonNull<String>(dayMap.get(diffDay)))
         if (diffDay == 0L) {
@@ -64,8 +64,8 @@ abstract class AbstractBeforeCategorizer(private val category: String) : Realize
         return result
     }
 
-    private fun handleDay(date: Date, market: Market, result: MutableSet<String>) {
-        val diffHours = HOURS.between(date.toInstant(), market.event.openDate)
+    private fun handleDay(date: Instant, market: Market, result: MutableSet<String>) {
+        val diffHours = HOURS.between(date, market.event.openDate)
         result.add(requireNonNull<String>(hourMap.get(diffHours)))
         if (diffHours == 0L) {
             handleMin(date, market, result)
@@ -73,8 +73,8 @@ abstract class AbstractBeforeCategorizer(private val category: String) : Realize
         }
     }
 
-    private fun handleMin(date: Date, market: Market, result: MutableSet<String>) {
-        val diffMin = MINUTES.between(date.toInstant(), market.event.openDate)
+    private fun handleMin(date: Instant, market: Market, result: MutableSet<String>) {
+        val diffMin = MINUTES.between(date, market.event.openDate)
         result.add(requireNonNull<String>(minMap.get(diffMin)))
     }
 

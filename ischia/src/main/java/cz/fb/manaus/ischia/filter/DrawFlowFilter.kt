@@ -8,5 +8,5 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile(ManausProfiles.PRODUCTION)
-class DrawFlowFilter : FlowFilter(Range.all(), Range.singleton(1),
+class DrawFlowFilter : FlowFilter(Range.all(),
         { _, runner -> runner.name.toLowerCase().contains("draw") }, emptySet())

@@ -7,9 +7,9 @@ import com.google.common.collect.Range.closedOpen
 import com.google.common.collect.RangeMap
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
-import cz.fb.manaus.core.repository.domain.RealizedBet
-import cz.fb.manaus.core.repository.domain.Side
-import cz.fb.manaus.reactor.price.Fairness
+import cz.fb.manaus.core.model.RealizedBet
+import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.getBestPrices
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -24,9 +24,8 @@ class FairnessCategorizer : RealizedBetCategorizer {
     override val isMarketSnapshotRequired: Boolean = true
 
     override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
-        val marketPrices = realizedBet.betAction.marketPrices
-        val fairness = calculator.getFairness(marketPrices.winnerCount.toDouble(),
-                Fairness.toKotlin(marketPrices.getBestPrices(Side.BACK)))
+        val marketPrices = realizedBet.betAction.runnerPrices
+        val fairness = calculator.getFairness(1, getBestPrices(marketPrices, Side.BACK))
         return setOf(getCategory(fairness!!))
     }
 

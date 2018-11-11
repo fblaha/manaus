@@ -6,4 +6,4 @@ import org.springframework.stereotype.Component
 
 
 @Component
-class HappyFlowFilter : FlowFilter(Range.all(), Range.all(), { _, _ -> true }, setOf())
+class HappyFlowFilter : FlowFilter(Range.all(), { _, _ -> true }, setOf())

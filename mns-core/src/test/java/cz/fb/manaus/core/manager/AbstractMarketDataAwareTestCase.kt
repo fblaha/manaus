@@ -2,7 +2,7 @@ package cz.fb.manaus.core.manager
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
-import cz.fb.manaus.core.repository.domain.Market
+import cz.fb.manaus.core.model.Market
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.junit.Before
 import org.springframework.beans.factory.annotation.Autowired

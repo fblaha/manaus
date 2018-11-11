@@ -2,9 +2,6 @@ package cz.fb.manaus.core.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import cz.fb.manaus.core.provider.ExchangeProvider
-import cz.fb.manaus.core.repository.domain.Price
-import cz.fb.manaus.core.repository.domain.Side
-import cz.fb.manaus.core.repository.domain.marketTemplate
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.junit.Assert.*
 import org.junit.Test

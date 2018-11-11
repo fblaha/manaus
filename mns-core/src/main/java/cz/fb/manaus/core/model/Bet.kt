@@ -1,7 +1,6 @@
 package cz.fb.manaus.core.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import cz.fb.manaus.core.repository.domain.Price
 import java.util.*
 
 data class Bet(val betId: String? = null,
@@ -10,7 +9,7 @@ data class Bet(val betId: String? = null,
                val requestedPrice: Price,
                val placedDate: Date? = null,
                val matchedAmount: Double = 0.0,
-               var actionId: Int = 0) {
+               var actionId: Long = 0) {
 
     val isMatched: Boolean
         @JsonIgnore

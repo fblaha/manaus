@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.category.categorizer
 
-import cz.fb.manaus.core.repository.domain.Market
+import cz.fb.manaus.core.model.Market
 import org.springframework.stereotype.Component
 import java.text.SimpleDateFormat
 import java.util.*

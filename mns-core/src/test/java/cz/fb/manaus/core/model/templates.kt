@@ -1,10 +1,10 @@
-package cz.fb.manaus.core.repository.domain
+package cz.fb.manaus.core.model
 
 import java.time.Instant
 
 val settledBet: SettledBet = SettledBet(
         id = "1",
-        selectionId = 100,
+        selectionId = SEL_HOME,
         selectionName = "Banik",
         profitAndLoss = 5.0,
         matched = Instant.now(),
@@ -15,7 +15,7 @@ val settledBet: SettledBet = SettledBet(
 
 val runnerPrices = listOf(
         RunnerPrices(
-                selectionId = 100,
+                selectionId = SEL_HOME,
                 matchedAmount = 100.0,
                 lastMatchedPrice = 3.0,
                 prices = listOf(
@@ -29,7 +29,7 @@ val betAction = BetAction(
         id = 0,
         marketID = "2",
         time = Instant.now(),
-        selectionID = 100,
+        selectionID = SEL_HOME,
         betID = null,
         betActionType = BetActionType.PLACE,
         runnerPrices = runnerPrices,
@@ -44,7 +44,7 @@ val marketTemplate = Market(id = "2",
         matchedAmount = 100.0,
         event = Event(
                 id = "100",
-                name = "Sparta vs Ostrava",
+                name = "Ostrava vs Sparta",
                 openDate = Instant.now(),
                 timezone = "UTC",
                 countryCode = "cz",
@@ -52,8 +52,8 @@ val marketTemplate = Market(id = "2",
         competition = Competition("100", "Czech League"),
         eventType = EventType("1000", "soccer"),
         runners = listOf(
-                Runner(100, "Banik Ostrava", 0.0, 0),
-                Runner(200, "Sparta Praha", 0.0, 0),
-                Runner(300, "The Draw", 0.0, 0)
+                Runner(SEL_HOME, "Banik Ostrava", 0.0, 0),
+                Runner(SEL_AWAY, "Sparta Praha", 0.0, 0),
+                Runner(SEL_DRAW, "The Draw", 0.0, 0)
         )
 )

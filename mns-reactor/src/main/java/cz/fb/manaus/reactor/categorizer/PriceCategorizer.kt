@@ -6,7 +6,7 @@ import com.google.common.collect.Range.*
 import com.google.common.collect.RangeMap
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
-import cz.fb.manaus.core.repository.domain.RealizedBet
+import cz.fb.manaus.core.model.RealizedBet
 import org.springframework.stereotype.Component
 import java.util.Objects.requireNonNull
 
@@ -19,7 +19,7 @@ class PriceCategorizer : RealizedBetCategorizer {
     }
 
     override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
-        return setOf(getCategory(realizedBet.price.price))
+        return setOf(getCategory(realizedBet.settledBet.price.price))
     }
 
     companion object {

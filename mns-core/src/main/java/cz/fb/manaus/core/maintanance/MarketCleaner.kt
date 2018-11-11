@@ -27,6 +27,7 @@ class MarketCleaner(
 
     override fun execute(): ConfigUpdate {
         val stopwatch = Stopwatch.createUnstarted().start()
+        // TODO delete bets and actions
         val count = marketRepository.delete(Instant.now().minus(marketHistoryDays, ChronoUnit.DAYS))
         metricRegistry.counter("purge.market").inc(count.toLong())
         val elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)

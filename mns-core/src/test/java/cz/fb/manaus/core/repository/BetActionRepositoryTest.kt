@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.repository
 
-import cz.fb.manaus.core.repository.domain.betAction
+import cz.fb.manaus.core.model.betAction
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.Before
@@ -15,58 +15,58 @@ import kotlin.test.assertTrue
 class BetActionRepositoryTest : AbstractDatabaseTestCase() {
 
     @Autowired
-    private lateinit var repository: BetActionRepository
+    private lateinit var betActionRepository: BetActionRepository
 
     @Before
     fun setUp() {
-        repository.repository.remove(ObjectFilters.ALL)
+        betActionRepository.repository.remove(ObjectFilters.ALL)
     }
     @Test
     fun save() {
-        assertTrue(repository.save(betAction) != 0L)
+        assertTrue(betActionRepository.save(betAction) != 0L)
     }
 
     @Test
     fun `set bet ID`() {
-        val actionID = repository.save(betAction)
-        assertNull(repository.find("2").first().betID)
-        repository.setBetID(actionID, "100")
-        assertEquals(1, repository.find("2").size)
-        assertEquals("100", repository.find("2").first().betID)
+        val actionID = betActionRepository.save(betAction)
+        assertNull(betActionRepository.find("2").first().betID)
+        betActionRepository.setBetID(actionID, "100")
+        assertEquals(1, betActionRepository.find("2").size)
+        assertEquals("100", betActionRepository.find("2").first().betID)
     }
 
     @Test
     fun find() {
-        repository.save(betAction)
-        assertEquals(1, repository.find("2").size)
-        assertEquals(0, repository.find("3").size)
+        betActionRepository.save(betAction)
+        assertEquals(1, betActionRepository.find("2").size)
+        assertEquals(0, betActionRepository.find("3").size)
     }
 
     @Test
     fun delete() {
-        repository.save(betAction)
-        assertEquals(1, repository.find("2").size)
-        assertEquals(1, repository.delete("2"))
-        assertEquals(0, repository.find("2").size)
+        betActionRepository.save(betAction)
+        assertEquals(1, betActionRepository.find("2").size)
+        assertEquals(1, betActionRepository.delete("2"))
+        assertEquals(0, betActionRepository.find("2").size)
     }
 
     @Test
     fun `get recent action`() {
-        val recent = repository.save(betAction)
-        repository.setBetID(recent, "100")
-        val older = repository.save(betAction.copy(time = Instant.now().minusSeconds(600)))
-        repository.setBetID(older, "100")
-        assertEquals(recent, repository.findRecentBetAction("100")!!.id)
+        val recent = betActionRepository.save(betAction)
+        betActionRepository.setBetID(recent, "100")
+        val older = betActionRepository.save(betAction.copy(time = Instant.now().minusSeconds(600)))
+        betActionRepository.setBetID(older, "100")
+        assertEquals(recent, betActionRepository.findRecentBetAction("100")!!.id)
     }
 
     @Test
     fun `get recent actions`() {
-        val recent = repository.save(betAction)
-        val older = repository.save(betAction.copy(time = Instant.now().minusSeconds(600)))
-        val actions = repository.findRecentBetActions(100)
+        val recent = betActionRepository.save(betAction)
+        val older = betActionRepository.save(betAction.copy(time = Instant.now().minusSeconds(600)))
+        val actions = betActionRepository.findRecentBetActions(100)
         assertEquals(2, actions.size)
         assertEquals(recent, actions.first().id)
         assertEquals(older, actions.last().id)
-        assertEquals(1, repository.findRecentBetActions(1).size)
+        assertEquals(1, betActionRepository.findRecentBetActions(1).size)
     }
 }

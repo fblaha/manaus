@@ -1,4 +1,4 @@
-package cz.fb.manaus.core.repository.domain
+package cz.fb.manaus.core.model
 
 import org.dizitart.no2.IndexType
 import org.dizitart.no2.objects.Id
@@ -11,8 +11,7 @@ import java.time.Instant
         Index(value = "settled", type = IndexType.NonUnique)
 )
 data class SettledBet(
-        @Id var id: String,
-        // TODO ID
+        @Id var id: String = "",
         val selectionId: Long,
         val selectionName: String,
         val profitAndLoss: Double,

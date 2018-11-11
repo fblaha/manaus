@@ -5,15 +5,12 @@ import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
-import cz.fb.manaus.reactor.price.PriceService
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.beans.factory.annotation.Autowired
 
 abstract class AbstractTooCloseUpdateValidator(private val closeSteps: Set<Int>) : Validator {
     @Autowired
     private lateinit var roundingService: RoundingService
-    @Autowired
-    private lateinit var priceService: PriceService
 
     override val isUpdateOnly: Boolean = true
 

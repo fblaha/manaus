@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.manager.filter
 
-import cz.fb.manaus.core.repository.domain.marketTemplate
+import cz.fb.manaus.core.model.marketTemplate
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired

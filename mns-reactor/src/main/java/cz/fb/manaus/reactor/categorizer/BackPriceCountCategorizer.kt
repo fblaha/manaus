@@ -1,6 +1,6 @@
 package cz.fb.manaus.reactor.categorizer
 
-import cz.fb.manaus.core.repository.domain.Side
+import cz.fb.manaus.core.model.Side
 import org.springframework.stereotype.Component
 
 @Component

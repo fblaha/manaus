@@ -1,6 +1,6 @@
 package cz.fb.manaus.reactor.categorizer
 
-import cz.fb.manaus.core.repository.domain.RealizedBet
+import cz.fb.manaus.core.model.RealizedBet
 import org.springframework.stereotype.Component
 
 @Component

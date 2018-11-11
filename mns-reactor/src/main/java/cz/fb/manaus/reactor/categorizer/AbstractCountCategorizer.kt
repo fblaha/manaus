@@ -2,8 +2,7 @@ package cz.fb.manaus.reactor.categorizer
 
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
-import cz.fb.manaus.core.repository.domain.RealizedBet
-import cz.fb.manaus.core.repository.domain.SettledBet
+import cz.fb.manaus.core.model.RealizedBet
 
 abstract class AbstractCountCategorizer(private val prefix: String, private val maxCount: Int) : RealizedBetCategorizer {
 
@@ -14,7 +13,7 @@ abstract class AbstractCountCategorizer(private val prefix: String, private val 
         return setOf(prefix + toCategory(count))
     }
 
-    protected abstract fun getCount(bet: SettledBet): Int
+    protected abstract fun getCount(bet: RealizedBet): Int
 
     private fun toCategory(count: Int): String {
         return if (count >= maxCount) {

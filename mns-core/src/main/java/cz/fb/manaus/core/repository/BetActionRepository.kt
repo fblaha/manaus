@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.repository
 
-import cz.fb.manaus.core.repository.domain.BetAction
+import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.spring.ManausProfiles
 import org.dizitart.kno2.filters.eq
 import org.dizitart.kno2.getRepository

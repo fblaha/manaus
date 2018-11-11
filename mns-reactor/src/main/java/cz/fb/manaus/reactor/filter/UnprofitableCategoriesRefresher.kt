@@ -11,14 +11,14 @@ import java.time.Duration
 
 @Component
 @Profile(ManausProfiles.DB)
-class UnprofitableCategoriesRefresher(@param:Value(REFRESH_PERIOD_EL) private val refreshPeriodHours: Int) : PeriodicMaintenanceTask {
+class UnprofitableCategoriesRefresher(@param:Value(REFRESH_PERIOD_EL) private val refreshPeriodHours: Long) : PeriodicMaintenanceTask {
 
     @Autowired(required = false)
     private val unprofitableCategoriesRegistries = mutableListOf<AbstractUnprofitableCategoriesRegistry>()
 
     override val name: String = "unprofitableCategoriesRefresh"
 
-    override val pausePeriod: Duration = Duration.ofHours(8)
+    override val pausePeriod: Duration = Duration.ofHours(refreshPeriodHours)
 
     override fun execute(): ConfigUpdate {
         val configUpdate = ConfigUpdate.empty(Duration.ofDays(1))

@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.repository
 
-import cz.fb.manaus.core.repository.domain.marketTemplate
+import cz.fb.manaus.core.model.marketTemplate
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.Before

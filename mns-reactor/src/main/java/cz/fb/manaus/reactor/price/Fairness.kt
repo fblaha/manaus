@@ -2,7 +2,6 @@ package cz.fb.manaus.reactor.price
 
 import com.google.common.base.MoreObjects
 import cz.fb.manaus.core.model.Side
-import java.util.*
 import java.util.Objects.requireNonNull
 
 class Fairness(val back: Double? = null, val lay: Double? = null) {
@@ -33,12 +32,6 @@ class Fairness(val back: Double? = null, val lay: Double? = null) {
                 .add("back", back)
                 .add("lay", lay)
                 .toString()
-    }
-
-    companion object {
-        fun toKotlin(values: List<OptionalDouble>): List<Double?> {
-            return values.map { if (it.isPresent) it.asDouble else null }
-        }
     }
 
 }

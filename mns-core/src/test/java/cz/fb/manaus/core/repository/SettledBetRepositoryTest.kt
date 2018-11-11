@@ -1,8 +1,8 @@
 package cz.fb.manaus.core.repository
 
-import cz.fb.manaus.core.repository.domain.Price
-import cz.fb.manaus.core.repository.domain.Side
-import cz.fb.manaus.core.repository.domain.settledBet
+import cz.fb.manaus.core.model.Price
+import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.settledBet
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.Before

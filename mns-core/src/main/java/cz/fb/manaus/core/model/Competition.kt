@@ -1,4 +1,4 @@
-package cz.fb.manaus.core.repository.domain
+package cz.fb.manaus.core.model
 
 data class Competition(
         val id: String,

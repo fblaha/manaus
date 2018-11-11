@@ -1,7 +1,7 @@
 package cz.fb.manaus.core.category
 
-import cz.fb.manaus.core.repository.domain.RealizedBet
-import cz.fb.manaus.core.repository.domain.Side
+import cz.fb.manaus.core.model.RealizedBet
+import cz.fb.manaus.core.model.Side
 
 data class BetCoverage(private val coverage: Map<Pair<String, Long>, List<RealizedBet>>) {
 

@@ -1,4 +1,4 @@
-package cz.fb.manaus.core.repository.domain
+package cz.fb.manaus.core.model
 
 enum class BetActionType {
     PLACE,

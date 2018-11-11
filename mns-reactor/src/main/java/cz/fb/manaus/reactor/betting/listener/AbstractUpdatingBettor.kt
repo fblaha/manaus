@@ -27,51 +27,41 @@ abstract class AbstractUpdatingBettor(private val side: Side, private val valida
 
     override fun onMarketSnapshot(snapshot: MarketSnapshot, betCollector: BetCollector,
                                   accountMoney: AccountMoney?, categoryBlacklist: Set<String>) {
-        val marketPrices = snapshot.marketPrices
-        val market = marketPrices.market
-        val winnerCount = marketPrices.winnerCount
-        val flowFilter = flowFilterRegistry.getFlowFilter(market.type)
-        if (flowFilter.winnerCountRange.contains(winnerCount)) {
-            val coverage = snapshot.coverage
-            val fairness = calculator.getFairness(marketPrices)
-            val credibleSide = fairness.moreCredibleSide!!
-            val ordering = COMPARATORS[credibleSide]!!
-            val prices = marketPrices.runnerPrices.sortedWith(ordering)
-            checkState(prices.map { it.selectionId }.distinct().count() ==
-                    prices.map { it.selectionId }.count())
+        val (marketPrices, market, _, coverage, _) = snapshot
+        val flowFilter = flowFilterRegistry.getFlowFilter(market.type!!)
+        val fairness = calculator.getFairness(marketPrices)
+        val credibleSide = fairness.moreCredibleSide!!
+        val ordering = COMPARATORS[credibleSide]!!
+        val sortedPrices = marketPrices.sortedWith(ordering)
+        checkState(sortedPrices.map { it.selectionId }.distinct().count() ==
+                sortedPrices.map { it.selectionId }.count())
 
-            for (i in prices.indices) {
-                val runnerPrices = prices[i]
-                val selectionId = runnerPrices.selectionId
-                val runner = market.getRunner(selectionId)
-                val activeSelection = coverage.contains(side, selectionId) || coverage.contains(side.opposite, selectionId)
-                val accepted = flowFilter.indexRange.contains(i) && flowFilter.runnerPredicate(market, runner)
-                if (activeSelection || accepted) {
-                    val oldBet = coverage.get(side, selectionId)
-                    val ctx = contextFactory.create(side, selectionId,
-                            snapshot, fairness, accountMoney)
-                    setTradedVolumeMean(ctx)
-                    val pricelessValidation = validationService.validate(ctx, validators)
-                    if (!pricelessValidation.isSuccess) {
-                        cancelBet(oldBet, betCollector)
-                        continue
-                    }
+        for ((i, runnerPrices) in sortedPrices.withIndex()) {
+            val selectionId = runnerPrices.selectionId
+            val runner = market.getRunner(selectionId)
+            val activeSelection = coverage.contains(side, selectionId) || coverage.contains(side.opposite, selectionId)
+            val accepted = flowFilter.indexRange.contains(i) && flowFilter.runnerPredicate(market, runner)
+            if (activeSelection || accepted) {
+                val oldBet = coverage.get(side, selectionId)
+                val ctx = contextFactory.create(side, selectionId,
+                        snapshot, fairness, accountMoney)
+                setTradedVolumeMean(ctx)
+                val pricelessValidation = validationService.validate(ctx, validators)
+                if (!pricelessValidation.isSuccess) {
+                    cancelBet(oldBet, betCollector)
+                    continue
+                }
 
-                    val newPrice = priceAdviser.getNewPrice(ctx)
-                    if (newPrice == null) {
-                        cancelBet(oldBet, betCollector)
-                        continue
-                    }
-
-                    ctx.newPrice = newPrice
-
-                    if (oldBet != null && oldBet.isMatched) continue
-
-                    val priceValidation = validationService.validate(ctx, validators)
-
-                    if (priceValidation.isSuccess) {
-                        bet(ctx, betCollector)
-                    }
+                val newPrice = priceAdviser.getNewPrice(ctx)
+                if (newPrice == null) {
+                    cancelBet(oldBet, betCollector)
+                    continue
+                }
+                ctx.newPrice = newPrice
+                if (oldBet != null && oldBet.isMatched) continue
+                val priceValidation = validationService.validate(ctx, validators)
+                if (priceValidation.isSuccess) {
+                    bet(ctx, betCollector)
                 }
             }
         }
@@ -85,7 +75,7 @@ abstract class AbstractUpdatingBettor(private val side: Side, private val valida
         if (oldBet != null) {
             betCollector.updateBet(BetCommand(oldBet.replacePrice(newPrice.price), action))
         } else {
-            val market = ctx.marketPrices.market
+            val market = ctx.market
             val bet = Bet(marketId = market.id, selectionId = ctx.runnerPrices.selectionId,
                     requestedPrice = newPrice)
             betCollector.placeBet(BetCommand(bet, action))

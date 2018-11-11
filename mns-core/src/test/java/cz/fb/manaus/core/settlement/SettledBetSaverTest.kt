@@ -1,10 +1,10 @@
 package cz.fb.manaus.core.settlement
 
+import cz.fb.manaus.core.model.betAction
+import cz.fb.manaus.core.model.marketTemplate
+import cz.fb.manaus.core.model.settledBet
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
-import cz.fb.manaus.core.repository.domain.betAction
-import cz.fb.manaus.core.repository.domain.marketTemplate
-import cz.fb.manaus.core.repository.domain.settledBet
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired

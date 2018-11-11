@@ -2,15 +2,12 @@ package cz.fb.manaus.reactor
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.provider.ExchangeProvider
-import cz.fb.manaus.core.test.CoreTestFactory
-import cz.fb.manaus.core.test.ModelFactory
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.BetContextFactory
 import cz.fb.manaus.reactor.price.Fairness
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import cz.fb.manaus.reactor.price.PriceService
 import cz.fb.manaus.reactor.rounding.RoundingService
-import org.apache.commons.lang3.time.DateUtils.addHours
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.time.Instant
@@ -46,7 +43,7 @@ class ReactorTestFactory {
         oldBet?.let { bet -> bets.add(bet) }
         val snapshot = MarketSnapshot.from(marketPrices, bets, null)
 
-        return contextFactory.create(side, CoreTestFactory.HOME, snapshot, fairness, null)
+        return contextFactory.create(side, SEL_HOME, snapshot, fairness, null)
     }
 
     fun createContext(side: Side, bestBack: Double, bestLay: Double): BetContext {
@@ -99,9 +96,9 @@ class ReactorTestFactory {
 
     fun createMarket(betBack: Double, bestLay: Double, lastMatched: Double?, winnerCount: Int): MarketPrices {
         val market = createMarket()
-        val home = newRP(CoreTestFactory.HOME, betBack, bestLay, lastMatched)
-        val draw = newRP(CoreTestFactory.DRAW, betBack, bestLay, lastMatched)
-        val away = newRP(CoreTestFactory.AWAY, betBack, bestLay, lastMatched)
+        val home = newRP(SEL_HOME, betBack, bestLay, lastMatched)
+        val draw = newRP(SEL_DRAW, betBack, bestLay, lastMatched)
+        val away = newRP(SEL_AWAY, betBack, bestLay, lastMatched)
         return ModelFactory.newPrices(winnerCount, market, listOf(home, draw, away), Date())
     }
 

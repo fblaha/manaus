@@ -5,7 +5,6 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
-
 import java.util.Objects.requireNonNull
 
 abstract class AbstractLastMatchedValidator(private val passEqual: Boolean) : Validator {

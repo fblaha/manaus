@@ -6,7 +6,7 @@ import com.google.common.collect.Range
 import com.google.common.collect.RangeMap
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
-import cz.fb.manaus.core.repository.domain.RealizedBet
+import cz.fb.manaus.core.model.RealizedBet
 
 abstract class AbstractMatchedCategorizer(private val prefix: String) : RealizedBetCategorizer {
 

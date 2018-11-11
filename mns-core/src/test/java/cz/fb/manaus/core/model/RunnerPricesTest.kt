@@ -1,4 +1,4 @@
-package cz.fb.manaus.core.repository.domain
+package cz.fb.manaus.core.model
 
 import org.junit.Test
 import kotlin.test.assertEquals

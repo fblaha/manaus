@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.betting.proposer.common
 
 import com.google.common.base.Preconditions
-import cz.fb.manaus.core.repository.domain.Side
+import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
@@ -18,7 +18,7 @@ abstract class AbstractBestPriceProposer(private val step: Int) : PriceProposer 
         val runnerPrices = context.runnerPrices
         val homogeneous = runnerPrices.getHomogeneous(context.side.opposite)
         val bestPrice = homogeneous.bestPrice
-        return if (bestPrice.isPresent) {
+        return if (bestPrice != null) {
             ValidationResult.ACCEPT
         } else {
             ValidationResult.REJECT
@@ -27,7 +27,7 @@ abstract class AbstractBestPriceProposer(private val step: Int) : PriceProposer 
 
     override fun getProposedPrice(context: BetContext): Double? {
         val side = requireNonNull(context.side)
-        val bestPrice = context.runnerPrices.getHomogeneous(side.opposite).bestPrice.get().price
+        val bestPrice = context.runnerPrices.getHomogeneous(side.opposite).bestPrice!!.price
         Preconditions.checkState(step >= 0)
         return if (step == 0) {
             bestPrice

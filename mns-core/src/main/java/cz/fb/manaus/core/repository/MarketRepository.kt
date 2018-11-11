@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.repository
 
-import cz.fb.manaus.core.repository.domain.Market
+import cz.fb.manaus.core.model.Market
 import cz.fb.manaus.spring.ManausProfiles
 import org.dizitart.kno2.filters.*
 import org.dizitart.kno2.getRepository
@@ -18,7 +18,9 @@ import java.time.Instant
 @Profile(ManausProfiles.DB)
 class MarketRepository(private val db: Nitrite) {
 
-    internal val repository: ObjectRepository<Market> by lazy { db.getRepository<Market> {} }
+    internal val repository: ObjectRepository<Market> by lazy {
+        db.getRepository<Market> {}
+    }
 
     fun saveOrUpdate(market: Market) {
         repository.update(market, true)

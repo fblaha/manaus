@@ -2,7 +2,7 @@ package cz.fb.manaus.core.manager.filter
 
 import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.category.CategoryService
-import cz.fb.manaus.core.repository.domain.Market
+import cz.fb.manaus.core.model.Market
 import org.springframework.stereotype.Component
 import java.util.logging.Level
 import java.util.logging.Logger

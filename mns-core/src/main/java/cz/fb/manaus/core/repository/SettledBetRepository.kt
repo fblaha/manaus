@@ -1,7 +1,7 @@
 package cz.fb.manaus.core.repository
 
-import cz.fb.manaus.core.repository.domain.SettledBet
-import cz.fb.manaus.core.repository.domain.Side
+import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.spring.ManausProfiles
 import org.dizitart.kno2.filters.and
 import org.dizitart.kno2.filters.eq

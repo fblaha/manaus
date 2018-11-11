@@ -1,6 +1,6 @@
 package cz.fb.manaus.reactor.betting.action
 
-import cz.fb.manaus.core.repository.domain.BetAction
+import cz.fb.manaus.core.model.BetAction
 
 interface BetActionListener {
 

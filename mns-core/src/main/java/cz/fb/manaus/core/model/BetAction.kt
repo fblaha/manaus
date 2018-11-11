@@ -1,4 +1,4 @@
-package cz.fb.manaus.core.repository.domain
+package cz.fb.manaus.core.model
 
 import org.dizitart.no2.IndexType
 import org.dizitart.no2.objects.Id
@@ -17,7 +17,12 @@ data class BetAction(
         val price: Price,
         val marketID: String,
         val selectionID: Long,
-        val betID: String?,
+        val betID: String? = null,
         val runnerPrices: List<RunnerPrices>,
         val properties: Map<String, String>
-)
+) {
+    companion object {
+        const val TRADED_VOL_MEAN = "tradedVolumeMean"
+        const val PROPOSER_PROP = "proposer"
+    }
+}

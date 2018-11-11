@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.category.categorizer
 
-import cz.fb.manaus.core.repository.domain.marketTemplate
+import cz.fb.manaus.core.model.marketTemplate
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.apache.commons.lang3.time.DateUtils
 import org.hamcrest.CoreMatchers.containsString

@@ -2,8 +2,8 @@ package cz.fb.manaus.core.category.categorizer
 
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.Category
-import cz.fb.manaus.core.repository.domain.Market
-import cz.fb.manaus.core.repository.domain.RealizedBet
+import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.model.RealizedBet
 import org.springframework.stereotype.Component
 
 

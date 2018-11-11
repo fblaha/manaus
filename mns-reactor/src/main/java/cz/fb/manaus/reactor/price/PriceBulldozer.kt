@@ -6,18 +6,19 @@ import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.PriceComparator
 import cz.fb.manaus.core.model.getWeightedMean
 import cz.fb.manaus.reactor.rounding.RoundingService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
-@Component
-class PriceBulldozer {
 
-    @Autowired
-    private lateinit var roundingService: RoundingService
+fun getWeightedMean(prices: List<Price>): Double? {
+    return getWeightedMean(prices, Price::price, Price::amount)
+}
+
+@Component
+class PriceBulldozer(private val roundingService: RoundingService) {
 
     fun bulldoze(threshold: Double, prices: List<Price>): List<Price> {
         var sum = 0.0
-        Preconditions.checkState(Comparators.isInStrictOrder(prices, PriceComparator.CMP))
+        Preconditions.checkState(Comparators.isInStrictOrder(prices, PriceComparator))
         val convicts = mutableListOf<Price>()
         val untouched = mutableListOf<Price>()
         for (price in prices) {

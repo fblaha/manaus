@@ -1,6 +1,6 @@
 package cz.fb.manaus.reactor.betting.validator.common.update
 
-import cz.fb.manaus.core.dao.BetActionDao
+import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
@@ -11,14 +11,14 @@ import java.time.temporal.ChronoUnit
 
 abstract class AbstractDelayUpdateValidator(private val pausePeriod: Duration) : Validator {
     @Autowired
-    private lateinit var actionDao: BetActionDao
+    private lateinit var betActionRepository: BetActionRepository
 
     override val isUpdateOnly: Boolean = true
 
     override fun validate(context: BetContext): ValidationResult {
-        val betId = context.oldBet!!.betId
-        val actionDate = actionDao.getBetActionDate(betId).get()
-        val untilNow = actionDate.toInstant().until(Instant.now(), ChronoUnit.MILLIS)
+        val betId = context.oldBet!!.betId!!
+        val actionDate = betActionRepository.findRecentBetAction(betId)!!.time
+        val untilNow = actionDate.until(Instant.now(), ChronoUnit.MILLIS)
         return ValidationResult.of(untilNow > pausePeriod.toMillis())
     }
 

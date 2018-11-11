@@ -2,13 +2,13 @@ package cz.fb.manaus.core.settlement
 
 import com.codahale.metrics.MetricRegistry
 import com.google.common.base.Preconditions
+import cz.fb.manaus.core.model.BetAction
+import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.model.Price
+import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.core.repository.SettledBetRepository
-import cz.fb.manaus.core.repository.domain.BetAction
-import cz.fb.manaus.core.repository.domain.Market
-import cz.fb.manaus.core.repository.domain.Price
-import cz.fb.manaus.core.repository.domain.SettledBet
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component

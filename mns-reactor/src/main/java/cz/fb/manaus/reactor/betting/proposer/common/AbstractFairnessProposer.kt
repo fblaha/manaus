@@ -17,7 +17,7 @@ abstract class AbstractFairnessProposer(private val side: Side, private val down
 
     override fun getProposedPrice(context: BetContext): Double {
         val fairness = context.fairness[side]!!
-        val bestPrice = context.runnerPrices.getHomogeneous(side).bestPrice.get()
+        val bestPrice = context.runnerPrices.getHomogeneous(side).bestPrice!!
         val fairPrice = priceService.getFairnessFairPrice(bestPrice.price, fairness)
         val downgradeFraction = downgradeStrategy(context)
         return priceService.downgrade(fairPrice, downgradeFraction, context.side)

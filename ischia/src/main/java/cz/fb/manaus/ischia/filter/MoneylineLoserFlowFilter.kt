@@ -8,4 +8,4 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile(ManausProfiles.PRODUCTION)
-class MoneylineLoserFlowFilter : FlowFilter(Range.singleton(1), Range.singleton(1), { _, _ -> true }, setOf("moneyline"))
+class MoneylineLoserFlowFilter : FlowFilter(Range.singleton(1), { _, _ -> true }, setOf("moneyline"))

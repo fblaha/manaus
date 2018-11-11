@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableSet.copyOf
 import cz.fb.manaus.core.category.categorizer.Categorizer
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
 import cz.fb.manaus.core.category.categorizer.SimulationAware
-import cz.fb.manaus.core.repository.domain.Market
-import cz.fb.manaus.core.repository.domain.RealizedBet
+import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.model.RealizedBet
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*

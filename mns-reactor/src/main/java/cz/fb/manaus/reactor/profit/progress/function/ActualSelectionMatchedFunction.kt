@@ -1,16 +1,14 @@
 package cz.fb.manaus.reactor.profit.progress.function
 
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.model.RealizedBet
 import org.springframework.stereotype.Component
 
 @Component
 class ActualSelectionMatchedFunction : ProgressFunction {
 
-    override fun invoke(bet: SettledBet): Double? {
-        return bet.betAction
-                .marketPrices
-                .getRunnerPrices(bet.selectionId)
-                .matchedAmount
+    override fun invoke(bet: RealizedBet): Double? {
+        return bet.betAction.runnerPrices
+                .find { it.selectionId == bet.settledBet.selectionId }?.matchedAmount
     }
 
 }

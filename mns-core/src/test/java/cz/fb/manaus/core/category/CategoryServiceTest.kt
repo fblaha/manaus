@@ -2,10 +2,10 @@ package cz.fb.manaus.core.category
 
 import cz.fb.manaus.core.MarketCategories
 import cz.fb.manaus.core.category.categorizer.SportCategorizer
-import cz.fb.manaus.core.repository.domain.RealizedBet
-import cz.fb.manaus.core.repository.domain.betAction
-import cz.fb.manaus.core.repository.domain.marketTemplate
-import cz.fb.manaus.core.repository.domain.settledBet
+import cz.fb.manaus.core.model.RealizedBet
+import cz.fb.manaus.core.model.betAction
+import cz.fb.manaus.core.model.marketTemplate
+import cz.fb.manaus.core.model.settledBet
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.hamcrest.CoreMatchers.hasItem
 import org.hamcrest.CoreMatchers.hasItems

@@ -3,17 +3,17 @@ package cz.fb.manaus.reactor.filter
 import com.google.common.base.Joiner
 import com.google.common.base.Splitter
 import com.google.common.base.Strings
-import cz.fb.manaus.core.dao.BetActionDao
-import cz.fb.manaus.core.dao.SettledBetDao
 import cz.fb.manaus.core.maintanance.ConfigUpdate
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
+import cz.fb.manaus.core.repository.RealizedBetLoader
+import cz.fb.manaus.core.repository.SettledBetRepository
 import cz.fb.manaus.reactor.profit.ProfitService
-import org.apache.commons.lang3.time.DateUtils.addDays
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import java.time.Duration
+import java.time.Instant
 import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -30,9 +30,9 @@ abstract class AbstractUnprofitableCategoriesRegistry(
     @Autowired
     private lateinit var profitService: ProfitService
     @Autowired
-    private lateinit var settledBetDao: SettledBetDao
+    private lateinit var settledBetRepository: SettledBetRepository
     @Autowired
-    private lateinit var betActionDao: BetActionDao
+    private lateinit var realizedBetLoader: RealizedBetLoader
     @Autowired
     private lateinit var provider: ExchangeProvider
 
@@ -54,14 +54,12 @@ abstract class AbstractUnprofitableCategoriesRegistry(
 
     fun updateBlacklists(configUpdate: ConfigUpdate) {
         log.log(Level.INFO, logPrefix + "black list update started")
-        val now = Date()
-        val settledBets = settledBetDao.getSettledBets(
-                Optional.of(addDays(now, -period.toDays().toInt())), Optional.of(now),
-                Optional.ofNullable(side), OptionalInt.empty())
-        betActionDao.fetchMarketPrices(settledBets.stream().map { it.betAction })
+        val now = Instant.now()
+        val settledBets = settledBetRepository.find(now.minusSeconds(period.toSeconds()), now, side)
         if (settledBets.isEmpty()) return
+        val realizedBets = settledBets.map { realizedBetLoader.toRealizedBet(it) }
         val chargeRate = provider.chargeRate
-        val profitRecords = profitService.getProfitRecords(settledBets, null, true, chargeRate)
+        val profitRecords = profitService.getProfitRecords(realizedBets, null, true, chargeRate)
 
         log.log(Level.INFO, logPrefix + "updating registry ''{0}''", name)
         updateBlacklists(profitRecords, configUpdate)
@@ -121,7 +119,6 @@ abstract class AbstractUnprofitableCategoriesRegistry(
     }
 
     companion object {
-
         private const val UNPROFITABLE_BLACK_LIST = "unprofitable.black.list."
         private val log = Logger.getLogger(AbstractUnprofitableCategoriesRegistry::class.java.simpleName)
     }

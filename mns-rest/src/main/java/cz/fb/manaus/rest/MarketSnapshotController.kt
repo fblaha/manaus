@@ -3,9 +3,12 @@ package cz.fb.manaus.rest
 import com.codahale.metrics.MetricRegistry
 import com.google.common.base.Joiner
 import com.google.common.base.Preconditions
-import cz.fb.manaus.core.dao.BetActionDao
-import cz.fb.manaus.core.dao.MarketDao
-import cz.fb.manaus.core.model.*
+import cz.fb.manaus.core.model.AccountMoney
+import cz.fb.manaus.core.model.Bet
+import cz.fb.manaus.core.model.CollectedBets
+import cz.fb.manaus.core.model.MarketSnapshot
+import cz.fb.manaus.core.repository.BetActionRepository
+import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.reactor.betting.BetManager
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
@@ -31,8 +34,8 @@ data class MarketSnapshotCrate(
 @Controller
 @Profile(ManausProfiles.DB)
 class MarketSnapshotController(private val manager: BetManager,
-                               private val marketDao: MarketDao,
-                               private val actionDao: BetActionDao,
+                               private val marketRepository: MarketRepository,
+                               private val betActionRepository: BetActionRepository,
                                private val metricRegistry: MetricRegistry,
                                private val betMetricUpdater: MatchedBetMetricUpdater) {
 
@@ -43,12 +46,12 @@ class MarketSnapshotController(private val manager: BetManager,
         metricRegistry.meter("market.snapshot.post").mark()
         try {
             val marketPrices = snapshotCrate.prices
-            marketDao.get(id).ifPresent { marketPrices.market = it }
+            marketRepository.get(id).ifPresent { marketPrices.market = it }
             logMarket(marketPrices)
             val bets = snapshotCrate.bets
             betMetricUpdater.update(snapshotCrate.scanTime.toLong(), bets)
-            val marketSnapshot = MarketSnapshot.from(marketPrices, bets, null)
-            val myBets = actionDao.getBetActionIds(id, OptionalLong.empty(), Optional.empty<Side>())
+            val marketSnapshot = MarketSnapshot.from(marketPrices, bets)
+            val myBets = betActionRepository.getBetActionIds(id, OptionalLong.empty(), Optional.empty<Side>())
             val collectedBets = manager.fire(marketSnapshot, myBets,
                     snapshotCrate.money, snapshotCrate.categoryBlacklist)
             return if (collectedBets.isEmpty) {

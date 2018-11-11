@@ -2,7 +2,7 @@ package cz.fb.manaus.core.category.categorizer
 
 import com.google.common.base.CharMatcher
 import com.google.common.base.Strings
-import cz.fb.manaus.core.repository.domain.Market
+import cz.fb.manaus.core.model.Market
 import org.springframework.stereotype.Component
 
 @Component

@@ -4,17 +4,13 @@ import com.google.common.base.Preconditions.checkState
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.Objects.requireNonNull
 
 @Service
-class RoundingService {
+class RoundingService(private val plugin: RoundingPlugin,
+                      private val provider: ExchangeProvider) {
 
-    @Autowired
-    private lateinit var plugin: RoundingPlugin
-    @Autowired
-    private lateinit var provider: ExchangeProvider
 
     fun increment(price: Double, stepNum: Int): Double? {
         val result = plugin.shift(price, stepNum)

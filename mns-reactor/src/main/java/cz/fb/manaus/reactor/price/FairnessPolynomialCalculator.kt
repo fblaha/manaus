@@ -1,7 +1,8 @@
 package cz.fb.manaus.reactor.price
 
-import cz.fb.manaus.core.model.MarketPrices
+import cz.fb.manaus.core.model.RunnerPrices
 import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.getBestPrices
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction
 import org.apache.commons.math3.analysis.solvers.LaguerreSolver
 import org.apache.commons.math3.exception.NoBracketingException
@@ -14,11 +15,11 @@ class FairnessPolynomialCalculator {
         return PolynomialFunction(doubleArrayOf(1.0, price - 1))
     }
 
-    fun getFairness(winnerCount: Double, prices: List<Double?>): Double? {
+    fun getFairness(winnerCount: Int, prices: List<Double?>): Double? {
         if (prices.all { it != null }) {
             val presentPrices = prices.mapNotNull { it }
             var rightSide = multiplyPolynomials(presentPrices)
-            rightSide = rightSide.multiply(PolynomialFunction(doubleArrayOf(winnerCount)))
+            rightSide = rightSide.multiply(PolynomialFunction(doubleArrayOf(winnerCount.toDouble())))
 
             val leftSideItems = mutableListOf<PolynomialFunction>()
             for (i in presentPrices.indices) {
@@ -45,9 +46,9 @@ class FairnessPolynomialCalculator {
         }
     }
 
-    fun getFairness(marketPrices: MarketPrices): Fairness {
-        val back = getFairness(marketPrices.winnerCount.toDouble(), Fairness.toKotlin(marketPrices.getBestPrices(Side.BACK)))
-        val lay = getFairness(marketPrices.winnerCount.toDouble(), Fairness.toKotlin(marketPrices.getBestPrices(Side.LAY)))
+    fun getFairness(marketPrices: List<RunnerPrices>): Fairness {
+        val back = getFairness(1, getBestPrices(marketPrices, Side.BACK))
+        val lay = getFairness(1, getBestPrices(marketPrices, Side.LAY))
         return Fairness(back = back, lay = lay)
     }
 

@@ -3,22 +3,24 @@ package cz.fb.manaus.reactor.profit.progress
 import com.google.common.collect.ImmutableList
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.model.ProfitRecord
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.reactor.profit.progress.function.ProgressFunction
 import org.springframework.stereotype.Component
 
 @Component
 class CoverageFunctionProfitService(functions: List<ProgressFunction>) : AbstractFunctionProfitService(functions), FunctionProfitRecordCalculator {
 
-    fun getProfitRecords(bets: List<SettledBet>, funcName: String?,
+    fun getProfitRecords(bets: List<RealizedBet>, funcName: String?,
                          chargeRate: Double, projection: String? = null): List<ProfitRecord> {
         return getProfitRecords(this, bets, chargeRate, funcName, projection)
     }
 
-    override fun getProfitRecords(function: ProgressFunction, bets: List<SettledBet>,
-                                  coverage: BetCoverage, charges: Map<String, Double>): List<ProfitRecord> {
+    override fun getProfitRecords(function: ProgressFunction,
+                                  bets: List<RealizedBet>,
+                                  coverage: BetCoverage,
+                                  charges: Map<String, Double>): List<ProfitRecord> {
         val (covered, solo) = bets.partition { bet ->
-            coverage.isCovered(bet.betAction.market.id, bet.selectionId)
+            coverage.isCovered(bet.market.id, bet.settledBet.selectionId)
         }
 
         val (head, tail) = covered.partition { this.isChargeGrowth(it) }
@@ -32,7 +34,7 @@ class CoverageFunctionProfitService(functions: List<ProgressFunction>) : Abstrac
         return builder.build()
     }
 
-    private fun addRecord(categoryName: String, bets: List<SettledBet>, function: ProgressFunction,
+    private fun addRecord(categoryName: String, bets: List<RealizedBet>, function: ProgressFunction,
                           coverage: BetCoverage, charges: Map<String, Double>): ProfitRecord? {
         val average = getAverage(bets, function)
         val category = getValueCategory(function.name + "_" + categoryName, average)
@@ -42,13 +44,13 @@ class CoverageFunctionProfitService(functions: List<ProgressFunction>) : Abstrac
         }
     }
 
-    private fun isChargeGrowth(bet: SettledBet): Boolean {
+    private fun isChargeGrowth(bet: RealizedBet): Boolean {
         val action = bet.betAction
-        val chargeGrowth = action.getDoubleProperty("chargeGrowth")
-        return chargeGrowth.orElse(java.lang.Double.MAX_VALUE) > 1
+        val chargeGrowth = action.properties["chargeGrowth"]
+        return if (chargeGrowth != null) chargeGrowth.toDouble() > 1 else true
     }
 
-    private fun getAverage(bets: List<SettledBet>, function: ProgressFunction): Double? {
+    private fun getAverage(bets: List<RealizedBet>, function: ProgressFunction): Double? {
         return if (bets.isEmpty())
             return null
         else

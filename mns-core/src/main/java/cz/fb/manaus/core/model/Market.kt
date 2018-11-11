@@ -1,4 +1,4 @@
-package cz.fb.manaus.core.repository.domain
+package cz.fb.manaus.core.model
 
 import org.dizitart.no2.IndexType
 import org.dizitart.no2.objects.Id

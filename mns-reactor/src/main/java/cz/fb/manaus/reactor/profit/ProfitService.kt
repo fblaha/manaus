@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.CategoryService
 import cz.fb.manaus.core.model.ProfitRecord
+import cz.fb.manaus.core.model.RealizedBet
+import cz.fb.manaus.core.model.Side
 import org.springframework.stereotype.Service
 import java.util.Objects.requireNonNull
 
@@ -12,7 +14,7 @@ import java.util.Objects.requireNonNull
 class ProfitService(private val categoryService: CategoryService,
                     private val profitPlugin: ProfitPlugin) {
 
-    fun getProfitRecords(bets: List<SettledBet>, projection: String?,
+    fun getProfitRecords(bets: List<RealizedBet>, projection: String?,
                          simulationAwareOnly: Boolean, chargeRate: Double): List<ProfitRecord> {
         var filtered = bets
         val coverage = BetCoverage.from(filtered)
@@ -54,28 +56,28 @@ class ProfitService(private val categoryService: CategoryService,
         return result
     }
 
-    private fun computeProfitRecords(bets: List<SettledBet>, simulationAwareOnly: Boolean,
+    private fun computeProfitRecords(bets: List<RealizedBet>, simulationAwareOnly: Boolean,
                                      charges: Map<String, Double>, coverage: BetCoverage): List<ProfitRecord> {
         return bets.flatMap { bet ->
             val categories = categoryService.getRealizedBetCategories(bet, simulationAwareOnly, coverage)
             categories.map { category ->
-                val charge = charges[bet.betAction.betId]!!
+                val charge = charges[bet.settledBet.id]!!
                 Preconditions.checkState(charge >= 0, charge)
                 toProfitRecord(bet, category, charge, coverage)
             }
         }
     }
 
-    fun toProfitRecord(bet: SettledBet, category: String, chargeContribution: Double, coverage: BetCoverage): ProfitRecord {
-        val type = requireNonNull(bet.price.side)
-        val price = bet.price.price
+    fun toProfitRecord(bet: RealizedBet, category: String, chargeContribution: Double, coverage: BetCoverage): ProfitRecord {
+        val type = requireNonNull(bet.settledBet.price.side)
+        val price = bet.settledBet.price.price
         val result = if (type === Side.BACK) {
-            ProfitRecord(category, bet.profitAndLoss, price, chargeContribution, 0, 1)
+            ProfitRecord(category, bet.settledBet.profitAndLoss, price, chargeContribution, 0, 1)
         } else {
-            ProfitRecord(category, bet.profitAndLoss, price, chargeContribution, 1, 0)
+            ProfitRecord(category, bet.settledBet.profitAndLoss, price, chargeContribution, 1, 0)
         }
-        val marketId = bet.betAction.market.id
-        val selectionId = bet.selectionId
+        val marketId = bet.market.id
+        val selectionId = bet.settledBet.selectionId
         if (coverage.isCovered(marketId, selectionId)) {
             val backPrice = coverage.getPrice(marketId, selectionId, Side.BACK)
             val layPrice = coverage.getPrice(marketId, selectionId, Side.LAY)

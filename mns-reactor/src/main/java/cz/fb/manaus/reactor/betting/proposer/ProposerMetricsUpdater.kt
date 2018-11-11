@@ -13,14 +13,14 @@ class ProposerMetricsUpdater : BetActionListener {
     @Autowired
     private lateinit var betUtils: BetUtils
     @Autowired
-    private val metricRegistry: MetricRegistry? = null
+    private lateinit var metricRegistry: MetricRegistry
 
     override fun onAction(action: BetAction) {
         val proposers = action.properties[BetAction.PROPOSER_PROP]!!
         val side = action.price.side.name.toLowerCase()
         for (proposer in betUtils.parseProposers(proposers)) {
             val key = Joiner.on('.').join(PROPOSER_METRIC, side, proposer)
-            metricRegistry!!.counter(key).inc()
+            metricRegistry.counter(key).inc()
         }
     }
 

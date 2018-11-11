@@ -5,11 +5,7 @@ import com.google.common.base.Preconditions.checkArgument
 import com.google.common.base.Preconditions.checkState
 import com.google.common.base.Splitter
 import com.google.common.collect.Comparators
-import cz.fb.manaus.core.model.Bet
-import cz.fb.manaus.core.repository.domain.BetAction
-import cz.fb.manaus.core.repository.domain.BetActionType
-import cz.fb.manaus.core.repository.domain.Price
-import cz.fb.manaus.core.repository.domain.SettledBet
+import cz.fb.manaus.core.model.*
 import org.springframework.stereotype.Component
 
 @Component
@@ -41,43 +37,28 @@ class BetUtils {
         return Splitter.on(',').omitEmptyStrings().trimResults().splitToList(proposers)
     }
 
-    fun limitBetAmount(ceiling: Double, bet: SettledBet): SettledBet {
-        val newPrice = limitPriceAmount(ceiling, bet.price)
-        if (newPrice != null) {
-            val copy = SettledBet()
-            BeanUtils.copyProperties(bet, copy)
-
-            val amount = bet.price.amount
+    fun limitBetAmount(ceiling: Double, bet: RealizedBet): RealizedBet {
+        val newBetPrice = limitPriceAmount(ceiling, bet.settledBet.price)
+        var result = bet
+        if (newBetPrice != null) {
+            val amount = bet.settledBet.price.amount
             val rate = ceiling / amount
-            copy.profitAndLoss = rate * bet.profitAndLoss
-            limitActionAmount(ceiling, copy)
+            val profitAndLoss = rate * bet.settledBet.profitAndLoss
 
-            copy.price = newPrice
-            return copy
+            result = result.copy(settledBet = result.settledBet.copy(profitAndLoss = profitAndLoss))
         }
-        limitActionAmount(ceiling, bet)
-        return bet
+        val newActionPrice = limitPriceAmount(ceiling, bet.betAction.price)
+        if (newActionPrice != null) {
+            result = result.copy(betAction = result.betAction.copy(price = newActionPrice))
+        }
+        return result
     }
 
     private fun limitPriceAmount(ceiling: Double, origPrice: Price): Price? {
         val amount = origPrice.amount
         if (ceiling < amount) {
-            val newPrice = Price()
-            BeanUtils.copyProperties(origPrice, newPrice)
-            newPrice.amount = ceiling
-            return newPrice
+            return origPrice.copy(amount = ceiling)
         }
         return null
-    }
-
-    fun limitActionAmount(ceiling: Double, betCopy: SettledBet) {
-        val orig = betCopy.betAction
-        if (orig != null) {
-            val actionCopy = BetAction()
-            BeanUtils.copyProperties(orig, actionCopy)
-            val newPrice = limitPriceAmount(ceiling, orig.price)
-            newPrice?.let { actionCopy.price = it }
-            betCopy.betAction = actionCopy
-        }
     }
 }

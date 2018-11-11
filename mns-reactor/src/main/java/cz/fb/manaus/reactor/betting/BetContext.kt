@@ -2,13 +2,9 @@ package cz.fb.manaus.reactor.betting
 
 import com.google.common.base.Preconditions.checkState
 import com.google.common.collect.Table
-import cz.fb.manaus.core.model.AccountMoney
-import cz.fb.manaus.core.model.Bet
-import cz.fb.manaus.core.model.MarketSnapshot
-import cz.fb.manaus.core.model.TradedVolume
-import cz.fb.manaus.core.repository.domain.Side
+import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.price.Fairness
-import java.util.*
+import java.time.Instant
 
 open class BetContext(open val side: Side,
                       val selectionId: Long,
@@ -18,8 +14,8 @@ open class BetContext(open val side: Side,
                       val fairness: Fairness) {
 
     open val properties: MutableMap<String, String> = mutableMapOf()
-    open val runnerPrices: RunnerPrices = marketSnapshot.marketPrices.getRunnerPrices(selectionId)
-    open val marketPrices: MarketPrices = marketSnapshot.marketPrices
+    open val runnerPrices: RunnerPrices = getRunnerPrices(marketSnapshot.runnerPrices, selectionId)
+    open val market: Market = marketSnapshot.market
 
     open val actualTradedVolume: TradedVolume? =
             if (marketSnapshot.tradedVolume != null) {
@@ -58,27 +54,31 @@ open class BetContext(open val side: Side,
 
     fun createBetAction(): BetAction {
         val type = if (oldBet != null) BetActionType.UPDATE else BetActionType.PLACE
-        val marketPrices = marketSnapshot.marketPrices
-        val action = BetAction()
-        action.betActionType = type
-        action.actionDate = Date()
-        action.market = marketPrices.market
-        action.selectionId = selectionId
-        action.marketPrices = marketPrices
-        action.properties = properties
-        action.price = newPrice
-        return action
+        return BetAction(
+                selectionID = selectionId,
+                price = newPrice!!,
+                id = 0,
+                time = Instant.now(),
+                marketID = marketSnapshot.market.id,
+                runnerPrices = marketSnapshot.runnerPrices,
+                properties = properties,
+                betActionType = type)
     }
 
     // TODO not used
-    fun simulateSettledBet(): SettledBet {
+    fun simulateSettledBet(): RealizedBet {
+        val market = marketSnapshot.market
         val action = createBetAction()
-        val bet = SettledBet()
-        bet.selectionId = action.selectionId
-        bet.price = action.price
-        bet.betAction = action
-        bet.placed = action.actionDate
-        return bet
+        val bet = SettledBet(
+                selectionId = action.selectionID,
+                price = action.price,
+                placed = action.time,
+                matched = action.time,
+                settled = Instant.now(),
+                profitAndLoss = 0.0,
+                selectionName = market.getRunner(action.selectionID).name
+        )
+        return RealizedBet(bet, action, market)
     }
 
 

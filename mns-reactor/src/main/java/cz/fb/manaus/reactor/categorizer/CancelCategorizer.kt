@@ -1,8 +1,8 @@
 package cz.fb.manaus.reactor.categorizer
 
-import cz.fb.manaus.core.repository.domain.BetAction
-import cz.fb.manaus.core.repository.domain.BetActionType
-import cz.fb.manaus.core.repository.domain.Market
+import cz.fb.manaus.core.model.BetAction
+import cz.fb.manaus.core.model.BetActionType
+import cz.fb.manaus.core.model.Market
 import org.springframework.stereotype.Component
 import java.util.Collections.indexOfSubList
 

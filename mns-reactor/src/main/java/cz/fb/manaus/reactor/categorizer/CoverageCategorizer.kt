@@ -7,9 +7,9 @@ import com.google.common.collect.ImmutableMap
 import com.google.common.collect.ImmutableSet
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
-import cz.fb.manaus.core.repository.domain.Price
-import cz.fb.manaus.core.repository.domain.RealizedBet
-import cz.fb.manaus.core.repository.domain.Side
+import cz.fb.manaus.core.model.Price
+import cz.fb.manaus.core.model.RealizedBet
+import cz.fb.manaus.core.model.Side
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -19,8 +19,8 @@ class CoverageCategorizer : RealizedBetCategorizer {
     override val isSimulationSupported: Boolean = false
 
     override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
-        val marketId = realizedBet.betAction.market.id
-        val selectionId = realizedBet.selectionId
+        val marketId = realizedBet.market.id
+        val selectionId = realizedBet.settledBet.selectionId
         val sides = coverage.getSides(marketId, selectionId)
         Preconditions.checkState(sides.size > 0)
         val builder = ImmutableMap.builder<Side, Double>()
@@ -28,7 +28,7 @@ class CoverageCategorizer : RealizedBetCategorizer {
             builder.put(side, coverage.getAmount(marketId, selectionId, side))
         }
         val amounts = builder.build()
-        return getCategories(realizedBet.price.side, amounts)
+        return getCategories(realizedBet.settledBet.price.side, amounts)
     }
 
     internal fun getCategories(mySide: Side, amounts: Map<Side, Double>): Set<String> {

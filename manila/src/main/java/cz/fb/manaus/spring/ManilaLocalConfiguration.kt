@@ -14,7 +14,7 @@ open class ManilaLocalConfiguration {
 
     @Bean
     open fun bestChanceFlowFilter(): FlowFilter {
-        return FlowFilter(Range.singleton(0), Range.singleton(1), { _, _ -> true }, emptySet())
+        return FlowFilter(Range.singleton(0), { _, _ -> true }, emptySet())
     }
 
 }

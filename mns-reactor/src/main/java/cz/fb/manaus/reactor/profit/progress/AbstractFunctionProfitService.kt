@@ -4,7 +4,7 @@ import com.google.common.base.Joiner
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.CategoryService
 import cz.fb.manaus.core.model.ProfitRecord
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.reactor.profit.ProfitPlugin
 import cz.fb.manaus.reactor.profit.ProfitService
 import cz.fb.manaus.reactor.profit.progress.function.ProgressFunction
@@ -22,7 +22,7 @@ abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) 
     private lateinit var profitService: ProfitService
 
 
-    protected fun getProfitRecords(calculator: FunctionProfitRecordCalculator, bets: List<SettledBet>,
+    protected fun getProfitRecords(calculator: FunctionProfitRecordCalculator, bets: List<RealizedBet>,
                                    chargeRate: Double, funcName: String?, projection: String?): List<ProfitRecord> {
         var filtered = bets
         val charges = profitPlugin.getCharges(filtered, chargeRate)
@@ -48,7 +48,7 @@ abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) 
         }
     }
 
-    protected fun computeChunkRecord(name: String, chunk: List<Pair<SettledBet, Double?>>,
+    protected fun computeChunkRecord(name: String, chunk: List<Pair<RealizedBet, Double?>>,
                                      charges: Map<String, Double>, coverage: BetCoverage): ProfitRecord {
         val average = chunk.mapNotNull { it.second }.average()
         val category = getValueCategory(name, average)
@@ -63,10 +63,10 @@ abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) 
         }
     }
 
-    protected fun computeFunctionRecord(category: String, bets: List<SettledBet>,
+    protected fun computeFunctionRecord(category: String, bets: List<RealizedBet>,
                                         charges: Map<String, Double>, coverage: BetCoverage): ProfitRecord {
         val chunkRecords = bets.map { bet ->
-            profitService.toProfitRecord(bet, category, charges[bet.betAction.betId]!!, coverage)
+            profitService.toProfitRecord(bet, category, charges[bet.settledBet.id]!!, coverage)
         }
         return profitService.mergeCategory(category, chunkRecords)
     }

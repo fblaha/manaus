@@ -3,7 +3,6 @@ package cz.fb.manaus.reactor.price
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.PriceComparator
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.model.getWeightedMean
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -58,7 +57,7 @@ class PriceBulldozerTest : AbstractLocalTestCase() {
 
     @Test(expected = IllegalStateException::class)
     fun `bulldozed prices are in wrong order - back`() {
-        val badOrder = realSample.sortedWith(PriceComparator.CMP).reversed()
+        val badOrder = realSample.sortedWith(PriceComparator).reversed()
         bulldozer.bulldoze(10.0, badOrder)
     }
 

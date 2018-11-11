@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.categorizer
 
-import cz.fb.manaus.core.repository.domain.BetAction
-import cz.fb.manaus.core.repository.domain.Market
+import cz.fb.manaus.core.model.BetAction
+import cz.fb.manaus.core.model.Market
 
 interface RelatedActionsAwareCategorizer {
 
