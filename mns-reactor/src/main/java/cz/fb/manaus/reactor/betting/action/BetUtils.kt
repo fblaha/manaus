@@ -10,7 +10,6 @@ import cz.fb.manaus.core.repository.domain.BetAction
 import cz.fb.manaus.core.repository.domain.BetActionType
 import cz.fb.manaus.core.repository.domain.Price
 import cz.fb.manaus.core.repository.domain.SettledBet
-import org.springframework.beans.BeanUtils
 import org.springframework.stereotype.Component
 
 @Component
@@ -25,7 +24,7 @@ class BetUtils {
             if (bet.betActionType != BetActionType.UPDATE) lastUpdates.clear()
             lastUpdates.add(bet)
         }
-        checkState(Comparators.isInStrictOrder(lastUpdates, compareBy { it.actionDate }))
+        checkState(Comparators.isInStrictOrder(lastUpdates, compareBy { it.time }))
         return lastUpdates
     }
 

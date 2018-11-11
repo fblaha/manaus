@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component
 class TypeCategorizer : AbstractDelegatingCategorizer(PREFIX) {
 
     public override fun getCategoryRaw(market: Market): Set<String> {
-        return setOf(market.type.toLowerCase())
-
+        val type = market.type
+        return if (type == null) emptySet() else setOf(market.type.toLowerCase())
     }
 
     companion object {

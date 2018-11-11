@@ -10,10 +10,10 @@ data class Market(
         @Id val id: String,
         val name: String,
         val matchedAmount: Double,
-        val isInPlay: Boolean,
-        val type: String,
+        val inPlay: Boolean,
+        val type: String?,
         val eventType: EventType,
-        val competition: Competition,
+        val competition: Competition?,
         val event: Event,
         val runners: List<Runner>
 ) {

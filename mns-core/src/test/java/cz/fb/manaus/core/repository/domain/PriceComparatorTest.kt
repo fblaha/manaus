@@ -1,5 +1,6 @@
 package cz.fb.manaus.core.repository.domain
 
+import com.google.common.collect.Comparators
 import org.junit.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -8,7 +9,7 @@ import kotlin.test.assertTrue
 class PriceComparatorTest {
 
     private fun isSorted(l: List<Price>): Boolean {
-        return l == l.sortedWith(PriceComparator)
+        return Comparators.isInOrder(l, PriceComparator)
     }
 
     @Test

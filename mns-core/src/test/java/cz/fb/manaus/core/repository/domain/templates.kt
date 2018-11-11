@@ -39,7 +39,7 @@ val betAction = BetAction(
 
 val marketTemplate = Market(id = "2",
         name = "Match Odds",
-        isInPlay = true,
+        inPlay = true,
         type = "match_odds",
         matchedAmount = 100.0,
         event = Event(

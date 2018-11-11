@@ -9,19 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.ResourceLoader
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import java.util.zip.ZipFile
 
 abstract class AbstractMarketDataAwareTestCase : AbstractLocalTestCase() {
     protected lateinit var markets: List<Market>
     @Autowired
     private lateinit var resourceLoader: ResourceLoader
+    @Autowired
+    private lateinit var objectMapper: ObjectMapper
+
 
     @Before
     fun setUp() {
-        val resource = resourceLoader.getResource("classpath:cz/fb/manaus/core/service/markets.zip")
-        val zipFile = ZipFile(resource.file)
-        val zipEntry = zipFile.getEntry("markets.json")
-        markets = ObjectMapper().readValue(zipFile.getInputStream(zipEntry), TYPE_REF)
+        val resource = resourceLoader.getResource("classpath:cz/fb/manaus/core/service/markets.json")
+        markets = objectMapper.readValue(resource.inputStream, TYPE_REF)
         markets = markets.map { it.copy(event = it.event.copy(openDate = Instant.now().plus(5, ChronoUnit.HOURS))) }
     }
 

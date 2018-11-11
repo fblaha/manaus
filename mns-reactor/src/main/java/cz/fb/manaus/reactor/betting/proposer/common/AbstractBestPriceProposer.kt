@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.betting.proposer.common
 
 import com.google.common.base.Preconditions
-import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.repository.domain.Side
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult

@@ -2,7 +2,11 @@ package cz.fb.manaus.reactor.betting
 
 import com.google.common.base.Preconditions.checkState
 import com.google.common.collect.Table
-import cz.fb.manaus.core.model.*
+import cz.fb.manaus.core.model.AccountMoney
+import cz.fb.manaus.core.model.Bet
+import cz.fb.manaus.core.model.MarketSnapshot
+import cz.fb.manaus.core.model.TradedVolume
+import cz.fb.manaus.core.repository.domain.Side
 import cz.fb.manaus.reactor.price.Fairness
 import java.util.*
 

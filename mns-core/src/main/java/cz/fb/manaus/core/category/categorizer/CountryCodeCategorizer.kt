@@ -8,7 +8,7 @@ class CountryCodeCategorizer : AbstractDelegatingCategorizer(PREFIX) {
 
     override fun getCategoryRaw(market: Market): Set<String> {
         val countryCode = market.event.countryCode
-        return setOf(countryCode.toLowerCase())
+        return if (countryCode == null) emptySet() else setOf(countryCode.toLowerCase())
     }
 
     companion object {

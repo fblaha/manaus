@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component
 class InPlayCategorizer : AbstractDelegatingCategorizer("inPlay_") {
 
     public override fun getCategoryRaw(market: Market): Set<String> {
-        return setOf(market.isInPlay.toString())
+        return setOf(market.inPlay.toString())
     }
 }

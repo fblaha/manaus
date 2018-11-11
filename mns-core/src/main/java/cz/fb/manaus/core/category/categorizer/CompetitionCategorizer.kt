@@ -10,7 +10,7 @@ class CompetitionCategorizer : AbstractDelegatingCategorizer(PREFIX) {
 
     override fun getCategoryRaw(market: Market): Set<String> {
         val competition = market.competition
-        return if (Strings.isNullOrEmpty(competition.name)) {
+        return if (competition == null || Strings.isNullOrEmpty(competition.name)) {
             setOf("none")
         } else {
             setOf(normalize(competition.name))

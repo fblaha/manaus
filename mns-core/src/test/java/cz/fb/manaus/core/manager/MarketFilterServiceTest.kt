@@ -2,11 +2,9 @@ package cz.fb.manaus.core.manager
 
 import com.google.common.collect.Range
 import junit.framework.TestCase.assertTrue
-import org.junit.Ignore
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-@Ignore
 class MarketFilterServiceTest : AbstractMarketDataAwareTestCase() {
     @Autowired
     private lateinit var filterService: MarketFilterService
