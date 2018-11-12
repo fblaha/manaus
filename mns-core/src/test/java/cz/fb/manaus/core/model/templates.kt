@@ -65,3 +65,10 @@ val market = Market(id = "2",
 )
 
 val realizedBet = RealizedBet(settledBet, betAction, market)
+
+fun RealizedBet.replacePrice(price: Price): RealizedBet {
+    return this.copy(
+            settledBet = this.settledBet.copy(price = price),
+            betAction = this.betAction.copy(price = price)
+    )
+}

@@ -1,14 +1,10 @@
 package cz.fb.manaus.reactor.betting.validator.common.update
 
-import cz.fb.manaus.core.dao.AbstractDaoTest
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.test.CoreTestFactory
-import cz.fb.manaus.core.test.ModelFactory
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.spring.ManausProfiles.DB
 import cz.fb.manaus.spring.ManausProfiles.TEST
-import org.apache.commons.lang3.time.DateUtils
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
@@ -27,7 +23,6 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDaoTest() {
 
 
     private fun checkValidation(actionType: BetActionType, beforeMinutes: Int, lay: Side, validationResult: ValidationResult) {
-        val market = newMarket()
         marketDao.saveOrUpdate(market)
         val place = ModelFactory.newAction(actionType, DateUtils.addMinutes(Date(), -beforeMinutes), Price(2.0, 30.0, lay), market, CoreTestFactory.HOME)
         place.betId = ReactorTestFactory.BET_ID
@@ -83,9 +78,6 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDaoTest() {
         checkValidation(BetActionType.UPDATE, 150, Side.BACK, ValidationResult.ACCEPT)
     }
 
-    private fun newMarket(): Market {
-        return CoreTestFactory.newMarket("33", DateUtils.addHours(Date(), 2), CoreTestFactory.MATCH_ODDS)
-    }
 
     @Component
     @Profile(DB)

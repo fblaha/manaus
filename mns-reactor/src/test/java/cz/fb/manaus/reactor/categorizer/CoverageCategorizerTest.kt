@@ -4,6 +4,7 @@ import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.realizedBet
+import cz.fb.manaus.core.model.replacePrice
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.hamcrest.CoreMatchers.hasItem
 import org.hamcrest.core.IsCollectionContaining.hasItems
