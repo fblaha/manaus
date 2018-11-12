@@ -6,7 +6,6 @@ import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.time.Instant
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -52,17 +51,19 @@ class BetActionRepositoryTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `get recent action`() {
+        val actionTime = betAction.time
         val recent = betActionRepository.save(betAction)
         betActionRepository.setBetID(recent, "100")
-        val older = betActionRepository.save(betAction.copy(time = Instant.now().minusSeconds(600)))
+        val older = betActionRepository.save(betAction.copy(time = actionTime.minusSeconds(600)))
         betActionRepository.setBetID(older, "100")
         assertEquals(recent, betActionRepository.findRecentBetAction("100")!!.id)
     }
 
     @Test
     fun `get recent actions`() {
+        val actionTime = betAction.time
         val recent = betActionRepository.save(betAction)
-        val older = betActionRepository.save(betAction.copy(time = Instant.now().minusSeconds(600)))
+        val older = betActionRepository.save(betAction.copy(time = actionTime.minusSeconds(600)))
         val actions = betActionRepository.findRecentBetActions(100)
         assertEquals(2, actions.size)
         assertEquals(recent, actions.first().id)

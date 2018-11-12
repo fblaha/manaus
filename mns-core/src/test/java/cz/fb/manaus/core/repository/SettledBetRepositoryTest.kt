@@ -8,7 +8,6 @@ import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.time.Instant
 import kotlin.test.assertEquals
 
 class SettledBetRepositoryTest : AbstractDatabaseTestCase() {
@@ -47,17 +46,19 @@ class SettledBetRepositoryTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `find - from`() {
+        val settledTime = settledBet.settled
         settledBetRepository.save(settledBet)
         assertEquals(1, settledBetRepository.find().size)
-        assertEquals(0, settledBetRepository.find(from = Instant.now().plusSeconds(30)).size)
-        assertEquals(1, settledBetRepository.find(from = Instant.now().minusSeconds(30)).size)
+        assertEquals(0, settledBetRepository.find(from = settledTime.plusSeconds(30)).size)
+        assertEquals(1, settledBetRepository.find(from = settledTime.minusSeconds(30)).size)
     }
 
     @Test
     fun `find - to`() {
+        val settledTime = settledBet.settled
         settledBetRepository.save(settledBet)
-        val minus30 = Instant.now().minusSeconds(30)
-        val plus30 = Instant.now().plusSeconds(30)
+        val minus30 = settledTime.minusSeconds(30)
+        val plus30 = settledTime.plusSeconds(30)
         assertEquals(1, settledBetRepository.find(from = minus30, to = plus30).size)
         assertEquals(0, settledBetRepository.find(from = minus30, to = minus30).size)
     }

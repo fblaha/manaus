@@ -9,13 +9,13 @@ class RunnerPricesTest {
     @Test
     fun homogeneous() {
         val back = runnerPrices.first().getHomogeneous(Side.BACK)
-        assertEquals(1, back.prices.size)
+        assertEquals(2, back.prices.size)
         assertEquals(Side.BACK, back.prices.first().side)
     }
 
     @Test
     fun `sorted prices`() {
-        assertEquals(2, runnerPrices.first().sortedPrices.size)
+        assertEquals(4, runnerPrices.first().sortedPrices.size)
         assertEquals(Side.BACK, runnerPrices.first().sortedPrices.first().side)
     }
 

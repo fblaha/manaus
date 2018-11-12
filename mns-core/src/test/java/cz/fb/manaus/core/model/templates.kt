@@ -1,16 +1,17 @@
 package cz.fb.manaus.core.model
 
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 val settledBet: SettledBet = SettledBet(
         id = "1",
         selectionId = SEL_HOME,
-        selectionName = "Banik",
-        profitAndLoss = 5.0,
-        matched = Instant.now(),
-        placed = Instant.now(),
-        settled = Instant.now(),
-        price = Price(3.0, 3.0, Side.BACK)
+        selectionName = "Banik Ostrave",
+        profitAndLoss = 9.9,
+        matched = Instant.now().minus(16, ChronoUnit.HOURS),
+        placed = Instant.now().minus(24, ChronoUnit.HOURS),
+        settled = Instant.now().minus(8, ChronoUnit.HOURS),
+        price = Price(3.3, 3.0, Side.BACK)
 )
 
 val homePrice = RunnerPrices(
@@ -18,8 +19,10 @@ val homePrice = RunnerPrices(
         matchedAmount = 100.0,
         lastMatchedPrice = 3.0,
         prices = listOf(
+                Price(2.4, 100.0, Side.BACK),
                 Price(2.5, 100.0, Side.BACK),
-                Price(3.5, 100.0, Side.LAY)
+                Price(3.5, 100.0, Side.LAY),
+                Price(3.7, 100.0, Side.LAY)
         )
 )
 val runnerPrices = listOf(
@@ -31,7 +34,7 @@ val runnerPrices = listOf(
 val betAction = BetAction(
         id = 0,
         marketID = "2",
-        time = Instant.now(),
+        time = Instant.now().minus(25, ChronoUnit.HOURS),
         selectionID = SEL_HOME,
         betID = null,
         betActionType = BetActionType.PLACE,
@@ -47,16 +50,16 @@ val market = Market(id = "2",
         matchedAmount = 100.0,
         event = Event(
                 id = "100",
-                name = "Ostrava vs Sparta",
+                name = "Banik Ostrava vs Sparta Prague",
                 openDate = Instant.now(),
-                timezone = "UTC",
+                timezone = "CET",
                 countryCode = "cz",
-                venue = "letna"),
+                venue = "bazaly"),
         competition = Competition("100", "Czech League"),
         eventType = EventType("1000", "soccer"),
         runners = listOf(
                 Runner(SEL_HOME, "Banik Ostrava", 0.0, 0),
-                Runner(SEL_AWAY, "Sparta Praha", 0.0, 1),
+                Runner(SEL_AWAY, "Sparta Prague", 0.0, 1),
                 Runner(SEL_DRAW, "The Draw", 0.0, 2)
         )
 )
