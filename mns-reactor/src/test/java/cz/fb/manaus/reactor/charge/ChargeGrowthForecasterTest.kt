@@ -1,11 +1,7 @@
 package cz.fb.manaus.reactor.charge
 
-import cz.fb.manaus.core.model.Bet
-import cz.fb.manaus.core.model.MarketSnapshot
-import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.core.test.CoreTestFactory
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.AmountAdviser
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
@@ -29,22 +25,22 @@ class ChargeGrowthForecasterTest : AbstractLocalTestCase() {
 
     @Test
     fun forecast() {
-        val market = factory.createMarket(0.05, listOf(0.5, 0.3, 0.2))
+        val market = factory.createMarketPrices(0.05, listOf(0.5, 0.3, 0.2))
         val currentBets = mutableListOf<Bet>()
-        val marketSnapshot = MarketSnapshot.from(market, currentBets, null)
+        val marketSnapshot = MarketSnapshot.from(market, cz.fb.manaus.core.model.market, currentBets)
         val fairness = calculator.getFairness(market)
-        var forecast = forecaster.getForecast(CoreTestFactory.DRAW, Side.BACK, marketSnapshot, fairness)
+        var forecast = forecaster.getForecast(SEL_DRAW, Side.BACK, marketSnapshot, fairness)
         assertTrue(forecast!! > 1)
         val betAmount = adviser.amount
-        currentBets.add(Bet("1", CoreTestFactory.MARKET_ID, CoreTestFactory.DRAW,
+        currentBets.add(Bet("1", "1", SEL_DRAW,
                 Price(3.0, betAmount, Side.LAY), Date(), betAmount))
-        forecast = forecaster.getForecast(CoreTestFactory.DRAW, Side.BACK, marketSnapshot, fairness)
+        forecast = forecaster.getForecast(SEL_DRAW, Side.BACK, marketSnapshot, fairness)
         assertFalse(forecast!! > 1)
 
-        forecast = forecaster.getForecast(CoreTestFactory.HOME, Side.BACK, marketSnapshot, fairness)
+        forecast = forecaster.getForecast(SEL_HOME, Side.BACK, marketSnapshot, fairness)
         assertTrue(forecast!! > 1)
 
-        forecast = forecaster.getForecast(CoreTestFactory.HOME, Side.LAY, marketSnapshot, fairness)
+        forecast = forecaster.getForecast(SEL_HOME, Side.LAY, marketSnapshot, fairness)
         assertFalse(forecast!! > 1)
     }
 }

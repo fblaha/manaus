@@ -1,9 +1,10 @@
 package cz.fb.manaus.reactor.categorizer
 
 import cz.fb.manaus.core.category.BetCoverage
+import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.realizedBet
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.core.test.CoreTestFactory.Companion.newSettledBet
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
@@ -15,26 +16,33 @@ class CounterBetCategorizerTest : AbstractLocalTestCase() {
 
     @Test
     fun `counter - equal prices`() {
-        val coverage = BetCoverage.from(listOf(newSettledBet(2.0, Side.BACK)))
-        assertEquals(setOf("counter_zero"), categorizer.getCategories(newSettledBet(2.0, Side.LAY), coverage))
+        val back = realizedBet.replacePrice(Price(2.0, 2.0, Side.BACK))
+        val lay = realizedBet.replacePrice(Price(2.0, 2.0, Side.LAY))
+        val coverage = BetCoverage.from(listOf(back))
+        assertEquals(setOf("counter_zero"), categorizer.getCategories(lay, coverage))
     }
 
     @Test
     fun `counter - sure profit`() {
-        val coverage = BetCoverage.from(listOf(newSettledBet(2.5, Side.BACK)))
-        assertEquals(setOf("counter_profit"), categorizer.getCategories(newSettledBet(2.0, Side.LAY), coverage))
+        val back = realizedBet.replacePrice(Price(2.5, 2.0, Side.BACK))
+        val lay = realizedBet.replacePrice(Price(2.0, 2.0, Side.LAY))
+        val coverage = BetCoverage.from(listOf(back))
+        assertEquals(setOf("counter_profit"), categorizer.getCategories(lay, coverage))
     }
 
     @Test
     fun `category - sure loss`() {
-        val coverage = BetCoverage.from(listOf(newSettledBet(1.5, Side.BACK)))
-        assertEquals(setOf("counter_loss"), categorizer.getCategories(newSettledBet(2.0, Side.LAY), coverage))
+        val back = realizedBet.replacePrice(Price(1.5, 2.0, Side.BACK))
+        val lay = realizedBet.replacePrice(Price(2.0, 2.0, Side.LAY))
+        val coverage = BetCoverage.from(listOf(back))
+        assertEquals(setOf("counter_loss"), categorizer.getCategories(lay, coverage))
     }
 
     @Test
     fun `no counter bet`() {
-        val coverage = BetCoverage.from(listOf(newSettledBet(2.0, Side.LAY)))
-        assertEquals(setOf("counter_none"), categorizer.getCategories(newSettledBet(2.0, Side.LAY), coverage))
+        val lay = realizedBet.replacePrice(Price(2.0, 2.0, Side.LAY))
+        val coverage = BetCoverage.from(listOf(lay))
+        assertEquals(setOf("counter_none"), categorizer.getCategories(lay, coverage))
     }
 
 }

@@ -10,25 +10,25 @@ class LayLoserBettorTest : AbstractBettorTest<LayLoserBettor>() {
 
     @Test
     fun `place bet - based on fairness`() {
-        checkPlace(persistMarket(reactorTestFactory.createMarket(2.98, 3.2, 3.05, 1)),
+        checkPlace(persistMarket(reactorTestFactory.createMarketPrices(2.98, 3.2, 3.05)),
                 3, 2.88)
     }
 
     @Test
     fun `place bet - based on best price`() {
-        checkPlace(persistMarket(reactorTestFactory.createMarket(2.58, 3.15, 3.0, 1)),
+        checkPlace(persistMarket(reactorTestFactory.createMarketPrices(2.58, 3.15, 3.0)),
                 3, 2.6)
     }
 
     @Test
     fun `place bet - based on last matched or traded volume`() {
-        checkPlace(persistMarket(reactorTestFactory.createMarket(2.8, 3.2, 2.5, 1)),
+        checkPlace(persistMarket(reactorTestFactory.createMarketPrices(2.8, 3.2, 2.5)),
                 3, 2.48)
     }
 
     @Test
     fun `too close price for update`() {
-        val market = persistMarket(reactorTestFactory.createMarket(2.90, 3.2, 3.0, 1))
+        val market = persistMarket(reactorTestFactory.createMarketPrices(2.90, 3.2, 3.0))
 
         checkUpdate(market, 2.86, Side.LAY, 0, 0)
         checkUpdate(market, 2.88, Side.LAY, 0, 0)

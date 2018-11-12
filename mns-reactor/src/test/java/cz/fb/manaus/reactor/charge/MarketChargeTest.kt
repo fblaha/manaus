@@ -1,25 +1,21 @@
 package cz.fb.manaus.reactor.charge
 
 import com.google.common.collect.ImmutableMap.of
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.whenever
-import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.core.test.ModelFactory
 import org.junit.Assert
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
+import java.time.Instant
 import kotlin.test.assertEquals
 
 class MarketChargeTest : AbstractLocalTestCase() {
     @Autowired
     private lateinit var provider: ExchangeProvider
-    private val current = Date()
+    private val current = Instant.now()
     /**
      * Comm Charged 5% On Net winnings of EUR0.2	 	 -	-	-	(0.01)	 	1,298.08
      * 16:36	 Qualifying Matches Bozoljac v Hernych / Match Odds / Ilia Bozoljac     Back	 2.98	2.00	Lost	(2.00)	 	1,298.09
@@ -31,14 +27,44 @@ class MarketChargeTest : AbstractLocalTestCase() {
     private val sel1: Long = 11
     private val sel2: Long = 22
 
-    private val back1 = mockAction(
-            ModelFactory.newSettled(sel1, "Ilia Bozoljac", -2.0, current, Price(2.98, 2.0, Side.BACK)), "1")
-    private val lay1 = mockAction(
-            ModelFactory.newSettled(sel1, "Ilia Bozoljac", 2.0, current, Price(2.6, 2.0, Side.LAY)), "2")
-    private val back2 = mockAction(
-            ModelFactory.newSettled(sel2, "Jan Hernych", 1.26, current, Price(1.63, 2.0, Side.BACK)), "3")
-    private val lay2 = mockAction(
-            ModelFactory.newSettled(sel2, "Jan Hernych", -1.06, current, Price(1.53, 2.0, Side.LAY)), "4")
+    private val back1 = SettledBet(
+            id = "1",
+            selectionId = sel1,
+            selectionName = "Ilia Bozoljac",
+            profitAndLoss = -2.0,
+            placed = current,
+            matched = current,
+            settled = current,
+            price = Price(2.98, 2.0, Side.BACK))
+
+    private val lay1 = SettledBet(
+            id = "2",
+            selectionId = sel1,
+            selectionName = "Ilia Bozoljac",
+            profitAndLoss = 2.0,
+            placed = current,
+            matched = current,
+            settled = current,
+            price = Price(2.6, 2.0, Side.LAY))
+
+    private val back2 = SettledBet(
+            id = "3",
+            selectionId = sel2,
+            selectionName = "Jan Hernych",
+            profitAndLoss = 1.26,
+            placed = current,
+            matched = current,
+            settled = current,
+            price = Price(1.63, 2.0, Side.BACK))
+    private val lay2 = SettledBet(
+            id = "4",
+            selectionId = sel2,
+            selectionName = "Jan Hernych",
+            profitAndLoss = -1.06,
+            placed = current,
+            matched = current,
+            settled = current,
+            price = Price(1.53, 2.0, Side.LAY))
 
 
     @Test
@@ -74,10 +100,4 @@ class MarketChargeTest : AbstractLocalTestCase() {
         }
     }
 
-    private fun mockAction(bet: SettledBet, betId: String): SettledBet {
-        val mock = mock<BetAction>()
-        whenever(mock.betId).thenReturn(betId)
-        bet.betAction = mock
-        return bet
-    }
 }

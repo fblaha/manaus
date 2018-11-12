@@ -14,7 +14,7 @@ class BetfairProfitPlugin : ProfitPlugin {
         val result = ImmutableMap.builder<String, Double>()
         val marketMap = bets.groupBy { bet -> bet.market.id }
         for (marketBets in marketMap.values) {
-            val charge = MarketCharge.fromBets(chargeRate, marketBets)
+            val charge = MarketCharge.fromBets(chargeRate, marketBets.map { it.settledBet })
             for (bet in marketBets) {
                 val betId = bet.settledBet.id
                 result.put(betId, charge.getChargeContribution(betId))

@@ -2,13 +2,9 @@ package cz.fb.manaus.reactor.betting.validator.common.update
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
-import cz.fb.manaus.core.model.MarketPrices
-import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.core.model.RunnerPrices
-import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.core.test.CoreTestFactory
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.rounding.RoundingService
@@ -29,19 +25,19 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
     @Autowired
     private lateinit var provider: ExchangeProvider
 
-    private lateinit var prices: MarketPrices
+    private lateinit var prices: List<RunnerPrices>
     private lateinit var runnerPrices: RunnerPrices
 
     @Before
     fun setUp() {
-        prices = factory.createMarket(0.1, listOf(0.4, 0.3, 0.3))
-        runnerPrices = prices.getRunnerPrices(CoreTestFactory.HOME)
+        prices = factory.createMarketPrices(0.1, listOf(0.4, 0.3, 0.3))
+        runnerPrices = getRunnerPrices(prices, SEL_HOME)
     }
 
     @Test
     fun `accept back`() {
         val oldPrice = Price(2.5, 5.0, Side.BACK)
-        val oldBet = ReactorTestFactory.newBet(oldPrice)
+        val oldBet = betTemplate.copy(requestedPrice = oldPrice)
 
         val context = factory.newBetContext(Side.BACK, prices, oldBet)
         context.newPrice = oldPrice
@@ -65,7 +61,7 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
         whenever(oldOne.side).thenReturn(Side.LAY)
         whenever(newOne.price).thenReturn(3.15)
         whenever(oldOne.price).thenReturn(3.1)
-        val oldBet = ReactorTestFactory.newBet(oldOne)
+        val oldBet = betTemplate.copy(requestedPrice = oldOne)
 
         val context = factory.newBetContext(Side.LAY, prices, oldBet)
         context.newPrice = newOne
@@ -86,7 +82,7 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
         whenever(oldOne.side).thenReturn(Side.LAY)
         whenever(oldOne.price).thenReturn(provider.minPrice)
         whenever(newOne.price).thenReturn(1.04)
-        val oldBet = ReactorTestFactory.newBet(oldOne)
+        val oldBet = betTemplate.copy(requestedPrice = oldOne)
 
         val context = factory.newBetContext(Side.LAY, prices, oldBet)
         context.newPrice = newOne

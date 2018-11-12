@@ -10,6 +10,14 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
 
+val betTemplate = Bet(
+        betId = "111",
+        marketId = "222",
+        selectionId = SEL_HOME,
+        requestedPrice = Price(3.0, 2.0, Side.BACK),
+        placedDate = Date())
+
+
 class BetTest : AbstractLocalTestCase() {
 
     @Autowired
@@ -35,14 +43,11 @@ class BetTest : AbstractLocalTestCase() {
 
     @Test
     fun `json marshall`() {
-        val original = Bet(betId = "111", marketId = "222", selectionId = 333,
-                requestedPrice = Price(3.0, 2.0, Side.BACK),
-                placedDate = Date())
 
-        val serialized = mapper.writer().writeValueAsString(original)
+        val serialized = mapper.writer().writeValueAsString(betTemplate)
         val restored = mapper.readerFor(Bet::class.java).readValue<Bet>(serialized)
-        assertEquals(original.requestedPrice, restored.requestedPrice)
-        assertEquals(original.placedDate, restored.placedDate)
+        assertEquals(betTemplate.requestedPrice, restored.requestedPrice)
+        assertEquals(betTemplate.placedDate, restored.placedDate)
         val doubleSerialized = mapper.writer().writeValueAsString(restored)
         assertEquals(serialized, doubleSerialized)
     }
@@ -51,7 +56,7 @@ class BetTest : AbstractLocalTestCase() {
         val requestedPrice = Price(3.0, provider.minAmount, Side.LAY)
         val date = Instant.now().minus(2, ChronoUnit.HOURS)
         return Bet(betId = "1",
-                marketId = marketTemplate.id,
+                marketId = market.id,
                 selectionId = 1000L,
                 requestedPrice = requestedPrice,
                 placedDate = Date.from(date),

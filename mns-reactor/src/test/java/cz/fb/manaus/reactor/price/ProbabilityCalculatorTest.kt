@@ -1,8 +1,8 @@
 package cz.fb.manaus.reactor.price
 
+import cz.fb.manaus.core.model.SEL_HOME
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.core.test.CoreTestFactory
 import cz.fb.manaus.reactor.ReactorTestFactory
 import org.junit.Assert
 import org.junit.Test
@@ -29,13 +29,13 @@ class ProbabilityCalculatorTest : AbstractLocalTestCase() {
     private fun checkProbability(probabilities: List<Double>) {
         val rates = listOf(0.05, 0.1, 0.2, 0.4)
         for (rate in rates) {
-            val prices = factory.createMarket(rate, probabilities)
+            val prices = factory.createMarketPrices(rate, probabilities)
             val fairness = fairnessPolynomialCalculator.getFairness(prices)
             for (side in Side.values()) {
                 val probability = calculator.fromFairness(fairness[side]!!, side, prices)
                 for (i in probabilities.indices) {
                     val expected = probabilities[i]
-                    val selection = CoreTestFactory.HOME + i
+                    val selection = SEL_HOME + i
                     Assert.assertEquals(expected, probability[selection]!!, 0.005)
                 }
             }

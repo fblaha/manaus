@@ -1,7 +1,7 @@
 package cz.fb.manaus.core.settlement
 
 import cz.fb.manaus.core.model.betAction
-import cz.fb.manaus.core.model.marketTemplate
+import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.model.settledBet
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
@@ -21,7 +21,7 @@ class SettledBetSaverTest : AbstractDatabaseTestCase() {
 
     @Test
     fun testSaver() {
-        marketRepository.saveOrUpdate(marketTemplate)
+        marketRepository.saveOrUpdate(market)
         betActionRepository.save(betAction.copy(betID = "testSaver"))
 
         val bet = settledBet.copy(id = "testSaver")

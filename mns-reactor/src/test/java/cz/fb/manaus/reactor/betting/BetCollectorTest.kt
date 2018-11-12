@@ -1,9 +1,9 @@
 package cz.fb.manaus.reactor.betting
 
 import cz.fb.manaus.core.model.Bet
-import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.betAction
 import org.junit.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -18,12 +18,12 @@ class BetCollectorTest {
         val updateBet = Bet(betId = "777", marketId = marketId, selectionId = selectionId,
                 requestedPrice = Price(5.0, 5.0, Side.LAY))
         var collector = BetCollector()
-        collector.updateBet(BetCommand(updateBet, BetAction()))
+        collector.updateBet(BetCommand(updateBet, betAction))
         checkCollector(collector)
         collector = BetCollector()
         val placeBet = Bet(betId = null, marketId = marketId, selectionId = selectionId,
                 requestedPrice = Price(5.0, 5.0, Side.LAY))
-        collector.placeBet(BetCommand(placeBet, BetAction()))
+        collector.placeBet(BetCommand(placeBet, betAction))
         checkCollector(collector)
     }
 

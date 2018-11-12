@@ -7,6 +7,6 @@ class MarketTest {
 
     @Test
     fun `runner by selection id`() {
-        assertEquals(marketTemplate.runners.first(), marketTemplate.getRunner(100))
+        assertEquals(market.runners.first(), market.getRunner(100))
     }
 }

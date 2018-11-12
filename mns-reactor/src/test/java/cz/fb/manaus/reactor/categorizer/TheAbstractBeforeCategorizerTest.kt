@@ -1,11 +1,11 @@
 package cz.fb.manaus.reactor.categorizer
 
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import java.util.*
+import java.time.Instant
 import kotlin.test.assertEquals
 
 
@@ -23,8 +23,8 @@ class TheAbstractBeforeCategorizerTest : AbstractLocalTestCase() {
     @Component
     private class TestBeforeCategorizer : AbstractBeforeCategorizer("test") {
 
-        override fun getDate(settledBet: SettledBet): Date {
-            return Date()
+        override fun getDate(settledBet: RealizedBet): Instant {
+            return Instant.now()
         }
 
     }

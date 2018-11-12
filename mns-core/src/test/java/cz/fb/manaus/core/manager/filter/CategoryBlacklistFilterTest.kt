@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.manager.filter
 
-import cz.fb.manaus.core.model.marketTemplate
+import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,8 +14,8 @@ class CategoryBlacklistFilterTest : AbstractLocalTestCase() {
 
     @Test
     fun testFilter() {
-        assertTrue(filter.accept(marketTemplate, setOf()))
-        assertFalse(filter.accept(marketTemplate, setOf("market_sport_soccer")))
+        assertTrue(filter.accept(market, setOf()))
+        assertFalse(filter.accept(market, setOf("market_sport_soccer")))
     }
 }
 

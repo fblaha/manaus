@@ -2,9 +2,9 @@ package cz.fb.manaus.reactor.betting.proposer.common
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
+import cz.fb.manaus.core.model.SEL_HOME
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.core.test.CoreTestFactory
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
@@ -27,7 +27,7 @@ class TheAbstractBestPriceProposerTest : AbstractLocalTestCase() {
     fun `lay propose`() {
         val context = mock<BetContext>()
         whenever(context.side).thenReturn(Side.LAY)
-        whenever(context.runnerPrices).thenReturn(factory.newRP(CoreTestFactory.HOME, 2.0, 4.5))
+        whenever(context.runnerPrices).thenReturn(factory.newRunnerPrices(SEL_HOME, 2.0, 4.5))
         assertEquals(ValidationResult.ACCEPT, layProposer.validate(context))
         assertEquals(2.02, layProposer.getProposedPrice(context))
     }
@@ -36,7 +36,8 @@ class TheAbstractBestPriceProposerTest : AbstractLocalTestCase() {
     fun check() {
         val context = mock<BetContext>()
         whenever(context.side).thenReturn(Side.LAY, Side.BACK)
-        whenever(context.runnerPrices).thenReturn(CoreTestFactory.newBackRP(2.0, CoreTestFactory.HOME, 2.0))
+        val prices = factory.newRunnerPrices(SEL_HOME, 2.0, 3.0)
+        whenever(context.runnerPrices).thenReturn(prices)
         assertEquals(ValidationResult.ACCEPT, layProposer.validate(context))
         assertEquals(ValidationResult.REJECT, backProposer.validate(context))
     }
@@ -45,7 +46,8 @@ class TheAbstractBestPriceProposerTest : AbstractLocalTestCase() {
     fun `back propose`() {
         val context = mock<BetContext>()
         whenever(context.side).thenReturn(Side.BACK)
-        whenever(context.runnerPrices).thenReturn(factory.newRP(CoreTestFactory.HOME, 2.5, 3.5))
+        val prices = factory.newRunnerPrices(SEL_HOME, 2.5, 3.5)
+        whenever(context.runnerPrices).thenReturn(prices)
         assertEquals(ValidationResult.ACCEPT, backProposer.validate(context))
         assertEquals(3.45, backProposer.getProposedPrice(context))
     }

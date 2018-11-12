@@ -13,16 +13,19 @@ val settledBet: SettledBet = SettledBet(
         price = Price(3.0, 3.0, Side.BACK)
 )
 
-val runnerPrices = listOf(
-        RunnerPrices(
-                selectionId = SEL_HOME,
-                matchedAmount = 100.0,
-                lastMatchedPrice = 3.0,
-                prices = listOf(
-                        Price(3.0, 100.0, Side.BACK),
-                        Price(3.5, 100.0, Side.LAY)
-                )
+val homePrice = RunnerPrices(
+        selectionId = SEL_HOME,
+        matchedAmount = 100.0,
+        lastMatchedPrice = 3.0,
+        prices = listOf(
+                Price(2.5, 100.0, Side.BACK),
+                Price(3.5, 100.0, Side.LAY)
         )
+)
+val runnerPrices = listOf(
+        homePrice,
+        homePrice.copy(selectionId = SEL_DRAW),
+        homePrice.copy(selectionId = SEL_AWAY)
 )
 
 val betAction = BetAction(
@@ -37,7 +40,7 @@ val betAction = BetAction(
         properties = mapOf("x" to "y")
 )
 
-val marketTemplate = Market(id = "2",
+val market = Market(id = "2",
         name = "Match Odds",
         inPlay = true,
         type = "match_odds",
@@ -53,7 +56,9 @@ val marketTemplate = Market(id = "2",
         eventType = EventType("1000", "soccer"),
         runners = listOf(
                 Runner(SEL_HOME, "Banik Ostrava", 0.0, 0),
-                Runner(SEL_AWAY, "Sparta Praha", 0.0, 0),
-                Runner(SEL_DRAW, "The Draw", 0.0, 0)
+                Runner(SEL_AWAY, "Sparta Praha", 0.0, 1),
+                Runner(SEL_DRAW, "The Draw", 0.0, 2)
         )
 )
+
+val realizedBet = RealizedBet(settledBet, betAction, market)

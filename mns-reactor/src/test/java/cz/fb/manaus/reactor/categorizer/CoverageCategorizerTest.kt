@@ -1,9 +1,10 @@
 package cz.fb.manaus.reactor.categorizer
 
 import cz.fb.manaus.core.category.BetCoverage
+import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.realizedBet
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.core.test.CoreTestFactory
 import org.hamcrest.CoreMatchers.hasItem
 import org.hamcrest.core.IsCollectionContaining.hasItems
 import org.junit.Assert.assertThat
@@ -41,7 +42,7 @@ class CoverageCategorizerTest : AbstractLocalTestCase() {
 
     @Test
     fun `category solo lay`() {
-        val bet = CoreTestFactory.newSettledBet(2.0, Side.LAY)
+        val bet = realizedBet.replacePrice(Price(2.0, 2.0, Side.LAY))
         val coverage = BetCoverage.from(listOf(bet))
         assertThat(categorizer.getCategories(bet, coverage), hasItems("coverage_soloLay", "coverage_solo"))
     }

@@ -38,7 +38,7 @@ class TheAbstractPriceFilterTest : AbstractLocalTestCase() {
 
     @Test
     fun `best prices`() {
-        val market = testFactory.createMarket(0.15, listOf(0.5, 0.3, 0.2))
+        val market = testFactory.createMarketPrices(0.15, listOf(0.5, 0.3, 0.2))
         for (runnerPrices in market.runnerPrices) {
             val bestBack = runnerPrices.getHomogeneous(Side.BACK).bestPrice.get()
             val bestLay = runnerPrices.getHomogeneous(Side.LAY).bestPrice.get()

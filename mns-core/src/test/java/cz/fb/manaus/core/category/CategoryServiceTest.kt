@@ -2,10 +2,8 @@ package cz.fb.manaus.core.category
 
 import cz.fb.manaus.core.MarketCategories
 import cz.fb.manaus.core.category.categorizer.SportCategorizer
-import cz.fb.manaus.core.model.RealizedBet
-import cz.fb.manaus.core.model.betAction
-import cz.fb.manaus.core.model.marketTemplate
-import cz.fb.manaus.core.model.settledBet
+import cz.fb.manaus.core.model.market
+import cz.fb.manaus.core.model.realizedBet
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.hamcrest.CoreMatchers.hasItem
 import org.hamcrest.CoreMatchers.hasItems
@@ -19,8 +17,8 @@ class CategoryServiceTest : AbstractLocalTestCase() {
 
     @Test
     fun `market category`() {
-        val eventType = marketTemplate.eventType
-        var market = marketTemplate
+        val eventType = market.eventType
+        var market = market
 
         market = market.copy(eventType = eventType.copy(name = "Soccer"))
         assertThat(categoryService.getMarketCategories(market, false), hasItem(SPORT_SOCCER))
@@ -35,8 +33,7 @@ class CategoryServiceTest : AbstractLocalTestCase() {
 
     @Test
     fun `bet category`() {
-        val bet = RealizedBet(settledBet, betAction, marketTemplate)
-        val categories = categoryService.getRealizedBetCategories(bet, false, BetCoverage.EMPTY)
+        val categories = categoryService.getRealizedBetCategories(realizedBet, false, BetCoverage.EMPTY)
         assertThat(categories,
                 hasItems("market_country_cz", "market_sport_soccer", "market_type_match_odds"))
     }

@@ -15,8 +15,8 @@ class ProbabilityComparatorTest : AbstractLocalTestCase() {
 
     @Test
     fun `probability comparison`() {
-        val first = testFactory.newRP(1, 1.4, 1.6)
-        val second = testFactory.newRP(2, 2.8, 3.3)
+        val first = testFactory.newRunnerPrices(1, 1.4, 1.6)
+        val second = testFactory.newRunnerPrices(2, 2.8, 3.3)
         assertEquals(1L, getFirstSelection(listOf(first, first)))
         assertEquals(1L, getFirstSelection(listOf(first, second)))
         assertEquals(1L, getFirstSelection(listOf(second, first)))

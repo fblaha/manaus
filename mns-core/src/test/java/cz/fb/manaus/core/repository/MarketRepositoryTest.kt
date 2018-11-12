@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.repository
 
-import cz.fb.manaus.core.model.marketTemplate
+import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.Before
@@ -25,14 +25,14 @@ class MarketRepositoryTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `save - read`() {
-        marketRepository.saveOrUpdate(marketTemplate)
+        marketRepository.saveOrUpdate(market)
         val fromDB = marketRepository.read("2")
-        assertEquals(marketTemplate, fromDB)
+        assertEquals(market, fromDB)
     }
 
     @Test
     fun `save - delete - read`() {
-        marketRepository.saveOrUpdate(marketTemplate)
+        marketRepository.saveOrUpdate(market)
         assertNotNull(marketRepository.read("2"))
         marketRepository.delete("2")
         assertNull(marketRepository.read("2"))
@@ -40,7 +40,7 @@ class MarketRepositoryTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `delete older then`() {
-        marketRepository.saveOrUpdate(marketTemplate)
+        marketRepository.saveOrUpdate(market)
         assertEquals(0, marketRepository.delete(Instant.now().minusSeconds(10)))
         assertNotNull(marketRepository.read("2"))
         assertEquals(1, marketRepository.delete(Instant.now().plusSeconds(10)))
@@ -49,7 +49,7 @@ class MarketRepositoryTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `find markets from`() {
-        marketRepository.saveOrUpdate(marketTemplate)
+        marketRepository.saveOrUpdate(market)
         assertEquals(1, marketRepository.find().size)
         assertEquals(0, marketRepository.find(from = Instant.now().plusSeconds(30)).size)
         assertEquals(1, marketRepository.find(from = Instant.now().minusSeconds(30)).size)
@@ -57,7 +57,7 @@ class MarketRepositoryTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `find markets to`() {
-        marketRepository.saveOrUpdate(marketTemplate)
+        marketRepository.saveOrUpdate(market)
         val minus30 = Instant.now().minusSeconds(30)
         val plus30 = Instant.now().plusSeconds(30)
         assertEquals(1, marketRepository.find(from = minus30, to = plus30).size)
@@ -66,17 +66,17 @@ class MarketRepositoryTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `find markets limit`() {
-        marketRepository.saveOrUpdate(marketTemplate)
-        marketRepository.saveOrUpdate(marketTemplate.copy(id = "3"))
+        marketRepository.saveOrUpdate(market)
+        marketRepository.saveOrUpdate(market.copy(id = "3"))
         assertEquals(2, marketRepository.find(maxResults = 2).size)
         assertEquals(1, marketRepository.find(maxResults = 1).size)
     }
 
     @Test
     fun `find markets sort`() {
-        val laterEvent = marketTemplate.event.copy(openDate = Instant.now().plusSeconds(30))
-        marketRepository.saveOrUpdate(marketTemplate.copy(id = "3", event = laterEvent))
-        marketRepository.saveOrUpdate(marketTemplate)
+        val laterEvent = market.event.copy(openDate = Instant.now().plusSeconds(30))
+        marketRepository.saveOrUpdate(market.copy(id = "3", event = laterEvent))
+        marketRepository.saveOrUpdate(market)
         val markets = marketRepository.find()
         assertEquals(2, markets.size)
         assertEquals("2", markets.first().id)
