@@ -99,7 +99,7 @@ class ReactorTestFactory(
             val backRounded = roundingService.roundBet(backPrice)
             val layPrice = priceService.downgrade(fairPrice, downgradeFraction, Side.BACK)
             val layRounded = roundingService.roundBet(layPrice)
-            val selectionId = SEL_HOME * i
+            val selectionId = SEL_HOME * (i + 1)
             val lastMatched = roundingService.roundBet(fairPrice)
             runnerPrices.add(newRunnerPrices(selectionId, backRounded!!, layRounded!!, lastMatched!!))
         }

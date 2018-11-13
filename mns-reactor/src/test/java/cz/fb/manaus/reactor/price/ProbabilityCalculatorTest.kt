@@ -33,9 +33,8 @@ class ProbabilityCalculatorTest : AbstractLocalTestCase() {
             val fairness = fairnessPolynomialCalculator.getFairness(prices)
             for (side in Side.values()) {
                 val probability = calculator.fromFairness(fairness[side]!!, side, prices)
-                for (i in probabilities.indices) {
-                    val expected = probabilities[i]
-                    val selection = SEL_HOME + i
+                for ((i, expected) in probabilities.withIndex()) {
+                    val selection = SEL_HOME * (i + 1)
                     Assert.assertEquals(expected, probability[selection]!!, 0.005)
                 }
             }
