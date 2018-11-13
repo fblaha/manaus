@@ -3,16 +3,18 @@ package cz.fb.manaus.core.model
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-val settledBet: SettledBet = SettledBet(
+val homeSettledBet: SettledBet = SettledBet(
         id = "1",
         selectionId = SEL_HOME,
-        selectionName = "Banik Ostrave",
+        selectionName = "Banik Ostrava",
         profitAndLoss = 9.9,
         matched = Instant.now().minus(16, ChronoUnit.HOURS),
         placed = Instant.now().minus(24, ChronoUnit.HOURS),
         settled = Instant.now().minus(8, ChronoUnit.HOURS),
         price = Price(3.3, 3.0, Side.BACK)
 )
+
+val drawSettledBet: SettledBet = homeSettledBet.copy(selectionName = "The Draw", selectionId = SEL_DRAW)
 
 val homePrice = RunnerPrices(
         selectionId = SEL_HOME,
@@ -36,12 +38,15 @@ val betAction = BetAction(
         marketID = "2",
         time = Instant.now().minus(25, ChronoUnit.HOURS),
         selectionID = SEL_HOME,
-        betID = null,
+        betID = "1",
         betActionType = BetActionType.PLACE,
         runnerPrices = runnerPrices,
         price = Price(3.0, 3.0, Side.BACK),
         properties = mapOf("x" to "y")
 )
+
+val settledAction = betAction.copy(betID = homeSettledBet.id)
+
 
 val market = Market(id = "2",
         name = "Match Odds",
@@ -64,7 +69,7 @@ val market = Market(id = "2",
         )
 )
 
-val realizedBet = RealizedBet(settledBet, betAction, market)
+val realizedBet = RealizedBet(homeSettledBet, betAction, market)
 
 fun RealizedBet.replacePrice(price: Price): RealizedBet {
     return this.copy(

@@ -1,14 +1,15 @@
 package cz.fb.manaus.reactor.profit.progress
 
-import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
-import cz.fb.manaus.reactor.profit.AbstractProfitTest
+import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.reactor.profit.generateBets
+import cz.fb.manaus.reactor.profit.toRealizedBet
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 
 
-class CoverageFunctionProfitServiceTest : AbstractProfitTest() {
+class CoverageFunctionProfitServiceTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var service: CoverageFunctionProfitService
@@ -17,7 +18,7 @@ class CoverageFunctionProfitServiceTest : AbstractProfitTest() {
 
     @Test
     fun `covered price`() {
-        val bets = generateBets()
+        val bets = generateBets().map { toRealizedBet(it) }
         val records = service.getProfitRecords(bets,
                 "price", provider.chargeRate)
         assertEquals(2, records.size)
@@ -28,7 +29,7 @@ class CoverageFunctionProfitServiceTest : AbstractProfitTest() {
 
     @Test
     fun `solo price`() {
-        val bets = generateBets(Side.BACK)
+        val bets = generateBets().map { toRealizedBet(it) }
         val records = service.getProfitRecords(bets,
                 "price", provider.chargeRate)
         assertEquals(1, records.size)

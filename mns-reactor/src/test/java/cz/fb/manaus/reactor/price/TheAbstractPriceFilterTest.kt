@@ -39,9 +39,9 @@ class TheAbstractPriceFilterTest : AbstractLocalTestCase() {
     @Test
     fun `best prices`() {
         val market = testFactory.createMarketPrices(0.15, listOf(0.5, 0.3, 0.2))
-        for (runnerPrices in market.runnerPrices) {
-            val bestBack = runnerPrices.getHomogeneous(Side.BACK).bestPrice.get()
-            val bestLay = runnerPrices.getHomogeneous(Side.LAY).bestPrice.get()
+        for (runnerPrices in market) {
+            val bestBack = runnerPrices.getHomogeneous(Side.BACK).bestPrice!!
+            val bestLay = runnerPrices.getHomogeneous(Side.LAY).bestPrice!!
             val prices = runnerPrices.prices.toList()
             val filteredPrices = this.filter.filter(prices)
             val bySide = filteredPrices.map { it.side to it }.toMap()
@@ -55,8 +55,6 @@ class TheAbstractPriceFilterTest : AbstractLocalTestCase() {
     private class TestFilter : AbstractPriceFilter(1, -1.0, Range.all())
 
     companion object {
-
-
         val BACK1 = Price(1.96, 5.0, Side.BACK)
         val LAY1 = Price(2.04, 5.0, Side.LAY)
         val BACK2 = Price(1.92, 5.0, Side.BACK)
@@ -69,5 +67,4 @@ class TheAbstractPriceFilterTest : AbstractLocalTestCase() {
                 BACK2, Price(1.88, 5.0, Side.BACK),
                 BACK3, BACK1)
     }
-
 }

@@ -2,13 +2,15 @@ package cz.fb.manaus.reactor.profit.progress
 
 import com.google.common.collect.Comparators
 import cz.fb.manaus.core.provider.ExchangeProvider
-import cz.fb.manaus.reactor.profit.AbstractProfitTest
+import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.reactor.profit.generateBets
+import cz.fb.manaus.reactor.profit.toRealizedBet
 import junit.framework.TestCase.assertTrue
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 
-class ProgressProfitServiceTest : AbstractProfitTest() {
+class ProgressProfitServiceTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var service: ProgressProfitService
@@ -18,7 +20,7 @@ class ProgressProfitServiceTest : AbstractProfitTest() {
 
     @Test
     fun `single chunk`() {
-        val bets = generateBets()
+        val bets = generateBets().map { toRealizedBet(it) }
         val records = service.getProfitRecords(bets,
                 "price", 1, provider.chargeRate, null)
         assertEquals(1, records.size)
@@ -29,7 +31,7 @@ class ProgressProfitServiceTest : AbstractProfitTest() {
 
     @Test
     fun `multiple chunks`() {
-        val bets = generateBets()
+        val bets = generateBets().map { toRealizedBet(it) }
         val records = service.getProfitRecords(bets,
                 "price", 10, provider.chargeRate, null)
         assertEquals(10, records.size)

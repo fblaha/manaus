@@ -1,8 +1,8 @@
 package cz.fb.manaus.core.repository
 
 import cz.fb.manaus.core.model.betAction
+import cz.fb.manaus.core.model.homeSettledBet
 import cz.fb.manaus.core.model.market
-import cz.fb.manaus.core.model.settledBet
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.Before
@@ -29,7 +29,7 @@ class RealizedBetLoaderTest : AbstractDatabaseTestCase() {
         marketRepository.saveOrUpdate(market)
         val savedAction = betAction.copy(betID = "1000")
         val actionID = betActionRepository.save(savedAction)
-        val savedBet = settledBet.copy(id = "1000")
+        val savedBet = homeSettledBet.copy(id = "1000")
         val (bet, action, market) = realizedBetLoader.toRealizedBet(savedBet)
         assertEquals(savedBet, bet)
         assertEquals(cz.fb.manaus.core.model.market, market)

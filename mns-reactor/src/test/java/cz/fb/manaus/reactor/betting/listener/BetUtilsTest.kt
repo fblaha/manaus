@@ -23,7 +23,7 @@ class BetUtilsTest : AbstractLocalTestCase() {
     @Before
     fun setUp() {
         val price = Price(5.0, 3.0, Side.BACK)
-        bet = settledBet.copy(price = price)
+        bet = homeSettledBet.copy(price = price)
     }
 
     @Test

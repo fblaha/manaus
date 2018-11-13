@@ -11,7 +11,7 @@ import java.time.Instant
         Index(value = "settled", type = IndexType.NonUnique)
 )
 data class SettledBet(
-        @Id var id: String = "",
+        @Id var id: String = "1",
         val selectionId: Long,
         val selectionName: String,
         val profitAndLoss: Double,

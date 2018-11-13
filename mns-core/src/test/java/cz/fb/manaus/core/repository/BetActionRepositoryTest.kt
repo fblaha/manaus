@@ -27,7 +27,7 @@ class BetActionRepositoryTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `set bet ID`() {
-        val actionID = betActionRepository.save(betAction)
+        val actionID = betActionRepository.save(betAction.copy(betID = null))
         assertNull(betActionRepository.find("2").first().betID)
         betActionRepository.setBetID(actionID, "100")
         assertEquals(1, betActionRepository.find("2").size)

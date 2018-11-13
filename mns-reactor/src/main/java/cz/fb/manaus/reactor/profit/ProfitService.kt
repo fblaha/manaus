@@ -14,7 +14,7 @@ import java.util.Objects.requireNonNull
 class ProfitService(private val categoryService: CategoryService,
                     private val profitPlugin: ProfitPlugin) {
 
-    fun getProfitRecords(bets: List<RealizedBet>, projection: String?,
+    fun getProfitRecords(bets: List<RealizedBet>, projection: String? = null,
                          simulationAwareOnly: Boolean, chargeRate: Double): List<ProfitRecord> {
         var filtered = bets
         val coverage = BetCoverage.from(filtered)
