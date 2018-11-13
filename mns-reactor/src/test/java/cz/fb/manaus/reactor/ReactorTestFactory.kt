@@ -37,7 +37,7 @@ class ReactorTestFactory(
         oldBet?.let { bet -> bets.add(bet) }
         val snapshot = MarketSnapshot.from(marketPrices, market, bets)
 
-        return contextFactory.create(side, SEL_HOME, snapshot, fairness, null)
+        return contextFactory.create(side, SEL_HOME, snapshot, fairness)
     }
 
     fun createContext(side: Side, bestBack: Double, bestLay: Double): BetContext {
@@ -55,9 +55,9 @@ class ReactorTestFactory(
                     Date.from(date), provider.minAmount)
             bets.add(counterBet)
         }
-        val snapshot = MarketSnapshot.from(marketPrices, market, emptyList())
+        val snapshot = MarketSnapshot.from(marketPrices, market, bets)
         return contextFactory.create(side, selectionId, snapshot,
-                calculator.getFairness(marketPrices), null)
+                calculator.getFairness(marketPrices))
 
     }
 

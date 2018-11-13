@@ -37,7 +37,7 @@ class BetUtilsTest : AbstractLocalTestCase() {
                 time = currDate.minus(10, ChronoUnit.HOURS),
                 price = priceBack)
         val back2 = actionTemplates.copy(
-                betActionType = BetActionType.PLACE,
+                betActionType = BetActionType.UPDATE,
                 time = currDate.minus(9, ChronoUnit.HOURS),
                 price = priceBack)
         val back3 = actionTemplates.copy(
@@ -49,7 +49,7 @@ class BetUtilsTest : AbstractLocalTestCase() {
                 time = currDate.minus(6, ChronoUnit.HOURS),
                 price = priceLay)
         val lay2 = actionTemplates.copy(
-                betActionType = BetActionType.PLACE,
+                betActionType = BetActionType.UPDATE,
                 time = currDate.minus(5, ChronoUnit.HOURS),
                 price = priceLay)
         val lay3 = actionTemplates.copy(

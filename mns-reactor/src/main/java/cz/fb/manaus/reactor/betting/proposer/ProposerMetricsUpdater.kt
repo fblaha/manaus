@@ -5,15 +5,11 @@ import com.google.common.base.Joiner
 import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.reactor.betting.action.BetActionListener
 import cz.fb.manaus.reactor.betting.action.BetUtils
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
-class ProposerMetricsUpdater : BetActionListener {
-    @Autowired
-    private lateinit var betUtils: BetUtils
-    @Autowired
-    private lateinit var metricRegistry: MetricRegistry
+class ProposerMetricsUpdater(private val betUtils: BetUtils,
+                             private val metricRegistry: MetricRegistry) : BetActionListener {
 
     override fun onAction(action: BetAction) {
         val proposers = action.properties[BetAction.PROPOSER_PROP]!!

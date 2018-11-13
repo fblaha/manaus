@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 
+// TODO no lazy
 @Lazy
 @Component
 class FlowFilterRegistry(flowFilters: List<FlowFilter>) {

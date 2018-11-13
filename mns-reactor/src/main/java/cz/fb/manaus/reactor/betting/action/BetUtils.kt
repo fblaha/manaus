@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting.action
 
-import com.google.common.base.Preconditions
 import com.google.common.base.Preconditions.checkArgument
 import com.google.common.base.Preconditions.checkState
 import com.google.common.base.Splitter
@@ -12,9 +11,8 @@ import org.springframework.stereotype.Component
 class BetUtils {
 
     fun getCurrentActions(betActions: List<BetAction>): List<BetAction> {
-        Preconditions.checkArgument(!betActions.isEmpty(), "missing bet actions")
         val lastUpdates = mutableListOf<BetAction>()
-        val first = betActions[0]
+        val first = betActions.first()
         for (bet in betActions) {
             validate(first, bet)
             if (bet.betActionType != BetActionType.UPDATE) lastUpdates.clear()

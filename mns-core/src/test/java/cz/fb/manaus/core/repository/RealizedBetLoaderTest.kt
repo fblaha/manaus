@@ -4,7 +4,6 @@ import cz.fb.manaus.core.model.betAction
 import cz.fb.manaus.core.model.homeSettledBet
 import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
-import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,11 +16,12 @@ class RealizedBetLoaderTest : AbstractDatabaseTestCase() {
     private lateinit var betActionRepository: BetActionRepository
     @Autowired
     private lateinit var realizedBetLoader: RealizedBetLoader
+    @Autowired
+    private lateinit var cleaner: DatabaseCleaner
 
     @Before
     fun setUp() {
-        marketRepository.repository.remove(ObjectFilters.ALL)
-        betActionRepository.repository.remove(ObjectFilters.ALL)
+        cleaner.clean()
     }
 
     @Test

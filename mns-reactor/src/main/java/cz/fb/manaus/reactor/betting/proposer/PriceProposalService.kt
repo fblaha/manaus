@@ -6,16 +6,12 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.price.PriceService
 import cz.fb.manaus.reactor.rounding.RoundingService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.Objects.requireNonNull
 
 @Service
-class PriceProposalService {
-    @Autowired
-    private lateinit var roundingService: RoundingService
-    @Autowired
-    private lateinit var priceService: PriceService
+class PriceProposalService(private val roundingService: RoundingService,
+                           private val priceService: PriceService) {
 
     fun reducePrices(context: BetContext, proposers: List<PriceProposer>, side: Side): ProposedPrice {
         val prices = mutableListOf<ProposedPrice>()

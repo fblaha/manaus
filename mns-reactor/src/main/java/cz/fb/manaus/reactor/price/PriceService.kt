@@ -4,19 +4,12 @@ import com.google.common.base.Preconditions
 import com.google.common.collect.Range
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.reactor.rounding.RoundingService
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Component
 import java.util.Objects.requireNonNull
 
-@Service
-class PriceService {
-
-    @Autowired
-    private lateinit var roundingService: RoundingService
-    @Autowired
-    private lateinit var provider: ExchangeProvider
+@Component
+class PriceService(private val roundingService: RoundingService) {
 
     fun downgrade(price: Double, downgradeFraction: Double, side: Side): Double {
         val aboveOne = price - 1

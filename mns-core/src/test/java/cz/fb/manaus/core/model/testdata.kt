@@ -16,7 +16,7 @@ val homeSettledBet: SettledBet = SettledBet(
 
 val drawSettledBet: SettledBet = homeSettledBet.copy(selectionName = "The Draw", selectionId = SEL_DRAW)
 
-val homePrice = RunnerPrices(
+val homePrices = RunnerPrices(
         selectionId = SEL_HOME,
         matchedAmount = 100.0,
         lastMatchedPrice = 3.0,
@@ -28,9 +28,9 @@ val homePrice = RunnerPrices(
         )
 )
 val runnerPrices = listOf(
-        homePrice,
-        homePrice.copy(selectionId = SEL_DRAW),
-        homePrice.copy(selectionId = SEL_AWAY)
+        homePrices,
+        homePrices.copy(selectionId = SEL_DRAW),
+        homePrices.copy(selectionId = SEL_AWAY)
 )
 
 val betAction = BetAction(

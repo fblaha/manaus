@@ -1,11 +1,8 @@
 package cz.fb.manaus.reactor.betting.validator.common
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.whenever
 import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.core.model.RunnerPrices
-import cz.fb.manaus.core.model.SEL_HOME
 import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.homePrices
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
@@ -35,12 +32,7 @@ class TheAbstractLastMatchedValidatorTest : AbstractLocalTestCase() {
     }
 
     private fun checkValidator(side: Side, lowerResult: ValidationResult, higherResult: ValidationResult) {
-        val runnerPrices = mock<RunnerPrices>()
-        whenever(runnerPrices.lastMatchedPrice).thenReturn(2.1)
-        whenever(runnerPrices.selectionId).thenReturn(SEL_HOME)
-//        whenever(marketPrices.getRunnerPrices(ArgumentMatchers.anyLong())).thenReturn(runnerPrices)
-//        whenever(marketPrices.getReciprocal(Side.BACK)).thenReturn(OptionalDouble.of(0.9))
-        val context = factory.newBetContext(side, listOf(runnerPrices), null)
+        val context = factory.newBetContext(side, listOf(homePrices.copy(lastMatchedPrice = 2.1)), null)
         context.newPrice = Price(2.0, 2.0, side)
         assertEquals(lowerResult, validator.validate(context))
         context.newPrice = Price(2.2, 2.0, side)
@@ -49,6 +41,5 @@ class TheAbstractLastMatchedValidatorTest : AbstractLocalTestCase() {
 
     @Component
     private class TestValidator : AbstractLastMatchedValidator(true)
-
 }
 

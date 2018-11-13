@@ -5,8 +5,10 @@ import cz.fb.manaus.core.model.SettledBet
 import java.lang.Math.max
 import java.util.*
 
-data class MarketCharge(private val totalProfit: Double, private val totalPositiveProfit: Double,
-                        private val totalCharge: Double, private val profits: Map<String, Double>) {
+data class MarketCharge(private val totalProfit: Double,
+                        private val totalPositiveProfit: Double,
+                        private val totalCharge: Double,
+                        private val profits: Map<String, Double>) {
 
     fun getChargeContribution(betId: String): Double {
         if (Price.amountEq(totalCharge, 0.0)) return 0.0

@@ -172,7 +172,7 @@ class PriceServiceTest : AbstractLocalTestCase() {
     fun `fairness - high probability`() {
         val lowPrice = 1.04
         val highPrice = 15.0
-        val home = homePrice.copy(prices = listOf(Price(lowPrice, 10.0, Side.BACK)))
+        val home = homePrices.copy(prices = listOf(Price(lowPrice, 10.0, Side.BACK)))
         val away = home.copy(selectionId = SEL_AWAY, prices = listOf(Price(highPrice, 10.0, Side.BACK)))
         val fairness = getFairness(Side.BACK, listOf(home, away))
         val lowFairPrice = priceService.getFairnessFairPrice(lowPrice, fairness)

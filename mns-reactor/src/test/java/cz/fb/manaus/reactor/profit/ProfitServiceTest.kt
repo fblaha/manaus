@@ -101,8 +101,11 @@ class ProfitServiceTest : AbstractLocalTestCase() {
 
     @Test
     fun `get profit records`() {
-        val bet1 = drawSettledBet.copy(profitAndLoss = 5.0, price = Price(2.0, 4.0, Side.LAY))
-        val bet2 = drawSettledBet.copy(profitAndLoss = -2.0, price = Price(2.0, 5.0, Side.BACK))
+        val bet1 = drawSettledBet.copy(profitAndLoss = 5.0,
+                price = Price(2.0, 4.0, Side.LAY))
+        val bet2 = drawSettledBet.copy(profitAndLoss = -2.0,
+                id = "bet2",
+                price = Price(2.0, 5.0, Side.BACK))
         val bets = listOf(bet1, bet2).map { toRealizedBet(it) }
         val records = profitService.getProfitRecords(bets = bets,
                 simulationAwareOnly = true,
@@ -111,11 +114,11 @@ class ProfitServiceTest : AbstractLocalTestCase() {
         val byCategory = byCategory(records)
 
 
-        assertEquals(1, byCategory["market_country_br"]!!.layCount)
-        Assert.assertEquals(2.8, byCategory["market_country_br"]!!.profit, 0.01)
+        assertEquals(1, byCategory["market_country_cz"]!!.layCount)
+        Assert.assertEquals(2.8, byCategory["market_country_cz"]!!.profit, 0.01)
 
-        assertEquals(1, byCategory["placedBefore_hour_1-2"]!!.backCount)
-        Assert.assertEquals(-2.0, byCategory["placedBefore_hour_1-2"]!!.profit, 0.01)
+        assertEquals(1, byCategory["placedBefore_day_1-2"]!!.backCount)
+        Assert.assertEquals(-2.0, byCategory["placedBefore_day_1-2"]!!.profit, 0.01)
 
         assertEquals(1, byCategory["placedBefore_day_1-2"]!!.layCount)
         Assert.assertEquals(4.8, byCategory["placedBefore_day_1-2"]!!.profit, 0.01)

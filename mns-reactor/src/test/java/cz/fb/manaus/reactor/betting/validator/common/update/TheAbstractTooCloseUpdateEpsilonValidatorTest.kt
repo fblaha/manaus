@@ -1,10 +1,9 @@
 package cz.fb.manaus.reactor.betting.validator.common.update
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.whenever
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.betTemplate
+import cz.fb.manaus.core.model.runnerPrices
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
@@ -43,27 +42,21 @@ class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
 
     @Test
     fun `accept lay`() {
-        val newOne = mock<Price>()
-        val oldOne = mock<Price>()
-        whenever(newOne.side).thenReturn(Side.LAY)
-        whenever(oldOne.side).thenReturn(Side.LAY)
-        whenever(oldOne.price).thenReturn(3.6)
+        val newOne = Price(3.65, 3.0, Side.LAY)
+        val oldOne = Price(3.6, 3.0, Side.LAY)
         val oldBet = betTemplate.copy(requestedPrice = oldOne)
 
-        val prices = factory.createMarketPrices(0.1, listOf(0.4, 0.3, 0.3))
-
-        val context = factory.newBetContext(Side.LAY, prices, oldBet)
-        context.newPrice = newOne
-        whenever(newOne.price).thenReturn(3.65)
+        val context = factory.newBetContext(Side.LAY, runnerPrices, oldBet)
+        context.newPrice = newOne.copy(price = 3.65)
         assertEquals(ValidationResult.REJECT, validator.validate(context))
-        whenever(newOne.price).thenReturn(3.7)
+        context.newPrice = newOne.copy(price = 3.7)
         assertEquals(ValidationResult.ACCEPT, validator.validate(context))
-        whenever(newOne.price).thenReturn(3.75)
+        context.newPrice = newOne.copy(price = 3.75)
         assertEquals(ValidationResult.ACCEPT, validator.validate(context))
 
-        whenever(newOne.price).thenReturn(3.55)
+        context.newPrice = newOne.copy(price = 3.55)
         assertEquals(ValidationResult.REJECT, validator.validate(context))
-        whenever(newOne.price).thenReturn(3.5)
+        context.newPrice = newOne.copy(price = 3.5)
         assertEquals(ValidationResult.ACCEPT, validator.validate(context))
     }
 

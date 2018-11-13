@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import cz.fb.manaus.core.model.SEL_HOME
 import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.homePrices
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.BetContext
@@ -36,10 +37,9 @@ class TheAbstractBestPriceProposerTest : AbstractLocalTestCase() {
     fun check() {
         val context = mock<BetContext>()
         whenever(context.side).thenReturn(Side.LAY, Side.BACK)
-        val prices = factory.newRunnerPrices(SEL_HOME, 2.0, 3.0)
-        whenever(context.runnerPrices).thenReturn(prices)
+        whenever(context.runnerPrices).thenReturn(homePrices)
         assertEquals(ValidationResult.ACCEPT, layProposer.validate(context))
-        assertEquals(ValidationResult.REJECT, backProposer.validate(context))
+        assertEquals(ValidationResult.ACCEPT, backProposer.validate(context))
     }
 
     @Test

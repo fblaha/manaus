@@ -2,7 +2,6 @@ package cz.fb.manaus.core.repository
 
 import cz.fb.manaus.core.model.betAction
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
-import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,11 +14,14 @@ class BetActionRepositoryTest : AbstractDatabaseTestCase() {
 
     @Autowired
     private lateinit var betActionRepository: BetActionRepository
+    @Autowired
+    private lateinit var cleaner: DatabaseCleaner
 
     @Before
     fun setUp() {
-        betActionRepository.repository.remove(ObjectFilters.ALL)
+        cleaner.clean()
     }
+
     @Test
     fun save() {
         assertTrue(betActionRepository.save(betAction) != 0L)

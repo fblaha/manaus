@@ -14,6 +14,6 @@ class LayPriceCountCategorizerTest : AbstractLocalTestCase() {
 
     @Test
     fun category() {
-        assertEquals(setOf("priceCountLay_0"), categorizer.getCategories(realizedBet, BetCoverage.EMPTY))
+        assertEquals(setOf("priceCountLay_2"), categorizer.getCategories(realizedBet, BetCoverage.EMPTY))
     }
 }

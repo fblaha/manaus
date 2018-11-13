@@ -2,12 +2,14 @@ package cz.fb.manaus.reactor.betting.validator.common.update
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.repository.BetActionRepository
+import cz.fb.manaus.core.repository.DatabaseCleaner
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.spring.ManausProfiles.DB
 import cz.fb.manaus.spring.ManausProfiles.TEST
+import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
@@ -16,7 +18,6 @@ import org.springframework.test.context.ActiveProfiles
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import java.util.*
 import kotlin.test.assertEquals
 
 @ActiveProfiles(value = ["matchbook", TEST, DB], inheritProfiles = false)
@@ -29,19 +30,27 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
     private lateinit var marketRepository: MarketRepository
     @Autowired
     private lateinit var betActionRepository: BetActionRepository
+    @Autowired
+    private lateinit var cleaner: DatabaseCleaner
 
+    @Before
+    fun setUp() {
+        cleaner.clean()
+    }
 
     private fun checkValidation(actionType: BetActionType, beforeMinutes: Long, lay: Side, validationResult: ValidationResult) {
         marketRepository.saveOrUpdate(market)
         val now = Instant.now()
-        val place = betAction.copy(time = now.minus(beforeMinutes, ChronoUnit.MINUTES),
-                price = Price(2.0, 30.0, lay))
+        val place = betAction.copy(
+                time = now.minus(beforeMinutes, ChronoUnit.MINUTES),
+                price = Price(2.0, 30.0, lay),
+                betActionType = actionType)
         betActionRepository.save(place)
         val result = validator.validate(reactorTestFactory.newUpdateBetContext(runnerPrices, lay))
         assertEquals(validationResult, result)
     }
 
-    @Test(expected = NoSuchElementException::class)
+    @Test(expected = NullPointerException::class)
     fun `no bet action`() {
         marketRepository.saveOrUpdate(market)
         val result = validator.validate(reactorTestFactory.newUpdateBetContext(runnerPrices, Side.LAY))

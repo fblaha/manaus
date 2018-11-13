@@ -2,7 +2,6 @@ package cz.fb.manaus.core.repository
 
 import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
-import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,12 +15,15 @@ class MarketRepositoryTest : AbstractDatabaseTestCase() {
 
     @Autowired
     private lateinit var marketRepository: MarketRepository
+    @Autowired
+    private lateinit var cleaner: DatabaseCleaner
 
 
     @Before
     fun setUp() {
-        marketRepository.repository.remove(ObjectFilters.ALL)
+        cleaner.clean()
     }
+
 
     @Test
     fun `save - read`() {

@@ -14,7 +14,7 @@ class BackPriceCountCategorizerTest : AbstractLocalTestCase() {
 
     @Test
     fun category() {
-        assertEquals(setOf("priceCountBack_3+"),
+        assertEquals(setOf("priceCountBack_2"),
                 categorizer.getCategories(realizedBet, BetCoverage.EMPTY))
     }
 }

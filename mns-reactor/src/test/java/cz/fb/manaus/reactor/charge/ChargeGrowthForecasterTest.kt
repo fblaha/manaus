@@ -25,16 +25,16 @@ class ChargeGrowthForecasterTest : AbstractLocalTestCase() {
 
     @Test
     fun forecast() {
-        val market = factory.createMarketPrices(0.05, listOf(0.5, 0.3, 0.2))
+        val marketPrices = factory.createMarketPrices(0.05, listOf(0.5, 0.3, 0.2))
         val currentBets = mutableListOf<Bet>()
-        val marketSnapshot = MarketSnapshot.from(market, cz.fb.manaus.core.model.market, currentBets)
-        val fairness = calculator.getFairness(market)
-        var forecast = forecaster.getForecast(SEL_DRAW, Side.BACK, marketSnapshot, fairness)
+        val marketSnapshot = MarketSnapshot.from(marketPrices, market, currentBets)
+        val fairness = calculator.getFairness(marketPrices)
+        var forecast = forecaster.getForecast(SEL_HOME, Side.BACK, marketSnapshot, fairness)
         assertTrue(forecast!! > 1)
         val betAmount = adviser.amount
-        currentBets.add(Bet("1", "1", SEL_DRAW,
+        currentBets.add(Bet("1", "1", SEL_HOME,
                 Price(3.0, betAmount, Side.LAY), Date(), betAmount))
-        forecast = forecaster.getForecast(SEL_DRAW, Side.BACK, marketSnapshot, fairness)
+        forecast = forecaster.getForecast(SEL_HOME, Side.BACK, marketSnapshot, fairness)
         assertFalse(forecast!! > 1)
 
         forecast = forecaster.getForecast(SEL_HOME, Side.BACK, marketSnapshot, fairness)
