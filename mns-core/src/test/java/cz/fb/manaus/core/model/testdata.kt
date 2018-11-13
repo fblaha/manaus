@@ -45,9 +45,6 @@ val betAction = BetAction(
         properties = mapOf("x" to "y")
 )
 
-val settledAction = betAction.copy(betID = homeSettledBet.id)
-
-
 val market = Market(id = "2",
         name = "Match Odds",
         inPlay = true,
