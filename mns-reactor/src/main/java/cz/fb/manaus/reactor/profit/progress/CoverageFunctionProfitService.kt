@@ -18,9 +18,7 @@ class CoverageFunctionProfitService(functions: List<ProgressFunction>) : Abstrac
                                   bets: List<RealizedBet>,
                                   coverage: BetCoverage,
                                   charges: Map<String, Double>): List<ProfitRecord> {
-        val (covered, solo) = bets.partition { bet ->
-            coverage.isCovered(bet.market.id, bet.settledBet.selectionId)
-        }
+        val (covered, solo) = bets.partition { coverage.isCovered(it.market.id, it.settledBet.selectionId) }
 
         val (head, tail) = covered.partition { this.isChargeGrowth(it) }
 

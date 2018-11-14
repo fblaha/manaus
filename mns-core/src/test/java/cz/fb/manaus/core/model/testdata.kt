@@ -14,7 +14,10 @@ val homeSettledBet: SettledBet = SettledBet(
         price = Price(3.3, 3.0, Side.BACK)
 )
 
-val drawSettledBet: SettledBet = homeSettledBet.copy(selectionName = "The Draw", selectionId = SEL_DRAW)
+val drawSettledBet: SettledBet = homeSettledBet.copy(
+        selectionName = "The Draw",
+        selectionId = SEL_DRAW,
+        id = "2")
 
 val homePrices = RunnerPrices(
         selectionId = SEL_HOME,

@@ -2,9 +2,7 @@ package cz.fb.manaus.core.repository
 
 import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
-import org.junit.Before
 import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -12,18 +10,6 @@ import kotlin.test.assertNull
 
 
 class MarketRepositoryTest : AbstractDatabaseTestCase() {
-
-    @Autowired
-    private lateinit var marketRepository: MarketRepository
-    @Autowired
-    private lateinit var cleaner: DatabaseCleaner
-
-
-    @Before
-    fun setUp() {
-        cleaner.clean()
-    }
-
 
     @Test
     fun `save - read`() {

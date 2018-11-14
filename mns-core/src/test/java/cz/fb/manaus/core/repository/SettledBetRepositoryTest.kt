@@ -4,24 +4,10 @@ import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.homeSettledBet
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
-import org.junit.Before
 import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 
 class SettledBetRepositoryTest : AbstractDatabaseTestCase() {
-
-    @Autowired
-    private lateinit var settledBetRepository: SettledBetRepository
-    @Autowired
-    private lateinit var cleaner: DatabaseCleaner
-
-
-    @Before
-    fun setUp() {
-        cleaner.clean()
-    }
-
 
     @Test
     fun `save - read`() {

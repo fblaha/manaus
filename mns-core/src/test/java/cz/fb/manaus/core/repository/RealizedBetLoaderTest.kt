@@ -4,25 +4,14 @@ import cz.fb.manaus.core.model.betAction
 import cz.fb.manaus.core.model.homeSettledBet
 import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
-import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 
 class RealizedBetLoaderTest : AbstractDatabaseTestCase() {
-    @Autowired
-    private lateinit var marketRepository: MarketRepository
-    @Autowired
-    private lateinit var betActionRepository: BetActionRepository
+
     @Autowired
     private lateinit var realizedBetLoader: RealizedBetLoader
-    @Autowired
-    private lateinit var cleaner: DatabaseCleaner
-
-    @Before
-    fun setUp() {
-        cleaner.clean()
-    }
 
     @Test
     fun toRealizedBet() {

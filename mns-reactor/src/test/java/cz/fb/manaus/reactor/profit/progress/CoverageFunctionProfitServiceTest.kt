@@ -1,5 +1,6 @@
 package cz.fb.manaus.reactor.profit.progress
 
+import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.profit.generateBets
@@ -29,7 +30,7 @@ class CoverageFunctionProfitServiceTest : AbstractLocalTestCase() {
 
     @Test
     fun `solo price`() {
-        val bets = generateBets().map { toRealizedBet(it) }
+        val bets = generateBets(Side.BACK).map { toRealizedBet(it) }
         val records = service.getProfitRecords(bets,
                 "price", provider.chargeRate)
         assertEquals(1, records.size)

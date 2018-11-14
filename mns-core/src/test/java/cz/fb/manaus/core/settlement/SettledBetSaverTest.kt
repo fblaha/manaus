@@ -3,8 +3,6 @@ package cz.fb.manaus.core.settlement
 import cz.fb.manaus.core.model.betAction
 import cz.fb.manaus.core.model.homeSettledBet
 import cz.fb.manaus.core.model.market
-import cz.fb.manaus.core.repository.BetActionRepository
-import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,10 +12,6 @@ class SettledBetSaverTest : AbstractDatabaseTestCase() {
 
     @Autowired
     private lateinit var saver: SettledBetSaver
-    @Autowired
-    private lateinit var marketRepository: MarketRepository
-    @Autowired
-    private lateinit var betActionRepository: BetActionRepository
 
     @Test
     fun testSaver() {

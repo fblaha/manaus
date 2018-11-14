@@ -1,15 +1,11 @@
 package cz.fb.manaus.reactor.betting.validator.common.update
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.repository.BetActionRepository
-import cz.fb.manaus.core.repository.DatabaseCleaner
-import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.spring.ManausProfiles.DB
 import cz.fb.manaus.spring.ManausProfiles.TEST
-import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
@@ -26,17 +22,6 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
     private lateinit var validator: TestValidator
     @Autowired
     private lateinit var reactorTestFactory: ReactorTestFactory
-    @Autowired
-    private lateinit var marketRepository: MarketRepository
-    @Autowired
-    private lateinit var betActionRepository: BetActionRepository
-    @Autowired
-    private lateinit var cleaner: DatabaseCleaner
-
-    @Before
-    fun setUp() {
-        cleaner.clean()
-    }
 
     private fun checkValidation(actionType: BetActionType, beforeMinutes: Long, lay: Side, validationResult: ValidationResult) {
         marketRepository.saveOrUpdate(market)
