@@ -9,25 +9,25 @@ class ProfitControllerTest : AbstractControllerTest() {
 
     @Test
     fun `profit records`() {
-        createMarketWithSingleSettledBet()
+        createLiveMarket()
         checkResponse("/profit/1d", "category", "side_lay", "profit")
     }
 
     @Test
     fun `progress records`() {
-        createMarketWithSingleSettledBet()
+        createLiveMarket()
         checkResponse("/fc-progress/1d", "category", "actualMatched", "actualMatched", "fairnessBack")
     }
 
     @Test
     fun `coverage records`() {
-        createMarketWithSingleSettledBet()
+        createLiveMarket()
         checkResponse("/fc-coverage/1d", "placedAhead_solo")
     }
 
     @Test
     fun `progress single function`() {
-        createMarketWithSingleSettledBet()
+        createLiveMarket()
         checkResponse("/fc-progress/1d?function=actualMatched", "actualMatched")
     }
 

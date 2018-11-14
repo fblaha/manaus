@@ -1,6 +1,10 @@
 package cz.fb.manaus.rest
 
-import cz.fb.manaus.core.dao.AbstractDaoTest
+import cz.fb.manaus.core.model.RealizedBet
+import cz.fb.manaus.core.model.betAction
+import cz.fb.manaus.core.model.homeSettledBet
+import cz.fb.manaus.core.model.market
+import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import org.junit.Before
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -13,7 +17,7 @@ import org.springframework.web.context.WebApplicationContext
 import kotlin.test.assertTrue
 
 @WebAppConfiguration
-abstract class AbstractControllerTest : AbstractDaoTest() {
+abstract class AbstractControllerTest : AbstractDatabaseTestCase() {
     protected lateinit var mvc: MockMvc
     @Autowired
     private lateinit var context: WebApplicationContext
@@ -31,5 +35,12 @@ abstract class AbstractControllerTest : AbstractDaoTest() {
     @Before
     fun mockRest() {
         mvc = MockMvcBuilders.webAppContextSetup(context).build()
+    }
+
+    protected fun createLiveMarket(): RealizedBet {
+        marketRepository.saveOrUpdate(market)
+        betActionRepository.save(betAction)
+        settledBetRepository.save(homeSettledBet)
+        return RealizedBet(homeSettledBet, betAction, market)
     }
 }

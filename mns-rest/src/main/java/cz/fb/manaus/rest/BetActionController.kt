@@ -1,70 +1,44 @@
 package cz.fb.manaus.rest
 
 import com.codahale.metrics.MetricRegistry
-import cz.fb.manaus.core.dao.BetActionDao
-import cz.fb.manaus.core.dao.MarketDao
-import cz.fb.manaus.core.dao.MarketPricesDao
 import cz.fb.manaus.core.model.BetAction
-import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.reactor.betting.action.ActionSaver
+import cz.fb.manaus.core.repository.BetActionRepository
+import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder
-import java.util.*
-import java.util.Optional.empty
 
 @Controller
 @Profile(ManausProfiles.DB)
-class BetActionController(private val betActionDao: BetActionDao,
-                          private val marketDao: MarketDao,
-                          private val marketPricesDao: MarketPricesDao,
-                          private val actionSaver: ActionSaver,
+class BetActionController(private val betActionRepository: BetActionRepository,
+                          private val marketRepository: MarketRepository,
                           private val metricRegistry: MetricRegistry) {
 
 
     @ResponseBody
     @RequestMapping(value = ["/markets/{id}/actions"], method = [RequestMethod.GET])
     fun getBetActions(@PathVariable id: String): List<BetAction> {
-        val actions = betActionDao.getBetActions(id, OptionalLong.empty(), empty<Side>())
-        betActionDao.fetchMarketPrices(actions.stream())
-        return actions
+        return betActionRepository.find(id)
     }
 
     @ResponseBody
     @RequestMapping(value = ["/actions"], method = [RequestMethod.GET])
     fun getBetActions(@RequestParam(defaultValue = "20") maxResults: Int): List<BetAction> {
-        val actions = betActionDao.getBetActions(OptionalInt.of(maxResults))
-        betActionDao.fetchMarketPrices(actions.stream())
-        return actions.reversed()
-    }
-
-    @RequestMapping(value = ["/markets/{id}/actions"], method = [RequestMethod.POST])
-    fun addAction(@PathVariable id: String,
-                  @RequestParam priceId: Int,
-                  @RequestBody action: BetAction): ResponseEntity<*> {
-        val market = marketDao.get(id)
-                .orElseThrow { IllegalArgumentException("no such market") }
-        action.market = market
-        betActionDao.saveOrUpdate(action)
-        marketPricesDao.get(priceId).ifPresent { action.marketPrices = it }
-        betActionDao.saveOrUpdate(action)
-        val location = ServletUriComponentsBuilder.fromCurrentRequestUri().build().toUri()
-        return ResponseEntity.created(location).build<Any>()
+        return betActionRepository.findRecentBetActions(maxResults).reversed()
     }
 
     @RequestMapping(value = ["/actions/{id}/betId"], method = [RequestMethod.PUT])
-    fun setBetId(@PathVariable id: Int,
-                 @RequestBody betId: String): ResponseEntity<*> {
-        val changedRows = actionSaver.setBetId(betId, id)
+    fun setBetId(@PathVariable id: Long,
+                 @RequestBody betID: String): ResponseEntity<*> {
+        val changedRows = betActionRepository.setBetID(id, betID)
         metricRegistry.counter("action.betId.put").inc()
-        if (changedRows > 0) {
-            return ResponseEntity.ok().build<Any>()
+        return if (changedRows > 0) {
+            ResponseEntity.ok().build<Any>()
         } else {
             metricRegistry.counter("action.betId.notFound").inc()
-            return ResponseEntity.notFound().build<Any>()
+            ResponseEntity.notFound().build<Any>()
         }
     }
 }

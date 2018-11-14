@@ -3,7 +3,7 @@ package cz.fb.manaus.rest
 import com.google.common.base.Splitter
 import com.google.common.base.Stopwatch
 import cz.fb.manaus.core.model.ProfitRecord
-import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.reactor.profit.ProfitService
@@ -90,7 +90,8 @@ class ProfitController(private val profitService: ProfitService,
         return records
     }
 
-    private fun loadBets(@PathVariable interval: String, @RequestParam(defaultValue = "true") cache: Boolean): List<SettledBet> {
+    private fun loadBets(@PathVariable interval: String,
+                         @RequestParam(defaultValue = "true") cache: Boolean): List<RealizedBet> {
         val stopwatch = Stopwatch.createStarted()
         val bets = betLoader.load(interval, cache)
         logTime(stopwatch, "Bets fetched")

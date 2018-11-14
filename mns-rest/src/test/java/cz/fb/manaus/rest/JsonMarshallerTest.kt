@@ -1,17 +1,13 @@
 package cz.fb.manaus.rest
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import cz.fb.manaus.core.model.BetActionType
-import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.ProfitRecord
-import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.betAction
+import cz.fb.manaus.core.model.drawSettledBet
+import cz.fb.manaus.core.model.homeSettledBet
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.core.test.CoreTestFactory.Companion.newBetAction
-import cz.fb.manaus.core.test.CoreTestFactory.Companion.newTestMarket
-import cz.fb.manaus.core.test.ModelFactory
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
 import kotlin.test.assertTrue
 
 class JsonMarshallerTest : AbstractLocalTestCase() {
@@ -20,19 +16,14 @@ class JsonMarshallerTest : AbstractLocalTestCase() {
 
     @Test
     fun `bet action list`() {
-        val action = ModelFactory.newAction(BetActionType.PLACE, Date(), Price(2.0, 5.0, Side.LAY),
-                newTestMarket(), 10)
-        val props = mapOf("property1" to "value1", "reciprocal" to "0.92")
-        action.properties = props
+        val action = betAction.copy(properties = mapOf("property1" to "value1", "reciprocal" to "0.92"))
         val json = mapper.writer().writeValueAsString(listOf(action))
         assertTrue { "value1" in json }
     }
 
     @Test
     fun `settled bet list`() {
-        val bet = ModelFactory.newSettled(555, "The Draw", 5.23, Date(), Price(2.02, 2.35, Side.LAY))
-        bet.betAction = newBetAction("1", newTestMarket())
-        val json = mapper.writer().writeValueAsString(listOf(bet))
+        val json = mapper.writer().writeValueAsString(listOf(homeSettledBet, drawSettledBet))
         assertTrue { "The Draw" in json }
     }
 
