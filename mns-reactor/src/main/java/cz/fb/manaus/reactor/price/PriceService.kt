@@ -43,9 +43,9 @@ class PriceService(private val roundingService: RoundingService) {
     /**
      * http://stats.stackexchange.com/questions/140269/how-to-convert-sport-odds-into-percentage
      */
-    fun getOverroundFairPrice(unfairPrice: Double, overround: Double, winnerCount: Int, runnerCount: Int): Double {
-        val probability = 1 / unfairPrice - (overround - winnerCount) / runnerCount
-        Preconditions.checkArgument(probability > 0, listOf(unfairPrice, overround, winnerCount, runnerCount))
+    fun getOverroundFairPrice(unfairPrice: Double, overround: Double, runnerCount: Int): Double {
+        val probability = 1 / unfairPrice - (overround - 1) / runnerCount
+        Preconditions.checkArgument(probability > 0, listOf(unfairPrice, overround, runnerCount))
         return 1 / probability
     }
 

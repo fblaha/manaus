@@ -107,7 +107,8 @@ class ProfitServiceTest : AbstractLocalTestCase() {
                 id = "bet2",
                 price = Price(2.0, 5.0, Side.BACK))
         val bets = listOf(bet1, bet2).map { toRealizedBet(it) }
-        val records = profitService.getProfitRecords(bets = bets,
+        val records = profitService.getProfitRecords(
+                bets = bets,
                 simulationAwareOnly = true,
                 chargeRate = provider.chargeRate)
 

@@ -23,7 +23,13 @@ internal fun generateBets(requestedSide: Side? = null): List<SettledBet> {
 
 private fun addSideBets(result: MutableList<SettledBet>, price: Double, side: Side, requestedSide: Side?) {
     if (requestedSide == null || requestedSide == side) {
-        result.add(drawSettledBet.copy(profitAndLoss = 5.0, price = Price(price, 4.0, side)))
-        result.add(homeSettledBet.copy(profitAndLoss = 5.0, price = Price(price, 4.0, side)))
+        result.add(drawSettledBet.copy(profitAndLoss = 5.0,
+                price = Price(price, 4.0, side),
+                id = "draw" + result.size.toString()
+
+        ))
+        result.add(homeSettledBet.copy(profitAndLoss = 5.0,
+                price = Price(price, 4.0, side),
+                id = "home" + result.size.toString()))
     }
 }

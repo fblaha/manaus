@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.profit.progress
 
-import com.google.common.collect.ImmutableList
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.RealizedBet
@@ -25,13 +24,13 @@ class CoverageFunctionProfitService(functions: List<ProgressFunction>) : Abstrac
 
         val (head, tail) = covered.partition { this.isChargeGrowth(it) }
 
-        val builder = ImmutableList.builder<ProfitRecord>()
+        val result = mutableListOf<ProfitRecord>()
 
-        addRecord("solo", solo, function, coverage, charges)?.let { builder.add(it) }
-        addRecord("covered", covered, function, coverage, charges)?.let { builder.add(it) }
-        addRecord("covHead", head, function, coverage, charges)?.let { builder.add(it) }
-        addRecord("covTail", tail, function, coverage, charges)?.let { builder.add(it) }
-        return builder.build()
+        addRecord("solo", solo, function, coverage, charges)?.let { result.add(it) }
+        addRecord("covered", covered, function, coverage, charges)?.let { result.add(it) }
+        addRecord("covHead", head, function, coverage, charges)?.let { result.add(it) }
+        addRecord("covTail", tail, function, coverage, charges)?.let { result.add(it) }
+        return result
     }
 
     private fun addRecord(categoryName: String, bets: List<RealizedBet>, function: ProgressFunction,

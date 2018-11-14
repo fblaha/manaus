@@ -12,8 +12,8 @@ import java.math.RoundingMode
 @Component
 class ProgressProfitService(functions: List<ProgressFunction>) : AbstractFunctionProfitService(functions) {
 
-    fun getProfitRecords(bets: List<RealizedBet>, funcName: String?,
-                         chunkCount: Int, chargeRate: Double, projection: String?): List<ProfitRecord> {
+    fun getProfitRecords(bets: List<RealizedBet>, funcName: String? = null,
+                         chunkCount: Int, chargeRate: Double, projection: String? = null): List<ProfitRecord> {
         val calculator = getCalculator(chunkCount)
         return getProfitRecords(calculator, bets, chargeRate, funcName, projection)
     }
