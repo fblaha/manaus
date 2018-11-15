@@ -10,7 +10,7 @@ class ProfitControllerTest : AbstractControllerTest() {
     @Test
     fun `profit records`() {
         createLiveMarket()
-        checkResponse("/profit/1d", "category", "side_lay", "profit")
+        checkResponse("/profit/1d", "category", "side_back", "profit")
     }
 
     @Test

@@ -1,9 +1,7 @@
 package cz.fb.manaus.rest
 
 import com.codahale.metrics.MetricRegistry
-import cz.fb.manaus.core.category.CategoryService
 import cz.fb.manaus.core.model.SettledBet
-import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.SettledBetRepository
 import cz.fb.manaus.core.settlement.SaveStatus
 import cz.fb.manaus.core.settlement.SettledBetSaver
@@ -18,9 +16,7 @@ import java.time.Instant
 @Controller
 @Profile(ManausProfiles.DB)
 class SettledBetController(private val settledBetRepository: SettledBetRepository,
-                           private val betActionRepository: BetActionRepository,
                            private val intervalParser: IntervalParser,
-                           private val categoryService: CategoryService,
                            private val betSaver: SettledBetSaver,
                            private val metricRegistry: MetricRegistry) {
 
@@ -43,7 +39,7 @@ class SettledBetController(private val settledBetRepository: SettledBetRepositor
     }
 
     @RequestMapping(value = ["/bets"], method = [RequestMethod.POST])
-    fun addBet(@RequestParam betId: String, @RequestBody bet: SettledBet): ResponseEntity<*> {
+    fun addBet(@RequestBody bet: SettledBet): ResponseEntity<*> {
         metricRegistry.counter("settled.bet.post").inc()
         return if (betSaver.saveBet(bet) == SaveStatus.NO_ACTION) {
             ResponseEntity.noContent().build<Any>()

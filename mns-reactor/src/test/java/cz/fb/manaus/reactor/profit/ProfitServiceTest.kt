@@ -142,9 +142,6 @@ class ProfitServiceTest : AbstractLocalTestCase() {
         assertEquals(1, byCategory["market_country_cz"]!!.layCount)
         Assert.assertEquals(2.8, byCategory["market_country_cz"]!!.profit, 0.01)
 
-        assertEquals(1, byCategory["placedBefore_day_1-2"]!!.backCount)
-        Assert.assertEquals(2.8, byCategory["placedBefore_day_1-2"]!!.profit, 0.01)
-
         assertTrue(profitService.getProfitRecords(bets = bets,
                 projection = "market_country_ua",
                 simulationAwareOnly = true,

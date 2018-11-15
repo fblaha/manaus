@@ -1,11 +1,13 @@
 package cz.fb.manaus.core.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.dizitart.no2.IndexType
 import org.dizitart.no2.objects.Id
 import org.dizitart.no2.objects.Index
 import java.time.Instant
 
 @Index(value = "event.openDate", type = IndexType.NonUnique)
+@JsonIgnoreProperties("openDate\$manaus_core")
 data class Market(
         @Id val id: String,
         val name: String,

@@ -1,5 +1,6 @@
 package cz.fb.manaus.core.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.dizitart.no2.IndexType
 import org.dizitart.no2.objects.Id
 import org.dizitart.no2.objects.Index
@@ -10,6 +11,7 @@ import java.time.Instant
         Index(value = "id", type = IndexType.Unique),
         Index(value = "settled", type = IndexType.NonUnique)
 )
+@JsonIgnoreProperties("side\$manaus_core")
 data class SettledBet(
         @Id var id: String = "1",
         val selectionId: Long,

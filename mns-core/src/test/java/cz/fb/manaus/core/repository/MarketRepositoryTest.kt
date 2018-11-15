@@ -3,7 +3,6 @@ package cz.fb.manaus.core.repository
 import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import org.junit.Test
-import java.time.Instant
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -29,9 +28,9 @@ class MarketRepositoryTest : AbstractDatabaseTestCase() {
     @Test
     fun `delete older then`() {
         marketRepository.saveOrUpdate(market)
-        assertEquals(0, marketRepository.delete(Instant.now().minusSeconds(10)))
+        assertEquals(0, marketRepository.delete(market.openDate.minusSeconds(10)))
         assertNotNull(marketRepository.read("2"))
-        assertEquals(1, marketRepository.delete(Instant.now().plusSeconds(10)))
+        assertEquals(1, marketRepository.delete(market.openDate.plusSeconds(10)))
         assertNull(marketRepository.read("2"))
     }
 
@@ -39,15 +38,15 @@ class MarketRepositoryTest : AbstractDatabaseTestCase() {
     fun `find markets from`() {
         marketRepository.saveOrUpdate(market)
         assertEquals(1, marketRepository.find().size)
-        assertEquals(0, marketRepository.find(from = Instant.now().plusSeconds(30)).size)
-        assertEquals(1, marketRepository.find(from = Instant.now().minusSeconds(30)).size)
+        assertEquals(0, marketRepository.find(from = market.openDate.plusSeconds(30)).size)
+        assertEquals(1, marketRepository.find(from = market.openDate.minusSeconds(30)).size)
     }
 
     @Test
     fun `find markets to`() {
         marketRepository.saveOrUpdate(market)
-        val minus30 = Instant.now().minusSeconds(30)
-        val plus30 = Instant.now().plusSeconds(30)
+        val minus30 = market.openDate.minusSeconds(30)
+        val plus30 = market.openDate.plusSeconds(30)
         assertEquals(1, marketRepository.find(from = minus30, to = plus30).size)
         assertEquals(0, marketRepository.find(from = minus30, to = minus30).size)
     }
@@ -62,7 +61,7 @@ class MarketRepositoryTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `find markets sort`() {
-        val laterEvent = market.event.copy(openDate = Instant.now().plusSeconds(30))
+        val laterEvent = market.event.copy(openDate = market.openDate.plusSeconds(30))
         marketRepository.saveOrUpdate(market.copy(id = "3", event = laterEvent))
         marketRepository.saveOrUpdate(market)
         val markets = marketRepository.find()

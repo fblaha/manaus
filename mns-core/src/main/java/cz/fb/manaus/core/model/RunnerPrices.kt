@@ -1,5 +1,7 @@
 package cz.fb.manaus.core.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 data class RunnerPrices(
         val selectionId: Long,
         val prices: List<Price>,
@@ -11,9 +13,11 @@ data class RunnerPrices(
     }
 
     val bestPrice: Price?
+        @JsonIgnore
         get() = prices.minWith(PriceComparator)
 
     val sortedPrices: List<Price>
+        @JsonIgnore
         get() = prices.sortedWith(PriceComparator)
 
 }

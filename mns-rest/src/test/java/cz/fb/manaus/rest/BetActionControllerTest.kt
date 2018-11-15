@@ -22,15 +22,14 @@ class BetActionControllerTest : AbstractControllerTest() {
 
     @Test
     fun `action list`() {
-        checkResponse("/actions", "betActionType", "actionDate")
-        checkResponse("/markets/" + market.id + "/actions", "betActionType", "actionDate")
+        checkResponse("/actions", "betActionType", "time")
+        checkResponse("/markets/" + market.id + "/actions", "betActionType", "time")
     }
 
     @Test
     fun `set bet ID`() {
-        val actionId = bet.betAction.id
         mvc.perform(put(
-                "/actions/{id}/betId", actionId)
+                "/actions/{id}/betId", bet.betAction.id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("100"))
                 .andExpect(status().isOk)

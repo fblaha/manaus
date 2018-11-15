@@ -56,7 +56,7 @@ val market = Market(id = "2",
         event = Event(
                 id = "100",
                 name = "Banik Ostrava vs Sparta Prague",
-                openDate = Instant.now(),
+                openDate = Instant.now().plus(2, ChronoUnit.DAYS),
                 timezone = "CET",
                 countryCode = "cz",
                 venue = "bazaly"),
