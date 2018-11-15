@@ -18,9 +18,9 @@ class BestPriceRangeValidator : Validator {
     override fun validate(context: BetContext): ValidationResult {
         val bestLay = context.runnerPrices.getHomogeneous(Side.LAY).bestPrice
         val bestBack = context.runnerPrices.getHomogeneous(Side.BACK).bestPrice
-        return if (bestBack.isPresent && bestLay.isPresent) {
-            val backPrice = bestBack.get().price
-            val layPrice = bestLay.get().price
+        return if (bestBack != null && bestLay != null) {
+            val backPrice = bestBack.price
+            val layPrice = bestLay.price
             ValidationResult.of(RANGE.containsAll(listOf(backPrice, layPrice)))
         } else {
             REJECT

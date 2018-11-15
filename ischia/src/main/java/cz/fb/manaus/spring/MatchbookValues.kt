@@ -20,7 +20,7 @@ open class MatchbookValues {
     }
 
     private fun strategy(context: BetContext): Double {
-        val type = context.marketPrices.market.type
+        val type = context.market.type
         return RATES.getOrDefault(type, 0.08)
     }
 

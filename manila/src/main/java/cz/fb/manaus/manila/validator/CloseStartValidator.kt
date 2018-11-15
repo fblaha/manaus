@@ -13,8 +13,8 @@ import java.time.temporal.ChronoUnit
 class CloseStartValidator : Validator {
 
     override fun validate(context: BetContext): ValidationResult {
-        val openDate = context.marketPrices.market.event.openDate
-        val seconds = Instant.now().until(openDate.toInstant(), ChronoUnit.SECONDS)
+        val openDate = context.market.event.openDate
+        val seconds = Instant.now().until(openDate, ChronoUnit.SECONDS)
         return ValidationResult.of(seconds > 30)
     }
 

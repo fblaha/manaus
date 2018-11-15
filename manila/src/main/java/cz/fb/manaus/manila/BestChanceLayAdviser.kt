@@ -7,7 +7,5 @@ import org.springframework.stereotype.Component
 
 @ManilaBet
 @Component
-class BestChanceLayAdviser
-@ManilaBet
-@Autowired
-constructor(proposers: List<PriceProposer>) : ProposerAdviser(proposers)
+class BestChanceLayAdviser @ManilaBet @Autowired constructor(proposers: List<PriceProposer>)
+    : ProposerAdviser(proposers)

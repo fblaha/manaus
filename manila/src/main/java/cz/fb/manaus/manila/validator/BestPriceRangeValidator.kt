@@ -15,14 +15,8 @@ class BestPriceRangeValidator : Validator {
 
     override fun validate(context: BetContext): ValidationResult {
         val bestBack = context.runnerPrices.getHomogeneous(Side.BACK).bestPrice
-        return bestBack
-                .map { price -> ValidationResult.of(RANGE.contains(price.price)) }
-                .orElse(REJECT)
-    }
-
-    companion object {
-
-        val RANGE = Range.closed(1.2, 2.5)
+        val range = Range.closed(1.2, 2.5)
+        return if (bestBack == null) REJECT else ValidationResult.of(range.contains(bestBack.price))
     }
 
 }
