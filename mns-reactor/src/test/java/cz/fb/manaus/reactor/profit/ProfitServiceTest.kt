@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.profit
 
-import com.google.common.collect.ImmutableMap.of
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
@@ -41,7 +40,7 @@ class ProfitServiceTest : AbstractLocalTestCase() {
         val backDraw = drawSettledBet.copy(profitAndLoss = -4.9,
                 id = "444",
                 price = Price(2.2, 3.5, Side.BACK))
-        checkRecords(0.935, of("selectionRegexp_draw", 0.067), layHome, backHome, layDraw, backDraw)
+        checkRecords(0.935, mapOf("selectionRegexp_draw" to 0.067), layHome, backHome, layDraw, backDraw)
     }
 
 

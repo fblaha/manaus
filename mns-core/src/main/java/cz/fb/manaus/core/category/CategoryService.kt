@@ -1,6 +1,5 @@
 package cz.fb.manaus.core.category
 
-import com.google.common.collect.ImmutableSet.copyOf
 import cz.fb.manaus.core.category.categorizer.Categorizer
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
 import cz.fb.manaus.core.category.categorizer.SimulationAware
@@ -23,7 +22,7 @@ class CategoryService {
             val categories = categorizer.getCategories(market)
             result.addAll(categories)
         }
-        return copyOf(result)
+        return result.toSet()
     }
 
     fun getRealizedBetCategories(realizedBet: RealizedBet, simulationAwareOnly: Boolean, coverage: BetCoverage): Set<String> {
@@ -34,7 +33,7 @@ class CategoryService {
             val categories = categorizer.getCategories(realizedBet, coverage)
             result.addAll(categories)
         }
-        return copyOf(result)
+        return result.toSet()
     }
 
     fun filterBets(realizedBets: List<RealizedBet>, projection: String, coverage: BetCoverage): List<RealizedBet> {

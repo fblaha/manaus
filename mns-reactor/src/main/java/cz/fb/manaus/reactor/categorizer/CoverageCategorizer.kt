@@ -3,8 +3,6 @@ package cz.fb.manaus.reactor.categorizer
 
 import com.google.common.base.CaseFormat
 import com.google.common.base.Preconditions
-import com.google.common.collect.ImmutableMap
-import com.google.common.collect.ImmutableSet
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
 import cz.fb.manaus.core.model.Price
@@ -23,11 +21,11 @@ class CoverageCategorizer : RealizedBetCategorizer {
         val selectionId = realizedBet.settledBet.selectionId
         val sides = coverage.getSides(marketId, selectionId)
         Preconditions.checkState(sides.size > 0)
-        val builder = ImmutableMap.builder<Side, Double>()
+        val builder = mutableMapOf<Side, Double>()
         for (side in sides) {
-            builder.put(side, coverage.getAmount(marketId, selectionId, side))
+            builder[side] = coverage.getAmount(marketId, selectionId, side)
         }
-        val amounts = builder.build()
+        val amounts = builder.toMap()
         return getCategories(realizedBet.settledBet.price.side, amounts)
     }
 
@@ -37,7 +35,8 @@ class CoverageCategorizer : RealizedBetCategorizer {
             val soloSide = "solo$sideFormatted"
             return setOf(PREFIX + soloSide, PREFIX + "solo")
         } else if (EnumSet.of(mySide, mySide.opposite) == amounts.keys) {
-            val builder = ImmutableSet.builder<String>().add(PREFIX + "both")
+            val builder = mutableSetOf<String>()
+            builder.add(PREFIX + "both")
             builder.add(PREFIX + "both")
             builder.add(PREFIX + "both" + sideFormatted)
             when {
@@ -45,7 +44,7 @@ class CoverageCategorizer : RealizedBetCategorizer {
                 amounts[Side.LAY]!! > amounts[Side.BACK]!! -> builder.add(PREFIX + "bothLayGt")
                 amounts[Side.LAY]!! < amounts[Side.BACK]!! -> builder.add(PREFIX + "bothBackGt")
             }
-            return builder.build()
+            return builder.toSet()
         }
         throw IllegalStateException()
     }
@@ -53,5 +52,4 @@ class CoverageCategorizer : RealizedBetCategorizer {
     companion object {
         const val PREFIX = "coverage_"
     }
-
 }

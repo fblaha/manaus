@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.charge
 
-import com.google.common.collect.ImmutableMap.of
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.model.Side
@@ -70,25 +69,25 @@ class MarketChargeTest : AbstractLocalTestCase() {
     @Test
     fun `low profit charge`() {
         val charge = MarketCharge.fromBets(provider.chargeRate, listOf(lay1, lay2, back1, back2))
-        checkCharge(charge, 0.013, 0.2, of("2", 0.01, "3", 0.0))
+        checkCharge(charge, 0.013, 0.2, mapOf("2" to 0.01, "3" to 0.0))
     }
 
     @Test
     fun `high profit charge`() {
         val charge = MarketCharge.fromBets(provider.chargeRate, listOf(lay1, lay2, back2))
-        checkCharge(charge, 0.143, 2.2, of("2", 0.09, "3", 0.05))
+        checkCharge(charge, 0.143, 2.2, mapOf("2" to 0.09, "3" to 0.05))
     }
 
     @Test
     fun `loss - expected 0 charge`() {
         val charge = MarketCharge.fromBets(provider.chargeRate, listOf(lay1, lay2, back1))
-        checkCharge(charge, 0.0, -1.06, of("2", 0.0, "3", 0.0))
+        checkCharge(charge, 0.0, -1.06, mapOf("2" to 0.0, "3" to 0.0))
     }
 
     @Test
     fun `1 loss 1 profit`() {
         val charge = MarketCharge.fromBets(provider.chargeRate, listOf(lay1, lay2))
-        checkCharge(charge, 0.061, 0.94, of("2", 0.06, "4", 0.0))
+        checkCharge(charge, 0.061, 0.94, mapOf("2" to 0.06, "4" to 0.0))
     }
 
     private fun checkCharge(charge: MarketCharge, totalCharge: Double, totalProfit: Double,

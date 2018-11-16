@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.profit
 
-import com.google.common.collect.ImmutableMap
 import cz.fb.manaus.core.model.RealizedBet
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
@@ -10,12 +9,12 @@ import org.springframework.stereotype.Component
 class MatchbookProfitPlugin : ProfitPlugin {
 
     override fun getCharges(bets: List<RealizedBet>, chargeRate: Double): Map<String, Double> {
-        val result = ImmutableMap.builder<String, Double>()
+        val result = mutableMapOf<String, Double>()
         for (bet in bets) {
             val betId = bet.settledBet.id
             result.put(betId, getCharge(chargeRate, bet.settledBet.profitAndLoss, bet.settledBet.price.amount))
         }
-        return result.build()
+        return result.toMap()
     }
 
     internal fun getCharge(chargeRate: Double, profitAndLoss: Double, amount: Double): Double {

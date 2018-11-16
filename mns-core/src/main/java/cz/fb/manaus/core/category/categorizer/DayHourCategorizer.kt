@@ -1,6 +1,5 @@
 package cz.fb.manaus.core.category.categorizer
 
-import com.google.common.collect.ImmutableList.of
 import com.google.common.collect.Range
 import com.google.common.collect.Range.closedOpen
 import cz.fb.manaus.core.model.Market
@@ -24,7 +23,7 @@ class DayHourCategorizer : AbstractDelegatingCategorizer("dayHour_") {
     }
 
     companion object {
-        val RANGES: List<Range<Int>> = of(
+        val RANGES: List<Range<Int>> = listOf(
                 closedOpen(0, 4),
                 closedOpen(4, 8),
                 closedOpen(8, 12),
