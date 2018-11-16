@@ -8,7 +8,7 @@ import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.betting.BetContext
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
+import java.time.Instant
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -39,7 +39,7 @@ class ValidationServiceTest : AbstractLocalTestCase() {
 
     private fun checkDownGrade(newPrice: Double, expected: ValidationResult?) {
         val oldBet = Bet(marketId = "1", selectionId = 1, requestedPrice = Price(2.2, 2.0, Side.LAY),
-                placedDate = Date(), matchedAmount = 5.0)
+                placedDate = Instant.now(), matchedAmount = 5.0)
         val rejecting = TestValidator(ValidationResult.REJECT)
         val result = service.handleDowngrade(
                 Price(newPrice, 2.0, Side.LAY),

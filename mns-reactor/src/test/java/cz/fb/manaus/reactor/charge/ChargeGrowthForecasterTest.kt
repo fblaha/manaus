@@ -7,7 +7,7 @@ import cz.fb.manaus.reactor.betting.AmountAdviser
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
+import java.time.Instant
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -33,7 +33,7 @@ class ChargeGrowthForecasterTest : AbstractLocalTestCase() {
         assertTrue(forecast!! > 1)
         val betAmount = adviser.amount
         currentBets.add(Bet("1", "1", SEL_DRAW,
-                Price(3.0, betAmount, Side.LAY), Date(), betAmount))
+                Price(3.0, betAmount, Side.LAY), Instant.now(), betAmount))
         forecast = forecaster.getForecast(SEL_DRAW, Side.BACK, marketSnapshot, fairness)
         assertFalse(forecast!! > 1)
 

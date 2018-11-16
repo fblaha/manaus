@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Profile
 @ComponentScan("cz.fb.manaus.core")
 open class CoreDatabaseConfiguration {
 
-    @Bean
+    @Bean(destroyMethod = "close")
     open fun db(): Nitrite {
         return nitrite {
             autoCommitBufferSize = 2048

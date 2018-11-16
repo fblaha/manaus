@@ -3,7 +3,7 @@ package cz.fb.manaus.core.model
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.*
+import java.time.Instant
 
 class CollectedBetsTest {
 
@@ -11,7 +11,7 @@ class CollectedBetsTest {
     fun serialization() {
         val mapper = ObjectMapper()
         val original = Bet(betId = "111", marketId = "222", selectionId = 333,
-                requestedPrice = Price(3.0, 2.0, Side.BACK), placedDate = Date())
+                requestedPrice = Price(3.0, 2.0, Side.BACK), placedDate = Instant.now())
 
         val bets = CollectedBets.create()
         bets.place.add(original)

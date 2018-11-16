@@ -1,14 +1,13 @@
 package cz.fb.manaus.core.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import java.util.*
+import java.time.Instant
 
 data class Bet(val betId: String? = null,
                val marketId: String,
                val selectionId: Long,
                val requestedPrice: Price,
-        // TODO instant
-               val placedDate: Date? = null,
+               val placedDate: Instant? = null,
                val matchedAmount: Double = 0.0,
                var actionId: Long = 0) {
 

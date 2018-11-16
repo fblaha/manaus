@@ -8,7 +8,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.util.*
+import java.time.Instant
 
 
 @ContextConfiguration(classes = [MarketSnapshotController::class])
@@ -22,7 +22,7 @@ class MarketSnapshotControllerTest : AbstractControllerTest() {
         createLiveMarket()
         val accountMoney = AccountMoney(2000.0, 1000.0)
         val categoryBlacklist = setOf("bad")
-        val bet = Bet("1", market.id, SEL_DRAW, Price(3.0, 5.0, Side.BACK), Date())
+        val bet = Bet("1", market.id, SEL_DRAW, Price(3.0, 5.0, Side.BACK), Instant.now())
         val crate = MarketSnapshotCrate(
                 prices = runnerPrices,
                 bets = listOf(bet),

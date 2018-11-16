@@ -8,7 +8,6 @@ import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import java.util.*
 import kotlin.test.assertEquals
 
 abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDatabaseTestCase() {
@@ -48,9 +47,9 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDatabase
     protected fun checkUpdate(marketPrices: List<RunnerPrices>, oldPrice: Double, type: Side, placeCount: Int, updateCount: Int) {
         val oldOne = Price(oldPrice, 3.72, type)
         val minus10h = Instant.now().minus(10, ChronoUnit.HOURS)
-        val unmatchedHome = Bet("1", market.id, SEL_HOME, oldOne, Date.from(minus10h))
-        val unmatchedDraw = Bet("2", market.id, SEL_DRAW, oldOne, Date.from(minus10h))
-        val unmatchedAway = Bet("3", market.id, SEL_AWAY, oldOne, Date.from(minus10h))
+        val unmatchedHome = Bet("1", market.id, SEL_HOME, oldOne, minus10h)
+        val unmatchedDraw = Bet("2", market.id, SEL_DRAW, oldOne, minus10h)
+        val unmatchedAway = Bet("3", market.id, SEL_AWAY, oldOne, minus10h)
         val bets = listOf(unmatchedHome, unmatchedDraw, unmatchedAway)
         bets.map {
             betActionRepository.save(betAction.copy(

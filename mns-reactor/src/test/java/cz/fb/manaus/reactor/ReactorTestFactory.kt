@@ -11,7 +11,6 @@ import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.stereotype.Component
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import java.util.*
 
 
 @Component
@@ -51,8 +50,7 @@ class ReactorTestFactory(
             val price = bestPrice.price
             val requestedPrice = Price(price, provider.minAmount, side.opposite)
             val date = Instant.now().minus(2, ChronoUnit.HOURS)
-            val counterBet = Bet("1", marketId, selectionId, requestedPrice,
-                    Date.from(date), provider.minAmount)
+            val counterBet = Bet("1", marketId, selectionId, requestedPrice, date, provider.minAmount)
             bets.add(counterBet)
         }
         val snapshot = MarketSnapshot.from(marketPrices, market, bets)

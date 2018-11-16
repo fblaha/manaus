@@ -8,14 +8,13 @@ import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import java.util.*
 
 val betTemplate = Bet(
         betId = "111",
         marketId = "222",
         selectionId = SEL_HOME,
         requestedPrice = Price(3.0, 2.0, Side.BACK),
-        placedDate = Date())
+        placedDate = Instant.now())
 
 
 class BetTest : AbstractLocalTestCase() {
@@ -59,7 +58,7 @@ class BetTest : AbstractLocalTestCase() {
                 marketId = market.id,
                 selectionId = 1000L,
                 requestedPrice = requestedPrice,
-                placedDate = Date.from(date),
+                placedDate = date,
                 matchedAmount = matchedAmount)
     }
 }
