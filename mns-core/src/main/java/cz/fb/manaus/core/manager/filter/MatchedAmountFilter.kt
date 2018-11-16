@@ -9,7 +9,6 @@ class MatchedAmountFilter : MarketFilter {
 
     override fun accept(market: Market, categoryBlacklist: Set<String>): Boolean {
         val matchedAmount = market.matchedAmount
-        return matchedAmount == null || !Price.amountEq(matchedAmount, 0.0)
+        return !Price.amountEq(matchedAmount, 0.0)
     }
-
 }

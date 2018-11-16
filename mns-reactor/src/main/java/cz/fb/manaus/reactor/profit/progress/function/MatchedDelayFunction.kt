@@ -9,11 +9,10 @@ class MatchedDelayFunction : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double? {
         val placed = bet.settledBet.placed
-        if (bet.settledBet.matched != null) {
+        if (placed != null) {
             val matched = bet.settledBet.matched
             return placed.until(matched, ChronoUnit.MINUTES).toDouble()
         }
         return null
     }
-
 }
