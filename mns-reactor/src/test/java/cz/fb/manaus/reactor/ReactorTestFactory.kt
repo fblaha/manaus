@@ -81,7 +81,7 @@ class ReactorTestFactory(
                 roundingService.decrement(backBestPrice, 2)!!,
                 roundingService.increment(layBestPrice, 1)!!,
                 roundingService.increment(layBestPrice, 2)!!),
-                100.0, lastMatched)
+                lastMatchedPrice, lastMatched)
     }
 
     fun createMarketPrices(betBack: Double, bestLay: Double, lastMatched: Double?): List<RunnerPrices> {

@@ -52,10 +52,14 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDatabase
         val unmatchedDraw = Bet("2", market.id, SEL_DRAW, oldOne, Date.from(minus10h))
         val unmatchedAway = Bet("3", market.id, SEL_AWAY, oldOne, Date.from(minus10h))
         val bets = listOf(unmatchedHome, unmatchedDraw, unmatchedAway)
-//        val actions = bets.map { bet -> coreTestFactory.savePlaceAction(bet, marketPrices.market) }
-
+        bets.map {
+            betActionRepository.save(betAction.copy(
+                    selectionID = it.selectionId,
+                    price = oldOne,
+                    betID = it.betId))
+        }
         check(marketPrices, bets, placeCount, updateCount)
-//        actions.forEach { betActionRepository.delete(it) }
+        betActionRepository.delete(market.id)
     }
 
 

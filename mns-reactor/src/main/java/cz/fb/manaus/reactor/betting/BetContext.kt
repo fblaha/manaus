@@ -6,29 +6,25 @@ import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.price.Fairness
 import java.time.Instant
 
-open class BetContext(open val side: Side,
-                      val selectionId: Long,
-                      val accountMoney: AccountMoney?,
-                      open val chargeGrowthForecast: Double?,
-                      private val marketSnapshot: MarketSnapshot,
-                      val fairness: Fairness) {
+open class BetContext(
+        val selectionId: Long,
+        open val side: Side,
+        open val market: Market,
+        open val runnerPrices: RunnerPrices,
+        open val marketPrices: List<RunnerPrices>,
+        open val chargeGrowthForecast: Double?,
+        open val coverage: Table<Side, Long, Bet>,
+        val accountMoney: AccountMoney?,
+        val fairness: Fairness,
+        val actualTradedVolume: TradedVolume?
+) {
 
     open val properties: MutableMap<String, String> = mutableMapOf()
-    open val runnerPrices: RunnerPrices = getRunnerPrices(marketSnapshot.runnerPrices, selectionId)
-    open val market: Market = marketSnapshot.market
 
-    open val actualTradedVolume: TradedVolume? =
-            if (marketSnapshot.tradedVolume != null) {
-                marketSnapshot.tradedVolume!![selectionId]!!
-            } else {
-                null
-            }
+    open val oldBet: Bet? = coverage.get(side, selectionId)
 
-    open val oldBet: Bet? = marketSnapshot.coverage.get(side, selectionId)
+    open val counterBet: Bet? = coverage.get(side.opposite, selectionId)
 
-    open val counterBet: Bet? = marketSnapshot.coverage.get(side.opposite, selectionId)
-
-    open val coverage: Table<Side, Long, Bet> = marketSnapshot.coverage
 
     val isCounterHalfMatched: Boolean
         get() {
@@ -59,15 +55,15 @@ open class BetContext(open val side: Side,
                 price = newPrice!!,
                 id = 0,
                 time = Instant.now(),
-                marketID = marketSnapshot.market.id,
-                runnerPrices = marketSnapshot.runnerPrices,
+                marketID = market.id,
+                runnerPrices = marketPrices,
                 properties = properties,
                 betActionType = type)
     }
 
     // TODO not used
     fun simulateSettledBet(): RealizedBet {
-        val market = marketSnapshot.market
+        val market = market
         val action = createBetAction()
         val bet = SettledBet(
                 selectionId = action.selectionID,
