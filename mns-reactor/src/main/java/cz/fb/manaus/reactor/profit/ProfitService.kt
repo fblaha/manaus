@@ -28,7 +28,7 @@ class ProfitService(private val categoryService: CategoryService,
         return mergeProfitRecords(betRecords)
     }
 
-    fun mergeProfitRecords(records: Collection<ProfitRecord>): List<ProfitRecord> {
+    private fun mergeProfitRecords(records: Collection<ProfitRecord>): List<ProfitRecord> {
         val categories = records.groupBy { it.category }
         return categories.entries
                 .map { e -> mergeCategory(e.key, e.value) }
@@ -48,8 +48,7 @@ class ProfitService(private val categoryService: CategoryService,
         val coverCount = records.map { it.coverCount }.sum()
         val result = ProfitRecord(category, theoreticalProfit, avgPrice, charge, layCount, backCount)
         if (coverCount > 0) {
-            val diff = records.filter { profitRecord -> profitRecord.coverDiff != null }
-                    .map { it.coverDiff }.filterNotNull().average()
+            val diff = records.filter { profitRecord -> profitRecord.coverDiff != null }.mapNotNull { it.coverDiff }.average()
             result.coverDiff = diff
             result.coverCount = coverCount
         }

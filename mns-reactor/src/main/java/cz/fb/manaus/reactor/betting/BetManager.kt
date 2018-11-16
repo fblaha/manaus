@@ -46,8 +46,7 @@ class BetManager(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
              myBets: Set<String>,
              accountMoney: AccountMoney?,
              categoryBlacklist: Set<String>): CollectedBets {
-        val marketPrices = snapshot.runnerPrices
-        filterPrices(marketPrices)
+        val marketPrices = filterPrices(snapshot.runnerPrices)
 
         val reciprocal = getReciprocal(marketPrices, Side.BACK)
         val market = snapshot.market

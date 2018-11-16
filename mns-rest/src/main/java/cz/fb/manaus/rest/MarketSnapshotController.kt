@@ -2,10 +2,7 @@ package cz.fb.manaus.rest
 
 import com.codahale.metrics.MetricRegistry
 import com.google.common.base.Preconditions
-import cz.fb.manaus.core.model.AccountMoney
-import cz.fb.manaus.core.model.Bet
-import cz.fb.manaus.core.model.MarketSnapshot
-import cz.fb.manaus.core.model.RunnerPrices
+import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.reactor.betting.BetManager
@@ -26,6 +23,7 @@ data class MarketSnapshotCrate(
         var bets: List<Bet>,
         var categoryBlacklist: Set<String>,
         var money: AccountMoney?,
+        val tradedVolume: Map<Long, TradedVolume>? = null,
         var scanTime: Long = 0
 )
 

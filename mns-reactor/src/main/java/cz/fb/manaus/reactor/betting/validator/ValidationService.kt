@@ -32,8 +32,7 @@ class ValidationService(private val priceService: PriceService,
     }
 
     fun validate(context: BetContext, validators: List<Validator>): ValidationResult {
-        val filteredValidators = validators
-                .filter(createPredicate(context))
+        val filteredValidators = validators.filter(createPredicate(context))
         Preconditions.checkState(!filteredValidators.isEmpty())
 
         val newPrice = context.newPrice

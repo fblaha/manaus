@@ -32,12 +32,11 @@ abstract class AbstractBestPriceProposer(private val step: Int) : PriceProposer 
         return if (step == 0) {
             bestPrice
         } else {
-            val shiftedPrice = if (side === Side.LAY) {
+            if (side === Side.LAY) {
                 roundingService.increment(bestPrice, step)
             } else {
                 roundingService.decrement(bestPrice, step)
             }
-            if (shiftedPrice != null) shiftedPrice else null
         }
     }
 }

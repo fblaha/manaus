@@ -85,7 +85,7 @@ class ProfitServiceTest : AbstractLocalTestCase() {
     }
 
     @Test
-    fun `simulation`() {
+    fun simulation() {
         val kamazBack = createKamazBack()
         val kamazLay = createKamazLay()
         val bets = listOf(kamazBack, kamazLay).map { toRealizedBet(it) }

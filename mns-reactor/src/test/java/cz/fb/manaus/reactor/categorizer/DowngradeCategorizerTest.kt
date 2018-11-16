@@ -44,7 +44,7 @@ class DowngradeCategorizerTest : AbstractLocalTestCase() {
         val now = Instant.now()
         val place = betAction.copy(price = Price(2.0, 5.0, Side.LAY),
                 time = now.minus(5, ChronoUnit.HOURS))
-        var update = betAction.copy(betActionType = BetActionType.UPDATE,
+        val update = betAction.copy(betActionType = BetActionType.UPDATE,
                 price = Price(2.1, 5.0, Side.BACK),
                 time = now.minus(2, ChronoUnit.HOURS))
 
@@ -57,7 +57,7 @@ class DowngradeCategorizerTest : AbstractLocalTestCase() {
         val now = Instant.now()
         val place = betAction.copy(price = Price(2.0, 5.0, Side.LAY),
                 time = now.minus(5, ChronoUnit.HOURS))
-        var update = betAction.copy(betActionType = BetActionType.UPDATE,
+        val update = betAction.copy(betActionType = BetActionType.UPDATE,
                 price = Price(2.1, 5.0, Side.LAY),
                 time = now.minus(7, ChronoUnit.HOURS))
 

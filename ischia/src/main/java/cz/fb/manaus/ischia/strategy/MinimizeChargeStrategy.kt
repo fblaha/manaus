@@ -8,7 +8,7 @@ import cz.fb.manaus.reactor.betting.BetContext
 import org.apache.commons.math3.util.Precision
 import java.util.Objects.requireNonNull
 
-class MinimizeChargeStrategy(internal val fairnessReductionLow: Double, internal val fairnessReductionHighBack: Double, internal val fairnessReductionHighLay: Double) {
+class MinimizeChargeStrategy(internal val fairnessReductionLow: Double, private val fairnessReductionHighBack: Double, private val fairnessReductionHighLay: Double) {
 
     fun getReductionRate(context: BetContext): Double {
         val rawRate = getRawRate(context)
@@ -24,10 +24,9 @@ class MinimizeChargeStrategy(internal val fairnessReductionLow: Double, internal
         val growthForecast = context.chargeGrowthForecast
         val upper = getUpperBoundary(context.side)
         if (growthForecast != null) {
-            val growth = growthForecast
-            if (Doubles.isFinite(growth)) {
-                setActionProperty(context, growth)
-                val result = Math.min(upper, upper * growth)
+            if (Doubles.isFinite(growthForecast)) {
+                setActionProperty(context, growthForecast)
+                val result = Math.min(upper, upper * growthForecast)
                 return Math.max(fairnessReductionLow, result)
             }
         }

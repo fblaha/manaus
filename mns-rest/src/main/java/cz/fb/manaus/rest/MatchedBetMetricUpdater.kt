@@ -20,7 +20,7 @@ class MatchedBetMetricUpdater(private val metricRegistry: MetricRegistry) {
         if (last > 0 && last != scanTime) {
             val lastCount = metricRegistry.counter(METRIC_NAME).count
             metricRegistry.remove(METRIC_NAME)
-            metricRegistry.histogram("bet.matched", MetricRegistry.MetricSupplier<Histogram> { this.newHistogram() }).update(lastCount)
+            metricRegistry.histogram("bet.matched") { this.newHistogram() }.update(lastCount)
         }
         val currentCount = bets.filter { it.isHalfMatched }.count()
         if (currentCount > 0) {

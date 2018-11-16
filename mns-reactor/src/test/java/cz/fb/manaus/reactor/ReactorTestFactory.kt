@@ -71,7 +71,7 @@ class ReactorTestFactory(
     }
 
     fun newRunnerPrices(selectionId: Long, bestBack: Double, bestLay: Double, lastMatchedPrice: Double? = null): RunnerPrices {
-        var lastMatched = lastMatchedPrice ?: roundingService.roundBet((bestBack + bestLay) / 2)!!
+        val lastMatched = lastMatchedPrice ?: roundingService.roundBet((bestBack + bestLay) / 2)!!
         val backBestPrice = Price(bestBack, 100.0, Side.BACK)
         val layBestPrice = Price(bestLay, 100.0, Side.LAY)
         return RunnerPrices(selectionId, listOf(

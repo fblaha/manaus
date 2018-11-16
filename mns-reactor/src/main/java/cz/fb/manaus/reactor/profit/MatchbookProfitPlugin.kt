@@ -12,7 +12,7 @@ class MatchbookProfitPlugin : ProfitPlugin {
         val result = mutableMapOf<String, Double>()
         for (bet in bets) {
             val betId = bet.settledBet.id
-            result.put(betId, getCharge(chargeRate, bet.settledBet.profitAndLoss, bet.settledBet.price.amount))
+            result[betId] = getCharge(chargeRate, bet.settledBet.profitAndLoss, bet.settledBet.price.amount)
         }
         return result.toMap()
     }

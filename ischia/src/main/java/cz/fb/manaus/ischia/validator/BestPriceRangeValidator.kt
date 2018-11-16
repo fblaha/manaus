@@ -28,7 +28,7 @@ class BestPriceRangeValidator : Validator {
     }
 
     companion object {
-        val RANGE = Range.closed(1.3, 6.0)
+        val RANGE = Range.closed(1.3, 6.0)!!
     }
 
 }

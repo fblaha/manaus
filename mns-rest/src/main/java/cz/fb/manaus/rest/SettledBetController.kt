@@ -34,7 +34,7 @@ class SettledBetController(private val settledBetRepository: SettledBetRepositor
         val range = intervalParser.parse(Instant.now(), interval)
         val from = range.lowerEndpoint()
         val to = range.upperEndpoint()
-        var settledBets = settledBetRepository.find(from = from, to = to)
+        val settledBets = settledBetRepository.find(from = from, to = to)
         return settledBets.reversed()
     }
 
