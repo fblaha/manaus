@@ -86,7 +86,7 @@ abstract class AbstractUpdatingBettor(private val side: Side, private val valida
                     requestedPrice = newPrice)
             betCollector.placeBet(BetCommand(bet, action))
         }
-        log.log(Level.INFO, "{0}_BET:  new bet ''{1}''", arrayOf(action.betActionType, action))
+        log.log(Level.INFO, "Bet {0} action ''{1}''", arrayOf(action.betActionType, action))
     }
 
     private fun cancelBet(oldBet: Bet?, betCollector: BetCollector) {
@@ -108,7 +108,7 @@ abstract class AbstractUpdatingBettor(private val side: Side, private val valida
     }
 
     private fun setProperty(key: String, value: Double, properties: MutableMap<String, String>) {
-        properties[key] = java.lang.Double.toString(Precision.round(value, 4))
+        properties[key] = Precision.round(value, 4).toString()
     }
 
     companion object {

@@ -43,11 +43,11 @@ class SettledBetLoader(private val intervalParser: IntervalParser,
         val stopwatch = Stopwatch.createStarted()
         val settledBets = settledBetRepository.find(from = range.lowerEndpoint(), to = range.upperEndpoint())
         var elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
-        log.log(Level.INFO, "Settle bets loaded {0} in ''{1}'' seconds", elapsed)
+        log.log(Level.INFO, "Settle bets loaded in ''{0}'' seconds", elapsed)
         stopwatch.reset().start()
         val realizedBets = settledBets.map { realizedBetLoader.toRealizedBet(it) }
         elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
-        log.log(Level.INFO, "Realized bets loaded in ''{1}'' seconds", elapsed)
+        log.log(Level.INFO, "Realized bets loaded in ''{0}'' seconds", elapsed)
         return realizedBets
     }
 
