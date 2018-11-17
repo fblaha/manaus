@@ -22,7 +22,7 @@ data class MarketSnapshotCrate(
         var prices: List<RunnerPrices>,
         var bets: List<Bet>,
         var categoryBlacklist: Set<String>,
-        var money: AccountMoney?,
+        var money: AccountMoney? = null,
         val tradedVolume: Map<Long, TradedVolume>? = null,
         var scanTime: Long = 0
 )
@@ -45,7 +45,7 @@ class MarketSnapshotController(private val manager: BetManager,
             val market = marketRepository.read(id)!!
             val bets = snapshotCrate.bets
             betMetricUpdater.update(snapshotCrate.scanTime, bets)
-            val marketSnapshot = MarketSnapshot.from(marketPrices, market, bets)
+            val marketSnapshot = MarketSnapshot.from(marketPrices, market, bets, snapshotCrate.tradedVolume)
             val myBets = betActionRepository.find(id).mapNotNull { it.betID }.toSet()
             val collectedBets = manager.fire(marketSnapshot, myBets,
                     snapshotCrate.money, snapshotCrate.categoryBlacklist)

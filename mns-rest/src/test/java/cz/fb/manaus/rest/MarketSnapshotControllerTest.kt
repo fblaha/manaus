@@ -1,17 +1,20 @@
 package cz.fb.manaus.rest
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import cz.fb.manaus.core.model.*
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
-import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.Instant
+import java.time.temporal.ChronoUnit
+import kotlin.test.assertEquals
 
 
-@ContextConfiguration(classes = [MarketSnapshotController::class])
+@ActiveProfiles("ischia")
 class MarketSnapshotControllerTest : AbstractControllerTest() {
 
     @Autowired
@@ -20,21 +23,24 @@ class MarketSnapshotControllerTest : AbstractControllerTest() {
     @Test
     fun `push snapshot`() {
         createLiveMarket()
-        val accountMoney = AccountMoney(2000.0, 1000.0)
-        val categoryBlacklist = setOf("bad")
-        val bet = Bet("1", market.id, SEL_DRAW, Price(3.0, 5.0, Side.BACK), Instant.now())
+        val bet = Bet("1", market.id, SEL_DRAW, Price(3.0, 5.0, Side.BACK),
+                Instant.now().minus(2, ChronoUnit.HOURS))
         val crate = MarketSnapshotCrate(
                 prices = runnerPrices,
                 bets = listOf(bet),
-                categoryBlacklist = categoryBlacklist,
+                categoryBlacklist = emptySet(),
                 money = accountMoney,
-                scanTime = 1000)
+                scanTime = 1000,
+                tradedVolume = tradedVolume)
 
         val snapshot = objectMapper.writer().writeValueAsString(crate)
-        mvc.perform(post("/markets/{id}/snapshot", market.id)
+        val result = mvc.perform(post("/markets/{id}/snapshot", market.id)
                 .content(snapshot)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent)
+                .andExpect(status().isOk)
                 .andReturn()
+        val collected: CollectedBets = objectMapper.readValue(result.response.contentAsString)
+        assertEquals(2, collected.place.size)
+        assertEquals(1, collected.update.size)
     }
 }

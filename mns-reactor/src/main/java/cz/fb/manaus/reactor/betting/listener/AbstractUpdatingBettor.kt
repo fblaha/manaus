@@ -43,8 +43,11 @@ abstract class AbstractUpdatingBettor(private val side: Side, private val valida
             val accepted = flowFilter.indexRange.contains(i) && flowFilter.runnerPredicate(market, runner)
             if (activeSelection || accepted) {
                 val oldBet = coverage.get(side, selectionId)
-                val ctx = contextFactory.create(side, selectionId,
-                        snapshot, fairness, accountMoney)
+                val ctx = contextFactory.create(side = side,
+                        selectionId = selectionId,
+                        snapshot = snapshot,
+                        fairness = fairness,
+                        accountMoney = accountMoney)
                 setTradedVolumeMean(ctx)
                 val pricelessValidation = validationService.validate(ctx, validators)
                 if (!pricelessValidation.isSuccess) {

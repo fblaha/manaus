@@ -3,6 +3,11 @@ package cz.fb.manaus.core.model
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
+const val SEL_HOME = 100L
+const val SEL_AWAY = 200L
+const val SEL_DRAW = 300L
+
+
 val homeSettledBet: SettledBet = SettledBet(
         id = "1",
         selectionId = SEL_HOME,
@@ -77,3 +82,10 @@ fun RealizedBet.replacePrice(price: Price): RealizedBet {
             betAction = this.betAction.copy(price = price)
     )
 }
+
+val tradedVolume = mapOf(
+        SEL_HOME to TradedVolume(listOf(TradedAmount(3.0, 10.0))),
+        SEL_DRAW to TradedVolume(listOf(TradedAmount(3.0, 10.0))),
+        SEL_AWAY to TradedVolume(listOf(TradedAmount(3.0, 10.0))))
+
+val accountMoney = AccountMoney(2000.0, 1000.0)

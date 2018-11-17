@@ -6,12 +6,10 @@ import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 
-@ContextConfiguration(classes = [SettledBetController::class])
 class SettledBetControllerTest : AbstractControllerTest() {
 
     @Autowired
@@ -30,17 +28,13 @@ class SettledBetControllerTest : AbstractControllerTest() {
 
     @Test
     fun `post settled bet`() {
-        val original = homeSettledBet
-        val serialized = objectMapper.writer().writeValueAsString(original)
-        checkPost(serialized, 202)
-    }
-
-    private fun checkPost(serialized: String, expectedStatus: Int) {
+        val serialized = objectMapper.writer().writeValueAsString(homeSettledBet)
         mvc.perform(post("/bets")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(serialized))
-                .andExpect(status().`is`(expectedStatus))
+                .andExpect(status().`is`(202))
                 .andReturn()
     }
+
 }

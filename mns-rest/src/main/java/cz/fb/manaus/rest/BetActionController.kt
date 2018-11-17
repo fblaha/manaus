@@ -3,7 +3,6 @@ package cz.fb.manaus.rest
 import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.repository.BetActionRepository
-import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*
 @Controller
 @Profile(ManausProfiles.DB)
 class BetActionController(private val betActionRepository: BetActionRepository,
-                          private val marketRepository: MarketRepository,
                           private val metricRegistry: MetricRegistry) {
 
 

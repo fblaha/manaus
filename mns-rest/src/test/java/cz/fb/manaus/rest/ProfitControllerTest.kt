@@ -1,10 +1,8 @@
 package cz.fb.manaus.rest
 
 import org.junit.Test
-import org.springframework.test.context.ContextConfiguration
 
 
-@ContextConfiguration(classes = [ProfitController::class])
 class ProfitControllerTest : AbstractControllerTest() {
 
     @Test

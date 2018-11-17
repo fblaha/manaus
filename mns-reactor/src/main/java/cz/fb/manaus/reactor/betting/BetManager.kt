@@ -76,10 +76,15 @@ class BetManager(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
     }
 
     private fun saveActions(commands: List<BetCommand>) {
-        val actions = commands.map { it.action }
-        actions.forEach { betActionRepository.save(it) }
-        actionListeners.forEach { listener -> actions.forEach { listener.onAction(it) } }
-        commands.forEach { it.bet = it.bet.copy(actionId = it.action.id) }
+        for (command in commands) {
+            saveAction(command)
+            actionListeners.forEach { it.onAction(command.action) }
+        }
+    }
+
+    private fun saveAction(command: BetCommand) {
+        val actionID = betActionRepository.save(command.action)
+        command.bet = command.bet.copy(actionId = actionID)
     }
 
     private fun filterPrices(marketPrices: List<RunnerPrices>): List<RunnerPrices> {
