@@ -4,8 +4,8 @@ import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
-import cz.fb.manaus.spring.ManausProfiles.DB
-import cz.fb.manaus.spring.ManausProfiles.TEST
+import cz.fb.manaus.spring.ManausProfiles.Companion.DB
+import cz.fb.manaus.spring.ManausProfiles.Companion.TEST
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile

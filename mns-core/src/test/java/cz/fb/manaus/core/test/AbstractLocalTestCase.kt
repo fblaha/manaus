@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.test
 
-import cz.fb.manaus.spring.ManausProfiles.TEST
+import cz.fb.manaus.spring.ManausProfiles.Companion.TEST
 import org.junit.runner.RunWith
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan

@@ -3,7 +3,7 @@ package cz.fb.manaus.ischia.validator
 import cz.fb.manaus.ischia.BackLoserBet
 import cz.fb.manaus.ischia.LayLoserBet
 import cz.fb.manaus.reactor.betting.validator.common.AbstractAccountMoneyValidator
-import cz.fb.manaus.spring.ManausProfiles.PRODUCTION
+import cz.fb.manaus.spring.ManausProfiles.Companion.PRODUCTION
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 
