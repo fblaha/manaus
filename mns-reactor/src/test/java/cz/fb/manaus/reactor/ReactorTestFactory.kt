@@ -23,7 +23,11 @@ class ReactorTestFactory(
 
 
     fun newUpdateBetContext(marketPrices: List<RunnerPrices>, side: Side): BetContext {
-        val oldBet = Bet("1", "1", SEL_HOME, Price(5.0, 5.0, side))
+        val oldBet = Bet(betId = "1",
+                marketId = "1",
+                selectionId = SEL_HOME,
+                requestedPrice = Price(5.0, 5.0, side),
+                placedDate = Instant.now())
         val context = newBetContext(side, marketPrices, oldBet)
         context.newPrice = oldBet.requestedPrice
         return context

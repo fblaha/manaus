@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class End2EndTest : AbstractControllerTest() {
@@ -20,7 +21,7 @@ class End2EndTest : AbstractControllerTest() {
     private lateinit var objectMapper: ObjectMapper
     private lateinit var collectedBets: CollectedBets
 
-    private fun `post market`() {
+    private fun `When I post market`() {
         val market = objectMapper.writer().writeValueAsString(market)
         val result = mvc.perform(MockMvcRequestBuilders.post("/markets")
                 .content(market)
@@ -30,7 +31,7 @@ class End2EndTest : AbstractControllerTest() {
         assertNotNull(result.response.getHeader(HttpHeaders.LOCATION))
     }
 
-    private fun `post snapshot and collect bets`() {
+    private fun `And I post snapshot and I collect bets`() {
         val crate = MarketSnapshotCrate(
                 prices = runnerPrices,
                 bets = emptyList(),
@@ -49,7 +50,7 @@ class End2EndTest : AbstractControllerTest() {
         assertEquals(0, collectedBets.update.size)
     }
 
-    private fun `set bet ID for all corresponding actions`() {
+    private fun `When I set bet ID for all bet actions`() {
         for ((i, bet) in collectedBets.place.withIndex()) {
             mvc.perform(MockMvcRequestBuilders.put(
                     "/actions/{id}/betId", bet.actionId)
@@ -61,7 +62,7 @@ class End2EndTest : AbstractControllerTest() {
     }
 
 
-    private fun `post settled bets for all corresponding actions`() {
+    private fun `When I post settled bets for all bet actions`() {
         for ((i, bet) in collectedBets.place.withIndex()) {
             val settledBet = homeSettledBet.copy(selectionId = bet.selectionId,
                     id = i.toString(),
@@ -78,7 +79,7 @@ class End2EndTest : AbstractControllerTest() {
         }
     }
 
-    private fun `settle bets should be reflected in profit records`() {
+    private fun `Then settled bets should be reflected in profit records`() {
         val result = mvc.perform(MockMvcRequestBuilders.get("/profit/1d").accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andReturn()
@@ -91,12 +92,39 @@ class End2EndTest : AbstractControllerTest() {
         assertTrue(allRecord.avgPrice in 3.4..3.5)
     }
 
+    private fun `Then all bet actions should have non empty bet ID`() {
+        checkAction(3) { assertNotNull(it.betID) }
+    }
+
+    private fun `Then bet actions are associated with the market and bet IDs are null`() {
+        checkAction(3) {
+            assertNull(it.betID)
+            assertEquals(3, it.runnerPrices.size)
+            assertEquals(BetActionType.PLACE, it.betActionType)
+            assertTrue { it.properties.isNotEmpty() }
+        }
+    }
+
+    private fun checkAction(expectedCount: Int, actionCheck: (BetAction) -> Unit) {
+        val result = mvc.perform(MockMvcRequestBuilders.get("/markets/" + market.id + "/actions")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andReturn()
+        val betActions: List<BetAction> = objectMapper.readValue(result.response.contentAsString)
+        assertEquals(expectedCount, betActions.size)
+        for (betAction in betActions) {
+            actionCheck(betAction)
+        }
+    }
+
     @Test
     fun `E2E API flow scenario`() {
-        `post market`()
-        `post snapshot and collect bets`()
-        `set bet ID for all corresponding actions`()
-        `post settled bets for all corresponding actions`()
-        `settle bets should be reflected in profit records`()
+        `When I post market`()
+        `And I post snapshot and I collect bets`()
+        `Then bet actions are associated with the market and bet IDs are null`()
+        `When I set bet ID for all bet actions`()
+        `Then all bet actions should have non empty bet ID`()
+        `When I post settled bets for all bet actions`()
+        `Then settled bets should be reflected in profit records`()
     }
 }

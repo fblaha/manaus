@@ -5,6 +5,7 @@ import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.betAction
 import org.junit.Test
+import java.time.Instant
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -15,14 +16,17 @@ class BetCollectorTest {
 
     @Test
     fun `find bet`() {
-        val updateBet = Bet(betId = "777", marketId = marketId, selectionId = selectionId,
-                requestedPrice = Price(5.0, 5.0, Side.LAY))
+        val updateBet = Bet(betId = "777", marketId = marketId,
+                selectionId = selectionId,
+                requestedPrice = Price(5.0, 5.0, Side.LAY),
+                placedDate = Instant.now())
         var collector = BetCollector()
         collector.updateBet(BetCommand(updateBet, betAction))
         checkCollector(collector)
         collector = BetCollector()
-        val placeBet = Bet(betId = null, marketId = marketId, selectionId = selectionId,
-                requestedPrice = Price(5.0, 5.0, Side.LAY))
+        val placeBet = Bet(marketId = marketId, selectionId = selectionId,
+                requestedPrice = Price(5.0, 5.0, Side.LAY),
+                placedDate = Instant.now())
         collector.placeBet(BetCommand(placeBet, betAction))
         checkCollector(collector)
     }

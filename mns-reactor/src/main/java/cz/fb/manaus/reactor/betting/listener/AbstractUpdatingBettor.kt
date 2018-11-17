@@ -10,6 +10,7 @@ import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.apache.commons.math3.util.Precision
 import org.springframework.beans.factory.annotation.Autowired
+import java.time.Instant
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -79,7 +80,9 @@ abstract class AbstractUpdatingBettor(private val side: Side, private val valida
             betCollector.updateBet(BetCommand(oldBet.replacePrice(newPrice.price), action))
         } else {
             val market = ctx.market
-            val bet = Bet(marketId = market.id, selectionId = ctx.runnerPrices.selectionId,
+            val bet = Bet(marketId = market.id,
+                    placedDate = Instant.now(),
+                    selectionId = ctx.runnerPrices.selectionId,
                     requestedPrice = newPrice)
             betCollector.placeBet(BetCommand(bet, action))
         }
