@@ -5,7 +5,6 @@ import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
 import org.springframework.stereotype.Service
-import java.util.Objects.requireNonNull
 
 @Service
 class RoundingService(private val plugin: RoundingPlugin,
@@ -30,7 +29,7 @@ class RoundingService(private val plugin: RoundingPlugin,
     }
 
     fun downgrade(price: Double, stepNum: Int, side: Side): Double? {
-        if (requireNonNull(side) === Side.LAY) {
+        if (side === Side.LAY) {
             return decrement(price, stepNum)
         } else if (side === Side.BACK) {
             return increment(price, stepNum)

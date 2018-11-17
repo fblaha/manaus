@@ -7,7 +7,6 @@ import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.Side
 import org.springframework.stereotype.Service
-import java.util.Objects.requireNonNull
 
 
 @Service
@@ -68,9 +67,9 @@ class ProfitService(private val categoryService: CategoryService,
     }
 
     fun toProfitRecord(bet: RealizedBet, category: String, chargeContribution: Double, coverage: BetCoverage): ProfitRecord {
-        val type = requireNonNull(bet.settledBet.price.side)
+        val side = bet.settledBet.price.side
         val price = bet.settledBet.price.price
-        val result = if (type === Side.BACK) {
+        val result = if (side === Side.BACK) {
             ProfitRecord(category, bet.settledBet.profitAndLoss, price, chargeContribution, 0, 1)
         } else {
             ProfitRecord(category, bet.settledBet.profitAndLoss, price, chargeContribution, 1, 0)

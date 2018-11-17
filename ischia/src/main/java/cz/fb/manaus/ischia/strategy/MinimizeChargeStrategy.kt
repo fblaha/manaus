@@ -6,7 +6,6 @@ import com.google.common.primitives.Doubles
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetContext
 import org.apache.commons.math3.util.Precision
-import java.util.Objects.requireNonNull
 
 class MinimizeChargeStrategy(internal val fairnessReductionLow: Double, private val fairnessReductionHighBack: Double, private val fairnessReductionHighLay: Double) {
 
@@ -17,7 +16,7 @@ class MinimizeChargeStrategy(internal val fairnessReductionLow: Double, private 
     }
 
     internal fun getUpperBoundary(side: Side): Double {
-        return if (requireNonNull(side) === Side.BACK) fairnessReductionHighBack else fairnessReductionHighLay
+        return if (side === Side.BACK) fairnessReductionHighBack else fairnessReductionHighLay
     }
 
     private fun getRawRate(context: BetContext): Double {
@@ -37,5 +36,4 @@ class MinimizeChargeStrategy(internal val fairnessReductionLow: Double, private 
         val rounded = Precision.round(growth, 4)
         context.properties["chargeGrowth"] = java.lang.Double.toString(rounded)
     }
-
 }

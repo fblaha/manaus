@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Profile
 import org.springframework.core.annotation.AnnotationAwareOrderComparator
 import org.springframework.stereotype.Service
 import java.time.Instant
-import java.util.Objects.requireNonNull
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -38,7 +37,6 @@ class BetManager(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
 
     @Autowired(required = false)
     fun setMarketSnapshotListeners(marketSnapshotListeners: List<MarketSnapshotListener>) {
-        requireNonNull(marketSnapshotListeners)
         this.marketSnapshotListeners = marketSnapshotListeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
     }
 

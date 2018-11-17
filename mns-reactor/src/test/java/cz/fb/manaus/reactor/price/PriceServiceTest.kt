@@ -8,7 +8,6 @@ import cz.fb.manaus.reactor.ReactorTestFactory
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -48,10 +47,9 @@ class PriceServiceTest : AbstractLocalTestCase() {
     }
 
     private fun isDowngrade(newOne: Price, oldOne: Price): Boolean {
-        val type = Objects.requireNonNull(newOne.side)
         val newPrice = newOne.price
         val oldPrice = oldOne.price
-        return priceService.isDowngrade(newPrice, oldPrice, type)
+        return priceService.isDowngrade(newPrice, oldPrice, newOne.side)
     }
 
     private fun getFairness(side: Side, marketPrices: List<RunnerPrices>): Double {

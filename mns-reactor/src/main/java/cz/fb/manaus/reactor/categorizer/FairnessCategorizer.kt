@@ -13,7 +13,6 @@ import cz.fb.manaus.core.model.getBestPrices
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import java.util.Objects.requireNonNull
 
 @Component
 class FairnessCategorizer : RealizedBetCategorizer {
@@ -30,7 +29,7 @@ class FairnessCategorizer : RealizedBetCategorizer {
     }
 
     internal fun getCategory(fairness: Double): String {
-        return PREFIX + requireNonNull<String>(RANGES.get(fairness))
+        return PREFIX + RANGES.get(fairness)!!
     }
 
     companion object {

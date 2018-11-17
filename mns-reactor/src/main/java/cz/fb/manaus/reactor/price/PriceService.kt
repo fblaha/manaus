@@ -6,7 +6,6 @@ import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.stereotype.Component
-import java.util.Objects.requireNonNull
 
 @Component
 class PriceService(private val roundingService: RoundingService) {
@@ -16,7 +15,7 @@ class PriceService(private val roundingService: RoundingService) {
         val targetFairness = 1 - downgradeFraction
         Preconditions.checkState(Range.closed(0.0, 1.0).contains(targetFairness))
 
-        if (requireNonNull(side) === Side.LAY) {
+        if (side === Side.LAY) {
             return 1 + aboveOne * targetFairness
         } else if (side === Side.BACK) {
             return 1 + aboveOne / targetFairness

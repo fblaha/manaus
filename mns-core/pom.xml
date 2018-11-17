@@ -36,13 +36,6 @@
             <groupId>org.dizitart</groupId>
             <artifactId>potassium-nitrite</artifactId>
         </dependency>
-        <!-- TODO java9 workaround -->
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.nhaarman/mockito-kotlin -->
         <dependency>
             <groupId>com.nhaarman</groupId>
             <artifactId>mockito-kotlin</artifactId>

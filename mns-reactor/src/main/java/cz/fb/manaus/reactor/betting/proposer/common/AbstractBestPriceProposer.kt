@@ -7,7 +7,6 @@ import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.Objects.requireNonNull
 
 abstract class AbstractBestPriceProposer(private val step: Int) : PriceProposer {
 
@@ -26,7 +25,7 @@ abstract class AbstractBestPriceProposer(private val step: Int) : PriceProposer 
     }
 
     override fun getProposedPrice(context: BetContext): Double? {
-        val side = requireNonNull(context.side)
+        val side = context.side
         val bestPrice = context.runnerPrices.getHomogeneous(side.opposite).bestPrice!!.price
         Preconditions.checkState(step >= 0)
         return if (step == 0) {

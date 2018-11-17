@@ -7,7 +7,6 @@ import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.stereotype.Service
-import java.util.Objects.requireNonNull
 
 @Service
 class ValidationService(private val priceService: PriceService,
@@ -17,7 +16,7 @@ class ValidationService(private val priceService: PriceService,
     internal fun handleDowngrade(newOne: Price?, oldOne: Bet?, validator: Validator): ValidationResult? {
         if (oldOne != null && newOne != null) {
             val oldPrice = oldOne.requestedPrice
-            checkState(newOne.side === requireNonNull(oldPrice.side), validator.javaClass)
+            checkState(newOne.side === oldPrice.side, validator::class)
             if (priceService.isDowngrade(newOne.price, oldPrice.price,
                             newOne.side) && validator.isDowngradeAccepting) {
                 return ValidationResult.ACCEPT
@@ -45,7 +44,7 @@ class ValidationService(private val priceService: PriceService,
             recorder.updateMetrics(validationResult, context.side, validator.name)
             collected.add(validationResult)
         }
-        return requireNonNull(reduce(collected))
+        return reduce(collected)
     }
 
     private fun createPredicate(context: BetContext): (Validator) -> Boolean {

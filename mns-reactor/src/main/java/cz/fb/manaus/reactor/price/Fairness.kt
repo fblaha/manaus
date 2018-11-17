@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.price
 
 import cz.fb.manaus.core.model.Side
-import java.util.Objects.requireNonNull
 
 data class Fairness(val back: Double? = null, val lay: Double? = null) {
 
@@ -23,6 +22,6 @@ data class Fairness(val back: Double? = null, val lay: Double? = null) {
         }
 
     operator fun get(side: Side): Double? {
-        return if (requireNonNull(side) === Side.BACK) back else lay
+        return if (side === Side.BACK) back else lay
     }
 }

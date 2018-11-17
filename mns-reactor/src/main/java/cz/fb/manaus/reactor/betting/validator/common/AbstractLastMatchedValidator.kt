@@ -5,7 +5,6 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
-import java.util.Objects.requireNonNull
 
 abstract class AbstractLastMatchedValidator(private val passEqual: Boolean) : Validator {
 
@@ -14,7 +13,7 @@ abstract class AbstractLastMatchedValidator(private val passEqual: Boolean) : Va
         if (Price.priceEq(context.newPrice!!.price, lastMatchedPrice)) {
             return ValidationResult.of(passEqual)
         }
-        val side = requireNonNull(context.side)
+        val side = context.side
         return if (side === Side.LAY) {
             ValidationResult.of(context.newPrice!!.price < lastMatchedPrice)
         } else {

@@ -7,7 +7,6 @@ import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.price.PriceService
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.stereotype.Service
-import java.util.Objects.requireNonNull
 
 @Service
 class PriceProposalService(private val roundingService: RoundingService,
@@ -29,7 +28,7 @@ class PriceProposalService(private val roundingService: RoundingService,
     }
 
     private fun reduce(side: Side, values: List<ProposedPrice>): ProposedPrice {
-        val result: ProposedPrice = if (requireNonNull(side) === Side.BACK) {
+        val result: ProposedPrice = if (side === Side.BACK) {
             values.maxBy { it.price }!!
         } else {
             values.minBy { it.price }!!
