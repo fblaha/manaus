@@ -1,13 +1,11 @@
 package cz.fb.manaus.reactor.betting.proposer
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.whenever
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.homeContext
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
 import kotlin.test.assertEquals
 
 class PriceProposalServiceTest : AbstractLocalTestCase() {
@@ -31,12 +29,11 @@ class PriceProposalServiceTest : AbstractLocalTestCase() {
                 return null
             }
         }
-        service.reducePrices(mock(), listOf(proposer), Side.LAY)
+        service.reducePrices(homeContext.copy(), listOf(proposer), Side.LAY)
     }
 
     private fun checkProposal(expectedPrice: Double, side: Side, proposers: List<PriceProposer>) {
-        val context: BetContext = mock()
-        whenever(context.properties).thenReturn(HashMap())
+        val context: BetContext = homeContext.copy()
         val price = service.reducePrices(context, proposers, side).price
         assertEquals(expectedPrice, price)
     }

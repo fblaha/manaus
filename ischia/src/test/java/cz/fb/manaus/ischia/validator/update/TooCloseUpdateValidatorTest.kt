@@ -20,7 +20,7 @@ class TooCloseUpdateValidatorTest : AbstractLocalTestCase() {
 
     @Test
     fun validate() {
-        val context = factory.createContext(Side.BACK, 2.5, 3.5)
+        val context = factory.newBetContext(Side.BACK, 2.5, 3.5)
         assertEquals(ValidationResult.ACCEPT, validator.validate(context))
     }
 

@@ -21,7 +21,6 @@ class ReactorTestFactory(
         private var contextFactory: BetContextFactory,
         private var provider: ExchangeProvider) {
 
-
     fun newUpdateBetContext(marketPrices: List<RunnerPrices>, side: Side): BetContext {
         val oldBet = Bet(betId = "1",
                 marketId = "1",
@@ -43,8 +42,8 @@ class ReactorTestFactory(
         return contextFactory.create(side, SEL_HOME, snapshot, fairness)
     }
 
-    fun createContext(side: Side, bestBack: Double, bestLay: Double): BetContext {
-        val marketPrices = createMarketPrices(bestBack, bestLay, 3.0)
+    fun newBetContext(side: Side, bestBack: Double, bestLay: Double): BetContext {
+        val marketPrices = newMarketPrices(bestBack, bestLay, 3.0)
         val runnerPrices = marketPrices.first()
         val selectionId = runnerPrices.selectionId
         val bestPrice = runnerPrices.getHomogeneous(side.opposite).bestPrice
@@ -60,16 +59,6 @@ class ReactorTestFactory(
         val snapshot = MarketSnapshot.from(marketPrices, market, bets)
         return contextFactory.create(side, selectionId, snapshot,
                 calculator.getFairness(marketPrices))
-
-    }
-
-    fun createRP(unfairPrices: List<Double>): List<RunnerPrices> {
-        val runnerPrices = mutableListOf<RunnerPrices>()
-        for (i in unfairPrices.indices) {
-            val unfairPrice = unfairPrices[i]
-            runnerPrices.add(newRunnerPrices(i.toLong(), unfairPrice, 10.0))
-        }
-        return runnerPrices
     }
 
     fun newRunnerPrices(selectionId: Long, bestBack: Double, bestLay: Double, lastMatchedPrice: Double? = null): RunnerPrices {
@@ -86,14 +75,14 @@ class ReactorTestFactory(
                 lastMatchedPrice, lastMatched)
     }
 
-    fun createMarketPrices(betBack: Double, bestLay: Double, lastMatched: Double?): List<RunnerPrices> {
+    fun newMarketPrices(betBack: Double, bestLay: Double, lastMatched: Double? = null): List<RunnerPrices> {
         val home = newRunnerPrices(SEL_HOME, betBack, bestLay, lastMatched)
         val draw = newRunnerPrices(SEL_DRAW, betBack, bestLay, lastMatched)
         val away = newRunnerPrices(SEL_AWAY, betBack, bestLay, lastMatched)
         return listOf(home, draw, away)
     }
 
-    fun createMarketPrices(downgradeFraction: Double, probabilities: List<Double>): List<RunnerPrices> {
+    fun newMarketPrices(downgradeFraction: Double, probabilities: List<Double>): List<RunnerPrices> {
         val runnerPrices = mutableListOf<RunnerPrices>()
         for ((i, p) in probabilities.withIndex()) {
             val fairPrice = 1 / p
@@ -107,5 +96,4 @@ class ReactorTestFactory(
         }
         return runnerPrices
     }
-
 }

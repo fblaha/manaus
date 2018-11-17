@@ -6,25 +6,26 @@ import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.price.Fairness
 import java.time.Instant
 
-open class BetContext(
+data class BetContext(
         val selectionId: Long,
-        open val side: Side,
-        open val market: Market,
-        open val runnerPrices: RunnerPrices,
-        open val marketPrices: List<RunnerPrices>,
-        open val chargeGrowthForecast: Double?,
-        open val coverage: Table<Side, Long, Bet>,
+        val side: Side,
+        val market: Market,
+        val marketPrices: List<RunnerPrices>,
+        val chargeGrowthForecast: Double?,
+        val coverage: Table<Side, Long, Bet>,
         val accountMoney: AccountMoney?,
         val fairness: Fairness,
         val actualTradedVolume: TradedVolume?
 ) {
 
-    open val properties: MutableMap<String, String> = mutableMapOf()
+    val runnerPrices: RunnerPrices
+        get() = marketPrices.first { it.selectionId == selectionId }
 
-    open val oldBet: Bet? = coverage.get(side, selectionId)
+    val properties: MutableMap<String, String> = mutableMapOf()
 
-    open val counterBet: Bet? = coverage.get(side.opposite, selectionId)
+    val oldBet: Bet? = coverage.get(side, selectionId)
 
+    val counterBet: Bet? = coverage.get(side.opposite, selectionId)
 
     val isCounterHalfMatched: Boolean
         get() {
@@ -37,11 +38,11 @@ open class BetContext(
                 val newSide = value.side
                 checkState(side === newSide)
                 if (this.oldBet != null) {
-                    val oldSide = this.oldBet!!.requestedPrice.side
+                    val oldSide = this.oldBet.requestedPrice.side
                     checkState(oldSide === newSide)
                 }
                 if (this.counterBet != null) {
-                    val otherSide = this.counterBet!!.requestedPrice.side
+                    val otherSide = this.counterBet.requestedPrice.side
                     checkState(otherSide === newSide.opposite)
                 }
             }
@@ -76,6 +77,4 @@ open class BetContext(
         )
         return RealizedBet(bet, action, market)
     }
-
-
 }

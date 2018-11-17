@@ -29,7 +29,7 @@ class ProbabilityCalculatorTest : AbstractLocalTestCase() {
     private fun checkProbability(probabilities: List<Double>) {
         val rates = listOf(0.05, 0.1, 0.2, 0.4)
         for (rate in rates) {
-            val prices = factory.createMarketPrices(rate, probabilities)
+            val prices = factory.newMarketPrices(rate, probabilities)
             val fairness = fairnessPolynomialCalculator.getFairness(prices)
             for (side in Side.values()) {
                 val probability = calculator.fromFairness(fairness[side]!!, side, prices)

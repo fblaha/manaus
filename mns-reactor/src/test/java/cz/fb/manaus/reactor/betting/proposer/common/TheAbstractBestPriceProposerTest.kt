@@ -1,13 +1,9 @@
 package cz.fb.manaus.reactor.betting.proposer.common
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.whenever
-import cz.fb.manaus.core.model.SEL_HOME
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.model.homePrices
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
-import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.homeContext
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,28 +22,23 @@ class TheAbstractBestPriceProposerTest : AbstractLocalTestCase() {
 
     @Test
     fun `lay propose`() {
-        val context = mock<BetContext>()
-        whenever(context.side).thenReturn(Side.LAY)
-        whenever(context.runnerPrices).thenReturn(factory.newRunnerPrices(SEL_HOME, 2.0, 4.5))
+        val context = homeContext.copy(side = Side.LAY,
+                marketPrices = factory.newMarketPrices(2.0, 4.5))
         assertEquals(ValidationResult.ACCEPT, layProposer.validate(context))
         assertEquals(2.02, layProposer.getProposedPrice(context))
     }
 
     @Test
     fun check() {
-        val context = mock<BetContext>()
-        whenever(context.side).thenReturn(Side.LAY, Side.BACK)
-        whenever(context.runnerPrices).thenReturn(homePrices)
+        val context = homeContext.copy(side = Side.LAY)
         assertEquals(ValidationResult.ACCEPT, layProposer.validate(context))
-        assertEquals(ValidationResult.ACCEPT, backProposer.validate(context))
+        assertEquals(ValidationResult.ACCEPT, backProposer.validate(context.copy(side = Side.BACK)))
     }
 
     @Test
     fun `back propose`() {
-        val context = mock<BetContext>()
-        whenever(context.side).thenReturn(Side.BACK)
-        val prices = factory.newRunnerPrices(SEL_HOME, 2.5, 3.5)
-        whenever(context.runnerPrices).thenReturn(prices)
+        val prices = factory.newMarketPrices(2.5, 3.5)
+        val context = homeContext.copy(marketPrices = prices)
         assertEquals(ValidationResult.ACCEPT, backProposer.validate(context))
         assertEquals(3.45, backProposer.getProposedPrice(context))
     }

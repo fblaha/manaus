@@ -94,7 +94,6 @@ abstract class AbstractUpdatingBettor(private val side: Side, private val valida
             metricRegistry.counter("bet.cancel").inc()
             betCollector.cancelBet(oldBet)
             log.log(Level.INFO, "CANCEL_BET: unable propose price for bet ''{0}''", oldBet)
-
         }
     }
 

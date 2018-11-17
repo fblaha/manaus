@@ -1,11 +1,11 @@
 package cz.fb.manaus.reactor.betting.validator
 
-import com.nhaarman.mockito_kotlin.mock
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.homeContext
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
@@ -45,11 +45,11 @@ class ValidationServiceTest : AbstractLocalTestCase() {
                 Price(newPrice, 2.0, Side.LAY),
                 oldBet, rejecting)
         assertEquals(expected, result)
-        assertEquals(ValidationResult.REJECT, rejecting.validate(mock()))
+        assertEquals(ValidationResult.REJECT, rejecting.validate(homeContext.copy()))
     }
 
 
-    private class TestValidator(private val result: ValidationResult) : Validator {
+    private data class TestValidator(private val result: ValidationResult) : Validator {
 
         override fun validate(context: BetContext): ValidationResult {
             return result

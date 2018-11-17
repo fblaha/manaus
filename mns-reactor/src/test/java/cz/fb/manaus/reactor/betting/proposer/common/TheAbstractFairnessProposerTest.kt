@@ -21,28 +21,28 @@ class TheAbstractFairnessProposerTest : AbstractLocalTestCase() {
 
     @Test
     fun `lay price by lay proposer`() {
-        val ctx = factory.createContext(Side.LAY, 2.5, 3.2)
+        val ctx = factory.newBetContext(Side.LAY, 2.5, 3.2)
         val proposedPrice = layProposer.getProposedPrice(ctx)
         assertEquals(2.96, Price.round(proposedPrice))
     }
 
     @Test
     fun `back price by lay proposer`() {
-        val ctx = factory.createContext(Side.BACK, 2.5, 3.5)
+        val ctx = factory.newBetContext(Side.BACK, 2.5, 3.5)
         val proposedPrice = layProposer.getProposedPrice(ctx)
         assertEquals(3.041, Price.round(proposedPrice))
     }
 
     @Test
     fun `back price by back proposer`() {
-        val ctx = factory.createContext(Side.BACK, 2.8, 3.5)
+        val ctx = factory.newBetContext(Side.BACK, 2.8, 3.5)
         val proposedPrice = backProposer.getProposedPrice(ctx)
         assertEquals(3.041, Price.round(proposedPrice))
     }
 
     @Test
     fun `lay price by back proposer`() {
-        val ctx = factory.createContext(Side.LAY, 2.2, 3.7)
+        val ctx = factory.newBetContext(Side.LAY, 2.2, 3.7)
         val proposedPrice = backProposer.getProposedPrice(ctx)
         assertEquals(2.96, Price.round(proposedPrice))
     }

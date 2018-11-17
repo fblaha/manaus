@@ -3,7 +3,6 @@ package cz.fb.manaus.reactor.betting
 import cz.fb.manaus.core.model.AccountMoney
 import cz.fb.manaus.core.model.MarketSnapshot
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.model.getRunnerPrices
 import cz.fb.manaus.reactor.charge.ChargeGrowthForecaster
 import cz.fb.manaus.reactor.price.Fairness
 import org.springframework.stereotype.Component
@@ -23,7 +22,6 @@ class BetContextFactory(private val forecaster: ChargeGrowthForecaster) {
                 side = side,
                 selectionId = selectionId,
                 marketPrices = marketPrices,
-                runnerPrices = getRunnerPrices(marketPrices, selectionId),
                 accountMoney = accountMoney,
                 chargeGrowthForecast = forecast,
                 coverage = coverage,

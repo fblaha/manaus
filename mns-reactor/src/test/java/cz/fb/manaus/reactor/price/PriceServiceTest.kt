@@ -120,8 +120,16 @@ class PriceServiceTest : AbstractLocalTestCase() {
         checkFairPrices(1, 1.4, 2.6)
     }
 
+    fun newMarketPrices(unfairPrices: List<Double>): List<RunnerPrices> {
+        val runnerPrices = mutableListOf<RunnerPrices>()
+        for ((i, unfairPrice) in unfairPrices.withIndex()) {
+            runnerPrices.add(factory.newRunnerPrices(i.toLong(), unfairPrice, 10.0))
+        }
+        return runnerPrices
+    }
+
     private fun checkFairPrices(winnerCount: Int, vararg unfairPrices: Double) {
-        val marketPrices = factory.createRP(Doubles.asList(*unfairPrices))
+        val marketPrices = newMarketPrices(Doubles.asList(*unfairPrices))
         val overround = getOverround(marketPrices, Side.BACK)!!
         val reciprocal = getReciprocal(marketPrices, Side.BACK)!!
         val fairness = getFairness(Side.BACK, marketPrices)
@@ -137,16 +145,14 @@ class PriceServiceTest : AbstractLocalTestCase() {
 
         checkOverroundUnfairPrices(reciprocal, winnerCount, Doubles.asList(*unfairPrices), overroundPrices)
 
+        val fairnessPrices = unfairPrices.map { price ->
+            val fair = priceService.getFairnessFairPrice(price, fairness)
+            assertTrue(price < fair)
+            fair
+        }
 
-        val fairnessPrices = unfairPrices
-                .map { price ->
-                    val fair = priceService.getFairnessFairPrice(price, fairness)
-                    assertTrue(price < fair)
-                    fair
-                }
-
-        val overFairnessBased = getOverround(factory.createRP(fairnessPrices), Side.BACK)
-        val overOverroundBased = getOverround(factory.createRP(overroundPrices), Side.BACK)
+        val overFairnessBased = getOverround(newMarketPrices(fairnessPrices), Side.BACK)
+        val overOverroundBased = getOverround(newMarketPrices(overroundPrices), Side.BACK)
 
         assertEquals(winnerCount.toDouble(), overFairnessBased!!, 0.001)
         assertEquals(winnerCount.toDouble(), overOverroundBased!!, 0.001)
@@ -174,7 +180,7 @@ class PriceServiceTest : AbstractLocalTestCase() {
 
     @Test
     fun `fairness based fair prices`() {
-        val market = factory.createMarketPrices(0.2, listOf(0.85, 0.1, 0.05))
+        val market = factory.newMarketPrices(0.2, listOf(0.85, 0.1, 0.05))
         val fairness = calculator.getFairness(market)
         val bestBack = getBestPrices(market, Side.BACK)[0]!!
         val bestLay = getBestPrices(market, Side.LAY)[0]!!
