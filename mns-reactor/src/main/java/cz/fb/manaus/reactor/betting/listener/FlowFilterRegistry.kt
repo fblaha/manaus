@@ -1,10 +1,7 @@
 package cz.fb.manaus.reactor.betting.listener
 
-import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 
-// TODO no lazy
-@Lazy
 @Component
 class FlowFilterRegistry(flowFilters: List<FlowFilter>) {
 
@@ -13,10 +10,12 @@ class FlowFilterRegistry(flowFilters: List<FlowFilter>) {
 
     init {
         val m = mutableMapOf<String, FlowFilter>()
-        flowFilters.forEach { flowFilter -> flowFilter.marketTypes.forEach { m[it] = flowFilter } }
-        defaultFilter = flowFilters
-                .find { flowFilter -> flowFilter.marketTypes.isEmpty() }
-                ?: FlowFilter.ALLOW_ALL
+        for (flowFilter in flowFilters) {
+            for (type in flowFilter.marketTypes) {
+                m[type] = flowFilter
+            }
+        }
+        defaultFilter = flowFilters.find { it.marketTypes.isEmpty() } ?: FlowFilter.ALLOW_ALL
         byMarketType = m.toMap()
     }
 

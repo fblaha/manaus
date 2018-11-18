@@ -28,7 +28,6 @@ class MarketChargeSimulator {
             if (profit > 0) {
                 val charge = profit * chargeRate
                 chargeMean += probability * charge
-
             }
         }
         return chargeMean
@@ -74,5 +73,4 @@ class MarketChargeSimulator {
             else -> Sets.powerSet(selections).filter { it.size == winnerCount }.toList()
         }
     }
-
 }

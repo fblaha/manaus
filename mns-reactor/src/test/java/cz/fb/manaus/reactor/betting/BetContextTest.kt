@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting
 
-import com.google.common.collect.HashBasedTable
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
@@ -17,7 +16,7 @@ val homeContext: BetContext = BetContext(
         side = Side.BACK,
         actualTradedVolume = tradedVolume[SEL_HOME],
         accountMoney = accountMoney,
-        coverage = HashBasedTable.create(),
+        coverage = mutableMapOf(),
         fairness = Fairness(0.9, 1.1),
         chargeGrowthForecast = 1.0,
         marketPrices = runnerPrices,

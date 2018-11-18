@@ -22,7 +22,7 @@ class MetricsService {
                 .flatMap { (k, v) -> getHistogramMetricRecords(k, v) }
 
         return (counters + meters + histograms)
-                .filter { (name) -> name.startsWith(prefix) }
+                .filter { it.name.startsWith(prefix) }
                 .sortedBy { it.name }
 
     }

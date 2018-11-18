@@ -1,22 +1,22 @@
 package cz.fb.manaus.core.model
 
-import com.google.common.collect.HashBasedTable
-import com.google.common.collect.Table
 import java.util.logging.Level
 import java.util.logging.Logger
 
 private val log = Logger.getLogger(MarketSnapshot::class.java.simpleName)
 
-internal fun getMarketCoverage(bets: List<Bet>): Table<Side, Long, Bet> {
+data class SideSelection(val side: Side, val selectionID: Long)
+
+internal fun getMarketCoverage(bets: List<Bet>): Map<SideSelection, Bet> {
     val sortedBets = bets.sortedBy { it.placedDate }
-    val result = HashBasedTable.create<Side, Long, Bet>()
+    val result = mutableMapOf<SideSelection, Bet>()
     for (bet in sortedBets) {
         val side = bet.requestedPrice.side
-        val predecessor = result.get(side, bet.selectionId)
+        val predecessor = result[SideSelection(side, bet.selectionId)]
         if (predecessor != null) {
             log.log(Level.WARNING, "Suspicious relationship between predecessor '$predecessor'' and successor ''$bet''")
         }
-        result.put(side, bet.selectionId, bet)
+        result[SideSelection(side, bet.selectionId)] = bet
     }
     return result
 }
@@ -24,7 +24,7 @@ internal fun getMarketCoverage(bets: List<Bet>): Table<Side, Long, Bet> {
 data class MarketSnapshot(val runnerPrices: List<RunnerPrices>,
                           val market: Market,
                           val currentBets: List<Bet>,
-                          val coverage: Table<Side, Long, Bet>,
+                          val coverage: Map<SideSelection, Bet>,
                           val tradedVolume: Map<Long, TradedVolume>? = null) {
 
     companion object {

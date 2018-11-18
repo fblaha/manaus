@@ -22,8 +22,8 @@ class MarketSnapshotTest {
                 placedDate = Instant.now(),
                 matchedAmount = 1.0)
         val coverage = getMarketCoverage(listOf(successor, predecessor))
-        assertEquals(1, coverage.size())
-        assertEquals(successor, coverage.get(side, selectionId))
+        assertEquals(1, coverage.size)
+        assertEquals(successor, coverage[SideSelection(side, selectionId)])
     }
 
 }

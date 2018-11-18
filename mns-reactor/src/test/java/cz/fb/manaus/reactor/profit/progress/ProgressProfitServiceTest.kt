@@ -17,7 +17,6 @@ class ProgressProfitServiceTest : AbstractLocalTestCase() {
     @Autowired
     private lateinit var provider: ExchangeProvider
 
-
     @Test
     fun `single chunk`() {
         val bets = generateBets().map { toRealizedBet(it) }

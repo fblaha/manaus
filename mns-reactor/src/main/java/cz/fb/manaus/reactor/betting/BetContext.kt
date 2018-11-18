@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.betting
 
 import com.google.common.base.Preconditions.checkState
-import com.google.common.collect.Table
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.price.Fairness
 import java.time.Instant
@@ -12,7 +11,7 @@ data class BetContext(
         val market: Market,
         val marketPrices: List<RunnerPrices>,
         val chargeGrowthForecast: Double?,
-        val coverage: Table<Side, Long, Bet>,
+        val coverage: Map<SideSelection, Bet>,
         val accountMoney: AccountMoney?,
         val fairness: Fairness,
         val actualTradedVolume: TradedVolume?
@@ -23,9 +22,9 @@ data class BetContext(
 
     val properties: MutableMap<String, String> = mutableMapOf()
 
-    val oldBet: Bet? = coverage.get(side, selectionId)
+    val oldBet: Bet? = coverage[SideSelection(side, selectionId)]
 
-    val counterBet: Bet? = coverage.get(side.opposite, selectionId)
+    val counterBet: Bet? = coverage[SideSelection(side.opposite, selectionId)]
 
     val isCounterHalfMatched: Boolean
         get() {
