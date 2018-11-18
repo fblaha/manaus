@@ -12,13 +12,14 @@ class FairnessPolynomialCalculatorTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var calculator: FairnessPolynomialCalculator
+    private val eps = 0.001
 
     @Test
     fun `polynomial fairness`() {
-        assertEquals(0.866, calculator.getFairness(1, listOf(2.5, 1.5))!!, 0.001)
-        assertEquals(0.825, calculator.getFairness(1, listOf(2.7, 1.4))!!, 0.001)
-        assertEquals(0.75, calculator.getFairness(1, listOf(2.5, 2.5, 2.5))!!, 0.001)
-        assertEquals(0.85, calculator.getFairness(1, listOf(2.7, 2.7, 2.7))!!, 0.001)
+        assertEquals(0.866, calculator.getFairness(1, listOf(2.5, 1.5))!!, eps)
+        assertEquals(0.825, calculator.getFairness(1, listOf(2.7, 1.4))!!, eps)
+        assertEquals(0.75, calculator.getFairness(1, listOf(2.5, 2.5, 2.5))!!, eps)
+        assertEquals(0.85, calculator.getFairness(1, listOf(2.7, 2.7, 2.7))!!, eps)
     }
 
     @Test
@@ -46,12 +47,12 @@ class FairnessPolynomialCalculatorTest : AbstractLocalTestCase() {
 
     @Test
     fun `fairness lay 2 runners`() {
-        assertEquals(1.118, calculator.getFairness(1, listOf(1.5, 3.5))!!, 0.001)
+        assertEquals(1.118, calculator.getFairness(1, listOf(1.5, 3.5))!!, eps)
     }
 
     @Test
     fun `fairness lay 3 runners`() {
-        assertEquals(1.093, calculator.getFairness(1, listOf(3.5, 3.5, 2.7))!!, 0.001)
+        assertEquals(1.093, calculator.getFairness(1, listOf(3.5, 3.5, 2.7))!!, eps)
     }
 
     companion object {

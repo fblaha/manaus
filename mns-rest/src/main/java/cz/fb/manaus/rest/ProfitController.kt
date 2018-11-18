@@ -28,7 +28,6 @@ class ProfitController(private val profitService: ProfitService,
                        private val betUtils: BetUtils) {
 
 
-    // TODO reduce arguments
     @ResponseBody
     @RequestMapping(value = ["/profit/" + IntervalParser.INTERVAL], method = [RequestMethod.GET])
     fun getProfitRecords(@PathVariable interval: String,

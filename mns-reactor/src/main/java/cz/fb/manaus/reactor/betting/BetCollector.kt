@@ -39,7 +39,7 @@ class BetCollector {
         return toUpdate.toList()
     }
 
-    fun getToCancel(): List<Bet> {
+    private fun getToCancel(): List<Bet> {
         return toCancel.toList()
     }
 

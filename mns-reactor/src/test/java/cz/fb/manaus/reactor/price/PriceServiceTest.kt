@@ -62,7 +62,7 @@ class PriceServiceTest : AbstractLocalTestCase() {
         val layFairness = getFairness(Side.LAY, marketPrices)
         assertEquals(1.5, layFairness, 0.1)
         val backFairness = getFairness(Side.BACK, marketPrices)
-        assertEquals(0.8, backFairness, 0.001) // TODO MarketPrices.FAIR_EPS
+        assertEquals(0.8, backFairness, 0.001)
 
         assertEquals(5.0, priceService.getRoundedFairnessFairPrice(4.2, backFairness)!!, 0.01)
         assertEquals(3.35, priceService.getRoundedFairnessFairPrice(2.87, backFairness)!!, 0.01)

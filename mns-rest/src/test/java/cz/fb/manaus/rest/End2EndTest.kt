@@ -21,6 +21,17 @@ class End2EndTest : AbstractControllerTest() {
     private lateinit var objectMapper: ObjectMapper
     private lateinit var collectedBets: CollectedBets
 
+    @Test
+    fun `E2E API flow scenario`() {
+        `When I post market`()
+        `And I post snapshot and I collect bets`()
+        `Then bet actions are associated with the market and bet IDs are null`()
+        `When I set bet ID for all bet actions`()
+        `Then all bet actions should have non empty bet ID`()
+        `When I post settled bets for all bet actions`()
+        `Then settled bets should be reflected in profit records`()
+    }
+
     private fun `When I post market`() {
         val market = objectMapper.writer().writeValueAsString(market)
         val result = mvc.perform(MockMvcRequestBuilders.post("/markets")
@@ -115,16 +126,5 @@ class End2EndTest : AbstractControllerTest() {
         for (betAction in betActions) {
             actionCheck(betAction)
         }
-    }
-
-    @Test
-    fun `E2E API flow scenario`() {
-        `When I post market`()
-        `And I post snapshot and I collect bets`()
-        `Then bet actions are associated with the market and bet IDs are null`()
-        `When I set bet ID for all bet actions`()
-        `Then all bet actions should have non empty bet ID`()
-        `When I post settled bets for all bet actions`()
-        `Then settled bets should be reflected in profit records`()
     }
 }
