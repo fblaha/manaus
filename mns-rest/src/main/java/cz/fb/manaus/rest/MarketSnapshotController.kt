@@ -46,7 +46,7 @@ class MarketSnapshotController(private val manager: BetManager,
             val bets = snapshotCrate.bets
             betMetricUpdater.update(snapshotCrate.scanTime, bets)
             val marketSnapshot = MarketSnapshot.from(marketPrices, market, bets, snapshotCrate.tradedVolume)
-            val myBets = betActionRepository.find(id).mapNotNull { it.betID }.toSet()
+            val myBets = betActionRepository.find(id).mapNotNull { it.betId }.toSet()
             val collectedBets = manager.fire(marketSnapshot, myBets,
                     snapshotCrate.money, snapshotCrate.categoryBlacklist)
             return if (collectedBets.isEmpty) {

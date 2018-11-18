@@ -53,9 +53,9 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDatabase
         val bets = listOf(unmatchedHome, unmatchedDraw, unmatchedAway)
         bets.map {
             betActionRepository.save(betAction.copy(
-                    selectionID = it.selectionId,
+                    selectionId = it.selectionId,
                     price = oldOne,
-                    betID = it.betId))
+                    betId = it.betId))
         }
         check(marketPrices, bets, placeCount, updateCount)
         betActionRepository.delete(market.id)

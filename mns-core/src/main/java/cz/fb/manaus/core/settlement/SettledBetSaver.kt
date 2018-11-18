@@ -27,7 +27,7 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
         if (settledBetRepository.read(settledBet.id) == null) {
             val action = betActionRepository.findRecentBetAction(settledBet.id)
             return if (action != null) {
-                val market = marketRepository.read(action.marketID)
+                val market = marketRepository.read(action.marketId)
                 validate(settledBet, action, market!!)
                 settledBetRepository.save(settledBet)
                 metricRegistry.counter("settled.bet.new").inc()
@@ -58,7 +58,7 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
     }
 
     private fun validateSelection(bet: SettledBet, action: BetAction) {
-        val selectionId = action.selectionID
+        val selectionId = action.selectionId
         Preconditions.checkArgument(selectionId == bet.selectionId,
                 "action.selectionId != bet.selectionId")
     }

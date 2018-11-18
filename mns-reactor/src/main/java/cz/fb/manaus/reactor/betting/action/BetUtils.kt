@@ -24,7 +24,7 @@ class BetUtils {
 
     private fun validate(first: BetAction, second: BetAction) {
         checkArgument(first.price.side === second.price.side)
-        checkArgument(first.selectionID == second.selectionID)
+        checkArgument(first.selectionId == second.selectionId)
     }
 
     fun getUnknownBets(bets: List<Bet>, myBets: Set<String>): List<Bet> {

@@ -5,8 +5,8 @@ import cz.fb.manaus.core.model.*
 fun toRealizedBet(settledBet: SettledBet): RealizedBet {
     val action = betAction.copy(
             price = settledBet.price,
-            selectionID = settledBet.selectionId,
-            betID = settledBet.id)
+            selectionId = settledBet.selectionId,
+            betId = settledBet.id)
     return RealizedBet(settledBet, action, market)
 }
 

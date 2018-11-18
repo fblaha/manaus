@@ -49,7 +49,7 @@ class ReactorTestFactory(
         val bestPrice = runnerPrices.getHomogeneous(side.opposite).bestPrice
         val bets = mutableListOf<Bet>()
         if (bestPrice != null) {
-            val marketId = "marketID"
+            val marketId = "marketId"
             val price = bestPrice.price
             val requestedPrice = Price(price, provider.minAmount, side.opposite)
             val date = Instant.now().minus(2, ChronoUnit.HOURS)

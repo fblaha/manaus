@@ -17,11 +17,11 @@ class BetActionRepositoryTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `set bet ID`() {
-        val actionID = betActionRepository.save(betAction.copy(betID = null))
-        assertNull(betActionRepository.find("2").first().betID)
-        betActionRepository.setBetID(actionID, "100")
+        val actionId = betActionRepository.save(betAction.copy(betId = null))
+        assertNull(betActionRepository.find("2").first().betId)
+        betActionRepository.setBetId(actionId, "100")
         assertEquals(1, betActionRepository.find("2").size)
-        assertEquals("100", betActionRepository.find("2").first().betID)
+        assertEquals("100", betActionRepository.find("2").first().betId)
     }
 
     @Test
@@ -43,9 +43,9 @@ class BetActionRepositoryTest : AbstractDatabaseTestCase() {
     fun `get recent action`() {
         val actionTime = betAction.time
         val recent = betActionRepository.save(betAction)
-        betActionRepository.setBetID(recent, "100")
+        betActionRepository.setBetId(recent, "100")
         val older = betActionRepository.save(betAction.copy(time = actionTime.minusSeconds(600)))
-        betActionRepository.setBetID(older, "100")
+        betActionRepository.setBetId(older, "100")
         assertEquals(recent, betActionRepository.findRecentBetAction("100")!!.id)
     }
 

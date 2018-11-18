@@ -16,6 +16,6 @@ class RealizedBetLoader(private val betActionRepository: BetActionRepository,
         return RealizedBet(
                 settledBet = settledBet,
                 betAction = action,
-                market = marketRepository.read(action.marketID)!!)
+                market = marketRepository.read(action.marketId)!!)
     }
 }

@@ -39,8 +39,8 @@ abstract class AbstractControllerTest : AbstractDatabaseTestCase() {
 
     protected fun createLiveMarket(): RealizedBet {
         marketRepository.saveOrUpdate(market)
-        val actionID = betActionRepository.save(betAction)
+        val actionId = betActionRepository.save(betAction)
         settledBetRepository.save(homeSettledBet)
-        return RealizedBet(homeSettledBet, betAction.copy(id = actionID), market)
+        return RealizedBet(homeSettledBet, betAction.copy(id = actionId), market)
     }
 }

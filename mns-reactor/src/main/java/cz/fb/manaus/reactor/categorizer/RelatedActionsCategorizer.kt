@@ -33,7 +33,7 @@ class RelatedActionsCategorizer : RealizedBetCategorizer {
         val selectionId = realizedBet.settledBet.selectionId
         // TODO filter in DB
         val betActions = betActionRepository.find(market.id)
-                .filter { it.selectionID == selectionId && side == it.price.side }
+                .filter { it.selectionId == selectionId && side == it.price.side }
         if (betActions.isEmpty()) {
             log.log(Level.WARNING, "missing  bet actions ''{0}''", realizedBet)
             return emptySet()

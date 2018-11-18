@@ -43,10 +43,10 @@ val runnerPrices = listOf(
 
 val betAction = BetAction(
         id = 0,
-        marketID = "2",
+        marketId = "2",
         time = Instant.now().minus(25, ChronoUnit.HOURS),
-        selectionID = SEL_HOME,
-        betID = "1",
+        selectionId = SEL_HOME,
+        betId = "1",
         betActionType = BetActionType.PLACE,
         runnerPrices = runnerPrices,
         price = Price(3.0, 3.0, Side.BACK),

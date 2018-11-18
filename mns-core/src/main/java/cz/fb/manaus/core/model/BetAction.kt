@@ -7,17 +7,17 @@ import org.dizitart.no2.objects.Indices
 import java.time.Instant
 
 @Indices(
-        Index(value = "marketID", type = IndexType.NonUnique),
-        Index(value = "betID", type = IndexType.NonUnique)
+        Index(value = "marketId", type = IndexType.NonUnique),
+        Index(value = "betId", type = IndexType.NonUnique)
 )
 data class BetAction(
         @Id val id: Long,
         val betActionType: BetActionType,
         val time: Instant,
         val price: Price,
-        val marketID: String,
-        val selectionID: Long,
-        val betID: String? = null,
+        val marketId: String,
+        val selectionId: Long,
+        val betId: String? = null,
         val runnerPrices: List<RunnerPrices>,
         val properties: Map<String, String>
 ) {

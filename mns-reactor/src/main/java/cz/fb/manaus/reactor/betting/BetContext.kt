@@ -51,11 +51,11 @@ data class BetContext(
     fun createBetAction(): BetAction {
         val type = if (oldBet != null) BetActionType.UPDATE else BetActionType.PLACE
         return BetAction(
-                selectionID = selectionId,
+                selectionId = selectionId,
                 price = newPrice!!,
                 id = 0,
                 time = Instant.now(),
-                marketID = market.id,
+                marketId = market.id,
                 runnerPrices = marketPrices,
                 properties = properties,
                 betActionType = type)
@@ -67,13 +67,13 @@ data class BetContext(
         val action = createBetAction()
         val bet = SettledBet(
                 id = "",
-                selectionId = action.selectionID,
+                selectionId = action.selectionId,
                 price = action.price,
                 placed = action.time,
                 matched = action.time,
                 settled = Instant.now(),
                 profitAndLoss = 0.0,
-                selectionName = market.getRunner(action.selectionID).name
+                selectionName = market.getRunner(action.selectionId).name
         )
         return RealizedBet(bet, action, market)
     }

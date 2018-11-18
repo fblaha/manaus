@@ -83,8 +83,8 @@ class BetManager(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
     }
 
     private fun saveAction(command: BetCommand) {
-        val actionID = betActionRepository.save(command.action)
-        command.bet = command.bet.copy(actionId = actionID)
+        val actionId = betActionRepository.save(command.action)
+        command.bet = command.bet.copy(actionId = actionId)
     }
 
     private fun filterPrices(marketPrices: List<RunnerPrices>): List<RunnerPrices> {

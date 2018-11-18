@@ -104,12 +104,12 @@ class End2EndTest : AbstractControllerTest() {
     }
 
     private fun `Then all bet actions should have non empty bet ID`() {
-        checkAction(3) { assertNotNull(it.betID) }
+        checkAction(3) { assertNotNull(it.betId) }
     }
 
     private fun `Then bet actions are associated with the market and bet IDs are null`() {
         checkAction(3) {
-            assertNull(it.betID)
+            assertNull(it.betId)
             assertEquals(3, it.runnerPrices.size)
             assertEquals(BetActionType.PLACE, it.betActionType)
             assertTrue { it.properties.isNotEmpty() }

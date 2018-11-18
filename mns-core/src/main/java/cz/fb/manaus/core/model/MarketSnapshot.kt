@@ -5,7 +5,7 @@ import java.util.logging.Logger
 
 private val log = Logger.getLogger(MarketSnapshot::class.java.simpleName)
 
-data class SideSelection(val side: Side, val selectionID: Long)
+data class SideSelection(val side: Side, val selectionId: Long)
 
 internal fun getMarketCoverage(bets: List<Bet>): Map<SideSelection, Bet> {
     val sortedBets = bets.sortedBy { it.placedDate }

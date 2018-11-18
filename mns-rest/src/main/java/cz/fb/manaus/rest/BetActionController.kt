@@ -30,8 +30,8 @@ class BetActionController(private val betActionRepository: BetActionRepository,
 
     @RequestMapping(value = ["/actions/{id}/betId"], method = [RequestMethod.PUT])
     fun setBetId(@PathVariable id: Long,
-                 @RequestBody betID: String): ResponseEntity<*> {
-        val changedRows = betActionRepository.setBetID(id, sanitizeID(betID))
+                 @RequestBody betId: String): ResponseEntity<*> {
+        val changedRows = betActionRepository.setBetId(id, sanitizeId(betId))
         metricRegistry.counter("action.betId.put").inc()
         return if (changedRows > 0) {
             ResponseEntity.ok().build<Any>()
@@ -41,7 +41,7 @@ class BetActionController(private val betActionRepository: BetActionRepository,
         }
     }
 
-    private fun sanitizeID(betID: String): String {
-        return CharMatcher.`is`('"').removeFrom(betID)
+    private fun sanitizeId(betId: String): String {
+        return CharMatcher.`is`('"').removeFrom(betId)
     }
 }

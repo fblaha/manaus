@@ -31,7 +31,7 @@ class BetUtilsTest : AbstractLocalTestCase() {
         val currDate = Instant.now()
         val priceBack = Price(2.0, 2.0, Side.BACK)
         val priceLay = Price(1.8, 2.0, Side.LAY)
-        val actionTemplates = betAction.copy(selectionID = 1L)
+        val actionTemplates = betAction.copy(selectionId = 1L)
         val back1 = actionTemplates.copy(
                 betActionType = BetActionType.PLACE,
                 time = currDate.minus(10, ChronoUnit.HOURS),
@@ -100,7 +100,7 @@ class BetUtilsTest : AbstractLocalTestCase() {
         val actionCopy = ceilCopy.betAction
         assertNotSame(action, actionCopy)
         assertEquals(betAction.time, actionCopy.time)
-        assertEquals(betAction.selectionID, actionCopy.selectionID)
+        assertEquals(betAction.selectionId, actionCopy.selectionId)
         assertEquals(2.0, actionCopy.price.amount)
     }
 
