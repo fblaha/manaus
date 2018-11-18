@@ -12,8 +12,6 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 @Configuration
@@ -42,8 +40,7 @@ open class CoreLocalConfiguration {
         val builder = Jackson2ObjectMapperBuilder()
         builder.modules(KotlinModule(), Jdk8Module(), JavaTimeModule())
                 .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-        builder.indentOutput(true).dateFormat(SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))
-        builder.timeZone(TimeZone.getDefault())
+        builder.indentOutput(true)
         return builder
     }
 

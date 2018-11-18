@@ -13,7 +13,7 @@ import java.time.Instant
 )
 @JsonIgnoreProperties("side\$manaus_core")
 data class SettledBet(
-        @Id var id: String = "1",
+        @Id var id: String,
         val selectionId: Long,
         val selectionName: String,
         val profitAndLoss: Double,

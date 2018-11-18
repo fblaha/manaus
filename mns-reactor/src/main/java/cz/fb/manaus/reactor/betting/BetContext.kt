@@ -66,6 +66,7 @@ data class BetContext(
         val market = market
         val action = createBetAction()
         val bet = SettledBet(
+                id = "",
                 selectionId = action.selectionID,
                 price = action.price,
                 placed = action.time,
