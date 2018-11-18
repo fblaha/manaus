@@ -1,6 +1,7 @@
 package cz.fb.manaus.rest
 
 import com.codahale.metrics.MetricRegistry
+import com.google.common.base.CharMatcher
 import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.spring.ManausProfiles
@@ -30,7 +31,7 @@ class BetActionController(private val betActionRepository: BetActionRepository,
     @RequestMapping(value = ["/actions/{id}/betId"], method = [RequestMethod.PUT])
     fun setBetId(@PathVariable id: Long,
                  @RequestBody betID: String): ResponseEntity<*> {
-        val changedRows = betActionRepository.setBetID(id, betID)
+        val changedRows = betActionRepository.setBetID(id, sanitizeID(betID))
         metricRegistry.counter("action.betId.put").inc()
         return if (changedRows > 0) {
             ResponseEntity.ok().build<Any>()
@@ -38,5 +39,9 @@ class BetActionController(private val betActionRepository: BetActionRepository,
             metricRegistry.counter("action.betId.notFound").inc()
             ResponseEntity.notFound().build<Any>()
         }
+    }
+
+    private fun sanitizeID(betID: String): String {
+        return CharMatcher.`is`('"').removeFrom(betID)
     }
 }
