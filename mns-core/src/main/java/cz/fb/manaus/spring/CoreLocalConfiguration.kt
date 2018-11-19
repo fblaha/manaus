@@ -48,5 +48,4 @@ open class CoreLocalConfiguration {
     open fun objectMapper(): ObjectMapper {
         return objectMapperBuilder().build()
     }
-
 }
