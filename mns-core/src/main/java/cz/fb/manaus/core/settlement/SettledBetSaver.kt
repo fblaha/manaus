@@ -65,15 +65,17 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
 
     private fun validateTimes(bet: SettledBet, action: BetAction, market: Market) {
         val placed = bet.placed
-        val actionDate = action.time
+        val actionTime = action.time
         val openDate = market.event.openDate
-        val latency = actionDate.until(placed, ChronoUnit.SECONDS)
-        if (latency > 30) {
-            log.log(Level.WARNING, "Too big latency for ''{0}''", bet)
-        }
-        if (placed != null && placed.isAfter(openDate)) {
-            metricRegistry.counter("settled.bet.PLACED_AFTER_START").inc()
-            log.log(Level.SEVERE, "Placed after open date ''{0}''", bet)
+        if (placed != null) {
+            val latency = actionTime.until(placed, ChronoUnit.SECONDS)
+            if (latency > 30) {
+                log.log(Level.WARNING, "Too big latency for ''{0}''", bet)
+            }
+            if (placed.isAfter(openDate)) {
+                metricRegistry.counter("settled.bet.PLACED_AFTER_START").inc()
+                log.log(Level.SEVERE, "Placed after open date ''{0}''", bet)
+            }
         }
     }
 
