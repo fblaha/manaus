@@ -30,6 +30,7 @@ class End2EndTest : AbstractControllerTest() {
         `Then all bet actions should have non empty bet ID`()
         `When I post settled bets for all bet actions`()
         `Then settled bets should be reflected in profit records`()
+        `And settled bets should be reflected in fc progress records`()
     }
 
     private fun `When I post market`() {
@@ -101,6 +102,14 @@ class End2EndTest : AbstractControllerTest() {
         assertEquals(3, allRecord.backCount)
         assertEquals(0, allRecord.layCount)
         assertTrue(allRecord.avgPrice in 3.4..3.5)
+    }
+
+    private fun `And settled bets should be reflected in fc progress records`() {
+        val result = mvc.perform(MockMvcRequestBuilders.get("/fc-progress/1d").accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andReturn()
+        val profitRecords: List<ProfitRecord> = objectMapper.readValue(result.response.contentAsString)
+        assertTrue(profitRecords.isNotEmpty())
     }
 
     private fun `Then all bet actions should have non empty bet ID`() {

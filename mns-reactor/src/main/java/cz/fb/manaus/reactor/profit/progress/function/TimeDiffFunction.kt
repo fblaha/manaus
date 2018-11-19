@@ -7,10 +7,13 @@ import java.time.temporal.ChronoUnit
 @Component
 class TimeDiffFunction : ProgressFunction {
 
-    override fun invoke(bet: RealizedBet): Double {
+    override fun invoke(bet: RealizedBet): Double? {
         val placed = bet.settledBet.placed
         val actionDate = bet.betAction.time
-        return actionDate.until(placed, ChronoUnit.SECONDS).toDouble()
+        return when {
+            placed != null -> actionDate.until(placed, ChronoUnit.SECONDS).toDouble()
+            else -> null
+        }
     }
 
 }

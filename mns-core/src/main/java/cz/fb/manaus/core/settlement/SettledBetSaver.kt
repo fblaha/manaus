@@ -82,6 +82,4 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
     companion object {
         private val log = Logger.getLogger(SettledBetSaver::class.java.simpleName)
     }
-
-
 }
