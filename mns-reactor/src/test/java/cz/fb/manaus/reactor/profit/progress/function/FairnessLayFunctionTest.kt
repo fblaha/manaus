@@ -14,5 +14,4 @@ class FairnessLayFunctionTest : AbstractLocalTestCase() {
     fun `get value`() {
         assertTrue(fc(realizedBet)!! in (1.0..1.5))
     }
-
 }

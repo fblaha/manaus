@@ -20,7 +20,7 @@ import java.util.logging.Logger
 @Profile(ManausProfiles.DB)
 class MarketCleaner(
         private val marketRepository: MarketRepository,
-        private val aprovers: List<MarketDeletionApprover>,
+        private val approvers: List<MarketDeletionApprover>,
         private val marketFootprintLoader: MarketFootprintLoader,
         private val marketPurger: MarketPurger,
         private val metricRegistry: MetricRegistry) : PeriodicMaintenanceTask {
@@ -32,10 +32,10 @@ class MarketCleaner(
     override fun execute(): ConfigUpdate {
         val stopwatch = Stopwatch.createUnstarted().start()
         var count = 0
-        for ((from, to) in aprovers.mapNotNull { it.timeRange }) {
+        for ((from, to) in approvers.mapNotNull { it.timeRange }) {
             val footprints = marketRepository.find(from, to).map { marketFootprintLoader.toFootprint(it) }
             for (footprint in footprints) {
-                if (aprovers.any { it.isDeletable(footprint) }) {
+                if (approvers.any { it.isDeletable(footprint) }) {
                     log.log(Level.INFO, "Deleting market ''{0}'' ", footprint.market)
                     marketPurger.purge(footprint)
                     count++

@@ -23,11 +23,13 @@ open class CoreDatabaseConfiguration {
                 autoCompact = false
             }
         } else {
-            nitrite {
+            val db = nitrite {
                 file = File(dbFile)
                 autoCommitBufferSize = 2048
                 autoCompact = false
             }
+            db.compact()
+            db
         }
     }
 
