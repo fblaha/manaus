@@ -1,12 +1,15 @@
 package cz.fb.manaus.core.repository
 
+import cz.fb.manaus.core.model.MarketFootprint
+import cz.fb.manaus.core.model.betAction
+import cz.fb.manaus.core.model.homeSettledBet
 import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.time.Instant
-import java.time.temporal.ChronoUnit
-import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class MarketPurgerTest : AbstractDatabaseTestCase() {
 
@@ -16,7 +19,23 @@ class MarketPurgerTest : AbstractDatabaseTestCase() {
     @Test
     fun `purge inactive`() {
         marketRepository.saveOrUpdate(market)
-        assertEquals(0, marketPurger.purgeInactive(Instant.now()))
-        assertEquals(1, marketPurger.purgeInactive(Instant.now().plus(3, ChronoUnit.DAYS)))
+        assertNotNull(marketRepository.read(market.id))
+        marketPurger.purge(MarketFootprint(market, emptyList(), emptyList()))
+        assertNull(marketRepository.read(market.id))
+    }
+
+    @Test
+    fun `purge active`() {
+        marketRepository.saveOrUpdate(market)
+        betActionRepository.save(betAction)
+        settledBetRepository.save(homeSettledBet)
+        assertNotNull(marketRepository.read(market.id))
+        assertNotNull(settledBetRepository.read(homeSettledBet.id))
+        assertTrue(betActionRepository.find(market.id).isNotEmpty())
+
+        marketPurger.purge(MarketFootprint(market, listOf(betAction), listOf(homeSettledBet)))
+        assertNull(marketRepository.read(market.id))
+        assertTrue(betActionRepository.find(market.id).isEmpty())
+        assertNull(settledBetRepository.read(homeSettledBet.id))
     }
 }

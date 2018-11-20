@@ -30,6 +30,10 @@ class SettledBetRepository(private val db: Nitrite) {
         repository.insert(settledBet)
     }
 
+    fun delete(id: String) {
+        repository.remove(SettledBet::id eq id)
+    }
+
     fun find(from: Instant? = null, to: Instant? = null, side: Side? = null, maxResults: Int? = null): List<SettledBet> {
         var filter = ObjectFilters.ALL
         if (from != null) {

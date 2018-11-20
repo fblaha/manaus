@@ -1,23 +1,27 @@
-package cz.fb.manaus.core.maintanance
+package cz.fb.manaus.core.maintanance.db
 
 import com.codahale.metrics.MetricRegistry
 import com.google.common.base.Stopwatch
+import cz.fb.manaus.core.maintanance.ConfigUpdate
+import cz.fb.manaus.core.maintanance.PeriodicMaintenanceTask
+import cz.fb.manaus.core.repository.MarketFootprintLoader
 import cz.fb.manaus.core.repository.MarketPurger
+import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.time.Duration
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 import java.util.logging.Logger
 
+
 @Component
 @Profile(ManausProfiles.DB)
 class MarketCleaner(
-        @param:Value(HIST_DAYS_EL) private val marketHistoryDays: Long,
+        private val marketRepository: MarketRepository,
+        private val aprovers: List<MarketDeletionApprover>,
+        private val marketFootprintLoader: MarketFootprintLoader,
         private val marketPurger: MarketPurger,
         private val metricRegistry: MetricRegistry) : PeriodicMaintenanceTask {
 
@@ -27,8 +31,18 @@ class MarketCleaner(
 
     override fun execute(): ConfigUpdate {
         val stopwatch = Stopwatch.createUnstarted().start()
-        // TODO delete bets and actions
-        val count = marketPurger.purgeInactive(Instant.now().minus(6, ChronoUnit.HOURS))
+        var count = 0
+        for ((from, to) in aprovers.mapNotNull { it.timeRange }) {
+            val footprints = marketRepository.find(from, to).map { marketFootprintLoader.toFootprint(it) }
+            for (footprint in footprints) {
+                if (aprovers.any { it.isDeletable(footprint) }) {
+                    log.log(Level.INFO, "Deleting market ''{0}'' ", footprint.market)
+                    marketPurger.purge(footprint)
+                    count++
+                }
+            }
+        }
+
         metricRegistry.counter("purge.market").inc(count.toLong())
         val elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
         log.log(Level.INFO, "DELETE_MARKETS: ''{0}'' obsolete markets removed in ''{1}'' seconds", arrayOf(count, elapsed))
