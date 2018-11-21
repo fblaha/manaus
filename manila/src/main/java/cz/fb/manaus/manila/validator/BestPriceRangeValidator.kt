@@ -1,6 +1,5 @@
 package cz.fb.manaus.manila.validator
 
-import com.google.common.collect.Range
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.manila.ManilaBet
 import cz.fb.manaus.reactor.betting.BetContext
@@ -15,8 +14,7 @@ class BestPriceRangeValidator : Validator {
 
     override fun validate(context: BetContext): ValidationResult {
         val bestBack = context.runnerPrices.getHomogeneous(Side.BACK).bestPrice
-        val range = Range.closed(1.2, 2.5)
-        return if (bestBack == null) REJECT else ValidationResult.of(range.contains(bestBack.price))
+        return if (bestBack == null) REJECT else ValidationResult.of(bestBack.price in 1.2..2.5)
     }
 
 }

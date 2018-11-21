@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting.validator.common.update
 
-import com.google.common.collect.Range
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
@@ -11,8 +10,7 @@ abstract class AbstractTooCloseUpdateEpsilonValidator(private val epsilon: Doubl
         val oldOne = context.oldBet!!.requestedPrice.price
         val newOne = context.newPrice!!.price
         val epsilon = (oldOne - 1) * this.epsilon
-        val closeRange = Range.closed(oldOne - epsilon, oldOne + epsilon)
-        return ValidationResult.of(!closeRange.contains(newOne))
+        return ValidationResult.of(newOne !in oldOne - epsilon..oldOne + epsilon)
     }
 
     override val isUpdateOnly: Boolean = true

@@ -1,6 +1,5 @@
 package cz.fb.manaus.ischia.validator
 
-import com.google.common.collect.Range
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.ischia.BackLoserBet
 import cz.fb.manaus.ischia.LayLoserBet
@@ -21,14 +20,9 @@ class BestPriceRangeValidator : Validator {
         return if (bestBack != null && bestLay != null) {
             val backPrice = bestBack.price
             val layPrice = bestLay.price
-            ValidationResult.of(RANGE.containsAll(listOf(backPrice, layPrice)))
+            ValidationResult.of(listOf(backPrice, layPrice).all { it in 1.3..6.0 })
         } else {
             REJECT
         }
     }
-
-    companion object {
-        val RANGE = Range.closed(1.3, 6.0)!!
-    }
-
 }

@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.price
 
 
-import com.google.common.collect.Range
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.PriceComparator
 import cz.fb.manaus.core.model.Side
@@ -9,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 
 abstract class AbstractPriceFilter(private val minCount: Int,
                                    private val bulldozeThreshold: Double,
-                                   private val priceRange: Range<Double>) {
+                                   private val priceRange: ClosedRange<Double>) {
     @Autowired
     private lateinit var bulldozer: PriceBulldozer
 
@@ -27,7 +26,7 @@ abstract class AbstractPriceFilter(private val minCount: Int,
     }
 
     private fun priceRangeFilter(price: Price): Boolean {
-        return priceRange.contains(price.price)
+        return price.price in priceRange
     }
 
     fun filter(prices: List<Price>): List<Price> {

@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.price
 
 import com.google.common.base.Preconditions
-import com.google.common.collect.Range
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.rounding.RoundingService
@@ -13,7 +12,7 @@ class PriceService(private val roundingService: RoundingService) {
     fun downgrade(price: Double, downgradeFraction: Double, side: Side): Double {
         val aboveOne = price - 1
         val targetFairness = 1 - downgradeFraction
-        Preconditions.checkState(Range.closed(0.0, 1.0).contains(targetFairness))
+        Preconditions.checkState(targetFairness in 0.0..1.0)
 
         if (side === Side.LAY) {
             return 1 + aboveOne * targetFairness

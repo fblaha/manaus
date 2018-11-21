@@ -16,8 +16,7 @@ import java.util.logging.Logger
 
 @Component
 @Profile(ManausProfiles.DB)
-class SettledBetLoader(private val intervalParser: IntervalParser,
-                       private val settledBetRepository: SettledBetRepository,
+class SettledBetLoader(private val settledBetRepository: SettledBetRepository,
                        private val realizedBetLoader: RealizedBetLoader) {
 
     private var cache = CacheBuilder.newBuilder()
@@ -39,9 +38,9 @@ class SettledBetLoader(private val intervalParser: IntervalParser,
     }
 
     private fun loadFromDatabase(interval: String): List<RealizedBet> {
-        val range = intervalParser.parse(Instant.now(), interval)
+        val (from, to) = IntervalParser.parse(Instant.now(), interval)
         val stopwatch = Stopwatch.createStarted()
-        val settledBets = settledBetRepository.find(from = range.lowerEndpoint(), to = range.upperEndpoint())
+        val settledBets = settledBetRepository.find(from = from, to = to)
         var elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
         log.log(Level.INFO, "Settle bets loaded in ''{0}'' seconds", elapsed)
         stopwatch.reset().start()

@@ -16,7 +16,6 @@ import java.time.Instant
 @Controller
 @Profile(ManausProfiles.DB)
 class SettledBetController(private val settledBetRepository: SettledBetRepository,
-                           private val intervalParser: IntervalParser,
                            private val betSaver: SettledBetSaver,
                            private val metricRegistry: MetricRegistry) {
 
@@ -31,9 +30,7 @@ class SettledBetController(private val settledBetRepository: SettledBetRepositor
     @ResponseBody
     @RequestMapping(value = ["/bets/" + IntervalParser.INTERVAL], method = [RequestMethod.GET])
     fun getSettledBets(@PathVariable interval: String): List<SettledBet> {
-        val range = intervalParser.parse(Instant.now(), interval)
-        val from = range.lowerEndpoint()
-        val to = range.upperEndpoint()
+        val (from, to) = IntervalParser.parse(Instant.now(), interval)
         val settledBets = settledBetRepository.find(from = from, to = to)
         return settledBets.reversed()
     }

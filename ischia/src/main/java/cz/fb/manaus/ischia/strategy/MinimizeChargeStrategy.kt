@@ -1,7 +1,6 @@
 package cz.fb.manaus.ischia.strategy
 
 import com.google.common.base.Preconditions
-import com.google.common.collect.Range
 import com.google.common.primitives.Doubles
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetContext
@@ -11,7 +10,7 @@ class MinimizeChargeStrategy(internal val fairnessReductionLow: Double, private 
 
     fun getReductionRate(context: BetContext): Double {
         val rawRate = getRawRate(context)
-        Preconditions.checkArgument(Range.closed(fairnessReductionLow, getUpperBoundary(context.side)).contains(rawRate))
+        Preconditions.checkArgument(rawRate in fairnessReductionLow..getUpperBoundary(context.side))
         return rawRate
     }
 

@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.price
 
-import com.google.common.collect.Range
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
@@ -52,7 +51,7 @@ class TheAbstractPriceFilterTest : AbstractLocalTestCase() {
     }
 
     @Component
-    private class TestFilter : AbstractPriceFilter(1, -1.0, Range.all())
+    private class TestFilter : AbstractPriceFilter(1, -1.0, 0.0..100.0)
 
     companion object {
         val BACK1 = Price(1.96, 5.0, Side.BACK)
