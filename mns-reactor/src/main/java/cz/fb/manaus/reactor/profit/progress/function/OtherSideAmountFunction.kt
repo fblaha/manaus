@@ -9,7 +9,7 @@ class OtherSideAmountFunction : AbstractOfferedAmountFunction() {
 
     override fun getRunnerPrices(bet: RealizedBet): RunnerPrices {
         val marketPrices = bet.betAction.runnerPrices
-        val prices = cz.fb.manaus.core.model.getRunnerPrices(marketPrices, bet.settledBet.selectionId)
+        val prices = cz.fb.manaus.reactor.price.getRunnerPrices(marketPrices, bet.settledBet.selectionId)
         val side = bet.settledBet.price.side.opposite
         return prices.getHomogeneous(side)
     }

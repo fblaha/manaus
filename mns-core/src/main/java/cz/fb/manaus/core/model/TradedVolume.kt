@@ -10,11 +10,7 @@ data class TradedVolume(val volume: List<TradedAmount>) {
         @JsonIgnore
         get() = getWeightedMean(volume)
 
-    companion object {
-        val EMPTY = TradedVolume(emptyList())
-    }
 }
-
 
 fun getWeightedMean(volume: List<TradedAmount>): Double? {
     return getWeightedMean(volume, TradedAmount::price, TradedAmount::amount)

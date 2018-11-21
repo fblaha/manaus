@@ -1,24 +1,19 @@
 package cz.fb.manaus.reactor.betting.listener
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import org.hamcrest.Matchers.closeTo
 import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.test.assertEquals
 import kotlin.test.assertNotSame
 
-class BetUtilsTest : AbstractLocalTestCase() {
+class BetUtilsTest {
 
-    @Autowired
-    private lateinit var betUtils: BetUtils
     private lateinit var bet: SettledBet
-
 
     @Before
     fun setUp() {
@@ -56,16 +51,16 @@ class BetUtilsTest : AbstractLocalTestCase() {
                 betActionType = BetActionType.PLACE,
                 time = currDate.minus(4, ChronoUnit.HOURS),
                 price = priceLay)
-        var filtered = betUtils.getCurrentActions(listOf(back1, back2, back3))
+        var filtered = BetUtils.getCurrentActions(listOf(back1, back2, back3))
         assertEquals(1, filtered.size)
         assertEquals(back3, filtered[filtered.size - 1])
 
-        filtered = betUtils.getCurrentActions(listOf(lay1, lay2))
+        filtered = BetUtils.getCurrentActions(listOf(lay1, lay2))
         assertEquals(2, filtered.size)
         assertEquals(lay1, filtered[0])
         assertEquals(lay2, filtered[filtered.size - 1])
 
-        filtered = betUtils.getCurrentActions(listOf(lay1, lay2, lay3))
+        filtered = BetUtils.getCurrentActions(listOf(lay1, lay2, lay3))
         assertEquals(1, filtered.size)
         assertEquals(lay3, filtered[filtered.size - 1])
     }
@@ -77,14 +72,14 @@ class BetUtilsTest : AbstractLocalTestCase() {
                 selectionId = 1,
                 requestedPrice = Price(3.0, 3.0, Side.BACK),
                 placedDate = Instant.now())
-        assertEquals(0, betUtils.getUnknownBets(listOf(bet), setOf("1")).size)
-        assertEquals(1, betUtils.getUnknownBets(listOf(bet), setOf("2")).size)
+        assertEquals(0, BetUtils.getUnknownBets(listOf(bet), setOf("1")).size)
+        assertEquals(1, BetUtils.getUnknownBets(listOf(bet), setOf("2")).size)
     }
 
     @Test
     fun `ceil amount settled bet`() {
         val bet = realizedBet
-        val ceilCopy = betUtils.limitBetAmount(2.0, bet)
+        val ceilCopy = BetUtils.limitBetAmount(2.0, bet)
         assertNotSame(bet, ceilCopy)
         assertEquals(bet.settledBet.selectionName, ceilCopy.settledBet.selectionName)
         assertEquals(bet.settledBet.selectionId, ceilCopy.settledBet.selectionId)
@@ -95,7 +90,7 @@ class BetUtilsTest : AbstractLocalTestCase() {
     @Test
     fun `ceil amount bet action`() {
         val bet = realizedBet
-        val ceilCopy = betUtils.limitBetAmount(2.0, bet)
+        val ceilCopy = BetUtils.limitBetAmount(2.0, bet)
         val action = bet.betAction
         val actionCopy = ceilCopy.betAction
         assertNotSame(action, actionCopy)
@@ -107,7 +102,7 @@ class BetUtilsTest : AbstractLocalTestCase() {
     @Test
     fun `bellow ceiling - returns the same instances`() {
         val bet = realizedBet
-        val ceilCopy = betUtils.limitBetAmount(100.0, bet)
+        val ceilCopy = BetUtils.limitBetAmount(100.0, bet)
         assertEquals(bet, ceilCopy)
     }
 }

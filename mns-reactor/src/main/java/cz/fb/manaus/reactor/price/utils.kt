@@ -1,6 +1,7 @@
-package cz.fb.manaus.core.model
+package cz.fb.manaus.reactor.price
 
-import org.apache.commons.math3.stat.descriptive.moment.Mean
+import cz.fb.manaus.core.model.RunnerPrices
+import cz.fb.manaus.core.model.Side
 
 fun getOverround(bestPrices: List<Double>): Double {
     return bestPrices.map { 1 / it }.sum()
@@ -26,15 +27,4 @@ fun getReciprocal(runnerPrices: List<RunnerPrices>, type: Side): Double? {
 
 fun getRunnerPrices(runnerPrices: List<RunnerPrices>, selectionId: Long): RunnerPrices {
     return runnerPrices.first { it.selectionId == selectionId }
-}
-
-
-fun <T> getWeightedMean(data: List<T>, valFunc: (T) -> Double, weightFunc: (T) -> Double): Double? {
-    return if (data.isEmpty()) {
-        null
-    } else {
-        val values = data.map(valFunc).toDoubleArray()
-        val weights = data.map(weightFunc).toDoubleArray()
-        Mean().evaluate(values, weights)
-    }
 }

@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.profit.progress.function
 
 import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.RunnerPrices
-import cz.fb.manaus.core.model.getRunnerPrices
+import cz.fb.manaus.reactor.price.getRunnerPrices
 import org.springframework.stereotype.Component
 
 @Component

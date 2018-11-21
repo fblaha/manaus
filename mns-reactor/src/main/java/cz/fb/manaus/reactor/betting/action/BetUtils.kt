@@ -5,10 +5,8 @@ import com.google.common.base.Preconditions.checkState
 import com.google.common.base.Splitter
 import com.google.common.collect.Comparators
 import cz.fb.manaus.core.model.*
-import org.springframework.stereotype.Component
 
-@Component
-class BetUtils {
+object BetUtils {
 
     fun getCurrentActions(betActions: List<BetAction>): List<BetAction> {
         val lastUpdates = mutableListOf<BetAction>()

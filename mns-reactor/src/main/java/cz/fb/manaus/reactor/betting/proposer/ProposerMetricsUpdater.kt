@@ -8,13 +8,12 @@ import cz.fb.manaus.reactor.betting.action.BetUtils
 import org.springframework.stereotype.Component
 
 @Component
-class ProposerMetricsUpdater(private val betUtils: BetUtils,
-                             private val metricRegistry: MetricRegistry) : BetActionListener {
+class ProposerMetricsUpdater(private val metricRegistry: MetricRegistry) : BetActionListener {
 
     override fun onAction(action: BetAction) {
         val proposers = action.properties[BetAction.PROPOSER_PROP]!!
         val side = action.price.side.name.toLowerCase()
-        for (proposer in betUtils.parseProposers(proposers)) {
+        for (proposer in BetUtils.parseProposers(proposers)) {
             val key = Joiner.on('.').join(PROPOSER_METRIC, side, proposer)
             metricRegistry.counter(key).inc()
         }

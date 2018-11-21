@@ -2,7 +2,6 @@ package cz.fb.manaus.reactor.price
 
 import cz.fb.manaus.core.model.RunnerPrices
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.model.getBestPrices
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction
 import org.apache.commons.math3.analysis.solvers.LaguerreSolver
 import org.apache.commons.math3.exception.NoBracketingException

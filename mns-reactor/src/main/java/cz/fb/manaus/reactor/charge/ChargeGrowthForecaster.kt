@@ -1,11 +1,15 @@
 package cz.fb.manaus.reactor.charge
 
 import com.google.common.collect.LinkedListMultimap
-import cz.fb.manaus.core.model.*
+import cz.fb.manaus.core.model.Bet
+import cz.fb.manaus.core.model.MarketSnapshot
+import cz.fb.manaus.core.model.Price
+import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.reactor.betting.AmountAdviser
 import cz.fb.manaus.reactor.price.Fairness
 import cz.fb.manaus.reactor.price.ProbabilityCalculator
+import cz.fb.manaus.reactor.price.getRunnerPrices
 import org.springframework.stereotype.Component
 
 @Component

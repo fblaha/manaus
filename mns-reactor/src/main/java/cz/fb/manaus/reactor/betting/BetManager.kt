@@ -8,6 +8,7 @@ import cz.fb.manaus.reactor.betting.action.BetActionListener
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
 import cz.fb.manaus.reactor.price.AbstractPriceFilter
+import cz.fb.manaus.reactor.price.getReciprocal
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -22,8 +23,6 @@ import java.util.logging.Logger
 @Profile(ManausProfiles.DB)
 class BetManager(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
     private val disabledListeners: Set<String> = rawDisabledListeners?.split(',')?.toSet() ?: emptySet()
-    @Autowired
-    private lateinit var betUtils: BetUtils
     @Autowired
     private lateinit var filterService: MarketFilterService
     @Autowired
@@ -53,7 +52,7 @@ class BetManager(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
         if (checkMarket(myBets, market, reciprocal, categoryBlacklist)) {
             validateOpenDate(market)
 
-            val unknownBets = betUtils.getUnknownBets(snapshot.currentBets, myBets)
+            val unknownBets = BetUtils.getUnknownBets(snapshot.currentBets, myBets)
             unknownBets.forEach { bet -> log.log(Level.WARNING, "unknown bet ''{0}''", bet) }
             if (unknownBets.isEmpty()) {
                 for (listener in marketSnapshotListeners) {

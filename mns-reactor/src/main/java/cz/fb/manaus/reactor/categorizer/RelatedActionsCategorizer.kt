@@ -6,24 +6,17 @@ import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
-import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
 
 @Component
 @Profile(ManausProfiles.DB)
-class RelatedActionsCategorizer : RealizedBetCategorizer {
+class RelatedActionsCategorizer(
+        private val betActionRepository: BetActionRepository,
+        private val relatedActionsAwareCategorizers: List<RelatedActionsAwareCategorizer>) : RealizedBetCategorizer {
 
-
-    @Autowired
-    private lateinit var betActionRepository: BetActionRepository
-    @Autowired
-    private lateinit var betUtils: BetUtils
-    @Autowired
-    private lateinit var relatedActionsAwareCategorizers: List<RelatedActionsAwareCategorizer>
 
     override val isSimulationSupported: Boolean = false
 
@@ -38,8 +31,8 @@ class RelatedActionsCategorizer : RealizedBetCategorizer {
             log.log(Level.WARNING, "missing  bet actions ''{0}''", realizedBet)
             return emptySet()
         }
-        val current = betUtils.getCurrentActions(betActions)
-        val result = HashSet<String>()
+        val current = BetUtils.getCurrentActions(betActions)
+        val result = mutableSetOf<String>()
         for (categorizer in relatedActionsAwareCategorizers) {
             val partial = categorizer.getCategories(current, market)
             result.addAll(partial)

@@ -24,8 +24,7 @@ class ProfitController(private val profitService: ProfitService,
                        private val progressProfitService: ProgressProfitService,
                        private val coverageService: CoverageFunctionProfitService,
                        private val provider: ExchangeProvider,
-                       private val betLoader: SettledBetLoader,
-                       private val betUtils: BetUtils) {
+                       private val betLoader: SettledBetLoader) {
 
 
     @ResponseBody
@@ -41,7 +40,7 @@ class ProfitController(private val profitService: ProfitService,
 
         val ceil = ceiling ?: -1.0
         if (ceil > 0) {
-            settledBets = settledBets.map { betUtils.limitBetAmount(ceil, it) }
+            settledBets = settledBets.map { BetUtils.limitBetAmount(ceil, it) }
         }
         val stopwatch = Stopwatch.createStarted()
         var profitRecords = profitService.getProfitRecords(settledBets, projection,

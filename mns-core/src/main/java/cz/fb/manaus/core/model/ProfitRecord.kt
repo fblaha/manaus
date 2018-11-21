@@ -13,6 +13,7 @@ data class ProfitRecord(
         var backCount: Int,
         var coverDiff: Double? = null,
         var coverCount: Int = 0) {
+
     val totalCount: Int
         get() = backCount + layCount
 
