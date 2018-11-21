@@ -18,8 +18,8 @@ open class RestLocalConfiguration(private val objectMapper: ObjectMapper) : WebM
         configurer.isUseSuffixPatternMatch = false
     }
 
-    override fun configureMessageConverters(converters: MutableList<HttpMessageConverter<*>>?) {
-        converters?.add(mappingJackson2HttpMessageConverter())
+    override fun configureMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
+        converters.add(mappingJackson2HttpMessageConverter())
         super.configureMessageConverters(converters)
     }
 

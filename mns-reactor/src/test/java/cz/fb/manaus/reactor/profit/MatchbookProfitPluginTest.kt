@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.profit
 
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.spring.ManausProfiles.Companion.TEST
+import cz.fb.manaus.spring.ManausProfiles.TEST
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,5 +39,4 @@ class MatchbookProfitPluginTest : AbstractLocalTestCase() {
         assertEquals(0.015, plugin.getCharge(provider.chargeRate, -4.68, 2.0), 0.0001)
         assertEquals(0.06, plugin.getCharge(provider.chargeRate, -8.0, 10.0), 0.0001)
     }
-
 }

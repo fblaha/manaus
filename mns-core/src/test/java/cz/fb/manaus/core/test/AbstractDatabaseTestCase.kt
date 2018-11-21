@@ -4,7 +4,7 @@ package cz.fb.manaus.core.test
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.core.repository.SettledBetRepository
-import cz.fb.manaus.spring.ManausProfiles.Companion.DB
+import cz.fb.manaus.spring.ManausProfiles.DB
 import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.After
 import org.junit.Before

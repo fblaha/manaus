@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.rounding
 
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.spring.ManausProfiles.Companion.TEST
+import cz.fb.manaus.spring.ManausProfiles.TEST
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
