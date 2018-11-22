@@ -17,6 +17,6 @@ class MarketFilterServiceTest : AbstractMarketDataAwareTestCase() {
     private fun checkFilterCount(expectedRange: ClosedRange<Int>, hasBets: Boolean) {
         val cnt = markets.filter { filterService.accept(it, hasBets, setOf()) }
                 .count()
-        assertTrue(expectedRange.contains(cnt))
+        assertTrue(cnt in expectedRange)
     }
 }

@@ -110,7 +110,7 @@ abstract class AbstractUnprofitableCategoriesRegistry(
         var i = 0
         for (weak in sorted) {
             if (i >= blackCount || weak.profit >= maximalProfit) break
-            if (blacklist.contains(weak.category)) continue
+            if (weak.category in blacklist) continue
             if (whitelist.stream().anyMatch { prefix -> weak.category.startsWith(prefix) }) continue
             currentBlacklist.add(weak.category)
             i++

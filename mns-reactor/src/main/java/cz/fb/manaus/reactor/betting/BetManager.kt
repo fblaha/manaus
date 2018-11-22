@@ -56,7 +56,7 @@ class BetManager(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
             unknownBets.forEach { bet -> log.log(Level.WARNING, "unknown bet ''{0}''", bet) }
             if (unknownBets.isEmpty()) {
                 for (listener in marketSnapshotListeners) {
-                    if (!disabledListeners.contains(listener.javaClass.simpleName)) {
+                    if (listener.javaClass.simpleName !in disabledListeners) {
                         listener.onMarketSnapshot(snapshot, collector, accountMoney, categoryBlacklist)
                     }
                 }

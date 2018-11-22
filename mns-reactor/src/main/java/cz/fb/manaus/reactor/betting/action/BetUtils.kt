@@ -26,7 +26,7 @@ object BetUtils {
     }
 
     fun getUnknownBets(bets: List<Bet>, myBets: Set<String>): List<Bet> {
-        return bets.filter { bet -> !myBets.contains(bet.betId) }
+        return bets.filter { bet -> bet.betId !in myBets }
     }
 
     fun parseProposers(proposers: String): List<String> {

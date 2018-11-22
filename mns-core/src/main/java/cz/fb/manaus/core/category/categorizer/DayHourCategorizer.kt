@@ -1,7 +1,5 @@
 package cz.fb.manaus.core.category.categorizer
 
-import com.google.common.collect.Range
-import com.google.common.collect.Range.closedOpen
 import cz.fb.manaus.core.model.Market
 import org.springframework.stereotype.Component
 import java.util.*
@@ -9,26 +7,19 @@ import java.util.*
 @Component
 class DayHourCategorizer : AbstractDelegatingCategorizer("dayHour_") {
 
+    private val ranges: List<ClosedRange<Int>> = listOf(
+            0..3, 4..7, 8..11, 12..15, 16..19, 20..23
+    )
+
     public override fun getCategoryRaw(market: Market): Set<String> {
         val startTime = Calendar.getInstance()
         startTime.time = Date.from(market.event.openDate)
         val hour = startTime.get(Calendar.HOUR_OF_DAY)
-        for (range in RANGES) {
-            if (range.contains(hour)) {
-                return setOf(range.lowerEndpoint().toString() + "_" + range.upperEndpoint())
+        for (range in ranges) {
+            if (hour in range) {
+                return setOf(range.start.toString() + "_" + range.endInclusive)
             }
         }
         throw IllegalStateException()
-
-    }
-
-    companion object {
-        val RANGES: List<Range<Int>> = listOf(
-                closedOpen(0, 4),
-                closedOpen(4, 8),
-                closedOpen(8, 12),
-                closedOpen(12, 16),
-                closedOpen(16, 20),
-                closedOpen(20, 24))
     }
 }

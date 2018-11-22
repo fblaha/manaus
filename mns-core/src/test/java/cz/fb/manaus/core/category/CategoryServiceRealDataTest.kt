@@ -94,7 +94,7 @@ class CategoryServiceRealDataTest : AbstractMarketDataAwareTestCase() {
         for (market in markets) {
             val categories = categoryService.getMarketCategories(market, false)
             counts.addAll(categories)
-            if (categories.contains(category)) {
+            if (category in categories) {
                 if (mustContainLower != null) {
                     assertThat(market.eventType.name.toLowerCase(), containsString(mustContainLower))
                 }

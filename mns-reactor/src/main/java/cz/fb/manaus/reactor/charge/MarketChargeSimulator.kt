@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.charge
 
 
-import com.google.common.collect.ListMultimap
 import com.google.common.collect.Sets
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
@@ -10,7 +9,11 @@ import org.springframework.stereotype.Component
 @Component
 class MarketChargeSimulator {
 
-    fun getChargeMean(winnerCount: Int, chargeRate: Double, probabilities: Map<Long, Double>, bets: ListMultimap<Long, Price>): Double {
+    fun getChargeMean(winnerCount: Int,
+                      chargeRate: Double,
+                      probabilities: Map<Long, Double>,
+                      bets: Map<Long, List<Price>>): Double {
+
         val selections = probabilities.keys
         val winnerPowerSet = getWinnersPowerSet(winnerCount, selections)
         var chargeMean = 0.0
@@ -18,8 +21,8 @@ class MarketChargeSimulator {
             val probability = getProbability(winners, probabilities)
             var profit = 0.0
             for (selection in selections) {
-                val isWinner = winners.contains(selection)
-                val selectionBets = bets.get(selection)
+                val isWinner = selection in winners
+                val selectionBets = bets.getOrDefault(selection, emptyList())
                 profit += if (isWinner)
                     selectionBets.map { this.profitWinner(it) }.sum()
                 else

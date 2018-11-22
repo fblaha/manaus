@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.charge
 
-import com.google.common.collect.LinkedListMultimap
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.MarketSnapshot
 import cz.fb.manaus.core.model.Price
@@ -19,19 +18,22 @@ class ChargeGrowthForecaster(
         private val amountAdviser: AmountAdviser,
         private val exchangeProvider: ExchangeProvider) {
 
-    private fun convertBetData(currentBets: List<Bet>): LinkedListMultimap<Long, Price> {
-        val bets = LinkedListMultimap.create<Long, Price>()
+    private fun convertBetData(currentBets: List<Bet>): MutableMap<Long, MutableList<Price>> {
+        val bets = mutableMapOf<Long, MutableList<Price>>()
         for (bet in currentBets) {
             val price = bet.requestedPrice.price
             val matchedAmount = bet.matchedAmount
             val side = bet.requestedPrice.side
-            bets.put(bet.selectionId, Price(price, matchedAmount, side))
+            bets.getOrPut(bet.selectionId) { mutableListOf() }.add(Price(price, matchedAmount, side))
         }
         return bets
     }
 
-    fun getForecast(selectionId: Long, betSide: Side,
-                    snapshot: MarketSnapshot, fairness: Fairness): Double? {
+    fun getForecast(selectionId: Long,
+                    betSide: Side,
+                    snapshot: MarketSnapshot,
+                    fairness: Fairness): Double? {
+
         if (exchangeProvider.isPerMarketCharge) {
             val fairnessSide = fairness.moreCredibleSide
             if (fairnessSide != null) {
@@ -46,7 +48,7 @@ class ChargeGrowthForecaster(
                 if (bestPrice != null) {
                     val price = bestPrice.price
                     val amount = amountAdviser.amount
-                    bets.put(selectionId, Price(price, amount, betSide))
+                    bets.getOrPut(selectionId) { mutableListOf() }.add(Price(price, amount, betSide))
                     val newCharge = simulator.getChargeMean(1, exchangeProvider.chargeRate, probabilities, bets)
                     return newCharge / oldCharge
                 }

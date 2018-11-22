@@ -39,7 +39,7 @@ class CategoryService {
     fun filterBets(realizedBets: List<RealizedBet>, projection: String, coverage: BetCoverage): List<RealizedBet> {
         return realizedBets.filter { input ->
             val categories = getRealizedBetCategories(input, false, coverage)
-            categories.any { it.contains(projection) }
+            categories.any { projection in it }
         }
     }
 

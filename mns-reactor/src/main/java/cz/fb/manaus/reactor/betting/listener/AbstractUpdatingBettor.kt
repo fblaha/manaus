@@ -41,7 +41,7 @@ abstract class AbstractUpdatingBettor(private val side: Side, private val valida
             val selectionId = runnerPrices.selectionId
             val runner = market.getRunner(selectionId)
             val activeSelection = SideSelection(side, selectionId) in coverage || SideSelection(side.opposite, selectionId) in coverage
-            val accepted = flowFilter.indexRange.contains(i) && flowFilter.runnerPredicate(market, runner)
+            val accepted = i in flowFilter.indexRange && flowFilter.runnerPredicate(market, runner)
             if (activeSelection || accepted) {
                 val oldBet = coverage[SideSelection(side, selectionId)]
                 val ctx = contextFactory.create(side = side,

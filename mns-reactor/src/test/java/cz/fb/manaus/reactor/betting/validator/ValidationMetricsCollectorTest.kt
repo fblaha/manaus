@@ -25,7 +25,7 @@ class ValidationMetricsCollectorTest : AbstractLocalTestCase() {
         metricsCollector.updateMetrics(ValidationResult.REJECT, Side.BACK, validator.name)
         val keys = metricRegistry.counters.keys
                 .filter { key -> key.startsWith(ValidationMetricsCollector.PREFIX) }
-                .filter { key -> key.contains(validator.name) }
+                .filter { key -> validator.name in key }
 
         assertEquals(2, keys.size)
         keys.forEach { key -> assertEquals(1L, metricRegistry.counter(key).count) }

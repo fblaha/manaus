@@ -16,6 +16,6 @@ class MarketTypeFilter : MarketFilter {
 
     override fun accept(market: Market, categoryBlacklist: Set<String>): Boolean {
         val type = Strings.nullToEmpty(market.type).toLowerCase()
-        return allowedTypes.contains(type)
+        return type in allowedTypes
     }
 }

@@ -17,19 +17,18 @@ class DayHourCategorizerTest : AbstractLocalTestCase() {
     @Test
     fun `hour categories`() {
         val dayStart = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS).toInstant()
-
         var event = market.event
 
         event = event.copy(openDate = dayStart)
-        assertThat(categorizer.getCategories(market.copy(event = event)).first(), containsString("0_4"))
+        assertThat(categorizer.getCategories(market.copy(event = event)).first(), containsString("0_3"))
 
         event = event.copy(openDate = dayStart.plus(3 * 60 + 59, ChronoUnit.MINUTES))
-        assertThat(categorizer.getCategories(market.copy(event = event)).first(), containsString("0_4"))
+        assertThat(categorizer.getCategories(market.copy(event = event)).first(), containsString("0_3"))
 
         event = event.copy(openDate = dayStart.plus(4, ChronoUnit.HOURS))
-        assertThat(categorizer.getCategories(market.copy(event = event)).first(), containsString("4_8"))
+        assertThat(categorizer.getCategories(market.copy(event = event)).first(), containsString("4_7"))
 
         event = event.copy(openDate = dayStart.plus(23, ChronoUnit.HOURS))
-        assertThat(categorizer.getCategories(market.copy(event = event)).first(), containsString("20_24"))
+        assertThat(categorizer.getCategories(market.copy(event = event)).first(), containsString("20_23"))
     }
 }
