@@ -5,4 +5,4 @@ import org.springframework.stereotype.Component
 
 
 @Component
-class HappyFlowFilter : FlowFilter(0..9999, { _, _ -> true }, setOf())
+class HappyFlowFilter : FlowFilter(ALL_INDICES, { _, _ -> true }, setOf())

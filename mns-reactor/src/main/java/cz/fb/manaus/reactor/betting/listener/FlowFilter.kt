@@ -8,6 +8,7 @@ open class FlowFilter(val indexRange: IntRange,
                       val marketTypes: Set<String>) {
 
     companion object {
-        val ALLOW_ALL = FlowFilter(0..9999, { _, _ -> true }, emptySet())
+        val ALL_INDICES = 0..9999
+        val ALLOW_ALL = FlowFilter(ALL_INDICES, { _, _ -> true }, emptySet())
     }
 }
