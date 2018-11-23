@@ -50,6 +50,10 @@ class SettledBetLoader(private val settledBetRepository: SettledBetRepository,
         return realizedBets
     }
 
+    internal fun invalidateCache() {
+        cache.invalidateAll()
+    }
+
     companion object {
         private val log = Logger.getLogger(SettledBetLoader::class.java.simpleName)
     }
