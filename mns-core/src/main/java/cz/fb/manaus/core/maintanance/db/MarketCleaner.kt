@@ -8,12 +8,10 @@ import cz.fb.manaus.core.repository.MarketFootprintLoader
 import cz.fb.manaus.core.repository.MarketPurger
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.spring.ManausProfiles
-import org.dizitart.no2.Nitrite
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.time.Duration
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicLong
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -25,14 +23,11 @@ class MarketCleaner(
         private val approvers: List<MarketDeletionApprover>,
         private val marketFootprintLoader: MarketFootprintLoader,
         private val marketPurger: MarketPurger,
-        private val metricRegistry: MetricRegistry,
-        private val db: Nitrite) : PeriodicMaintenanceTask {
+        private val metricRegistry: MetricRegistry) : PeriodicMaintenanceTask {
 
     override val name: String = "marketCleanup"
 
     override val pausePeriod = Duration.ofMinutes(15)!!
-
-    private val deletionCounter = AtomicLong()
 
     override fun execute(): ConfigUpdate {
         val stopwatch = Stopwatch.createUnstarted().start()
@@ -46,10 +41,6 @@ class MarketCleaner(
                     count++
                 }
             }
-        }
-        if (deletionCounter.addAndGet(count) > 100) {
-            deletionCounter.set(0)
-            db.compact()
         }
         metricRegistry.counter("purge.market").inc(count)
         val elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
