@@ -104,29 +104,6 @@
                 <scope>compile</scope>
                 <version>${project.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>com.fasterxml.jackson.module</groupId>
-                <artifactId>jackson-module-kotlin</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-annotations</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.dizitart</groupId>
-                <artifactId>potassium-nitrite</artifactId>
-                <version>3.1.0</version>
-            </dependency>
-
-
             <dependency>
                 <groupId>cz.fb.manaus</groupId>
                 <artifactId>ischia</artifactId>
@@ -139,13 +116,28 @@
                 <scope>compile</scope>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
-                <groupId>cz.fb.manaus</groupId>
-                <artifactId>manaus-boot</artifactId>
-                <scope>compile</scope>
-                <version>${project.version}</version>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-kotlin</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.dizitart</groupId>
+                <artifactId>potassium-nitrite</artifactId>
+                <version>3.1.0</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-math3</artifactId>
@@ -167,7 +159,6 @@
                 <version>1.6.0</version>
                 <scope>test</scope>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
