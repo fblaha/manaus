@@ -21,6 +21,6 @@ open class MatchbookValues {
 
     private fun strategy(context: BetContext): Double {
         val type = context.market.type
-        return mapOf("moneyline" to 0.1).getOrDefault(type, 0.08)
+        return mapOf("moneyline" to 0.1).getOrDefault(type, 0.07)
     }
 }

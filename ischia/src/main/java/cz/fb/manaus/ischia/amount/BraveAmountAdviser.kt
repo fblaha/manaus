@@ -10,5 +10,5 @@ import org.springframework.stereotype.Component
 class BraveAmountAdviser(private val minimalAmountAdviser: MinimalAmountAdviser) : AmountAdviser {
 
     override val amount: Double
-        get() = minimalAmountAdviser.amount + 1.0
+        get() = minimalAmountAdviser.amount
 }
