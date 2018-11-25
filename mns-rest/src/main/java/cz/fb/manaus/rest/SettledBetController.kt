@@ -23,7 +23,7 @@ class SettledBetController(private val settledBetRepository: SettledBetRepositor
     @ResponseBody
     @RequestMapping(value = ["/bets"], method = [RequestMethod.GET])
     fun getSettledBets(@RequestParam(defaultValue = "20") maxResults: Int): List<SettledBet> {
-        val bets = settledBetRepository.find(maxResults = maxResults)
+        val bets = settledBetRepository.find(maxResults = maxResults, asc = false)
         return bets.reversed()
     }
 
@@ -31,7 +31,7 @@ class SettledBetController(private val settledBetRepository: SettledBetRepositor
     @RequestMapping(value = ["/bets/" + IntervalParser.INTERVAL], method = [RequestMethod.GET])
     fun getSettledBets(@PathVariable interval: String): List<SettledBet> {
         val (from, to) = IntervalParser.parse(Instant.now(), interval)
-        val settledBets = settledBetRepository.find(from = from, to = to)
+        val settledBets = settledBetRepository.find(from = from, to = to, asc = false)
         return settledBets.reversed()
     }
 

@@ -34,7 +34,11 @@ class SettledBetRepository(private val db: Nitrite) {
         repository.remove(SettledBet::id eq id)
     }
 
-    fun find(from: Instant? = null, to: Instant? = null, side: Side? = null, maxResults: Int? = null): List<SettledBet> {
+    fun find(from: Instant? = null,
+             to: Instant? = null,
+             side: Side? = null,
+             maxResults: Int? = null,
+             asc: Boolean = true): List<SettledBet> {
         var filter = ObjectFilters.ALL
         if (from != null) {
             val fromFilter = SettledBet::settled gte from
@@ -48,7 +52,8 @@ class SettledBetRepository(private val db: Nitrite) {
             val sideFilter = SettledBet::side eq side
             filter = filter?.and(sideFilter) ?: sideFilter
         }
-        var options = FindOptions.sort("settled", SortOrder.Ascending)
+        val sortOrder = if (asc) SortOrder.Ascending else SortOrder.Descending
+        var options = FindOptions.sort("settled", sortOrder)
         if (maxResults != null) options = options.thenLimit(0, maxResults)
         return repository.find(filter, options).toList()
     }
