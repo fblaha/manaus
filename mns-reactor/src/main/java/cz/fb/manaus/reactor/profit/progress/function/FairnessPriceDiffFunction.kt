@@ -5,16 +5,11 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import cz.fb.manaus.reactor.price.PriceService
 import cz.fb.manaus.reactor.price.getRunnerPrices
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
-class FairnessPriceDiffFunction : ProgressFunction {
-
-    @Autowired
-    private lateinit var calculator: FairnessPolynomialCalculator
-    @Autowired
-    private lateinit var priceService: PriceService
+class FairnessPriceDiffFunction(private val calculator: FairnessPolynomialCalculator,
+                                private val priceService: PriceService) : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double? {
         val marketPrices = bet.betAction.runnerPrices

@@ -4,14 +4,10 @@ import com.codahale.metrics.Counter
 import com.codahale.metrics.Histogram
 import com.codahale.metrics.Meter
 import com.codahale.metrics.MetricRegistry
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
-class MetricsService {
-
-    @Autowired
-    private lateinit var registry: MetricRegistry
+class MetricsService(private val registry: MetricRegistry) {
 
     fun getCollectedMetrics(prefix: String): List<MetricRecord<*>> {
         val counters = registry.counters.entries

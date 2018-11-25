@@ -7,14 +7,10 @@ import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.price.PriceService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
-class MatchedPriceCategorizer : RealizedBetCategorizer {
-
-    @Autowired
-    private lateinit var priceService: PriceService
+class MatchedPriceCategorizer(private val priceService: PriceService) : RealizedBetCategorizer {
 
     override val isSimulationSupported: Boolean = false
 

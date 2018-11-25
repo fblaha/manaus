@@ -4,18 +4,13 @@ import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import cz.fb.manaus.reactor.price.getBestPrices
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
-class FairnessBackFunction : ProgressFunction {
-
-    @Autowired
-    private lateinit var calculator: FairnessPolynomialCalculator
+class FairnessBackFunction(private val calculator: FairnessPolynomialCalculator) : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double? {
         val marketPrices = bet.betAction.runnerPrices
         return calculator.getFairness(1, getBestPrices(marketPrices, Side.BACK))
     }
-
 }

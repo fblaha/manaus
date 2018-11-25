@@ -3,13 +3,10 @@ package cz.fb.manaus.reactor.betting.validator
 import com.codahale.metrics.MetricRegistry
 import com.google.common.base.Joiner
 import cz.fb.manaus.core.model.Side
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
-class ValidationMetricsCollector {
-    @Autowired
-    private lateinit var metricRegistry: MetricRegistry
+class ValidationMetricsCollector(private val metricRegistry: MetricRegistry) {
 
     fun updateMetrics(result: ValidationResult, type: Side, validatorName: String) {
         val name = getName(type, result.isSuccess, validatorName)
