@@ -5,16 +5,12 @@ import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
 import cz.fb.manaus.core.category.categorizer.SimulationAware
 import cz.fb.manaus.core.model.Market
 import cz.fb.manaus.core.model.RealizedBet
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class CategoryService {
-    @Autowired
-    private val categorizers = mutableListOf<Categorizer>()
-    @Autowired
-    private val settledBetCategorizers = mutableListOf<RealizedBetCategorizer>()
+class CategoryService(private val categorizers: List<Categorizer> = emptyList(),
+                      private val settledBetCategorizers: List<RealizedBetCategorizer> = emptyList()) {
 
     fun getMarketCategories(market: Market, simulationAwareOnly: Boolean): Set<String> {
         val result = HashSet<String>()

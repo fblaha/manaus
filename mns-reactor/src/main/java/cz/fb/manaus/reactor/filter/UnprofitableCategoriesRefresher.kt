@@ -3,7 +3,6 @@ package cz.fb.manaus.reactor.filter
 import cz.fb.manaus.core.maintanance.ConfigUpdate
 import cz.fb.manaus.core.maintanance.PeriodicMaintenanceTask
 import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
@@ -11,10 +10,10 @@ import java.time.Duration
 
 @Component
 @Profile(ManausProfiles.DB)
-class UnprofitableCategoriesRefresher(@param:Value(REFRESH_PERIOD_EL) private val refreshPeriodHours: Long) : PeriodicMaintenanceTask {
+class UnprofitableCategoriesRefresher(
+        @param:Value("#{systemEnvironment['MNS_UNPROFITABLE_REFRESH_PERIOD_HRS'] ?: 8}") private val refreshPeriodHours: Long,
+        private val unprofitableCategoriesRegistries: List<AbstractUnprofitableCategoriesRegistry>) : PeriodicMaintenanceTask {
 
-    @Autowired(required = false)
-    private val unprofitableCategoriesRegistries = mutableListOf<AbstractUnprofitableCategoriesRegistry>()
 
     override val name: String = "unprofitableCategoriesRefresh"
 
@@ -28,7 +27,4 @@ class UnprofitableCategoriesRefresher(@param:Value(REFRESH_PERIOD_EL) private va
         return configUpdate
     }
 
-    companion object {
-        const val REFRESH_PERIOD_EL = "#{systemEnvironment['MNS_UNPROFITABLE_REFRESH_PERIOD_HRS'] ?: 8}"
-    }
 }

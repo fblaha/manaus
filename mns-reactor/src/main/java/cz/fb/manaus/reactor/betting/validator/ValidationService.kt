@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service
 class ValidationService(private val priceService: PriceService,
                         private val recorder: ValidationMetricsCollector) {
 
-
     internal fun handleDowngrade(newOne: Price?, oldOne: Bet?, validator: Validator): ValidationResult? {
         if (oldOne != null && newOne != null) {
             val oldPrice = oldOne.requestedPrice
@@ -26,13 +25,13 @@ class ValidationService(private val priceService: PriceService,
     }
 
     internal fun reduce(results: List<ValidationResult>): ValidationResult {
-        checkState(!results.isEmpty())
+        checkState(results.isNotEmpty())
         return ValidationResult.of(results.all { it.isSuccess })
     }
 
     fun validate(context: BetContext, validators: List<Validator>): ValidationResult {
         val filteredValidators = validators.filter(createPredicate(context))
-        Preconditions.checkState(!filteredValidators.isEmpty())
+        Preconditions.checkState(filteredValidators.isNotEmpty())
 
         val newPrice = context.newPrice
         val collected = mutableListOf<ValidationResult>()
@@ -61,5 +60,4 @@ class ValidationService(private val priceService: PriceService,
         }
         return { validator -> predicates.all { it(validator) } }
     }
-
 }

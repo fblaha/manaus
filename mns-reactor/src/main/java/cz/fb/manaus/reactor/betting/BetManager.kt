@@ -10,7 +10,6 @@ import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
 import cz.fb.manaus.reactor.price.AbstractPriceFilter
 import cz.fb.manaus.reactor.price.getReciprocal
 import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Profile
 import org.springframework.core.annotation.AnnotationAwareOrderComparator
@@ -21,23 +20,18 @@ import java.util.logging.Logger
 
 @Service
 @Profile(ManausProfiles.DB)
-class BetManager(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
+class BetManager(
+        @Value("#{systemEnvironment['MNS_DISABLED_LISTENERS']}") rawDisabledListeners: String?,
+        private val filterService: MarketFilterService,
+        private val priceFilter: AbstractPriceFilter?,
+        private val betActionRepository: BetActionRepository,
+        private val actionListeners: List<BetActionListener> = emptyList(),
+        snapshotListeners: List<MarketSnapshotListener> = emptyList()) {
+
     private val disabledListeners: Set<String> = rawDisabledListeners?.split(',')?.toSet() ?: emptySet()
-    @Autowired
-    private lateinit var filterService: MarketFilterService
-    @Autowired
-    private var priceFilter: AbstractPriceFilter? = null
-    @Autowired
-    private lateinit var betActionRepository: BetActionRepository
-    @Autowired(required = false)
-    private val actionListeners = emptyList<BetActionListener>()
-    private var marketSnapshotListeners: List<MarketSnapshotListener> = mutableListOf()
+    private val sortedSnapshotListeners: List<MarketSnapshotListener> =
+            snapshotListeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
 
-
-    @Autowired(required = false)
-    fun setMarketSnapshotListeners(marketSnapshotListeners: List<MarketSnapshotListener>) {
-        this.marketSnapshotListeners = marketSnapshotListeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
-    }
 
     fun fire(snapshot: MarketSnapshot,
              myBets: Set<String>,
@@ -55,7 +49,7 @@ class BetManager(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
             val unknownBets = BetUtils.getUnknownBets(snapshot.currentBets, myBets)
             unknownBets.forEach { bet -> log.log(Level.WARNING, "unknown bet ''{0}''", bet) }
             if (unknownBets.isEmpty()) {
-                for (listener in marketSnapshotListeners) {
+                for (listener in sortedSnapshotListeners) {
                     if (listener.javaClass.simpleName !in disabledListeners) {
                         listener.onMarketSnapshot(snapshot, collector, accountMoney, categoryBlacklist)
                     }
@@ -91,17 +85,15 @@ class BetManager(@Value(DISABLED_LISTENERS_EL) rawDisabledListeners: String?) {
             log.log(Level.WARNING, "No price filtering configured.")
             marketPrices
         } else {
-            val filter = priceFilter!!
-            marketPrices.map { it.copy(prices = filter.filter(it.prices)) }
+            marketPrices.map { it.copy(prices = priceFilter.filter(it.prices)) }
         }
     }
 
     private fun checkMarket(myBets: Set<String>, market: Market, reciprocal: Double?, categoryBlacklist: Set<String>): Boolean {
-        return reciprocal != null && filterService.accept(market, !myBets.isEmpty(), categoryBlacklist)
+        return reciprocal != null && filterService.accept(market, myBets.isNotEmpty(), categoryBlacklist)
     }
 
     companion object {
-        const val DISABLED_LISTENERS_EL = "#{systemEnvironment['MNS_DISABLED_LISTENERS']}"
         private val log = Logger.getLogger(BetManager::class.java.simpleName)
     }
 }
