@@ -9,4 +9,7 @@ interface ProgressFunction : NameAware, (RealizedBet) -> Double? {
         get() {
             return super.name.removeSuffix("Function")
         }
+
+    val includeNoValues: Boolean get() = true
+
 }

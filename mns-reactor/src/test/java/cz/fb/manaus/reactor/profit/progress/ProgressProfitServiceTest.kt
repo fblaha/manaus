@@ -21,20 +21,21 @@ class ProgressProfitServiceTest : AbstractLocalTestCase() {
     fun `single chunk`() {
         val bets = generateBets().map { toRealizedBet(it) }
         val records = service.getProfitRecords(bets = bets,
-                funcName = "price",
+                funcName = "priceBack",
                 chunkCount = 1,
                 chargeRate = provider.chargeRate)
         assertEquals(1, records.size)
-        assertEquals("price: 2.79", records[0].category)
-        assertEquals(bets.size, records[0].totalCount)
+        assertEquals("priceBack: 2.84", records[0].category)
+        assertEquals(bets.size / 2, records[0].totalCount)
         assertEquals(bets.size / 2, records[0].backCount)
+        assertEquals(0, records[0].layCount)
     }
 
     @Test
     fun `multiple chunks`() {
         val bets = generateBets().map { toRealizedBet(it) }
         val records = service.getProfitRecords(bets = bets,
-                funcName = "price",
+                funcName = "priceBack",
                 chunkCount = 10,
                 chargeRate = provider.chargeRate)
         assertEquals(10, records.size)

@@ -4,15 +4,14 @@ import cz.fb.manaus.core.model.realizedBet
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
-class PriceFunctionTest : AbstractLocalTestCase() {
+class PriceLayFunctionTest : AbstractLocalTestCase() {
     @Autowired
-    private lateinit var fc: PriceFunction
+    private lateinit var fc: PriceLayFunction
 
     @Test
     fun `get value`() {
-        assertEquals(3.3, fc(realizedBet))
+        assertNull(fc(realizedBet))
     }
-
 }

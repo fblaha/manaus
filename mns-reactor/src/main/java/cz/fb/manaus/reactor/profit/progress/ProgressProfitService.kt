@@ -48,7 +48,7 @@ class ProgressProfitService(functions: List<ProgressFunction>) : AbstractFunctio
                 .toMutableList()
 
 
-        if (!noValues.isEmpty()) {
+        if (noValues.isNotEmpty() && function.includeNoValues) {
             result.add(0, computeFunctionRecord(function.name + ": -",
                     noValues.map { it.first }, charges, coverage))
         }

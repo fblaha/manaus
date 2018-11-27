@@ -21,9 +21,9 @@ class CoverageFunctionProfitServiceTest : AbstractLocalTestCase() {
     fun `covered price`() {
         val bets = generateBets().map { toRealizedBet(it) }
         val records = service.getProfitRecords(bets,
-                "price", provider.chargeRate)
+                "priceBack", provider.chargeRate)
         assertEquals(2, records.size)
-        assertEquals("price_covered: 2.79", records[0].category)
+        assertEquals("priceBack_covered: 2.84", records[0].category)
         assertEquals(bets.size, records[0].totalCount)
         assertEquals(bets.size / 2, records[0].backCount)
     }
@@ -32,9 +32,9 @@ class CoverageFunctionProfitServiceTest : AbstractLocalTestCase() {
     fun `solo price`() {
         val bets = generateBets(Side.BACK).map { toRealizedBet(it) }
         val records = service.getProfitRecords(bets,
-                "price", provider.chargeRate)
+                "priceBack", provider.chargeRate)
         assertEquals(1, records.size)
-        assertEquals("price_solo: 2.84", records[0].category)
+        assertEquals("priceBack_solo: 2.84", records[0].category)
         assertEquals(bets.size, records[0].totalCount)
         assertEquals(bets.size, records[0].backCount)
     }
