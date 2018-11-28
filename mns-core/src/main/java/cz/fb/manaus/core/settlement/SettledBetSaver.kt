@@ -34,11 +34,11 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
                 SaveStatus.OK
             } else {
                 metricRegistry.counter("settled.bet.NO_ACTION").inc()
-                log.log(Level.WARNING, "SETTLED_BET: no bet action for ''{0}''", settledBet)
+                log.log(Level.WARNING, "no bet action for '$settledBet'")
                 SaveStatus.NO_ACTION
             }
         } else {
-            log.log(Level.INFO, "SETTLED_BET: action with id ''{0}'' already saved", settledBet.id)
+            log.log(Level.INFO, "action with id '${settledBet.id}' already saved")
             return SaveStatus.COLLISION
         }
     }
@@ -53,7 +53,7 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
         val requestedPrice = action.price
         val price = bet.price
         if (!Price.priceEq(requestedPrice.price, price.price)) {
-            log.log(Level.WARNING, "Different requested price ''{0}''", bet)
+            log.log(Level.WARNING, "different requested price '$requestedPrice' bet '$bet'")
         }
     }
 
@@ -70,11 +70,11 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
         if (placed != null) {
             val latency = actionTime.until(placed, ChronoUnit.SECONDS)
             if (latency > 30) {
-                log.log(Level.WARNING, "Too big latency for ''{0}''", bet)
+                log.log(Level.WARNING, "too big latency $latency sec for '$bet'")
             }
             if (placed.isAfter(openDate)) {
                 metricRegistry.counter("settled.bet.PLACED_AFTER_START").inc()
-                log.log(Level.SEVERE, "Placed after open date ''{0}''", bet)
+                log.log(Level.SEVERE, "placed after open date '$bet'")
             }
         }
     }
