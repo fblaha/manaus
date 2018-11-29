@@ -50,6 +50,5 @@ class MarketCleaner(
 
     companion object {
         private val log = Logger.getLogger(MarketCleaner::class.java.simpleName)
-        const val HIST_DAYS_EL = "#{systemEnvironment['MNS_MARKET_HISTORY_DAYS'] ?: 200}"
     }
 }

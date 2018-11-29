@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import cz.fb.manaus.core.provider.ExchangeProvider
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -16,6 +17,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 
 @Configuration
 @ComponentScan(value = ["cz.fb.manaus.core"])
+@EnableConfigurationProperties
 open class CoreLocalConfiguration {
 
     @Bean

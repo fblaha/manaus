@@ -1,0 +1,8 @@
+db:
+  marketHistoryDays: 300
+  file: mns.db
+---
+spring:
+  profiles: test
+db:
+  file:

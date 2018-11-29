@@ -1,8 +1,8 @@
 package cz.fb.manaus.spring
 
+import cz.fb.manaus.core.conf.DatabaseConf
 import org.dizitart.kno2.nitrite
 import org.dizitart.no2.Nitrite
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -15,16 +15,17 @@ import java.io.File
 @ComponentScan("cz.fb.manaus.core")
 open class CoreDatabaseConfiguration {
 
+
     @Bean(destroyMethod = "close")
-    open fun db(@Value("#{systemEnvironment['MNS_DB_FILE']}") dbFile: String?): Nitrite {
-        return if (dbFile == null) {
+    open fun db(databaseConf: DatabaseConf): Nitrite {
+        return if (databaseConf.file.isNullOrBlank()) {
             nitrite {
                 autoCommitBufferSize = 2048
                 autoCompact = false
             }
         } else {
             val db = nitrite {
-                file = File(dbFile)
+                file = File(databaseConf.file)
                 autoCommitBufferSize = 2048
                 autoCompact = false
             }
