@@ -29,6 +29,8 @@ class MarketCleaner(
 
     override val pausePeriod = Duration.ofMinutes(15)!!
 
+    private val log = Logger.getLogger(MarketCleaner::class.java.simpleName)
+
     override fun execute(): ConfigUpdate {
         val stopwatch = Stopwatch.createUnstarted().start()
         var count = 0L
@@ -46,9 +48,5 @@ class MarketCleaner(
         val elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
         log.log(Level.INFO, "DELETE_MARKETS: ''{0}'' obsolete markets removed in ''{1}'' seconds", arrayOf(count, elapsed))
         return ConfigUpdate.NOP
-    }
-
-    companion object {
-        private val log = Logger.getLogger(MarketCleaner::class.java.simpleName)
     }
 }

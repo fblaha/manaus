@@ -9,6 +9,8 @@ import java.util.logging.Logger
 @Component
 class ObsoleteFilter : MarketFilter {
 
+    private val log = Logger.getLogger(ObsoleteFilter::class.java.simpleName)
+
     override fun accept(market: Market, categoryBlacklist: Set<String>): Boolean {
         val result = market.event.openDate.isAfter(Instant.now())
         if (!result) {
@@ -18,8 +20,4 @@ class ObsoleteFilter : MarketFilter {
     }
 
     override val isStrict: Boolean = true
-
-    companion object {
-        private val log = Logger.getLogger(ObsoleteFilter::class.java.simpleName)
-    }
 }

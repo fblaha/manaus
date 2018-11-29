@@ -17,6 +17,7 @@ class RelatedActionsCategorizer(
         private val betActionRepository: BetActionRepository,
         private val relatedActionsAwareCategorizers: List<RelatedActionsAwareCategorizer>) : RealizedBetCategorizer {
 
+    private val log = Logger.getLogger(RelatedActionsCategorizer::class.java.simpleName)
 
     override val isSimulationSupported: Boolean = false
 
@@ -38,10 +39,6 @@ class RelatedActionsCategorizer(
             result.addAll(partial)
         }
         return result
-    }
-
-    companion object {
-        private val log = Logger.getLogger(RelatedActionsCategorizer::class.java.simpleName)
     }
 }
 

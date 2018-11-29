@@ -26,6 +26,7 @@ class ProfitController(private val profitService: ProfitService,
                        private val provider: ExchangeProvider,
                        private val betLoader: SettledBetLoader) {
 
+    private val log = Logger.getLogger(ProfitController::class.java.simpleName)
 
     @ResponseBody
     @RequestMapping(value = ["/profit/" + IntervalParser.INTERVAL], method = [RequestMethod.GET])
@@ -114,6 +115,5 @@ class ProfitController(private val profitService: ProfitService,
                 "category" to compareBy { it.category },
                 "betProfit" to compareBy { it.betProfit },
                 "profit" to compareBy { it.profit })
-        private val log = Logger.getLogger(ProfitController::class.java.simpleName)
     }
 }

@@ -32,6 +32,7 @@ class BetManager(
     private val sortedSnapshotListeners: List<MarketSnapshotListener> =
             snapshotListeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
 
+    private val log = Logger.getLogger(BetManager::class.java.simpleName)
 
     fun fire(snapshot: MarketSnapshot,
              myBets: Set<String>,
@@ -93,7 +94,4 @@ class BetManager(
         return reciprocal != null && filterService.accept(market, myBets.isNotEmpty(), categoryBlacklist)
     }
 
-    companion object {
-        private val log = Logger.getLogger(BetManager::class.java.simpleName)
-    }
 }

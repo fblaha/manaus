@@ -26,6 +26,8 @@ abstract class AbstractUpdatingBettor(private val side: Side, private val valida
     @Autowired
     private lateinit var metricRegistry: MetricRegistry
 
+    private val log = Logger.getLogger(AbstractUpdatingBettor::class.java.simpleName)
+
     override fun onMarketSnapshot(snapshot: MarketSnapshot, betCollector: BetCollector,
                                   accountMoney: AccountMoney?, categoryBlacklist: Set<String>) {
         val (marketPrices, market, _, coverage, _) = snapshot
@@ -109,9 +111,5 @@ abstract class AbstractUpdatingBettor(private val side: Side, private val valida
 
     private fun setProperty(key: String, value: Double, properties: MutableMap<String, String>) {
         properties[key] = Precision.round(value, 4).toString()
-    }
-
-    companion object {
-        private val log = Logger.getLogger(AbstractUpdatingBettor::class.java.simpleName)
     }
 }

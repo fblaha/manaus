@@ -38,6 +38,8 @@ abstract class AbstractUnprofitableCategoriesRegistry(
 
     private lateinit var whitelist: List<String>
 
+    private val log = Logger.getLogger(AbstractUnprofitableCategoriesRegistry::class.java.simpleName)
+
     private val logPrefix: String
         get() = String.format("UNPROFITABLE_REGISTRY(%s): ", name)
 
@@ -120,6 +122,5 @@ abstract class AbstractUnprofitableCategoriesRegistry(
 
     companion object {
         private const val UNPROFITABLE_BLACK_LIST = "unprofitable.black.list."
-        private val log = Logger.getLogger(AbstractUnprofitableCategoriesRegistry::class.java.simpleName)
     }
 }

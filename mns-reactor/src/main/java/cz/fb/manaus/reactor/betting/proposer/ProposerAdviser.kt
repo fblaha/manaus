@@ -24,6 +24,8 @@ open class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAd
     @Autowired
     private lateinit var roundingService: RoundingService
 
+    private val log = Logger.getLogger(ProposerAdviser::class.java.simpleName)
+
     override fun getNewPrice(betContext: BetContext): Price? {
         val proposedPrice = reducePrices(betContext)
         return if (proposedPrice != null) {
@@ -54,9 +56,5 @@ open class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAd
                 .map { it.simpleName }.sorted().joinToString(",")
         log.log(Level.INFO, "Proposer coordinator class: ''{0}'', proposers: ''{1}''",
                 arrayOf<Any>(this.javaClass.simpleName, proposerList))
-    }
-
-    companion object {
-        private val log = Logger.getLogger(ProposerAdviser::class.java.simpleName)
     }
 }

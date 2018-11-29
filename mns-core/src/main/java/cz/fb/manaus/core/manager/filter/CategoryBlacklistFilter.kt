@@ -11,6 +11,7 @@ import java.util.logging.Logger
 class CategoryBlacklistFilter(private val categoryService: CategoryService,
                               private val metricRegistry: MetricRegistry) : MarketFilter {
 
+    private val log = Logger.getLogger(CategoryBlacklistFilter::class.java.simpleName)
 
     override fun accept(market: Market, categoryBlacklist: Set<String>): Boolean {
         val categories = categoryService.getMarketCategories(market, false)
@@ -21,9 +22,5 @@ class CategoryBlacklistFilter(private val categoryService: CategoryService,
                     arrayOf(intersection, market))
         }
         return intersection.isEmpty()
-    }
-
-    companion object {
-        private val log = Logger.getLogger(CategoryBlacklistFilter::class.java.simpleName)
     }
 }

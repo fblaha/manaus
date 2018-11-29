@@ -23,6 +23,8 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
                       private val marketRepository: MarketRepository,
                       private val metricRegistry: MetricRegistry) {
 
+    private val log = Logger.getLogger(SettledBetSaver::class.java.simpleName)
+
     fun saveBet(settledBet: SettledBet): SaveStatus {
         if (settledBetRepository.read(settledBet.id) == null) {
             val action = betActionRepository.findRecentBetAction(settledBet.id)
@@ -77,9 +79,5 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
                 log.log(Level.SEVERE, "placed after open date '$bet'")
             }
         }
-    }
-
-    companion object {
-        private val log = Logger.getLogger(SettledBetSaver::class.java.simpleName)
     }
 }

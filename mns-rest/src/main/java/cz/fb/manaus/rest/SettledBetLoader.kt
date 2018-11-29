@@ -19,6 +19,9 @@ import java.util.logging.Logger
 class SettledBetLoader(private val settledBetRepository: SettledBetRepository,
                        private val realizedBetLoader: RealizedBetLoader) {
 
+
+    private val log = Logger.getLogger(SettledBetLoader::class.java.simpleName)
+
     private var cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .expireAfterAccess(10, TimeUnit.MINUTES)
@@ -52,10 +55,6 @@ class SettledBetLoader(private val settledBetRepository: SettledBetRepository,
 
     internal fun invalidateCache() {
         cache.invalidateAll()
-    }
-
-    companion object {
-        private val log = Logger.getLogger(SettledBetLoader::class.java.simpleName)
     }
 
 }
