@@ -16,11 +16,6 @@ open class MatchbookValues {
 
     @Bean
     open fun downgradeStrategy(): (BetContext) -> Double {
-        return { this.strategy(it) }
-    }
-
-    private fun strategy(context: BetContext): Double {
-        val type = context.market.type
-        return mapOf("moneyline" to 0.1).getOrDefault(type, 0.07)
+        return { 0.07 }
     }
 }
