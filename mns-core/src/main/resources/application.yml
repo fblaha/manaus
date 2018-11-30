@@ -1,8 +1,7 @@
 db:
-  marketHistoryDays: 300
-  file: mns.db
----
-spring:
-  profiles: test
-db:
   file:
+markets:
+  history: 300d
+  lookAhead: 7d
+betting:
+  disabledListeners: []

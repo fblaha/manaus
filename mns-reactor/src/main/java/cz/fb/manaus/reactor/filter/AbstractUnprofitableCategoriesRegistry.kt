@@ -1,8 +1,6 @@
 package cz.fb.manaus.reactor.filter
 
 import com.google.common.base.Joiner
-import com.google.common.base.Splitter
-import com.google.common.base.Strings
 import cz.fb.manaus.core.maintanance.ConfigUpdate
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.Side
@@ -11,17 +9,16 @@ import cz.fb.manaus.core.repository.RealizedBetLoader
 import cz.fb.manaus.core.repository.SettledBetRepository
 import cz.fb.manaus.reactor.profit.ProfitService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import java.time.Duration
 import java.time.Instant
 import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
-import java.util.stream.Stream
 
 
 abstract class AbstractUnprofitableCategoriesRegistry(
-        private val name: String, private val period: Duration,
+        private val name: String,
+        private val period: Duration,
         private val side: Side?,
         private val maximalProfit: Double,
         private val filterPrefix: String,
@@ -36,8 +33,6 @@ abstract class AbstractUnprofitableCategoriesRegistry(
     @Autowired
     private lateinit var provider: ExchangeProvider
 
-    private lateinit var whitelist: List<String>
-
     private val log = Logger.getLogger(AbstractUnprofitableCategoriesRegistry::class.java.simpleName)
 
     private val logPrefix: String
@@ -45,14 +40,6 @@ abstract class AbstractUnprofitableCategoriesRegistry(
 
     private val propertyPrefix: String
         get() = "$UNPROFITABLE_BLACK_LIST$name."
-
-    @Autowired
-    fun setWhitelist(@Value("#{systemEnvironment['MNS_CATEGORY_WHITE_LIST']}") rawWhiteList: String?) {
-        this.whitelist = Splitter.on(',')
-                .omitEmptyStrings()
-                .trimResults()
-                .splitToList(Strings.nullToEmpty(rawWhiteList))
-    }
 
     fun updateBlacklists(configUpdate: ConfigUpdate) {
         log.log(Level.INFO, logPrefix + "black list update started")
@@ -77,14 +64,14 @@ abstract class AbstractUnprofitableCategoriesRegistry(
         val totalBlacklist = HashSet<String>()
         for ((thresholdPct, blackCount) in thresholds) {
             val threshold = getThreshold(thresholdPct)
-            val blacklist = getBlacklist(threshold, blackCount, totalCount, filtered.stream(), totalBlacklist)
+            val blacklist = getBlacklist(threshold, blackCount, totalCount, filtered, totalBlacklist)
             totalBlacklist.addAll(blacklist)
             saveBlacklist(thresholdPct, blacklist, configUpdate)
         }
     }
 
     private fun getFiltered(profitRecords: List<ProfitRecord>): List<ProfitRecord> {
-        return if (Strings.isNullOrEmpty(filterPrefix)) {
+        return if (filterPrefix.isBlank()) {
             profitRecords
         } else {
             profitRecords.filter { it.category.startsWith(filterPrefix) }
@@ -101,23 +88,24 @@ abstract class AbstractUnprofitableCategoriesRegistry(
         return thresholdPct / 100.0
     }
 
-    internal fun getBlacklist(threshold: Double, blackCount: Int, totalCount: Int, profitRecords: Stream<ProfitRecord>,
+    internal fun getBlacklist(threshold: Double,
+                              blackCount: Int,
+                              totalCount: Int,
+                              profitRecords: List<ProfitRecord>,
                               blacklist: Set<String>): Set<String> {
-        val currentBlacklist = LinkedHashSet<String>()
+        val currentBlacklist = mutableListOf<String>()
 
-        val sorted = profitRecords.filter { record -> record.totalCount.toDouble() / totalCount <= threshold }
-                .sorted(compareBy { it.profit })
+        val sorted = profitRecords
+                .filter { it.totalCount.toDouble() / totalCount <= threshold }
+                .sortedBy { it.profit }
 
-
-        var i = 0
         for (weak in sorted) {
-            if (i >= blackCount || weak.profit >= maximalProfit) break
-            if (weak.category in blacklist) continue
-            if (whitelist.stream().anyMatch { prefix -> weak.category.startsWith(prefix) }) continue
-            currentBlacklist.add(weak.category)
-            i++
+            if (currentBlacklist.size >= blackCount || weak.profit >= maximalProfit) break
+            if (weak.category !in blacklist) {
+                currentBlacklist.add(weak.category)
+            }
         }
-        return currentBlacklist
+        return currentBlacklist.toSet()
     }
 
     companion object {

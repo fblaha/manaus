@@ -7,10 +7,10 @@ import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.reactor.betting.action.BetActionListener
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
+import cz.fb.manaus.reactor.conf.BettingConf
 import cz.fb.manaus.reactor.price.AbstractPriceFilter
 import cz.fb.manaus.reactor.price.getReciprocal
 import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Profile
 import org.springframework.core.annotation.AnnotationAwareOrderComparator
 import org.springframework.stereotype.Service
@@ -21,14 +21,14 @@ import java.util.logging.Logger
 @Service
 @Profile(ManausProfiles.DB)
 class BetManager(
-        @Value("#{systemEnvironment['MNS_DISABLED_LISTENERS']}") rawDisabledListeners: String?,
         private val filterService: MarketFilterService,
         private val priceFilter: AbstractPriceFilter?,
         private val betActionRepository: BetActionRepository,
         private val actionListeners: List<BetActionListener> = emptyList(),
+        bettingConf: BettingConf,
         snapshotListeners: List<MarketSnapshotListener> = emptyList()) {
 
-    private val disabledListeners: Set<String> = rawDisabledListeners?.split(',')?.toSet() ?: emptySet()
+    private val disabledListeners: Set<String> = bettingConf.disabledListeners.toSet()
     private val sortedSnapshotListeners: List<MarketSnapshotListener> =
             snapshotListeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
 

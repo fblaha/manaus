@@ -1,8 +1,6 @@
 package cz.fb.manaus.reactor.categorizer
 
 import com.google.common.base.Joiner
-import com.google.common.base.MoreObjects
-import com.google.common.base.Strings
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
 import cz.fb.manaus.core.model.BetAction
@@ -16,8 +14,8 @@ open class ProposerCategorizer : RealizedBetCategorizer {
 
     private fun getProposers(realizedBet: RealizedBet): List<String> {
         val properties = realizedBet.betAction.properties
-        val rawProposers = MoreObjects.firstNonNull(Strings.emptyToNull(properties[BetAction.PROPOSER_PROP]), "none")
-        return BetUtils.parseProposers(rawProposers)
+        val rawProposers = properties[BetAction.PROPOSER_PROP]
+        return BetUtils.parseProposers(if (rawProposers.isNullOrBlank()) "none" else rawProposers)
     }
 
     private fun getSideAware(prefix: String, side: Side, category: String): String {

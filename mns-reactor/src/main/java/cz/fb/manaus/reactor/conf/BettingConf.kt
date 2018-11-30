@@ -1,4 +1,4 @@
-package cz.fb.manaus.core.conf
+package cz.fb.manaus.reactor.conf
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
@@ -6,10 +6,10 @@ import java.util.logging.Logger
 import javax.annotation.PostConstruct
 
 @Component
-@ConfigurationProperties("db")
-data class DatabaseConf(var file: String? = null) {
+@ConfigurationProperties("betting")
+data class BettingConf(var disabledListeners: List<String> = emptyList()) {
 
-    private val log = Logger.getLogger(DatabaseConf::class.java.simpleName)
+    private val log = Logger.getLogger(BettingConf::class.java.simpleName)
 
     @PostConstruct
     fun log() {

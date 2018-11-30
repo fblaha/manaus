@@ -10,8 +10,6 @@ import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsCollectionContaining.hasItem
 import org.hamcrest.core.IsNot.not
-import org.junit.After
-import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
@@ -30,66 +28,46 @@ class TheAbstractUnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase()
         return ProfitRecord(category, profitAndLoss, 2.0, 0.06, betCount, 0)
     }
 
-    @Before
-    fun setUp() {
-        registry.setWhitelist("white.tes")
-    }
-
-    @After
-    fun tearDown() {
-        registry.setWhitelist("white.tes")
-    }
 
     @Test
     fun `blacklist threshold`() {
         assertTrue("horror" in registry.getBlacklist(0.1, 1, 110,
-                listOf(pr("horror", -10.0, 10)).stream(), setOf()))
+                listOf(pr("horror", -10.0, 10)), setOf()))
         assertFalse("horror" in registry.getBlacklist(0.1, 1, 90,
-                listOf(pr("horror", -10.0, 10)).stream(),
-                setOf()))
+                listOf(pr("horror", -10.0, 10)), setOf()))
         assertFalse("horror" in registry.getBlacklist(0.1, 0, 110,
-                listOf(pr("horror", -10.0, 10)).stream(),
-                setOf()))
+                listOf(pr("horror", -10.0, 10)), setOf()))
     }
 
     @Test
     fun `blacklist sort`() {
         assertThat(registry.getBlacklist(0.1, 1, 110,
                 listOf(pr("horror", -10.0, 10), pr("weak", -1.0, 10),
-                        pr("bad", -5.0, 10)).stream(), setOf()),
+                        pr("bad", -5.0, 10)), setOf()),
                 allOf(hasItem("horror"), not(hasItem("weak")), not(hasItem("bad")))
         )
         assertThat(registry.getBlacklist(0.1, 2, 110,
                 listOf(pr("horror", -10.0, 10), pr("weak", -1.0, 10),
-                        pr("bad", -5.0, 10)).stream(), setOf()),
+                        pr("bad", -5.0, 10)), setOf()),
                 allOf(hasItem("horror"), not(hasItem("weak")), hasItem("bad"))
         )
         assertThat(registry.getBlacklist(0.1, 3, 110,
                 listOf(pr("horror", -10.0, 10), pr("weak", -1.0, 10),
-                        pr("bad", -5.0, 10)).stream(), setOf()),
+                        pr("bad", -5.0, 10)), setOf()),
                 allOf(hasItem("horror"), hasItem("weak"), hasItem("bad"))
         )
     }
 
     @Test
     fun `blacklist duplicate`() {
-        assertThat(registry.getBlacklist(0.1, 2, 110,
-                listOf(pr("horror", -10.0, 10),
-                        pr("weak", -1.0, 10),
-                        pr("bad", -5.0, 10)).stream(),
-                setOf("horror")),
+        val records = listOf(pr("horror", -10.0, 10),
+                pr("weak", -1.0, 10),
+                pr("bad", -5.0, 10))
+        val blacklist = registry.getBlacklist(0.1, 2, 110,
+                records,
+                setOf("horror"))
+        assertThat(blacklist,
                 allOf(not(hasItem("horror")), hasItem("weak"), hasItem("bad"))
-        )
-    }
-
-    @Test
-    fun `whitelist priority over blacklist`() {
-        assertThat(registry.getBlacklist(0.1, 2, 110,
-                listOf(pr("white.test", -10.0, 10),
-                        pr("weak", -1.0, 10),
-                        pr("bad", -5.0, 10)).stream(),
-                setOf()),
-                allOf(not(hasItem("white.test")), hasItem("weak"), hasItem("bad"))
         )
     }
 
