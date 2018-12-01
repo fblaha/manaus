@@ -4,5 +4,4 @@ target/
 *.log
 *.iml
 generated/
-j8
-credentials.properties
+application.yml

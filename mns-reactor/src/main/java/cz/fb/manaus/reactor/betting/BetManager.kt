@@ -9,28 +9,18 @@ import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
 import cz.fb.manaus.reactor.price.AbstractPriceFilter
 import cz.fb.manaus.reactor.price.getReciprocal
-import cz.fb.manaus.spring.ManausProfiles
-import cz.fb.manaus.spring.conf.BettingConf
-import org.springframework.context.annotation.Profile
 import org.springframework.core.annotation.AnnotationAwareOrderComparator
-import org.springframework.stereotype.Service
 import java.time.Instant
 import java.util.logging.Level
 import java.util.logging.Logger
 
-@Service
-@Profile(ManausProfiles.DB)
 class BetManager(
         private val filterService: MarketFilterService,
         private val priceFilter: AbstractPriceFilter?,
         private val betActionRepository: BetActionRepository,
-        private val actionListeners: List<BetActionListener> = emptyList(),
-        bettingConf: BettingConf,
-        snapshotListeners: List<MarketSnapshotListener> = emptyList()) {
-
-    private val disabledListeners: Set<String> = bettingConf.disabledListeners.toSet()
-    private val sortedSnapshotListeners: List<MarketSnapshotListener> =
-            snapshotListeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
+        private val actionListeners: List<BetActionListener>,
+        private val disabledListeners: Set<String>,
+        private val sortedSnapshotListeners: List<MarketSnapshotListener>) {
 
     private val log = Logger.getLogger(BetManager::class.java.simpleName)
 
@@ -94,4 +84,24 @@ class BetManager(
         return reciprocal != null && filterService.accept(market, myBets.isNotEmpty(), categoryBlacklist)
     }
 
+    companion object {
+        fun create(betActionRepository: BetActionRepository,
+                   filterService: MarketFilterService,
+                   priceFilter: AbstractPriceFilter?,
+                   disabledListeners: Set<String>,
+                   snapshotListeners: List<MarketSnapshotListener>?,
+                   actionListeners: List<BetActionListener>): BetManager {
+
+            val listeners = snapshotListeners ?: emptyList()
+            val sortedSnapshotListeners: List<MarketSnapshotListener> =
+                    listeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
+
+            return BetManager(filterService,
+                    priceFilter,
+                    betActionRepository,
+                    actionListeners,
+                    disabledListeners,
+                    sortedSnapshotListeners)
+        }
+    }
 }
