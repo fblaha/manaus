@@ -1,11 +1,9 @@
-package cz.fb.manaus.reactor.conf
+package cz.fb.manaus.spring.conf
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.stereotype.Component
 import java.util.logging.Logger
 import javax.annotation.PostConstruct
 
-@Component
 @ConfigurationProperties("betting")
 data class BettingConf(var disabledListeners: List<String> = emptyList()) {
 

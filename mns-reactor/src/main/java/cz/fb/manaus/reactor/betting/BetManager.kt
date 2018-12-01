@@ -7,10 +7,10 @@ import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.reactor.betting.action.BetActionListener
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
-import cz.fb.manaus.reactor.conf.BettingConf
 import cz.fb.manaus.reactor.price.AbstractPriceFilter
 import cz.fb.manaus.reactor.price.getReciprocal
 import cz.fb.manaus.spring.ManausProfiles
+import cz.fb.manaus.spring.conf.BettingConf
 import org.springframework.context.annotation.Profile
 import org.springframework.core.annotation.AnnotationAwareOrderComparator
 import org.springframework.stereotype.Service

@@ -1,8 +1,9 @@
 package cz.fb.manaus.spring
 
-import cz.fb.manaus.core.conf.DatabaseConf
+import cz.fb.manaus.spring.conf.DatabaseConf
 import org.dizitart.kno2.nitrite
 import org.dizitart.no2.Nitrite
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -13,6 +14,7 @@ import java.io.File
 @Profile(ManausProfiles.DB)
 @Configuration
 @ComponentScan("cz.fb.manaus.core")
+@EnableConfigurationProperties(DatabaseConf::class)
 open class CoreDatabaseConfiguration {
 
 

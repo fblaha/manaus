@@ -6,7 +6,10 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import cz.fb.manaus.core.maintanance.db.OldMarketApprover
+import cz.fb.manaus.core.manager.filter.LookAheadFilter
 import cz.fb.manaus.core.provider.ExchangeProvider
+import cz.fb.manaus.spring.conf.MarketConf
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -17,7 +20,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 
 @Configuration
 @ComponentScan(value = ["cz.fb.manaus.core"])
-@EnableConfigurationProperties
+@EnableConfigurationProperties(MarketConf::class)
 open class CoreLocalConfiguration {
 
     @Bean
@@ -49,5 +52,15 @@ open class CoreLocalConfiguration {
     @Bean
     open fun objectMapper(): ObjectMapper {
         return objectMapperBuilder().build()
+    }
+
+    @Bean
+    open fun oldMarketApprover(marketConf: MarketConf): OldMarketApprover {
+        return OldMarketApprover(marketConf.history)
+    }
+
+    @Bean
+    open fun lookAheadFilter(marketConf: MarketConf): LookAheadFilter {
+        return LookAheadFilter(marketConf.lookAhead)
     }
 }
