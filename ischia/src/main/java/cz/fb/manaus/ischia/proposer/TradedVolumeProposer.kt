@@ -27,12 +27,8 @@ class TradedVolumeProposer(private val priceService: PriceService) : PricePropos
 
     override fun getProposedPrice(context: BetContext): Double {
         val weightedMean = context.actualTradedVolume!!.weightedMean!!
-        return priceService.downgrade(weightedMean, REDUCTION_RATE,
+        return priceService.downgrade(weightedMean, 0.01,
                 context.side)
-    }
-
-    companion object {
-        const val REDUCTION_RATE = 0.01
     }
 
 }

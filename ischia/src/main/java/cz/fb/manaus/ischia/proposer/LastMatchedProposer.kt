@@ -25,7 +25,7 @@ class LastMatchedProposer(private val priceService: PriceService) : PricePropose
     override fun getProposedPrice(context: BetContext): Double {
         val lastMatchedPrice = context.runnerPrices.lastMatchedPrice!!
         return priceService.downgrade(lastMatchedPrice,
-                TradedVolumeProposer.REDUCTION_RATE, context.side)
+                0.01, context.side)
     }
 
 }

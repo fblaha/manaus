@@ -1,0 +1,8 @@
+filter:
+  runnerName:
+  marketTypes:
+    - three_way
+    - match_odds
+    - rt_match_odds
+    - moneyline
+
