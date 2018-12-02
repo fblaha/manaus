@@ -9,7 +9,6 @@ import cz.fb.manaus.reactor.betting.proposer.common.AbstractBestPriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Component
 object BestPriceProposer : AbstractBestPriceProposer(1)
 
 @Component
-class BackAdviser @Autowired constructor(proposers: List<PriceProposer>) : ProposerAdviser(proposers)
+class BackAdviser(proposers: List<PriceProposer>) : ProposerAdviser(proposers)
 
 @Component
 object AcceptAllValidator : Validator {
@@ -28,6 +27,5 @@ object AcceptAllValidator : Validator {
 
 @Component
 @Profile(ManausProfiles.DB)
-class BackBettor @Autowired constructor(
-        validators: List<Validator>, coordinator: BackAdviser) : AbstractUpdatingBettor(Side.BACK, validators, coordinator)
+class BackBettor(validators: List<Validator>, coordinator: BackAdviser) : AbstractUpdatingBettor(Side.BACK, validators, coordinator)
 
