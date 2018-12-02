@@ -6,9 +6,10 @@ import cz.fb.manaus.core.model.PriceComparator
 import cz.fb.manaus.core.model.Side
 import org.springframework.beans.factory.annotation.Autowired
 
-abstract class AbstractPriceFilter(private val minCount: Int,
-                                   private val bulldozeThreshold: Double,
-                                   private val priceRange: ClosedRange<Double>) {
+// TODO data class
+open class PriceFilter(private val minCount: Int,
+                       private val bulldozeThreshold: Double,
+                       private val priceRange: ClosedRange<Double>) {
     @Autowired
     private lateinit var bulldozer: PriceBulldozer
 

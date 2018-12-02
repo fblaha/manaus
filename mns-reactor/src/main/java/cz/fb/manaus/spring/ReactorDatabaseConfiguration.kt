@@ -5,7 +5,7 @@ import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.reactor.betting.BetManager
 import cz.fb.manaus.reactor.betting.action.BetActionListener
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
-import cz.fb.manaus.reactor.price.AbstractPriceFilter
+import cz.fb.manaus.reactor.price.PriceFilter
 import cz.fb.manaus.spring.conf.BettingConf
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -22,7 +22,7 @@ open class ReactorDatabaseConfiguration {
 
     @Bean
     open fun betManager(filterService: MarketFilterService,
-                        priceFilter: AbstractPriceFilter?,
+                        priceFilter: PriceFilter?,
                         betActionRepository: BetActionRepository,
                         actionListeners: List<BetActionListener>,
                         bettingConf: BettingConf,

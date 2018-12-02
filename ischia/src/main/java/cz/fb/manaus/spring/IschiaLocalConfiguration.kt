@@ -4,15 +4,17 @@ import cz.fb.manaus.ischia.filter.MarketTypeFilter
 import cz.fb.manaus.ischia.filter.moneyLineLoserFilter
 import cz.fb.manaus.ischia.filter.runnerNameFilter
 import cz.fb.manaus.reactor.betting.listener.FlowFilter
+import cz.fb.manaus.reactor.price.PriceFilter
 import cz.fb.manaus.spring.conf.FilterConf
+import cz.fb.manaus.spring.conf.PriceConf
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.*
 
 @Configuration
 @Profile("ischia")
 @ComponentScan(value = ["cz.fb.manaus.ischia"])
-@Import(BetfairValues::class, MatchbookValues::class)
-@EnableConfigurationProperties(FilterConf::class)
+@Import(BetfairStrategyConfiguration::class, MatchbookStrategyConfiguration::class)
+@EnableConfigurationProperties(FilterConf::class, PriceConf::class)
 open class IschiaLocalConfiguration {
 
     @Bean
@@ -30,4 +32,11 @@ open class IschiaLocalConfiguration {
     open fun moneyLineLoserFilter(): FlowFilter {
         return moneyLineLoserFilter
     }
+
+    @Bean
+    @Primary
+    open fun abnormalPriceFilter(priceConf: PriceConf): PriceFilter {
+        return PriceFilter(3, priceConf.bulldoze, 1.03..100.0)
+    }
+
 }

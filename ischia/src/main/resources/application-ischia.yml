@@ -5,4 +5,6 @@ filter:
     - match_odds
     - rt_match_odds
     - moneyline
-
+price:
+    downgradeRate: 0.1
+    bulldoze: 10

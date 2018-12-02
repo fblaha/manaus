@@ -8,12 +8,7 @@ import org.springframework.context.annotation.Profile
 
 @Configuration
 @Profile("betfair")
-open class BetfairValues {
-
-    @Bean
-    open fun priceBulldoze(): Double {
-        return 50.0
-    }
+open class BetfairStrategyConfiguration {
 
     @Bean
     open fun downgradeStrategy(): (BetContext) -> Double {
@@ -24,5 +19,4 @@ open class BetfairValues {
     open fun minimizeChargeStrategy(): MinimizeChargeStrategy {
         return MinimizeChargeStrategy(0.01, 0.05, 0.06)
     }
-
 }

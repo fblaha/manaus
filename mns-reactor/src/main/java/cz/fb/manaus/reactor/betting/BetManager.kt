@@ -7,7 +7,7 @@ import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.reactor.betting.action.BetActionListener
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
-import cz.fb.manaus.reactor.price.AbstractPriceFilter
+import cz.fb.manaus.reactor.price.PriceFilter
 import cz.fb.manaus.reactor.price.getReciprocal
 import org.springframework.core.annotation.AnnotationAwareOrderComparator
 import java.time.Instant
@@ -16,7 +16,7 @@ import java.util.logging.Logger
 
 class BetManager(
         private val filterService: MarketFilterService,
-        private val priceFilter: AbstractPriceFilter?,
+        private val priceFilter: PriceFilter?,
         private val betActionRepository: BetActionRepository,
         private val actionListeners: List<BetActionListener>,
         private val disabledListeners: Set<String>,
@@ -87,7 +87,7 @@ class BetManager(
     companion object {
         fun create(betActionRepository: BetActionRepository,
                    filterService: MarketFilterService,
-                   priceFilter: AbstractPriceFilter?,
+                   priceFilter: PriceFilter?,
                    disabledListeners: Set<String>,
                    snapshotListeners: List<MarketSnapshotListener>?,
                    actionListeners: List<BetActionListener>): BetManager {

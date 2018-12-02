@@ -5,15 +5,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import java.util.logging.Logger
 import javax.annotation.PostConstruct
 
-@ConfigurationProperties("filter")
-data class FilterConf(var runnerName: String?,
-                      var marketTypes: List<String>?) {
+@ConfigurationProperties("price")
+data class PriceConf(var downgradeRate: Double = 0.0,
+                     var bulldoze: Double = 0.0) {
 
-    private val log = Logger.getLogger(FilterConf::class.java.simpleName)
+    private val log = Logger.getLogger(PriceConf::class.java.simpleName)
 
     @PostConstruct
     fun validate() {
         log.info("$this")
-        Preconditions.checkState(!marketTypes.isNullOrEmpty())
+        Preconditions.checkState(downgradeRate > 0.0)
     }
 }

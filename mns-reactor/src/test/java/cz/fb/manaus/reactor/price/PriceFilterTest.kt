@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 
 
-class TheAbstractPriceFilterTest : AbstractLocalTestCase() {
+class PriceFilterTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var filter: TestFilter
@@ -51,7 +51,7 @@ class TheAbstractPriceFilterTest : AbstractLocalTestCase() {
     }
 
     @Component
-    private class TestFilter : AbstractPriceFilter(1, -1.0, 0.0..100.0)
+    private class TestFilter : PriceFilter(1, -1.0, 0.0..100.0)
 
     companion object {
         val BACK1 = Price(1.96, 5.0, Side.BACK)
