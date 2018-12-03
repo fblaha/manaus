@@ -14,8 +14,9 @@ import java.time.Duration
 @BackLoserBet
 @Component
 @Profile(ManausProfiles.DB)
-class CompetitionUnprofitableCategoriesFilter : AbstractUnprofitableCategoriesRegistry("competition", Duration.ofDays(120), null, -30.0, PREFIX, mapOf(20 to 2, 15 to 2, 10 to 2)) {
-    companion object {
-        const val PREFIX = Category.MARKET_PREFIX + CompetitionCategorizer.PREFIX
-    }
-}
+class CompetitionUnprofitableCategoriesFilter : AbstractUnprofitableCategoriesRegistry(
+        name = "competition",
+        period = Duration.ofDays(120),
+        maximalProfit = -30.0,
+        filterPrefix = Category.MARKET_PREFIX + CompetitionCategorizer.PREFIX,
+        thresholds = mapOf(20 to 2, 15 to 2, 10 to 2))

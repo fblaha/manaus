@@ -34,7 +34,6 @@ class PriceFilterTest : AbstractLocalTestCase() {
         assertEquals(listOf(BACK1, BACK2, BACK3, LAY1, LAY2, LAY3), filter.getSignificantPrices(3, SAMPLE_PRICES))
     }
 
-
     @Test
     fun `best prices`() {
         val market = testFactory.newMarketPrices(0.15, listOf(0.5, 0.3, 0.2))
@@ -51,7 +50,8 @@ class PriceFilterTest : AbstractLocalTestCase() {
     }
 
     @Component
-    private class TestFilter : PriceFilter(1, -1.0, 0.0..100.0)
+    internal class TestFilter(priceBulldozer: PriceBulldozer) :
+            PriceFilter(1, -1.0, 0.0..100.0, priceBulldozer)
 
     companion object {
         val BACK1 = Price(1.96, 5.0, Side.BACK)

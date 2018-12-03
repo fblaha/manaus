@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile(ManausProfiles.DB)
-class BackLoserBettor @BackLoserBet @Autowired constructor(
-        validators: List<Validator>,
-        coordinator: BackLoserAdviser) : AbstractUpdatingBettor(Side.BACK, validators, coordinator)
+class BackLoserBettor @BackLoserBet @Autowired constructor(validators: List<Validator>, coordinator: BackLoserAdviser) :
+        AbstractUpdatingBettor(
+                side = Side.BACK,
+                validators = validators,
+                priceAdviser = coordinator)

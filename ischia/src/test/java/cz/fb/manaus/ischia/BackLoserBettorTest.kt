@@ -2,11 +2,16 @@ package cz.fb.manaus.ischia
 
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.AbstractBettorTest
+import cz.fb.manaus.reactor.price.PriceFilter
 import org.junit.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ActiveProfiles
 
 @ActiveProfiles("ischia")
 class BackLoserBettorTest : AbstractBettorTest<BackLoserBettor>() {
+
+    @Autowired
+    private lateinit var priceFilter: PriceFilter
 
     @Test
     fun `place bet - based on best price`() {

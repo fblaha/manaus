@@ -19,7 +19,7 @@ import java.util.logging.Logger
 abstract class AbstractUnprofitableCategoriesRegistry(
         private val name: String,
         private val period: Duration,
-        private val side: Side?,
+        private val side: Side? = null,
         private val maximalProfit: Double,
         private val filterPrefix: String,
         private val thresholds: Map<Int, Int>) {

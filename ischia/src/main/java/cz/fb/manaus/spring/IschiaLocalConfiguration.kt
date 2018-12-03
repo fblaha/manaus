@@ -4,6 +4,7 @@ import cz.fb.manaus.ischia.filter.MarketTypeFilter
 import cz.fb.manaus.ischia.filter.moneyLineLoserFilter
 import cz.fb.manaus.ischia.filter.runnerNameFilter
 import cz.fb.manaus.reactor.betting.listener.FlowFilter
+import cz.fb.manaus.reactor.price.PriceBulldozer
 import cz.fb.manaus.reactor.price.PriceFilter
 import cz.fb.manaus.spring.conf.FilterConf
 import cz.fb.manaus.spring.conf.PriceConf
@@ -35,8 +36,7 @@ open class IschiaLocalConfiguration {
 
     @Bean
     @Primary
-    open fun abnormalPriceFilter(priceConf: PriceConf): PriceFilter {
-        return PriceFilter(3, priceConf.bulldoze, 1.03..100.0)
+    open fun abnormalPriceFilter(priceConf: PriceConf, priceBulldozer: PriceBulldozer): PriceFilter {
+        return PriceFilter(3, priceConf.bulldoze, 1.03..100.0, priceBulldozer)
     }
-
 }
