@@ -6,7 +6,8 @@ import java.util.logging.Logger
 import javax.annotation.PostConstruct
 
 @ConfigurationProperties("price")
-data class PriceConf(var downgradeRate: Double = 0.0,
+data class PriceConf(var downgradeBackRate: Double = 0.0,
+                     var downgradeLayRate: Double = 0.0,
                      var bulldoze: Double = 0.0) {
 
     private val log = Logger.getLogger(PriceConf::class.java.simpleName)
@@ -14,6 +15,7 @@ data class PriceConf(var downgradeRate: Double = 0.0,
     @PostConstruct
     fun validate() {
         log.info("$this")
-        Preconditions.checkState(downgradeRate > 0.0)
+        Preconditions.checkState(downgradeBackRate > 0.0)
+        Preconditions.checkState(downgradeLayRate > 0.0)
     }
 }
