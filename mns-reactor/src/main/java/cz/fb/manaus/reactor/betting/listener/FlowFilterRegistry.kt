@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component
 class FlowFilterRegistry(flowFilters: List<FlowFilter>) {
 
     private val byMarketType: Map<String, FlowFilter>
-    private val defaultFilter: FlowFilter
 
     init {
         val m = mutableMapOf<String, FlowFilter>()
@@ -15,11 +14,11 @@ class FlowFilterRegistry(flowFilters: List<FlowFilter>) {
                 m[type] = flowFilter
             }
         }
-        defaultFilter = flowFilters.find { it.marketTypes.isEmpty() } ?: FlowFilter.ALLOW_ALL
-        byMarketType = m.toMap()
+        val defaultFilter = flowFilters.find { it.marketTypes.isEmpty() } ?: FlowFilter.ALLOW_ALL
+        byMarketType = m.toMap().withDefault { defaultFilter }
     }
 
     fun getFlowFilter(marketType: String): FlowFilter {
-        return byMarketType.getOrDefault(marketType, defaultFilter)
+        return byMarketType.getValue(marketType)
     }
 }

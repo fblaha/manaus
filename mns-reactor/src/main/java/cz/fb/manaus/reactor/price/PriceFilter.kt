@@ -12,11 +12,9 @@ open class PriceFilter(private val minCount: Int,
                        private val bulldozer: PriceBulldozer) {
 
     internal fun getSignificantPrices(minCount: Int, prices: List<Price>): List<Price> {
-        val bySide = prices.filter { this.priceRangeFilter(it) }.groupBy { it.side }
-        val sortedBack = bySide.getOrDefault(Side.BACK, emptyList())
-                .sortedWith(PriceComparator)
-        val sortedLay = bySide.getOrDefault(Side.LAY, emptyList())
-                .sortedWith(PriceComparator)
+        val bySide = prices.filter { this.priceRangeFilter(it) }.groupBy { it.side }.withDefault { emptyList() }
+        val sortedBack = bySide.getValue(Side.BACK).sortedWith(PriceComparator)
+        val sortedLay = bySide.getValue(Side.LAY).sortedWith(PriceComparator)
         val bulldozedBack = bulldozer.bulldoze(bulldozeThreshold, sortedBack)
         val bulldozedLay = bulldozer.bulldoze(bulldozeThreshold, sortedLay)
         val topBack = bulldozedBack.take(minCount)

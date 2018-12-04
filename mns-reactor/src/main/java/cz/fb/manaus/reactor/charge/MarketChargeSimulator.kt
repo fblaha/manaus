@@ -14,6 +14,7 @@ class MarketChargeSimulator {
                       probabilities: Map<Long, Double>,
                       bets: Map<Long, List<Price>>): Double {
 
+        val defaultBets = bets.withDefault { emptyList() }
         val selections = probabilities.keys
         val winnerPowerSet = getWinnersPowerSet(winnerCount, selections)
         var chargeMean = 0.0
@@ -22,7 +23,7 @@ class MarketChargeSimulator {
             var profit = 0.0
             for (selection in selections) {
                 val isWinner = selection in winners
-                val selectionBets = bets.getOrDefault(selection, emptyList())
+                val selectionBets = defaultBets.getValue(selection)
                 profit += if (isWinner)
                     selectionBets.map { this.profitWinner(it) }.sum()
                 else
