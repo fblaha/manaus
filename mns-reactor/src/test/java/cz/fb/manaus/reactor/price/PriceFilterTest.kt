@@ -4,18 +4,24 @@ import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
+import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 
 
 class PriceFilterTest : AbstractLocalTestCase() {
 
-    @Autowired
-    private lateinit var filter: TestFilter
+    private lateinit var filter: PriceFilter
     @Autowired
     private lateinit var testFactory: ReactorTestFactory
+    @Autowired
+    private lateinit var priceBulldozer: PriceBulldozer
+
+    @Before
+    fun setUp() {
+        filter = PriceFilter(1, -1.0, 0.0..100.0, priceBulldozer)
+    }
 
     @Test
     fun `significant prices size`() {
@@ -48,10 +54,6 @@ class PriceFilterTest : AbstractLocalTestCase() {
             assertEquals(bestLay, bySide[Side.LAY])
         }
     }
-
-    @Component
-    internal class TestFilter(priceBulldozer: PriceBulldozer) :
-            PriceFilter(1, -1.0, 0.0..100.0, priceBulldozer)
 
     companion object {
         val BACK1 = Price(1.96, 5.0, Side.BACK)

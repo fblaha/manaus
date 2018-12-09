@@ -35,7 +35,6 @@ open class IschiaLocalConfiguration {
     }
 
     @Bean
-    @Primary
     open fun abnormalPriceFilter(priceConf: PriceConf, priceBulldozer: PriceBulldozer): PriceFilter {
         return PriceFilter(3, priceConf.bulldoze, 1.03..100.0, priceBulldozer)
     }
