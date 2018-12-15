@@ -26,8 +26,7 @@ open class ReactorDatabaseConfiguration {
                         betActionRepository: BetActionRepository,
                         actionListeners: List<BetActionListener>,
                         bettingConf: BettingConf,
-            // TODO not nullalble
-                        snapshotListeners: List<MarketSnapshotListener>?): BetManager {
+                        snapshotListeners: List<MarketSnapshotListener>): BetManager {
         val disabledListeners = bettingConf.disabledListeners.toSet()
         return BetManager.create(betActionRepository, filterService, priceFilter,
                 disabledListeners, snapshotListeners, actionListeners)

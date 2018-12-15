@@ -89,12 +89,11 @@ class BetManager(
                    filterService: MarketFilterService,
                    priceFilter: PriceFilter?,
                    disabledListeners: Set<String>,
-                   snapshotListeners: List<MarketSnapshotListener>?,
+                   snapshotListeners: List<MarketSnapshotListener>,
                    actionListeners: List<BetActionListener>): BetManager {
 
-            val listeners = snapshotListeners ?: emptyList()
             val sortedSnapshotListeners: List<MarketSnapshotListener> =
-                    listeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
+                    snapshotListeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
 
             return BetManager(filterService,
                     priceFilter,
