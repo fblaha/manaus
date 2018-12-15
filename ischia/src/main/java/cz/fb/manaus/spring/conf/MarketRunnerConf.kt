@@ -5,15 +5,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import java.util.logging.Logger
 import javax.annotation.PostConstruct
 
-@ConfigurationProperties("filter")
-data class FilterConf(var runnerName: String?,
-                      var marketTypes: List<String>?) {
+@ConfigurationProperties("market-runner")
+data class MarketRunnerConf(var runnerName: String?,
+                            var types: List<String>?) {
 
-    private val log = Logger.getLogger(FilterConf::class.java.simpleName)
+    private val log = Logger.getLogger(MarketRunnerConf::class.java.simpleName)
 
     @PostConstruct
     fun validate() {
         log.info("$this")
-        Preconditions.checkState(!marketTypes.isNullOrEmpty())
+        Preconditions.checkState(!types.isNullOrEmpty())
     }
 }

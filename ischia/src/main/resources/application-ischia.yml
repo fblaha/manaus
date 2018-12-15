@@ -1,11 +1,14 @@
-filter:
+market-runner:
   runnerName:
-  marketTypes:
+  types:
     - three_way
     - match_odds
     - rt_match_odds
     - moneyline
 price:
-    downgradeBackRate: 0.1
-    downgradeLayRate: 0.1
-    bulldoze: 10
+  downgradeBackRate: 0.1
+  downgradeLayRate: 0.1
+  bulldoze: 10
+  limit: 3
+  min: 1.0
+  max: 1000

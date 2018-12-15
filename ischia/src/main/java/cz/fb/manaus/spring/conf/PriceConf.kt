@@ -8,7 +8,10 @@ import javax.annotation.PostConstruct
 @ConfigurationProperties("price")
 data class PriceConf(var downgradeBackRate: Double = 0.0,
                      var downgradeLayRate: Double = 0.0,
-                     var bulldoze: Double = 0.0) {
+                     var bulldoze: Double = 0.0,
+                     var min: Double = 0.0,
+                     var max: Double = 0.0,
+                     var limit: Int = 0) {
 
     private val log = Logger.getLogger(PriceConf::class.java.simpleName)
 
@@ -17,5 +20,8 @@ data class PriceConf(var downgradeBackRate: Double = 0.0,
         log.info("$this")
         Preconditions.checkState(downgradeBackRate > 0.0)
         Preconditions.checkState(downgradeLayRate > 0.0)
+        Preconditions.checkState(min >= 1.0)
+        Preconditions.checkState(max > 1.0)
+        Preconditions.checkState(limit > 0)
     }
 }
