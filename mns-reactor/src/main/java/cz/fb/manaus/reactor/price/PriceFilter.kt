@@ -12,10 +12,10 @@ class PriceFilter(private val limit: Int,
 
     internal fun getSignificantPrices(limit: Int, prices: List<Price>): List<Price> {
         val (back, lay) = prices.filter { it.price in this.priceRange }.partition { it.side == Side.BACK }
-        return filter(back, limit) + filter(lay, limit)
+        return filter(limit, back) + filter(limit, lay)
     }
 
-    private fun filter(prices: List<Price>, limit: Int): List<Price> {
+    private fun filter(limit: Int, prices: List<Price>): List<Price> {
         val sorted = prices.sortedWith(PriceComparator)
         return bulldozer.bulldoze(bulldozeThreshold, sorted).take(limit)
     }
