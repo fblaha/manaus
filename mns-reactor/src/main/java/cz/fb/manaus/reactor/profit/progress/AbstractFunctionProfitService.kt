@@ -10,7 +10,6 @@ import cz.fb.manaus.reactor.profit.ProfitService
 import cz.fb.manaus.reactor.profit.progress.function.ProgressFunction
 import org.apache.commons.math3.util.Precision
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.Objects.requireNonNull
 
 abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) {
     private val functions: Map<String, ProgressFunction> = functions.map { it.name to it }.toMap()
@@ -24,25 +23,18 @@ abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) 
 
     protected fun getProfitRecords(calculator: FunctionProfitRecordCalculator, bets: List<RealizedBet>,
                                    chargeRate: Double, funcName: String?, projection: String?): List<ProfitRecord> {
-        var filtered = bets
-        val charges = profitPlugin.getCharges(filtered, chargeRate)
-        val coverage = BetCoverage.from(filtered)
+        val charges = profitPlugin.getCharges(bets, chargeRate)
+        val coverage = BetCoverage.from(bets)
 
-        if (projection != null) {
-            filtered = categoryService.filterBets(filtered, projection, coverage)
-        }
+        val filtered = if (projection != null) categoryService.filterBets(bets, projection, coverage) else bets
 
-        val profitRecords = mutableListOf<ProfitRecord>()
-        for (function in getProgressFunctions(funcName)) {
-            profitRecords.addAll(calculator.getProfitRecords(function, filtered, coverage, charges))
-        }
-        return profitRecords
+        return getProgressFunctions(funcName)
+                .flatMap { calculator.getProfitRecords(it, filtered, coverage, charges) }
     }
 
     private fun getProgressFunctions(funcName: String?): Iterable<ProgressFunction> {
         return if (funcName != null) {
-            listOf(requireNonNull<ProgressFunction>(functions[funcName],
-                    String.format("No such function '%s'", funcName)))
+            listOf(functions[funcName]!!)
         } else {
             functions.values.sortedBy { it.name }
         }

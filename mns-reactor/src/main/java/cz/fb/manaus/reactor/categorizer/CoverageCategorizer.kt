@@ -21,11 +21,7 @@ class CoverageCategorizer : RealizedBetCategorizer {
         val selectionId = realizedBet.settledBet.selectionId
         val sides = coverage.getSides(marketId, selectionId)
         Preconditions.checkState(sides.isNotEmpty())
-        val builder = mutableMapOf<Side, Double>()
-        for (side in sides) {
-            builder[side] = coverage.getAmount(marketId, selectionId, side)
-        }
-        val amounts = builder.toMap()
+        val amounts = sides.map { it to coverage.getAmount(marketId, selectionId, it) }.toMap()
         return getCategories(realizedBet.settledBet.price.side, amounts)
     }
 

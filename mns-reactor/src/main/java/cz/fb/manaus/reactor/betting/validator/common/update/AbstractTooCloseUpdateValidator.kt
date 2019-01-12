@@ -18,16 +18,13 @@ abstract class AbstractTooCloseUpdateValidator(private val closeSteps: Set<Int>)
         val oldOne = context.oldBet!!.requestedPrice.price
         val newOne = context.newPrice!!.price
         if (Price.priceEq(newOne, oldOne)) return ValidationResult.REJECT
-        for (step in closeSteps) {
-            Preconditions.checkArgument(step != 0)
-            val closePrice: Double? = when {
-                step > 0 -> roundingService.increment(oldOne, step)
-                else -> roundingService.decrement(oldOne, -step)
-            }
-            if (closePrice != null && Price.priceEq(newOne, closePrice))
-                return ValidationResult.REJECT
-        }
-        return ValidationResult.ACCEPT
+        val containsEqualPrice = closeSteps
+                .onEach { Preconditions.checkArgument(it != 0) }
+                .mapNotNull {
+                    if (it > 0) roundingService.increment(oldOne, it)
+                    else roundingService.decrement(oldOne, -it)
+                }.any { Price.priceEq(newOne, it) }
+        return ValidationResult.of(!containsEqualPrice)
     }
 
 }

@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.profit.progress
 
-import com.google.common.collect.Lists
 import com.google.common.math.IntMath
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.model.ProfitRecord
@@ -41,7 +40,7 @@ class ProgressProfitService(functions: List<ProgressFunction>) : AbstractFunctio
 
         if (sortedCopy.isEmpty()) return emptyList()
 
-        val chunks = Lists.partition<Pair<RealizedBet, Double?>>(sortedCopy, chunkSize)
+        val chunks = sortedCopy.chunked(chunkSize)
 
         val result = chunks
                 .map { chunk -> computeChunkRecord(function.name, chunk, charges, coverage) }

@@ -24,11 +24,7 @@ open class ProposerCategorizer : RealizedBetCategorizer {
 
     override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
         val proposers = getProposers(realizedBet)
-        val builder = mutableSetOf<String>()
         val side = realizedBet.settledBet.price.side
-        for (proposer in proposers) {
-            builder.add(getSideAware("proposer_", side, proposer))
-        }
-        return builder.toSet()
+        return proposers.map { getSideAware("proposer_", side, it) }.toSet()
     }
 }
