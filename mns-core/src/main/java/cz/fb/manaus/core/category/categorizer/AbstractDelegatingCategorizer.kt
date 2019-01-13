@@ -20,6 +20,6 @@ abstract class AbstractDelegatingCategorizer(private val prefix: String) : Reali
 
     private fun getPrefixedCategories(market: Market): Set<String> {
         val categories = getCategoryRaw(market) ?: return emptySet()
-        return categories.map { input -> Category.MARKET_PREFIX + prefix + input }.toSet()
+        return categories.map { Category.MARKET_PREFIX + prefix + it }.toSet()
     }
 }

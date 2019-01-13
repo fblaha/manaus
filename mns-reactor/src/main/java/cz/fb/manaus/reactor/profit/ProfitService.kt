@@ -30,7 +30,7 @@ class ProfitService(private val categoryService: CategoryService,
     private fun mergeProfitRecords(records: Collection<ProfitRecord>): List<ProfitRecord> {
         val categories = records.groupBy { it.category }
         return categories.entries
-                .map { e -> mergeCategory(e.key, e.value) }
+                .map { mergeCategory(it.key, it.value) }
                 .sortedBy { it.category }
     }
 
@@ -47,7 +47,7 @@ class ProfitService(private val categoryService: CategoryService,
         val coverCount = records.map { it.coverCount }.sum()
         val result = ProfitRecord(category, theoreticalProfit, avgPrice, charge, layCount, backCount)
         if (coverCount > 0) {
-            val diff = records.filter { profitRecord -> profitRecord.coverDiff != null }.mapNotNull { it.coverDiff }.average()
+            val diff = records.filter { it.coverDiff != null }.mapNotNull { it.coverDiff }.average()
             result.coverDiff = diff
             result.coverCount = coverCount
         }
@@ -58,10 +58,10 @@ class ProfitService(private val categoryService: CategoryService,
                                      charges: Map<String, Double>, coverage: BetCoverage): List<ProfitRecord> {
         return bets.flatMap { bet ->
             val categories = categoryService.getRealizedBetCategories(bet, simulationAwareOnly, coverage)
-            categories.map { category ->
+            categories.map {
                 val charge = charges[bet.settledBet.id]!!
                 Preconditions.checkState(charge >= 0, charge)
-                toProfitRecord(bet, category, charge, coverage)
+                toProfitRecord(bet, it, charge, coverage)
             }
         }
     }

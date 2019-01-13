@@ -34,12 +34,17 @@ class ReactorTestFactory(
 
     fun newBetContext(side: Side, marketPrices: List<RunnerPrices>, oldBet: Bet?): BetContext {
         val fairness = Fairness(0.9, 1.1)
-
-        val bets = mutableListOf<Bet>()
-        oldBet?.let { bet -> bets.add(bet) }
-        val snapshot = MarketSnapshot.from(marketPrices, market, bets)
-
-        return contextFactory.create(side, SEL_HOME, snapshot, fairness)
+        val snapshot = MarketSnapshot.from(
+                runnerPrices = marketPrices,
+                market = market,
+                currentBets = oldBet?.let { listOf(it) }.orEmpty()
+        )
+        return contextFactory.create(
+                side = side,
+                selectionId = SEL_HOME,
+                snapshot = snapshot,
+                fairness = fairness
+        )
     }
 
     fun newBetContext(side: Side, bestBack: Double, bestLay: Double): BetContext {

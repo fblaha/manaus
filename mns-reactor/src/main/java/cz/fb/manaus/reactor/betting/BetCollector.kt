@@ -54,10 +54,10 @@ class BetCollector {
     fun findBet(marketId: String, selId: Long, side: Side): Bet? {
         val placeOrUpdate = (toPlace + toUpdate).map { it.bet }
 
-        return (placeOrUpdate + toCancel).find { bet ->
-            bet.marketId == marketId
-                    && bet.selectionId == selId
-                    && bet.requestedPrice.side === side
+        return (placeOrUpdate + toCancel).find {
+            it.marketId == marketId
+                    && it.selectionId == selId
+                    && it.requestedPrice.side === side
         }
     }
 }

@@ -30,7 +30,7 @@ class MaintenanceController(private val metricRegistry: MetricRegistry,
     @RequestMapping(value = ["/maintenance/{name}"], method = [RequestMethod.POST])
     fun runTask(@PathVariable name: String): ResponseEntity<*> {
         metricRegistry.counter("maintenance.$name").inc()
-        val task = tasks.find { t -> name == t.name }
+        val task = tasks.find { name == it.name }
         val update = task?.execute()
         return if (update == null) {
             ResponseEntity.notFound().build<ConfigUpdate>()

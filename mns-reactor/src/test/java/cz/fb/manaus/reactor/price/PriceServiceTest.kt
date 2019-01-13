@@ -92,17 +92,17 @@ class PriceServiceTest : AbstractLocalTestCase() {
 
     @Test
     fun `overround fair price 2 runners - generated`() {
-        (1..9).forEach { i -> checkFairPrices(1, 1.9, 1.0 + i * 0.1) }
+        (1..9).forEach { checkFairPrices(1, 1.9, 1.0 + it * 0.1) }
     }
 
     @Test
     fun `overround fair price 3 runners - generated`() {
-        (1..19).forEach { i ->
-            val price = 1.0 + i * 0.1
+        (1..19).forEach {
+            val price = 1.0 + it * 0.1
             checkFairPrices(1, 2.8, 2.8, price)
         }
-        (1..19).forEach { i ->
-            val price = 1.0 + i * 0.1
+        (1..19).forEach {
+            val price = 1.0 + it * 0.1
             checkFairPrices(1, 2.8, 1.5, price)
         }
     }
@@ -135,19 +135,18 @@ class PriceServiceTest : AbstractLocalTestCase() {
         val fairness = getFairness(Side.BACK, marketPrices)
         assertTrue(overround > 1)
 
-        val overroundPrices = unfairPrices
-                .map { price ->
-                    val fair = priceService.getOverroundFairPrice(price, overround,
-                            unfairPrices.size)
-                    assertTrue(price < fair)
-                    fair
-                }
+        val overroundPrices = unfairPrices.map {
+            val fair = priceService.getOverroundFairPrice(it, overround,
+                    unfairPrices.size)
+            assertTrue(it < fair)
+            fair
+        }
 
         checkOverroundUnfairPrices(reciprocal, winnerCount, Doubles.asList(*unfairPrices), overroundPrices)
 
-        val fairnessPrices = unfairPrices.map { price ->
-            val fair = priceService.getFairnessFairPrice(price, fairness)
-            assertTrue(price < fair)
+        val fairnessPrices = unfairPrices.map {
+            val fair = priceService.getFairnessFairPrice(it, fairness)
+            assertTrue(it < fair)
             fair
         }
 

@@ -57,8 +57,8 @@ abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) 
 
     protected fun computeFunctionRecord(category: String, bets: List<RealizedBet>,
                                         charges: Map<String, Double>, coverage: BetCoverage): ProfitRecord {
-        val chunkRecords = bets.map { bet ->
-            profitService.toProfitRecord(bet, category, charges[bet.settledBet.id]!!, coverage)
+        val chunkRecords = bets.map {
+            profitService.toProfitRecord(it, category, charges[it.settledBet.id]!!, coverage)
         }
         return profitService.mergeCategory(category, chunkRecords)
     }
