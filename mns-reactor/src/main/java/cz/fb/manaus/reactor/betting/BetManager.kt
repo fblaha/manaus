@@ -40,11 +40,9 @@ class BetManager(
             val unknownBets = BetUtils.getUnknownBets(snapshot.currentBets, myBets)
             unknownBets.forEach { bet -> log.log(Level.WARNING, "unknown bet ''{0}''", bet) }
             if (unknownBets.isEmpty()) {
-                for (listener in sortedSnapshotListeners) {
-                    if (listener.javaClass.simpleName !in disabledListeners) {
-                        listener.onMarketSnapshot(snapshot, collector, accountMoney, categoryBlacklist)
-                    }
-                }
+                sortedSnapshotListeners
+                        .filter { it.javaClass.simpleName !in disabledListeners }
+                        .forEach { it.onMarketSnapshot(snapshot, collector, accountMoney, categoryBlacklist) }
                 saveActions(collector.getToPlace())
                 saveActions(collector.getToUpdate())
             }

@@ -8,14 +8,9 @@ class FlowFilterRegistry(flowFilters: List<FlowFilter>) {
     private val byMarketType: Map<String, FlowFilter>
 
     init {
-        val m = mutableMapOf<String, FlowFilter>()
-        for (flowFilter in flowFilters) {
-            for (type in flowFilter.marketTypes) {
-                m[type] = flowFilter
-            }
-        }
+        val m = flowFilters.flatMap { it.marketTypes.map { type -> type to it } }.toMap()
         val defaultFilter = flowFilters.find { it.marketTypes.isEmpty() } ?: FlowFilter.ALLOW_ALL
-        byMarketType = m.toMap().withDefault { defaultFilter }
+        byMarketType = m.withDefault { defaultFilter }
     }
 
     fun getFlowFilter(marketType: String): FlowFilter {

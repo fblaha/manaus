@@ -17,9 +17,7 @@ class UnprofitableCategoriesRefresher(private val unprofitableCategoriesRegistri
 
     override fun execute(): ConfigUpdate {
         val configUpdate = ConfigUpdate.empty(Duration.ofDays(1))
-        for (registry in unprofitableCategoriesRegistries) {
-            registry.updateBlacklists(configUpdate)
-        }
+        unprofitableCategoriesRegistries.forEach { it.updateBlacklists(configUpdate) }
         return configUpdate
     }
 

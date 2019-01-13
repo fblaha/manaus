@@ -33,12 +33,7 @@ class RelatedActionsCategorizer(
             return emptySet()
         }
         val current = BetUtils.getCurrentActions(betActions)
-        val result = mutableSetOf<String>()
-        for (categorizer in relatedActionsAwareCategorizers) {
-            val partial = categorizer.getCategories(current, market)
-            result.addAll(partial)
-        }
-        return result
+        return relatedActionsAwareCategorizers.flatMap { it.getCategories(current, market) }.toSet()
     }
 }
 

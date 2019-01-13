@@ -29,9 +29,7 @@ abstract class AbstractControllerTest : AbstractDatabaseTestCase() {
                 .andExpect(status().isOk)
                 .andReturn()
         val content = result.response.contentAsString
-        for (substring in substrings) {
-            assertTrue(substring in content)
-        }
+        substrings.forEach { assertTrue(it in content) }
     }
 
     @Before

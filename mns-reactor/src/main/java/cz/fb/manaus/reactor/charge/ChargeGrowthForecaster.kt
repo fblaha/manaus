@@ -18,15 +18,13 @@ class ChargeGrowthForecaster(
         private val amountAdviser: AmountAdviser,
         private val exchangeProvider: ExchangeProvider) {
 
-    private fun convertBetData(currentBets: List<Bet>): MutableMap<Long, MutableList<Price>> {
-        val bets = mutableMapOf<Long, MutableList<Price>>()
-        for (bet in currentBets) {
-            val price = bet.requestedPrice.price
-            val matchedAmount = bet.matchedAmount
-            val side = bet.requestedPrice.side
-            bets.getOrPut(bet.selectionId) { mutableListOf() }.add(Price(price, matchedAmount, side))
-        }
-        return bets
+    private fun convertBetData(currentBets: List<Bet>): Map<Long, List<Price>> {
+        return currentBets.groupBy({ it.selectionId }, {
+            val price = it.requestedPrice.price
+            val matchedAmount = it.matchedAmount
+            val side = it.requestedPrice.side
+            Price(price, matchedAmount, side)
+        })
     }
 
     fun getForecast(selectionId: Long,
@@ -41,7 +39,7 @@ class ChargeGrowthForecaster(
                 val probabilities = probabilityCalculator.fromFairness(
                         sideFairness, fairnessSide, snapshot.runnerPrices)
                 val marketPrices = snapshot.runnerPrices
-                val bets = convertBetData(snapshot.currentBets)
+                val bets = convertBetData(snapshot.currentBets).toMutableMap()
                 val runnerPrices = getRunnerPrices(marketPrices, selectionId)
                 val oldCharge = simulator.getChargeMean(
                         winnerCount = 1,
@@ -53,7 +51,8 @@ class ChargeGrowthForecaster(
                 if (bestPrice != null) {
                     val price = bestPrice.price
                     val amount = amountAdviser.amount
-                    bets.getOrPut(selectionId) { mutableListOf() }.add(Price(price, amount, betSide))
+                    val selBets = bets[selectionId] ?: emptyList()
+                    bets[selectionId] = selBets + listOf(Price(price, amount, betSide))
                     val newCharge = simulator.getChargeMean(
                             winnerCount = 1,
                             chargeRate = exchangeProvider.chargeRate,

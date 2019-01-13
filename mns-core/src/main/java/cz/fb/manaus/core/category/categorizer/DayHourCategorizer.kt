@@ -15,11 +15,7 @@ class DayHourCategorizer : AbstractDelegatingCategorizer("dayHour_") {
         val startTime = Calendar.getInstance()
         startTime.time = Date.from(market.event.openDate)
         val hour = startTime.get(Calendar.HOUR_OF_DAY)
-        for (range in ranges) {
-            if (hour in range) {
-                return setOf(range.start.toString() + "_" + range.endInclusive)
-            }
-        }
-        throw IllegalStateException()
+        val range = ranges.first { hour in it }
+        return setOf(range.start.toString() + "_" + range.endInclusive)
     }
 }
