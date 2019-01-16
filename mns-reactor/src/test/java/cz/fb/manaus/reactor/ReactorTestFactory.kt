@@ -52,15 +52,14 @@ class ReactorTestFactory(
         val runnerPrices = marketPrices.first()
         val selectionId = runnerPrices.selectionId
         val bestPrice = runnerPrices.getHomogeneous(side.opposite).bestPrice
-        val bets = mutableListOf<Bet>()
-        if (bestPrice != null) {
+        val bets = if (bestPrice != null) {
             val marketId = "marketId"
             val price = bestPrice.price
             val requestedPrice = Price(price, provider.minAmount, side.opposite)
             val date = Instant.now().minus(2, ChronoUnit.HOURS)
             val counterBet = Bet("1", marketId, selectionId, requestedPrice, date, provider.minAmount)
-            bets.add(counterBet)
-        }
+            listOf(counterBet)
+        } else emptyList()
         val snapshot = MarketSnapshot.from(marketPrices, market, bets)
         return contextFactory.create(side, selectionId, snapshot,
                 calculator.getFairness(marketPrices))
