@@ -69,14 +69,17 @@ class ReactorTestFactory(
         val lastMatched = lastMatchedPrice ?: roundingService.roundBet((bestBack + bestLay) / 2)!!
         val backBestPrice = Price(bestBack, 100.0, Side.BACK)
         val layBestPrice = Price(bestLay, 100.0, Side.LAY)
-        return RunnerPrices(selectionId, listOf(
-                backBestPrice,
-                layBestPrice,
-                roundingService.decrement(backBestPrice, 1)!!,
-                roundingService.decrement(backBestPrice, 2)!!,
-                roundingService.increment(layBestPrice, 1)!!,
-                roundingService.increment(layBestPrice, 2)!!),
-                lastMatchedPrice, lastMatched)
+        return RunnerPrices(
+                selectionId = selectionId,
+                prices = listOf(
+                        backBestPrice,
+                        layBestPrice,
+                        roundingService.decrement(backBestPrice, 1)!!,
+                        roundingService.decrement(backBestPrice, 2)!!,
+                        roundingService.increment(layBestPrice, 1)!!,
+                        roundingService.increment(layBestPrice, 2)!!),
+                lastMatchedPrice = lastMatchedPrice,
+                matchedAmount = lastMatched)
     }
 
     fun newMarketPrices(betBack: Double, bestLay: Double, lastMatched: Double? = null): List<RunnerPrices> {

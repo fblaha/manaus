@@ -36,9 +36,7 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDatabase
         val result = check(marketPrices, listOf(), expectedCount, 0)
         val toPlace = result.getToPlace()
         if (expectedPrice != null) {
-            for (command in toPlace) {
-                assertEquals(expectedPrice, command.bet.requestedPrice.price)
-            }
+            toPlace.forEach { assertEquals(expectedPrice, it.bet.requestedPrice.price) }
         }
         return result
     }

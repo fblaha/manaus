@@ -21,18 +21,15 @@ class MinimizeChargeStrategy(internal val fairnessReductionLow: Double, private 
     private fun getRawRate(context: BetContext): Double {
         val growthForecast = context.chargeGrowthForecast
         val upper = getUpperBoundary(context.side)
-        if (growthForecast != null) {
-            if (Doubles.isFinite(growthForecast)) {
-                setActionProperty(context, growthForecast)
-                val result = Math.min(upper, upper * growthForecast)
-                return Math.max(fairnessReductionLow, result)
-            }
-        }
-        return upper
+        return if (growthForecast != null && Doubles.isFinite(growthForecast)) {
+            setActionProperty(context, growthForecast)
+            val result = Math.min(upper, upper * growthForecast)
+            Math.max(fairnessReductionLow, result)
+        } else upper
     }
 
     private fun setActionProperty(context: BetContext, growth: Double) {
         val rounded = Precision.round(growth, 4)
-        context.properties["chargeGrowth"] = java.lang.Double.toString(rounded)
+        context.properties["chargeGrowth"] = rounded.toString()
     }
 }

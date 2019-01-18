@@ -49,10 +49,9 @@ class CoverageFunctionProfitService(functions: List<ProgressFunction>) : Abstrac
 
     private fun getAverage(bets: List<RealizedBet>, function: ProgressFunction): Double? {
         return if (bets.isEmpty())
-            return null
+            null
         else
-            bets.mapNotNull { function(it) }
-                    .average()
+            bets.mapNotNull { function(it) }.average()
     }
 
 }
