@@ -121,7 +121,7 @@ class End2EndTest : AbstractControllerTest() {
             assertNull(it.betId)
             assertEquals(3, it.runnerPrices.size)
             assertEquals(BetActionType.PLACE, it.betActionType)
-            assertTrue { it.properties.isNotEmpty() }
+            assertTrue { it.proposers.isNotEmpty() }
         }
     }
 

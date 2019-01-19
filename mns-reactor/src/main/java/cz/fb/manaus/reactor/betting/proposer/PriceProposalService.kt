@@ -4,16 +4,13 @@ import com.google.common.base.Preconditions
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetContext
-import cz.fb.manaus.reactor.price.PriceService
-import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.stereotype.Service
 
 @Service
-class PriceProposalService(private val roundingService: RoundingService,
-                           private val priceService: PriceService) {
+class PriceProposalService {
 
-    fun reducePrices(context: BetContext, proposers: List<PriceProposer>, side: Side): ProposedPrice {
-        val prices = mutableListOf<ProposedPrice>()
+    fun reducePrices(context: BetContext, proposers: List<PriceProposer>): ProposedPrice<Double> {
+        val prices = mutableListOf<ProposedPrice<Double>>()
         Preconditions.checkState(!proposers.isEmpty())
         for (proposer in proposers) {
             val proposedPrice = proposer.getProposedPrice(context)
@@ -21,14 +18,14 @@ class PriceProposalService(private val roundingService: RoundingService,
                 Preconditions.checkState(proposedPrice != null, proposer.javaClass)
             }
             if (proposedPrice != null) {
-                prices.add(ProposedPrice(proposedPrice, proposer.name))
+                prices.add(ProposedPrice(proposedPrice, setOf(proposer.name)))
             }
         }
-        return reduce(side, prices)
+        return reduce(context.side, prices)
     }
 
-    private fun reduce(side: Side, values: List<ProposedPrice>): ProposedPrice {
-        val result: ProposedPrice = if (side === Side.BACK) {
+    private fun reduce(side: Side, values: List<ProposedPrice<Double>>): ProposedPrice<Double> {
+        val result: ProposedPrice<Double> = if (side === Side.BACK) {
             values.maxBy { it.price }!!
         } else {
             values.minBy { it.price }!!

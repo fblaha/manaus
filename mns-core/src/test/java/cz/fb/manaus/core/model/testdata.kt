@@ -50,7 +50,7 @@ val betAction = BetAction(
         betActionType = BetActionType.PLACE,
         runnerPrices = runnerPrices,
         price = Price(3.0, 3.0, Side.BACK),
-        properties = mapOf("x" to "y")
+        proposers = setOf("bestPrice")
 )
 
 val market = Market(id = "2",

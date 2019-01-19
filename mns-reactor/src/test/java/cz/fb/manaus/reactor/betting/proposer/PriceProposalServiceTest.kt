@@ -29,12 +29,11 @@ class PriceProposalServiceTest : AbstractLocalTestCase() {
                 return null
             }
         }
-        service.reducePrices(homeContext.copy(), listOf(proposer), Side.LAY)
+        service.reducePrices(homeContext.copy(side = Side.LAY), listOf(proposer))
     }
 
     private fun checkProposal(expectedPrice: Double, side: Side, proposers: List<PriceProposer>) {
-        val context: BetContext = homeContext.copy()
-        val price = service.reducePrices(context, proposers, side).price
+        val price = service.reducePrices(homeContext.copy(side = side), proposers).price
         assertEquals(expectedPrice, price)
     }
 

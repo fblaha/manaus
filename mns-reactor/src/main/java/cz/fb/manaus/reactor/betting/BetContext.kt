@@ -16,11 +16,8 @@ data class BetContext(
         val fairness: Fairness,
         val actualTradedVolume: TradedVolume?
 ) {
-
     val runnerPrices: RunnerPrices
         get() = marketPrices.first { it.selectionId == selectionId }
-
-    val properties: MutableMap<String, String> = mutableMapOf()
 
     val oldBet: Bet? = coverage[SideSelection(side, selectionId)]
 
@@ -30,6 +27,8 @@ data class BetContext(
         get() {
             return counterBet?.isHalfMatched ?: false
         }
+
+    var proposers: Set<String> = emptySet()
 
     var newPrice: Price? = null
         set(value) {
@@ -57,8 +56,9 @@ data class BetContext(
                 time = Instant.now(),
                 marketId = market.id,
                 runnerPrices = marketPrices,
-                properties = properties,
-                betActionType = type)
+                betActionType = type,
+                chargeGrowth = chargeGrowthForecast,
+                proposers = proposers)
     }
 
     // TODO not used

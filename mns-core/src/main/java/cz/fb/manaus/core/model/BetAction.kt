@@ -19,10 +19,6 @@ data class BetAction(
         val selectionId: Long,
         val betId: String? = null,
         val runnerPrices: List<RunnerPrices>,
-        val properties: Map<String, String>
-) {
-    companion object {
-        const val TRADED_VOL_MEAN = "tradedVolumeMean"
-        const val PROPOSER_PROP = "proposer"
-    }
-}
+        val chargeGrowth: Double? = null,
+        val proposers: Set<String> = emptySet()
+)

@@ -1,7 +1,5 @@
 package cz.fb.manaus.reactor.betting.proposer
 
-import com.google.common.base.Joiner
-import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.reactor.betting.AmountAdviser
@@ -26,28 +24,21 @@ open class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAd
 
     private val log = Logger.getLogger(ProposerAdviser::class.java.simpleName)
 
-    override fun getNewPrice(betContext: BetContext): Price? {
-        val proposedPrice = reducePrices(betContext)
-        return if (proposedPrice != null) {
+    override fun getNewPrice(betContext: BetContext): ProposedPrice<Price>? {
+        val proposedPrice = proposalService.reducePrices(betContext, proposers)
+        val roundedPrice = roundingService.roundBet(proposedPrice.price)
+
+        return if (roundedPrice != null) {
             var amount = adviser.amount
             val counterBet = betContext.counterBet
             if (counterBet != null && counterBet.matchedAmount > 0) {
                 amount = counterBet.requestedPrice.amount
             }
-            Price(proposedPrice,
-                    Math.max(amount, provider.minAmount), betContext.side)
+            val price = Price(roundedPrice, Math.max(amount, provider.minAmount), betContext.side)
+            ProposedPrice(price, proposedPrice.proposers)
         } else {
             null
         }
-    }
-
-    private fun reducePrices(context: BetContext): Double? {
-        val proposedPrice = proposalService.reducePrices(context, proposers, context.side)
-        val rounded = roundingService.roundBet(proposedPrice.price)
-        if (rounded != null) {
-            context.properties[BetAction.PROPOSER_PROP] = Joiner.on(',').join(proposedPrice.proposers)
-        }
-        return rounded
     }
 
     @PostConstruct

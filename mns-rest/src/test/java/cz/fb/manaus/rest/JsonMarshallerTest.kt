@@ -16,9 +16,9 @@ class JsonMarshallerTest : AbstractLocalTestCase() {
 
     @Test
     fun `bet action list`() {
-        val action = betAction.copy(properties = mapOf("property1" to "value1", "reciprocal" to "0.92"))
+        val action = betAction.copy(proposers = setOf("bestPrice"))
         val json = mapper.writer().writeValueAsString(listOf(action))
-        assertTrue { "value1" in json }
+        assertTrue { "bestPrice" in json }
     }
 
     @Test

@@ -43,8 +43,8 @@ class CoverageFunctionProfitService(functions: List<ProgressFunction>) : Abstrac
 
     private fun isChargeGrowth(bet: RealizedBet): Boolean {
         val action = bet.betAction
-        val chargeGrowth = action.properties["chargeGrowth"]
-        return if (chargeGrowth != null) chargeGrowth.toDouble() > 1 else true
+        val chargeGrowth = action.chargeGrowth
+        return if (chargeGrowth != null) chargeGrowth > 1 else true
     }
 
     private fun getAverage(bets: List<RealizedBet>, function: ProgressFunction): Double? {

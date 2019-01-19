@@ -8,7 +8,6 @@ import cz.fb.manaus.reactor.betting.listener.ProbabilityComparator.Companion.COM
 import cz.fb.manaus.reactor.betting.validator.ValidationService
 import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
-import org.apache.commons.math3.util.Precision
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import java.util.logging.Level
@@ -53,7 +52,6 @@ abstract class AbstractUpdatingBettor(private val side: Side,
                         snapshot = snapshot,
                         fairness = fairness,
                         accountMoney = accountMoney)
-                setTradedVolumeMean(ctx)
                 val pricelessValidation = validationService.validate(ctx, validators)
                 if (!pricelessValidation.isSuccess) {
                     cancelBet(oldBet, betCollector)
@@ -65,7 +63,9 @@ abstract class AbstractUpdatingBettor(private val side: Side,
                     cancelBet(oldBet, betCollector)
                     continue
                 }
-                ctx.newPrice = newPrice
+                ctx.newPrice = newPrice.price
+                ctx.proposers = newPrice.proposers
+
                 if (oldBet != null && oldBet.isMatched) continue
                 val priceValidation = validationService.validate(ctx, validators)
                 if (priceValidation.isSuccess) {
@@ -99,19 +99,5 @@ abstract class AbstractUpdatingBettor(private val side: Side,
             betCollector.cancelBet(oldBet)
             log.log(Level.INFO, "CANCEL_BET: unable propose price for bet ''{0}''", oldBet)
         }
-    }
-
-    private fun setTradedVolumeMean(context: BetContext) {
-        val tradedVolume = context.actualTradedVolume
-        if (tradedVolume != null) {
-            val weightedMean = tradedVolume.weightedMean
-            if (weightedMean != null) {
-                setProperty(BetAction.TRADED_VOL_MEAN, weightedMean, context.properties)
-            }
-        }
-    }
-
-    private fun setProperty(key: String, value: Double, properties: MutableMap<String, String>) {
-        properties[key] = Precision.round(value, 4).toString()
     }
 }
