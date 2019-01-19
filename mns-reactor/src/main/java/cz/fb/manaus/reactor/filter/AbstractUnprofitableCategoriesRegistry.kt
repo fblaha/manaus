@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import java.time.Duration
 import java.time.Instant
 import java.util.*
-import java.util.logging.Level
 import java.util.logging.Logger
 
 
@@ -33,7 +32,7 @@ abstract class AbstractUnprofitableCategoriesRegistry(
     @Autowired
     private lateinit var provider: ExchangeProvider
 
-    private val log = Logger.getLogger(AbstractUnprofitableCategoriesRegistry::class.java.simpleName)
+    private val log = Logger.getLogger(AbstractUnprofitableCategoriesRegistry::class.simpleName)
 
     private val logPrefix: String
         get() = String.format("UNPROFITABLE_REGISTRY(%s): ", name)
@@ -42,7 +41,7 @@ abstract class AbstractUnprofitableCategoriesRegistry(
         get() = "$UNPROFITABLE_BLACK_LIST$name."
 
     fun updateBlacklists(configUpdate: ConfigUpdate) {
-        log.log(Level.INFO, logPrefix + "black list update started")
+        log.info { logPrefix + "black list update started" }
         val now = Instant.now()
         val settledBets = settledBetRepository.find(now.minusSeconds(period.toSeconds()), now, side)
         if (settledBets.isEmpty()) return
@@ -50,7 +49,7 @@ abstract class AbstractUnprofitableCategoriesRegistry(
         val chargeRate = provider.chargeRate
         val profitRecords = profitService.getProfitRecords(realizedBets, null, true, chargeRate)
 
-        log.log(Level.INFO, logPrefix + "updating registry ''{0}''", name)
+        log.info { logPrefix + "updating registry '$name'" }
         updateBlacklists(profitRecords, configUpdate)
     }
 

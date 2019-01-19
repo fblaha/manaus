@@ -11,7 +11,6 @@ import cz.fb.manaus.reactor.price.PriceFilter
 import cz.fb.manaus.reactor.price.getReciprocal
 import org.springframework.core.annotation.AnnotationAwareOrderComparator
 import java.time.Instant
-import java.util.logging.Level
 import java.util.logging.Logger
 
 class BetManager(
@@ -22,13 +21,14 @@ class BetManager(
         private val disabledListeners: Set<String>,
         private val sortedSnapshotListeners: List<MarketSnapshotListener>) {
 
-    private val log = Logger.getLogger(BetManager::class.java.simpleName)
+    private val log = Logger.getLogger(BetManager::class.simpleName)
 
     fun fire(snapshot: MarketSnapshot,
              myBets: Set<String>,
              accountMoney: AccountMoney?,
              categoryBlacklist: Set<String>): CollectedBets {
         val marketPrices = filterPrices(snapshot.runnerPrices)
+
 
         val reciprocal = getReciprocal(marketPrices, Side.BACK)
         val market = snapshot.market
@@ -38,7 +38,7 @@ class BetManager(
             validateOpenDate(market)
 
             val unknownBets = BetUtils.getUnknownBets(snapshot.currentBets, myBets)
-            unknownBets.forEach { bet -> log.log(Level.WARNING, "unknown bet ''{0}''", bet) }
+            unknownBets.forEach { log.warning { "unknown bet '$it'" } }
             if (unknownBets.isEmpty()) {
                 sortedSnapshotListeners
                         .filter { it.javaClass.simpleName !in disabledListeners }
@@ -71,7 +71,7 @@ class BetManager(
 
     private fun filterPrices(marketPrices: List<RunnerPrices>): List<RunnerPrices> {
         return if (priceFilter == null) {
-            log.log(Level.WARNING, "No price filtering configured.")
+            log.warning { "no price filtering configured" }
             marketPrices
         } else {
             marketPrices.map { it.copy(prices = priceFilter.filter(it.prices)) }

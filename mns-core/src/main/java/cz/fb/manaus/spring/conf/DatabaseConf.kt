@@ -7,10 +7,10 @@ import javax.annotation.PostConstruct
 @ConfigurationProperties("db")
 data class DatabaseConf(var file: String? = null) {
 
-    private val log = Logger.getLogger(DatabaseConf::class.java.simpleName)
+    private val log = Logger.getLogger(DatabaseConf::class.simpleName)
 
     @PostConstruct
     fun log() {
-        log.info("$this")
+        log.info { "$this" }
     }
 }

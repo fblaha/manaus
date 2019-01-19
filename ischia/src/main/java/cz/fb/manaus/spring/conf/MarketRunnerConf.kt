@@ -9,11 +9,11 @@ import javax.annotation.PostConstruct
 data class MarketRunnerConf(var runnerName: String?,
                             var types: List<String>?) {
 
-    private val log = Logger.getLogger(MarketRunnerConf::class.java.simpleName)
+    private val log = Logger.getLogger(MarketRunnerConf::class.simpleName)
 
     @PostConstruct
     fun validate() {
-        log.info("$this")
+        log.info { "$this" }
         Preconditions.checkState(!types.isNullOrEmpty())
     }
 }

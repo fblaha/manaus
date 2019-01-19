@@ -7,10 +7,10 @@ import javax.annotation.PostConstruct
 @ConfigurationProperties("betting")
 data class BettingConf(var disabledListeners: List<String> = emptyList()) {
 
-    private val log = Logger.getLogger(BettingConf::class.java.simpleName)
+    private val log = Logger.getLogger(BettingConf::class.simpleName)
 
     @PostConstruct
     fun log() {
-        log.info("$this")
+        log.info { "$this" }
     }
 }

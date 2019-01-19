@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.time.Instant
 import java.util.concurrent.TimeUnit
-import java.util.logging.Level
 import java.util.logging.Logger
 
 @Component
@@ -20,7 +19,7 @@ class SettledBetLoader(private val settledBetRepository: SettledBetRepository,
                        private val realizedBetLoader: RealizedBetLoader) {
 
 
-    private val log = Logger.getLogger(SettledBetLoader::class.java.simpleName)
+    private val log = Logger.getLogger(SettledBetLoader::class.simpleName)
 
     private var cache = CacheBuilder.newBuilder()
             .maximumSize(100)
@@ -45,11 +44,11 @@ class SettledBetLoader(private val settledBetRepository: SettledBetRepository,
         val stopwatch = Stopwatch.createStarted()
         val settledBets = settledBetRepository.find(from = from, to = to)
         var elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
-        log.log(Level.INFO, "Settle bets loaded in ''{0}'' seconds", elapsed)
+        log.info { "settle bets loaded in '$elapsed' seconds" }
         stopwatch.reset().start()
         val realizedBets = settledBets.map { realizedBetLoader.toRealizedBet(it) }
         elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
-        log.log(Level.INFO, "Realized bets loaded in ''{0}'' seconds", elapsed)
+        log.info { "realized bets loaded in '$elapsed' seconds" }
         return realizedBets
     }
 

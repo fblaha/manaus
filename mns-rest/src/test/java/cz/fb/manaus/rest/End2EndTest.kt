@@ -76,7 +76,8 @@ class End2EndTest : AbstractControllerTest() {
 
     private fun `When I post settled bets for all bet actions`() {
         for ((i, bet) in collectedBets.place.withIndex()) {
-            val settledBet = homeSettledBet.copy(selectionId = bet.selectionId,
+            val settledBet = homeSettledBet.copy(
+                    selectionId = bet.selectionId,
                     id = i.toString(),
                     price = bet.requestedPrice,
                     profitAndLoss = 10.0
@@ -132,8 +133,6 @@ class End2EndTest : AbstractControllerTest() {
                 .andReturn()
         val betActions: List<BetAction> = objectMapper.readValue(result.response.contentAsString)
         assertEquals(expectedCount, betActions.size)
-        for (betAction in betActions) {
-            actionCheck(betAction)
-        }
+        betActions.forEach { actionCheck(it) }
     }
 }

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import java.util.concurrent.TimeUnit
-import java.util.logging.Level
 import java.util.logging.Logger
 
 @Controller
@@ -26,7 +25,7 @@ class ProfitController(private val profitService: ProfitService,
                        private val provider: ExchangeProvider,
                        private val betLoader: SettledBetLoader) {
 
-    private val log = Logger.getLogger(ProfitController::class.java.simpleName)
+    private val log = Logger.getLogger(ProfitController::class.simpleName)
 
     @ResponseBody
     @RequestMapping(value = ["/profit/" + IntervalParser.INTERVAL], method = [RequestMethod.GET])
@@ -46,7 +45,7 @@ class ProfitController(private val profitService: ProfitService,
         val stopwatch = Stopwatch.createStarted()
         var profitRecords = profitService.getProfitRecords(settledBets, projection,
                 false, getChargeRate(charge))
-        logTime(stopwatch, "Profit records computed")
+        logTime(stopwatch, "profit records computed")
         if (filter != null) {
             val filters = parseFilter(filter)
             profitRecords = profitRecords
@@ -70,7 +69,7 @@ class ProfitController(private val profitService: ProfitService,
         val stopwatch = Stopwatch.createStarted()
         val chargeRate = getChargeRate(charge)
         val records = progressProfitService.getProfitRecords(bets, function, chunkCount, chargeRate, projection)
-        logTime(stopwatch, "Profit records computed")
+        logTime(stopwatch, "profit records computed")
         return records
     }
 
@@ -85,7 +84,7 @@ class ProfitController(private val profitService: ProfitService,
         val stopwatch = Stopwatch.createStarted()
         val chargeRate = getChargeRate(charge)
         val records = coverageService.getProfitRecords(bets, function, chargeRate, projection)
-        logTime(stopwatch, "Profit records computed")
+        logTime(stopwatch, "profit records computed")
         return records
     }
 
@@ -93,13 +92,13 @@ class ProfitController(private val profitService: ProfitService,
                          @RequestParam(defaultValue = "true") cache: Boolean): List<RealizedBet> {
         val stopwatch = Stopwatch.createStarted()
         val bets = betLoader.load(interval, cache)
-        logTime(stopwatch, "Bets fetched")
+        logTime(stopwatch, "pets fetched")
         return bets
     }
 
     private fun logTime(stopwatch: Stopwatch, messagePrefix: String) {
         val elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
-        log.log(Level.INFO, "{0} in ''{1}'' seconds", arrayOf(messagePrefix, elapsed))
+        log.info { "$messagePrefix in '$elapsed' seconds" }
     }
 
     private fun getChargeRate(chargeRate: Double?): Double {

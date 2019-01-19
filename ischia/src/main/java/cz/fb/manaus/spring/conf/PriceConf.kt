@@ -13,11 +13,11 @@ data class PriceConf(var downgradeBackRate: Double = 0.0,
                      var max: Double = 0.0,
                      var limit: Int = 0) {
 
-    private val log = Logger.getLogger(PriceConf::class.java.simpleName)
+    private val log = Logger.getLogger(PriceConf::class.simpleName)
 
     @PostConstruct
     fun validate() {
-        log.info("$this")
+        log.info { "$this" }
         Preconditions.checkState(downgradeBackRate > 0.0)
         Preconditions.checkState(downgradeLayRate > 0.0)
         Preconditions.checkState(min >= 1.0)

@@ -8,7 +8,6 @@ import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
-import java.util.logging.Level
 import java.util.logging.Logger
 
 @Component
@@ -17,7 +16,7 @@ class RelatedActionsCategorizer(
         private val betActionRepository: BetActionRepository,
         private val relatedActionsAwareCategorizers: List<RelatedActionsAwareCategorizer>) : RealizedBetCategorizer {
 
-    private val log = Logger.getLogger(RelatedActionsCategorizer::class.java.simpleName)
+    private val log = Logger.getLogger(RelatedActionsCategorizer::class.simpleName)
 
     override val isSimulationSupported: Boolean = false
 
@@ -29,7 +28,7 @@ class RelatedActionsCategorizer(
         val betActions = betActionRepository.find(market.id)
                 .filter { it.selectionId == selectionId && side == it.price.side }
         if (betActions.isEmpty()) {
-            log.log(Level.WARNING, "missing  bet actions ''{0}''", realizedBet)
+            log.warning { "missing  bet actions '$realizedBet'" }
             return emptySet()
         }
         val current = BetUtils.getCurrentActions(betActions)

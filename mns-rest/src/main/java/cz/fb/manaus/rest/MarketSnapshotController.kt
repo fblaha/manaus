@@ -35,7 +35,7 @@ class MarketSnapshotController(private val manager: BetManager,
                                private val metricRegistry: MetricRegistry,
                                private val betMetricUpdater: MatchedBetMetricUpdater) {
 
-    private val log = Logger.getLogger(MarketSnapshotController::class.java.simpleName)
+    private val log = Logger.getLogger(MarketSnapshotController::class.simpleName)
 
     @RequestMapping(value = ["/markets/{id}/snapshot"], method = [RequestMethod.POST])
     fun pushMarketSnapshot(@PathVariable id: String, @RequestBody snapshotCrate: MarketSnapshotCrate): ResponseEntity<*> {
@@ -67,7 +67,7 @@ class MarketSnapshotController(private val manager: BetManager,
     }
 
     private fun logException(snapshot: MarketSnapshotCrate, e: RuntimeException) {
-        log.log(Level.SEVERE, "Error emerged for ''{0}''", snapshot)
+        log.severe { "error emerged for '$snapshot'" }
         log.log(Level.SEVERE, "fix it!", e)
     }
 }

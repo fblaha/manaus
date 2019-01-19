@@ -7,7 +7,6 @@ import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.PriceAdviser
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.logging.Level
 import java.util.logging.Logger
 import javax.annotation.PostConstruct
 
@@ -22,7 +21,7 @@ open class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAd
     @Autowired
     private lateinit var roundingService: RoundingService
 
-    private val log = Logger.getLogger(ProposerAdviser::class.java.simpleName)
+    private val log = Logger.getLogger(ProposerAdviser::class.simpleName)
 
     override fun getNewPrice(betContext: BetContext): ProposedPrice<Price>? {
         val proposedPrice = proposalService.reducePrices(betContext, proposers)
@@ -45,7 +44,6 @@ open class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAd
     fun logConfig() {
         val proposerList = proposers.map { it.javaClass }
                 .map { it.simpleName }.sorted().joinToString(",")
-        log.log(Level.INFO, "Proposer coordinator class: ''{0}'', proposers: ''{1}''",
-                arrayOf<Any>(this.javaClass.simpleName, proposerList))
+        log.info { "proposer coordinator class: '${this.javaClass.simpleName}', proposers: '$proposerList'" }
     }
 }

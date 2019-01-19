@@ -10,7 +10,6 @@ import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
-import java.util.logging.Level
 import java.util.logging.Logger
 
 abstract class AbstractUpdatingBettor(private val side: Side,
@@ -27,7 +26,7 @@ abstract class AbstractUpdatingBettor(private val side: Side,
     @Autowired
     private lateinit var metricRegistry: MetricRegistry
 
-    private val log = Logger.getLogger(AbstractUpdatingBettor::class.java.simpleName)
+    private val log = Logger.getLogger(AbstractUpdatingBettor::class.simpleName)
 
     override fun onMarketSnapshot(snapshot: MarketSnapshot, betCollector: BetCollector,
                                   accountMoney: AccountMoney?, categoryBlacklist: Set<String>) {
@@ -90,14 +89,14 @@ abstract class AbstractUpdatingBettor(private val side: Side,
                     requestedPrice = newPrice)
             betCollector.placeBet(BetCommand(bet, action))
         }
-        log.log(Level.INFO, "Bet {0} action ''{1}''", arrayOf(action.betActionType, action))
+        log.info { "bet ${action.betActionType} action '$action'" }
     }
 
     private fun cancelBet(oldBet: Bet?, betCollector: BetCollector) {
         if (oldBet != null && !oldBet.isMatched) {
             metricRegistry.counter("bet.cancel").inc()
             betCollector.cancelBet(oldBet)
-            log.log(Level.INFO, "CANCEL_BET: unable propose price for bet ''{0}''", oldBet)
+            log.info { "bet cancel - unable propose price for bet '$oldBet'" }
         }
     }
 }

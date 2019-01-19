@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.time.Duration
 import java.util.concurrent.TimeUnit
-import java.util.logging.Level
 import java.util.logging.Logger
 
 
@@ -29,7 +28,7 @@ class MarketCleaner(
 
     override val pausePeriod = Duration.ofMinutes(15)!!
 
-    private val log = Logger.getLogger(MarketCleaner::class.java.simpleName)
+    private val log = Logger.getLogger(MarketCleaner::class.simpleName)
 
     override fun execute(): ConfigUpdate {
         val stopwatch = Stopwatch.createUnstarted().start()
@@ -38,7 +37,7 @@ class MarketCleaner(
             val footprints = marketRepository.find(from, to).map { marketFootprintLoader.toFootprint(it) }
             for (footprint in footprints) {
                 if (approvers.any { it.isDeletable(footprint) }) {
-                    log.log(Level.INFO, "Deleting market ''{0}'' ", footprint.market)
+                    log.info { "deleting market '${footprint.market}'" }
                     marketPurger.purge(footprint)
                     count++
                 }
@@ -46,7 +45,7 @@ class MarketCleaner(
         }
         metricRegistry.counter("purge.market").inc(count)
         val elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
-        log.log(Level.INFO, "DELETE_MARKETS: ''{0}'' obsolete markets removed in ''{1}'' seconds", arrayOf(count, elapsed))
+        log.info { "market deletion - '$count' obsolete markets removed in '$elapsed' seconds" }
         return ConfigUpdate.NOP
     }
 }

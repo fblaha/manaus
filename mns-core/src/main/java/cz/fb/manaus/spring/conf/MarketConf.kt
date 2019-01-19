@@ -10,12 +10,12 @@ import javax.annotation.PostConstruct
 data class MarketConf(var history: Duration = Duration.ZERO,
                       var lookAhead: Duration = Duration.ZERO) {
 
-    private val log = Logger.getLogger(MarketConf::class.java.simpleName)
+    private val log = Logger.getLogger(MarketConf::class.simpleName)
 
     @PostConstruct
     fun validate() {
+        log.info { "$this" }
         Preconditions.checkState(!history.isZero)
         Preconditions.checkState(!lookAhead.isZero)
-        log.info("$this")
     }
 }
