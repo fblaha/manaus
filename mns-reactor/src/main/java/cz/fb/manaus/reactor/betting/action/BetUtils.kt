@@ -2,7 +2,6 @@ package cz.fb.manaus.reactor.betting.action
 
 import com.google.common.base.Preconditions.checkArgument
 import com.google.common.base.Preconditions.checkState
-import com.google.common.base.Splitter
 import com.google.common.collect.Comparators
 import cz.fb.manaus.core.model.*
 
@@ -27,10 +26,6 @@ object BetUtils {
 
     fun getUnknownBets(bets: List<Bet>, myBets: Set<String>): List<Bet> {
         return bets.filter { it.betId !in myBets }
-    }
-
-    fun parseProposers(proposers: String): List<String> {
-        return Splitter.on(',').omitEmptyStrings().trimResults().splitToList(proposers)
     }
 
     fun limitBetAmount(ceiling: Double, bet: RealizedBet): RealizedBet {
