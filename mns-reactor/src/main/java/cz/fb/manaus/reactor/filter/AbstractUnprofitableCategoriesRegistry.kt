@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.filter
 
-import com.google.common.base.Joiner
 import cz.fb.manaus.core.maintanance.ConfigUpdate
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.Side
@@ -78,8 +77,8 @@ abstract class AbstractUnprofitableCategoriesRegistry(
     }
 
     internal fun saveBlacklist(thresholdPct: Int, blacklist: Set<String>, configUpdate: ConfigUpdate) {
-        if (!blacklist.isEmpty()) {
-            configUpdate.setProperties[propertyPrefix + thresholdPct] = Joiner.on(',').join(TreeSet(blacklist))
+        if (blacklist.isNotEmpty()) {
+            configUpdate.setProperties[propertyPrefix + thresholdPct] = blacklist.sorted().joinToString(".")
         }
     }
 

@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.betting.validator
 
 import com.codahale.metrics.MetricRegistry
-import com.google.common.base.Joiner
 import cz.fb.manaus.core.model.Side
 import org.springframework.stereotype.Component
 
@@ -14,9 +13,9 @@ class ValidationMetricsCollector(private val metricRegistry: MetricRegistry) {
     }
 
     private fun getName(type: Side, pass: Boolean, validatorName: String): String {
-        return Joiner.on('.').join(PREFIX,
-                type.name.toLowerCase(), validatorName,
-                if (pass) "pass" else "fail")
+        val result = if (pass) "pass" else "fail"
+        val strSide = type.name.toLowerCase()
+        return "$PREFIX.$strSide.$validatorName.$result"
     }
 
     companion object {

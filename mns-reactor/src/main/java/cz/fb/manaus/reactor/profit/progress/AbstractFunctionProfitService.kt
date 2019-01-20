@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.profit.progress
 
-import com.google.common.base.Joiner
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.CategoryService
 import cz.fb.manaus.core.model.ProfitRecord
@@ -50,8 +49,8 @@ abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) 
 
     protected fun getValueCategory(name: String, average: Double?): String {
         return when (average) {
-            null -> Joiner.on(": ").join(name, "-")
-            else -> Joiner.on(": ").join(name, Precision.round(average, 4))
+            null -> "$name: -"
+            else -> "$name: ${Precision.round(average, 4)}"
         }
     }
 

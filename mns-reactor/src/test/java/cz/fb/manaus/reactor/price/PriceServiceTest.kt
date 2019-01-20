@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.price
 
-import com.google.common.primitives.Doubles
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
@@ -129,7 +128,7 @@ class PriceServiceTest : AbstractLocalTestCase() {
     }
 
     private fun checkFairPrices(winnerCount: Int, vararg unfairPrices: Double) {
-        val marketPrices = newMarketPrices(Doubles.asList(*unfairPrices))
+        val marketPrices = newMarketPrices(unfairPrices.asList())
         val overround = getOverround(marketPrices, Side.BACK)!!
         val reciprocal = getReciprocal(marketPrices, Side.BACK)!!
         val fairness = getFairness(Side.BACK, marketPrices)
@@ -142,7 +141,7 @@ class PriceServiceTest : AbstractLocalTestCase() {
             fair
         }
 
-        checkOverroundUnfairPrices(reciprocal, winnerCount, Doubles.asList(*unfairPrices), overroundPrices)
+        checkOverroundUnfairPrices(reciprocal, winnerCount, unfairPrices.asList(), overroundPrices)
 
         val fairnessPrices = unfairPrices.map {
             val fair = priceService.getFairnessFairPrice(it, fairness)
