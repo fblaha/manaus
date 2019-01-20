@@ -39,7 +39,7 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
                 SaveStatus.NO_ACTION
             }
         } else {
-            log.info { "action with id '${settledBet.id}' already saved" }
+            log.info { "settled bet with id '${settledBet.id}' already saved" }
             return SaveStatus.COLLISION
         }
     }
