@@ -78,7 +78,7 @@ abstract class AbstractUnprofitableCategoriesRegistry(
 
     internal fun saveBlacklist(thresholdPct: Int, blacklist: Set<String>, configUpdate: ConfigUpdate) {
         if (blacklist.isNotEmpty()) {
-            configUpdate.setProperties[propertyPrefix + thresholdPct] = blacklist.sorted().joinToString(".")
+            configUpdate.setProperties[propertyPrefix + thresholdPct] = blacklist.sorted().joinToString(",")
         }
     }
 
