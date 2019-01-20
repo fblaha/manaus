@@ -1,7 +1,6 @@
 package cz.fb.manaus.core.category
 
 import com.google.common.collect.HashMultiset
-import com.google.common.collect.Sets
 import cz.fb.manaus.core.MarketCategories
 import cz.fb.manaus.core.category.categorizer.CountryCodeCategorizer
 import cz.fb.manaus.core.category.categorizer.RunnerCountCategorizer
@@ -23,7 +22,7 @@ class CategoryServiceRealDataTest : AbstractMarketDataAwareTestCase() {
     fun testDisjunctiveCategories() {
         for (market in markets) {
             val marketCategories = categoryService.getMarketCategories(market, false)
-            val intersection = Sets.intersection(marketCategories, DISJUNCTIVE_CATEGORIES)
+            val intersection = marketCategories intersect DISJUNCTIVE_CATEGORIES
             assertEquals(1, intersection.size, market.toString())
         }
     }

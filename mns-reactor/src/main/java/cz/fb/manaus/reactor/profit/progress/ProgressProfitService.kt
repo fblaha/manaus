@@ -30,7 +30,7 @@ class ProgressProfitService(functions: List<ProgressFunction>) : AbstractFunctio
                                      coverage: BetCoverage,
                                      bets: List<RealizedBet>,
                                      charges: Map<String, Double>): List<ProfitRecord> {
-        val computed = bets.map { Pair(it, function(it)) }
+        val computed = bets.map { it to function(it) }
 
         val (hasValue, noValues) = computed.partition { it.second != null }
 
@@ -42,17 +42,14 @@ class ProgressProfitService(functions: List<ProgressFunction>) : AbstractFunctio
 
         val chunks = sortedCopy.chunked(chunkSize)
 
-        val result = chunks
-                .map { computeChunkRecord(function.name, it, charges, coverage) }
-                .toMutableList()
-
+        val result = chunks.map { computeChunkRecord(function.name, it, charges, coverage) }
 
         if (noValues.isNotEmpty() && function.includeNoValues) {
-            result.add(0, computeFunctionRecord(function.name + ": -",
-                    noValues.map { it.first }, charges, coverage))
+            val noValBets = noValues.map { it.first }
+            val category = "${function.name}: -"
+            val noValRecord = computeFunctionRecord(category, noValBets, charges, coverage)
+            return listOf(noValRecord) + result
         }
         return result
     }
-
-
 }
