@@ -31,8 +31,7 @@ class DowngradeCategorizer : RelatedActionsAwareCategorizer {
         checkState(actions
                 .map { it.price.side }
                 .distinct().count() <= 1, "mixed sides")
-        checkState(Comparators.isInStrictOrder(actions, compareBy { it.time }),
-                "time disorder")
+        checkState(actions.zipWithNext().all { it.first.time < it.second.time }, "time disorder")
     }
 
     companion object {

@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.profit.progress
 
-import com.google.common.collect.Comparators
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.profit.generateBets
@@ -39,6 +38,6 @@ class ProgressProfitServiceTest : AbstractLocalTestCase() {
                 chunkCount = 10,
                 chargeRate = provider.chargeRate)
         assertEquals(10, records.size)
-        assertTrue(Comparators.isInStrictOrder(records, compareBy { it.avgPrice }))
+        assertTrue(records.zipWithNext().all { it.first.avgPrice < it.second.avgPrice })
     }
 }

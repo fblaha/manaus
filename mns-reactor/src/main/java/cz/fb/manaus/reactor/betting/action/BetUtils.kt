@@ -2,7 +2,6 @@ package cz.fb.manaus.reactor.betting.action
 
 import com.google.common.base.Preconditions.checkArgument
 import com.google.common.base.Preconditions.checkState
-import com.google.common.collect.Comparators
 import cz.fb.manaus.core.model.*
 
 object BetUtils {
@@ -15,7 +14,7 @@ object BetUtils {
             if (bet.betActionType != BetActionType.UPDATE) lastUpdates.clear()
             lastUpdates.add(bet)
         }
-        checkState(Comparators.isInStrictOrder(lastUpdates, compareBy { it.time }))
+        checkState(lastUpdates.zipWithNext().all { it.first.time < it.second.time })
         return lastUpdates
     }
 

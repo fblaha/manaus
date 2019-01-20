@@ -1,7 +1,6 @@
 package cz.fb.manaus.rest
 
 import com.google.common.base.CharMatcher
-import com.google.common.base.Splitter
 import cz.fb.manaus.core.maintanance.db.TimeRange
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -16,7 +15,7 @@ object IntervalParser {
 
     internal fun parse(date: Instant, interval: String): TimeRange {
         var shiftedDate = date
-        val split = Splitter.on('-').splitToList(interval)
+        val split = interval.split('-')
         val intervalOnly = split[0]
 
         val count = Integer.parseInt(CharMatcher.digit().retainFrom(intervalOnly))

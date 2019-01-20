@@ -1,6 +1,5 @@
 package cz.fb.manaus.rest
 
-import com.google.common.base.Splitter
 import com.google.common.base.Stopwatch
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.RealizedBet
@@ -106,7 +105,7 @@ class ProfitController(private val profitService: ProfitService,
     }
 
     private fun parseFilter(rawFilter: String): List<String> {
-        return Splitter.on(',').splitToList(rawFilter)
+        return rawFilter.split(',')
     }
 
     companion object {
