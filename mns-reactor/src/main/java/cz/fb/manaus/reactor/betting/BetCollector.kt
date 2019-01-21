@@ -3,7 +3,6 @@ package cz.fb.manaus.reactor.betting
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.CollectedBets
 import cz.fb.manaus.core.model.Side
-import java.util.Objects.requireNonNull
 
 class BetCollector {
 
@@ -15,7 +14,7 @@ class BetCollector {
         get() = toPlace.isEmpty() && toUpdate.isEmpty() && toCancel.isEmpty()
 
     fun updateBet(command: BetCommand) {
-        requireNonNull(command.bet.betId)
+        requireNotNull(command.bet.betId)
         toUpdate.add(command)
     }
 
@@ -25,7 +24,7 @@ class BetCollector {
     }
 
     fun cancelBet(oldBet: Bet) {
-        requireNonNull(oldBet.betId)
+        requireNotNull(oldBet.betId)
         toCancel.add(oldBet)
     }
 
