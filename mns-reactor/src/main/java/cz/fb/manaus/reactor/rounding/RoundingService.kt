@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.rounding
 
-import com.google.common.base.Preconditions.checkState
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
@@ -13,14 +12,14 @@ class RoundingService(private val plugin: RoundingPlugin,
 
     fun increment(price: Double, stepNum: Int): Double? {
         val result = plugin.shift(price, stepNum)
-        if (result != null) checkState(result > price)
+        if (result != null) check(result > price)
         return result
     }
 
     fun decrement(price: Double, stepNum: Int): Double? {
         val result = plugin.shift(price, -stepNum)
         if (result != null) {
-            checkState(result < price)
+            check(result < price)
             if (result < provider.minPrice) {
                 return null
             }

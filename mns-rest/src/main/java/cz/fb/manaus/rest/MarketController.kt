@@ -1,6 +1,5 @@
 package cz.fb.manaus.rest
 
-import com.google.common.base.Preconditions
 import cz.fb.manaus.core.model.Market
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.spring.ManausProfiles
@@ -38,6 +37,6 @@ class MarketController(private val marketRepository: MarketRepository) {
     }
 
     private fun validateMarket(market: Market) {
-        Preconditions.checkArgument(!market.runners.isEmpty(), "runners is empty")
+        require(!market.runners.isEmpty()) { "runners is empty" }
     }
 }

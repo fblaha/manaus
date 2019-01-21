@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.categorizer
 
-import com.google.common.base.Preconditions.checkState
 import com.google.common.collect.Comparators
 import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.model.Market
@@ -28,10 +27,10 @@ class DowngradeCategorizer : RelatedActionsAwareCategorizer {
     }
 
     private fun validate(actions: List<BetAction>) {
-        checkState(actions
+        check(actions
                 .map { it.price.side }
-                .distinct().count() <= 1, "mixed sides")
-        checkState(actions.zipWithNext().all { it.first.time < it.second.time }, "time disorder")
+                .distinct().count() <= 1) { "mixed sides" }
+        check(actions.zipWithNext().all { it.first.time < it.second.time }) { "time disorder" }
     }
 
     companion object {

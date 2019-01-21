@@ -1,6 +1,5 @@
 package cz.fb.manaus.spring.conf
 
-import com.google.common.base.Preconditions
 import org.springframework.boot.context.properties.ConfigurationProperties
 import java.time.Duration
 import java.util.logging.Logger
@@ -15,7 +14,7 @@ data class MarketConf(var history: Duration = Duration.ZERO,
     @PostConstruct
     fun validate() {
         log.info { "$this" }
-        Preconditions.checkState(!history.isZero)
-        Preconditions.checkState(!lookAhead.isZero)
+        check(!history.isZero)
+        check(!lookAhead.isZero)
     }
 }

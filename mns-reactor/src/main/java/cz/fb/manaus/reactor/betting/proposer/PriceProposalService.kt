@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting.proposer
 
-import com.google.common.base.Preconditions
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetContext
@@ -11,11 +10,11 @@ class PriceProposalService {
 
     fun reducePrices(context: BetContext, proposers: List<PriceProposer>): ProposedPrice<Double> {
         val prices = mutableListOf<ProposedPrice<Double>>()
-        Preconditions.checkState(!proposers.isEmpty())
+        check(!proposers.isEmpty())
         for (proposer in proposers) {
             val proposedPrice = proposer.getProposedPrice(context)
             if (proposer.isMandatory) {
-                Preconditions.checkState(proposedPrice != null, proposer.javaClass)
+                check(proposedPrice != null) { proposer.javaClass }
             }
             if (proposedPrice != null) {
                 prices.add(ProposedPrice(proposedPrice, setOf(proposer.name)))

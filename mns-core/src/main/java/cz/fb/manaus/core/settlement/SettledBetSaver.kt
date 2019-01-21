@@ -1,7 +1,6 @@
 package cz.fb.manaus.core.settlement
 
 import com.codahale.metrics.MetricRegistry
-import com.google.common.base.Preconditions
 import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.model.Market
 import cz.fb.manaus.core.model.Price
@@ -60,8 +59,7 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
 
     private fun validateSelection(bet: SettledBet, action: BetAction) {
         val selectionId = action.selectionId
-        Preconditions.checkArgument(selectionId == bet.selectionId,
-                "action.selectionId != bet.selectionId")
+        require(selectionId == bet.selectionId) { "action.selectionId != bet.selectionId" }
     }
 
     private fun validateTimes(bet: SettledBet, action: BetAction, market: Market) {

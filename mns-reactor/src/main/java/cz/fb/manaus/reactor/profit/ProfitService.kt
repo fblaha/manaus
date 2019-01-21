@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.profit
 
-import com.google.common.base.Preconditions
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.CategoryService
 import cz.fb.manaus.core.model.ProfitRecord
@@ -35,7 +34,7 @@ class ProfitService(private val categoryService: CategoryService,
     }
 
     fun mergeCategory(category: String, records: Collection<ProfitRecord>): ProfitRecord {
-        Preconditions.checkArgument(records.map { it.category }
+        require(records.map { it.category }
                 .all { category == it })
         val avgPrice = records
                 .map { it.avgPrice }
@@ -60,7 +59,7 @@ class ProfitService(private val categoryService: CategoryService,
             val categories = categoryService.getRealizedBetCategories(bet, simulationAwareOnly, coverage)
             categories.map {
                 val charge = charges[bet.settledBet.id]!!
-                Preconditions.checkState(charge >= 0, charge)
+                check(charge >= 0) { charge }
                 toProfitRecord(bet, it, charge, coverage)
             }
         }

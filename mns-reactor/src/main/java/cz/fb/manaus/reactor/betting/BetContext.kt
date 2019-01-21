@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting
 
-import com.google.common.base.Preconditions.checkState
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.price.Fairness
 import java.time.Instant
@@ -34,14 +33,14 @@ data class BetContext(
         set(value) {
             if (value != null) {
                 val newSide = value.side
-                checkState(side === newSide)
+                check(side === newSide)
                 if (this.oldBet != null) {
                     val oldSide = this.oldBet.requestedPrice.side
-                    checkState(oldSide === newSide)
+                    check(oldSide === newSide)
                 }
                 if (this.counterBet != null) {
                     val otherSide = this.counterBet.requestedPrice.side
-                    checkState(otherSide === newSide.opposite)
+                    check(otherSide === newSide.opposite)
                 }
             }
             field = value

@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting
 
-import com.google.common.base.Preconditions.checkState
 import cz.fb.manaus.core.manager.MarketFilterService
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.repository.BetActionRepository
@@ -53,8 +52,7 @@ class BetManager(
     private fun validateOpenDate(market: Market) {
         val currDate = Instant.now()
         val openDate = market.event.openDate
-        checkState(currDate.isBefore(openDate),
-                "current %s, open date %s", currDate, openDate)
+        check(currDate.isBefore(openDate)) { "current $currDate open date $openDate" }
     }
 
     private fun saveActions(commands: List<BetCommand>) {

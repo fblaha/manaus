@@ -1,6 +1,5 @@
 package cz.fb.manaus.spring.conf
 
-import com.google.common.base.Preconditions
 import org.springframework.boot.context.properties.ConfigurationProperties
 import java.util.logging.Logger
 import javax.annotation.PostConstruct
@@ -18,10 +17,10 @@ data class PriceConf(var downgradeBackRate: Double = 0.0,
     @PostConstruct
     fun validate() {
         log.info { "$this" }
-        Preconditions.checkState(downgradeBackRate > 0.0)
-        Preconditions.checkState(downgradeLayRate > 0.0)
-        Preconditions.checkState(min >= 1.0)
-        Preconditions.checkState(max > 1.0)
-        Preconditions.checkState(limit > 0)
+        check(downgradeBackRate > 0.0)
+        check(downgradeLayRate > 0.0)
+        check(min >= 1.0)
+        check(max > 1.0)
+        check(limit > 0)
     }
 }

@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.price
 
-import com.google.common.base.Preconditions
 import com.google.common.collect.Comparators
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.PriceComparator
@@ -18,7 +17,7 @@ class PriceBulldozer(private val roundingService: RoundingService) {
 
     fun bulldoze(threshold: Double, prices: List<Price>): List<Price> {
         var sum = 0.0
-        Preconditions.checkState(Comparators.isInStrictOrder(prices, PriceComparator))
+        check(Comparators.isInStrictOrder(prices, PriceComparator))
         val convicts = mutableListOf<Price>()
         val untouched = mutableListOf<Price>()
         for (price in prices) {

@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting.validator.common.update
 
-import com.google.common.base.Preconditions
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
@@ -19,7 +18,7 @@ abstract class AbstractTooCloseUpdateValidator(private val closeSteps: Set<Int>)
         val newOne = context.newPrice!!.price
         if (Price.priceEq(newOne, oldOne)) return ValidationResult.REJECT
         val containsEqualPrice = closeSteps
-                .onEach { Preconditions.checkArgument(it != 0) }
+                .onEach { require(it != 0) }
                 .mapNotNull {
                     if (it > 0) roundingService.increment(oldOne, it)
                     else roundingService.decrement(oldOne, -it)

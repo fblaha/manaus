@@ -1,7 +1,5 @@
 package cz.fb.manaus.reactor.betting.action
 
-import com.google.common.base.Preconditions.checkArgument
-import com.google.common.base.Preconditions.checkState
 import cz.fb.manaus.core.model.*
 
 object BetUtils {
@@ -14,13 +12,13 @@ object BetUtils {
             if (bet.betActionType != BetActionType.UPDATE) lastUpdates.clear()
             lastUpdates.add(bet)
         }
-        checkState(lastUpdates.zipWithNext().all { it.first.time < it.second.time })
+        check(lastUpdates.zipWithNext().all { it.first.time < it.second.time })
         return lastUpdates
     }
 
     private fun validate(first: BetAction, second: BetAction) {
-        checkArgument(first.price.side === second.price.side)
-        checkArgument(first.selectionId == second.selectionId)
+        require(first.price.side === second.price.side)
+        require(first.selectionId == second.selectionId)
     }
 
     fun getUnknownBets(bets: List<Bet>, myBets: Set<String>): List<Bet> {

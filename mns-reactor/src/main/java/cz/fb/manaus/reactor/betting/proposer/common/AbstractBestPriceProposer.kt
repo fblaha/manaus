@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting.proposer.common
 
-import com.google.common.base.Preconditions
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
@@ -27,7 +26,7 @@ abstract class AbstractBestPriceProposer(private val step: Int) : PriceProposer 
     override fun getProposedPrice(context: BetContext): Double? {
         val side = context.side
         val bestPrice = context.runnerPrices.getHomogeneous(side.opposite).bestPrice!!.price
-        Preconditions.checkState(step >= 0)
+        check(step >= 0)
         return if (step == 0) {
             bestPrice
         } else {

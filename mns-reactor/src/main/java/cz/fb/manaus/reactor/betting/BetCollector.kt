@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting
 
-import com.google.common.base.Preconditions.checkState
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.CollectedBets
 import cz.fb.manaus.core.model.Side
@@ -21,7 +20,7 @@ class BetCollector {
     }
 
     fun placeBet(betCommand: BetCommand) {
-        checkState(betCommand.bet.betId == null)
+        check(betCommand.bet.betId == null)
         toPlace.add(betCommand)
     }
 

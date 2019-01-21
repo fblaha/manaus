@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.betting.listener
 
 import com.codahale.metrics.MetricRegistry
-import com.google.common.base.Preconditions.checkState
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.betting.*
 import cz.fb.manaus.reactor.betting.listener.ProbabilityComparator.Companion.COMPARATORS
@@ -36,7 +35,7 @@ abstract class AbstractUpdatingBettor(private val side: Side,
         val credibleSide = fairness.moreCredibleSide!!
         val ordering = COMPARATORS[credibleSide]!!
         val sortedPrices = marketPrices.sortedWith(ordering)
-        checkState(sortedPrices.map { it.selectionId }.distinct().count() ==
+        check(sortedPrices.map { it.selectionId }.distinct().count() ==
                 sortedPrices.map { it.selectionId }.count())
 
         for ((i, runnerPrices) in sortedPrices.withIndex()) {

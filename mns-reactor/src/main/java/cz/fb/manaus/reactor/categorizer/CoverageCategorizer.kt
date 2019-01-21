@@ -2,7 +2,6 @@ package cz.fb.manaus.reactor.categorizer
 
 
 import com.google.common.base.CaseFormat
-import com.google.common.base.Preconditions
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
 import cz.fb.manaus.core.model.Price
@@ -20,7 +19,7 @@ class CoverageCategorizer : RealizedBetCategorizer {
         val marketId = realizedBet.market.id
         val selectionId = realizedBet.settledBet.selectionId
         val sides = coverage.getSides(marketId, selectionId)
-        Preconditions.checkState(sides.isNotEmpty())
+        check(sides.isNotEmpty())
         val amounts = sides.map { it to coverage.getAmount(marketId, selectionId, it) }.toMap()
         return getCategories(realizedBet.settledBet.price.side, amounts)
     }

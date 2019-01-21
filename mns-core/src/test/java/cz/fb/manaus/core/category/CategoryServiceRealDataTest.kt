@@ -1,6 +1,5 @@
 package cz.fb.manaus.core.category
 
-import com.google.common.collect.HashMultiset
 import cz.fb.manaus.core.MarketCategories
 import cz.fb.manaus.core.category.categorizer.CountryCodeCategorizer
 import cz.fb.manaus.core.category.categorizer.RunnerCountCategorizer
@@ -89,17 +88,17 @@ class CategoryServiceRealDataTest : AbstractMarketDataAwareTestCase() {
     }
 
     private fun getCategoryCount(category: String, mustContainLower: String?): Int {
-        val counts = HashMultiset.create<String>()
+        val counts = mutableMapOf<String, Int>().withDefault { 0 }
         for (market in markets) {
             val categories = categoryService.getMarketCategories(market, false)
-            counts.addAll(categories)
+            categories.forEach { counts[it] = counts.getValue(it) + 1 }
             if (category in categories) {
                 if (mustContainLower != null) {
                     assertThat(market.eventType.name.toLowerCase(), containsString(mustContainLower))
                 }
             }
         }
-        return counts.count(category)
+        return counts[category]!!
     }
 
     companion object {
@@ -121,5 +120,4 @@ class CategoryServiceRealDataTest : AbstractMarketDataAwareTestCase() {
                 Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.MOTOR_SPORT,
                 Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.HORSES)
     }
-
 }

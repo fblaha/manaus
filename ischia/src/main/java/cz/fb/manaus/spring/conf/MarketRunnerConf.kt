@@ -1,6 +1,5 @@
 package cz.fb.manaus.spring.conf
 
-import com.google.common.base.Preconditions
 import org.springframework.boot.context.properties.ConfigurationProperties
 import java.util.logging.Logger
 import javax.annotation.PostConstruct
@@ -14,6 +13,6 @@ data class MarketRunnerConf(var runnerName: String?,
     @PostConstruct
     fun validate() {
         log.info { "$this" }
-        Preconditions.checkState(!types.isNullOrEmpty())
+        check(!types.isNullOrEmpty())
     }
 }

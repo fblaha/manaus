@@ -1,7 +1,5 @@
 package cz.fb.manaus.reactor.betting.validator
 
-import com.google.common.base.Preconditions
-import com.google.common.base.Preconditions.checkState
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.reactor.betting.BetContext
@@ -15,7 +13,7 @@ class ValidationService(private val priceService: PriceService,
     internal fun handleDowngrade(newOne: Price?, oldOne: Bet?, validator: Validator): ValidationResult? {
         if (oldOne != null && newOne != null) {
             val oldPrice = oldOne.requestedPrice
-            checkState(newOne.side === oldPrice.side, validator::class)
+            check(newOne.side === oldPrice.side) { validator::class }
             if (priceService.isDowngrade(newOne.price, oldPrice.price,
                             newOne.side) && validator.isDowngradeAccepting) {
                 return ValidationResult.ACCEPT
@@ -25,19 +23,19 @@ class ValidationService(private val priceService: PriceService,
     }
 
     internal fun reduce(results: List<ValidationResult>): ValidationResult {
-        checkState(results.isNotEmpty())
+        check(results.isNotEmpty())
         return ValidationResult.of(results.all { it.isSuccess })
     }
 
     fun validate(context: BetContext, validators: List<Validator>): ValidationResult {
         val filteredValidators = validators.filter(createPredicate(context))
-        Preconditions.checkState(filteredValidators.isNotEmpty())
+        check(filteredValidators.isNotEmpty())
 
         val newPrice = context.newPrice
         val collected = mutableListOf<ValidationResult>()
         for (validator in filteredValidators) {
             if (validator.isUpdateOnly) {
-                Preconditions.checkState(context.oldBet != null)
+                check(context.oldBet != null)
             }
             val validationResult = handleDowngrade(newPrice, context.oldBet, validator) ?: validator.validate(context)
             recorder.updateMetrics(validationResult, context.side, validator.name)

@@ -1,6 +1,5 @@
 package cz.fb.manaus.core.category
 
-import com.google.common.base.Preconditions.checkState
 import cz.fb.manaus.core.MarketCategories
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -20,8 +19,8 @@ data class Category(private val category: String) {
     private val matcher: Matcher
         get() {
             val matcher = PATTERN.matcher(category)
-            checkState(matcher.matches())
-            checkState(MARKET_PREFIX != matcher.group(1))
+            check(matcher.matches())
+            check(MARKET_PREFIX != matcher.group(1))
             return matcher
         }
 

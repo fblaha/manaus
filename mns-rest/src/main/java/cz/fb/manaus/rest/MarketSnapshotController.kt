@@ -1,7 +1,6 @@
 package cz.fb.manaus.rest
 
 import com.codahale.metrics.MetricRegistry
-import com.google.common.base.Preconditions
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
@@ -63,7 +62,7 @@ class MarketSnapshotController(private val manager: BetManager,
     }
 
     private fun validateMarket(snapshotCrate: MarketSnapshotCrate) {
-        Preconditions.checkState(!snapshotCrate.prices.isEmpty())
+        check(!snapshotCrate.prices.isEmpty())
     }
 
     private fun logException(snapshot: MarketSnapshotCrate, e: RuntimeException) {

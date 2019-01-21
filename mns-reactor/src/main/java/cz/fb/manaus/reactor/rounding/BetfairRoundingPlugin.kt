@@ -1,7 +1,5 @@
 package cz.fb.manaus.reactor.rounding
 
-import com.google.common.base.Preconditions
-import com.google.common.base.Preconditions.checkArgument
 import com.google.common.collect.ImmutableRangeMap
 import com.google.common.collect.Range.closedOpen
 import com.google.common.collect.Range.openClosed
@@ -24,13 +22,13 @@ class BetfairRoundingPlugin : RoundingPlugin {
     }
 
     override fun shift(price: Double, steps: Int): Double? {
-        Preconditions.checkArgument(steps != 0)
+        require(steps != 0)
         val increment = steps > 0
         return shift(price, Math.abs(steps), increment)
     }
 
     private fun shift(price: Double, steps: Int, increment: Boolean): Double? {
-        checkArgument(steps >= 1)
+        require(steps >= 1)
         val step = getStep(price, increment)
         return if (step != null) {
             val result = Price.round(price + step)
