@@ -5,20 +5,17 @@ import cz.fb.manaus.core.model.*
 object BetUtils {
 
     fun getCurrentActions(betActions: List<BetAction>): List<BetAction> {
-        val lastUpdates = mutableListOf<BetAction>()
-        val first = betActions.first()
-        for (bet in betActions) {
-            validate(first, bet)
-            if (bet.betActionType != BetActionType.UPDATE) lastUpdates.clear()
-            lastUpdates.add(bet)
-        }
-        check(lastUpdates.zipWithNext().all { it.first.time < it.second.time })
-        return lastUpdates
+        validate(betActions)
+        val updates = betActions.takeLastWhile { it.betActionType === BetActionType.UPDATE }
+        val placeIdx = betActions.size - updates.size - 1
+        return if (placeIdx >= 0) listOf(betActions[placeIdx]) + updates else updates
     }
 
-    private fun validate(first: BetAction, second: BetAction) {
-        require(first.price.side === second.price.side)
-        require(first.selectionId == second.selectionId)
+    private fun validate(betActions: List<BetAction>) {
+        val nextZip = betActions.zipWithNext()
+        nextZip.forEach { check(it.first.time < it.second.time) }
+        nextZip.forEach { check(it.first.selectionId == it.second.selectionId) }
+        nextZip.forEach { check(it.first.price.side == it.second.price.side) }
     }
 
     fun getUnknownBets(bets: List<Bet>, myBets: Set<String>): List<Bet> {
@@ -44,9 +41,6 @@ object BetUtils {
 
     private fun limitPriceAmount(ceiling: Double, origPrice: Price): Price? {
         val amount = origPrice.amount
-        if (ceiling < amount) {
-            return origPrice.copy(amount = ceiling)
-        }
-        return null
+        return if (ceiling < amount) origPrice.copy(amount = ceiling) else null
     }
 }
