@@ -6,7 +6,7 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit.DAYS
 
 @Component
-class AgeDaysFunction : ProgressFunction {
+object AgeDaysFunction : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double {
         val openDate = bet.market.event.openDate

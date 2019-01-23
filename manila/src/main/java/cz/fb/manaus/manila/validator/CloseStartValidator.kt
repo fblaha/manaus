@@ -10,7 +10,7 @@ import java.time.temporal.ChronoUnit
 
 @ManilaBet
 @Component
-class CloseStartValidator : Validator {
+object CloseStartValidator : Validator {
 
     override fun validate(context: BetContext): ValidationResult {
         val openDate = context.market.event.openDate

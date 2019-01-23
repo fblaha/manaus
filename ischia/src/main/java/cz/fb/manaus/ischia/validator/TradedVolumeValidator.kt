@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 @LayLoserBet
 @Component
 @Profile("betfair")
-class TradedVolumeValidator : Validator {
+object TradedVolumeValidator : Validator {
 
     override fun validate(context: BetContext): ValidationResult {
         return ValidationResult.of(context.actualTradedVolume!!.volume.size >= 3)

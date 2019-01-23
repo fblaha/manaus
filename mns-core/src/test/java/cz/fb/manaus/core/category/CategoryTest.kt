@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.category
 
-import cz.fb.manaus.core.category.categorizer.CountryCodeCategorizer
+import cz.fb.manaus.core.category.categorizer.COUNTRY_PREFIX
 import org.junit.Test
 import kotlin.test.assertEquals
 
@@ -21,9 +21,9 @@ class CategoryTest {
 
     companion object {
         const val CZE = "cze"
-        const val RAW = CountryCodeCategorizer.PREFIX + CZE
+        const val RAW = COUNTRY_PREFIX + CZE
         const val MARKET_CZE = Category.MARKET_PREFIX + RAW
-        const val COUNTRY_CAT_BASE = Category.MARKET_PREFIX + CountryCodeCategorizer.PREFIX
+        const val COUNTRY_CAT_BASE = Category.MARKET_PREFIX + COUNTRY_PREFIX
     }
 
 }

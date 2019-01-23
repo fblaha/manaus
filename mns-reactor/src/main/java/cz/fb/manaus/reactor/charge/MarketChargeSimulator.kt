@@ -7,7 +7,7 @@ import cz.fb.manaus.core.model.Side
 import org.springframework.stereotype.Component
 
 @Component
-class MarketChargeSimulator {
+object MarketChargeSimulator {
 
     fun getChargeMean(winnerCount: Int,
                       chargeRate: Double,

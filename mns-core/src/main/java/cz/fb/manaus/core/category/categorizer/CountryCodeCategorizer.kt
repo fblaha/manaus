@@ -3,15 +3,13 @@ package cz.fb.manaus.core.category.categorizer
 import cz.fb.manaus.core.model.Market
 import org.springframework.stereotype.Component
 
+const val COUNTRY_PREFIX = "country_"
+
 @Component
-class CountryCodeCategorizer : AbstractDelegatingCategorizer(PREFIX) {
+object CountryCodeCategorizer : AbstractDelegatingCategorizer(COUNTRY_PREFIX) {
 
     override fun getCategoryRaw(market: Market): Set<String> {
         val countryCode = market.event.countryCode
         return if (countryCode == null) emptySet() else setOf(countryCode.toLowerCase())
-    }
-
-    companion object {
-        const val PREFIX = "country_"
     }
 }

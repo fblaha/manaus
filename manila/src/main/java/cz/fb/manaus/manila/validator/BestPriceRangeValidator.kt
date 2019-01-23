@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 
 @ManilaBet
 @Component
-class BestPriceRangeValidator : Validator {
+object BestPriceRangeValidator : Validator {
 
     override fun validate(context: BetContext): ValidationResult {
         val bestBack = context.runnerPrices.getHomogeneous(Side.BACK).bestPrice

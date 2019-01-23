@@ -14,11 +14,10 @@ class BetfairProfitPlugin : ProfitPlugin {
         val marketMap = bets.groupBy { it.market.id }
         for (marketBets in marketMap.values) {
             val charge = MarketCharge.fromBets(chargeRate, marketBets.map { it.settledBet })
-            for (bet in marketBets) {
-                val betId = bet.settledBet.id
-                assert(betId !in result)
-                result[betId] = charge.getChargeContribution(betId)
-            }
+            val charges = marketBets.map { it.settledBet.id }
+                    .onEach { check(it !in result) }
+                    .associate { it to charge.getChargeContribution(it) }
+            result.putAll(charges)
         }
         return result
     }

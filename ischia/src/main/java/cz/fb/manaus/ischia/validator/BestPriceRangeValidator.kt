@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 @LayLoserBet
 @BackLoserBet
 @Component
-class BestPriceRangeValidator : Validator {
+object BestPriceRangeValidator : Validator {
 
     override fun validate(context: BetContext): ValidationResult {
         val bestLay = context.runnerPrices.getHomogeneous(Side.LAY).bestPrice

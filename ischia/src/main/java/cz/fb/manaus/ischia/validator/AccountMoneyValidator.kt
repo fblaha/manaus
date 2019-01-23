@@ -11,4 +11,4 @@ import org.springframework.stereotype.Component
 @LayLoserBet
 @Component
 @Profile(PRODUCTION)
-class AccountMoneyValidator : AbstractAccountMoneyValidator(25.0)
+object AccountMoneyValidator : AbstractAccountMoneyValidator(25.0)

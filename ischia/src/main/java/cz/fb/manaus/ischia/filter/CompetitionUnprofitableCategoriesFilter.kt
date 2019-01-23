@@ -14,7 +14,7 @@ import java.time.Duration
 @BackLoserBet
 @Component
 @Profile(ManausProfiles.DB)
-class CompetitionUnprofitableCategoriesFilter : AbstractUnprofitableCategoriesRegistry(
+object CompetitionUnprofitableCategoriesFilter : AbstractUnprofitableCategoriesRegistry(
         name = "competition",
         period = Duration.ofDays(120),
         maximalProfit = -30.0,

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component
 class MatchbookProfitPlugin : ProfitPlugin {
 
     override fun getCharges(bets: List<RealizedBet>, chargeRate: Double): Map<String, Double> {
-        return bets
-                .map { it.settledBet.id to getCharge(chargeRate, it.settledBet.profitAndLoss, it.settledBet.price.amount) }
+        return bets.asSequence().map { it.settledBet }
+                .map { it.id to getCharge(chargeRate, it.profitAndLoss, it.price.amount) }
                 .toMap()
     }
 

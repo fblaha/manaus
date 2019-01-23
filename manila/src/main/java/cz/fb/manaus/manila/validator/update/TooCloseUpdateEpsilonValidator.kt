@@ -11,4 +11,4 @@ import org.springframework.stereotype.Component
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Profile("matchbook")
-class TooCloseUpdateEpsilonValidator : AbstractTooCloseUpdateEpsilonValidator(0.02)
+object TooCloseUpdateEpsilonValidator : AbstractTooCloseUpdateEpsilonValidator(0.02)

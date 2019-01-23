@@ -12,12 +12,11 @@ import java.time.temporal.ChronoUnit
 @BackLoserBet
 @LayLoserBet
 @Component
-class CloseStartValidator : Validator {
+object CloseStartValidator : Validator {
 
     override fun validate(context: BetContext): ValidationResult {
         val openDate = context.market.event.openDate
         val seconds = Instant.now().until(openDate, ChronoUnit.SECONDS)
         return ValidationResult.of(seconds > 30)
     }
-
 }

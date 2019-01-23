@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Component
-class WeekDayCategorizer : AbstractDelegatingCategorizer(PREFIX) {
+object WeekDayCategorizer : AbstractDelegatingCategorizer("weekDay_") {
 
     public override fun getCategoryRaw(market: Market): Set<String> {
         val date = market.event.openDate
@@ -20,7 +20,4 @@ class WeekDayCategorizer : AbstractDelegatingCategorizer(PREFIX) {
         return setOf(weekDay)
     }
 
-    companion object {
-        const val PREFIX = "weekDay_"
-    }
 }

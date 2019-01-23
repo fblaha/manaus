@@ -1,7 +1,7 @@
 package cz.fb.manaus.core.category
 
 import cz.fb.manaus.core.MarketCategories
-import cz.fb.manaus.core.category.categorizer.SportCategorizer
+import cz.fb.manaus.core.category.categorizer.SPORT_PREFIX
 import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.model.realizedBet
 import cz.fb.manaus.core.test.AbstractLocalTestCase
@@ -28,7 +28,7 @@ class CategoryServiceTest : AbstractLocalTestCase() {
 
         market = market.copy(eventType = eventType.copy(name = "Golf"))
         assertThat(categoryService.getMarketCategories(market, false),
-                hasItem(Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.GOLF))
+                hasItem(Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.GOLF))
     }
 
     @Test
@@ -39,7 +39,7 @@ class CategoryServiceTest : AbstractLocalTestCase() {
     }
 
     companion object {
-        const val SPORT_SOCCER = Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.SOCCER
-        const val SPORT_TENNIS = Category.MARKET_PREFIX + SportCategorizer.PREFIX + MarketCategories.TENNIS
+        const val SPORT_SOCCER = Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.SOCCER
+        const val SPORT_TENNIS = Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.TENNIS
     }
 }

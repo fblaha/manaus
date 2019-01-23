@@ -1,7 +1,7 @@
 package cz.fb.manaus.ischia.filter
 
 import cz.fb.manaus.core.category.Category
-import cz.fb.manaus.core.category.categorizer.CountryCodeCategorizer
+import cz.fb.manaus.core.category.categorizer.COUNTRY_PREFIX
 import cz.fb.manaus.ischia.BackLoserBet
 import cz.fb.manaus.ischia.LayLoserBet
 import cz.fb.manaus.reactor.filter.AbstractUnprofitableCategoriesRegistry
@@ -14,9 +14,9 @@ import java.time.Duration
 @BackLoserBet
 @Component
 @Profile(ManausProfiles.DB)
-class CountryCodeUnprofitableCategoriesFilter : AbstractUnprofitableCategoriesRegistry(
+object CountryCodeUnprofitableCategoriesFilter : AbstractUnprofitableCategoriesRegistry(
         name = "countryCodeLay",
         period = Duration.ofDays(30),
         maximalProfit = -30.0,
-        filterPrefix = Category.MARKET_PREFIX + CountryCodeCategorizer.PREFIX,
+        filterPrefix = Category.MARKET_PREFIX + COUNTRY_PREFIX,
         thresholds = mapOf(20 to 3))

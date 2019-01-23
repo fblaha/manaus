@@ -10,4 +10,4 @@ import org.springframework.stereotype.Component
 @LayLoserBet
 @Component
 @Profile("betfair")
-class LastMatchedValidator : AbstractLastMatchedValidator(true)
+object LastMatchedValidator : AbstractLastMatchedValidator(true)

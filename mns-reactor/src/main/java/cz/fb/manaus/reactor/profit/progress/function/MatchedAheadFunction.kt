@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 import java.time.Instant
 
 @Component
-class MatchedAheadFunction : AheadTimeFunction {
+object MatchedAheadFunction : AheadTimeFunction {
 
     override fun getRelatedTime(bet: RealizedBet): Instant? {
         return bet.settledBet.matched

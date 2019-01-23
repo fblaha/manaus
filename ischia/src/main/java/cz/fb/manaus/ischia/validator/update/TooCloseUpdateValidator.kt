@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Profile("betfair")
-class TooCloseUpdateValidator : AbstractTooCloseUpdateValidator(setOf(-1, 1)) {
+object TooCloseUpdateValidator : AbstractTooCloseUpdateValidator(setOf(-1, 1)) {
 
     override fun validate(context: BetContext): ValidationResult {
         return if (context.isCounterHalfMatched) {

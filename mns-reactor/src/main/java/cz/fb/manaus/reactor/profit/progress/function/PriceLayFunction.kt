@@ -5,7 +5,7 @@ import cz.fb.manaus.core.model.Side
 import org.springframework.stereotype.Component
 
 @Component
-class PriceLayFunction : ProgressFunction {
+object PriceLayFunction : ProgressFunction {
 
     override val includeNoValues: Boolean get() = false
 

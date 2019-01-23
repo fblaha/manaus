@@ -10,7 +10,6 @@ import cz.fb.manaus.reactor.profit.ProfitService
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Duration
 import java.time.Instant
-import java.util.*
 import java.util.logging.Logger
 
 
@@ -59,7 +58,7 @@ abstract class AbstractUnprofitableCategoriesRegistry(
 
         configUpdate.deletePrefixes.add(propertyPrefix)
 
-        val totalBlacklist = HashSet<String>()
+        val totalBlacklist = mutableSetOf<String>()
         for ((thresholdPct, blackCount) in thresholds) {
             val threshold = getThreshold(thresholdPct)
             val blacklist = getBlacklist(threshold, blackCount, totalCount, filtered, totalBlacklist)
@@ -90,20 +89,16 @@ abstract class AbstractUnprofitableCategoriesRegistry(
                               blackCount: Int,
                               totalCount: Int,
                               profitRecords: List<ProfitRecord>,
-                              blacklist: Set<String>): Set<String> {
-        val currentBlacklist = mutableListOf<String>()
+                              actualBlacklist: Set<String>): Set<String> {
 
-        val sorted = profitRecords
+        val sorted = profitRecords.asSequence()
+                .filter { it.category !in actualBlacklist }
                 .filter { it.totalCount.toDouble() / totalCount <= threshold }
                 .sortedBy { it.profit }
 
-        for (weak in sorted) {
-            if (currentBlacklist.size >= blackCount || weak.profit >= maximalProfit) break
-            if (weak.category !in blacklist) {
-                currentBlacklist.add(weak.category)
-            }
-        }
-        return currentBlacklist.toSet()
+        return sorted.takeWhile { it.profit < maximalProfit }
+                .take(blackCount)
+                .map { it.category }.toSet()
     }
 
     companion object {

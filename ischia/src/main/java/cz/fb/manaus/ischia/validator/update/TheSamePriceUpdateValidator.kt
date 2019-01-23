@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Profile("betfair")
-class TheSamePriceUpdateValidator : AbstractTooCloseUpdateValidator(emptySet()) {
+object TheSamePriceUpdateValidator : AbstractTooCloseUpdateValidator(emptySet()) {
 
     override val isDowngradeAccepting: Boolean = false
 }

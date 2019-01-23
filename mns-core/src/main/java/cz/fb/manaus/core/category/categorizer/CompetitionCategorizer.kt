@@ -16,7 +16,6 @@ class CompetitionCategorizer : AbstractDelegatingCategorizer(PREFIX) {
         }
     }
 
-
     companion object {
         const val PREFIX = "competition_"
     }

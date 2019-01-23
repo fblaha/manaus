@@ -5,7 +5,7 @@ import cz.fb.manaus.core.model.RealizedBet
 import org.springframework.stereotype.Component
 
 @Component
-class SideCategorizer : RealizedBetCategorizer {
+object SideCategorizer : RealizedBetCategorizer {
 
     override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
         val side = realizedBet.settledBet.price.side.name.toLowerCase()

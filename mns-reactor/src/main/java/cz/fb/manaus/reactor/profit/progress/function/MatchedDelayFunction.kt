@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 import java.time.temporal.ChronoUnit
 
 @Component
-class MatchedDelayFunction : ProgressFunction {
+object MatchedDelayFunction : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double? {
         val placed = bet.settledBet.placed

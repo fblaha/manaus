@@ -6,7 +6,7 @@ import cz.fb.manaus.reactor.price.getReciprocal
 import org.springframework.stereotype.Component
 
 @Component
-class ReciprocalLayFunction : ProgressFunction {
+object ReciprocalLayFunction : ProgressFunction {
     override fun invoke(bet: RealizedBet): Double? {
         return getReciprocal(bet.betAction.runnerPrices, Side.LAY)
     }

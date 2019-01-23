@@ -4,7 +4,7 @@ import cz.fb.manaus.core.model.RealizedBet
 import org.springframework.stereotype.Component
 
 @Component
-class TotalMatchedFunction : ProgressFunction {
+object TotalMatchedFunction : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double {
         return bet.market.matchedAmount

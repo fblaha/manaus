@@ -5,17 +5,22 @@ import cz.fb.manaus.core.model.Market
 import org.springframework.stereotype.Component
 import java.util.regex.Pattern
 
+const val SPORT_PREFIX = "sport_"
 
 @Component
-class SportCategorizer : AbstractDelegatingCategorizer(PREFIX) {
+object SportCategorizer : AbstractDelegatingCategorizer(SPORT_PREFIX) {
+
+    private val americanFootball = Pattern.compile("american\\s+football")!!
+    private val motorSport = Pattern.compile("motor\\s+sport")!!
+    private val iceHockey = Pattern.compile("ice\\s+hockey")!!
 
     private fun getCategory(market: Market): String? {
         val typeName = market.eventType.name.toLowerCase()
         when {
             "basketball" == typeName -> return MarketCategories.BASKETBALL
-            AMERICAN_FOOTBALL.matcher(typeName).matches() -> return MarketCategories.AMERICAN_FOOTBALL
-            ICE_HOCKEY.matcher(typeName).matches() -> return MarketCategories.ICE_HOCKEY
-            MOTOR_SPORT.matcher(typeName).matches() -> return MarketCategories.MOTOR_SPORT
+            americanFootball.matcher(typeName).matches() -> return MarketCategories.AMERICAN_FOOTBALL
+            iceHockey.matcher(typeName).matches() -> return MarketCategories.ICE_HOCKEY
+            motorSport.matcher(typeName).matches() -> return MarketCategories.MOTOR_SPORT
             "volleyball" == typeName -> return MarketCategories.VOLLEYBALL
             "soccer" == typeName -> return MarketCategories.SOCCER
             "snooker" == typeName -> return MarketCategories.SNOOKER
@@ -39,10 +44,4 @@ class SportCategorizer : AbstractDelegatingCategorizer(PREFIX) {
         return if (category != null) setOf(category) else emptySet()
     }
 
-    companion object {
-        val AMERICAN_FOOTBALL = Pattern.compile("american\\s+football")!!
-        val MOTOR_SPORT = Pattern.compile("motor\\s+sport")!!
-        val ICE_HOCKEY = Pattern.compile("ice\\s+hockey")!!
-        const val PREFIX = "sport_"
-    }
 }

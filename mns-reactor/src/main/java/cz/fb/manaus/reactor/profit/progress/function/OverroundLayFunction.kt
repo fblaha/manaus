@@ -6,7 +6,7 @@ import cz.fb.manaus.reactor.price.getOverround
 import org.springframework.stereotype.Component
 
 @Component
-class OverroundLayFunction : ProgressFunction {
+object OverroundLayFunction : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double? {
         return getOverround(bet.betAction.runnerPrices, Side.LAY)

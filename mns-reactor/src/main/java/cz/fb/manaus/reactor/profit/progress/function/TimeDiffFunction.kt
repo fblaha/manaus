@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 import java.time.temporal.ChronoUnit
 
 @Component
-class TimeDiffFunction : ProgressFunction {
+object TimeDiffFunction : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double? {
         val placed = bet.settledBet.placed

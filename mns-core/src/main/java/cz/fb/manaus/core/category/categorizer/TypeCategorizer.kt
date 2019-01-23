@@ -4,14 +4,10 @@ import cz.fb.manaus.core.model.Market
 import org.springframework.stereotype.Component
 
 @Component
-class TypeCategorizer : AbstractDelegatingCategorizer(PREFIX) {
+object TypeCategorizer : AbstractDelegatingCategorizer("type_") {
 
     public override fun getCategoryRaw(market: Market): Set<String> {
         val type = market.type
         return if (type == null) emptySet() else setOf(market.type.toLowerCase())
-    }
-
-    companion object {
-        const val PREFIX = "type_"
     }
 }

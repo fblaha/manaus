@@ -4,7 +4,7 @@ import cz.fb.manaus.core.model.RealizedBet
 import org.springframework.stereotype.Component
 
 @Component
-class MatchedAmountDiffFunction : ProgressFunction {
+object MatchedAmountDiffFunction : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double {
         val actionAmount = bet.betAction.price.amount

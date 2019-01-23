@@ -5,7 +5,7 @@ import cz.fb.manaus.core.model.RunnerPrices
 import org.springframework.stereotype.Component
 
 @Component
-class OtherSideAmountFunction : AbstractOfferedAmountFunction() {
+object OtherSideAmountFunction : AbstractOfferedAmountFunction() {
 
     override fun getRunnerPrices(bet: RealizedBet): RunnerPrices {
         val marketPrices = bet.betAction.runnerPrices
