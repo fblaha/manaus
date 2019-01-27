@@ -3,8 +3,8 @@ package cz.fb.manaus.core.settlement
 import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.model.Market
-import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.model.priceEq
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.core.repository.SettledBetRepository
@@ -52,7 +52,7 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
     private fun validatePrice(bet: SettledBet, action: BetAction) {
         val requestedPrice = action.price
         val price = bet.price
-        if (!Price.priceEq(requestedPrice.price, price.price)) {
+        if (!(requestedPrice.price priceEq price.price)) {
             log.warning { "different requested price '$requestedPrice' bet '$bet'" }
         }
     }

@@ -12,14 +12,13 @@ data class Price(
         fun round(value: Double): Double {
             return Precision.round(value, 3)
         }
-
-        fun priceEq(first: Double, second: Double): Boolean {
-            return Precision.equals(first, second, 0.0001)
-        }
-
-        fun amountEq(first: Double, second: Double): Boolean {
-            return Precision.equals(first, second, 0.0001)
-        }
     }
 }
 
+infix fun Double.priceEq(second: Double): Boolean {
+    return Precision.equals(this, second, 0.0001)
+}
+
+infix fun Double.amountEq(second: Double): Boolean {
+    return Precision.equals(this, second, 0.0001)
+}

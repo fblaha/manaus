@@ -4,9 +4,9 @@ package cz.fb.manaus.reactor.categorizer
 import com.google.common.base.CaseFormat
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
-import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.amountEq
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -35,7 +35,7 @@ class CoverageCategorizer : RealizedBetCategorizer {
             builder.add(PREFIX + "both")
             builder.add(PREFIX + "both" + sideFormatted)
             when {
-                Price.amountEq(amounts[Side.LAY]!!, amounts[Side.BACK]!!) -> builder.add(PREFIX + "bothEqual")
+                amounts[Side.LAY]!! amountEq amounts[Side.BACK]!! -> builder.add(PREFIX + "bothEqual")
                 amounts[Side.LAY]!! > amounts[Side.BACK]!! -> builder.add(PREFIX + "bothLayGt")
                 amounts[Side.LAY]!! < amounts[Side.BACK]!! -> builder.add(PREFIX + "bothBackGt")
             }

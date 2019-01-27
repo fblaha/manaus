@@ -79,7 +79,7 @@ abstract class AbstractUpdatingBettor(private val side: Side,
 
         val oldBet = ctx.oldBet
         if (oldBet != null) {
-            betCollector.updateBet(BetCommand(oldBet.replacePrice(newPrice.price), action))
+            betCollector.updateBet(BetCommand(oldBet replacePrice newPrice.price, action))
         } else {
             val market = ctx.market
             val bet = Bet(marketId = market.id,

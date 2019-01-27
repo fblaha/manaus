@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.price
 
-import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.priceEq
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.stereotype.Component
 
@@ -22,7 +22,7 @@ class PriceService(private val roundingService: RoundingService) {
     }
 
     fun isDowngrade(newPrice: Double, oldPrice: Double, type: Side): Boolean {
-        if (Price.priceEq(newPrice, oldPrice)) return false
+        if (newPrice priceEq oldPrice) return false
         return if (type === Side.BACK) {
             newPrice > oldPrice
         } else {

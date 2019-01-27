@@ -3,9 +3,9 @@ package cz.fb.manaus.reactor.categorizer
 
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
-import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.priceEq
 import org.springframework.stereotype.Component
 
 @Component
@@ -27,7 +27,7 @@ class CounterBetCategorizer : RealizedBetCategorizer {
             val price = realizedBet.settledBet.price.price
             val prices = mapOf(side to price, counterSide to avgCounter)
             when {
-                Price.priceEq(avgCounter, price) -> setOf(PREFIX + "zero")
+                avgCounter priceEq price -> setOf(PREFIX + "zero")
                 prices[Side.BACK]!! > prices[Side.LAY]!! -> setOf(PREFIX + "profit")
                 prices[Side.BACK]!! < prices[Side.LAY]!! -> setOf(PREFIX + "loss")
                 else -> throw IllegalStateException()

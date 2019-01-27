@@ -13,14 +13,14 @@ data class Bet(val betId: String? = null,
 
     val isMatched: Boolean
         @JsonIgnore
-        get() = !Price.amountEq(matchedAmount, 0.0)
+        get() = !(matchedAmount amountEq 0.0)
 
     val isHalfMatched: Boolean
         @JsonIgnore
         get() = matchedAmount > requestedPrice.amount / 2
 
 
-    fun replacePrice(newPrice: Double): Bet {
+    infix fun replacePrice(newPrice: Double): Bet {
         return copy(requestedPrice = Price(newPrice, requestedPrice.amount, requestedPrice.side))
     }
 }

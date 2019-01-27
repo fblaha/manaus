@@ -3,9 +3,9 @@ package cz.fb.manaus.reactor.categorizer
 
 import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
-import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.priceEq
 import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.stereotype.Component
 
@@ -22,7 +22,7 @@ class MatchedPriceCategorizer(private val priceService: PriceService) : Realized
     }
 
     internal fun getCategory(matched: Double, requested: Double, side: Side): String {
-        return if (Price.priceEq(matched, requested)) {
+        return if (matched priceEq requested) {
             PREFIX + "equal"
         } else {
             val downgrade = priceService.isDowngrade(matched, requested, side)

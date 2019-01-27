@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.betting.proposer
 
-import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.priceEq
 import cz.fb.manaus.reactor.betting.BetContext
 import org.springframework.stereotype.Service
 
@@ -31,7 +31,7 @@ class PriceProposalService {
         }
 
         val proposers = values
-                .filter { Price.priceEq(it.price, result.price) }
+                .filter { it.price priceEq result.price }
                 .flatMap { it.proposers }.toSet()
         return ProposedPrice(result.price, proposers)
     }
