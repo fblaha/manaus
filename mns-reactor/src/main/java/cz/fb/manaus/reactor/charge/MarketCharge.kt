@@ -28,7 +28,7 @@ data class MarketCharge(private val totalProfit: Double,
         fun fromBets(chargeRate: Double, bets: Iterable<SettledBet>): MarketCharge {
             val profits = bets.associate { it.id to it.profitAndLoss }.toMap()
             val totalProfit = bets.sumByDouble { it.profitAndLoss }
-            val totalPositiveProfit = bets.sumByDouble { max(it.profitAndLoss, 0.0) }
+            val totalPositiveProfit = bets.map { it.profitAndLoss }.filter { it > 0 }.sum()
             val totalCharge = Price.round(chargeRate * max(totalProfit, 0.0))
             return MarketCharge(totalProfit, totalPositiveProfit, totalCharge, profits)
         }
