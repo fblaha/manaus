@@ -22,13 +22,12 @@ class CoverageFunctionProfitService(functions: List<ProgressFunction>) : Abstrac
 
         val (head, tail) = covered.partition { this.isChargeGrowth(it) }
 
-        val result = mutableListOf<ProfitRecord>()
-
-        addRecord("solo", solo, function, coverage, charges)?.let { result.add(it) }
-        addRecord("covered", covered, function, coverage, charges)?.let { result.add(it) }
-        addRecord("covHead", head, function, coverage, charges)?.let { result.add(it) }
-        addRecord("covTail", tail, function, coverage, charges)?.let { result.add(it) }
-        return result
+        val result = mutableListOf<ProfitRecord?>()
+        result.add(addRecord("solo", solo, function, coverage, charges))
+        result.add(addRecord("covered", covered, function, coverage, charges))
+        result.add(addRecord("covHead", head, function, coverage, charges))
+        result.add(addRecord("covTail", tail, function, coverage, charges))
+        return result.filterNotNull()
     }
 
     private fun addRecord(categoryName: String, bets: List<RealizedBet>, function: ProgressFunction,

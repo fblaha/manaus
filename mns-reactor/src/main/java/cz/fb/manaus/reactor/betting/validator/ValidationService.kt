@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service
 class ValidationService(private val priceService: PriceService,
                         private val recorder: ValidationMetricsCollector) {
 
-    internal fun handleDowngrade(newOne: Price?, oldOne: Bet?, validator: Validator): ValidationResult? {
+    internal fun handleDowngrade(newOne: Price?, oldOne: Bet?, isDowngradeAccepting: Boolean): ValidationResult? {
         if (oldOne != null && newOne != null) {
             val oldPrice = oldOne.requestedPrice
-            check(newOne.side === oldPrice.side) { validator::class }
+            check(newOne.side === oldPrice.side)
             if (priceService.isDowngrade(newOne.price, oldPrice.price,
-                            newOne.side) && validator.isDowngradeAccepting) {
+                            newOne.side) && isDowngradeAccepting) {
                 return ValidationResult.ACCEPT
             }
         }
@@ -31,18 +31,20 @@ class ValidationService(private val priceService: PriceService,
         val filteredValidators = validators.filter(createPredicate(context))
         check(filteredValidators.isNotEmpty())
 
-        val newPrice = context.newPrice
-        val collected = mutableListOf<ValidationResult>()
-        for (validator in filteredValidators) {
-            if (validator.isUpdateOnly) {
-                check(context.oldBet != null)
-            }
-            val validationResult = handleDowngrade(newPrice, context.oldBet, validator) ?: validator.validate(context)
-            recorder.updateMetrics(validationResult, context.side, validator.name)
-            collected.add(validationResult)
+        if (filteredValidators.any { it.isUpdateOnly }) {
+            check(context.oldBet != null)
         }
+
+        val collected = filteredValidators
+                .map { it.name to validate(context, it) }
+                .onEach { recorder.updateMetrics(it.second, context.side, it.first) }
+                .map { it.second }
         return reduce(collected)
     }
+
+    private fun validate(context: BetContext, validator: Validator) =
+            handleDowngrade(context.newPrice, context.oldBet, validator.isDowngradeAccepting)
+                    ?: validator.validate(context)
 
     private fun createPredicate(context: BetContext): (Validator) -> Boolean {
         val predicates = mutableListOf<(Validator) -> Boolean>()

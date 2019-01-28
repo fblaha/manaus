@@ -38,5 +38,4 @@ class CoverageFunctionProfitServiceTest : AbstractLocalTestCase() {
         assertEquals(bets.size, records[0].totalCount)
         assertEquals(bets.size, records[0].backCount)
     }
-
 }

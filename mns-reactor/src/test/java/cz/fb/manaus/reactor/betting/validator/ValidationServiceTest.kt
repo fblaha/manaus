@@ -43,7 +43,7 @@ class ValidationServiceTest : AbstractLocalTestCase() {
         val rejecting = TestValidator(ValidationResult.REJECT)
         val result = service.handleDowngrade(
                 Price(newPrice, 2.0, Side.LAY),
-                oldBet, rejecting)
+                oldBet, rejecting.isDowngradeAccepting)
         assertEquals(expected, result)
         assertEquals(ValidationResult.REJECT, rejecting.validate(homeContext.copy()))
     }
