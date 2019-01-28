@@ -42,21 +42,20 @@ class ValidationService(private val priceService: PriceService,
         return reduce(collected)
     }
 
-    private fun validate(context: BetContext, validator: Validator) =
-            handleDowngrade(context.newPrice, context.oldBet, validator.isDowngradeAccepting)
-                    ?: validator.validate(context)
+    private fun validate(context: BetContext, validator: Validator): ValidationResult {
+        val downgradeResult = handleDowngrade(context.newPrice, context.oldBet, validator.isDowngradeAccepting)
+        return downgradeResult ?: validator.validate(context)
+    }
 
     private fun createPredicate(context: BetContext): (Validator) -> Boolean {
         val predicates = mutableListOf<(Validator) -> Boolean>()
         if (context.oldBet == null) {
-            val updateOnly: (Validator) -> Boolean = { it.isUpdateOnly }
-            predicates.add { !updateOnly(it) }
+            predicates.add { !it.isUpdateOnly }
         }
-        val priceRequired: (Validator) -> Boolean = { it.isPriceRequired }
         if (context.newPrice != null) {
-            predicates.add(priceRequired)
+            predicates.add { it.isPriceRequired }
         } else {
-            predicates.add { !priceRequired(it) }
+            predicates.add { !it.isPriceRequired }
         }
         return { validator -> predicates.all { it(validator) } }
     }
