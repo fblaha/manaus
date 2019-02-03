@@ -24,6 +24,7 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
     private val log = Logger.getLogger(SettledBetSaver::class.simpleName)
 
     fun saveBet(settledBet: SettledBet): SaveStatus {
+        // TODO check bet equality and update
         if (settledBetRepository.read(settledBet.id) == null) {
             val action = betActionRepository.findRecentBetAction(settledBet.id)
             return if (action != null) {
