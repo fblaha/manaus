@@ -7,6 +7,7 @@ import org.dizitart.no2.objects.Index
 import org.dizitart.no2.objects.Indices
 import java.time.Instant
 
+// TODO add commission
 @Indices(
         Index(value = "id", type = IndexType.Unique),
         Index(value = "settled", type = IndexType.NonUnique)
