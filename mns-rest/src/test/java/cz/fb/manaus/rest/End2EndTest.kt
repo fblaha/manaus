@@ -88,7 +88,7 @@ class End2EndTest : AbstractControllerTest() {
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(serialized))
-                    .andExpect(MockMvcResultMatchers.status().`is`(202))
+                    .andExpect(MockMvcResultMatchers.status().`is`(201))
                     .andReturn()
         }
     }

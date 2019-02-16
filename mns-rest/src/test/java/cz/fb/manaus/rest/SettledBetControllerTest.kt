@@ -33,7 +33,7 @@ class SettledBetControllerTest : AbstractControllerTest() {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(serialized))
-                .andExpect(status().`is`(202))
+                .andExpect(status().`is`(204))
                 .andReturn()
     }
 

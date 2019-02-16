@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.util.UriComponentsBuilder
 import java.time.Instant
 
 
@@ -35,13 +36,13 @@ class SettledBetController(private val settledBetRepository: SettledBetRepositor
     }
 
     @RequestMapping(value = ["/bets"], method = [RequestMethod.POST])
-    fun addBet(@RequestBody bet: SettledBet): ResponseEntity<*> {
+    fun addBet(builder: UriComponentsBuilder, @RequestBody bet: SettledBet): ResponseEntity<*> {
         metricRegistry.counter("settled.bet.post").inc()
         return if (betSaver.saveBet(bet)) {
-            ResponseEntity.noContent().build<Any>()
+            val uriComponents = builder.path("/bets/{id}").buildAndExpand(bet.id)
+            ResponseEntity.created(uriComponents.toUri()).build<Any>()
         } else {
-            ResponseEntity.accepted().build<Any>()
+            ResponseEntity.noContent().build<Any>()
         }
     }
-
 }
