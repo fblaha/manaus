@@ -23,24 +23,30 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
 
     private val log = Logger.getLogger(SettledBetSaver::class.simpleName)
 
-    fun saveBet(settledBet: SettledBet): SaveStatus {
-        // TODO check bet equality and update
-        if (settledBetRepository.read(settledBet.id) == null) {
+    fun saveBet(settledBet: SettledBet): Boolean {
+        val stored = settledBetRepository.read(settledBet.id)
+        if (stored == null) {
             val action = betActionRepository.findRecentBetAction(settledBet.id)
             return if (action != null) {
                 val market = marketRepository.read(action.marketId)
                 validate(settledBet, action, market!!)
                 settledBetRepository.save(settledBet)
                 metricRegistry.counter("settled.bet.new").inc()
-                SaveStatus.OK
+                true
             } else {
                 metricRegistry.counter("settled.bet.NO_ACTION").inc()
                 log.warning { "no bet action for '$settledBet'" }
-                SaveStatus.NO_ACTION
+                false
             }
         } else {
-            log.info { "settled bet with id '${settledBet.id}' already saved" }
-            return SaveStatus.COLLISION
+            return if (stored != settledBet) {
+                log.warning { "updating saved settled bet with id '${settledBet.id}'" }
+                settledBetRepository.update(settledBet)
+                true
+            } else {
+                log.info { "settled bet with id '${settledBet.id}' already saved" }
+                false
+            }
         }
     }
 

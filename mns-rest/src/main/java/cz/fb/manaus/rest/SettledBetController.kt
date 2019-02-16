@@ -3,7 +3,6 @@ package cz.fb.manaus.rest
 import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.repository.SettledBetRepository
-import cz.fb.manaus.core.settlement.SaveStatus
 import cz.fb.manaus.core.settlement.SettledBetSaver
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
@@ -38,7 +37,7 @@ class SettledBetController(private val settledBetRepository: SettledBetRepositor
     @RequestMapping(value = ["/bets"], method = [RequestMethod.POST])
     fun addBet(@RequestBody bet: SettledBet): ResponseEntity<*> {
         metricRegistry.counter("settled.bet.post").inc()
-        return if (betSaver.saveBet(bet) == SaveStatus.NO_ACTION) {
+        return if (betSaver.saveBet(bet)) {
             ResponseEntity.noContent().build<Any>()
         } else {
             ResponseEntity.accepted().build<Any>()

@@ -30,6 +30,10 @@ class SettledBetRepository(private val db: Nitrite) {
         repository.insert(settledBet)
     }
 
+    fun update(settledBet: SettledBet) {
+        check(repository.update(SettledBet::id eq settledBet.id, settledBet).affectedCount == 1)
+    }
+
     fun delete(id: String) {
         repository.remove(SettledBet::id eq id)
     }

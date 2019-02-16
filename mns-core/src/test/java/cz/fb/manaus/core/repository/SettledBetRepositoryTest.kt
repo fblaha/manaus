@@ -6,6 +6,7 @@ import cz.fb.manaus.core.model.homeSettledBet
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class SettledBetRepositoryTest : AbstractDatabaseTestCase() {
 
@@ -13,6 +14,14 @@ class SettledBetRepositoryTest : AbstractDatabaseTestCase() {
     fun `save - read`() {
         settledBetRepository.save(homeSettledBet)
         assertEquals(homeSettledBet, settledBetRepository.read(homeSettledBet.id))
+    }
+
+    @Test
+    fun `save - update`() {
+        settledBetRepository.save(homeSettledBet)
+        assertNull(settledBetRepository.read(homeSettledBet.id)!!.commission)
+        settledBetRepository.update(homeSettledBet.copy(commission = 0.1))
+        assertEquals(0.1, settledBetRepository.read(homeSettledBet.id)!!.commission)
     }
 
     @Test
