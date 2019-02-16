@@ -13,8 +13,9 @@ val homeSettledBet: SettledBet = SettledBet(
         selectionId = SEL_HOME,
         selectionName = "Banik Ostrava",
         profitAndLoss = 9.9,
-        matched = Instant.now().minus(16, ChronoUnit.HOURS),
+        commission = null,
         placed = Instant.now().minus(24, ChronoUnit.HOURS),
+        matched = Instant.now().minus(16, ChronoUnit.HOURS),
         settled = Instant.now().minus(8, ChronoUnit.HOURS),
         price = Price(3.3, 3.0, Side.BACK)
 )

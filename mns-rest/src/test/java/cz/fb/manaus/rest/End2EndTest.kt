@@ -80,7 +80,8 @@ class End2EndTest : AbstractControllerTest() {
                     selectionId = bet.selectionId,
                     id = i.toString(),
                     price = bet.requestedPrice,
-                    profitAndLoss = 10.0
+                    profitAndLoss = 10.0,
+                    commission = 0.1
             )
             val serialized = objectMapper.writer().writeValueAsString(settledBet)
             mvc.perform(MockMvcRequestBuilders.post("/bets")

@@ -7,7 +7,6 @@ import org.dizitart.no2.objects.Index
 import org.dizitart.no2.objects.Indices
 import java.time.Instant
 
-// TODO add commission
 @Indices(
         Index(value = "id", type = IndexType.Unique),
         Index(value = "settled", type = IndexType.NonUnique)
@@ -18,6 +17,7 @@ data class SettledBet(
         val selectionId: Long,
         val selectionName: String,
         val profitAndLoss: Double,
+        val commission: Double?,
         val placed: Instant?,
         val matched: Instant,
         val settled: Instant,

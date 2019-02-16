@@ -67,12 +67,13 @@ data class BetContext(
         val bet = SettledBet(
                 id = "",
                 selectionId = action.selectionId,
-                price = action.price,
+                selectionName = market.getRunner(action.selectionId).name,
+                profitAndLoss = 0.0,
+                commission = null,
                 placed = action.time,
                 matched = action.time,
                 settled = Instant.now(),
-                profitAndLoss = 0.0,
-                selectionName = market.getRunner(action.selectionId).name
+                price = action.price
         )
         return RealizedBet(bet, action, market)
     }

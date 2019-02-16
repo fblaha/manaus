@@ -18,25 +18,25 @@ class MatchbookProfitPluginTest : AbstractLocalTestCase() {
 
     @Test
     fun `charge back win`() {
-        assertEquals(0.207, plugin.getCharge(provider.chargeRate, 27.6, 10.0), 0.001)
-        assertEquals(0.0381, plugin.getCharge(provider.chargeRate, 5.08, 2.0), 0.001)
+        assertEquals(0.207, plugin.getCountedCharge(provider.chargeRate, 27.6, 10.0), 0.001)
+        assertEquals(0.0381, plugin.getCountedCharge(provider.chargeRate, 5.08, 2.0), 0.001)
     }
 
     @Test
     fun `charge back loss`() {
-        assertEquals(0.015, plugin.getCharge(provider.chargeRate, -2.0, 2.0), 0.0001)
-        assertEquals(0.075, plugin.getCharge(provider.chargeRate, -10.0, 10.0), 0.0001)
+        assertEquals(0.015, plugin.getCountedCharge(provider.chargeRate, -2.0, 2.0), 0.0001)
+        assertEquals(0.075, plugin.getCountedCharge(provider.chargeRate, -10.0, 10.0), 0.0001)
     }
 
     @Test
     fun `charge lay win`() {
-        assertEquals(0.015, plugin.getCharge(provider.chargeRate, 2.0, 2.0), 0.001)
-        assertEquals(0.075, plugin.getCharge(provider.chargeRate, 10.0, 10.0), 0.001)
+        assertEquals(0.015, plugin.getCountedCharge(provider.chargeRate, 2.0, 2.0), 0.001)
+        assertEquals(0.075, plugin.getCountedCharge(provider.chargeRate, 10.0, 10.0), 0.001)
     }
 
     @Test
     fun `charge lay loss`() {
-        assertEquals(0.015, plugin.getCharge(provider.chargeRate, -4.68, 2.0), 0.0001)
-        assertEquals(0.06, plugin.getCharge(provider.chargeRate, -8.0, 10.0), 0.0001)
+        assertEquals(0.015, plugin.getCountedCharge(provider.chargeRate, -4.68, 2.0), 0.0001)
+        assertEquals(0.06, plugin.getCountedCharge(provider.chargeRate, -8.0, 10.0), 0.0001)
     }
 }
