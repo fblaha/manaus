@@ -2,11 +2,14 @@ package cz.fb.manaus.core.maintanance
 
 import cz.fb.manaus.core.model.TaskExecution
 import cz.fb.manaus.core.repository.TaskExecutionRepository
+import cz.fb.manaus.spring.ManausProfiles
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.time.Instant
 import java.util.logging.Logger
 
 @Component
+@Profile(ManausProfiles.DB)
 class PeriodicTaskManager(
         private val periodicTasks: List<PeriodicTask>,
         private val taskExecutionRepository: TaskExecutionRepository
