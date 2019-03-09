@@ -7,6 +7,7 @@ import java.time.Instant
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class TaskExecutionRepositoryTest : AbstractDatabaseTestCase() {
 
@@ -43,10 +44,10 @@ class TaskExecutionRepositoryTest : AbstractDatabaseTestCase() {
     @Test
     fun list() {
         val taskExecution = TaskExecution("test", Instant.now())
-        assertEquals(0, taskExecutionRepository.list().size)
+        assertTrue(taskExecutionRepository.list().isEmpty())
         taskExecutionRepository.saveOrUpdate(taskExecution)
         assertEquals(1, taskExecutionRepository.list().size)
         taskExecutionRepository.delete(taskExecution.name)
-        assertEquals(0, taskExecutionRepository.list().size)
+        assertTrue(taskExecutionRepository.list().isEmpty())
     }
 }
