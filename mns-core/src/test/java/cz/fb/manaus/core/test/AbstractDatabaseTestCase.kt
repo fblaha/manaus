@@ -4,6 +4,7 @@ package cz.fb.manaus.core.test
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.core.repository.SettledBetRepository
+import cz.fb.manaus.core.repository.TaskExecutionRepository
 import cz.fb.manaus.spring.ManausProfiles.DB
 import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.After
@@ -20,6 +21,8 @@ abstract class AbstractDatabaseTestCase : AbstractLocalTestCase() {
     protected lateinit var settledBetRepository: SettledBetRepository
     @Autowired
     protected lateinit var marketRepository: MarketRepository
+    @Autowired
+    protected lateinit var taskExecutionRepository: TaskExecutionRepository
 
     @After
     @Before
@@ -27,5 +30,6 @@ abstract class AbstractDatabaseTestCase : AbstractLocalTestCase() {
         marketRepository.repository.remove(ObjectFilters.ALL)
         betActionRepository.repository.remove(ObjectFilters.ALL)
         settledBetRepository.repository.remove(ObjectFilters.ALL)
+        taskExecutionRepository.repository.remove(ObjectFilters.ALL)
     }
 }

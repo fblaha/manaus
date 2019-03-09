@@ -1,13 +1,13 @@
 package cz.fb.manaus.rest
 
 import cz.fb.manaus.core.maintanance.ConfigUpdate
-import cz.fb.manaus.core.maintanance.PeriodicMaintenanceTask
+import cz.fb.manaus.core.maintanance.PeriodicTask
 import org.springframework.stereotype.Component
 
 import java.time.Duration
 
 @Component
-internal class TestTask : PeriodicMaintenanceTask {
+internal class TestTask : PeriodicTask {
 
     override val name: String = "testTask"
 

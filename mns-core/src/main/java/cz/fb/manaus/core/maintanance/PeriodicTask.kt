@@ -2,7 +2,7 @@ package cz.fb.manaus.core.maintanance
 
 import java.time.Duration
 
-interface PeriodicMaintenanceTask {
+interface PeriodicTask {
 
     val name: String
 

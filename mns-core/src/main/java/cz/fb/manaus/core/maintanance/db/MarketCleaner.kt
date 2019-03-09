@@ -3,7 +3,7 @@ package cz.fb.manaus.core.maintanance.db
 import com.codahale.metrics.MetricRegistry
 import com.google.common.base.Stopwatch
 import cz.fb.manaus.core.maintanance.ConfigUpdate
-import cz.fb.manaus.core.maintanance.PeriodicMaintenanceTask
+import cz.fb.manaus.core.maintanance.PeriodicTask
 import cz.fb.manaus.core.repository.MarketFootprintLoader
 import cz.fb.manaus.core.repository.MarketPurger
 import cz.fb.manaus.core.repository.MarketRepository
@@ -21,7 +21,7 @@ class MarketCleaner(private val marketRepository: MarketRepository,
                     private val marketFootprintLoader: MarketFootprintLoader,
                     private val marketPurger: MarketPurger,
                     private val metricRegistry: MetricRegistry,
-                    private val approvers: List<MarketDeletionApprover>) : PeriodicMaintenanceTask {
+                    private val approvers: List<MarketDeletionApprover>) : PeriodicTask {
 
     override val name: String = "marketCleanup"
 

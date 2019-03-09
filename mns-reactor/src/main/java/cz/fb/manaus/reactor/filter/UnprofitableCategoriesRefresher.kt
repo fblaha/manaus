@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.filter
 
 import cz.fb.manaus.core.maintanance.ConfigUpdate
-import cz.fb.manaus.core.maintanance.PeriodicMaintenanceTask
+import cz.fb.manaus.core.maintanance.PeriodicTask
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
@@ -9,7 +9,7 @@ import java.time.Duration
 
 @Component
 @Profile(ManausProfiles.DB)
-class UnprofitableCategoriesRefresher(private val unprofitableCategoriesRegistries: List<AbstractUnprofitableCategoriesRegistry>) : PeriodicMaintenanceTask {
+class UnprofitableCategoriesRefresher(private val unprofitableCategoriesRegistries: List<AbstractUnprofitableCategoriesRegistry>) : PeriodicTask {
 
     override val name: String = "unprofitableCategoriesRefresh"
 
