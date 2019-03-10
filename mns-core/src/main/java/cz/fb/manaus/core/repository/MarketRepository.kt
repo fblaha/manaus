@@ -2,12 +2,14 @@ package cz.fb.manaus.core.repository
 
 import cz.fb.manaus.core.model.Market
 import cz.fb.manaus.spring.ManausProfiles
-import org.dizitart.kno2.filters.*
+import org.dizitart.kno2.filters.and
+import org.dizitart.kno2.filters.gte
+import org.dizitart.kno2.filters.lt
+import org.dizitart.kno2.filters.lte
 import org.dizitart.kno2.getRepository
 import org.dizitart.no2.FindOptions
 import org.dizitart.no2.Nitrite
 import org.dizitart.no2.SortOrder
-import org.dizitart.no2.objects.ObjectRepository
 import org.dizitart.no2.objects.filters.ObjectFilters
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
@@ -16,26 +18,11 @@ import java.time.Instant
 
 @Component
 @Profile(ManausProfiles.DB)
-class MarketRepository(private val db: Nitrite) {
-
-    internal val repository: ObjectRepository<Market> by lazy {
-        db.getRepository<Market> {}
-    }
-
-    fun saveOrUpdate(market: Market) {
-        repository.update(market, true)
-    }
-
-    fun read(id: String): Market? {
-        return repository.find(Market::id eq id).firstOrDefault()
-    }
+class MarketRepository(private val db: Nitrite) :
+        AbstractRepository<Market>({ db.getRepository {} }, Market::id) {
 
     fun delete(olderThan: Instant): Int {
         return repository.remove(Market::openDate lt olderThan).affectedCount
-    }
-
-    fun delete(id: String) {
-        repository.remove(Market::id eq id)
     }
 
     fun find(from: Instant? = null, to: Instant? = null, maxResults: Int? = null): List<Market> {

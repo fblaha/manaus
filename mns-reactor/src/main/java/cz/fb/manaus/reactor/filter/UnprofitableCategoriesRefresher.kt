@@ -9,7 +9,8 @@ import java.time.Duration
 
 @Component
 @Profile(ManausProfiles.DB)
-class UnprofitableCategoriesRefresher(private val unprofitableCategoriesRegistries: List<AbstractUnprofitableCategoriesRegistry>) : PeriodicTask {
+class UnprofitableCategoriesRefresher(
+        private val registries: List<AbstractUnprofitableCategoriesRegistry>) : PeriodicTask {
 
     override val name: String = "unprofitableCategoriesRefresh"
 
@@ -17,7 +18,7 @@ class UnprofitableCategoriesRefresher(private val unprofitableCategoriesRegistri
 
     override fun execute(): ConfigUpdate {
         val configUpdate = ConfigUpdate.empty(Duration.ofDays(1))
-        unprofitableCategoriesRegistries.forEach { it.updateBlacklists(configUpdate) }
+        registries.forEach { it.updateBlacklists(configUpdate) }
         return configUpdate
     }
 

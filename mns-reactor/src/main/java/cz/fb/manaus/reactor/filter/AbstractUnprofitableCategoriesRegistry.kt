@@ -36,7 +36,7 @@ abstract class AbstractUnprofitableCategoriesRegistry(
         get() = String.format("UNPROFITABLE_REGISTRY(%s): ", name)
 
     private val propertyPrefix: String
-        get() = "$UNPROFITABLE_BLACK_LIST$name."
+        get() = "unprofitable.black.list.$name."
 
     fun updateBlacklists(configUpdate: ConfigUpdate) {
         log.info { logPrefix + "black list update started" }
@@ -103,9 +103,5 @@ abstract class AbstractUnprofitableCategoriesRegistry(
         return sorted.takeWhile { it.profit < maximalProfit }
                 .take(blackCount)
                 .map { it.category }.toSet()
-    }
-
-    companion object {
-        private const val UNPROFITABLE_BLACK_LIST = "unprofitable.black.list."
     }
 }

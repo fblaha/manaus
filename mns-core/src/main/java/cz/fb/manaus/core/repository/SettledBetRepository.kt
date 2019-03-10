@@ -11,7 +11,6 @@ import org.dizitart.kno2.getRepository
 import org.dizitart.no2.FindOptions
 import org.dizitart.no2.Nitrite
 import org.dizitart.no2.SortOrder
-import org.dizitart.no2.objects.ObjectRepository
 import org.dizitart.no2.objects.filters.ObjectFilters
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
@@ -19,23 +18,11 @@ import java.time.Instant
 
 @Component
 @Profile(ManausProfiles.DB)
-class SettledBetRepository(private val db: Nitrite) {
-    internal val repository: ObjectRepository<SettledBet> by lazy { db.getRepository<SettledBet> {} }
-
-    fun read(id: String): SettledBet? {
-        return repository.find(SettledBet::id eq id).firstOrDefault()
-    }
-
-    fun save(settledBet: SettledBet) {
-        repository.insert(settledBet)
-    }
+class SettledBetRepository(private val db: Nitrite) :
+        AbstractRepository<SettledBet>({ db.getRepository {} }, SettledBet::id) {
 
     fun update(settledBet: SettledBet) {
         check(repository.update(SettledBet::id eq settledBet.id, settledBet).affectedCount == 1)
-    }
-
-    fun delete(id: String) {
-        repository.remove(SettledBet::id eq id)
     }
 
     fun find(from: Instant? = null,
