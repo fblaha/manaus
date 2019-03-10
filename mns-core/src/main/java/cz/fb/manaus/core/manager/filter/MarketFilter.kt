@@ -7,5 +7,5 @@ interface MarketFilter {
     val isStrict: Boolean
         get() = false
 
-    fun accept(market: Market, categoryBlacklist: Set<String>): Boolean
+    fun accept(market: Market): Boolean
 }

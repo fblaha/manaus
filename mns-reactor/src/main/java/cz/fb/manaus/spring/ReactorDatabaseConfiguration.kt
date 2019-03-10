@@ -2,6 +2,7 @@ package cz.fb.manaus.spring
 
 import cz.fb.manaus.core.manager.MarketFilterService
 import cz.fb.manaus.core.repository.BetActionRepository
+import cz.fb.manaus.core.repository.BlacklistedCategoryRepository
 import cz.fb.manaus.reactor.betting.BetManager
 import cz.fb.manaus.reactor.betting.action.BetActionListener
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
@@ -24,11 +25,18 @@ open class ReactorDatabaseConfiguration {
     open fun betManager(filterService: MarketFilterService,
                         priceFilter: PriceFilter?,
                         betActionRepository: BetActionRepository,
+                        blacklistedCategoryRepository: BlacklistedCategoryRepository,
                         actionListeners: List<BetActionListener>,
                         bettingConf: BettingConf,
                         snapshotListeners: List<MarketSnapshotListener>): BetManager {
         val disabledListeners = bettingConf.disabledListeners.toSet()
-        return BetManager.create(betActionRepository, filterService, priceFilter,
-                disabledListeners, snapshotListeners, actionListeners)
+        return BetManager.create(
+                betActionRepository,
+                blacklistedCategoryRepository,
+                filterService,
+                priceFilter,
+                disabledListeners,
+                snapshotListeners,
+                actionListeners)
     }
 }

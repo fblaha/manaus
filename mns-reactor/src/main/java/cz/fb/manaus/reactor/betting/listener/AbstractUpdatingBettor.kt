@@ -27,8 +27,9 @@ abstract class AbstractUpdatingBettor(private val side: Side,
 
     private val log = Logger.getLogger(AbstractUpdatingBettor::class.simpleName)
 
-    override fun onMarketSnapshot(snapshot: MarketSnapshot, betCollector: BetCollector,
-                                  accountMoney: AccountMoney?, categoryBlacklist: Set<String>) {
+    override fun onMarketSnapshot(snapshot: MarketSnapshot,
+                                  betCollector: BetCollector,
+                                  accountMoney: AccountMoney?) {
         val (marketPrices, market, _, coverage, _) = snapshot
         val flowFilter = flowFilterRegistry.getFlowFilter(market.type!!)
         val fairness = calculator.getFairness(marketPrices)

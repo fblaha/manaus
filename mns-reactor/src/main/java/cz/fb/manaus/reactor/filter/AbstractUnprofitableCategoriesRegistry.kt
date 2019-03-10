@@ -1,6 +1,6 @@
 package cz.fb.manaus.reactor.filter
 
-import cz.fb.manaus.core.maintanance.ConfigUpdate
+import cz.fb.manaus.core.model.BlacklistedCategory
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ExchangeProvider
@@ -33,16 +33,13 @@ abstract class AbstractUnprofitableCategoriesRegistry(
     private val log = Logger.getLogger(AbstractUnprofitableCategoriesRegistry::class.simpleName)
 
     private val logPrefix: String
-        get() = String.format("UNPROFITABLE_REGISTRY(%s): ", name)
+        get() = "unprofitable registry '$name': "
 
-    private val propertyPrefix: String
-        get() = "unprofitable.black.list.$name."
-
-    fun updateBlacklists(configUpdate: ConfigUpdate) {
+    fun getBlacklist(): List<BlacklistedCategory> {
         log.info { logPrefix + "black list update started" }
         val now = Instant.now()
         val settledBets = settledBetRepository.find(now.minusSeconds(period.toSeconds()), now, side)
-        if (settledBets.isEmpty()) return
+        if (settledBets.isEmpty()) return emptyList()
         val realizedBets = settledBets.map { realizedBetLoader.toRealizedBet(it) }
         val chargeRate = provider.chargeRate
         val profitRecords = profitService.getProfitRecords(
@@ -52,23 +49,25 @@ abstract class AbstractUnprofitableCategoriesRegistry(
                 chargeRate = chargeRate)
 
         log.info { logPrefix + "updating registry '$name'" }
-        updateBlacklists(profitRecords, configUpdate)
+        return getBlacklist(profitRecords)
     }
 
-    internal fun updateBlacklists(profitRecords: List<ProfitRecord>, configUpdate: ConfigUpdate) {
+    internal fun getBlacklist(profitRecords: List<ProfitRecord>): List<BlacklistedCategory> {
         val all = profitRecords.find { ProfitRecord.isAllCategory(it) }!!
         val filtered = getFiltered(profitRecords)
         val totalCount = all.totalCount
 
-        configUpdate.deletePrefixes.add(propertyPrefix)
-
         val totalBlacklist = mutableSetOf<String>()
+        val perThreshold = mutableListOf<List<BlacklistedCategory>>()
         for ((thresholdPct, blackCount) in thresholds) {
             val threshold = getThreshold(thresholdPct)
             val blacklist = getBlacklist(threshold, blackCount, totalCount, filtered, totalBlacklist)
-            totalBlacklist.addAll(blacklist)
-            saveBlacklist(thresholdPct, blacklist, configUpdate)
+            perThreshold.add(blacklist)
+            totalBlacklist.addAll(blacklist.map { it.name })
         }
+        val result = perThreshold.flatten()
+        check(result.distinctBy { it.name }.size == result.size)
+        return result
     }
 
     private fun getFiltered(profitRecords: List<ProfitRecord>): List<ProfitRecord> {
@@ -76,12 +75,6 @@ abstract class AbstractUnprofitableCategoriesRegistry(
             profitRecords
         } else {
             profitRecords.filter { it.category.startsWith(filterPrefix) }
-        }
-    }
-
-    internal fun saveBlacklist(thresholdPct: Int, blacklist: Set<String>, configUpdate: ConfigUpdate) {
-        if (blacklist.isNotEmpty()) {
-            configUpdate.setProperties[propertyPrefix + thresholdPct] = blacklist.sorted().joinToString(",")
         }
     }
 
@@ -93,7 +86,7 @@ abstract class AbstractUnprofitableCategoriesRegistry(
                               blackCount: Int,
                               totalCount: Int,
                               profitRecords: List<ProfitRecord>,
-                              actualBlacklist: Set<String>): Set<String> {
+                              actualBlacklist: Set<String>): List<BlacklistedCategory> {
 
         val sorted = profitRecords.asSequence()
                 .filter { it.category !in actualBlacklist }
@@ -102,6 +95,7 @@ abstract class AbstractUnprofitableCategoriesRegistry(
 
         return sorted.takeWhile { it.profit < maximalProfit }
                 .take(blackCount)
-                .map { it.category }.toSet()
+                .map { BlacklistedCategory(it.category, period, it.profit) }
+                .toList()
     }
 }

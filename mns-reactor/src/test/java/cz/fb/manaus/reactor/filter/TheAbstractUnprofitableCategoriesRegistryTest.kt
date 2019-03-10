@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.filter
 
 import cz.fb.manaus.core.MarketCategories
-import cz.fb.manaus.core.maintanance.ConfigUpdate
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
@@ -32,28 +31,28 @@ class TheAbstractUnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase()
     @Test
     fun `blacklist threshold`() {
         assertTrue("horror" in registry.getBlacklist(0.1, 1, 110,
-                listOf(pr("horror", -10.0, 10)), setOf()))
+                listOf(pr("horror", -10.0, 10)), setOf()).map { it.name })
         assertFalse("horror" in registry.getBlacklist(0.1, 1, 90,
-                listOf(pr("horror", -10.0, 10)), setOf()))
+                listOf(pr("horror", -10.0, 10)), setOf()).map { it.name })
         assertFalse("horror" in registry.getBlacklist(0.1, 0, 110,
-                listOf(pr("horror", -10.0, 10)), setOf()))
+                listOf(pr("horror", -10.0, 10)), setOf()).map { it.name })
     }
 
     @Test
     fun `blacklist sort`() {
         assertThat(registry.getBlacklist(0.1, 1, 110,
                 listOf(pr("horror", -10.0, 10), pr("weak", -1.0, 10),
-                        pr("bad", -5.0, 10)), setOf()),
+                        pr("bad", -5.0, 10)), setOf()).map { it.name },
                 allOf(hasItem("horror"), not(hasItem("weak")), not(hasItem("bad")))
         )
         assertThat(registry.getBlacklist(0.1, 2, 110,
                 listOf(pr("horror", -10.0, 10), pr("weak", -1.0, 10),
-                        pr("bad", -5.0, 10)), setOf()),
+                        pr("bad", -5.0, 10)), setOf()).map { it.name },
                 allOf(hasItem("horror"), not(hasItem("weak")), hasItem("bad"))
         )
         assertThat(registry.getBlacklist(0.1, 3, 110,
                 listOf(pr("horror", -10.0, 10), pr("weak", -1.0, 10),
-                        pr("bad", -5.0, 10)), setOf()),
+                        pr("bad", -5.0, 10)), setOf()).map { it.name },
                 allOf(hasItem("horror"), hasItem("weak"), hasItem("bad"))
         )
     }
@@ -66,45 +65,25 @@ class TheAbstractUnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase()
         val blacklist = registry.getBlacklist(0.1, 2, 110,
                 records,
                 setOf("horror"))
-        assertThat(blacklist,
+        assertThat(blacklist.map { it.name },
                 allOf(not(hasItem("horror")), hasItem("weak"), hasItem("bad"))
         )
     }
 
     @Test
     fun `update filter prefix`() {
-        val configUpdate = ConfigUpdate.empty(Duration.ZERO)
-        val properties = configUpdate.setProperties
-        registry.updateBlacklists(listOf(pr(MarketCategories.ALL, 10.0, 100),
+        val blacklist = registry.getBlacklist(listOf(
+                pr(MarketCategories.ALL, 10.0, 100),
                 pr("weak1", -1.0, 5),
                 pr("not_match", -1.0, 2),
-                pr("weak2", -1.0, 5)), configUpdate)
+                pr("weak2", -1.0, 5)))
 
-        assertEquals("weak1,weak2", properties["unprofitable.black.list.test.5"])
+        assertEquals(listOf("weak1", "weak2"), blacklist.map { it.name }.toList())
     }
 
     @Test
     fun threshold() {
         assertEquals(0.1, registry.getThreshold(10))
-    }
-
-    @Test
-    fun save() {
-        val configUpdate = ConfigUpdate.empty(Duration.ZERO)
-        registry.saveBlacklist(10, setOf("weak1", "weak2", "weak3"), configUpdate)
-        val properties = configUpdate.setProperties
-
-        assertEquals("weak1,weak2,weak3", properties["unprofitable.black.list.test.10"])
-    }
-
-    @Test
-    fun `blacklist to save`() {
-        val configUpdate = ConfigUpdate.empty(Duration.ZERO)
-        val properties = configUpdate.setProperties
-        registry.saveBlacklist(10, setOf("weak10_1", "weak10_2", "weak10_3"), configUpdate)
-        assertEquals("weak10_1,weak10_2,weak10_3", properties["unprofitable.black.list.test.10"])
-        registry.saveBlacklist(5, setOf("weak5_1", "weak5_2", "weak5_3"), configUpdate)
-        assertEquals("weak5_1,weak5_2,weak5_3", properties["unprofitable.black.list.test.5"])
     }
 
     @Component

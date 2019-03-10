@@ -8,7 +8,6 @@ interface MarketSnapshotListener {
 
     fun onMarketSnapshot(snapshot: MarketSnapshot,
                          betCollector: BetCollector,
-                         accountMoney: AccountMoney?,
-                         categoryBlacklist: Set<String>)
+                         accountMoney: AccountMoney? = null)
 
 }

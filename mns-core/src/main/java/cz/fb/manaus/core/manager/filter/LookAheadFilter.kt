@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit
 
 class LookAheadFilter(private val lookAhead: Duration) : MarketFilter {
 
-    override fun accept(market: Market, categoryBlacklist: Set<String>): Boolean {
+    override fun accept(market: Market): Boolean {
         val start = market.openDate
         val untilStart = Instant.now().until(start, ChronoUnit.MINUTES)
         return untilStart < lookAhead.toMinutes()

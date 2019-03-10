@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 @Profile("betfair")
 class MatchedAmountFilter : MarketFilter {
 
-    override fun accept(market: Market, categoryBlacklist: Set<String>): Boolean {
+    override fun accept(market: Market): Boolean {
         val matchedAmount = market.matchedAmount
         return !(matchedAmount amountEq 0.0)
     }

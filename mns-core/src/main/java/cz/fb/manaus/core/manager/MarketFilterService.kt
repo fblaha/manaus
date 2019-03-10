@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service
 @Service
 class MarketFilterService(private val marketFilters: List<MarketFilter> = mutableListOf()) {
 
-    fun accept(market: Market, hasBets: Boolean, categoryBlacklist: Set<String>): Boolean {
+    fun accept(market: Market, hasBets: Boolean): Boolean {
         var filters = marketFilters
         if (hasBets) {
             filters = filters.filter { it.isStrict }
         }
-        return filters.all { it.accept(market, categoryBlacklist) }
+        return filters.all { it.accept(market) }
     }
 }

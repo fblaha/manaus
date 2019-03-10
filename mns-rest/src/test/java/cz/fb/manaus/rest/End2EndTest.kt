@@ -47,7 +47,6 @@ class End2EndTest : AbstractControllerTest() {
         val crate = MarketSnapshotCrate(
                 prices = runnerPrices,
                 bets = emptyList(),
-                categoryBlacklist = emptySet(),
                 scanTime = 1000,
                 tradedVolume = tradedVolume)
 

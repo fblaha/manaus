@@ -2,7 +2,6 @@ package cz.fb.manaus.core.maintanance.db
 
 import com.codahale.metrics.MetricRegistry
 import com.google.common.base.Stopwatch
-import cz.fb.manaus.core.maintanance.ConfigUpdate
 import cz.fb.manaus.core.maintanance.PeriodicTask
 import cz.fb.manaus.core.repository.MarketFootprintLoader
 import cz.fb.manaus.core.repository.MarketPurger
@@ -29,7 +28,7 @@ class MarketCleaner(private val marketRepository: MarketRepository,
 
     private val log = Logger.getLogger(MarketCleaner::class.simpleName)
 
-    override fun execute(): ConfigUpdate {
+    override fun execute() {
         val stopwatch = Stopwatch.createUnstarted().start()
         var count = 0L
         for ((from, to) in approvers.mapNotNull { it.timeRange }) {
@@ -45,6 +44,5 @@ class MarketCleaner(private val marketRepository: MarketRepository,
         metricRegistry.counter("purge.market").inc(count)
         val elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
         log.info { "market deletion - '$count' obsolete markets removed in '$elapsed' seconds" }
-        return ConfigUpdate.NOP
     }
 }

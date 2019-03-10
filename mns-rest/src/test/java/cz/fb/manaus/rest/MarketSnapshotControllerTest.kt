@@ -28,7 +28,6 @@ class MarketSnapshotControllerTest : AbstractControllerTest() {
         val crate = MarketSnapshotCrate(
                 prices = runnerPrices,
                 bets = listOf(bet),
-                categoryBlacklist = emptySet(),
                 money = accountMoney,
                 scanTime = 1000,
                 tradedVolume = tradedVolume)

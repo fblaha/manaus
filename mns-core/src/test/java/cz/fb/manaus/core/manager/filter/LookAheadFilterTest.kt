@@ -18,7 +18,7 @@ class LookAheadFilterTest : AbstractLocalTestCase() {
         val event = market.event
         val plus50d = Instant.now().plus(50, ChronoUnit.DAYS)
         val plus5d = Instant.now().plus(5, ChronoUnit.DAYS)
-        assertFalse(lookAheadFilter.accept(market.copy(event = event.copy(openDate = plus50d)), setOf()))
-        assertTrue(lookAheadFilter.accept(market.copy(event = event.copy(openDate = plus5d)), setOf()))
+        assertFalse(lookAheadFilter.accept(market.copy(event = event.copy(openDate = plus50d))))
+        assertTrue(lookAheadFilter.accept(market.copy(event = event.copy(openDate = plus5d))))
     }
 }

@@ -10,7 +10,7 @@ class ObsoleteFilter : MarketFilter {
 
     private val log = Logger.getLogger(ObsoleteFilter::class.simpleName)
 
-    override fun accept(market: Market, categoryBlacklist: Set<String>): Boolean {
+    override fun accept(market: Market): Boolean {
         val result = market.event.openDate.isAfter(Instant.now())
         if (!result) {
             log.finest { "omitting obsolete date '${market.event.openDate}' for '$market'" }
