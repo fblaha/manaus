@@ -10,7 +10,7 @@ class PriceProposalService {
 
     fun reducePrices(context: BetContext, proposers: List<PriceProposer>): ProposedPrice<Double> {
         val prices = mutableListOf<ProposedPrice<Double>>()
-        check(!proposers.isEmpty())
+        check(proposers.isNotEmpty())
         for (proposer in proposers) {
             val proposedPrice = proposer.getProposedPrice(context)
             if (proposer.isMandatory) {

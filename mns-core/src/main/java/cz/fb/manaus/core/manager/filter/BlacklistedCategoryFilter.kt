@@ -21,7 +21,7 @@ class BlacklistedCategoryFilter(private val blacklistedCategoryRepository: Black
         val categories = categoryService.getMarketCategories(market, false)
         val blacklist = blacklistedCategoryRepository.list().map { it.name }.toSet()
         val intersection = categories intersect blacklist
-        if (!intersection.isEmpty()) {
+        if (intersection.isNotEmpty()) {
             metricRegistry.counter("blacklist.market").inc()
             log.info { "blacklist category '$intersection' for market '$market'" }
         }

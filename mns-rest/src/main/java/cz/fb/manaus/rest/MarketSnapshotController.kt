@@ -61,7 +61,7 @@ class MarketSnapshotController(private val manager: BetManager,
     }
 
     private fun validateMarket(snapshotCrate: MarketSnapshotCrate) {
-        check(!snapshotCrate.prices.isEmpty())
+        check(snapshotCrate.prices.isNotEmpty())
     }
 
     private fun logException(snapshot: MarketSnapshotCrate, e: RuntimeException) {

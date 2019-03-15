@@ -37,6 +37,6 @@ class MarketController(private val marketRepository: MarketRepository) {
     }
 
     private fun validateMarket(market: Market) {
-        require(!market.runners.isEmpty()) { "runners is empty" }
+        require(market.runners.isNotEmpty()) { "runners is empty" }
     }
 }
