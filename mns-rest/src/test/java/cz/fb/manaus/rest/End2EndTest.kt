@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.google.common.net.HttpHeaders
 import cz.fb.manaus.core.MarketCategories
 import cz.fb.manaus.core.model.*
+import cz.fb.manaus.reactor.ml.BetFeatureVector
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -31,6 +32,7 @@ class End2EndTest : AbstractControllerTest() {
         `When I post settled bets for all bet actions`()
         `Then settled bets should be reflected in profit records`()
         `And settled bets should be reflected in fc progress records`()
+        `And settled bets should be reflected in ML bet features`()
     }
 
     private fun `When I post market`() {
@@ -111,6 +113,14 @@ class End2EndTest : AbstractControllerTest() {
                 .andReturn()
         val profitRecords: List<ProfitRecord> = objectMapper.readValue(result.response.contentAsString)
         assertTrue(profitRecords.isNotEmpty())
+    }
+
+    private fun `And settled bets should be reflected in ML bet features`() {
+        val result = mvc.perform(MockMvcRequestBuilders.get("/ml/bet-features/1d").accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andReturn()
+        val vectors: List<BetFeatureVector> = objectMapper.readValue(result.response.contentAsString)
+        assertTrue(vectors.isNotEmpty())
     }
 
     private fun `Then all bet actions should have non empty bet ID`() {
