@@ -32,12 +32,17 @@ class SettledBetLoader(private val settledBetRepository: SettledBetRepository,
             })
 
     fun load(interval: String, useCache: Boolean): List<RealizedBet> {
-        return if (useCache) {
+        val stopwatch = Stopwatch.createStarted()
+        val result = if (useCache) {
             cache.getUnchecked(interval)
         } else {
             loadFromDatabase(interval)
         }
+        val elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
+        log.info { "bets fetched in '$elapsed' seconds" }
+        return result
     }
+
 
     private fun loadFromDatabase(interval: String): List<RealizedBet> {
         val (from, to) = IntervalParser.parse(Instant.now(), interval)

@@ -2,7 +2,6 @@ package cz.fb.manaus.rest
 
 import com.google.common.base.Stopwatch
 import cz.fb.manaus.core.model.ProfitRecord
-import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.reactor.profit.ProfitService
@@ -35,7 +34,7 @@ class ProfitController(private val profitService: ProfitService,
                          @RequestParam(required = false) charge: Double?,
                          @RequestParam(required = false) ceiling: Double?,
                          @RequestParam(defaultValue = "true") cache: Boolean): List<ProfitRecord> {
-        var settledBets = loadBets(interval, cache)
+        var settledBets = betLoader.load(interval, cache)
 
         val ceil = ceiling ?: -1.0
         if (ceil > 0) {
@@ -64,7 +63,7 @@ class ProfitController(private val profitService: ProfitService,
                            @RequestParam(required = false) charge: Double?,
                            @RequestParam(required = false) projection: String?,
                            @RequestParam(defaultValue = "true") cache: Boolean): List<ProfitRecord> {
-        val bets = loadBets(interval, cache)
+        val bets = betLoader.load(interval, cache)
         val stopwatch = Stopwatch.createStarted()
         val chargeRate = getChargeRate(charge)
         val records = progressProfitService.getProfitRecords(bets, function, chunkCount, chargeRate, projection)
@@ -79,20 +78,12 @@ class ProfitController(private val profitService: ProfitService,
                            @RequestParam(required = false) charge: Double?,
                            @RequestParam(required = false) projection: String?,
                            @RequestParam(defaultValue = "true") cache: Boolean): List<ProfitRecord> {
-        val bets = loadBets(interval, cache)
+        val bets = betLoader.load(interval, cache)
         val stopwatch = Stopwatch.createStarted()
         val chargeRate = getChargeRate(charge)
         val records = coverageService.getProfitRecords(bets, function, chargeRate, projection)
         logTime(stopwatch, "profit records computed")
         return records
-    }
-
-    private fun loadBets(@PathVariable interval: String,
-                         @RequestParam(defaultValue = "true") cache: Boolean): List<RealizedBet> {
-        val stopwatch = Stopwatch.createStarted()
-        val bets = betLoader.load(interval, cache)
-        logTime(stopwatch, "pets fetched")
-        return bets
     }
 
     private fun logTime(stopwatch: Stopwatch, messagePrefix: String) {
