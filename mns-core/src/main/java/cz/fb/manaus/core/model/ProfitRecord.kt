@@ -23,10 +23,6 @@ data class ProfitRecord(
     val profit: Double
         get() = theoreticalProfit - charge
 
-    val coverRate: Double
-        get() = coverCount / totalCount.toDouble()
-
-
     companion object {
         fun isAllCategory(input: ProfitRecord): Boolean {
             return Category.parse(input.category).isAll
