@@ -29,6 +29,12 @@ class MarketControllerTest : AbstractControllerTest() {
     }
 
     @Test
+    fun `market ID list`() {
+        createLiveMarket()
+        checkResponse("/market-ids", "2")
+    }
+
+    @Test
     fun `market create`() {
         val market = objectMapper.writer().writeValueAsString(market)
         val result = mvc.perform(post("/markets")

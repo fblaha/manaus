@@ -19,6 +19,11 @@ class MarketController(private val marketRepository: MarketRepository) {
         @RequestMapping(value = ["/markets"], method = [RequestMethod.GET])
         get() = marketRepository.find(from = Instant.now())
 
+    val marketIDs: List<String>
+        @ResponseBody
+        @RequestMapping(value = ["/market-ids"], method = [RequestMethod.GET])
+        get() = marketRepository.findIDs()
+
     @ResponseBody
     @RequestMapping(value = ["/markets/{id}"], method = [RequestMethod.GET])
     fun getMarket(@PathVariable id: String): Market {

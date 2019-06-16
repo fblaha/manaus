@@ -69,4 +69,10 @@ class MarketRepositoryTest : AbstractDatabaseTestCase() {
         assertEquals("2", markets.first().id)
         assertEquals("3", markets.last().id)
     }
+
+    @Test
+    fun `find markets IDs`() {
+        marketRepository.saveOrUpdate(market)
+        assertEquals(listOf("2"), marketRepository.findIDs())
+    }
 }

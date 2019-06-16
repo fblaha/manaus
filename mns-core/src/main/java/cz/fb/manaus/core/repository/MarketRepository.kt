@@ -10,6 +10,7 @@ import org.dizitart.kno2.getRepository
 import org.dizitart.no2.FindOptions
 import org.dizitart.no2.Nitrite
 import org.dizitart.no2.SortOrder
+import org.dizitart.no2.objects.Cursor
 import org.dizitart.no2.objects.filters.ObjectFilters
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
@@ -26,6 +27,14 @@ class MarketRepository(private val db: Nitrite) :
     }
 
     fun find(from: Instant? = null, to: Instant? = null, maxResults: Int? = null): List<Market> {
+        return findLazy(from, to, maxResults).toList()
+    }
+
+    fun findIDs(from: Instant? = null, to: Instant? = null): List<String> {
+        return findLazy(from, to, null).map { it.id }.toList()
+    }
+
+    private fun findLazy(from: Instant?, to: Instant?, maxResults: Int?): Cursor<Market> {
         var filter = ObjectFilters.ALL
         if (from != null) {
             val fromFilter = Market::openDate gte from
@@ -37,7 +46,7 @@ class MarketRepository(private val db: Nitrite) :
         }
         var options = FindOptions.sort("openDate", SortOrder.Ascending)
         if (maxResults != null) options = options.thenLimit(0, maxResults)
-        return repository.find(filter, options).toList()
+        return repository.find(filter, options)
     }
 
 }
