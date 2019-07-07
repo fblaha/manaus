@@ -20,7 +20,7 @@ import java.time.Instant
 @Component
 @Profile(ManausProfiles.DB)
 class MarketRepository(private val db: Nitrite) :
-        AbstractRepository<Market>({ db.getRepository {} }, Market::id) {
+        AbstractRepository<Market, String>({ db.getRepository {} }, Market::id) {
 
     fun delete(olderThan: Instant): Int {
         return repository.remove(Market::openDate lt olderThan).affectedCount

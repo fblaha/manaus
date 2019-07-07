@@ -17,7 +17,7 @@ class RealizedBetLoaderTest : AbstractDatabaseTestCase() {
     fun toRealizedBet() {
         marketRepository.saveOrUpdate(market)
         val savedAction = betAction.copy(betId = "1000")
-        val actionId = betActionRepository.save(savedAction)
+        val actionId = betActionRepository.idSafeSave(savedAction)
         val savedBet = homeSettledBet.copy(id = "1000")
         val (bet, action, market) = realizedBetLoader.toRealizedBet(savedBet)
         assertEquals(savedBet, bet)

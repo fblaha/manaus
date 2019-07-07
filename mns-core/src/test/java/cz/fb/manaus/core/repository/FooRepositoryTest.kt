@@ -25,7 +25,7 @@ data class Foo(
 @Component
 @Profile(ManausProfiles.DB)
 class FooRepository(private val db: Nitrite) :
-        AbstractRepository<Foo>({ db.getRepository {} }, Foo::name)
+        AbstractRepository<Foo, String>({ db.getRepository {} }, Foo::name)
 
 class FooRepositoryTest : AbstractDatabaseTestCase() {
 

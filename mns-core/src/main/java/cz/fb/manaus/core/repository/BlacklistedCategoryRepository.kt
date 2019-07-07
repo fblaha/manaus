@@ -11,4 +11,4 @@ import org.springframework.stereotype.Component
 @Component
 @Profile(ManausProfiles.DB)
 class BlacklistedCategoryRepository(private val db: Nitrite) :
-        AbstractRepository<BlacklistedCategory>({ db.getRepository {} }, BlacklistedCategory::name)
+        AbstractRepository<BlacklistedCategory, String>({ db.getRepository {} }, BlacklistedCategory::name)

@@ -17,7 +17,7 @@ class SettledBetSaverTest : AbstractDatabaseTestCase() {
     @Test
     fun saver() {
         marketRepository.saveOrUpdate(market)
-        betActionRepository.save(betAction.copy(betId = "testSaver"))
+        betActionRepository.idSafeSave(betAction.copy(betId = "testSaver"))
 
         val bet = homeSettledBet.copy(id = "testSaver")
         assertTrue(saver.saveBet(bet))

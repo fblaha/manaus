@@ -65,7 +65,7 @@ class BetManager(
     }
 
     private fun saveAction(command: BetCommand) {
-        val actionId = betActionRepository.save(command.action)
+        val actionId = betActionRepository.idSafeSave(command.action)
         command.bet = command.bet.copy(actionId = actionId)
     }
 

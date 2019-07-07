@@ -30,7 +30,7 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
                 time = now.minus(beforeMinutes, ChronoUnit.MINUTES),
                 price = Price(2.0, 30.0, lay),
                 betActionType = actionType)
-        betActionRepository.save(place)
+        betActionRepository.idSafeSave(place)
         val result = validator.validate(reactorTestFactory.newUpdateBetContext(runnerPrices, lay))
         assertEquals(validationResult, result)
     }

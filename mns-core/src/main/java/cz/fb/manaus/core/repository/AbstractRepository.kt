@@ -5,8 +5,8 @@ import org.dizitart.no2.objects.ObjectRepository
 import kotlin.reflect.KProperty1
 
 
-abstract class AbstractRepository<T>(loader: () -> ObjectRepository<T>,
-                                     val key: KProperty1<T, String>) {
+abstract class AbstractRepository<T, U>(loader: () -> ObjectRepository<T>,
+                                        val key: KProperty1<T, U>) {
 
     internal val repository: ObjectRepository<T> by lazy(loader)
 

@@ -27,7 +27,7 @@ class MarketPurgerTest : AbstractDatabaseTestCase() {
     @Test
     fun `purge active`() {
         marketRepository.saveOrUpdate(market)
-        betActionRepository.save(betAction)
+        betActionRepository.idSafeSave(betAction)
         settledBetRepository.save(homeSettledBet)
         assertNotNull(marketRepository.read(market.id))
         assertNotNull(settledBetRepository.read(homeSettledBet.id))

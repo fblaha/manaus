@@ -8,24 +8,22 @@ import org.dizitart.no2.FindOptions
 import org.dizitart.no2.Nitrite
 import org.dizitart.no2.NitriteId
 import org.dizitart.no2.SortOrder
-import org.dizitart.no2.objects.ObjectRepository
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 
 
 @Component
 @Profile(ManausProfiles.DB)
-class BetActionRepository(private val db: Nitrite) {
+class BetActionRepository(private val db: Nitrite) :
+        AbstractRepository<BetAction, Long>({ db.getRepository {} }, BetAction::id) {
 
-    internal val repository: ObjectRepository<BetAction> by lazy { db.getRepository<BetAction> {} }
-
-    fun save(betAction: BetAction): Long {
+    fun idSafeSave(betAction: BetAction): Long {
         val action = if (betAction.id == 0L) betAction.copy(id = NitriteId.newId().idValue) else betAction
-        repository.insert(action)
+        this.save(action)
         return action.id
     }
 
-    fun delete(marketId: String): Int {
+    fun deleteByMarket(marketId: String): Int {
         return repository.remove(BetAction::marketId eq marketId).affectedCount
     }
 

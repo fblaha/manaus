@@ -15,7 +15,7 @@ class MarketPurger(private val marketRepository: MarketRepository,
     fun purge(footprint: MarketFootprint) {
         val (market, _, settledBets) = footprint
         settledBets.forEach { settledBetRepository.delete(it.id) }
-        betActionRepository.delete(market.id)
+        betActionRepository.deleteByMarket(market.id)
         marketRepository.delete(market.id)
     }
 }

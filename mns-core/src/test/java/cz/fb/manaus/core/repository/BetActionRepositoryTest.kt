@@ -12,12 +12,12 @@ class BetActionRepositoryTest : AbstractDatabaseTestCase() {
 
     @Test
     fun save() {
-        assertTrue(betActionRepository.save(betAction) != 0L)
+        assertTrue(betActionRepository.idSafeSave(betAction) != 0L)
     }
 
     @Test
     fun `set bet ID`() {
-        val actionId = betActionRepository.save(betAction.copy(betId = null))
+        val actionId = betActionRepository.idSafeSave(betAction.copy(betId = null))
         assertNull(betActionRepository.find("2").first().betId)
         betActionRepository.setBetId(actionId, "100")
         assertEquals(1, betActionRepository.find("2").size)
@@ -26,25 +26,25 @@ class BetActionRepositoryTest : AbstractDatabaseTestCase() {
 
     @Test
     fun find() {
-        betActionRepository.save(betAction)
+        betActionRepository.idSafeSave(betAction)
         assertEquals(1, betActionRepository.find("2").size)
         assertEquals(0, betActionRepository.find("3").size)
     }
 
     @Test
     fun delete() {
-        betActionRepository.save(betAction)
+        betActionRepository.idSafeSave(betAction)
         assertEquals(1, betActionRepository.find("2").size)
-        assertEquals(1, betActionRepository.delete("2"))
+        assertEquals(1, betActionRepository.deleteByMarket("2"))
         assertEquals(0, betActionRepository.find("2").size)
     }
 
     @Test
     fun `get recent action`() {
         val actionTime = betAction.time
-        val recent = betActionRepository.save(betAction)
+        val recent = betActionRepository.idSafeSave(betAction)
         betActionRepository.setBetId(recent, "100")
-        val older = betActionRepository.save(betAction.copy(time = actionTime.minusSeconds(600)))
+        val older = betActionRepository.idSafeSave(betAction.copy(time = actionTime.minusSeconds(600)))
         betActionRepository.setBetId(older, "100")
         assertEquals(recent, betActionRepository.findRecentBetAction("100")!!.id)
     }
@@ -52,8 +52,8 @@ class BetActionRepositoryTest : AbstractDatabaseTestCase() {
     @Test
     fun `get recent actions`() {
         val actionTime = betAction.time
-        val recent = betActionRepository.save(betAction)
-        val older = betActionRepository.save(betAction.copy(time = actionTime.minusSeconds(600)))
+        val recent = betActionRepository.idSafeSave(betAction)
+        val older = betActionRepository.idSafeSave(betAction.copy(time = actionTime.minusSeconds(600)))
         val actions = betActionRepository.findRecentBetActions(100)
         assertEquals(2, actions.size)
         assertEquals(recent, actions.first().id)

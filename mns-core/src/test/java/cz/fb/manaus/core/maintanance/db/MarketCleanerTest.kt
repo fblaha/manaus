@@ -25,7 +25,7 @@ class MarketCleanerTest : AbstractDatabaseTestCase() {
     @Test
     fun `execute - not empty market`() {
         saveMarket(4)
-        betActionRepository.save(betAction)
+        betActionRepository.idSafeSave(betAction)
         marketCleaner.execute()
         assertNotNull(marketRepository.read(market.id))
     }

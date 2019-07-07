@@ -21,7 +21,7 @@ class MarketFootprintLoaderTest : AbstractDatabaseTestCase() {
         assertTrue(footprint.betActions.isEmpty())
         assertTrue(footprint.settledBets.isEmpty())
 
-        betActionRepository.save(betAction)
+        betActionRepository.idSafeSave(betAction)
         settledBetRepository.save(homeSettledBet)
         footprint = marketFootprintLoader.toFootprint(market)
         assertTrue(footprint.betActions.isNotEmpty())
