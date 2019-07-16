@@ -7,5 +7,5 @@ import org.springframework.stereotype.Component
 class MinimalAmountAdviser(private val provider: ExchangeProvider) : AmountAdviser {
 
     override val amount: Double
-        get() = provider.minAmount + 1.0
+        get() = provider.minAmount
 }
