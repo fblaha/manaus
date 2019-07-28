@@ -17,6 +17,6 @@ import java.time.Duration
 object CompetitionUnprofitableCategoriesFilter : AbstractUnprofitableCategoriesRegistry(
         name = "competition",
         period = Duration.ofDays(120),
-        maximalProfit = -30.0,
+        maximalProfit = -45.0,
         filterPrefix = Category.MARKET_PREFIX + CompetitionCategorizer.PREFIX,
         thresholds = mapOf(20 to 2, 15 to 2, 10 to 2))

@@ -17,6 +17,6 @@ import java.time.Duration
 object CountryCodeUnprofitableCategoriesFilter : AbstractUnprofitableCategoriesRegistry(
         name = "countryCodeLay",
         period = Duration.ofDays(30),
-        maximalProfit = -30.0,
+        maximalProfit = -45.0,
         filterPrefix = Category.MARKET_PREFIX + COUNTRY_PREFIX,
         thresholds = mapOf(20 to 3))
