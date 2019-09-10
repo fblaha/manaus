@@ -16,7 +16,7 @@ import java.time.Duration
 @Profile(ManausProfiles.DB)
 object CompetitionUnprofitableCategoriesFilter : AbstractUnprofitableCategoriesRegistry(
         name = "competition",
-        period = Duration.ofDays(120),
+        period = Duration.ofDays(30),
         maximalProfit = -45.0,
         filterPrefix = Category.MARKET_PREFIX + CompetitionCategorizer.PREFIX,
         thresholds = mapOf(20 to 2, 15 to 2, 10 to 2))
