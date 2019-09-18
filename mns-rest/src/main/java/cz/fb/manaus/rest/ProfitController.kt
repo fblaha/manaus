@@ -6,7 +6,7 @@ import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.reactor.profit.ProfitService
 import cz.fb.manaus.reactor.profit.progress.CoverageFunctionProfitService
-import cz.fb.manaus.reactor.profit.progress.ProgressProfitService
+import cz.fb.manaus.reactor.profit.progress.FixedBinFunctionProfitService
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Controller
@@ -18,7 +18,7 @@ import java.util.logging.Logger
 @Controller
 @Profile(ManausProfiles.DB)
 class ProfitController(private val profitService: ProfitService,
-                       private val progressProfitService: ProgressProfitService,
+                       private val fixedBinFunctionProfitService: FixedBinFunctionProfitService,
                        private val coverageService: CoverageFunctionProfitService,
                        private val provider: ExchangeProvider,
                        private val betLoader: SettledBetLoader) {
@@ -66,7 +66,7 @@ class ProfitController(private val profitService: ProfitService,
         val bets = betLoader.load(interval, cache)
         val stopwatch = Stopwatch.createStarted()
         val chargeRate = getChargeRate(charge)
-        val records = progressProfitService.getProfitRecords(bets, function, binCount, chargeRate, projection)
+        val records = fixedBinFunctionProfitService.getProfitRecords(bets, function, binCount, chargeRate, projection)
         logTime(stopwatch, "profit records computed")
         return records
     }
