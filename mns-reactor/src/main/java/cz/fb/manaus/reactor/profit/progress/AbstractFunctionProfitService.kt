@@ -39,11 +39,11 @@ abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) 
         }
     }
 
-    protected fun computeChunkRecord(name: String, chunk: List<Pair<RealizedBet, Double?>>,
-                                     charges: Map<String, Double>, coverage: BetCoverage): ProfitRecord {
-        val average = chunk.mapNotNull { it.second }.average()
+    protected fun computeBinRecord(name: String, bin: List<Pair<RealizedBet, Double?>>,
+                                   charges: Map<String, Double>, coverage: BetCoverage): ProfitRecord {
+        val average = bin.mapNotNull { it.second }.average()
         val category = getValueCategory(name, average)
-        val bets = chunk.map { it.first }
+        val bets = bin.map { it.first }
         return computeFunctionRecord(category, bets, charges, coverage)
     }
 
@@ -56,10 +56,10 @@ abstract class AbstractFunctionProfitService(functions: List<ProgressFunction>) 
 
     protected fun computeFunctionRecord(category: String, bets: List<RealizedBet>,
                                         charges: Map<String, Double>, coverage: BetCoverage): ProfitRecord {
-        val chunkRecords = bets.map {
+        val binRecords = bets.map {
             profitService.toProfitRecord(it, category, charges[it.settledBet.id]!!, coverage)
         }
-        return profitService.mergeCategory(category, chunkRecords)
+        return profitService.mergeCategory(category, binRecords)
     }
 
 }

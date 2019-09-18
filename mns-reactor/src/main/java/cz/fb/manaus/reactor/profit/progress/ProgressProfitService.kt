@@ -12,21 +12,21 @@ import java.math.RoundingMode
 class ProgressProfitService(functions: List<ProgressFunction>) : AbstractFunctionProfitService(functions) {
 
     fun getProfitRecords(bets: List<RealizedBet>, funcName: String? = null,
-                         chunkCount: Int, chargeRate: Double, projection: String? = null): List<ProfitRecord> {
-        val calculator = getCalculator(chunkCount)
+                         binCount: Int, chargeRate: Double, projection: String? = null): List<ProfitRecord> {
+        val calculator = getCalculator(binCount)
         return getProfitRecords(calculator, bets, chargeRate, funcName, projection)
     }
 
-    private fun getCalculator(chunkCount: Int): FunctionProfitRecordCalculator {
+    private fun getCalculator(binCount: Int): FunctionProfitRecordCalculator {
         return object : FunctionProfitRecordCalculator {
             override fun getProfitRecords(function: ProgressFunction, bets: List<RealizedBet>, coverage: BetCoverage, charges: Map<String, Double>): List<ProfitRecord> {
-                return computeProfitRecords(function, chunkCount, coverage, bets, charges)
+                return computeProfitRecords(function, binCount, coverage, bets, charges)
             }
         }
     }
 
     private fun computeProfitRecords(function: ProgressFunction,
-                                     chunkCount: Int,
+                                     binCount: Int,
                                      coverage: BetCoverage,
                                      bets: List<RealizedBet>,
                                      charges: Map<String, Double>): List<ProfitRecord> {
@@ -36,13 +36,13 @@ class ProgressProfitService(functions: List<ProgressFunction>) : AbstractFunctio
 
         val sortedCopy = hasValue.sortedBy { it.second }
 
-        val chunkSize = IntMath.divide(sortedCopy.size, chunkCount, RoundingMode.CEILING)
+        val binSize = IntMath.divide(sortedCopy.size, binCount, RoundingMode.CEILING)
 
         if (sortedCopy.isEmpty()) return emptyList()
 
-        val chunks = sortedCopy.chunked(chunkSize)
+        val bins = sortedCopy.chunked(binSize)
 
-        val result = chunks.map { computeChunkRecord(function.name, it, charges, coverage) }
+        val result = bins.map { computeBinRecord(function.name, it, charges, coverage) }
 
         if (noValues.isNotEmpty() && function.includeNoValues) {
             val noValBets = noValues.map { it.first }

@@ -17,11 +17,11 @@ class ProgressProfitServiceTest : AbstractLocalTestCase() {
     private lateinit var provider: ExchangeProvider
 
     @Test
-    fun `single chunk`() {
+    fun `single bin`() {
         val bets = generateBets().map { toRealizedBet(it) }
         val records = service.getProfitRecords(bets = bets,
                 funcName = "priceBack",
-                chunkCount = 1,
+                binCount = 1,
                 chargeRate = provider.chargeRate)
         assertEquals(1, records.size)
         assertEquals("priceBack: 2.84", records[0].category)
@@ -31,11 +31,11 @@ class ProgressProfitServiceTest : AbstractLocalTestCase() {
     }
 
     @Test
-    fun `multiple chunks`() {
+    fun `multiple bins`() {
         val bets = generateBets().map { toRealizedBet(it) }
         val records = service.getProfitRecords(bets = bets,
                 funcName = "priceBack",
-                chunkCount = 10,
+                binCount = 10,
                 chargeRate = provider.chargeRate)
         assertEquals(10, records.size)
         assertTrue(records.zipWithNext().all { it.first.avgPrice < it.second.avgPrice })

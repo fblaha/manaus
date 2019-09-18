@@ -58,7 +58,7 @@ class ProfitController(private val profitService: ProfitService,
     @ResponseBody
     @RequestMapping(value = ["/fc-progress/" + IntervalParser.INTERVAL], method = [RequestMethod.GET])
     fun getProgressRecords(@PathVariable interval: String,
-                           @RequestParam(defaultValue = "5") chunkCount: Int,
+                           @RequestParam(defaultValue = "5") binCount: Int,
                            @RequestParam(required = false) function: String?,
                            @RequestParam(required = false) charge: Double?,
                            @RequestParam(required = false) projection: String?,
@@ -66,7 +66,7 @@ class ProfitController(private val profitService: ProfitService,
         val bets = betLoader.load(interval, cache)
         val stopwatch = Stopwatch.createStarted()
         val chargeRate = getChargeRate(charge)
-        val records = progressProfitService.getProfitRecords(bets, function, chunkCount, chargeRate, projection)
+        val records = progressProfitService.getProfitRecords(bets, function, binCount, chargeRate, projection)
         logTime(stopwatch, "profit records computed")
         return records
     }
