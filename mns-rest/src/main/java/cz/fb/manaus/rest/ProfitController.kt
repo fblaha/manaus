@@ -5,7 +5,6 @@ import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.reactor.profit.ProfitService
-import cz.fb.manaus.reactor.profit.progress.CoverageFunctionProfitService
 import cz.fb.manaus.reactor.profit.progress.FixedBinFunctionProfitService
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
@@ -19,7 +18,6 @@ import java.util.logging.Logger
 @Profile(ManausProfiles.DB)
 class ProfitController(private val profitService: ProfitService,
                        private val fixedBinFunctionProfitService: FixedBinFunctionProfitService,
-                       private val coverageService: CoverageFunctionProfitService,
                        private val provider: ExchangeProvider,
                        private val betLoader: SettledBetLoader) {
 
@@ -71,20 +69,6 @@ class ProfitController(private val profitService: ProfitService,
         return records
     }
 
-    @ResponseBody
-    @RequestMapping(value = ["/fc-coverage/" + IntervalParser.INTERVAL], method = [RequestMethod.GET])
-    fun getCoverageRecords(@PathVariable interval: String,
-                           @RequestParam(required = false) function: String?,
-                           @RequestParam(required = false) charge: Double?,
-                           @RequestParam(required = false) projection: String?,
-                           @RequestParam(defaultValue = "true") cache: Boolean): List<ProfitRecord> {
-        val bets = betLoader.load(interval, cache)
-        val stopwatch = Stopwatch.createStarted()
-        val chargeRate = getChargeRate(charge)
-        val records = coverageService.getProfitRecords(bets, function, chargeRate, projection)
-        logTime(stopwatch, "profit records computed")
-        return records
-    }
 
     private fun logTime(stopwatch: Stopwatch, messagePrefix: String) {
         val elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
