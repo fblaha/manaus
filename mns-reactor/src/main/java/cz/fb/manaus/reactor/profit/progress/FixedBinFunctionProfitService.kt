@@ -46,11 +46,11 @@ class FixedBinFunctionProfitService(functions: List<ProgressFunction>) {
 
         val (hasValue, noValues) = computed.partition { it.second != null }
 
+        if (hasValue.isEmpty()) return emptyList()
+
         val sortedCopy = hasValue.sortedBy { it.second }
 
         val binSize = IntMath.divide(sortedCopy.size, binCount, RoundingMode.CEILING)
-
-        if (sortedCopy.isEmpty()) return emptyList()
 
         val bins = sortedCopy.chunked(binSize)
 

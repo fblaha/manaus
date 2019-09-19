@@ -18,12 +18,6 @@ class ProfitControllerTest : AbstractControllerTest() {
     }
 
     @Test
-    fun `coverage records`() {
-        createLiveMarket()
-        checkResponse("/fc-coverage/1d", "placedAhead_solo")
-    }
-
-    @Test
     fun `progress single function`() {
         createLiveMarket()
         checkResponse("/fc-progress/1d?function=actualMatched", "actualMatched")
