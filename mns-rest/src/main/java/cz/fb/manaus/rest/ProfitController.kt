@@ -21,6 +21,13 @@ class ProfitController(private val profitService: ProfitService,
                        private val provider: ExchangeProvider,
                        private val betLoader: SettledBetLoader) {
 
+
+    private val comparators: Map<String, Comparator<ProfitRecord>> = mapOf(
+            "category" to compareBy { it.category },
+            "betProfit" to compareBy { it.betProfit },
+            "profit" to compareBy { it.profit })
+
+
     private val log = Logger.getLogger(ProfitController::class.simpleName)
 
     @ResponseBody
@@ -48,7 +55,7 @@ class ProfitController(private val profitService: ProfitService,
                     .filter { filters.any { token -> token in it.category } }
         }
         if (sort != null) {
-            profitRecords = profitRecords.sortedWith(COMPARATORS[sort]!!)
+            profitRecords = profitRecords.sortedWith(comparators[sort]!!)
         }
         return profitRecords
     }
@@ -83,10 +90,4 @@ class ProfitController(private val profitService: ProfitService,
         return rawFilter.split(',')
     }
 
-    companion object {
-        val COMPARATORS: Map<String, Comparator<ProfitRecord>> = mapOf(
-                "category" to compareBy { it.category },
-                "betProfit" to compareBy { it.betProfit },
-                "profit" to compareBy { it.profit })
-    }
 }

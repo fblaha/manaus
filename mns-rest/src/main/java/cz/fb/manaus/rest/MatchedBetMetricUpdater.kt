@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicLong
 
 @Component
 class MatchedBetMetricUpdater(private val metricRegistry: MetricRegistry) {
+    private val metricName = "bet.matched.count"
     private val lastScan = AtomicLong(0)
 
     private fun newHistogram(): Histogram {
@@ -18,17 +19,13 @@ class MatchedBetMetricUpdater(private val metricRegistry: MetricRegistry) {
     fun update(scanTime: Long, bets: List<Bet>) {
         val last = lastScan.getAndSet(scanTime)
         if (last > 0 && last != scanTime) {
-            val lastCount = metricRegistry.counter(METRIC_NAME).count
-            metricRegistry.remove(METRIC_NAME)
+            val lastCount = metricRegistry.counter(metricName).count
+            metricRegistry.remove(metricName)
             metricRegistry.histogram("bet.matched") { this.newHistogram() }.update(lastCount)
         }
         val currentCount = bets.filter { it.isHalfMatched }.count()
         if (currentCount > 0) {
-            metricRegistry.counter(METRIC_NAME).inc(currentCount.toLong())
+            metricRegistry.counter(metricName).inc(currentCount.toLong())
         }
-    }
-
-    companion object {
-        const val METRIC_NAME = "bet.matched.count"
     }
 }
