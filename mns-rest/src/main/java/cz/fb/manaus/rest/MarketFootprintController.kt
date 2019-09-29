@@ -22,12 +22,8 @@ class MarketFootprintController(
     @ResponseBody
     @RequestMapping(value = ["/footprints/{id}"], method = [RequestMethod.GET])
     fun getFootprint(@PathVariable id: String): ResponseEntity<MarketFootprint> {
-        val market = marketRepository.read(id)
-        return if (market != null) {
-            ResponseEntity.ok(marketFootprintLoader.toFootprint(market))
-        } else {
-            ResponseEntity.notFound().build()
-        }
+        val footprint = marketRepository.read(id)?.let { marketFootprintLoader.toFootprint(it) }
+        return handleNotFound(footprint)
     }
 
     @ResponseBody

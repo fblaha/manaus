@@ -26,8 +26,8 @@ class MarketController(private val marketRepository: MarketRepository) {
 
     @ResponseBody
     @RequestMapping(value = ["/markets/{id}"], method = [RequestMethod.GET])
-    fun getMarket(@PathVariable id: String): Market {
-        return marketRepository.read(id)!!
+    fun getMarket(@PathVariable id: String): ResponseEntity<Market> {
+        return handleNotFound(marketRepository.read(id))
     }
 
     @ResponseBody
