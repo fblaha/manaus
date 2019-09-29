@@ -8,7 +8,9 @@ import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import kotlin.test.assertNotNull
 
 
@@ -20,6 +22,14 @@ class MarketFootprintControllerTest : AbstractControllerTest() {
     fun `get by ID`() {
         createLiveMarket()
         checkResponse("/footprints/2", "Banik", "Sparta")
+    }
+
+    @Test
+    fun `get by ID - missing`() {
+        mvc.perform(get("/footprints/123456")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound)
+                .andReturn()
     }
 
     @Test
