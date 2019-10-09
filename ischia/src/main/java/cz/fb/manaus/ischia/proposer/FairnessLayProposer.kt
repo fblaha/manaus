@@ -7,7 +7,5 @@ import cz.fb.manaus.reactor.betting.proposer.common.AbstractFairnessProposer
 import org.springframework.stereotype.Component
 
 @Component
-// TODO enable for back
-//@BackLoserBet
 @LayLoserBet
 class FairnessLayProposer(downgradeStrategy: (BetContext) -> Double) : AbstractFairnessProposer(Side.LAY, downgradeStrategy)
