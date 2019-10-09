@@ -14,8 +14,8 @@ class ValidationService(private val priceService: PriceService,
         if (oldOne != null && newOne != null) {
             val oldPrice = oldOne.requestedPrice
             check(newOne.side === oldPrice.side)
-            if (priceService.isDowngrade(newOne.price, oldPrice.price,
-                            newOne.side) && isDowngradeAccepting) {
+            val isDowngrade = priceService.isDowngrade(newOne.price, oldPrice.price, newOne.side)
+            if (isDowngrade && isDowngradeAccepting) {
                 return ValidationResult.ACCEPT
             }
         }

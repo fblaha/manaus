@@ -14,7 +14,10 @@ object BestPriceRangeValidator : Validator {
 
     override fun validate(context: BetContext): ValidationResult {
         val bestBack = context.runnerPrices.getHomogeneous(Side.BACK).bestPrice
-        return if (bestBack == null) REJECT else ValidationResult.of(bestBack.price in 1.2..2.5)
+        return when (bestBack) {
+            null -> REJECT
+            else -> ValidationResult.of(bestBack.price in 1.2..2.5)
+        }
     }
 
 }

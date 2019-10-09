@@ -22,7 +22,10 @@ fun getOverround(runnerPrices: List<RunnerPrices>, type: Side): Double? {
 
 fun getReciprocal(runnerPrices: List<RunnerPrices>, type: Side): Double? {
     val overround = getOverround(runnerPrices, type)
-    return if (overround == null) null else 1 / overround
+    return when (overround) {
+        null -> null
+        else -> 1 / overround
+    }
 }
 
 fun getRunnerPrices(runnerPrices: List<RunnerPrices>, selectionId: Long): RunnerPrices {

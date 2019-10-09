@@ -47,7 +47,10 @@ data class BetContext(
         }
 
     fun createBetAction(): BetAction {
-        val type = if (oldBet != null) BetActionType.UPDATE else BetActionType.PLACE
+        val type = when (oldBet) {
+            null -> BetActionType.PLACE
+            else -> BetActionType.UPDATE
+        }
         return BetAction(
                 selectionId = selectionId,
                 price = newPrice!!,

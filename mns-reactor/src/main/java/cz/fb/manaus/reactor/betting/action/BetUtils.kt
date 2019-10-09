@@ -8,7 +8,10 @@ object BetUtils {
         validate(betActions)
         val updates = betActions.takeLastWhile { it.betActionType === BetActionType.UPDATE }
         val place = betActions.getOrNull(betActions.size - updates.size - 1)
-        return if (place == null) updates else listOf(place) + updates
+        return when (place) {
+            null -> updates
+            else -> listOf(place) + updates
+        }
     }
 
     private fun validate(betActions: List<BetAction>) {

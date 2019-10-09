@@ -12,7 +12,4 @@ import org.springframework.stereotype.Component
 @Profile(ManausProfiles.DB)
 class BestChanceLayBettor @ManilaBet @Autowired
 constructor(validators: List<Validator>, adviser: BestChanceLayAdviser) :
-        AbstractUpdatingBettor(
-                side = Side.LAY,
-                validators = validators,
-                priceAdviser = adviser)
+        AbstractUpdatingBettor(side = Side.LAY, validators = validators, priceAdviser = adviser)

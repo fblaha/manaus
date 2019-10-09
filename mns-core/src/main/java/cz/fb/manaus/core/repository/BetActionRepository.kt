@@ -18,7 +18,10 @@ class BetActionRepository(private val db: Nitrite) :
         AbstractRepository<BetAction, Long>({ db.getRepository {} }, BetAction::id) {
 
     fun idSafeSave(betAction: BetAction): Long {
-        val action = if (betAction.id == 0L) betAction.copy(id = NitriteId.newId().idValue) else betAction
+        val action = when (betAction.id) {
+            0L -> betAction.copy(id = NitriteId.newId().idValue)
+            else -> betAction
+        }
         this.save(action)
         return action.id
     }

@@ -8,6 +8,9 @@ object TypeCategorizer : AbstractDelegatingCategorizer("type_") {
 
     public override fun getCategoryRaw(market: Market): Set<String> {
         val type = market.type
-        return if (type == null) emptySet() else setOf(market.type.toLowerCase())
+        return when (type) {
+            null -> emptySet()
+            else -> setOf(market.type.toLowerCase())
+        }
     }
 }
