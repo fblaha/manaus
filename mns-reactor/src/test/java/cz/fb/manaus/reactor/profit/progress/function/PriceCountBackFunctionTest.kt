@@ -9,10 +9,10 @@ import kotlin.test.assertEquals
 class PriceCountBackFunctionTest : AbstractLocalTestCase() {
 
     @Autowired
-    private lateinit var categorizer: PriceCountBackFunction
+    private lateinit var fc: PriceCountBackFunction
 
     @Test
     fun category() {
-        assertEquals(2.0, categorizer(realizedBet))
+        assertEquals(2.0, fc(realizedBet))
     }
 }
