@@ -7,7 +7,7 @@ import cz.fb.manaus.core.model.PriceComparator
 import org.springframework.stereotype.Component
 
 @Component
-class DowngradeCategorizer : RelatedActionsAwareCategorizer {
+class DowngradeCategorizer : ActionHistoryCategorizer {
 
     override fun getCategories(actions: List<BetAction>, market: Market): Set<String> {
         validate(actions)

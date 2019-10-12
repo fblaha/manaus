@@ -12,11 +12,11 @@ import java.util.logging.Logger
 
 @Component
 @Profile(ManausProfiles.DB)
-class RelatedActionsCategorizer(
+class ActionHistoryCategorizerCollector(
         private val betActionRepository: BetActionRepository,
-        private val relatedActionsAwareCategorizers: List<RelatedActionsAwareCategorizer>) : RealizedBetCategorizer {
+        private val categorizers: List<ActionHistoryCategorizer>) : RealizedBetCategorizer {
 
-    private val log = Logger.getLogger(RelatedActionsCategorizer::class.simpleName)
+    private val log = Logger.getLogger(ActionHistoryCategorizerCollector::class.simpleName)
 
     override val isSimulationSupported: Boolean = false
 
@@ -32,7 +32,7 @@ class RelatedActionsCategorizer(
             return emptySet()
         }
         val current = BetUtils.getCurrentActions(betActions)
-        return relatedActionsAwareCategorizers.flatMap { it.getCategories(current, market) }.toSet()
+        return categorizers.flatMap { it.getCategories(current, market) }.toSet()
     }
 }
 

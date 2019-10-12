@@ -8,7 +8,7 @@ import cz.fb.manaus.core.model.Market
 import org.springframework.stereotype.Component
 
 @Component
-class ActionCountCategorizer : RelatedActionsAwareCategorizer {
+class ActionCountCategorizer : ActionHistoryCategorizer {
 
     override fun getCategories(actions: List<BetAction>, market: Market): Set<String> {
         return setOf("betActionCount_" + RANGES.get(actions.size)!!)

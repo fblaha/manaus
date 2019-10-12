@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 import java.util.Collections.indexOfSubList
 
 @Component
-class CancelCategorizer : RelatedActionsAwareCategorizer {
+class CancelCategorizer : ActionHistoryCategorizer {
 
     override fun getCategories(actions: List<BetAction>, market: Market): Set<String> {
         if (actions.isEmpty()) return emptySet()
