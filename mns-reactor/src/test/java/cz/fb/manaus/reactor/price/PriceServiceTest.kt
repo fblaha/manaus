@@ -7,6 +7,7 @@ import cz.fb.manaus.reactor.ReactorTestFactory
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
+import kotlin.math.max
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -191,6 +192,6 @@ class PriceServiceTest : AbstractLocalTestCase() {
         val overround = winnerCount / targetReciprocal
         val selectionOverround = (overround - winnerCount) / runnerCount
         val probability = 1 / fairPrice
-        return Math.max(1 / (selectionOverround + probability), provider.minPrice)
+        return max(1 / (selectionOverround + probability), provider.minPrice)
     }
 }

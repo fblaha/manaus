@@ -9,6 +9,7 @@ import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.logging.Logger
 import javax.annotation.PostConstruct
+import kotlin.math.max
 
 open class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAdviser {
 
@@ -33,7 +34,7 @@ open class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAd
             if (counterBet != null && counterBet.matchedAmount > 0) {
                 amount = counterBet.requestedPrice.amount
             }
-            val price = Price(roundedPrice, Math.max(amount, provider.minAmount), betContext.side)
+            val price = Price(roundedPrice, max(amount, provider.minAmount), betContext.side)
             ProposedPrice(price, proposedPrice.proposers)
         } else {
             null

@@ -6,6 +6,7 @@ import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import cz.fb.manaus.reactor.price.PriceService
 import cz.fb.manaus.reactor.price.getRunnerPrices
 import org.springframework.stereotype.Component
+import kotlin.math.abs
 
 @Component
 class FairnessPriceDiffFunction(private val calculator: FairnessPolynomialCalculator,
@@ -24,7 +25,7 @@ class FairnessPriceDiffFunction(private val calculator: FairnessPolynomialCalcul
             val backPrice = backBest!!.price
             val fairnessLayFairPrice = priceService.getFairnessFairPrice(layPrice, layFairness)
             val fairnessBackFairPrice = priceService.getFairnessFairPrice(backPrice, backFairness)
-            Math.abs(fairnessBackFairPrice - fairnessLayFairPrice)
+            abs(fairnessBackFairPrice - fairnessLayFairPrice)
         } else {
             null
         }

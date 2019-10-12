@@ -3,6 +3,8 @@ package cz.fb.manaus.ischia.strategy
 import com.google.common.primitives.Doubles
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetContext
+import kotlin.math.max
+import kotlin.math.min
 
 class MinimizeChargeStrategy(internal val fairnessReductionLow: Double, private val fairnessReductionHighBack: Double, private val fairnessReductionHighLay: Double) {
 
@@ -20,8 +22,8 @@ class MinimizeChargeStrategy(internal val fairnessReductionLow: Double, private 
         val growthForecast = context.chargeGrowthForecast
         val upper = getUpperBoundary(context.side)
         return if (growthForecast != null && Doubles.isFinite(growthForecast)) {
-            val result = Math.min(upper, upper * growthForecast)
-            Math.max(fairnessReductionLow, result)
+            val result = min(upper, upper * growthForecast)
+            max(fairnessReductionLow, result)
         } else upper
     }
 }

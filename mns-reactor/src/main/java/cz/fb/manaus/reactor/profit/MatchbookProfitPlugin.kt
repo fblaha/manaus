@@ -4,6 +4,7 @@ import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.SettledBet
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
+import kotlin.math.min
 
 @Component
 @Profile("matchbook")
@@ -25,7 +26,7 @@ class MatchbookProfitPlugin : ProfitPlugin {
 
     internal fun getCountedCharge(chargeRate: Double, profitAndLoss: Double, amount: Double): Double {
         return if (profitAndLoss < 0) {
-            Math.min(amount, -profitAndLoss) * chargeRate
+            min(amount, -profitAndLoss) * chargeRate
         } else {
             profitAndLoss * chargeRate
         }

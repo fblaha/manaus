@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.charge
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.model.amountEq
-import java.lang.Math.max
+import kotlin.math.max
 
 data class MarketCharge(private val totalProfit: Double,
                         private val totalPositiveProfit: Double,

@@ -8,6 +8,7 @@ import cz.fb.manaus.core.model.Price
 import org.apache.commons.math3.util.Precision
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
+import kotlin.math.abs
 
 @Component
 @Profile("betfair")
@@ -49,7 +50,7 @@ class BetfairRoundingPlugin : RoundingPlugin {
     override fun shift(price: Double, steps: Int): Double? {
         require(steps != 0)
         val increment = steps > 0
-        return shift(price, Math.abs(steps), increment)
+        return shift(price, abs(steps), increment)
     }
 
     private fun shift(price: Double, steps: Int, increment: Boolean): Double? {
