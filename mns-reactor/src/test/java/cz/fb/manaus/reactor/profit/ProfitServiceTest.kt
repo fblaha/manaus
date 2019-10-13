@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.profit
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.junit.Assert
 import org.junit.Test
@@ -10,37 +9,47 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
+const val chargeRate = 0.02
 
 class ProfitServiceTest : AbstractLocalTestCase() {
     @Autowired
     private lateinit var profitService: ProfitService
-    @Autowired
-    private lateinit var provider: ExchangeProvider
 
 
     @Test
     fun `single selection`() {
-        val lay = homeSettledBet.copy(profitAndLoss = 5.0, price = Price(2.0, 4.0, Side.LAY))
-        val back = lay.copy(profitAndLoss = -4.5, price = Price(2.2, 3.5, Side.BACK),
-                id = "222")
-        checkRecords(0.47, null, lay, back)
+        val lay = homeSettledBet.copy(
+                profitAndLoss = 5.0,
+                commission = 0.5 * chargeRate,
+                price = Price(2.0, 4.0, Side.LAY)
+        )
+        val back = lay.copy(
+                profitAndLoss = -4.5,
+                commission = 0.0,
+                price = Price(2.2, 3.5, Side.BACK),
+                id = "222"
+        )
+        checkRecords(withCharge(0.5), lay, back)
     }
 
     @Test
     fun `multi selection`() {
         val layHome = homeSettledBet.copy(profitAndLoss = 5.0,
                 id = "111",
+                commission = 1 * chargeRate / 2, // 2% net win - 2 win bets
                 price = Price(2.0, 4.0, Side.LAY))
         val backHome = homeSettledBet.copy(profitAndLoss = -4.1,
                 id = "222",
                 price = Price(2.2, 3.5, Side.BACK))
         val layDraw = drawSettledBet.copy(profitAndLoss = 5.0,
                 id = "333",
+                commission = 1 * chargeRate / 2,
                 price = Price(2.0, 4.0, Side.LAY))
         val backDraw = drawSettledBet.copy(profitAndLoss = -4.9,
                 id = "444",
                 price = Price(2.2, 3.5, Side.BACK))
-        checkRecords(0.935, mapOf("selectionRegexp_draw" to 0.067), layHome, backHome, layDraw, backDraw)
+        val records = checkRecords(withCharge(1.0), layHome, backHome, layDraw, backDraw)
+        checkCategories(records, "selectionRegexp_draw" to 0.09)
     }
 
 
@@ -56,14 +65,14 @@ class ProfitServiceTest : AbstractLocalTestCase() {
         val back = lay.copy(profitAndLoss = 7.29,
                 id = "22264",
                 price = Price(2.34, 5.44, Side.BACK))
-        checkRecords(-0.01, null, lay, back)
+        checkRecords(withCharge(-0.01), lay, back)
     }
 
     @Test
     fun `real lay win`() {
         val kamazLay = createKamazLay()
         val kamazBack = createKamazBack()
-        checkRecords(0.98, null, kamazLay, kamazBack)
+        checkRecords(withCharge(1.05), kamazLay, kamazBack)
     }
 
     private fun createKamazBack(): SettledBet {
@@ -80,6 +89,7 @@ class ProfitServiceTest : AbstractLocalTestCase() {
         return homeSettledBet.copy(selectionId = SEL_HOME,
                 selectionName = "Kamaz",
                 profitAndLoss = 5.27,
+                commission = 0.021,
                 id = "kmzLay",
                 price = Price(2.92, 5.27, Side.LAY))
     }
@@ -91,20 +101,25 @@ class ProfitServiceTest : AbstractLocalTestCase() {
         val bets = listOf(kamazBack, kamazLay).map { toRealizedBet(it) }
         val simulationOnly = profitService.getProfitRecords(
                 bets = bets,
-                simulationAwareOnly = true,
-                chargeRate = provider.chargeRate)
+                simulationAwareOnly = true)
         val all = profitService.getProfitRecords(
                 bets = bets,
-                simulationAwareOnly = false,
-                chargeRate = provider.chargeRate)
+                simulationAwareOnly = false)
         assertTrue(simulationOnly.size < all.size)
         assertTrue(simulationOnly.isNotEmpty())
     }
 
-    private fun checkRecords(expectedAllProfit: Double, otherProfits: Map<String, Double>?, vararg bets: SettledBet) {
+    private fun checkCategories(records: List<ProfitRecord>, vararg expectedProfits: Pair<String, Double>) {
+        val byCategory = byCategory(records)
+        for ((key, value) in expectedProfits) {
+            val record = byCategory[key]!!
+            Assert.assertEquals(value, record.profit, 0.0001)
+        }
+    }
+
+    private fun checkRecords(expectedAllProfit: Double, vararg bets: SettledBet): List<ProfitRecord> {
         val betList = listOf(*bets).map { toRealizedBet(it) }
-        val result = profitService.getProfitRecords(betList, null,
-                false, provider.chargeRate)
+        val result = profitService.getProfitRecords(betList, null, false)
         val all = result.find { ProfitRecord.isAllCategory(it) }!!
         Assert.assertEquals(expectedAllProfit, all.profit, 0.01)
         val backCount = betList.filter { it.settledBet.price.side === Side.BACK }.count()
@@ -112,43 +127,36 @@ class ProfitServiceTest : AbstractLocalTestCase() {
         assertEquals(backCount, all.backCount)
         assertEquals(layCount, all.layCount)
         assertEquals(layCount + backCount, all.totalCount)
-        if (otherProfits != null) {
-            val byCategory = byCategory(result)
-            for ((key, value) in otherProfits) {
-                val record = byCategory[key]!!
-                Assert.assertEquals(value, record.profit, 0.0001)
-            }
-        }
+        return result
     }
 
     @Test
     fun `get profit records`() {
         val bet1 = drawSettledBet.copy(
                 profitAndLoss = 5.0,
+                commission = 3.0 * chargeRate,
                 price = Price(2.0, 4.0, Side.LAY))
         val bet2 = drawSettledBet.copy(
                 profitAndLoss = -2.0,
+                commission = 0.0,
                 id = "bet2",
                 price = Price(2.0, 5.0, Side.BACK))
         val bets = listOf(bet1, bet2).map { toRealizedBet(it) }
         val records = profitService.getProfitRecords(
                 bets = bets,
-                simulationAwareOnly = true,
-                chargeRate = provider.chargeRate)
+                simulationAwareOnly = true)
 
         val byCategory = byCategory(records)
 
         assertEquals(1, byCategory["market_country_cz"]!!.layCount)
-        Assert.assertEquals(2.8, byCategory["market_country_cz"]!!.profit, 0.01)
+        Assert.assertEquals(withCharge(3.0), byCategory["market_country_cz"]!!.profit, 0.01)
 
         assertTrue(profitService.getProfitRecords(bets = bets,
                 projection = "market_country_ua",
-                simulationAwareOnly = true,
-                chargeRate = provider.chargeRate).isEmpty())
+                simulationAwareOnly = true).isEmpty())
         assertFalse(profitService.getProfitRecords(bets = bets,
                 projection = "market_country_cz",
-                simulationAwareOnly = true,
-                chargeRate = provider.chargeRate).isEmpty())
+                simulationAwareOnly = true).isEmpty())
     }
 
     private fun byCategory(records: List<ProfitRecord>): Map<String, ProfitRecord> {
@@ -163,5 +171,12 @@ class ProfitServiceTest : AbstractLocalTestCase() {
         val r2 = ProfitRecord("test", 100.0, 2.0, 0.06, 1, 1)
         val record = profitService.mergeCategory("test", listOf(r1, r2))
         Assert.assertEquals(record.coverDiff!!, r1.coverDiff!!, 0.00001)
+    }
+}
+
+fun withCharge(profit: Double, rate: Double = chargeRate): Double {
+    return when {
+        profit > 0 -> profit - profit * rate
+        else -> profit
     }
 }

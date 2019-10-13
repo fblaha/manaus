@@ -21,8 +21,7 @@ class FixedBinFunctionProfitServiceTest : AbstractLocalTestCase() {
         val bets = generateBets().map { toRealizedBet(it) }
         val records = service.getProfitRecords(bets = bets,
                 funcName = "priceBack",
-                binCount = 1,
-                chargeRate = provider.chargeRate)
+                binCount = 1)
         assertEquals(1, records.size)
         assertEquals("priceBack: 2.84", records[0].category)
         assertEquals(bets.size / 2, records[0].totalCount)
@@ -35,8 +34,7 @@ class FixedBinFunctionProfitServiceTest : AbstractLocalTestCase() {
         val bets = generateBets().map { toRealizedBet(it) }
         val records = service.getProfitRecords(bets = bets,
                 funcName = "priceBack",
-                binCount = 10,
-                chargeRate = provider.chargeRate)
+                binCount = 10)
         assertEquals(10, records.size)
         assertTrue(records.zipWithNext().all { it.first.avgPrice < it.second.avgPrice })
     }

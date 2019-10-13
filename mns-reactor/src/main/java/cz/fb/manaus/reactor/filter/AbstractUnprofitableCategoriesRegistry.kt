@@ -41,12 +41,10 @@ abstract class AbstractUnprofitableCategoriesRegistry(
         val settledBets = settledBetRepository.find(now.minusSeconds(period.toSeconds()), now, side)
         if (settledBets.isEmpty()) return emptyList()
         val realizedBets = settledBets.map { realizedBetLoader.toRealizedBet(it) }
-        val chargeRate = provider.chargeRate
         val profitRecords = profitService.getProfitRecords(
                 bets = realizedBets,
                 projection = null,
-                simulationAwareOnly = true,
-                chargeRate = chargeRate)
+                simulationAwareOnly = true)
 
         log.info { logPrefix + "updating registry '$name'" }
         return getBlacklist(profitRecords)

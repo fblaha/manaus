@@ -9,20 +9,17 @@ import org.springframework.stereotype.Service
 
 
 @Service
-class ProfitService(private val categoryService: CategoryService,
-                    private val profitPlugin: ProfitPlugin) {
+class ProfitService(private val categoryService: CategoryService) {
 
-    fun getProfitRecords(bets: List<RealizedBet>, projection: String? = null,
-                         simulationAwareOnly: Boolean, chargeRate: Double): List<ProfitRecord> {
+    fun getProfitRecords(bets: List<RealizedBet>, projection: String? = null, simulationAwareOnly: Boolean): List<ProfitRecord> {
         var filtered = bets
         val coverage = BetCoverage.from(filtered)
-        val charges = profitPlugin.getCharges(filtered, chargeRate)
 
         if (projection != null) {
             filtered = categoryService.filterBets(filtered, projection, coverage)
         }
 
-        val betRecords = computeProfitRecords(filtered, simulationAwareOnly, charges, coverage)
+        val betRecords = computeProfitRecords(filtered, simulationAwareOnly, coverage)
         return mergeProfitRecords(betRecords)
     }
 
@@ -53,12 +50,11 @@ class ProfitService(private val categoryService: CategoryService,
         return result
     }
 
-    private fun computeProfitRecords(bets: List<RealizedBet>, simulationAwareOnly: Boolean,
-                                     charges: Map<String, Double>, coverage: BetCoverage): List<ProfitRecord> {
+    private fun computeProfitRecords(bets: List<RealizedBet>, simulationAwareOnly: Boolean, coverage: BetCoverage): List<ProfitRecord> {
         return bets.flatMap { bet ->
             val categories = categoryService.getRealizedBetCategories(bet, simulationAwareOnly, coverage)
             categories.map {
-                val charge = charges[bet.settledBet.id]!!
+                val charge = bet.settledBet.commission ?: 0.0
                 check(charge >= 0) { charge }
                 toProfitRecord(bet, it, charge, coverage)
             }
