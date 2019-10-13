@@ -1,6 +1,6 @@
 package cz.fb.manaus.reactor.betting
 
-import cz.fb.manaus.core.model.AccountMoney
+import cz.fb.manaus.core.model.Account
 import cz.fb.manaus.core.model.MarketSnapshot
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.charge.ChargeGrowthForecaster
@@ -14,15 +14,16 @@ class BetContextFactory(private val forecaster: ChargeGrowthForecaster) {
                selectionId: Long,
                snapshot: MarketSnapshot,
                fairness: Fairness,
-               accountMoney: AccountMoney? = null): BetContext {
+               account: Account): BetContext {
         val (marketPrices, market, _, coverage, tradedVolume) = snapshot
-        val forecast = forecaster.getForecast(selectionId, side, snapshot, fairness)
+        val commission = account.provider.commission
+        val forecast = forecaster.getForecast(selectionId, side, snapshot, fairness, commission)
         return BetContext(
                 market = market,
                 side = side,
                 selectionId = selectionId,
                 marketPrices = marketPrices,
-                accountMoney = accountMoney,
+                account = account,
                 chargeGrowthForecast = forecast,
                 coverage = coverage,
                 fairness = fairness,

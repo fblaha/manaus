@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.charge
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -12,8 +11,6 @@ class MarketChargeSimulatorTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var simulator: MarketChargeSimulator
-    @Autowired
-    private lateinit var provider: ExchangeProvider
 
 
     private val threeImbalanced = mapOf(
@@ -101,9 +98,9 @@ class MarketChargeSimulatorTest : AbstractLocalTestCase() {
                                      bets: MutableMap<Long, MutableList<Price>>,
                                      probabilities: Map<Long, Double>,
                                      assertion: (Double, Double) -> Unit) {
-        val before = simulator.getChargeMean(1, provider.chargeRate, probabilities, bets)
+        val before = simulator.getChargeMean(1, provider.commission, probabilities, bets)
         bets.getOrPut(selection) { mutableListOf() }.add(newBet)
-        val after = simulator.getChargeMean(1, provider.chargeRate, probabilities, bets)
+        val after = simulator.getChargeMean(1, provider.commission, probabilities, bets)
         assertion(before, after)
     }
 }

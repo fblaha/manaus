@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.betting.proposer
 
 import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.reactor.betting.AmountAdviser
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.PriceAdviser
@@ -15,8 +14,6 @@ open class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAd
 
     @Autowired
     private lateinit var adviser: AmountAdviser
-    @Autowired
-    private lateinit var provider: ExchangeProvider
     @Autowired
     private lateinit var proposalService: PriceProposalService
     @Autowired
@@ -34,7 +31,8 @@ open class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAd
             if (counterBet != null && counterBet.matchedAmount > 0) {
                 amount = counterBet.requestedPrice.amount
             }
-            val price = Price(roundedPrice, max(amount, provider.minAmount), betContext.side)
+            val minAmount = betContext.account.provider.minAmount
+            val price = Price(roundedPrice, max(amount, minAmount), betContext.side)
             ProposedPrice(price, proposedPrice.proposers)
         } else {
             null

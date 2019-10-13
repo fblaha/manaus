@@ -7,7 +7,7 @@ import cz.fb.manaus.reactor.betting.validator.Validator
 open class AbstractAccountMoneyValidator(private val minimalAvailable: Double) : Validator {
 
     override fun validate(context: BetContext): ValidationResult {
-        val money = context.accountMoney
+        val money = context.account.money
         return if (money != null)
             ValidationResult.of(money.available > minimalAvailable)
         else

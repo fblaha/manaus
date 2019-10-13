@@ -11,7 +11,7 @@ data class BetContext(
         val marketPrices: List<RunnerPrices>,
         val chargeGrowthForecast: Double?,
         val coverage: Map<SideSelection, Bet>,
-        val accountMoney: AccountMoney?,
+        val account: Account,
         val fairness: Fairness,
         val actualTradedVolume: TradedVolume?
 ) {

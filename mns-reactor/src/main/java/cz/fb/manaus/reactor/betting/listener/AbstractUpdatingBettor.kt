@@ -29,7 +29,7 @@ abstract class AbstractUpdatingBettor(private val side: Side,
 
     override fun onMarketSnapshot(snapshot: MarketSnapshot,
                                   betCollector: BetCollector,
-                                  accountMoney: AccountMoney?) {
+                                  account: Account) {
         val (marketPrices, market, _, coverage, _) = snapshot
         val flowFilter = flowFilterRegistry.getFlowFilter(market.type!!)
         val fairness = calculator.getFairness(marketPrices)
@@ -50,7 +50,7 @@ abstract class AbstractUpdatingBettor(private val side: Side,
                         selectionId = selectionId,
                         snapshot = snapshot,
                         fairness = fairness,
-                        accountMoney = accountMoney)
+                        account = account)
                 val pricelessValidation = validationService.validate(ctx, validators)
                 if (!pricelessValidation.isSuccess) {
                     cancelBet(oldBet, betCollector)

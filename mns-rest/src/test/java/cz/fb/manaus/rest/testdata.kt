@@ -27,8 +27,8 @@ object AcceptAllValidator : Validator {
 
 @Component
 @Profile(ManausProfiles.DB)
-class BackBettor(validators: List<Validator>, coordinator: BackAdviser) : AbstractUpdatingBettor(
+class BackBettor(validators: List<Validator>, backAdviser: BackAdviser) : AbstractUpdatingBettor(
         side = Side.BACK,
         validators = validators,
-        priceAdviser = coordinator)
+        priceAdviser = backAdviser)
 

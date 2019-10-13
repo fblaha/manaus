@@ -26,7 +26,7 @@ class BetManager(
 
     fun fire(snapshot: MarketSnapshot,
              myBets: Set<String>,
-             accountMoney: AccountMoney?): CollectedBets {
+             account: Account): CollectedBets {
         val marketPrices = filterPrices(snapshot.runnerPrices)
 
 
@@ -43,7 +43,7 @@ class BetManager(
             if (unknownBets.isEmpty()) {
                 sortedSnapshotListeners
                         .filter { it.javaClass.simpleName !in disabledListeners }
-                        .forEach { it.onMarketSnapshot(snapshot, collector, accountMoney) }
+                        .forEach { it.onMarketSnapshot(snapshot, collector, account) }
                 saveActions(collector.getToPlace())
                 saveActions(collector.getToUpdate())
             }

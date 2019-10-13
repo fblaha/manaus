@@ -3,7 +3,6 @@ package cz.fb.manaus.reactor.filter
 import cz.fb.manaus.core.model.BlacklistedCategory
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.repository.RealizedBetLoader
 import cz.fb.manaus.core.repository.SettledBetRepository
 import cz.fb.manaus.reactor.profit.ProfitService
@@ -27,8 +26,6 @@ abstract class AbstractUnprofitableCategoriesRegistry(
     private lateinit var settledBetRepository: SettledBetRepository
     @Autowired
     private lateinit var realizedBetLoader: RealizedBetLoader
-    @Autowired
-    private lateinit var provider: ExchangeProvider
 
     private val log = Logger.getLogger(AbstractUnprofitableCategoriesRegistry::class.simpleName)
 

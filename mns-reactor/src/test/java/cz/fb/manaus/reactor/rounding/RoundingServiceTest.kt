@@ -1,5 +1,6 @@
 package cz.fb.manaus.reactor.rounding
 
+import cz.fb.manaus.core.model.provider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,10 +25,10 @@ class RoundingServiceTest : AbstractLocalTestCase() {
         }
         price = service.increment(price, 1)!!
         for (i in 0 until repeat) {
-            price = service.decrement(price, 1)!!
+            price = service.decrement(price, 1, provider.minPrice)!!
             downList.add(price)
         }
-        price = service.decrement(price, 1)!!
+        price = service.decrement(price, 1, provider.minPrice)!!
         assertEquals(start, price)
         downList.reverse()
         assertEquals(downList, upList)
@@ -46,10 +47,10 @@ class RoundingServiceTest : AbstractLocalTestCase() {
         assertEquals(price1, price2)
 
         for (i in 0 until repeat) {
-            price1 = service.decrement(price1, 1)!!
+            price1 = service.decrement(price1, 1, provider.minPrice)!!
         }
         for (i in 0 until repeat / 50) {
-            price2 = service.decrement(price2, 50)!!
+            price2 = service.decrement(price2, 50, provider.minPrice)!!
         }
         assertEquals(price1, price2)
     }

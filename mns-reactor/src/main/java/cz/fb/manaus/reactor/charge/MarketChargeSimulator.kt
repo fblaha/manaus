@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 object MarketChargeSimulator {
 
     fun getChargeMean(winnerCount: Int,
-                      chargeRate: Double,
+                      commission: Double,
                       probabilities: Map<Long, Double>,
                       bets: Map<Long, List<Price>>): Double {
 
@@ -30,7 +30,7 @@ object MarketChargeSimulator {
                     selectionBets.map { this.profitLoser(it) }.sum()
             }
             if (profit > 0) {
-                val charge = profit * chargeRate
+                val charge = profit * commission
                 chargeMean += probability * charge
             }
         }

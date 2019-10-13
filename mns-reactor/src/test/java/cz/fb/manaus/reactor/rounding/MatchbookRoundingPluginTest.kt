@@ -1,6 +1,6 @@
 package cz.fb.manaus.reactor.rounding
 
-import cz.fb.manaus.core.provider.ExchangeProvider
+import cz.fb.manaus.core.model.provider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.spring.ManausProfiles.TEST
 import org.junit.Assert.assertEquals
@@ -14,8 +14,6 @@ class MatchbookRoundingPluginTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var plugin: MatchbookRoundingPlugin
-    @Autowired
-    private lateinit var provider: ExchangeProvider
 
 
     @Test

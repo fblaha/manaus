@@ -24,7 +24,7 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDatabase
                       updateCount: Int): BetCollector {
         val collector = BetCollector()
         val snapshot = MarketSnapshot.from(marketPrices, market, bets, createTradedVolume(marketPrices))
-        bettor.onMarketSnapshot(snapshot, collector)
+        bettor.onMarketSnapshot(snapshot, collector, account)
         assertEquals(placeCount, collector.getToPlace().size)
         assertEquals(updateCount, collector.getToUpdate().size)
         return collector
@@ -69,9 +69,8 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDatabase
             result.getOrPut(runnerPrices.selectionId) { mutableListOf() }
                     .add(TradedAmount(roundingService.increment(lastMatchedPrice, 1)!!, 5.0))
             result.getOrPut(runnerPrices.selectionId) { mutableListOf() }
-                    .add(TradedAmount(roundingService.decrement(lastMatchedPrice, 1)!!, 5.0))
+                    .add(TradedAmount(roundingService.decrement(lastMatchedPrice, 1, provider.minPrice)!!, 5.0))
         }
         return result.mapValues { TradedVolume(it.value) }
-
     }
 }

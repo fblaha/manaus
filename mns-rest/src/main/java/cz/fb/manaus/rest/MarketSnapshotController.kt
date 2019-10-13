@@ -20,7 +20,7 @@ import java.util.logging.Logger
 data class MarketSnapshotCrate(
         var prices: List<RunnerPrices>,
         var bets: List<Bet>,
-        var money: AccountMoney? = null,
+        var account: Account,
         val tradedVolume: Map<Long, TradedVolume>? = null,
         var scanTime: Long = 0
 )
@@ -36,7 +36,7 @@ class MarketSnapshotController(private val manager: BetManager,
     private val log = Logger.getLogger(MarketSnapshotController::class.simpleName)
 
     @RequestMapping(value = ["/markets/{id}/snapshot"], method = [RequestMethod.POST])
-    fun pushMarketSnapshot(@PathVariable id: String, @RequestBody snapshotCrate: MarketSnapshotCrate): ResponseEntity<*> {
+    fun pushMarketSnapshot(@PathVariable id: String, @RequestBody snapshotCrate: MarketSnapshotCrate): ResponseEntity<CollectedBets> {
         validateMarket(snapshotCrate)
         metricRegistry.meter("market.snapshot.post").mark()
         try {
@@ -46,17 +46,20 @@ class MarketSnapshotController(private val manager: BetManager,
             betMetricUpdater.update(snapshotCrate.scanTime, bets)
             val marketSnapshot = MarketSnapshot.from(marketPrices, market, bets, snapshotCrate.tradedVolume)
             val myBets = betActionRepository.find(id).mapNotNull { it.betId }.toSet()
-            val collectedBets = manager.fire(marketSnapshot, myBets,
-                    snapshotCrate.money)
-            return if (collectedBets.isEmpty) {
-                ResponseEntity.noContent().build<Any>()
-            } else {
-                ResponseEntity.ok(collectedBets)
-            }
+            val collectedBets = manager.fire(marketSnapshot, myBets, snapshotCrate.account)
+            return toResponse(collectedBets)
         } catch (e: RuntimeException) {
             metricRegistry.counter("_SNAPSHOT_ERROR_").inc()
             logException(snapshotCrate, e)
             throw e
+        }
+    }
+
+    private fun toResponse(collectedBets: CollectedBets): ResponseEntity<CollectedBets> {
+        return if (collectedBets.isEmpty) {
+            ResponseEntity.noContent().build<CollectedBets>()
+        } else {
+            ResponseEntity.ok(collectedBets)
         }
     }
 

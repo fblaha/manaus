@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.BetContextFactory
 import cz.fb.manaus.reactor.price.Fairness
@@ -15,11 +14,10 @@ import java.time.temporal.ChronoUnit
 
 @Component
 class ReactorTestFactory(
-        private var roundingService: RoundingService,
-        private var calculator: FairnessPolynomialCalculator,
-        private var priceService: PriceService,
-        private var contextFactory: BetContextFactory,
-        private var provider: ExchangeProvider) {
+        private val roundingService: RoundingService,
+        private val calculator: FairnessPolynomialCalculator,
+        private val priceService: PriceService,
+        private val contextFactory: BetContextFactory) {
 
     fun newUpdateBetContext(marketPrices: List<RunnerPrices>, side: Side): BetContext {
         val oldBet = Bet(betId = "1",
@@ -43,7 +41,8 @@ class ReactorTestFactory(
                 side = side,
                 selectionId = SEL_HOME,
                 snapshot = snapshot,
-                fairness = fairness
+                fairness = fairness,
+                account = account
         )
     }
 
@@ -61,8 +60,13 @@ class ReactorTestFactory(
             listOf(counterBet)
         } else emptyList()
         val snapshot = MarketSnapshot.from(marketPrices, market, bets)
-        return contextFactory.create(side, selectionId, snapshot,
-                calculator.getFairness(marketPrices))
+        return contextFactory.create(
+                side = side,
+                selectionId = selectionId,
+                snapshot = snapshot,
+                fairness = calculator.getFairness(marketPrices),
+                account = account
+        )
     }
 
     fun newRunnerPrices(selectionId: Long, bestBack: Double, bestLay: Double, lastMatchedPrice: Double? = null): RunnerPrices {
@@ -74,8 +78,8 @@ class ReactorTestFactory(
                 prices = listOf(
                         backBestPrice,
                         layBestPrice,
-                        roundingService.decrement(backBestPrice, 1)!!,
-                        roundingService.decrement(backBestPrice, 2)!!,
+                        roundingService.decrement(backBestPrice, 1, provider.minPrice)!!,
+                        roundingService.decrement(backBestPrice, 2, provider.minPrice)!!,
                         roundingService.increment(layBestPrice, 1)!!,
                         roundingService.increment(layBestPrice, 2)!!),
                 lastMatchedPrice = lastMatchedPrice,

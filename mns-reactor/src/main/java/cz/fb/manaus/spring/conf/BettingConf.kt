@@ -6,12 +6,14 @@ import javax.annotation.PostConstruct
 
 @ConfigurationProperties("betting")
 data class BettingConf(var disabledListeners: List<String> = emptyList(),
-                       var amount: Double?) {
+                       var amount: Double = -1.0) {
 
     private val log = Logger.getLogger(BettingConf::class.simpleName)
 
     @PostConstruct
-    fun log() {
+    fun validate() {
         log.info { "$this" }
+        check(amount > 0.0)
     }
+
 }

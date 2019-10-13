@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.price
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import org.junit.Assert.assertEquals
@@ -17,8 +16,6 @@ class PriceServiceTest : AbstractLocalTestCase() {
     private lateinit var priceService: PriceService
     @Autowired
     private lateinit var factory: ReactorTestFactory
-    @Autowired
-    private lateinit var provider: ExchangeProvider
     @Autowired
     private lateinit var calculator: FairnessPolynomialCalculator
 

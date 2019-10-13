@@ -50,6 +50,7 @@ class End2EndTest : AbstractControllerTest() {
                 prices = runnerPrices,
                 bets = emptyList(),
                 scanTime = 1000,
+                account = account,
                 tradedVolume = tradedVolume)
 
         val snapshot = objectMapper.writer().writeValueAsString(crate)

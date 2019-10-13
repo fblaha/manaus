@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.profit.progress
 
-import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.profit.generateBets
 import cz.fb.manaus.reactor.profit.toRealizedBet
@@ -13,8 +12,6 @@ class FixedBinFunctionProfitServiceTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var service: FixedBinFunctionProfitService
-    @Autowired
-    private lateinit var provider: ExchangeProvider
 
     @Test
     fun `single bin`() {

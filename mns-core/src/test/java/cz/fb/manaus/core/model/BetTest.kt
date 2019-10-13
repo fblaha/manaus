@@ -1,7 +1,6 @@
 package cz.fb.manaus.core.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.junit.Assert.*
 import org.junit.Test
@@ -19,8 +18,6 @@ val betTemplate = Bet(
 
 class BetTest : AbstractLocalTestCase() {
 
-    @Autowired
-    private lateinit var provider: ExchangeProvider
     @Autowired
     private lateinit var mapper: ObjectMapper
 

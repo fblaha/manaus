@@ -4,7 +4,6 @@ import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.MarketSnapshot
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.reactor.betting.AmountAdviser
 import cz.fb.manaus.reactor.price.Fairness
 import cz.fb.manaus.reactor.price.ProbabilityCalculator
@@ -15,8 +14,7 @@ import org.springframework.stereotype.Component
 class ChargeGrowthForecaster(
         private val simulator: MarketChargeSimulator,
         private val probabilityCalculator: ProbabilityCalculator,
-        private val amountAdviser: AmountAdviser,
-        private val exchangeProvider: ExchangeProvider) {
+        private val amountAdviser: AmountAdviser) {
 
     private fun convertBetData(currentBets: List<Bet>): Map<Long, List<Price>> {
         return currentBets.groupBy({ it.selectionId }, {
@@ -30,37 +28,37 @@ class ChargeGrowthForecaster(
     fun getForecast(selectionId: Long,
                     betSide: Side,
                     snapshot: MarketSnapshot,
-                    fairness: Fairness): Double? {
+                    fairness: Fairness,
+            // TODO no hardcoded
+                    commission: Double): Double? {
 
-        if (exchangeProvider.isPerMarketCharge) {
-            val fairnessSide = fairness.moreCredibleSide
-            if (fairnessSide != null) {
-                val sideFairness = fairness[fairnessSide]!!
-                val probabilities = probabilityCalculator.fromFairness(
-                        sideFairness, fairnessSide, snapshot.runnerPrices)
-                val marketPrices = snapshot.runnerPrices
-                val bets = convertBetData(snapshot.currentBets).toMutableMap()
-                val runnerPrices = getRunnerPrices(marketPrices, selectionId)
-                val oldCharge = simulator.getChargeMean(
+        val fairnessSide = fairness.moreCredibleSide
+        if (fairnessSide != null) {
+            val sideFairness = fairness[fairnessSide]!!
+            val probabilities = probabilityCalculator.fromFairness(
+                    sideFairness, fairnessSide, snapshot.runnerPrices)
+            val marketPrices = snapshot.runnerPrices
+            val bets = convertBetData(snapshot.currentBets).toMutableMap()
+            val runnerPrices = getRunnerPrices(marketPrices, selectionId)
+            val oldCharge = simulator.getChargeMean(
+                    winnerCount = 1,
+                    commission = commission,
+                    probabilities = probabilities,
+                    bets = bets
+            )
+            val bestPrice = runnerPrices.getHomogeneous(betSide.opposite).bestPrice
+            if (bestPrice != null) {
+                val price = bestPrice.price
+                val amount = amountAdviser.amount
+                val selBets = bets[selectionId] ?: emptyList()
+                bets[selectionId] = selBets + listOf(Price(price, amount, betSide))
+                val newCharge = simulator.getChargeMean(
                         winnerCount = 1,
-                        chargeRate = exchangeProvider.chargeRate,
+                        commission = commission,
                         probabilities = probabilities,
                         bets = bets
                 )
-                val bestPrice = runnerPrices.getHomogeneous(betSide.opposite).bestPrice
-                if (bestPrice != null) {
-                    val price = bestPrice.price
-                    val amount = amountAdviser.amount
-                    val selBets = bets[selectionId] ?: emptyList()
-                    bets[selectionId] = selBets + listOf(Price(price, amount, betSide))
-                    val newCharge = simulator.getChargeMean(
-                            winnerCount = 1,
-                            chargeRate = exchangeProvider.chargeRate,
-                            probabilities = probabilities,
-                            bets = bets
-                    )
-                    return newCharge / oldCharge
-                }
+                return newCharge / oldCharge
             }
         }
         return null

@@ -17,11 +17,14 @@ abstract class AbstractTooCloseUpdateValidator(private val closeSteps: Set<Int>)
         val oldOne = context.oldBet!!.requestedPrice.price
         val newOne = context.newPrice!!.price
         if (newOne priceEq oldOne) return ValidationResult.REJECT
+        val minPrice = context.account.provider.minPrice
         val containsEqualPrice = closeSteps
                 .onEach { require(it != 0) }
                 .mapNotNull {
-                    if (it > 0) roundingService.increment(oldOne, it)
-                    else roundingService.decrement(oldOne, -it)
+                    when {
+                        it > 0 -> roundingService.increment(oldOne, it)
+                        else -> roundingService.decrement(oldOne, -it, minPrice)
+                    }
                 }.any { newOne priceEq it }
         return ValidationResult.of(!containsEqualPrice)
     }

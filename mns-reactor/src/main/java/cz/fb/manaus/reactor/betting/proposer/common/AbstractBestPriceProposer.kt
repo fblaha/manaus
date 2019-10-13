@@ -33,7 +33,7 @@ abstract class AbstractBestPriceProposer(private val step: Int) : PriceProposer 
             if (side === Side.LAY) {
                 roundingService.increment(bestPrice, step)
             } else {
-                roundingService.decrement(bestPrice, step)
+                roundingService.decrement(bestPrice, step, context.account.provider.minPrice)
             }
         }
     }

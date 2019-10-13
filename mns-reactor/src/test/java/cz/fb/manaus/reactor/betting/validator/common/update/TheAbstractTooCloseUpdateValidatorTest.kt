@@ -1,10 +1,6 @@
 package cz.fb.manaus.reactor.betting.validator.common.update
 
-import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.model.betTemplate
-import cz.fb.manaus.core.model.runnerPrices
-import cz.fb.manaus.core.provider.ExchangeProvider
+import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
@@ -22,8 +18,6 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
     private lateinit var roundingService: RoundingService
     @Autowired
     private lateinit var factory: ReactorTestFactory
-    @Autowired
-    private lateinit var provider: ExchangeProvider
 
 
     @Test
@@ -35,13 +29,13 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
         context.newPrice = oldPrice
         assertEquals(ValidationResult.REJECT, validator.validate(context))
 
-        context.newPrice = roundingService.decrement(oldPrice, 1)
+        context.newPrice = roundingService.decrement(oldPrice, 1, provider.minPrice)
         assertEquals(ValidationResult.REJECT, validator.validate(context))
 
-        context.newPrice = roundingService.decrement(oldPrice, 2)
+        context.newPrice = roundingService.decrement(oldPrice, 2, provider.minPrice)
         assertEquals(ValidationResult.REJECT, validator.validate(context))
 
-        context.newPrice = roundingService.decrement(oldPrice, 3)
+        context.newPrice = roundingService.decrement(oldPrice, 3, provider.minPrice)
         assertEquals(ValidationResult.ACCEPT, validator.validate(context))
     }
 
