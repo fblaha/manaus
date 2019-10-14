@@ -4,7 +4,7 @@ package cz.fb.manaus.core.model
 data class SideSelection(val side: Side, val selectionId: Long) {
     val oppositeSide: SideSelection
         get() {
-            return SideSelection(side.opposite, selectionId)
+            return copy(side = side.opposite)
         }
 }
 
