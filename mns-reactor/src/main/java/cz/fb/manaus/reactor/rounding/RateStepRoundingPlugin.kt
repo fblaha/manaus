@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile("matchbook")
-class MatchbookRoundingPlugin : RoundingPlugin {
+class RateStepRoundingPlugin : RoundingPlugin {
 
     override fun shift(price: Double, steps: Int): Double {
         return price + steps * getStep(price)

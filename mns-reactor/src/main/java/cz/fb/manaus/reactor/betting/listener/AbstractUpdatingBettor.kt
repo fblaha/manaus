@@ -39,6 +39,8 @@ abstract class AbstractUpdatingBettor(private val side: Side,
         check(sortedPrices.map { it.selectionId }.distinct().count() ==
                 sortedPrices.map { it.selectionId }.count())
 
+        val (priceValidators, prePriceValidators) = validators.partition { it.isPriceRequired }
+
         for ((i, runnerPrices) in sortedPrices.withIndex()) {
             val selectionId = runnerPrices.selectionId
             val runner = market.getRunner(selectionId)
@@ -51,8 +53,8 @@ abstract class AbstractUpdatingBettor(private val side: Side,
                         snapshot = snapshot,
                         fairness = fairness,
                         account = account)
-                val pricelessValidation = validationService.validate(ctx, validators)
-                if (!pricelessValidation.isSuccess) {
+                val prePriceValidation = validationService.validate(ctx, prePriceValidators)
+                if (!prePriceValidation.isSuccess) {
                     cancelBet(oldBet, betCollector)
                     continue
                 }
@@ -66,7 +68,7 @@ abstract class AbstractUpdatingBettor(private val side: Side,
                 ctx.proposers = newPrice.proposers
 
                 if (oldBet != null && oldBet.isMatched) continue
-                val priceValidation = validationService.validate(ctx, validators)
+                val priceValidation = validationService.validate(ctx, priceValidators)
                 if (priceValidation.isSuccess) {
                     bet(ctx, betCollector)
                 }

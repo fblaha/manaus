@@ -1,11 +1,11 @@
 package cz.fb.manaus.ischia.validator.update
 
+import cz.fb.manaus.core.provider.ProviderCapability
 import cz.fb.manaus.ischia.BackLoserBet
 import cz.fb.manaus.ischia.LayLoserBet
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.common.update.AbstractTooCloseUpdateValidator
-import org.springframework.context.annotation.Profile
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
@@ -14,8 +14,10 @@ import org.springframework.stereotype.Component
 @LayLoserBet
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-@Profile("betfair")
 object TooCloseUpdateValidator : AbstractTooCloseUpdateValidator(setOf(-1, 1)) {
+
+    override val requiredCapabilities: Set<ProviderCapability>
+        get() = setOf(ProviderCapability.FixedStepPrice)
 
     override fun validate(context: BetContext): ValidationResult {
         return if (context.isCounterHalfMatched) {

@@ -48,15 +48,15 @@ class ValidationService(private val priceService: PriceService,
     }
 
     private fun createPredicate(context: BetContext): (Validator) -> Boolean {
-        val predicates = mutableListOf<(Validator) -> Boolean>()
-        if (context.oldBet == null) {
-            predicates.add { !it.isUpdateOnly }
+        return fun(validator: Validator): Boolean {
+            if (validator.isUpdateOnly && context.oldBet == null) {
+                return false
+            }
+            if (validator.isPriceRequired && context.newPrice == null) {
+                return false
+            }
+            val providerCapabilities = context.account.provider.capabilities
+            return providerCapabilities.containsAll(validator.requiredCapabilities)
         }
-        if (context.newPrice != null) {
-            predicates.add { it.isPriceRequired }
-        } else {
-            predicates.add { !it.isPriceRequired }
-        }
-        return { validator -> predicates.all { it(validator) } }
     }
 }

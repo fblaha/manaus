@@ -1,6 +1,7 @@
 package cz.fb.manaus.core.model
 
 import cz.fb.manaus.core.provider.ExchangeProvider
+import cz.fb.manaus.core.provider.ProviderCapability
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
@@ -92,6 +93,11 @@ val tradedVolume = mapOf(
 
 val accountMoney = AccountMoney(2000.0, 1000.0)
 
-val provider = ExchangeProvider("test", 2.0, 1.001, 0.02)
+val provider = ExchangeProvider(
+        name = "test",
+        minAmount = 2.0,
+        minPrice = 1.001,
+        commission = 0.02,
+        capabilities = ProviderCapability.values().toSet())
 
 val account = Account(provider, accountMoney)

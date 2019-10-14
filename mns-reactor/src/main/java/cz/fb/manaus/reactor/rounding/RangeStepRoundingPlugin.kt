@@ -12,7 +12,7 @@ import kotlin.math.abs
 
 @Component
 @Profile("betfair")
-class BetfairRoundingPlugin : RoundingPlugin {
+class RangeStepRoundingPlugin : RoundingPlugin {
 
     private val incrementSteps: RangeMap<Double, Double> = ImmutableRangeMap.builder<Double, Double>()
             .put(closedOpen(1.0, 2.0), 0.01)
