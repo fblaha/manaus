@@ -2,14 +2,15 @@ package cz.fb.manaus.core.manager
 
 import cz.fb.manaus.core.manager.filter.MarketFilter
 import cz.fb.manaus.core.model.Market
-import org.springframework.stereotype.Service
+import cz.fb.manaus.core.provider.ProviderCapability
+import org.springframework.stereotype.Component
 
 
-@Service
-class MarketFilterService(private val marketFilters: List<MarketFilter> = mutableListOf()) {
+@Component
+class MarketFilterService(private val marketFilters: List<MarketFilter>) {
 
-    fun accept(market: Market, hasBets: Boolean): Boolean {
-        var filters = marketFilters
+    fun accept(market: Market, hasBets: Boolean, providerCapabilities: Set<ProviderCapability>): Boolean {
+        var filters = marketFilters.filter { it.checkCapabilities(providerCapabilities) }
         if (hasBets) {
             filters = filters.filter { it.isStrict }
         }

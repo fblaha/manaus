@@ -8,8 +8,3 @@ data class ExchangeProvider(
         val capabilities: Set<ProviderCapability> = emptySet()
 )
 
-enum class ProviderCapability {
-    FixedStepPrice,
-    LastMatchedPrice,
-    TradedVolume,
-}

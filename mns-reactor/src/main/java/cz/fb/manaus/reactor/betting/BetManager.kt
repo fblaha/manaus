@@ -3,12 +3,10 @@ package cz.fb.manaus.reactor.betting
 import cz.fb.manaus.core.manager.MarketFilterService
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.repository.BetActionRepository
-import cz.fb.manaus.core.repository.BlacklistedCategoryRepository
 import cz.fb.manaus.reactor.betting.action.BetActionListener
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
 import cz.fb.manaus.reactor.price.PriceFilter
-import cz.fb.manaus.reactor.price.getReciprocal
 import org.springframework.core.annotation.AnnotationAwareOrderComparator
 import java.time.Instant
 import java.util.logging.Logger
@@ -17,7 +15,6 @@ class BetManager(
         private val filterService: MarketFilterService,
         private val priceFilter: PriceFilter?,
         private val betActionRepository: BetActionRepository,
-        private val blacklistedCategoryRepository: BlacklistedCategoryRepository,
         private val actionListeners: List<BetActionListener>,
         private val disabledListeners: Set<String>,
         private val sortedSnapshotListeners: List<MarketSnapshotListener>) {
@@ -27,15 +24,13 @@ class BetManager(
     fun fire(snapshot: MarketSnapshot,
              myBets: Set<String>,
              account: Account): CollectedBets {
-        val marketPrices = filterPrices(snapshot.runnerPrices)
 
 
-        val reciprocal = getReciprocal(marketPrices, Side.BACK)
         val market = snapshot.market
         val collector = BetCollector()
 
 
-        if (checkMarket(myBets, market, reciprocal)) {
+        if (filterService.accept(market, myBets.isNotEmpty(), account.provider.capabilities)) {
             validateOpenDate(market)
 
             val unknownBets = BetUtils.getUnknownBets(snapshot.currentBets, myBets)
@@ -78,13 +73,8 @@ class BetManager(
         }
     }
 
-    private fun checkMarket(myBets: Set<String>, market: Market, reciprocal: Double?): Boolean {
-        return reciprocal != null && filterService.accept(market, myBets.isNotEmpty())
-    }
-
     companion object {
         fun create(betActionRepository: BetActionRepository,
-                   blacklistedCategoryRepository: BlacklistedCategoryRepository,
                    filterService: MarketFilterService,
                    priceFilter: PriceFilter?,
                    disabledListeners: Set<String>,
@@ -97,7 +87,6 @@ class BetManager(
             return BetManager(filterService,
                     priceFilter,
                     betActionRepository,
-                    blacklistedCategoryRepository,
                     actionListeners,
                     disabledListeners,
                     sortedSnapshotListeners)

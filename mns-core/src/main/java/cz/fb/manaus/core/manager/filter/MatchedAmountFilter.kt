@@ -2,12 +2,14 @@ package cz.fb.manaus.core.manager.filter
 
 import cz.fb.manaus.core.model.Market
 import cz.fb.manaus.core.model.amountEq
-import org.springframework.context.annotation.Profile
+import cz.fb.manaus.core.provider.ProviderCapability
 import org.springframework.stereotype.Component
 
 @Component
-@Profile("betfair")
 class MatchedAmountFilter : MarketFilter {
+
+    override val requiredCapabilities: Set<ProviderCapability>
+        get() = setOf(ProviderCapability.MatchedAmount)
 
     override fun accept(market: Market): Boolean {
         val matchedAmount = market.matchedAmount

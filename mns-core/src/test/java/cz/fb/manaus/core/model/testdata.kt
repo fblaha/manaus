@@ -1,7 +1,7 @@
 package cz.fb.manaus.core.model
 
 import cz.fb.manaus.core.provider.ExchangeProvider
-import cz.fb.manaus.core.provider.ProviderCapability
+import cz.fb.manaus.core.provider.allCapabilities
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
@@ -98,6 +98,6 @@ val provider = ExchangeProvider(
         minAmount = 2.0,
         minPrice = 1.001,
         commission = 0.02,
-        capabilities = ProviderCapability.values().toSet())
+        capabilities = allCapabilities)
 
 val account = Account(provider, accountMoney)
