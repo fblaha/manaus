@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 object TheSamePriceUpdateValidator : AbstractTooCloseUpdateValidator(emptySet()) {
 
     override val requiredCapabilities: Set<ProviderCapability>
-        get() = setOf(ProviderCapability.FixedStepPrice)
+        get() = setOf(ProviderCapability.PriceShiftFixedStep)
 
     override val isDowngradeAccepting: Boolean = false
 }

@@ -95,7 +95,7 @@ val accountMoney = AccountMoney(2000.0, 1000.0)
 
 val bfCapabilities = setOf(
         ProviderCapability.MatchedAmount,
-        ProviderCapability.FixedStepPrice,
+        ProviderCapability.PriceShiftFixedStep,
         ProviderCapability.TradedVolume,
         ProviderCapability.LastMatchedPrice)
 

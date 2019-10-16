@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component
 object TooCloseUpdateValidator : AbstractTooCloseUpdateValidator(setOf(-1, 1)) {
 
     override val requiredCapabilities: Set<ProviderCapability>
-        get() = setOf(ProviderCapability.FixedStepPrice)
+        get() = setOf(ProviderCapability.PriceShiftFixedStep)
 
     override fun validate(context: BetContext): ValidationResult {
         return if (context.isCounterHalfMatched) {

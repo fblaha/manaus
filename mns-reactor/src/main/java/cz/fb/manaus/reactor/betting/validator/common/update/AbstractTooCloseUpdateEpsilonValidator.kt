@@ -17,6 +17,6 @@ abstract class AbstractTooCloseUpdateEpsilonValidator(private val epsilon: Doubl
     override val isUpdateOnly: Boolean = true
 
     override val requiredCapabilities: Set<ProviderCapability>
-        get() = setOf(ProviderCapability.ContinuousPrice)
+        get() = setOf(ProviderCapability.PriceShiftContinuous)
 }
 
