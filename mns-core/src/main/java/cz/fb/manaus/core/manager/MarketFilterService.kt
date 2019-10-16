@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 class MarketFilterService(private val marketFilters: List<MarketFilter>) {
 
     fun accept(market: Market, hasBets: Boolean, providerCapabilities: Set<ProviderCapability>): Boolean {
-        var filters = marketFilters.filter { it.checkCapabilities(providerCapabilities) }
+        var filters = marketFilters.filter { it.allIn(providerCapabilities) }
         if (hasBets) {
             filters = filters.filter { it.isStrict }
         }

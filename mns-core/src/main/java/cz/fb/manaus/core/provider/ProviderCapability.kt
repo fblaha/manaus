@@ -2,9 +2,12 @@ package cz.fb.manaus.core.provider
 
 enum class ProviderCapability {
     FixedStepPrice,
+    ContinuousPrice,
     LastMatchedPrice,
     TradedVolume,
     MatchedAmount
 }
 
-val allCapabilities = ProviderCapability.values().toSet()
+fun validateProviderCapabilities(capabilities: Set<ProviderCapability>) {
+    check(ProviderCapability.FixedStepPrice in capabilities || ProviderCapability.ContinuousPrice in capabilities)
+}

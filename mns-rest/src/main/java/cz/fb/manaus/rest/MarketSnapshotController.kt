@@ -2,6 +2,7 @@ package cz.fb.manaus.rest
 
 import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.*
+import cz.fb.manaus.core.provider.validateProviderCapabilities
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.reactor.betting.BetManager
@@ -38,6 +39,8 @@ class MarketSnapshotController(private val manager: BetManager,
     @RequestMapping(value = ["/markets/{id}/snapshot"], method = [RequestMethod.POST])
     fun pushMarketSnapshot(@PathVariable id: String, @RequestBody snapshotCrate: MarketSnapshotCrate): ResponseEntity<CollectedBets> {
         validateMarket(snapshotCrate)
+        val account = snapshotCrate.account
+        validateProviderCapabilities(account.provider.capabilities)
         metricRegistry.meter("market.snapshot.post").mark()
         try {
             val marketPrices = snapshotCrate.prices
@@ -46,7 +49,7 @@ class MarketSnapshotController(private val manager: BetManager,
             betMetricUpdater.update(snapshotCrate.scanTime, bets)
             val marketSnapshot = MarketSnapshot.from(marketPrices, market, bets, snapshotCrate.tradedVolume)
             val myBets = betActionRepository.find(id).mapNotNull { it.betId }.toSet()
-            val collectedBets = manager.fire(marketSnapshot, myBets, snapshotCrate.account)
+            val collectedBets = manager.fire(marketSnapshot, myBets, account)
             return toResponse(collectedBets)
         } catch (e: RuntimeException) {
             metricRegistry.counter("_SNAPSHOT_ERROR_").inc()

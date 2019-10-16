@@ -1,5 +1,6 @@
 package cz.fb.manaus.reactor.betting.validator.common.update
 
+import cz.fb.manaus.core.provider.ProviderCapability
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
@@ -15,4 +16,7 @@ abstract class AbstractTooCloseUpdateEpsilonValidator(private val epsilon: Doubl
 
     override val isUpdateOnly: Boolean = true
 
+    override val requiredCapabilities: Set<ProviderCapability>
+        get() = setOf(ProviderCapability.ContinuousPrice)
 }
+

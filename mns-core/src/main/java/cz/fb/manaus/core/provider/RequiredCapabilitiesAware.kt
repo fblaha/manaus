@@ -5,7 +5,7 @@ interface RequiredCapabilitiesAware {
     val requiredCapabilities: Set<ProviderCapability>
         get() = emptySet()
 
-    fun checkCapabilities(providerCapabilities: Set<ProviderCapability>): Boolean {
+    fun allIn(providerCapabilities: Set<ProviderCapability>): Boolean {
         return providerCapabilities.containsAll(requiredCapabilities)
     }
 
