@@ -8,6 +8,8 @@ enum class ProviderCapability {
     MatchedAmount
 }
 
+val priceCapabilities = setOf(ProviderCapability.ContinuousPrice, ProviderCapability.FixedStepPrice)
+
 fun validateProviderCapabilities(capabilities: Set<ProviderCapability>) {
-    check(ProviderCapability.FixedStepPrice in capabilities || ProviderCapability.ContinuousPrice in capabilities)
+    check((priceCapabilities intersect capabilities).size == 1)
 }
