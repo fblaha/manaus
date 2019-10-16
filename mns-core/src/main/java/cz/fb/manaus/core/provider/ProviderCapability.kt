@@ -21,5 +21,6 @@ enum class ProviderCapability {
 
 
 fun validateProviderCapabilities(capabilities: Set<ProviderCapability>) {
+    // TODO not correct - empty set case
     capabilities.forEach { it.validate(capabilities) }
 }
