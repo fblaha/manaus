@@ -1,26 +1,16 @@
 package cz.fb.manaus.core.provider
 
 enum class ProviderCapability {
-    PriceShiftFixedStep {
-        override fun validate(providerCapabilities: Set<ProviderCapability>) {
-            check(PriceShiftContinuous !in providerCapabilities)
-        }
-    },
-    PriceShiftContinuous {
-        override fun validate(providerCapabilities: Set<ProviderCapability>) {
-            check(PriceShiftFixedStep !in providerCapabilities)
-        }
-    },
+    PriceShiftFixedStep,
+    PriceShiftContinuous,
     LastMatchedPrice,
     TradedVolume,
-    MatchedAmount;
-
-    open fun validate(providerCapabilities: Set<ProviderCapability>) {}
-
+    MatchedAmount
 }
 
 
+val priceCapabilities = setOf(ProviderCapability.PriceShiftContinuous, ProviderCapability.PriceShiftFixedStep)
+
 fun validateProviderCapabilities(capabilities: Set<ProviderCapability>) {
-    // TODO not correct - empty set case
-    capabilities.forEach { it.validate(capabilities) }
+    check((priceCapabilities intersect capabilities).size == 1)
 }
