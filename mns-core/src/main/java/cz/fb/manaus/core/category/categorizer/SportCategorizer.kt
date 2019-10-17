@@ -40,8 +40,7 @@ object SportCategorizer : AbstractDelegatingCategorizer(SPORT_PREFIX) {
     }
 
     public override fun getCategoryRaw(market: Market): Set<String> {
-        val category = getCategory(market)
-        return when (category) {
+        return when (val category = getCategory(market)) {
             null -> emptySet()
             else -> setOf(category)
         }

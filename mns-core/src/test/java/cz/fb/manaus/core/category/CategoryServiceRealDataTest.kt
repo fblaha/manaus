@@ -83,7 +83,7 @@ class CategoryServiceRealDataTest : AbstractMarketDataAwareTestCase() {
     private fun checkCategory(category: String, mustContainLower: String?) {
         val size = markets.size
         val count = getCategoryCount(category, mustContainLower)
-        assertTrue(count in 1..(size - 1))
+        assertTrue(count in 1 until size)
     }
 
     private fun getCategoryCount(category: String, mustContainLower: String?): Int {

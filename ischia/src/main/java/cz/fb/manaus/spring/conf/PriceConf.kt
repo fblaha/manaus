@@ -1,16 +1,18 @@
 package cz.fb.manaus.spring.conf
 
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.context.properties.ConstructorBinding
 import java.util.logging.Logger
 import javax.annotation.PostConstruct
 
+@ConstructorBinding
 @ConfigurationProperties("price")
-data class PriceConf(var downgradeBackRate: Double = 0.0,
-                     var downgradeLayRate: Double = 0.0,
-                     var bulldoze: Double = 0.0,
-                     var min: Double = 0.0,
-                     var max: Double = 0.0,
-                     var limit: Int = 0) {
+data class PriceConf(val downgradeBackRate: Double = 0.0,
+                     val downgradeLayRate: Double = 0.0,
+                     val bulldoze: Double = 0.0,
+                     val min: Double = 0.0,
+                     val max: Double = 0.0,
+                     val limit: Int = 0) {
 
     private val log = Logger.getLogger(PriceConf::class.simpleName)
 

@@ -9,8 +9,7 @@ const val COUNTRY_PREFIX = "country_"
 object CountryCodeCategorizer : AbstractDelegatingCategorizer(COUNTRY_PREFIX) {
 
     override fun getCategoryRaw(market: Market): Set<String> {
-        val countryCode = market.event.countryCode
-        return when (countryCode) {
+        return when (val countryCode = market.event.countryCode) {
             null -> emptySet()
             else -> setOf(countryCode.toLowerCase())
         }

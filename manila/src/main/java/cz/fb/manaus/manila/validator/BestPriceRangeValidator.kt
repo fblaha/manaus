@@ -13,8 +13,7 @@ import org.springframework.stereotype.Component
 object BestPriceRangeValidator : Validator {
 
     override fun validate(context: BetContext): ValidationResult {
-        val bestBack = context.runnerPrices.getHomogeneous(Side.BACK).bestPrice
-        return when (bestBack) {
+        return when (val bestBack = context.runnerPrices.getHomogeneous(Side.BACK).bestPrice) {
             null -> REJECT
             else -> ValidationResult.of(bestBack.price in 1.2..2.5)
         }
