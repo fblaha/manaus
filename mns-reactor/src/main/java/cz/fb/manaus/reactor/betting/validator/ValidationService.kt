@@ -55,8 +55,8 @@ class ValidationService(private val priceService: PriceService,
             if (validator.isPriceRequired && context.newPrice == null) {
                 return false
             }
-            val providerCapabilities = context.account.provider.capabilities
-            return validator.allIn(providerCapabilities)
+            val hasCapabilities = context.account.provider.capabilityPredicate
+            return hasCapabilities(validator)
         }
     }
 }

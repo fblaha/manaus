@@ -2,11 +2,10 @@ package cz.fb.manaus.reactor.price
 
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.priceEq
-import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.stereotype.Component
 
 @Component
-class PriceService(private val roundingService: RoundingService) {
+class PriceService {
 
     fun downgrade(price: Double, downgradeFraction: Double, side: Side): Double {
         val aboveOne = price - 1
@@ -46,8 +45,5 @@ class PriceService(private val roundingService: RoundingService) {
         return 1 / probability
     }
 
-    fun getRoundedFairnessFairPrice(unfairPrice: Double, fairness: Double): Double? {
-        return roundingService.roundBet(getFairnessFairPrice(unfairPrice, fairness))
-    }
 
 }

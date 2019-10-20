@@ -5,18 +5,15 @@ import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.spring.ManausProfiles.DB
-import cz.fb.manaus.spring.ManausProfiles.TEST
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
-import org.springframework.test.context.ActiveProfiles
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.test.assertEquals
 
-@ActiveProfiles(value = ["matchbook", TEST, DB], inheritProfiles = false)
 class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
     @Autowired
     private lateinit var validator: TestValidator
@@ -62,7 +59,6 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
     fun `far place back`() {
         checkValidation(BetActionType.PLACE, 31, Side.BACK, ValidationResult.ACCEPT)
     }
-
 
     @Test
     fun `close update back`() {

@@ -1,5 +1,7 @@
 package cz.fb.manaus.core.provider
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 data class ExchangeProvider(
         val name: String,
         val minAmount: Double,
@@ -10,6 +12,10 @@ data class ExchangeProvider(
     fun validate() {
         validateProviderCapabilities(capabilities)
     }
+
+    @JsonIgnore
+    val capabilityPredicate: CapabilityPredicate = predicate(capabilities)
+
 }
 
 

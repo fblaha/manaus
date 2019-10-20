@@ -1,36 +1,36 @@
 package cz.fb.manaus.reactor.betting
 
 import cz.fb.manaus.core.manager.MarketFilterService
-import cz.fb.manaus.core.model.*
+import cz.fb.manaus.core.model.Account
+import cz.fb.manaus.core.model.CollectedBets
+import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.model.MarketSnapshot
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.reactor.betting.action.BetActionListener
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
-import cz.fb.manaus.reactor.price.PriceFilter
 import org.springframework.core.annotation.AnnotationAwareOrderComparator
 import java.time.Instant
 import java.util.logging.Logger
 
 class BetManager(
+        snapshotListeners: List<MarketSnapshotListener>,
         private val filterService: MarketFilterService,
-        private val priceFilter: PriceFilter?,
         private val betActionRepository: BetActionRepository,
         private val actionListeners: List<BetActionListener>,
-        private val disabledListeners: Set<String>,
-        private val sortedSnapshotListeners: List<MarketSnapshotListener>) {
+        private val disabledListeners: Set<String>) {
+
+    private val sortedSnapshotListeners: List<MarketSnapshotListener> =
+            snapshotListeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
 
     private val log = Logger.getLogger(BetManager::class.simpleName)
 
-    fun fire(snapshot: MarketSnapshot,
-             myBets: Set<String>,
-             account: Account): CollectedBets {
-
+    fun fire(snapshot: MarketSnapshot, myBets: Set<String>, account: Account): CollectedBets {
 
         val market = snapshot.market
         val collector = BetCollector()
 
-
-        if (filterService.accept(market, myBets.isNotEmpty(), account.provider.capabilities)) {
+        if (filterService.accept(market, myBets.isNotEmpty(), account.provider.capabilityPredicate)) {
             validateOpenDate(market)
 
             val unknownBets = BetUtils.getUnknownBets(snapshot.currentBets, myBets)
@@ -54,42 +54,9 @@ class BetManager(
 
     private fun saveActions(commands: List<BetCommand>) {
         for (command in commands) {
-            saveAction(command)
+            val actionId = betActionRepository.idSafeSave(command.action)
+            command.bet = command.bet.copy(actionId = actionId)
             actionListeners.forEach { it.onAction(command.action) }
-        }
-    }
-
-    private fun saveAction(command: BetCommand) {
-        val actionId = betActionRepository.idSafeSave(command.action)
-        command.bet = command.bet.copy(actionId = actionId)
-    }
-
-    private fun filterPrices(marketPrices: List<RunnerPrices>): List<RunnerPrices> {
-        return if (priceFilter == null) {
-            log.warning { "no price filtering configured" }
-            marketPrices
-        } else {
-            marketPrices.map { it.copy(prices = priceFilter.filter(it.prices)) }
-        }
-    }
-
-    companion object {
-        fun create(betActionRepository: BetActionRepository,
-                   filterService: MarketFilterService,
-                   priceFilter: PriceFilter?,
-                   disabledListeners: Set<String>,
-                   snapshotListeners: List<MarketSnapshotListener>,
-                   actionListeners: List<BetActionListener>): BetManager {
-
-            val sortedSnapshotListeners: List<MarketSnapshotListener> =
-                    snapshotListeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
-
-            return BetManager(filterService,
-                    priceFilter,
-                    betActionRepository,
-                    actionListeners,
-                    disabledListeners,
-                    sortedSnapshotListeners)
         }
     }
 }

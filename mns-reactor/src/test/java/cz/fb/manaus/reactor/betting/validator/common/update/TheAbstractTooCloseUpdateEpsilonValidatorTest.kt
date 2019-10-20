@@ -31,10 +31,10 @@ class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
         assertEquals(ValidationResult.REJECT, validator.validate(context))
 
 
-        context.newPrice = roundingService.decrement(oldPrice, 1, provider.minPrice)
+        context.newPrice = factory.decrement(oldPrice, 1, provider.minPrice, bfPredicate)
         assertEquals(ValidationResult.REJECT, validator.validate(context))
 
-        context.newPrice = roundingService.decrement(oldPrice, 3, provider.minPrice)
+        context.newPrice = factory.decrement(oldPrice, 3, provider.minPrice, bfPredicate)
         assertEquals(ValidationResult.ACCEPT, validator.validate(context))
     }
 

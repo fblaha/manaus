@@ -12,8 +12,14 @@ enum class ProviderCapability {
 }
 
 
-val priceCapabilities = setOf(PriceShiftContinuous, PriceShiftFixedStep)
+val priceShiftCapabilities = setOf(PriceShiftContinuous, PriceShiftFixedStep)
 
 fun validateProviderCapabilities(capabilities: Set<ProviderCapability>) {
-    check((priceCapabilities intersect capabilities).size == 1)
+    check((priceShiftCapabilities intersect capabilities).size == 1)
+}
+
+typealias CapabilityPredicate = (RequiredCapabilitiesAware) -> Boolean
+
+fun predicate(capabilities: Set<ProviderCapability>): CapabilityPredicate {
+    return { capabilities.containsAll(it.requiredCapabilities) }
 }

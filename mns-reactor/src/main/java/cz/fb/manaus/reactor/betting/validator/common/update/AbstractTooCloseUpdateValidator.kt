@@ -18,12 +18,13 @@ abstract class AbstractTooCloseUpdateValidator(private val closeSteps: Set<Int>)
         val newOne = context.newPrice!!.price
         if (newOne priceEq oldOne) return ValidationResult.REJECT
         val minPrice = context.account.provider.minPrice
+        val capabilityPredicate = context.account.provider.capabilityPredicate
         val containsEqualPrice = closeSteps
                 .onEach { require(it != 0) }
                 .mapNotNull {
                     when {
-                        it > 0 -> roundingService.increment(oldOne, it)
-                        else -> roundingService.decrement(oldOne, -it, minPrice)
+                        it > 0 -> roundingService.increment(oldOne, it, capabilityPredicate)
+                        else -> roundingService.decrement(oldOne, -it, minPrice, capabilityPredicate)
                     }
                 }.any { newOne priceEq it }
         return ValidationResult.of(!containsEqualPrice)

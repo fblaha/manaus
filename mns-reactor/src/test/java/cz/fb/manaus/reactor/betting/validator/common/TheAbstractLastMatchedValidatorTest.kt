@@ -6,14 +6,11 @@ import cz.fb.manaus.core.model.homePrices
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
-import cz.fb.manaus.spring.ManausProfiles.TEST
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import org.springframework.test.context.ActiveProfiles
 import kotlin.test.assertEquals
 
-@ActiveProfiles(value = ["matchbook", TEST], inheritProfiles = false)
 class TheAbstractLastMatchedValidatorTest : AbstractLocalTestCase() {
 
     @Autowired

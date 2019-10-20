@@ -9,12 +9,11 @@ import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ActiveProfiles
 
-@ActiveProfiles(value = ["matchbook", TEST], inheritProfiles = false)
-class MatchbookRoundingPluginTest : AbstractLocalTestCase() {
+@ActiveProfiles(TEST, inheritProfiles = false)
+class RateStepRoundingPluginTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var plugin: RateStepRoundingPlugin
-
 
     @Test
     fun `shift by 1`() {

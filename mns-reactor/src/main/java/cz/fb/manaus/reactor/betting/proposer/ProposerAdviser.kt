@@ -23,7 +23,8 @@ open class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAd
 
     override fun getNewPrice(betContext: BetContext): ProposedPrice<Price>? {
         val proposedPrice = proposalService.reducePrices(betContext, proposers)
-        val roundedPrice = roundingService.roundBet(proposedPrice.price)
+        val capabilityPredicate = betContext.account.provider.capabilityPredicate
+        val roundedPrice = roundingService.roundBet(proposedPrice.price, capabilityPredicate)
 
         return if (roundedPrice != null) {
             var amount = adviser.amount

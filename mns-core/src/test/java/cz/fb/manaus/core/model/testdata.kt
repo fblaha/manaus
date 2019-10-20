@@ -100,11 +100,14 @@ val bfCapabilities: Set<ProviderCapability> = setOf(
         ProviderCapability.LastMatchedPrice
 )
 
+
 val provider = ExchangeProvider(
         name = "test",
         minAmount = 2.0,
         minPrice = 1.001,
         commission = 0.02,
         capabilities = bfCapabilities)
+
+val bfPredicate = provider.capabilityPredicate
 
 val account = Account(provider, accountMoney)

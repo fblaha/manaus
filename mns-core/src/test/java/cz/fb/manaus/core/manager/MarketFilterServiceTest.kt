@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.manager
 
-import cz.fb.manaus.core.model.bfCapabilities
+import cz.fb.manaus.core.model.bfPredicate
 import junit.framework.TestCase.assertTrue
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,7 +16,7 @@ class MarketFilterServiceTest : AbstractMarketDataAwareTestCase() {
     }
 
     private fun checkFilterCount(expectedRange: ClosedRange<Int>, hasBets: Boolean) {
-        val cnt = markets.filter { filterService.accept(it, hasBets, bfCapabilities) }
+        val cnt = markets.filter { filterService.accept(it, hasBets, bfPredicate) }
                 .count()
         assertTrue(cnt in expectedRange)
     }

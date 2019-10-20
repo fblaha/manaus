@@ -28,12 +28,10 @@ open class ReactorDatabaseConfiguration {
                         bettingConf: BettingConf,
                         snapshotListeners: List<MarketSnapshotListener>): BetManager {
         val disabledListeners = bettingConf.disabledListeners.toSet()
-        return BetManager.create(
-                betActionRepository,
+        return BetManager(snapshotListeners,
                 filterService,
-                priceFilter,
-                disabledListeners,
-                snapshotListeners,
-                actionListeners)
+                betActionRepository,
+                actionListeners,
+                disabledListeners)
     }
 }

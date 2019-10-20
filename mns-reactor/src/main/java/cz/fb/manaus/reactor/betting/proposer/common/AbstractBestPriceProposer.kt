@@ -27,13 +27,14 @@ abstract class AbstractBestPriceProposer(private val step: Int) : PriceProposer 
         val side = context.side
         val bestPrice = context.runnerPrices.getHomogeneous(side.opposite).bestPrice!!.price
         check(step >= 0)
+        val provider = context.account.provider
         return if (step == 0) {
             bestPrice
         } else {
             if (side === Side.LAY) {
-                roundingService.increment(bestPrice, step)
+                roundingService.increment(bestPrice, step, provider.capabilityPredicate)
             } else {
-                roundingService.decrement(bestPrice, step, context.account.provider.minPrice)
+                roundingService.decrement(bestPrice, step, provider.minPrice, provider.capabilityPredicate)
             }
         }
     }
