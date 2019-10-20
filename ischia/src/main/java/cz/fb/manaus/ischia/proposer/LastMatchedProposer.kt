@@ -1,6 +1,7 @@
 package cz.fb.manaus.ischia.proposer
 
 import cz.fb.manaus.core.provider.ProviderCapability
+import cz.fb.manaus.core.provider.ProviderCapability.LastMatchedPrice
 import cz.fb.manaus.ischia.BackLoserBet
 import cz.fb.manaus.ischia.LayLoserBet
 import cz.fb.manaus.reactor.betting.BetContext
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Component
 class LastMatchedProposer(private val priceService: PriceService) : PriceProposer {
 
     override val requiredCapabilities: Set<ProviderCapability>
-        get() = setOf(ProviderCapability.LastMatchedPrice)
+        get() = setOf(LastMatchedPrice)
 
     override fun validate(context: BetContext): ValidationResult {
         val lastMatchedPrice = context.runnerPrices.lastMatchedPrice

@@ -2,20 +2,27 @@ package cz.fb.manaus.reactor.rounding
 
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.provider.ProviderCapability
+import cz.fb.manaus.core.provider.ProviderCapability.PriceShiftFixedStep
 import org.springframework.stereotype.Service
 
 @Service
-class RoundingService(private val plugin: RoundingPlugin) {
+class RoundingService(private val plugins: List<RoundingPlugin>) {
 
 
     fun increment(price: Double, stepNum: Int): Double? {
+        val plugin = findPlugin(PriceShiftFixedStep)
         val result = plugin.shift(price, stepNum)
         if (result != null) check(result > price)
         return result
     }
 
+    private fun findPlugin(providerCapability: ProviderCapability): RoundingPlugin {
+        return plugins.find { providerCapability in it.requiredCapabilities } ?: error("no such plugin")
+    }
+
     fun decrement(price: Double, stepNum: Int, minPrice: Double): Double? {
-        val result = plugin.shift(price, -stepNum)
+        val result = findPlugin(PriceShiftFixedStep).shift(price, -stepNum)
         if (result != null) {
             check(result < price)
             if (result < minPrice) {
@@ -53,7 +60,7 @@ class RoundingService(private val plugin: RoundingPlugin) {
     }
 
     fun roundBet(price: Double): Double? {
-        return plugin.round(price)
+        return findPlugin(PriceShiftFixedStep).round(price)
     }
 
 }

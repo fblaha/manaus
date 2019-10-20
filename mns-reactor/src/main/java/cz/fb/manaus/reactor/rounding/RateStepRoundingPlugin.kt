@@ -1,12 +1,11 @@
 package cz.fb.manaus.reactor.rounding
 
 import cz.fb.manaus.core.model.Price
-import org.springframework.context.annotation.Profile
+import cz.fb.manaus.core.provider.ProviderCapability
 import org.springframework.stereotype.Component
 
 
 @Component
-@Profile("matchbook")
 class RateStepRoundingPlugin : RoundingPlugin {
 
     override fun shift(price: Double, steps: Int): Double {
@@ -20,5 +19,8 @@ class RateStepRoundingPlugin : RoundingPlugin {
     override fun round(price: Double): Double {
         return Price.round(price)
     }
+
+    override val requiredCapabilities: Set<ProviderCapability>
+        get() = setOf(ProviderCapability.LastMatchedPrice)
 
 }

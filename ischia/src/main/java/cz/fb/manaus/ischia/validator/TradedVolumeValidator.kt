@@ -1,6 +1,7 @@
 package cz.fb.manaus.ischia.validator
 
 import cz.fb.manaus.core.provider.ProviderCapability
+import cz.fb.manaus.core.provider.ProviderCapability.TradedVolume
 import cz.fb.manaus.ischia.BackLoserBet
 import cz.fb.manaus.ischia.LayLoserBet
 import cz.fb.manaus.reactor.betting.BetContext
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component
 object TradedVolumeValidator : Validator {
 
     override val requiredCapabilities: Set<ProviderCapability>
-        get() = setOf(ProviderCapability.TradedVolume)
+        get() = setOf(TradedVolume)
 
     override fun validate(context: BetContext): ValidationResult {
         return ValidationResult.of(context.actualTradedVolume!!.volume.size >= 3)

@@ -93,11 +93,12 @@ val tradedVolume = mapOf(
 
 val accountMoney = AccountMoney(2000.0, 1000.0)
 
-val bfCapabilities = setOf(
+val bfCapabilities: Set<ProviderCapability> = setOf(
         ProviderCapability.MatchedAmount,
         ProviderCapability.PriceShiftFixedStep,
         ProviderCapability.TradedVolume,
-        ProviderCapability.LastMatchedPrice)
+        ProviderCapability.LastMatchedPrice
+)
 
 val provider = ExchangeProvider(
         name = "test",

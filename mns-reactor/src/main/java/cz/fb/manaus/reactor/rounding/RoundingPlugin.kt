@@ -1,6 +1,8 @@
 package cz.fb.manaus.reactor.rounding
 
-interface RoundingPlugin {
+import cz.fb.manaus.core.provider.RequiredCapabilitiesAware
+
+interface RoundingPlugin : RequiredCapabilitiesAware {
 
     fun shift(price: Double, steps: Int): Double?
 

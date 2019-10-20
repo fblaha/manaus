@@ -1,6 +1,7 @@
 package cz.fb.manaus.ischia.validator.update
 
 import cz.fb.manaus.core.provider.ProviderCapability
+import cz.fb.manaus.core.provider.ProviderCapability.PriceShiftFixedStep
 import cz.fb.manaus.ischia.BackLoserBet
 import cz.fb.manaus.ischia.LayLoserBet
 import cz.fb.manaus.reactor.betting.validator.common.update.AbstractTooCloseUpdateValidator
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component
 object TheSamePriceUpdateValidator : AbstractTooCloseUpdateValidator(emptySet()) {
 
     override val requiredCapabilities: Set<ProviderCapability>
-        get() = setOf(ProviderCapability.PriceShiftFixedStep)
+        get() = setOf(PriceShiftFixedStep)
 
     override val isDowngradeAccepting: Boolean = false
 }

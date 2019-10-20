@@ -1,5 +1,8 @@
 package cz.fb.manaus.core.provider
 
+import cz.fb.manaus.core.provider.ProviderCapability.PriceShiftContinuous
+import cz.fb.manaus.core.provider.ProviderCapability.PriceShiftFixedStep
+
 enum class ProviderCapability {
     PriceShiftFixedStep,
     PriceShiftContinuous,
@@ -9,7 +12,7 @@ enum class ProviderCapability {
 }
 
 
-val priceCapabilities = setOf(ProviderCapability.PriceShiftContinuous, ProviderCapability.PriceShiftFixedStep)
+val priceCapabilities = setOf(PriceShiftContinuous, PriceShiftFixedStep)
 
 fun validateProviderCapabilities(capabilities: Set<ProviderCapability>) {
     check((priceCapabilities intersect capabilities).size == 1)

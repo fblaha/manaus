@@ -5,13 +5,13 @@ import com.google.common.collect.Range.closedOpen
 import com.google.common.collect.Range.openClosed
 import com.google.common.collect.RangeMap
 import cz.fb.manaus.core.model.Price
+import cz.fb.manaus.core.provider.ProviderCapability
+import cz.fb.manaus.core.provider.ProviderCapability.PriceShiftFixedStep
 import org.apache.commons.math3.util.Precision
-import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import kotlin.math.abs
 
 @Component
-@Profile("betfair")
 class RangeStepRoundingPlugin : RoundingPlugin {
 
     private val incrementSteps: RangeMap<Double, Double> = ImmutableRangeMap.builder<Double, Double>()
@@ -84,4 +84,7 @@ class RangeStepRoundingPlugin : RoundingPlugin {
             null
         }
     }
+
+    override val requiredCapabilities: Set<ProviderCapability>
+        get() = setOf(PriceShiftFixedStep)
 }
