@@ -5,6 +5,11 @@ data class ExchangeProvider(
         val minAmount: Double,
         val minPrice: Double,
         val commission: Double,
-        val capabilities: Set<ProviderCapability> = emptySet()
-)
+        val capabilities: Set<ProviderCapability> = emptySet()) {
+
+    fun validate() {
+        validateProviderCapabilities(capabilities)
+    }
+}
+
 

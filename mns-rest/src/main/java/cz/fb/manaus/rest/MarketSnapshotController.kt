@@ -2,7 +2,6 @@ package cz.fb.manaus.rest
 
 import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.provider.validateProviderCapabilities
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.reactor.betting.BetManager
@@ -40,7 +39,7 @@ class MarketSnapshotController(private val manager: BetManager,
     fun pushMarketSnapshot(@PathVariable id: String, @RequestBody snapshotCrate: MarketSnapshotCrate): ResponseEntity<CollectedBets> {
         validateMarket(snapshotCrate)
         val account = snapshotCrate.account
-        validateProviderCapabilities(account.provider.capabilities)
+        account.provider.validate()
         metricRegistry.meter("market.snapshot.post").mark()
         try {
             val marketPrices = snapshotCrate.prices
