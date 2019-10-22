@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.rounding
 
 import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.core.provider.ProviderCapability
+import cz.fb.manaus.core.provider.ProviderCapability.PriceShiftContinuous
 import org.springframework.stereotype.Component
 
 
@@ -20,7 +20,5 @@ class RateStepRoundingPlugin : RoundingPlugin {
         return Price.round(price)
     }
 
-    override val requiredCapabilities: Set<ProviderCapability>
-        get() = setOf(ProviderCapability.LastMatchedPrice)
-
+    override val requiredCapabilities get() = setOf(PriceShiftContinuous)
 }

@@ -5,7 +5,6 @@ import com.google.common.collect.Range.closedOpen
 import com.google.common.collect.Range.openClosed
 import com.google.common.collect.RangeMap
 import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.core.provider.ProviderCapability
 import cz.fb.manaus.core.provider.ProviderCapability.PriceShiftFixedStep
 import org.apache.commons.math3.util.Precision
 import org.springframework.stereotype.Component
@@ -85,6 +84,5 @@ class RangeStepRoundingPlugin : RoundingPlugin {
         }
     }
 
-    override val requiredCapabilities: Set<ProviderCapability>
-        get() = setOf(PriceShiftFixedStep)
+    override val requiredCapabilities get() = setOf(PriceShiftFixedStep)
 }
