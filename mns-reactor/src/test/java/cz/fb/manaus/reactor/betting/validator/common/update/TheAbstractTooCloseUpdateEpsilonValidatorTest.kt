@@ -5,6 +5,7 @@ import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.rounding.RoundingService
+import cz.fb.manaus.reactor.rounding.decrement
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -31,10 +32,10 @@ class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
         assertEquals(ValidationResult.REJECT, validator.validate(context))
 
 
-        context.newPrice = factory.decrement(oldPrice, 1, provider.minPrice, bfPredicate)
+        context.newPrice = roundingService.decrement(oldPrice, 1, provider.minPrice, bfPredicate)
         assertEquals(ValidationResult.REJECT, validator.validate(context))
 
-        context.newPrice = factory.decrement(oldPrice, 3, provider.minPrice, bfPredicate)
+        context.newPrice = roundingService.decrement(oldPrice, 3, provider.minPrice, bfPredicate)
         assertEquals(ValidationResult.ACCEPT, validator.validate(context))
     }
 

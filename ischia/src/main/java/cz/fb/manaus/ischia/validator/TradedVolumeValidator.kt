@@ -18,6 +18,6 @@ object TradedVolumeValidator : Validator {
         get() = setOf(TradedVolume)
 
     override fun validate(context: BetContext): ValidationResult {
-        return ValidationResult.of(context.actualTradedVolume!!.volume.size >= 3)
+        return ValidationResult.of(context.metrics.actualTradedVolume!!.volume.size >= 3)
     }
 }

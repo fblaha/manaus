@@ -1,13 +1,14 @@
 package cz.fb.manaus.reactor
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.provider.CapabilityPredicate
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.BetContextFactory
 import cz.fb.manaus.reactor.price.Fairness
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import cz.fb.manaus.reactor.price.PriceService
 import cz.fb.manaus.reactor.rounding.RoundingService
+import cz.fb.manaus.reactor.rounding.decrement
+import cz.fb.manaus.reactor.rounding.increment
 import org.springframework.stereotype.Component
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -80,10 +81,10 @@ class ReactorTestFactory(
                 prices = listOf(
                         backBestPrice,
                         layBestPrice,
-                        decrement(backBestPrice, 1, provider.minPrice, bfPredicate)!!,
-                        decrement(backBestPrice, 2, provider.minPrice, bfPredicate)!!,
-                        increment(layBestPrice, 1, bfPredicate)!!,
-                        increment(layBestPrice, 2, bfPredicate)!!),
+                        roundingService.decrement(backBestPrice, 1, provider.minPrice, bfPredicate)!!,
+                        roundingService.decrement(backBestPrice, 2, provider.minPrice, bfPredicate)!!,
+                        roundingService.increment(layBestPrice, 1, bfPredicate)!!,
+                        roundingService.increment(layBestPrice, 2, bfPredicate)!!),
                 lastMatchedPrice = lastMatchedPrice,
                 matchedAmount = lastMatched)
     }
@@ -109,24 +110,4 @@ class ReactorTestFactory(
         }
         return runnerPrices
     }
-
-    private fun increment(price: Price, stepNum: Int, capabilityPredicate: CapabilityPredicate): Price? {
-        val newPrice = roundingService.increment(price.price, stepNum, capabilityPredicate)
-        return if (newPrice != null) {
-            Price(newPrice, price.amount, price.side)
-        } else {
-            null
-        }
-    }
-
-    // TODO should be rounding service ext methods
-    fun decrement(price: Price, stepNum: Int, minPrice: Double, capabilityPredicate: CapabilityPredicate): Price? {
-        val newPrice = roundingService.decrement(price.price, stepNum, minPrice, capabilityPredicate)
-        return if (newPrice != null) {
-            Price(newPrice, price.amount, price.side)
-        } else {
-            null
-        }
-    }
-
 }

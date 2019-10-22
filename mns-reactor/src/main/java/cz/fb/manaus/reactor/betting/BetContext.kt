@@ -4,16 +4,21 @@ import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.price.Fairness
 import java.time.Instant
 
+data class Metrics(
+        val chargeGrowthForecast: Double?,
+        val fairness: Fairness,
+        val actualTradedVolume: TradedVolume?
+)
+
+
 data class BetContext(
         val selectionId: Long,
         val side: Side,
         val market: Market,
         val marketPrices: List<RunnerPrices>,
-        val chargeGrowthForecast: Double?,
         val coverage: Map<SideSelection, Bet>,
         val account: Account,
-        val fairness: Fairness,
-        val actualTradedVolume: TradedVolume?
+        val metrics: Metrics
 ) {
     val runnerPrices: RunnerPrices
         get() = marketPrices.first { it.selectionId == selectionId }
@@ -59,7 +64,7 @@ data class BetContext(
                 marketId = market.id,
                 runnerPrices = marketPrices,
                 betActionType = type,
-                chargeGrowth = chargeGrowthForecast,
+                chargeGrowth = metrics.chargeGrowthForecast,
                 proposers = proposers)
     }
 

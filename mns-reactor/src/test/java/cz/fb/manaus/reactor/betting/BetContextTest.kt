@@ -14,13 +14,16 @@ import kotlin.test.assertTrue
 val homeContext: BetContext = BetContext(
         selectionId = SEL_HOME,
         side = Side.BACK,
-        actualTradedVolume = tradedVolume[SEL_HOME],
         account = account,
         coverage = mutableMapOf(),
-        fairness = Fairness(0.9, 1.1),
-        chargeGrowthForecast = 1.0,
         marketPrices = runnerPrices,
-        market = market)
+        market = market,
+        metrics = Metrics(
+                actualTradedVolume = tradedVolume[SEL_HOME],
+                fairness = Fairness(0.9, 1.1),
+                chargeGrowthForecast = 1.0
+        )
+)
 
 
 class BetContextTest : AbstractLocalTestCase() {

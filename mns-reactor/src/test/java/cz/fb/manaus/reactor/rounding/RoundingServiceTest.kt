@@ -1,7 +1,9 @@
 package cz.fb.manaus.reactor.rounding
 
+import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.bfPredicate
 import cz.fb.manaus.core.model.provider
+import cz.fb.manaus.core.provider.CapabilityPredicate
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -85,5 +87,24 @@ class RoundingServiceTest : AbstractLocalTestCase() {
             assertEquals(price, service.roundBet(price + step / 4.0, bfPredicate)!!)
             assertEquals(oneMore, service.roundBet(price + 3.0 * step / 4.0, bfPredicate)!!)
         }
+    }
+}
+
+
+fun RoundingService.increment(price: Price, stepNum: Int, capabilityPredicate: CapabilityPredicate): Price? {
+    val newPrice = increment(price.price, stepNum, capabilityPredicate)
+    return if (newPrice != null) {
+        Price(newPrice, price.amount, price.side)
+    } else {
+        null
+    }
+}
+
+fun RoundingService.decrement(price: Price, stepNum: Int, minPrice: Double, capabilityPredicate: CapabilityPredicate): Price? {
+    val newPrice = decrement(price.price, stepNum, minPrice, capabilityPredicate)
+    return if (newPrice != null) {
+        Price(newPrice, price.amount, price.side)
+    } else {
+        null
     }
 }
