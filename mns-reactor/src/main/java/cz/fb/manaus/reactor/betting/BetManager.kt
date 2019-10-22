@@ -30,7 +30,7 @@ class BetManager(
         val market = snapshot.market
         val collector = BetCollector()
 
-        if (filterService.accept(market, myBets.isNotEmpty(), account.provider.capabilityPredicate)) {
+        if (filterService.accept(market, myBets.isNotEmpty(), account.provider::hasCapabilities)) {
             validateOpenDate(market)
 
             val unknownBets = BetUtils.getUnknownBets(snapshot.currentBets, myBets)

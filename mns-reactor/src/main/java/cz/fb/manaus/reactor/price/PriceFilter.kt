@@ -4,8 +4,8 @@ package cz.fb.manaus.reactor.price
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.PriceComparator
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.provider.ProviderCapability
-import cz.fb.manaus.core.provider.predicate
+import cz.fb.manaus.core.provider.CapabilityPredicate
+import cz.fb.manaus.core.provider.ProviderCapability.PriceShiftFixedStep
 
 // TODO not used in prod code
 class PriceFilter(private val limit: Int,
@@ -14,7 +14,7 @@ class PriceFilter(private val limit: Int,
                   private val bulldozer: PriceBulldozer) {
 
     // TODO it is really not good
-    val capabilityPredicate = predicate(setOf(ProviderCapability.PriceShiftFixedStep))
+    private val capabilityPredicate: CapabilityPredicate = { it.requiredCapabilities.contains(PriceShiftFixedStep) }
 
     internal fun getSignificantPrices(limit: Int, prices: List<Price>): List<Price> {
         val (back, lay) = prices.filter { it.price in this.priceRange }.partition { it.side == Side.BACK }

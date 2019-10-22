@@ -67,9 +67,9 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDatabase
             result.getOrPut(runnerPrices.selectionId) { mutableListOf() }
                     .add(TradedAmount(lastMatchedPrice, 5.0))
             result.getOrPut(runnerPrices.selectionId) { mutableListOf() }
-                    .add(TradedAmount(roundingService.increment(lastMatchedPrice, 1, provider.capabilityPredicate)!!, 5.0))
+                    .add(TradedAmount(roundingService.increment(lastMatchedPrice, 1, provider::hasCapabilities)!!, 5.0))
             result.getOrPut(runnerPrices.selectionId) { mutableListOf() }
-                    .add(TradedAmount(roundingService.decrement(lastMatchedPrice, 1, provider.minPrice, provider.capabilityPredicate)!!, 5.0))
+                    .add(TradedAmount(roundingService.decrement(lastMatchedPrice, 1, provider.minPrice, provider::hasCapabilities)!!, 5.0))
         }
         return result.mapValues { TradedVolume(it.value) }
     }

@@ -20,6 +20,3 @@ fun validateProviderCapabilities(capabilities: Set<ProviderCapability>) {
 
 typealias CapabilityPredicate = (RequiredCapabilitiesAware) -> Boolean
 
-fun predicate(capabilities: Set<ProviderCapability>): CapabilityPredicate {
-    return { capabilities.containsAll(it.requiredCapabilities) }
-}
