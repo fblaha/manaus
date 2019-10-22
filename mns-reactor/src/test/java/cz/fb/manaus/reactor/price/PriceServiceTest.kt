@@ -71,7 +71,7 @@ class PriceServiceTest : AbstractLocalTestCase() {
 
     private fun getRoundedFairnessFairPrice(unfairPrice: Double, fairness: Double): Double? {
         val fairPrice = priceService.getFairnessFairPrice(unfairPrice, fairness)
-        return roundingService.roundBet(fairPrice, provider::hasCapabilities)
+        return roundingService.roundBet(fairPrice, provider::capabilityMatch)
     }
 
     @Test

@@ -108,6 +108,6 @@ val provider = ExchangeProvider(
         commission = 0.02,
         capabilities = bfCapabilities)
 
-val bfPredicate = provider::hasCapabilities
+val bfPredicate = provider::capabilityMatch
 
 val account = Account(provider, accountMoney)

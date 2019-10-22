@@ -5,13 +5,13 @@ data class ExchangeProvider(
         val minAmount: Double,
         val minPrice: Double,
         val commission: Double,
-        val capabilities: Set<ProviderCapability> = emptySet()) {
+        val capabilities: Set<ProviderCapability>) {
 
     fun validate() {
         validateProviderCapabilities(capabilities)
     }
 
-    fun hasCapabilities(required: RequiredCapabilitiesAware): Boolean = capabilities.containsAll(required.requiredCapabilities)
+    fun capabilityMatch(required: RequiredCapabilitiesAware) = capabilities.containsAll(required.requiredCapabilities)
 }
 
 

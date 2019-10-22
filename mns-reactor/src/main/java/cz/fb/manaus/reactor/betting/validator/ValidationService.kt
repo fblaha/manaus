@@ -56,7 +56,7 @@ class ValidationService(private val priceService: PriceService,
                 return false
             }
             val provider = context.account.provider
-            return provider.hasCapabilities(validator)
+            return provider.capabilityMatch(validator)
         }
     }
 }
