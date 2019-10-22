@@ -18,7 +18,7 @@ class BetContextFactory(private val forecaster: ChargeGrowthForecaster) {
         val (marketPrices, market, _, coverage, tradedVolume) = snapshot
         val commission = account.provider.commission
         val forecast = forecaster.getForecast(selectionId, side, snapshot, fairness, commission)
-        val metrics = Metrics(
+        val metrics = BetMetrics(
                 chargeGrowthForecast = forecast,
                 fairness = fairness,
                 actualTradedVolume = tradedVolume?.get(selectionId)

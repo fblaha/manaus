@@ -78,7 +78,7 @@ abstract class AbstractUpdatingBettor(private val side: Side,
     }
 
     private fun bet(ctx: BetContext, betCollector: BetCollector) {
-        val action = ctx.createBetAction()
+        val action = ctx.betAction
         val newPrice = ctx.newPrice!!
 
         val oldBet = ctx.oldBet

@@ -18,7 +18,7 @@ val homeContext: BetContext = BetContext(
         coverage = mutableMapOf(),
         marketPrices = runnerPrices,
         market = market,
-        metrics = Metrics(
+        metrics = BetMetrics(
                 actualTradedVolume = tradedVolume[SEL_HOME],
                 fairness = Fairness(0.9, 1.1),
                 chargeGrowthForecast = 1.0
@@ -41,7 +41,7 @@ class BetContextTest : AbstractLocalTestCase() {
     fun `simulate settled bet`() {
         val context = factory.newBetContext(Side.LAY, 3.5, 4.6)
         context.newPrice = Price(3.0, 5.0, Side.LAY)
-        val settledBet = context.simulateSettledBet()
+        val settledBet = context.simulatedBet
         assertEquals(context.side, settledBet.settledBet.price.side)
         Assert.assertEquals(5.0, settledBet.settledBet.price.amount, 0.0001)
         assertNotNull(settledBet.betAction)
