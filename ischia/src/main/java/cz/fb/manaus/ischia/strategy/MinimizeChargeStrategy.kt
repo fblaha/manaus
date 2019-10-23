@@ -3,10 +3,15 @@ package cz.fb.manaus.ischia.strategy
 import com.google.common.primitives.Doubles
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.proposer.DowngradeStrategy
 import kotlin.math.max
 import kotlin.math.min
 
-class MinimizeChargeStrategy(internal val fairnessReductionLow: Double, private val fairnessReductionHighBack: Double, private val fairnessReductionHighLay: Double) {
+class MinimizeChargeStrategy(internal val fairnessReductionLow: Double, private val fairnessReductionHighBack: Double, private val fairnessReductionHighLay: Double) : DowngradeStrategy {
+
+    override fun invoke(ctx: BetContext): Double {
+        return getReductionRate(ctx)
+    }
 
     fun getReductionRate(context: BetContext): Double {
         val rawRate = getRawRate(context)

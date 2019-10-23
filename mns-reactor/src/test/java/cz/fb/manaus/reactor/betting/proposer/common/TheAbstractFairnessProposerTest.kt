@@ -4,6 +4,7 @@ import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
+import cz.fb.manaus.reactor.betting.proposer.FixedDowngradeStrategy
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -47,11 +48,12 @@ class TheAbstractFairnessProposerTest : AbstractLocalTestCase() {
         assertEquals(2.96, Price.round(proposedPrice))
     }
 
-    @Component
-    private class TestLayProposer : AbstractFairnessProposer(Side.LAY, { 0.02 })
 
     @Component
-    private class TestBackProposer : AbstractFairnessProposer(Side.BACK, { 0.02 })
+    private class TestLayProposer : AbstractFairnessProposer(Side.LAY, FixedDowngradeStrategy(0.02))
 
+    @Component
+    private class TestBackProposer : AbstractFairnessProposer(Side.BACK, FixedDowngradeStrategy(0.02))
 
 }
+

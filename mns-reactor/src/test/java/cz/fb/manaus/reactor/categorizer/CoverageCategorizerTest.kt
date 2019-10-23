@@ -7,7 +7,7 @@ import cz.fb.manaus.core.model.realizedBet
 import cz.fb.manaus.core.model.replacePrice
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.hamcrest.CoreMatchers.hasItem
-import org.hamcrest.core.IsCollectionContaining.hasItems
+import org.hamcrest.core.IsIterableContaining.hasItems
 import org.junit.Assert.assertThat
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired

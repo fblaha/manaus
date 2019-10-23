@@ -2,12 +2,13 @@ package cz.fb.manaus.reactor.betting.proposer.common
 
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.proposer.DowngradeStrategy
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.beans.factory.annotation.Autowired
 
-abstract class AbstractFairnessProposer(private val side: Side, private val downgradeStrategy: (BetContext) -> Double) : PriceProposer {
+abstract class AbstractFairnessProposer(private val side: Side, private val downgradeStrategy: DowngradeStrategy) : PriceProposer {
     @Autowired
     private lateinit var priceService: PriceService
 
