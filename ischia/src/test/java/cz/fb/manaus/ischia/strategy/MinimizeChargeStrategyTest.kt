@@ -17,18 +17,10 @@ class MinimizeChargeStrategyTest : AbstractLocalTestCase() {
     @Test
     fun strategy() {
         val ctx = homeContext
-        assertEquals(strategy.getUpperBoundary(ctx.side),
-                strategy.getReductionRate(ctx.replaceForecast(null)),
-                0.000001)
-        assertEquals(strategy.getUpperBoundary(ctx.side),
-                strategy.getReductionRate(ctx.replaceForecast(Double.NaN)),
-                0.000001)
-        assertEquals(strategy.getUpperBoundary(ctx.side),
-                strategy.getReductionRate(ctx.replaceForecast(1.5)),
-                0.000001)
-        assertEquals(strategy.fairnessReductionLow,
-                strategy.getReductionRate(ctx.replaceForecast(0.1)),
-                0.000001)
+        assertEquals(strategy.getUpperBoundary(ctx.side), strategy(ctx.replaceForecast(null)), 0.000001)
+        assertEquals(strategy.getUpperBoundary(ctx.side), strategy(ctx.replaceForecast(Double.NaN)), 0.000001)
+        assertEquals(strategy.getUpperBoundary(ctx.side), strategy(ctx.replaceForecast(1.5)), 0.000001)
+        assertEquals(strategy.fairnessReductionLow, strategy(ctx.replaceForecast(0.1)), 0.000001)
     }
 
     private fun BetContext.replaceForecast(forecast: Double?) =

@@ -10,12 +10,8 @@ import kotlin.math.min
 class MinimizeChargeStrategy(internal val fairnessReductionLow: Double, private val fairnessReductionHighBack: Double, private val fairnessReductionHighLay: Double) : DowngradeStrategy {
 
     override fun invoke(ctx: BetContext): Double {
-        return getReductionRate(ctx)
-    }
-
-    fun getReductionRate(context: BetContext): Double {
-        val rawRate = getRawRate(context)
-        require(rawRate in fairnessReductionLow..getUpperBoundary(context.side))
+        val rawRate = getRawRate(ctx)
+        require(rawRate in fairnessReductionLow..getUpperBoundary(ctx.side))
         return rawRate
     }
 
