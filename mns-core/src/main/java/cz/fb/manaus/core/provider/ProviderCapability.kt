@@ -18,5 +18,5 @@ fun validateProviderCapabilities(capabilities: Set<ProviderCapability>) {
     check((priceShiftCapabilities intersect capabilities).size == 1)
 }
 
-typealias CapabilityPredicate = (RequiredCapabilitiesAware) -> Boolean
+typealias ProviderMatcher = (ProviderSelector) -> Boolean
 

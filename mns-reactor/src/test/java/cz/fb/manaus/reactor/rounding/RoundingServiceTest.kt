@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.rounding
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.bfPredicate
 import cz.fb.manaus.core.model.provider
-import cz.fb.manaus.core.provider.CapabilityPredicate
+import cz.fb.manaus.core.provider.ProviderMatcher
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -90,21 +90,12 @@ class RoundingServiceTest : AbstractLocalTestCase() {
     }
 }
 
-
-fun RoundingService.increment(price: Price, stepNum: Int, capabilityPredicate: CapabilityPredicate): Price? {
-    val newPrice = increment(price.price, stepNum, capabilityPredicate)
-    return if (newPrice != null) {
-        Price(newPrice, price.amount, price.side)
-    } else {
-        null
-    }
+fun RoundingService.increment(price: Price, stepNum: Int, providerMatcher: ProviderMatcher): Price? {
+    val newPrice = increment(price.price, stepNum, providerMatcher)
+    return newPrice?.let { Price(it, price.amount, price.side) }
 }
 
-fun RoundingService.decrement(price: Price, stepNum: Int, minPrice: Double, capabilityPredicate: CapabilityPredicate): Price? {
-    val newPrice = decrement(price.price, stepNum, minPrice, capabilityPredicate)
-    return if (newPrice != null) {
-        Price(newPrice, price.amount, price.side)
-    } else {
-        null
-    }
+fun RoundingService.decrement(price: Price, stepNum: Int, minPrice: Double, providerMatcher: ProviderMatcher): Price? {
+    val newPrice = decrement(price.price, stepNum, minPrice, providerMatcher)
+    return newPrice?.let { Price(it, price.amount, price.side) }
 }

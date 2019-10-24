@@ -11,7 +11,7 @@ data class ExchangeProvider(
         validateProviderCapabilities(capabilities)
     }
 
-    fun capabilityMatch(required: RequiredCapabilitiesAware) = capabilities.containsAll(required.requiredCapabilities)
+    fun capabilityMatch(required: ProviderSelector) = capabilities.containsAll(required.requiredCapabilities)
 }
 
 

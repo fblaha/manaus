@@ -1,10 +1,10 @@
 package cz.fb.manaus.reactor.betting.validator
 
-import cz.fb.manaus.core.provider.RequiredCapabilitiesAware
+import cz.fb.manaus.core.provider.ProviderSelector
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.NameAware
 
-interface Validator : NameAware, RequiredCapabilitiesAware {
+interface Validator : NameAware, ProviderSelector {
 
     val isDowngradeAccepting: Boolean
         get() = true

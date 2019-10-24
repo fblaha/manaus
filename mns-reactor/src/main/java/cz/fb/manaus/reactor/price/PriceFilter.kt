@@ -4,7 +4,7 @@ package cz.fb.manaus.reactor.price
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.PriceComparator
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.provider.CapabilityPredicate
+import cz.fb.manaus.core.provider.ProviderMatcher
 
 // TODO not used in prod code
 class PriceFilter(private val limit: Int,
@@ -12,17 +12,17 @@ class PriceFilter(private val limit: Int,
                   private val priceRange: ClosedRange<Double>,
                   private val bulldozer: PriceBulldozer) {
 
-    internal fun getSignificantPrices(limit: Int, prices: List<Price>, capabilityPredicate: CapabilityPredicate): List<Price> {
+    internal fun getSignificantPrices(limit: Int, prices: List<Price>, providerMatcher: ProviderMatcher): List<Price> {
         val (back, lay) = prices.filter { it.price in this.priceRange }.partition { it.side == Side.BACK }
-        return filter(limit, back, capabilityPredicate) + filter(limit, lay, capabilityPredicate)
+        return filter(limit, back, providerMatcher) + filter(limit, lay, providerMatcher)
     }
 
-    private fun filter(limit: Int, prices: List<Price>, capabilityPredicate: CapabilityPredicate): List<Price> {
+    private fun filter(limit: Int, prices: List<Price>, providerMatcher: ProviderMatcher): List<Price> {
         val sorted = prices.sortedWith(PriceComparator)
-        return bulldozer.bulldoze(bulldozeThreshold, sorted, capabilityPredicate).take(limit)
+        return bulldozer.bulldoze(bulldozeThreshold, sorted, providerMatcher).take(limit)
     }
 
-    fun filter(prices: List<Price>, capabilityPredicate: CapabilityPredicate): List<Price> {
-        return getSignificantPrices(limit, prices, capabilityPredicate)
+    fun filter(prices: List<Price>, providerMatcher: ProviderMatcher): List<Price> {
+        return getSignificantPrices(limit, prices, providerMatcher)
     }
 }

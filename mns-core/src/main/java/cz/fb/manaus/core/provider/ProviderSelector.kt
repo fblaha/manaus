@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.provider
 
-interface RequiredCapabilitiesAware {
+interface ProviderSelector {
 
     val requiredCapabilities: Set<ProviderCapability> get() = emptySet()
 
