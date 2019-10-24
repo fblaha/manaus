@@ -5,15 +5,13 @@ data class ExchangeProvider(
         val minAmount: Double,
         val minPrice: Double,
         val commission: Double,
-        val tags: Set<String>,
-        val capabilities: Set<ProviderCapability>) {
+        val tags: Set<ProviderTag>) {
 
     fun validate() {
-        validateProviderCapabilities(capabilities)
+        validateProviderCapabilities(tags)
     }
 
-    fun matches(selector: ProviderSelector) =
-            capabilities.containsAll(selector.capabilities) && tags.containsAll(selector.tags)
+    fun matches(selector: ProviderSelector) = tags.containsAll(selector.tags)
 }
 
 

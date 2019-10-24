@@ -2,8 +2,9 @@ package cz.fb.manaus.ischia.strategy
 
 import com.google.common.primitives.Doubles
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.provider.ProviderCapability
 import cz.fb.manaus.core.provider.ProviderSelector
+import cz.fb.manaus.core.provider.ProviderTag.CommissionNetWin
+import cz.fb.manaus.core.provider.ProviderTag.ProviderBetfair
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.proposer.DowngradeStrategy
 import kotlin.math.max
@@ -12,8 +13,7 @@ import kotlin.math.min
 class MinimizeChargeStrategy(
         internal val fairnessReductionLow: Double,
         private val fairnessReductionHighBack: Double,
-        private val fairnessReductionHighLay: Double,
-        override val tags: Set<String> = emptySet()) : DowngradeStrategy, ProviderSelector {
+        private val fairnessReductionHighLay: Double) : DowngradeStrategy, ProviderSelector {
 
     override fun invoke(ctx: BetContext): Double {
         val rawRate = getRawRate(ctx)
@@ -34,5 +34,5 @@ class MinimizeChargeStrategy(
         } else upper
     }
 
-    override val capabilities get() = setOf(ProviderCapability.CommissionNetWin)
+    override val tags get() = setOf(CommissionNetWin, ProviderBetfair)
 }

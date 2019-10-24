@@ -1,7 +1,7 @@
 package cz.fb.manaus.core.model
 
 import cz.fb.manaus.core.provider.ExchangeProvider
-import cz.fb.manaus.core.provider.ProviderCapability
+import cz.fb.manaus.core.provider.ProviderTag
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
@@ -93,12 +93,13 @@ val tradedVolume = mapOf(
 
 val accountMoney = AccountMoney(2000.0, 1000.0)
 
-val bfCapabilities: Set<ProviderCapability> = setOf(
-        ProviderCapability.MatchedAmount,
-        ProviderCapability.PriceShiftFixedStep,
-        ProviderCapability.TradedVolume,
-        ProviderCapability.LastMatchedPrice,
-        ProviderCapability.CommissionNetWin
+val BF_TAGS: Set<ProviderTag> = setOf(
+        ProviderTag.ProviderBetfair,
+        ProviderTag.MatchedAmount,
+        ProviderTag.PriceShiftFixedStep,
+        ProviderTag.TradedVolume,
+        ProviderTag.LastMatchedPrice,
+        ProviderTag.CommissionNetWin
 )
 
 
@@ -107,7 +108,6 @@ val provider = ExchangeProvider(
         minAmount = 2.0,
         minPrice = 1.001,
         commission = 0.02,
-        tags = setOf("betfair", "test"),
-        capabilities = bfCapabilities)
+        tags = BF_TAGS)
 
 val account = Account(provider, accountMoney)

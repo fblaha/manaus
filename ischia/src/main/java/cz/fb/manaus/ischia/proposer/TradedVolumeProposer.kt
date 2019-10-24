@@ -1,7 +1,6 @@
 package cz.fb.manaus.ischia.proposer
 
-import cz.fb.manaus.core.provider.ProviderCapability
-import cz.fb.manaus.core.provider.ProviderCapability.TradedVolume
+import cz.fb.manaus.core.provider.ProviderTag.TradedVolume
 import cz.fb.manaus.ischia.BackLoserBet
 import cz.fb.manaus.ischia.LayLoserBet
 import cz.fb.manaus.reactor.betting.BetContext
@@ -16,8 +15,7 @@ import org.springframework.stereotype.Component
 @LayLoserBet
 class TradedVolumeProposer(private val priceService: PriceService) : PriceProposer {
 
-    override val capabilities: Set<ProviderCapability>
-        get() = setOf(TradedVolume)
+    override val tags get() = setOf(TradedVolume)
 
     override fun validate(context: BetContext): ValidationResult {
         val tradedVolume = context.metrics.actualTradedVolume!!

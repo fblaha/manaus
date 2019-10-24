@@ -1,5 +1,6 @@
 package cz.fb.manaus.spring
 
+import cz.fb.manaus.core.provider.ProviderTag.ProviderMatchbook
 import cz.fb.manaus.ischia.filter.MarketTypeFilter
 import cz.fb.manaus.ischia.filter.moneyLineLoserFilter
 import cz.fb.manaus.ischia.filter.runnerNameFilter
@@ -28,7 +29,7 @@ open class IschiaLocalConfiguration {
         return FixedDowngradeStrategy(
                 back = priceConf.downgradeBackRate,
                 lay = priceConf.downgradeLayRate,
-                tags = setOf("matchbook")
+                tags = setOf(ProviderMatchbook)
         )
     }
 
@@ -37,8 +38,7 @@ open class IschiaLocalConfiguration {
         return MinimizeChargeStrategy(
                 fairnessReductionLow = 0.01,
                 fairnessReductionHighBack = 0.05,
-                fairnessReductionHighLay = 0.06,
-                tags = setOf("betfair")
+                fairnessReductionHighLay = 0.06
         )
     }
 
