@@ -18,7 +18,7 @@ abstract class AbstractTooCloseUpdateValidator(private val closeSteps: Set<Int>)
         val newOne = context.newPrice!!.price
         if (newOne priceEq oldOne) return ValidationResult.REJECT
         val minPrice = context.account.provider.minPrice
-        val capabilityPredicate = context.account.provider::capabilityMatch
+        val capabilityPredicate = context.account.provider::matches
         val containsEqualPrice = closeSteps
                 .onEach { require(it != 0) }
                 .mapNotNull {

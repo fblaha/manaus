@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.rounding
 
 import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.core.model.bfPredicate
 import cz.fb.manaus.core.model.provider
 import cz.fb.manaus.core.provider.ProviderMatcher
 import cz.fb.manaus.core.test.AbstractLocalTestCase
@@ -23,15 +22,15 @@ class RoundingServiceTest : AbstractLocalTestCase() {
         val upList = mutableListOf<Double>()
         val downList = mutableListOf<Double>()
         for (i in 0 until repeat) {
-            price = service.increment(price, 1, bfPredicate)!!
+            price = service.increment(price, 1, provider::matches)!!
             upList.add(price)
         }
-        price = service.increment(price, 1, bfPredicate)!!
+        price = service.increment(price, 1, provider::matches)!!
         for (i in 0 until repeat) {
-            price = service.decrement(price, 1, provider.minPrice, bfPredicate)!!
+            price = service.decrement(price, 1, provider.minPrice, provider::matches)!!
             downList.add(price)
         }
-        price = service.decrement(price, 1, provider.minPrice, bfPredicate)!!
+        price = service.decrement(price, 1, provider.minPrice, provider::matches)!!
         assertEquals(start, price)
         downList.reverse()
         assertEquals(downList, upList)
@@ -41,51 +40,51 @@ class RoundingServiceTest : AbstractLocalTestCase() {
     fun steps() {
         var price1 = start
         for (i in 0 until repeat) {
-            price1 = service.increment(price1, 1, bfPredicate)!!
+            price1 = service.increment(price1, 1, provider::matches)!!
         }
         var price2 = start
         for (i in 0 until repeat / 50) {
-            price2 = service.increment(price2, 50, bfPredicate)!!
+            price2 = service.increment(price2, 50, provider::matches)!!
         }
         assertEquals(price1, price2)
 
         for (i in 0 until repeat) {
-            price1 = service.decrement(price1, 1, provider.minPrice, bfPredicate)!!
+            price1 = service.decrement(price1, 1, provider.minPrice, provider::matches)!!
         }
         for (i in 0 until repeat / 50) {
-            price2 = service.decrement(price2, 50, provider.minPrice, bfPredicate)!!
+            price2 = service.decrement(price2, 50, provider.minPrice, provider::matches)!!
         }
         assertEquals(price1, price2)
     }
 
     @Test
     fun `round bet`() {
-        assertEquals(1.05, service.roundBet(1.0544444444, bfPredicate))
-        assertEquals(1.06, service.roundBet(1.05555555, bfPredicate))
-        assertEquals(2.08, service.roundBet(2.081, bfPredicate))
-        assertEquals(2.1, service.roundBet(2.09, bfPredicate))
-        assertEquals(3.6, service.roundBet(3.575, bfPredicate))
-        assertEquals(3.85, service.roundBet(3.84, bfPredicate))
-        assertEquals(3.80, service.roundBet(3.81, bfPredicate))
-        assertEquals(3.85, service.roundBet(3.83, bfPredicate))
-        assertEquals(5.2, service.roundBet(5.15, bfPredicate))
-        assertEquals(5.1, service.roundBet(5.14, bfPredicate))
-        assertEquals(8.8, service.roundBet(8.7, bfPredicate))
-        assertEquals(8.6, service.roundBet(8.69, bfPredicate))
-        assertEquals(980.0, service.roundBet(984.0, bfPredicate))
-        assertEquals(990.0, service.roundBet(985.0, bfPredicate))
+        assertEquals(1.05, service.roundBet(1.0544444444, provider::matches))
+        assertEquals(1.06, service.roundBet(1.05555555, provider::matches))
+        assertEquals(2.08, service.roundBet(2.081, provider::matches))
+        assertEquals(2.1, service.roundBet(2.09, provider::matches))
+        assertEquals(3.6, service.roundBet(3.575, provider::matches))
+        assertEquals(3.85, service.roundBet(3.84, provider::matches))
+        assertEquals(3.80, service.roundBet(3.81, provider::matches))
+        assertEquals(3.85, service.roundBet(3.83, provider::matches))
+        assertEquals(5.2, service.roundBet(5.15, provider::matches))
+        assertEquals(5.1, service.roundBet(5.14, provider::matches))
+        assertEquals(8.8, service.roundBet(8.7, provider::matches))
+        assertEquals(8.6, service.roundBet(8.69, provider::matches))
+        assertEquals(980.0, service.roundBet(984.0, provider::matches))
+        assertEquals(990.0, service.roundBet(985.0, provider::matches))
     }
 
     @Test
     fun `round bet - loop test`() {
         var price = start
         for (i in 0 until repeat) {
-            price = service.increment(price, 1, bfPredicate)!!
-            val oneMore = service.increment(price, 1, bfPredicate)!!
+            price = service.increment(price, 1, provider::matches)!!
+            val oneMore = service.increment(price, 1, provider::matches)!!
             val step = oneMore - price
-            assertEquals(price, service.roundBet(price, bfPredicate)!!)
-            assertEquals(price, service.roundBet(price + step / 4.0, bfPredicate)!!)
-            assertEquals(oneMore, service.roundBet(price + 3.0 * step / 4.0, bfPredicate)!!)
+            assertEquals(price, service.roundBet(price, provider::matches)!!)
+            assertEquals(price, service.roundBet(price + step / 4.0, provider::matches)!!)
+            assertEquals(oneMore, service.roundBet(price + 3.0 * step / 4.0, provider::matches)!!)
         }
     }
 }

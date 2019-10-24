@@ -20,5 +20,5 @@ class RateStepRoundingPlugin : RoundingPlugin {
         return Price.round(price)
     }
 
-    override val requiredCapabilities get() = setOf(PriceShiftContinuous)
+    override val capabilities get() = setOf(PriceShiftContinuous)
 }

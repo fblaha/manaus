@@ -8,7 +8,7 @@ import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.beans.factory.annotation.Autowired
 
-abstract class AbstractFairnessProposer(private val side: Side, private val downgradeStrategy: DowngradeStrategy) : PriceProposer {
+abstract class AbstractFairnessProposer(private val side: Side, private vararg val downgradeStrategies: DowngradeStrategy) : PriceProposer {
     @Autowired
     private lateinit var priceService: PriceService
 
@@ -20,7 +20,9 @@ abstract class AbstractFairnessProposer(private val side: Side, private val down
         val fairness = context.metrics.fairness[side]!!
         val bestPrice = context.runnerPrices.getHomogeneous(side).bestPrice!!
         val fairPrice = priceService.getFairnessFairPrice(bestPrice.price, fairness)
-        val downgradeFraction = downgradeStrategy(context)
+        val provider = context.account.provider
+        val strategy = downgradeStrategies.find(provider::matches) ?: error("no such strategy")
+        val downgradeFraction = strategy(context)
         return priceService.downgrade(fairPrice, downgradeFraction, context.side)
     }
 }

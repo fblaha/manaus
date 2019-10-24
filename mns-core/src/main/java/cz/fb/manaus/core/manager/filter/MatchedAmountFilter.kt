@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 @Component
 class MatchedAmountFilter : MarketFilter {
 
-    override val requiredCapabilities: Set<ProviderCapability>
+    override val capabilities: Set<ProviderCapability>
         get() = setOf(ProviderCapability.MatchedAmount)
 
     override fun accept(market: Market): Boolean {

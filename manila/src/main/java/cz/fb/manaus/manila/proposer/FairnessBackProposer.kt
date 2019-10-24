@@ -9,4 +9,4 @@ import org.springframework.stereotype.Component
 
 @Component
 @ManilaBet
-object FairnessBackProposer : AbstractFairnessProposer(Side.BACK, FixedDowngradeStrategy(0.07))
+object FairnessBackProposer : AbstractFairnessProposer(Side.BACK, FixedDowngradeStrategy(0.07, 0.07))

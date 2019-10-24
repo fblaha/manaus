@@ -8,4 +8,4 @@ import org.springframework.stereotype.Component
 
 @Component
 @ManilaBet
-object FairnessLayProposer : AbstractFairnessProposer(Side.LAY, FixedDowngradeStrategy(0.07))
+object FairnessLayProposer : AbstractFairnessProposer(Side.LAY, FixedDowngradeStrategy(0.07, 0.07))

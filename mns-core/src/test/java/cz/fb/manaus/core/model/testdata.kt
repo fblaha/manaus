@@ -97,7 +97,8 @@ val bfCapabilities: Set<ProviderCapability> = setOf(
         ProviderCapability.MatchedAmount,
         ProviderCapability.PriceShiftFixedStep,
         ProviderCapability.TradedVolume,
-        ProviderCapability.LastMatchedPrice
+        ProviderCapability.LastMatchedPrice,
+        ProviderCapability.CommissionNetWin
 )
 
 
@@ -106,8 +107,7 @@ val provider = ExchangeProvider(
         minAmount = 2.0,
         minPrice = 1.001,
         commission = 0.02,
+        tags = setOf("betfair", "test"),
         capabilities = bfCapabilities)
-
-val bfPredicate = provider::capabilityMatch
 
 val account = Account(provider, accountMoney)

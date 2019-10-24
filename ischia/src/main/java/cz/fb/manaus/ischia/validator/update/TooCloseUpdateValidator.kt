@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 object TooCloseUpdateValidator : AbstractTooCloseUpdateValidator(setOf(-1, 1)) {
 
-    override val requiredCapabilities: Set<ProviderCapability>
+    override val capabilities: Set<ProviderCapability>
         get() = setOf(ProviderCapability.PriceShiftFixedStep)
 
     override fun validate(context: BetContext): ValidationResult {

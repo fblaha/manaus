@@ -9,7 +9,7 @@ import cz.fb.manaus.reactor.betting.validator.Validator
 
 abstract class AbstractLastMatchedValidator(private val passEqual: Boolean) : Validator {
 
-    override val requiredCapabilities: Set<ProviderCapability>
+    override val capabilities: Set<ProviderCapability>
         get() = setOf(ProviderCapability.LastMatchedPrice)
 
     override fun validate(context: BetContext): ValidationResult {

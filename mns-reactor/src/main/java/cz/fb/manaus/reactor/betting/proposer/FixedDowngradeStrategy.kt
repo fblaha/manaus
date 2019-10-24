@@ -1,9 +1,14 @@
 package cz.fb.manaus.reactor.betting.proposer
 
+import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetContext
 
-class FixedDowngradeStrategy(val value: Double) : DowngradeStrategy {
+class FixedDowngradeStrategy(val back: Double, val lay: Double, override val tags: Set<String> = emptySet()) : DowngradeStrategy {
+
     override fun invoke(ctx: BetContext): Double {
-        return value
+        return when (ctx.side) {
+            Side.BACK -> back
+            Side.LAY -> lay
+        }
     }
 }

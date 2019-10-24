@@ -84,5 +84,5 @@ class RangeStepRoundingPlugin : RoundingPlugin {
         }
     }
 
-    override val requiredCapabilities get() = setOf(PriceShiftFixedStep)
+    override val capabilities get() = setOf(PriceShiftFixedStep)
 }

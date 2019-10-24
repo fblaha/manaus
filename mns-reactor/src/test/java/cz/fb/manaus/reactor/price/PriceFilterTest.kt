@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.price
 
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.model.bfPredicate
+import cz.fb.manaus.core.model.provider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import org.junit.Before
@@ -45,21 +45,21 @@ class PriceFilterTest : AbstractLocalTestCase() {
 
     @Test
     fun `significant prices size`() {
-        assertEquals(2, filter.getSignificantPrices(1, samplePrices, bfPredicate).size)
-        assertEquals(4, filter.getSignificantPrices(2, samplePrices, bfPredicate).size)
-        assertEquals(6, filter.getSignificantPrices(3, samplePrices, bfPredicate).size)
-        assertEquals(8, filter.getSignificantPrices(4, samplePrices, bfPredicate).size)
-        assertEquals(9, filter.getSignificantPrices(5, samplePrices, bfPredicate).size)
-        assertEquals(10, filter.getSignificantPrices(6, samplePrices, bfPredicate).size)
+        assertEquals(2, filter.getSignificantPrices(1, samplePrices, provider::matches).size)
+        assertEquals(4, filter.getSignificantPrices(2, samplePrices, provider::matches).size)
+        assertEquals(6, filter.getSignificantPrices(3, samplePrices, provider::matches).size)
+        assertEquals(8, filter.getSignificantPrices(4, samplePrices, provider::matches).size)
+        assertEquals(9, filter.getSignificantPrices(5, samplePrices, provider::matches).size)
+        assertEquals(10, filter.getSignificantPrices(6, samplePrices, provider::matches).size)
     }
 
     @Test
     fun `significant prices`() {
-        assertEquals(listOf(back1, lay1), filter.getSignificantPrices(1, samplePrices, bfPredicate))
+        assertEquals(listOf(back1, lay1), filter.getSignificantPrices(1, samplePrices, provider::matches))
         assertEquals(listOf(back1, back2, lay1, lay2),
-                filter.getSignificantPrices(2, samplePrices, bfPredicate))
+                filter.getSignificantPrices(2, samplePrices, provider::matches))
         assertEquals(listOf(back1, back2, back3, lay1, lay2, lay3),
-                filter.getSignificantPrices(3, samplePrices, bfPredicate))
+                filter.getSignificantPrices(3, samplePrices, provider::matches))
     }
 
     @Test
@@ -69,7 +69,7 @@ class PriceFilterTest : AbstractLocalTestCase() {
             val bestBack = runnerPrices.getHomogeneous(Side.BACK).bestPrice!!
             val bestLay = runnerPrices.getHomogeneous(Side.LAY).bestPrice!!
             val prices = runnerPrices.prices.toList()
-            val filteredPrices = filter.filter(prices, bfPredicate)
+            val filteredPrices = filter.filter(prices, provider::matches)
             val bySide = filteredPrices.map { it.side to it }.toMap()
 
             assertEquals(bestBack, bySide[Side.BACK])

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
 @LayLoserBet
 class TradedVolumeProposer(private val priceService: PriceService) : PriceProposer {
 
-    override val requiredCapabilities: Set<ProviderCapability>
+    override val capabilities: Set<ProviderCapability>
         get() = setOf(TradedVolume)
 
     override fun validate(context: BetContext): ValidationResult {

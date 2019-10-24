@@ -4,7 +4,7 @@ import cz.fb.manaus.core.provider.ProviderMatcher
 import org.springframework.stereotype.Service
 
 @Service
-class RoundingService(private val plugins: List<RoundingPlugin>) {
+class RoundingService(private vararg val plugins: RoundingPlugin) {
 
     fun increment(price: Double, stepNum: Int, providerMatcher: ProviderMatcher): Double? {
         val plugin = findPlugin(providerMatcher)

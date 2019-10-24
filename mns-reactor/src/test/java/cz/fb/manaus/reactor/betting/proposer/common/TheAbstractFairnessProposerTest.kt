@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 
+val downgradeStrategy = FixedDowngradeStrategy(0.02, 0.02)
 
 class TheAbstractFairnessProposerTest : AbstractLocalTestCase() {
 
@@ -50,10 +51,10 @@ class TheAbstractFairnessProposerTest : AbstractLocalTestCase() {
 
 
     @Component
-    private class TestLayProposer : AbstractFairnessProposer(Side.LAY, FixedDowngradeStrategy(0.02))
+    private class TestLayProposer : AbstractFairnessProposer(Side.LAY, downgradeStrategy)
 
     @Component
-    private class TestBackProposer : AbstractFairnessProposer(Side.BACK, FixedDowngradeStrategy(0.02))
+    private class TestBackProposer : AbstractFairnessProposer(Side.BACK, downgradeStrategy)
 
 }
 

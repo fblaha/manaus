@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
 @LayLoserBet
 class LastMatchedProposer(private val priceService: PriceService) : PriceProposer {
 
-    override val requiredCapabilities: Set<ProviderCapability>
+    override val capabilities: Set<ProviderCapability>
         get() = setOf(LastMatchedPrice)
 
     override fun validate(context: BetContext): ValidationResult {

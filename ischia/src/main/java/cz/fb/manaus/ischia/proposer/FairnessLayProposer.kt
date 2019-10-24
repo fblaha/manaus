@@ -8,4 +8,4 @@ import org.springframework.stereotype.Component
 
 @Component
 @LayLoserBet
-class FairnessLayProposer(downgradeStrategy: DowngradeStrategy) : AbstractFairnessProposer(Side.LAY, downgradeStrategy)
+class FairnessLayProposer(vararg downgradeStrategy: DowngradeStrategy) : AbstractFairnessProposer(Side.LAY, *downgradeStrategy)

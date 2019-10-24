@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 @Component
 object TradedVolumeValidator : Validator {
 
-    override val requiredCapabilities: Set<ProviderCapability>
+    override val capabilities: Set<ProviderCapability>
         get() = setOf(TradedVolume)
 
     override fun validate(context: BetContext): ValidationResult {

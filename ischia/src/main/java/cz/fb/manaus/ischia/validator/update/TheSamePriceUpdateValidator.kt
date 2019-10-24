@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 object TheSamePriceUpdateValidator : AbstractTooCloseUpdateValidator(emptySet()) {
 
-    override val requiredCapabilities: Set<ProviderCapability>
+    override val capabilities: Set<ProviderCapability>
         get() = setOf(PriceShiftFixedStep)
 
     override val isDowngradeAccepting: Boolean = false
