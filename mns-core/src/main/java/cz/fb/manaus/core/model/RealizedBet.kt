@@ -18,5 +18,9 @@ fun simulate(betAction: BetAction, market: Market): RealizedBet {
             settled = Instant.now(),
             price = betAction.price
     )
-    return RealizedBet(bet, betAction, market)
+    return RealizedBet(
+            settledBet = bet,
+            betAction = betAction,
+            market = market
+    )
 }
