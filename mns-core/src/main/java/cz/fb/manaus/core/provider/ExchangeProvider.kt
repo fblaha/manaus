@@ -8,7 +8,7 @@ data class ExchangeProvider(
         val tags: Set<ProviderTag>) {
 
     fun validate() {
-        validateProviderCapabilities(tags)
+        validateTags(tags)
     }
 
     fun matches(selector: ProviderSelector) = tags.containsAll(selector.tags)

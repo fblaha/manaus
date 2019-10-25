@@ -19,12 +19,14 @@ enum class ProviderTag {
 }
 
 
-val priceShiftCapabilities = setOf(PriceShiftContinuous, PriceShiftFixedStep)
-val commissionCapabilities = setOf(CommissionNetWin, CommissionSingleBet)
+val priceShiftTags = setOf(PriceShiftContinuous, PriceShiftFixedStep)
+val commissionTags = setOf(CommissionNetWin, CommissionSingleBet)
+val providerTags = setOf(CommissionNetWin, CommissionSingleBet)
 
-fun validateProviderCapabilities(tags: Set<ProviderTag>) {
-    check((priceShiftCapabilities intersect tags).size == 1)
-    check((commissionCapabilities intersect tags).size == 1)
+fun validateTags(tags: Set<ProviderTag>) {
+    check((priceShiftTags intersect tags).size == 1)
+    check((commissionTags intersect tags).size == 1)
+    check((providerTags intersect tags).size <= 1)
 }
 
 typealias ProviderMatcher = (ProviderSelector) -> Boolean
