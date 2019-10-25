@@ -7,9 +7,6 @@ enum class ProviderTag {
     PriceShiftFixedStep,
     PriceShiftContinuous,
 
-    CommissionNetWin,
-    CommissionSingleBet,
-
     ProviderMatchbook,
     ProviderBetfair,
 
@@ -20,12 +17,10 @@ enum class ProviderTag {
 
 
 val priceShiftTags = setOf(PriceShiftContinuous, PriceShiftFixedStep)
-val commissionTags = setOf(CommissionNetWin, CommissionSingleBet)
-val providerTags = setOf(CommissionNetWin, CommissionSingleBet)
+val providerTags = setOf(ProviderBetfair, ProviderMatchbook)
 
 fun validateTags(tags: Set<ProviderTag>) {
     check((priceShiftTags intersect tags).size == 1)
-    check((commissionTags intersect tags).size == 1)
     check((providerTags intersect tags).size <= 1)
 }
 

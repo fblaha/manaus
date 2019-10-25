@@ -33,45 +33,47 @@ abstract class AbstractUpdatingBettor(private val side: Side,
         val (marketPrices, market, _, coverage, _) = snapshot
         val flowFilter = flowFilterRegistry.getFlowFilter(market.type!!)
         val fairness = calculator.getFairness(marketPrices)
-        val credibleSide = fairness.moreCredibleSide!!
-        val ordering = COMPARATORS[credibleSide]!!
-        val sortedPrices = marketPrices.sortedWith(ordering)
-        check(sortedPrices.map { it.selectionId }.distinct().count() ==
-                sortedPrices.map { it.selectionId }.count())
+        val credibleSide = fairness.moreCredibleSide
+        if (credibleSide != null) {
+            val ordering = COMPARATORS[credibleSide] ?: error("no such side")
+            val sortedPrices = marketPrices.sortedWith(ordering)
+            check(sortedPrices.map { it.selectionId }.distinct().count() ==
+                    sortedPrices.map { it.selectionId }.count())
 
-        val (priceValidators, prePriceValidators) = validators.partition { it.isPriceRequired }
+            val (priceValidators, prePriceValidators) = validators.partition { it.isPriceRequired }
 
-        for ((i, runnerPrices) in sortedPrices.withIndex()) {
-            val selectionId = runnerPrices.selectionId
-            val runner = market.getRunner(selectionId)
-            val sideSelection = SideSelection(side, selectionId)
-            val activeSelection = sideSelection in coverage || sideSelection.oppositeSide in coverage
-            val accepted = i in flowFilter.indexRange && flowFilter.runnerPredicate(market, runner)
-            if (activeSelection || accepted) {
-                val oldBet = coverage[sideSelection]
-                val ctx = contextFactory.create(side = side,
-                        selectionId = selectionId,
-                        snapshot = snapshot,
-                        fairness = fairness,
-                        account = account)
-                val prePriceValidation = validationService.validate(ctx, prePriceValidators)
-                if (!prePriceValidation.isSuccess) {
-                    cancelBet(oldBet, betCollector)
-                    continue
-                }
+            for ((i, runnerPrices) in sortedPrices.withIndex()) {
+                val selectionId = runnerPrices.selectionId
+                val runner = market.getRunner(selectionId)
+                val sideSelection = SideSelection(side, selectionId)
+                val activeSelection = sideSelection in coverage || sideSelection.oppositeSide in coverage
+                val accepted = i in flowFilter.indexRange && flowFilter.runnerPredicate(market, runner)
+                if (activeSelection || accepted) {
+                    val oldBet = coverage[sideSelection]
+                    val ctx = contextFactory.create(side = side,
+                            selectionId = selectionId,
+                            snapshot = snapshot,
+                            fairness = fairness,
+                            account = account)
+                    val prePriceValidation = validationService.validate(ctx, prePriceValidators)
+                    if (!prePriceValidation.isSuccess) {
+                        cancelBet(oldBet, betCollector)
+                        continue
+                    }
 
-                val newPrice = priceAdviser.getNewPrice(ctx)
-                if (newPrice == null) {
-                    cancelBet(oldBet, betCollector)
-                    continue
-                }
-                ctx.newPrice = newPrice.price
-                ctx.proposers = newPrice.proposers
+                    val newPrice = priceAdviser.getNewPrice(ctx)
+                    if (newPrice == null) {
+                        cancelBet(oldBet, betCollector)
+                        continue
+                    }
+                    ctx.newPrice = newPrice.price
+                    ctx.proposers = newPrice.proposers
 
-                if (oldBet != null && oldBet.isMatched) continue
-                val priceValidation = validationService.validate(ctx, priceValidators)
-                if (priceValidation.isSuccess) {
-                    bet(ctx, betCollector)
+                    if (oldBet != null && oldBet.isMatched) continue
+                    val priceValidation = validationService.validate(ctx, priceValidators)
+                    if (priceValidation.isSuccess) {
+                        bet(ctx, betCollector)
+                    }
                 }
             }
         }

@@ -3,7 +3,6 @@ package cz.fb.manaus.ischia.strategy
 import com.google.common.primitives.Doubles
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ProviderSelector
-import cz.fb.manaus.core.provider.ProviderTag.CommissionNetWin
 import cz.fb.manaus.core.provider.ProviderTag.ProviderBetfair
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.proposer.DowngradeStrategy
@@ -34,5 +33,5 @@ class MinimizeChargeStrategy(
         } else upper
     }
 
-    override val tags get() = setOf(CommissionNetWin, ProviderBetfair)
+    override val tags get() = setOf(ProviderBetfair)
 }

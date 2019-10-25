@@ -98,8 +98,7 @@ val BF_TAGS: Set<ProviderTag> = setOf(
         ProviderTag.MatchedAmount,
         ProviderTag.PriceShiftFixedStep,
         ProviderTag.TradedVolume,
-        ProviderTag.LastMatchedPrice,
-        ProviderTag.CommissionNetWin
+        ProviderTag.LastMatchedPrice
 )
 
 
