@@ -13,15 +13,10 @@ data class BetContext(
         val metrics: BetMetrics
 ) {
     val runnerPrices: RunnerPrices = marketPrices.first { it.selectionId == selectionId }
-
     val oldBet: Bet? = coverage[SideSelection(side, selectionId)]
-
     val counterBet: Bet? = coverage[SideSelection(side.opposite, selectionId)]
-
     val isCounterHalfMatched: Boolean = counterBet?.isHalfMatched ?: false
-
     var proposers: Set<String> = emptySet()
-
     var newPrice: Price? = null
         set(value) {
             if (value != null) {
@@ -58,21 +53,5 @@ data class BetContext(
         }
 
     // TODO not used
-    val simulatedBet: RealizedBet
-        get() {
-            val market = market
-            val action = betAction
-            val bet = SettledBet(
-                    id = "",
-                    selectionId = action.selectionId,
-                    selectionName = market.getRunner(action.selectionId).name,
-                    profitAndLoss = 0.0,
-                    commission = null,
-                    placed = action.time,
-                    matched = action.time,
-                    settled = Instant.now(),
-                    price = action.price
-            )
-            return RealizedBet(bet, action, market)
-        }
+    val simulatedBet: RealizedBet get() = simulate(betAction, market)
 }
