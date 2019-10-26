@@ -2,7 +2,8 @@ package cz.fb.manaus.reactor
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.betting.BetContext
-import cz.fb.manaus.reactor.betting.BetContextFactory
+import cz.fb.manaus.reactor.betting.BetMetrics
+import cz.fb.manaus.reactor.charge.ChargeGrowthForecaster
 import cz.fb.manaus.reactor.price.Fairness
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import cz.fb.manaus.reactor.price.PriceService
@@ -19,7 +20,7 @@ class ReactorTestFactory(
         private val roundingService: RoundingService,
         private val calculator: FairnessPolynomialCalculator,
         private val priceService: PriceService,
-        private val contextFactory: BetContextFactory) {
+        private val forecaster: ChargeGrowthForecaster) {
 
     fun newUpdateBetContext(marketPrices: List<RunnerPrices>, side: Side): BetContext {
         val oldBet = Bet(betId = "1",
@@ -39,13 +40,7 @@ class ReactorTestFactory(
                 market = market,
                 currentBets = oldBet?.let { listOf(it) }.orEmpty()
         )
-        return contextFactory.create(
-                side = side,
-                selectionId = SEL_HOME,
-                snapshot = snapshot,
-                fairness = fairness,
-                account = account
-        )
+        return newCtx(side, SEL_HOME, fairness, snapshot)
     }
 
     fun newBetContext(side: Side, bestBack: Double, bestLay: Double): BetContext {
@@ -62,12 +57,30 @@ class ReactorTestFactory(
             listOf(counterBet)
         } else emptyList()
         val snapshot = MarketSnapshot.from(marketPrices, market, bets)
-        return contextFactory.create(
+        val fairness = calculator.getFairness(marketPrices)
+        return newCtx(side, selectionId, fairness, snapshot)
+    }
+
+    private fun newCtx(side: Side, selectionId: Long, fairness: Fairness, snapshot: MarketSnapshot): BetContext {
+        val forecast = forecaster.getForecast(selectionId = selectionId,
+                betSide = side,
+                snapshot = snapshot,
+                fairness = fairness,
+                commission = account.provider.commission
+        )
+        val metrics = BetMetrics(
+                chargeGrowthForecast = forecast,
+                fairness = fairness,
+                actualTradedVolume = snapshot.tradedVolume?.get(key = selectionId)
+        )
+        return BetContext(
+                market = snapshot.market,
                 side = side,
                 selectionId = selectionId,
-                snapshot = snapshot,
-                fairness = calculator.getFairness(marketPrices),
-                account = account
+                marketPrices = snapshot.runnerPrices,
+                account = account,
+                coverage = snapshot.coverage,
+                metrics = metrics
         )
     }
 

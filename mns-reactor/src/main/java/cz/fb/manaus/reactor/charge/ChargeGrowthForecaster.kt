@@ -29,7 +29,6 @@ class ChargeGrowthForecaster(
                     betSide: Side,
                     snapshot: MarketSnapshot,
                     fairness: Fairness,
-            // TODO no hardcoded
                     commission: Double): Double? {
 
         val fairnessSide = fairness.moreCredibleSide

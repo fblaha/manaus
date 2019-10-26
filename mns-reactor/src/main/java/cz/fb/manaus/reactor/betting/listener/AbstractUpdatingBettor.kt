@@ -6,6 +6,8 @@ import cz.fb.manaus.reactor.betting.*
 import cz.fb.manaus.reactor.betting.listener.ProbabilityComparator.Companion.COMPARATORS
 import cz.fb.manaus.reactor.betting.validator.ValidationService
 import cz.fb.manaus.reactor.betting.validator.Validator
+import cz.fb.manaus.reactor.charge.ChargeGrowthForecaster
+import cz.fb.manaus.reactor.price.Fairness
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
@@ -21,7 +23,7 @@ abstract class AbstractUpdatingBettor(private val side: Side,
     @Autowired
     private lateinit var calculator: FairnessPolynomialCalculator
     @Autowired
-    private lateinit var contextFactory: BetContextFactory
+    private lateinit var forecaster: ChargeGrowthForecaster
     @Autowired
     private lateinit var metricRegistry: MetricRegistry
 
@@ -49,12 +51,8 @@ abstract class AbstractUpdatingBettor(private val side: Side,
                 val activeSelection = sideSelection in coverage || sideSelection.oppositeSide in coverage
                 val accepted = i in flowFilter.indexRange && flowFilter.runnerPredicate(market, runner)
                 if (activeSelection || accepted) {
+                    val ctx = buildContext(selectionId, snapshot, fairness, account, coverage)
                     val oldBet = coverage[sideSelection]
-                    val ctx = contextFactory.create(side = side,
-                            selectionId = selectionId,
-                            snapshot = snapshot,
-                            fairness = fairness,
-                            account = account)
                     val prePriceValidation = validationService.validate(ctx, prePriceValidators)
                     if (!prePriceValidation.isSuccess) {
                         cancelBet(oldBet, betCollector)
@@ -77,6 +75,30 @@ abstract class AbstractUpdatingBettor(private val side: Side,
                 }
             }
         }
+    }
+
+    private fun buildContext(selectionId: Long, snapshot: MarketSnapshot, fairness: Fairness, account: Account, coverage: Map<SideSelection, Bet>): BetContext {
+        val forecast = forecaster.getForecast(
+                selectionId = selectionId,
+                betSide = side,
+                snapshot = snapshot,
+                fairness = fairness,
+                commission = account.provider.commission
+        )
+        val metrics = BetMetrics(
+                chargeGrowthForecast = forecast,
+                fairness = fairness,
+                actualTradedVolume = snapshot.tradedVolume?.get(key = selectionId)
+        )
+        return BetContext(
+                market = snapshot.market,
+                side = side,
+                selectionId = selectionId,
+                marketPrices = snapshot.runnerPrices,
+                account = account,
+                coverage = coverage,
+                metrics = metrics
+        )
     }
 
     private fun bet(ctx: BetContext, betCollector: BetCollector) {
