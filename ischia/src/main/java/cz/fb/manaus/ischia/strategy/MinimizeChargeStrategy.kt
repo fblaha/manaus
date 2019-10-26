@@ -3,7 +3,7 @@ package cz.fb.manaus.ischia.strategy
 import com.google.common.primitives.Doubles
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ProviderSelector
-import cz.fb.manaus.core.provider.ProviderTag.ProviderBetfair
+import cz.fb.manaus.core.provider.ProviderTag.VendorBetfair
 import cz.fb.manaus.reactor.betting.BetContext
 import cz.fb.manaus.reactor.betting.proposer.DowngradeStrategy
 import kotlin.math.max
@@ -33,5 +33,5 @@ class MinimizeChargeStrategy(
         } else upper
     }
 
-    override val tags get() = setOf(ProviderBetfair)
+    override val tags get() = setOf(VendorBetfair)
 }

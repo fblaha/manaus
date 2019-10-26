@@ -94,7 +94,7 @@ val tradedVolume = mapOf(
 val accountMoney = AccountMoney(2000.0, 1000.0)
 
 val BF_TAGS: Set<ProviderTag> = setOf(
-        ProviderTag.ProviderBetfair,
+        ProviderTag.VendorBetfair,
         ProviderTag.MatchedAmount,
         ProviderTag.PriceShiftFixedStep,
         ProviderTag.TradedVolume,

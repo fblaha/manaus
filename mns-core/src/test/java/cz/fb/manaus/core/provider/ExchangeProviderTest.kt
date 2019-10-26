@@ -24,9 +24,9 @@ class ExchangeProviderTest {
 
     @Test
     fun `match tags`() {
-        assertFalse { provider.matches(MockSelector(setOf(ProviderMatchbook))) }
-        assertTrue { provider.matches(MockSelector(setOf(ProviderBetfair))) }
-        assertTrue { provider.matches(MockSelector(setOf(ProviderBetfair, PriceShiftFixedStep))) }
-        assertFalse { provider.matches(MockSelector(setOf(ProviderBetfair, PriceShiftContinuous))) }
+        assertFalse { provider.matches(MockSelector(setOf(VendorMatchbook))) }
+        assertTrue { provider.matches(MockSelector(setOf(VendorBetfair))) }
+        assertTrue { provider.matches(MockSelector(setOf(VendorBetfair, PriceShiftFixedStep))) }
+        assertFalse { provider.matches(MockSelector(setOf(VendorBetfair, PriceShiftContinuous))) }
     }
 }

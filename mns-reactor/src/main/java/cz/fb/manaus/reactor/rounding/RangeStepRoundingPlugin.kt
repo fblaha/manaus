@@ -6,7 +6,7 @@ import com.google.common.collect.Range.openClosed
 import com.google.common.collect.RangeMap
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.provider.ProviderTag.PriceShiftFixedStep
-import cz.fb.manaus.core.provider.ProviderTag.ProviderBetfair
+import cz.fb.manaus.core.provider.ProviderTag.VendorBetfair
 import org.apache.commons.math3.util.Precision
 import org.springframework.stereotype.Component
 import kotlin.math.abs
@@ -85,5 +85,5 @@ class RangeStepRoundingPlugin : RoundingPlugin {
         }
     }
 
-    override val tags get() = setOf(PriceShiftFixedStep, ProviderBetfair)
+    override val tags get() = setOf(PriceShiftFixedStep, VendorBetfair)
 }
