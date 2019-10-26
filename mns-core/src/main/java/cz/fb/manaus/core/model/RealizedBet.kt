@@ -11,7 +11,7 @@ fun simulate(betAction: BetAction, market: Market): RealizedBet {
             id = "",
             selectionId = betAction.selectionId,
             selectionName = market.getRunner(betAction.selectionId).name,
-            profitAndLoss = 0.0,
+            profit = 0.0,
             commission = null,
             placed = betAction.time,
             matched = betAction.time,

@@ -30,9 +30,9 @@ object BetUtils {
         if (newBetPrice != null) {
             val amount = bet.settledBet.price.amount
             val rate = ceiling / amount
-            val profitAndLoss = rate * bet.settledBet.profitAndLoss
+            val profitAndLoss = rate * bet.settledBet.profit
 
-            result = result.copy(settledBet = result.settledBet.copy(profitAndLoss = profitAndLoss))
+            result = result.copy(settledBet = result.settledBet.copy(profit = profitAndLoss))
         }
         val newActionPrice = limitPriceAmount(ceiling, bet.betAction.price)
         if (newActionPrice != null) {

@@ -65,9 +65,9 @@ class ProfitService(private val categoryService: CategoryService) {
         val side = bet.settledBet.price.side
         val price = bet.settledBet.price.price
         val result = if (side === Side.BACK) {
-            ProfitRecord(category, bet.settledBet.profitAndLoss, price, chargeContribution, 0, 1)
+            ProfitRecord(category, bet.settledBet.profit, price, chargeContribution, 0, 1)
         } else {
-            ProfitRecord(category, bet.settledBet.profitAndLoss, price, chargeContribution, 1, 0)
+            ProfitRecord(category, bet.settledBet.profit, price, chargeContribution, 1, 0)
         }
         val marketId = bet.market.id
         val selectionId = bet.settledBet.selectionId
