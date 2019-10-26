@@ -19,12 +19,12 @@ class ProfitServiceTest : AbstractLocalTestCase() {
     @Test
     fun `single selection`() {
         val lay = homeSettledBet.copy(
-                profit = 5.0,
+                profitAndLoss = 5.0,
                 commission = 0.5 * chargeRate,
                 price = Price(2.0, 4.0, Side.LAY)
         )
         val back = lay.copy(
-                profit = -4.5,
+                profitAndLoss = -4.5,
                 commission = 0.0,
                 price = Price(2.2, 3.5, Side.BACK),
                 id = "222"
@@ -34,18 +34,18 @@ class ProfitServiceTest : AbstractLocalTestCase() {
 
     @Test
     fun `multi selection`() {
-        val layHome = homeSettledBet.copy(profit = 5.0,
+        val layHome = homeSettledBet.copy(profitAndLoss = 5.0,
                 id = "111",
                 commission = 1 * chargeRate / 2, // 2% net win - 2 win bets
                 price = Price(2.0, 4.0, Side.LAY))
-        val backHome = homeSettledBet.copy(profit = -4.1,
+        val backHome = homeSettledBet.copy(profitAndLoss = -4.1,
                 id = "222",
                 price = Price(2.2, 3.5, Side.BACK))
-        val layDraw = drawSettledBet.copy(profit = 5.0,
+        val layDraw = drawSettledBet.copy(profitAndLoss = 5.0,
                 id = "333",
                 commission = 1 * chargeRate / 2,
                 price = Price(2.0, 4.0, Side.LAY))
-        val backDraw = drawSettledBet.copy(profit = -4.9,
+        val backDraw = drawSettledBet.copy(profitAndLoss = -4.9,
                 id = "444",
                 price = Price(2.2, 3.5, Side.BACK))
         val records = checkRecords(withCharge(1.0), layHome, backHome, layDraw, backDraw)
@@ -58,11 +58,11 @@ class ProfitServiceTest : AbstractLocalTestCase() {
         //22263	2012-04-26 15:37:47.0	2012-04-26 06:11:23.0	6.4	    2.14	1	-7.3	47973	Over 2.5 Goals	105524600	105524600	RUS	2012-04-26 16:00:00.0	1524.3	Over/Under 2.5 goals	26837433
         val lay = homeSettledBet.copy(selectionId = SEL_HOME,
                 selectionName = "Over 2.5 Goals",
-                profit = -7.3,
+                profitAndLoss = -7.3,
                 id = "22263",
                 price = Price(2.14, 6.4, Side.LAY))
         //22264	2012-04-26 15:53:26.0	2012-04-26 15:53:07.0	5.44	2.34	0	7.29	47973	Over 2.5 Goals	105524600	105524600	RUS	2012-04-26 16:00:00.0	1524.3	Over/Under 2.5 goals	26837433
-        val back = lay.copy(profit = 7.29,
+        val back = lay.copy(profitAndLoss = 7.29,
                 id = "22264",
                 price = Price(2.34, 5.44, Side.BACK))
         checkRecords(withCharge(-0.01), lay, back)
@@ -80,7 +80,7 @@ class ProfitServiceTest : AbstractLocalTestCase() {
         return homeSettledBet.copy(selectionId = SEL_HOME,
                 id = "kmzBack",
                 selectionName = "Kamaz",
-                profit = -4.22,
+                profitAndLoss = -4.22,
                 price = Price(2.98, 4.22, Side.BACK))
     }
 
@@ -88,7 +88,7 @@ class ProfitServiceTest : AbstractLocalTestCase() {
         //22255	2012-04-26 06:56:08.0	2012-04-26 02:00:51.0	5.27	2.92	1	5.27	2460921	Kamaz	105486372	105486372	RUS	2012-04-26 16:00:00.0	4314.43	Match Odds	26836220
         return homeSettledBet.copy(selectionId = SEL_HOME,
                 selectionName = "Kamaz",
-                profit = 5.27,
+                profitAndLoss = 5.27,
                 commission = 0.021,
                 id = "kmzLay",
                 price = Price(2.92, 5.27, Side.LAY))
@@ -133,11 +133,11 @@ class ProfitServiceTest : AbstractLocalTestCase() {
     @Test
     fun `get profit records`() {
         val bet1 = drawSettledBet.copy(
-                profit = 5.0,
+                profitAndLoss = 5.0,
                 commission = 3.0 * chargeRate,
                 price = Price(2.0, 4.0, Side.LAY))
         val bet2 = drawSettledBet.copy(
-                profit = -2.0,
+                profitAndLoss = -2.0,
                 commission = 0.0,
                 id = "bet2",
                 price = Price(2.0, 5.0, Side.BACK))

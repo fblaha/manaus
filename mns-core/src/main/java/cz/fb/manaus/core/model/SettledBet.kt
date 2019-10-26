@@ -16,7 +16,7 @@ data class SettledBet(
         @Id var id: String,
         val selectionId: Long,
         val selectionName: String,
-        val profit: Double,
+        val profitAndLoss: Double,
         val commission: Double?,
         val placed: Instant?,
         val matched: Instant,

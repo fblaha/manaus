@@ -12,7 +12,7 @@ class BetFeatureService(private val functions: List<ProgressFunction>) {
         return BetFeatureVector(
                 id = bet.settledBet.id,
                 side = bet.settledBet.price.side,
-                profit = bet.settledBet.profit,
+                profit = bet.settledBet.profitAndLoss,
                 features = features)
     }
 }

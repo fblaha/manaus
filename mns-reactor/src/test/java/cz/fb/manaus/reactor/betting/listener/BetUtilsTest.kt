@@ -83,8 +83,8 @@ class BetUtilsTest {
         assertNotSame(bet, ceilCopy)
         assertEquals(bet.settledBet.selectionName, ceilCopy.settledBet.selectionName)
         assertEquals(bet.settledBet.selectionId, ceilCopy.settledBet.selectionId)
-        assertThat(ceilCopy.settledBet.profit,
-                closeTo(bet.settledBet.profit * 2.0 / 3, 0.001))
+        assertThat(ceilCopy.settledBet.profitAndLoss,
+                closeTo(bet.settledBet.profitAndLoss * 2.0 / 3, 0.001))
     }
 
     @Test

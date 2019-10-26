@@ -82,7 +82,7 @@ class End2EndTest : AbstractControllerTest() {
                     selectionId = bet.selectionId,
                     id = i.toString(),
                     price = bet.requestedPrice,
-                    profit = 10.0,
+                    profitAndLoss = 10.0,
                     commission = 0.1
             )
             val serialized = objectMapper.writer().writeValueAsString(settledBet)
