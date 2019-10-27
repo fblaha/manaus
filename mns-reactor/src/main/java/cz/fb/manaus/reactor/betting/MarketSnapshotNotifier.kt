@@ -8,12 +8,11 @@ import cz.fb.manaus.core.model.MarketSnapshot
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.reactor.betting.action.BetActionListener
 import cz.fb.manaus.reactor.betting.action.BetUtils
+import cz.fb.manaus.reactor.betting.listener.MarketSnapshotEvent
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
 import org.springframework.core.annotation.AnnotationAwareOrderComparator
 import java.time.Instant
 import java.util.logging.Logger
-
-data class MarketSnapshotEvent(val snapshot: MarketSnapshot, val myBets: Set<String>, val account: Account)
 
 class MarketSnapshotNotifier(
         snapshotListeners: List<MarketSnapshotListener>,
@@ -27,20 +26,18 @@ class MarketSnapshotNotifier(
 
     private val log = Logger.getLogger(MarketSnapshotNotifier::class.simpleName)
 
-    fun notify(marketSnapshotEvent: MarketSnapshotEvent): CollectedBets {
-        val (snapshot, myBets, account) = marketSnapshotEvent
-        val market = snapshot.market
+    fun notify(snapshot: MarketSnapshot, myBets: Set<String>, account: Account): CollectedBets {
         val collector = BetCollector()
 
-        if (filterService.accept(market, myBets.isNotEmpty(), account.provider::matches)) {
-            validateOpenDate(market)
+        if (filterService.accept(snapshot.market, myBets.isNotEmpty(), account.provider::matches)) {
+            validateOpenDate(snapshot.market)
 
             val unknownBets = BetUtils.getUnknownBets(snapshot.currentBets, myBets)
             unknownBets.forEach { log.warning { "unknown bet '$it'" } }
             if (unknownBets.isEmpty()) {
                 sortedSnapshotListeners
                         .filter { it.javaClass.simpleName !in disabledListeners }
-                        .forEach { it.onMarketSnapshot(snapshot, collector, account) }
+                        .forEach { it.onMarketSnapshot(MarketSnapshotEvent(snapshot, account, collector)) }
                 saveActions(collector.getToPlace())
                 saveActions(collector.getToUpdate())
             }

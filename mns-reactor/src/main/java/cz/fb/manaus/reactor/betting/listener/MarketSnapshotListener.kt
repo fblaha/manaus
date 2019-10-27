@@ -4,10 +4,14 @@ import cz.fb.manaus.core.model.Account
 import cz.fb.manaus.core.model.MarketSnapshot
 import cz.fb.manaus.reactor.betting.BetCollector
 
+data class MarketSnapshotEvent(
+        val snapshot: MarketSnapshot,
+        val account: Account,
+        val collector: BetCollector
+)
+
 interface MarketSnapshotListener {
 
-    fun onMarketSnapshot(snapshot: MarketSnapshot,
-                         betCollector: BetCollector,
-                         account: Account)
+    fun onMarketSnapshot(event: MarketSnapshotEvent)
 
 }
