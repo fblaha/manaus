@@ -13,7 +13,9 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator
 import java.time.Instant
 import java.util.logging.Logger
 
-class BetManager(
+data class MarketSnapshotEvent(val snapshot: MarketSnapshot, val myBets: Set<String>, val account: Account)
+
+class MarketSnapshotNotifier(
         snapshotListeners: List<MarketSnapshotListener>,
         private val filterService: MarketFilterService,
         private val betActionRepository: BetActionRepository,
@@ -23,10 +25,10 @@ class BetManager(
     private val sortedSnapshotListeners: List<MarketSnapshotListener> =
             snapshotListeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
 
-    private val log = Logger.getLogger(BetManager::class.simpleName)
+    private val log = Logger.getLogger(MarketSnapshotNotifier::class.simpleName)
 
-    fun fire(snapshot: MarketSnapshot, myBets: Set<String>, account: Account): CollectedBets {
-
+    fun notify(marketSnapshotEvent: MarketSnapshotEvent): CollectedBets {
+        val (snapshot, myBets, account) = marketSnapshotEvent
         val market = snapshot.market
         val collector = BetCollector()
 

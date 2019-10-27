@@ -2,7 +2,7 @@ package cz.fb.manaus.spring
 
 import cz.fb.manaus.core.manager.MarketFilterService
 import cz.fb.manaus.core.repository.BetActionRepository
-import cz.fb.manaus.reactor.betting.BetManager
+import cz.fb.manaus.reactor.betting.MarketSnapshotNotifier
 import cz.fb.manaus.reactor.betting.action.BetActionListener
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
 import cz.fb.manaus.reactor.price.PriceFilter
@@ -26,9 +26,9 @@ open class ReactorDatabaseConfiguration {
                         betActionRepository: BetActionRepository,
                         actionListeners: List<BetActionListener>,
                         bettingConf: BettingConf,
-                        snapshotListeners: List<MarketSnapshotListener>): BetManager {
+                        snapshotListeners: List<MarketSnapshotListener>): MarketSnapshotNotifier {
         val disabledListeners = bettingConf.disabledListeners.toSet()
-        return BetManager(snapshotListeners,
+        return MarketSnapshotNotifier(snapshotListeners,
                 filterService,
                 betActionRepository,
                 actionListeners,

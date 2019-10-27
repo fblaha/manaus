@@ -4,7 +4,8 @@ import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
-import cz.fb.manaus.reactor.betting.BetManager
+import cz.fb.manaus.reactor.betting.MarketSnapshotEvent
+import cz.fb.manaus.reactor.betting.MarketSnapshotNotifier
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
@@ -27,9 +28,9 @@ data class MarketSnapshotCrate(
 
 @Controller
 @Profile(ManausProfiles.DB)
-class MarketSnapshotController(private val manager: BetManager,
+class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
                                private val marketRepository: MarketRepository,
-                               private val betActionRepository: BetActionRepository,
+                               private val actionRepository: BetActionRepository,
                                private val metricRegistry: MetricRegistry,
                                private val betMetricUpdater: MatchedBetMetricUpdater) {
 
@@ -47,8 +48,8 @@ class MarketSnapshotController(private val manager: BetManager,
             val bets = snapshotCrate.bets
             betMetricUpdater.update(snapshotCrate.scanTime, bets)
             val marketSnapshot = MarketSnapshot.from(marketPrices, market, bets, snapshotCrate.tradedVolume)
-            val myBets = betActionRepository.find(id).mapNotNull { it.betId }.toSet()
-            val collectedBets = manager.fire(marketSnapshot, myBets, account)
+            val myBets = actionRepository.find(id).mapNotNull { it.betId }.toSet()
+            val collectedBets = notifier.notify(MarketSnapshotEvent(marketSnapshot, myBets, account))
             return toResponse(collectedBets)
         } catch (e: RuntimeException) {
             metricRegistry.counter("_SNAPSHOT_ERROR_").inc()
