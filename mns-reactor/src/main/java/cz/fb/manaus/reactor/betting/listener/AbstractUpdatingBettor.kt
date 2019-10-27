@@ -30,7 +30,7 @@ abstract class AbstractUpdatingBettor(private val side: Side,
     private val log = Logger.getLogger(AbstractUpdatingBettor::class.simpleName)
 
     override fun onMarketSnapshot(event: MarketSnapshotEvent) {
-        val (snapshot, account, betCollector) = event
+        val (snapshot, account, collector) = event
         val (marketPrices, market, _, coverage, _) = snapshot
         val flowFilter = flowFilterRegistry.getFlowFilter(market.type!!)
         val fairness = calculator.getFairness(marketPrices)
@@ -54,13 +54,13 @@ abstract class AbstractUpdatingBettor(private val side: Side,
                     val oldBet = coverage[sideSelection]
                     val prePriceValidation = validationService.validate(ctx, prePriceValidators)
                     if (!prePriceValidation.isSuccess) {
-                        cancelBet(oldBet, betCollector)
+                        cancelBet(oldBet, collector)
                         continue
                     }
 
                     val newPrice = priceAdviser.getNewPrice(ctx)
                     if (newPrice == null) {
-                        cancelBet(oldBet, betCollector)
+                        cancelBet(oldBet, collector)
                         continue
                     }
                     ctx.newPrice = newPrice.price
@@ -69,7 +69,7 @@ abstract class AbstractUpdatingBettor(private val side: Side,
                     if (oldBet != null && oldBet.isMatched) continue
                     val priceValidation = validationService.validate(ctx, priceValidators)
                     if (priceValidation.isSuccess) {
-                        bet(ctx, betCollector)
+                        bet(ctx, collector)
                     }
                 }
             }
