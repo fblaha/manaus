@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.betting.proposer.common
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
-import cz.fb.manaus.reactor.betting.homeContext
+import cz.fb.manaus.reactor.betting.HOME_EVENT
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,7 +22,7 @@ class TheAbstractBestPriceProposerTest : AbstractLocalTestCase() {
 
     @Test
     fun `lay propose`() {
-        val context = homeContext.copy(side = Side.LAY,
+        val context = HOME_EVENT.copy(side = Side.LAY,
                 marketPrices = factory.newMarketPrices(2.0, 4.5))
         assertEquals(ValidationResult.ACCEPT, layProposer.validate(context))
         assertEquals(2.02, layProposer.getProposedPrice(context))
@@ -30,7 +30,7 @@ class TheAbstractBestPriceProposerTest : AbstractLocalTestCase() {
 
     @Test
     fun check() {
-        val context = homeContext.copy(side = Side.LAY)
+        val context = HOME_EVENT.copy(side = Side.LAY)
         assertEquals(ValidationResult.ACCEPT, layProposer.validate(context))
         assertEquals(ValidationResult.ACCEPT, backProposer.validate(context.copy(side = Side.BACK)))
     }
@@ -38,7 +38,7 @@ class TheAbstractBestPriceProposerTest : AbstractLocalTestCase() {
     @Test
     fun `back propose`() {
         val prices = factory.newMarketPrices(2.5, 3.5)
-        val context = homeContext.copy(marketPrices = prices)
+        val context = HOME_EVENT.copy(marketPrices = prices)
         assertEquals(ValidationResult.ACCEPT, backProposer.validate(context))
         assertEquals(3.45, backProposer.getProposedPrice(context))
     }

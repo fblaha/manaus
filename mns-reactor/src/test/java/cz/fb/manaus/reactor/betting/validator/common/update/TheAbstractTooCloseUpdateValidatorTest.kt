@@ -26,7 +26,7 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
         val oldPrice = Price(2.5, 5.0, Side.BACK)
         val oldBet = betTemplate.copy(requestedPrice = oldPrice)
 
-        val context = factory.newBetContext(Side.BACK, runnerPrices, oldBet)
+        val context = factory.newBetEvent(Side.BACK, runnerPrices, oldBet)
         context.newPrice = oldPrice
         assertEquals(ValidationResult.REJECT, validator.validate(context))
 
@@ -47,7 +47,7 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
 
         val oldBet = betTemplate.copy(requestedPrice = oldOne)
 
-        val context = factory.newBetContext(Side.LAY, runnerPrices, oldBet)
+        val context = factory.newBetEvent(Side.LAY, runnerPrices, oldBet)
         context.newPrice = newOne
         assertEquals(ValidationResult.REJECT, validator.validate(context))
         context.newPrice = newOne.copy(price = 3.2)
@@ -64,7 +64,7 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
         val oldOne = Price(provider.minPrice, 5.0, Side.LAY)
         val oldBet = betTemplate.copy(requestedPrice = oldOne)
 
-        val context = factory.newBetContext(Side.LAY, runnerPrices, oldBet)
+        val context = factory.newBetEvent(Side.LAY, runnerPrices, oldBet)
         context.newPrice = newOne
         assertEquals(ValidationResult.ACCEPT, validator.validate(context))
     }

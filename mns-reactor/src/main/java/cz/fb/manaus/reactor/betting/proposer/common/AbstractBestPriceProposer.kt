@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.betting.proposer.common
 
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.rounding.RoundingService
@@ -12,9 +12,9 @@ abstract class AbstractBestPriceProposer(private val step: Int) : PriceProposer 
     @Autowired
     private lateinit var roundingService: RoundingService
 
-    override fun validate(context: BetContext): ValidationResult {
-        val runnerPrices = context.runnerPrices
-        val homogeneous = runnerPrices.getHomogeneous(context.side.opposite)
+    override fun validate(event: BetEvent): ValidationResult {
+        val runnerPrices = event.runnerPrices
+        val homogeneous = runnerPrices.getHomogeneous(event.side.opposite)
         val bestPrice = homogeneous.bestPrice
         return if (bestPrice != null) {
             ValidationResult.ACCEPT
@@ -23,11 +23,11 @@ abstract class AbstractBestPriceProposer(private val step: Int) : PriceProposer 
         }
     }
 
-    override fun getProposedPrice(context: BetContext): Double? {
-        val side = context.side
-        val bestPrice = context.runnerPrices.getHomogeneous(side.opposite).bestPrice!!.price
+    override fun getProposedPrice(event: BetEvent): Double? {
+        val side = event.side
+        val bestPrice = event.runnerPrices.getHomogeneous(side.opposite).bestPrice!!.price
         check(step >= 0)
-        val provider = context.account.provider
+        val provider = event.account.provider
         return if (step == 0) {
             bestPrice
         } else {

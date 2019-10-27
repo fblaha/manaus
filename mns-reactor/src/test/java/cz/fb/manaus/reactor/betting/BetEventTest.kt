@@ -11,7 +11,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-val homeContext: BetContext = BetContext(
+val HOME_EVENT: BetEvent = BetEvent(
         selectionId = SEL_HOME,
         side = Side.BACK,
         account = account,
@@ -26,20 +26,20 @@ val homeContext: BetContext = BetContext(
 )
 
 
-class BetContextTest : AbstractLocalTestCase() {
+class BetEventTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var factory: ReactorTestFactory
 
     @Test
     fun `counter half matched`() {
-        assertTrue(factory.newBetContext(Side.BACK, 3.5, 4.6).isCounterHalfMatched)
-        assertTrue(factory.newBetContext(Side.LAY, 3.5, 4.6).isCounterHalfMatched)
+        assertTrue(factory.newBetEvent(Side.BACK, 3.5, 4.6).isCounterHalfMatched)
+        assertTrue(factory.newBetEvent(Side.LAY, 3.5, 4.6).isCounterHalfMatched)
     }
 
     @Test
     fun `simulate settled bet`() {
-        val context = factory.newBetContext(Side.LAY, 3.5, 4.6)
+        val context = factory.newBetEvent(Side.LAY, 3.5, 4.6)
         context.newPrice = Price(3.0, 5.0, Side.LAY)
         val settledBet = context.simulatedBet
         assertEquals(context.side, settledBet.settledBet.price.side)

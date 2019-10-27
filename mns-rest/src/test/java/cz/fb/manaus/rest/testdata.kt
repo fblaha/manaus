@@ -1,7 +1,7 @@
 package cz.fb.manaus.rest
 
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.listener.AbstractUpdatingBettor
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.proposer.ProposerAdviser
@@ -20,7 +20,7 @@ class BackAdviser(proposers: List<PriceProposer>) : ProposerAdviser(proposers)
 
 @Component
 object AcceptAllValidator : Validator {
-    override fun validate(context: BetContext): ValidationResult {
+    override fun validate(event: BetEvent): ValidationResult {
         return ValidationResult.ACCEPT
     }
 }

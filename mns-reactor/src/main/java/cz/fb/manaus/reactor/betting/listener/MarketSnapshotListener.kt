@@ -12,6 +12,6 @@ data class MarketSnapshotEvent(
 
 interface MarketSnapshotListener {
 
-    fun onMarketSnapshot(event: MarketSnapshotEvent)
+    fun onMarketSnapshot(marketSnapshotEvent: MarketSnapshotEvent)
 
 }

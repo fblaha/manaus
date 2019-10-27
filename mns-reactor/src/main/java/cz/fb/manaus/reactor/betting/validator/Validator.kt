@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.betting.validator
 
 import cz.fb.manaus.core.provider.ProviderSelector
-import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.NameAware
 
 interface Validator : NameAware, ProviderSelector {
@@ -15,6 +15,6 @@ interface Validator : NameAware, ProviderSelector {
     val isPriceRequired: Boolean
         get() = true
 
-    fun validate(context: BetContext): ValidationResult
+    fun validate(event: BetEvent): ValidationResult
 
 }

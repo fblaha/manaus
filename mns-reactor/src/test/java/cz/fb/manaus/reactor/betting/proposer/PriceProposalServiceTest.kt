@@ -2,8 +2,8 @@ package cz.fb.manaus.reactor.betting.proposer
 
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.reactor.betting.BetContext
-import cz.fb.manaus.reactor.betting.homeContext
+import cz.fb.manaus.reactor.betting.BetEvent
+import cz.fb.manaus.reactor.betting.HOME_EVENT
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
@@ -25,28 +25,28 @@ class PriceProposalServiceTest : AbstractLocalTestCase() {
     @Test(expected = IllegalStateException::class)
     fun `mandatory price`() {
         val proposer: PriceProposer = object : PriceProposer {
-            override fun getProposedPrice(context: BetContext): Double? {
+            override fun getProposedPrice(event: BetEvent): Double? {
                 return null
             }
         }
-        service.reducePrices(homeContext.copy(side = Side.LAY), listOf(proposer))
+        service.reducePrices(HOME_EVENT.copy(side = Side.LAY), listOf(proposer))
     }
 
     private fun checkProposal(expectedPrice: Double, side: Side, proposers: List<PriceProposer>) {
-        val price = service.reducePrices(homeContext.copy(side = side), proposers).price
+        val price = service.reducePrices(HOME_EVENT.copy(side = side), proposers).price
         assertEquals(expectedPrice, price)
     }
 
     private class TestProposer1 : PriceProposer {
 
-        override fun getProposedPrice(context: BetContext): Double {
+        override fun getProposedPrice(event: BetEvent): Double {
             return MIN_PRICE
         }
     }
 
     private open class TestProposer2 : PriceProposer {
 
-        override fun getProposedPrice(context: BetContext): Double {
+        override fun getProposedPrice(event: BetEvent): Double {
             return MAX_PRICE
         }
     }

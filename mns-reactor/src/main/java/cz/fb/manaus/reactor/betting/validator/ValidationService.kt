@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.betting.validator
 
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.stereotype.Service
 
@@ -27,35 +27,35 @@ class ValidationService(private val priceService: PriceService,
         return ValidationResult.of(results.all { it.isSuccess })
     }
 
-    fun validate(context: BetContext, validators: List<Validator>): ValidationResult {
-        val filteredValidators = validators.filter(createPredicate(context))
+    fun validate(event: BetEvent, validators: List<Validator>): ValidationResult {
+        val filteredValidators = validators.filter(createPredicate(event))
         check(filteredValidators.isNotEmpty())
 
         if (filteredValidators.any { it.isUpdateOnly }) {
-            check(context.oldBet != null)
+            check(event.oldBet != null)
         }
 
         val collected = filteredValidators
-                .map { it.name to validate(context, it) }
-                .onEach { recorder.updateMetrics(it.second, context.side, it.first) }
+                .map { it.name to validate(event, it) }
+                .onEach { recorder.updateMetrics(it.second, event.side, it.first) }
                 .map { it.second }
         return reduce(collected)
     }
 
-    private fun validate(context: BetContext, validator: Validator): ValidationResult {
-        val downgradeResult = handleDowngrade(context.newPrice, context.oldBet, validator.isDowngradeAccepting)
-        return downgradeResult ?: validator.validate(context)
+    private fun validate(event: BetEvent, validator: Validator): ValidationResult {
+        val downgradeResult = handleDowngrade(event.newPrice, event.oldBet, validator.isDowngradeAccepting)
+        return downgradeResult ?: validator.validate(event)
     }
 
-    private fun createPredicate(context: BetContext): (Validator) -> Boolean {
+    private fun createPredicate(event: BetEvent): (Validator) -> Boolean {
         return fun(validator: Validator): Boolean {
-            if (validator.isUpdateOnly && context.oldBet == null) {
+            if (validator.isUpdateOnly && event.oldBet == null) {
                 return false
             }
-            if (validator.isPriceRequired && context.newPrice == null) {
+            if (validator.isPriceRequired && event.newPrice == null) {
                 return false
             }
-            val provider = context.account.provider
+            val provider = event.account.provider
             return provider.matches(validator)
         }
     }

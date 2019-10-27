@@ -2,18 +2,18 @@ package cz.fb.manaus.reactor.betting.proposer
 
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.priceEq
-import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.BetEvent
 import org.springframework.stereotype.Service
 
 @Service
 class PriceProposalService {
 
-    fun reducePrices(context: BetContext, proposers: List<PriceProposer>): ProposedPrice<Double> {
+    fun reducePrices(event: BetEvent, proposers: List<PriceProposer>): ProposedPrice<Double> {
         val prices = mutableListOf<ProposedPrice<Double>>()
         check(proposers.isNotEmpty())
-        val provider = context.account.provider
+        val provider = event.account.provider
         for (proposer in proposers.filter(provider::matches)) {
-            val proposedPrice = proposer.getProposedPrice(context)
+            val proposedPrice = proposer.getProposedPrice(event)
             if (proposer.isMandatory) {
                 check(proposedPrice != null) { proposer.javaClass }
             }
@@ -21,7 +21,7 @@ class PriceProposalService {
                 prices.add(ProposedPrice(proposedPrice, setOf(proposer.name)))
             }
         }
-        return reduce(context.side, prices)
+        return reduce(event.side, prices)
     }
 
     private fun reduce(side: Side, values: List<ProposedPrice<Double>>): ProposedPrice<Double> {

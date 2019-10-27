@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.betting.proposer
 
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.reactor.betting.AmountAdviser
-import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.PriceAdviser
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,19 +21,19 @@ open class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAd
 
     private val log = Logger.getLogger(ProposerAdviser::class.simpleName)
 
-    override fun getNewPrice(betContext: BetContext): ProposedPrice<Price>? {
-        val proposedPrice = proposalService.reducePrices(betContext, proposers)
-        val tagPredicate = betContext.account.provider::matches
+    override fun getNewPrice(betEvent: BetEvent): ProposedPrice<Price>? {
+        val proposedPrice = proposalService.reducePrices(betEvent, proposers)
+        val tagPredicate = betEvent.account.provider::matches
         val roundedPrice = roundingService.roundBet(proposedPrice.price, tagPredicate)
 
         return if (roundedPrice != null) {
             var amount = adviser.amount
-            val counterBet = betContext.counterBet
+            val counterBet = betEvent.counterBet
             if (counterBet != null && counterBet.matchedAmount > 0) {
                 amount = counterBet.requestedPrice.amount
             }
-            val minAmount = betContext.account.provider.minAmount
-            val price = Price(roundedPrice, max(amount, minAmount), betContext.side)
+            val minAmount = betEvent.account.provider.minAmount
+            val price = Price(roundedPrice, max(amount, minAmount), betEvent.side)
             ProposedPrice(price, proposedPrice.proposers)
         } else {
             null

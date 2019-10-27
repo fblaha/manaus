@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.betting
 import cz.fb.manaus.core.model.*
 import java.time.Instant
 
-data class BetContext(
+data class BetEvent(
         val selectionId: Long,
         val side: Side,
         val market: Market,

@@ -29,8 +29,8 @@ abstract class AbstractUpdatingBettor(private val side: Side,
 
     private val log = Logger.getLogger(AbstractUpdatingBettor::class.simpleName)
 
-    override fun onMarketSnapshot(event: MarketSnapshotEvent) {
-        val (snapshot, account, collector) = event
+    override fun onMarketSnapshot(marketSnapshotEvent: MarketSnapshotEvent) {
+        val (snapshot, account, collector) = marketSnapshotEvent
         val (marketPrices, market, _, coverage, _) = snapshot
         val flowFilter = flowFilterRegistry.getFlowFilter(market.type!!)
         val fairness = calculator.getFairness(marketPrices)
@@ -50,38 +50,38 @@ abstract class AbstractUpdatingBettor(private val side: Side,
                 val activeSelection = sideSelection in coverage || sideSelection.oppositeSide in coverage
                 val accepted = i in flowFilter.indexRange && flowFilter.runnerPredicate(market, runner)
                 if (activeSelection || accepted) {
-                    val ctx = buildContext(selectionId, snapshot, fairness, account, coverage)
+                    val event = buildEvent(selectionId, snapshot, fairness, account, coverage)
                     val oldBet = coverage[sideSelection]
-                    val prePriceValidation = validationService.validate(ctx, prePriceValidators)
+                    val prePriceValidation = validationService.validate(event, prePriceValidators)
                     if (!prePriceValidation.isSuccess) {
                         cancelBet(oldBet, collector)
                         continue
                     }
 
-                    val newPrice = priceAdviser.getNewPrice(ctx)
+                    val newPrice = priceAdviser.getNewPrice(event)
                     if (newPrice == null) {
                         cancelBet(oldBet, collector)
                         continue
                     }
-                    ctx.newPrice = newPrice.price
-                    ctx.proposers = newPrice.proposers
+                    event.newPrice = newPrice.price
+                    event.proposers = newPrice.proposers
 
                     if (oldBet != null && oldBet.isMatched) continue
-                    val priceValidation = validationService.validate(ctx, priceValidators)
+                    val priceValidation = validationService.validate(event, priceValidators)
                     if (priceValidation.isSuccess) {
-                        bet(ctx, collector)
+                        bet(event, collector)
                     }
                 }
             }
         }
     }
 
-    private fun buildContext(
+    private fun buildEvent(
             selectionId: Long,
             snapshot: MarketSnapshot,
             fairness: Fairness,
             account: Account, coverage:
-            Map<SideSelection, Bet>): BetContext {
+            Map<SideSelection, Bet>): BetEvent {
 
         val forecast = forecaster.getForecast(
                 selectionId = selectionId,
@@ -95,7 +95,7 @@ abstract class AbstractUpdatingBettor(private val side: Side,
                 fairness = fairness,
                 actualTradedVolume = snapshot.tradedVolume?.get(key = selectionId)
         )
-        return BetContext(
+        return BetEvent(
                 market = snapshot.market,
                 side = side,
                 selectionId = selectionId,
@@ -106,18 +106,18 @@ abstract class AbstractUpdatingBettor(private val side: Side,
         )
     }
 
-    private fun bet(ctx: BetContext, betCollector: BetCollector) {
-        val action = ctx.betAction
-        val newPrice = ctx.newPrice!!
+    private fun bet(event: BetEvent, betCollector: BetCollector) {
+        val action = event.betAction
+        val newPrice = event.newPrice!!
 
-        val oldBet = ctx.oldBet
+        val oldBet = event.oldBet
         if (oldBet != null) {
             betCollector.updateBet(BetCommand(oldBet replacePrice newPrice.price, action))
         } else {
-            val market = ctx.market
+            val market = event.market
             val bet = Bet(marketId = market.id,
                     placedDate = Instant.now(),
-                    selectionId = ctx.runnerPrices.selectionId,
+                    selectionId = event.runnerPrices.selectionId,
                     requestedPrice = newPrice)
             betCollector.placeBet(BetCommand(bet, action))
         }

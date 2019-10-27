@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.betting.proposer.common
 
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.proposer.DowngradeStrategy
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
@@ -12,17 +12,17 @@ abstract class AbstractFairnessProposer(private val side: Side, private vararg v
     @Autowired
     private lateinit var priceService: PriceService
 
-    override fun validate(context: BetContext): ValidationResult {
-        return ValidationResult.of(context.metrics.fairness[side] != null)
+    override fun validate(event: BetEvent): ValidationResult {
+        return ValidationResult.of(event.metrics.fairness[side] != null)
     }
 
-    override fun getProposedPrice(context: BetContext): Double {
-        val fairness = context.metrics.fairness[side]!!
-        val bestPrice = context.runnerPrices.getHomogeneous(side).bestPrice!!
+    override fun getProposedPrice(event: BetEvent): Double {
+        val fairness = event.metrics.fairness[side]!!
+        val bestPrice = event.runnerPrices.getHomogeneous(side).bestPrice!!
         val fairPrice = priceService.getFairnessFairPrice(bestPrice.price, fairness)
-        val provider = context.account.provider
+        val provider = event.account.provider
         val strategy = downgradeStrategies.find(provider::matches) ?: error("no such strategy")
-        val downgradeFraction = strategy(context)
-        return priceService.downgrade(fairPrice, downgradeFraction, context.side)
+        val downgradeFraction = strategy(event)
+        return priceService.downgrade(fairPrice, downgradeFraction, event.side)
     }
 }

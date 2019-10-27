@@ -29,7 +29,7 @@ class TheAbstractLastMatchedValidatorTest : AbstractLocalTestCase() {
     }
 
     private fun checkValidator(side: Side, lowerResult: ValidationResult, higherResult: ValidationResult) {
-        val context = factory.newBetContext(side, listOf(homePrices.copy(lastMatchedPrice = 2.1)), null)
+        val context = factory.newBetEvent(side, listOf(homePrices.copy(lastMatchedPrice = 2.1)), null)
         context.newPrice = Price(2.0, 2.0, side)
         assertEquals(lowerResult, validator.validate(context))
         context.newPrice = Price(2.2, 2.0, side)

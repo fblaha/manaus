@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.betting.validator
 import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.BetEvent
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
@@ -17,7 +17,7 @@ class ValidationMetricsCollectorTest : AbstractLocalTestCase() {
     @Test
     fun `validation metrics`() {
         val validator: Validator = object : Validator {
-            override fun validate(context: BetContext): ValidationResult {
+            override fun validate(event: BetEvent): ValidationResult {
                 return ValidationResult.ACCEPT
             }
         }

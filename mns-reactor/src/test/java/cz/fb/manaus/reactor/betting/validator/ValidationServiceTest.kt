@@ -4,8 +4,8 @@ import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.reactor.betting.BetContext
-import cz.fb.manaus.reactor.betting.homeContext
+import cz.fb.manaus.reactor.betting.BetEvent
+import cz.fb.manaus.reactor.betting.HOME_EVENT
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
@@ -45,13 +45,13 @@ class ValidationServiceTest : AbstractLocalTestCase() {
                 Price(newPrice, 2.0, Side.LAY),
                 oldBet, rejecting.isDowngradeAccepting)
         assertEquals(expected, result)
-        assertEquals(ValidationResult.REJECT, rejecting.validate(homeContext.copy()))
+        assertEquals(ValidationResult.REJECT, rejecting.validate(HOME_EVENT.copy()))
     }
 
 
     private data class TestValidator(private val result: ValidationResult) : Validator {
 
-        override fun validate(context: BetContext): ValidationResult {
+        override fun validate(event: BetEvent): ValidationResult {
             return result
         }
     }

@@ -1,6 +1,6 @@
 package cz.fb.manaus.reactor.betting.proposer
 
-import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.NameAware
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
@@ -10,7 +10,7 @@ interface PriceProposer : Validator, NameAware {
     val isMandatory: Boolean
         get() = true
 
-    fun getProposedPrice(context: BetContext): Double?
+    fun getProposedPrice(event: BetEvent): Double?
 
 
     override val isDowngradeAccepting: Boolean
@@ -21,7 +21,7 @@ interface PriceProposer : Validator, NameAware {
         get() = false
 
 
-    override fun validate(context: BetContext): ValidationResult {
+    override fun validate(event: BetEvent): ValidationResult {
         return ValidationResult.ACCEPT
     }
 }

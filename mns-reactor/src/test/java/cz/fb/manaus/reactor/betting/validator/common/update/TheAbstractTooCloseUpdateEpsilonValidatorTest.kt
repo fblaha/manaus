@@ -27,7 +27,7 @@ class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
         val oldBet = betTemplate.copy(requestedPrice = oldPrice)
 
         val prices = factory.newMarketPrices(0.1, listOf(0.4, 0.3, 0.3))
-        val context = factory.newBetContext(Side.BACK, prices, oldBet)
+        val context = factory.newBetEvent(Side.BACK, prices, oldBet)
         context.newPrice = oldPrice
         assertEquals(ValidationResult.REJECT, validator.validate(context))
 
@@ -45,7 +45,7 @@ class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
         val oldOne = Price(3.6, 3.0, Side.LAY)
         val oldBet = betTemplate.copy(requestedPrice = oldOne)
 
-        val context = factory.newBetContext(Side.LAY, runnerPrices, oldBet)
+        val context = factory.newBetEvent(Side.LAY, runnerPrices, oldBet)
         context.newPrice = newOne.copy(price = 3.65)
         assertEquals(ValidationResult.REJECT, validator.validate(context))
         context.newPrice = newOne.copy(price = 3.7)

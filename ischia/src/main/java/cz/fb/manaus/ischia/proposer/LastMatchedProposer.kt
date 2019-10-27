@@ -3,7 +3,7 @@ package cz.fb.manaus.ischia.proposer
 import cz.fb.manaus.core.provider.ProviderTag.LastMatchedPrice
 import cz.fb.manaus.ischia.BackLoserBet
 import cz.fb.manaus.ischia.LayLoserBet
-import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.price.PriceService
@@ -17,15 +17,15 @@ class LastMatchedProposer(private val priceService: PriceService) : PricePropose
 
     override val tags get() = setOf(LastMatchedPrice)
 
-    override fun validate(context: BetContext): ValidationResult {
-        val lastMatchedPrice = context.runnerPrices.lastMatchedPrice
+    override fun validate(event: BetEvent): ValidationResult {
+        val lastMatchedPrice = event.runnerPrices.lastMatchedPrice
         return ValidationResult.of(lastMatchedPrice != null)
     }
 
-    override fun getProposedPrice(context: BetContext): Double {
-        val lastMatchedPrice = context.runnerPrices.lastMatchedPrice!!
+    override fun getProposedPrice(event: BetEvent): Double {
+        val lastMatchedPrice = event.runnerPrices.lastMatchedPrice!!
         return priceService.downgrade(lastMatchedPrice,
-                0.01, context.side)
+                0.01, event.side)
     }
 
 }

@@ -6,8 +6,8 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import cz.fb.manaus.spring.ManausProfiles
 import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.CoreMatchers.hasItem
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.core.IsCollectionContaining.hasItem
 import org.hamcrest.core.IsNot.not
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired

@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.betting.validator.common.update
 
 import cz.fb.manaus.core.model.priceEq
-import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.reactor.rounding.RoundingService
@@ -13,12 +13,12 @@ abstract class AbstractTooCloseUpdateValidator(private val closeSteps: Set<Int>)
 
     override val isUpdateOnly: Boolean = true
 
-    override fun validate(context: BetContext): ValidationResult {
-        val oldOne = context.oldBet!!.requestedPrice.price
-        val newOne = context.newPrice!!.price
+    override fun validate(event: BetEvent): ValidationResult {
+        val oldOne = event.oldBet!!.requestedPrice.price
+        val newOne = event.newPrice!!.price
         if (newOne priceEq oldOne) return ValidationResult.REJECT
-        val minPrice = context.account.provider.minPrice
-        val tagPredicate = context.account.provider::matches
+        val minPrice = event.account.provider.minPrice
+        val tagPredicate = event.account.provider::matches
         val containsEqualPrice = closeSteps
                 .onEach { require(it != 0) }
                 .mapNotNull {

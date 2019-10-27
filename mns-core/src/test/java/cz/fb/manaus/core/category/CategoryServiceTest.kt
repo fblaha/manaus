@@ -5,11 +5,9 @@ import cz.fb.manaus.core.category.categorizer.SPORT_PREFIX
 import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.model.realizedBet
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import org.hamcrest.CoreMatchers.hasItem
-import org.hamcrest.CoreMatchers.hasItems
-import org.junit.Assert.assertThat
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
+import kotlin.test.assertTrue
 
 class CategoryServiceTest : AbstractLocalTestCase() {
     @Autowired
@@ -21,21 +19,19 @@ class CategoryServiceTest : AbstractLocalTestCase() {
         var market = market
 
         market = market.copy(eventType = eventType.copy(name = "Soccer"))
-        assertThat(categoryService.getMarketCategories(market, false), hasItem(SPORT_SOCCER))
+        assertTrue { SPORT_SOCCER in categoryService.getMarketCategories(market, false) }
 
         market = market.copy(eventType = eventType.copy(name = "Tennis"))
-        assertThat(categoryService.getMarketCategories(market, false), hasItem(SPORT_TENNIS))
+        assertTrue { SPORT_TENNIS in categoryService.getMarketCategories(market, false) }
 
         market = market.copy(eventType = eventType.copy(name = "Golf"))
-        assertThat(categoryService.getMarketCategories(market, false),
-                hasItem(Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.GOLF))
+        assertTrue { Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.GOLF in categoryService.getMarketCategories(market, false) }
     }
 
     @Test
     fun `bet category`() {
         val categories = categoryService.getRealizedBetCategories(realizedBet, false, BetCoverage.EMPTY)
-        assertThat(categories,
-                hasItems("market_country_cz", "market_sport_soccer", "market_type_match_odds"))
+        assertTrue { categories.containsAll(listOf("market_country_cz", "market_sport_soccer", "market_type_match_odds")) }
     }
 
     companion object {

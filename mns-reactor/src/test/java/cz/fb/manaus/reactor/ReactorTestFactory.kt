@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.reactor.betting.BetContext
+import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.BetMetrics
 import cz.fb.manaus.reactor.charge.ChargeGrowthForecaster
 import cz.fb.manaus.reactor.price.Fairness
@@ -22,28 +22,28 @@ class ReactorTestFactory(
         private val priceService: PriceService,
         private val forecaster: ChargeGrowthForecaster) {
 
-    fun newUpdateBetContext(marketPrices: List<RunnerPrices>, side: Side): BetContext {
+    fun newUpdateBetContext(marketPrices: List<RunnerPrices>, side: Side): BetEvent {
         val oldBet = Bet(betId = "1",
                 marketId = "1",
                 selectionId = SEL_HOME,
                 requestedPrice = Price(5.0, 5.0, side),
                 placedDate = Instant.now())
-        val context = newBetContext(side, marketPrices, oldBet)
+        val context = newBetEvent(side, marketPrices, oldBet)
         context.newPrice = oldBet.requestedPrice
         return context
     }
 
-    fun newBetContext(side: Side, marketPrices: List<RunnerPrices>, oldBet: Bet?): BetContext {
+    fun newBetEvent(side: Side, marketPrices: List<RunnerPrices>, oldBet: Bet?): BetEvent {
         val fairness = Fairness(0.9, 1.1)
         val snapshot = MarketSnapshot.from(
                 runnerPrices = marketPrices,
                 market = market,
                 currentBets = oldBet?.let { listOf(it) }.orEmpty()
         )
-        return newCtx(side, SEL_HOME, fairness, snapshot)
+        return newEvent(side, SEL_HOME, fairness, snapshot)
     }
 
-    fun newBetContext(side: Side, bestBack: Double, bestLay: Double): BetContext {
+    fun newBetEvent(side: Side, bestBack: Double, bestLay: Double): BetEvent {
         val marketPrices = newMarketPrices(bestBack, bestLay, 3.0)
         val runnerPrices = marketPrices.first()
         val selectionId = runnerPrices.selectionId
@@ -58,10 +58,10 @@ class ReactorTestFactory(
         } else emptyList()
         val snapshot = MarketSnapshot.from(marketPrices, market, bets)
         val fairness = calculator.getFairness(marketPrices)
-        return newCtx(side, selectionId, fairness, snapshot)
+        return newEvent(side, selectionId, fairness, snapshot)
     }
 
-    private fun newCtx(side: Side, selectionId: Long, fairness: Fairness, snapshot: MarketSnapshot): BetContext {
+    private fun newEvent(side: Side, selectionId: Long, fairness: Fairness, snapshot: MarketSnapshot): BetEvent {
         val forecast = forecaster.getForecast(selectionId = selectionId,
                 betSide = side,
                 snapshot = snapshot,
@@ -73,7 +73,7 @@ class ReactorTestFactory(
                 fairness = fairness,
                 actualTradedVolume = snapshot.tradedVolume?.get(key = selectionId)
         )
-        return BetContext(
+        return BetEvent(
                 market = snapshot.market,
                 side = side,
                 selectionId = selectionId,

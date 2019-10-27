@@ -13,7 +13,7 @@ class NameAwareTest {
 
     private class VeryProfitableProposer : PriceProposer {
 
-        override fun getProposedPrice(context: BetContext): Double {
+        override fun getProposedPrice(event: BetEvent): Double {
             return 5.0
         }
     }
