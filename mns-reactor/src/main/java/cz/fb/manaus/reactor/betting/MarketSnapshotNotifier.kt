@@ -38,8 +38,8 @@ class MarketSnapshotNotifier(
                 sortedSnapshotListeners
                         .filter { it.javaClass.simpleName !in disabledListeners }
                         .forEach { it.onMarketSnapshot(MarketSnapshotEvent(snapshot, account, collector)) }
-                saveActions(collector.getToPlace())
-                saveActions(collector.getToUpdate())
+                saveActions(collector.placeCommands)
+                saveActions(collector.updateCommands)
             }
         }
         return collector.toCollectedBets()

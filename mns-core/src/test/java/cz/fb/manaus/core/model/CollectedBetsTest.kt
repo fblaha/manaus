@@ -13,10 +13,11 @@ class CollectedBetsTest {
         val original = Bet(betId = "111", marketId = "222", selectionId = 333,
                 requestedPrice = Price(3.0, 2.0, Side.BACK), placedDate = Instant.now())
 
-        val bets = CollectedBets.create()
-        bets.place.add(original)
-        bets.update.add(original)
-        bets.cancel.add("100")
+        val bets = CollectedBets(
+                place = listOf(original),
+                update = listOf(original),
+                cancel = listOf("100")
+        )
 
         val serialized = mapper.writer().writeValueAsString(bets)
         val tree = mapper.reader().readTree(serialized)

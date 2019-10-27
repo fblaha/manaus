@@ -41,6 +41,16 @@ class BetCollectorTest {
     @Test
     fun `empty collector`() {
         val collector = BetCollector()
-        assertTrue(collector.isEmpty)
+        assertTrue(collector.empty)
+    }
+}
+
+
+fun BetCollector.findBet(marketId: String, selId: Long, side: Side): Bet? {
+    val placeOrUpdate = (placeCommands + updateCommands).map { it.bet }
+    return (placeOrUpdate + cancelCommands).find {
+        it.marketId == marketId
+                && it.selectionId == selId
+                && it.requestedPrice.side === side
     }
 }

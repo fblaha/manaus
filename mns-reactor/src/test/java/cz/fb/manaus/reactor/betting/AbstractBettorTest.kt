@@ -4,6 +4,7 @@ import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.listener.AbstractUpdatingBettor
+import cz.fb.manaus.reactor.betting.listener.MarketSnapshotEvent
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
@@ -24,9 +25,9 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDatabase
                       updateCount: Int): BetCollector {
         val collector = BetCollector()
         val snapshot = MarketSnapshot.from(marketPrices, market, bets, createTradedVolume(marketPrices))
-        bettor.onMarketSnapshot(snapshot, collector, account)
-        assertEquals(placeCount, collector.getToPlace().size)
-        assertEquals(updateCount, collector.getToUpdate().size)
+        bettor.onMarketSnapshot(MarketSnapshotEvent(snapshot, account, collector))
+        assertEquals(placeCount, collector.placeCommands.size)
+        assertEquals(updateCount, collector.updateCommands.size)
         return collector
     }
 
@@ -34,7 +35,7 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDatabase
                              expectedCount: Int,
                              expectedPrice: Double?): BetCollector {
         val result = check(marketPrices, listOf(), expectedCount, 0)
-        val toPlace = result.getToPlace()
+        val toPlace = result.placeCommands
         if (expectedPrice != null) {
             toPlace.forEach { assertEquals(expectedPrice, it.bet.requestedPrice.price) }
         }

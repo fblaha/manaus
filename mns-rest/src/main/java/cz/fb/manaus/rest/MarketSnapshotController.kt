@@ -58,7 +58,7 @@ class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
     }
 
     private fun toResponse(collectedBets: CollectedBets): ResponseEntity<CollectedBets> {
-        return if (collectedBets.isEmpty) {
+        return if (collectedBets.empty) {
             ResponseEntity.noContent().build<CollectedBets>()
         } else {
             ResponseEntity.ok(collectedBets)

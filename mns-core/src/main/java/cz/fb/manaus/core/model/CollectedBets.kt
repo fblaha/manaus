@@ -1,18 +1,9 @@
 package cz.fb.manaus.core.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
+data class CollectedBets(val place: List<Bet>,
+                         val update: List<Bet>,
+                         val cancel: List<String>)
 
-data class CollectedBets(val place: MutableList<Bet>,
-                         val update: MutableList<Bet>,
-                         val cancel: MutableList<String>) {
+val CollectedBets.empty: Boolean
+    get() = place.isEmpty() && update.isEmpty() && cancel.isEmpty()
 
-    val isEmpty: Boolean
-        @JsonIgnore
-        get() = place.isEmpty() && update.isEmpty() && cancel.isEmpty()
-
-    companion object {
-        fun create(): CollectedBets {
-            return CollectedBets(mutableListOf(), mutableListOf(), mutableListOf())
-        }
-    }
-}
