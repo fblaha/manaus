@@ -76,7 +76,13 @@ abstract class AbstractUpdatingBettor(private val side: Side,
         }
     }
 
-    private fun buildContext(selectionId: Long, snapshot: MarketSnapshot, fairness: Fairness, account: Account, coverage: Map<SideSelection, Bet>): BetContext {
+    private fun buildContext(
+            selectionId: Long,
+            snapshot: MarketSnapshot,
+            fairness: Fairness,
+            account: Account, coverage:
+            Map<SideSelection, Bet>): BetContext {
+
         val forecast = forecaster.getForecast(
                 selectionId = selectionId,
                 betSide = side,
