@@ -1,5 +1,7 @@
 package cz.fb.manaus.core.provider
 
+import java.util.*
+
 data class ExchangeProvider(
         val name: String,
         val minAmount: Double,
@@ -7,11 +9,13 @@ data class ExchangeProvider(
         val commission: Double,
         val tags: Set<ProviderTag>) {
 
+    private val enumTags = EnumSet.copyOf(tags)
+
     fun validate() {
-        validateTags(tags)
+        validateTags(enumTags)
     }
 
-    fun matches(selector: ProviderSelector) = tags.containsAll(selector.tags)
+    fun matches(selector: ProviderSelector) = enumTags.containsAll(selector.tags)
 }
 
 
