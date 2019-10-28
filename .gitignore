@@ -5,3 +5,4 @@ target/
 *.iml
 generated/
 application.yml
+.mvn
