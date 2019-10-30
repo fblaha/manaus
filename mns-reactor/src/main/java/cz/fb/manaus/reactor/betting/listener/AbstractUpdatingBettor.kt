@@ -31,7 +31,8 @@ abstract class AbstractUpdatingBettor(private val side: Side,
 
     override fun onMarketSnapshot(marketSnapshotEvent: MarketSnapshotEvent) {
         val (snapshot, account, collector) = marketSnapshotEvent
-        val (marketPrices, market, _, coverage, _) = snapshot
+        val (marketPrices, market) = snapshot
+        val coverage = snapshot.coverage
         val flowFilter = flowFilterRegistry.getFlowFilter(market.type!!)
         val fairness = calculator.getFairness(marketPrices)
         val credibleSide = fairness.moreCredibleSide

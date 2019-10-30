@@ -46,9 +46,9 @@ class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
             val market = marketRepository.read(id)!!
             val bets = snapshotCrate.bets
             betMetricUpdater.update(snapshotCrate.scanTime, bets)
-            val marketSnapshot = MarketSnapshot.from(marketPrices, market, bets, snapshotCrate.tradedVolume)
+            val snapshot = MarketSnapshot(marketPrices, market, bets, snapshotCrate.tradedVolume)
             val myBets = actionRepository.find(id).mapNotNull { it.betId }.toSet()
-            val collectedBets = notifier.notify(marketSnapshot, myBets, account)
+            val collectedBets = notifier.notify(snapshot, myBets, account)
             return toResponse(collectedBets)
         } catch (e: RuntimeException) {
             metricRegistry.counter("_SNAPSHOT_ERROR_").inc()

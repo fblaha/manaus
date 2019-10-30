@@ -35,7 +35,7 @@ class ReactorTestFactory(
 
     fun newBetEvent(side: Side, marketPrices: List<RunnerPrices>, oldBet: Bet?): BetEvent {
         val fairness = Fairness(0.9, 1.1)
-        val snapshot = MarketSnapshot.from(
+        val snapshot = MarketSnapshot(
                 runnerPrices = marketPrices,
                 market = market,
                 currentBets = oldBet?.let { listOf(it) }.orEmpty()
@@ -56,7 +56,7 @@ class ReactorTestFactory(
             val counterBet = Bet("1", marketId, selectionId, requestedPrice, date, provider.minAmount)
             listOf(counterBet)
         } else emptyList()
-        val snapshot = MarketSnapshot.from(marketPrices, market, bets)
+        val snapshot = MarketSnapshot(marketPrices, market, bets)
         val fairness = calculator.getFairness(marketPrices)
         return newEvent(side, selectionId, fairness, snapshot)
     }

@@ -24,7 +24,7 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDatabase
                       placeCount: Int,
                       updateCount: Int): BetCollector {
         val collector = BetCollector()
-        val snapshot = MarketSnapshot.from(marketPrices, market, bets, createTradedVolume(marketPrices))
+        val snapshot = MarketSnapshot(marketPrices, market, bets, createTradedVolume(marketPrices))
         bettor.onMarketSnapshot(MarketSnapshotEvent(snapshot, account, collector))
         assertEquals(placeCount, collector.placeCommands.size)
         assertEquals(updateCount, collector.updateCommands.size)
