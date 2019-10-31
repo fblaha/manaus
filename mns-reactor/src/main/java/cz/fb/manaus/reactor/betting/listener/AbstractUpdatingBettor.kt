@@ -15,8 +15,11 @@ import java.time.Instant
 import java.util.logging.Logger
 
 abstract class AbstractUpdatingBettor(private val side: Side,
-                                      private val validators: List<Validator>,
+                                      validators: List<Validator>,
                                       private val priceAdviser: PriceAdviser) : MarketSnapshotListener {
+
+    private val validators = validators.partition { it.isPriceRequired }
+
     @Autowired
     private lateinit var validationService: ValidationService
     @Autowired
@@ -42,9 +45,7 @@ abstract class AbstractUpdatingBettor(private val side: Side,
             val sortedPrices = marketPrices.sortedWith(ordering)
             check(sortedPrices.map { it.selectionId }.distinct().count() ==
                     sortedPrices.map { it.selectionId }.count())
-
-            val (priceValidators, prePriceValidators) = validators.partition { it.isPriceRequired }
-
+            val (priceValidators, prePriceValidators) = validators
             for ((i, runnerPrices) in sortedPrices.withIndex()) {
                 val selectionId = runnerPrices.selectionId
                 val runner = market.getRunner(selectionId)
@@ -55,9 +56,7 @@ abstract class AbstractUpdatingBettor(private val side: Side,
                     val event = buildEvent(selectionId, snapshot, fairness, account, coverage)
                     val oldBet = coverage[sideSelection]
                     val prePriceValidation = validationService.validate(event, prePriceValidators)
-                    if (prePriceValidation === ValidationResult.REJECT) {
-                        cancelBet(oldBet, collector)
-                    }
+                    cancelOnReject(prePriceValidation, oldBet, collector)
                     if (prePriceValidation === ValidationResult.ACCEPT) {
                         val newPrice = priceAdviser.getNewPrice(event)
                         if (newPrice == null) {
@@ -69,12 +68,19 @@ abstract class AbstractUpdatingBettor(private val side: Side,
 
                         if (oldBet != null && oldBet.isMatched) continue
                         val priceValidation = validationService.validate(event, priceValidators)
+                        cancelOnReject(priceValidation, oldBet, collector)
                         if (priceValidation === ValidationResult.ACCEPT) {
                             bet(event, collector)
                         }
                     }
                 }
             }
+        }
+    }
+
+    private fun cancelOnReject(prePriceValidation: ValidationResult, oldBet: Bet?, collector: BetCollector) {
+        if (prePriceValidation === ValidationResult.REJECT) {
+            cancelBet(oldBet, collector)
         }
     }
 
