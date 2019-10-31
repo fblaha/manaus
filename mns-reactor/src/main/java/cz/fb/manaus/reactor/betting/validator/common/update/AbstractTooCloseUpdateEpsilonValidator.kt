@@ -5,7 +5,7 @@ import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
 
-abstract class AbstractTooCloseUpdateEpsilonValidator(private val epsilon: Double) : Validator<BetEvent> {
+abstract class AbstractTooCloseUpdateEpsilonValidator(private val epsilon: Double) : Validator {
 
     override fun validate(event: BetEvent): ValidationResult {
         val oldOne = event.oldBet!!.requestedPrice.price

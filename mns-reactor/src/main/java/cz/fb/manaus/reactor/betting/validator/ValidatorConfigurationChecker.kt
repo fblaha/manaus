@@ -1,12 +1,11 @@
 package cz.fb.manaus.reactor.betting.validator
 
-import cz.fb.manaus.reactor.betting.BetEvent
 import org.springframework.stereotype.Component
 import java.util.logging.Logger
 import javax.annotation.PostConstruct
 
 @Component
-class ValidatorConfigurationChecker(private val validators: List<Validator<BetEvent>> = emptyList()) {
+class ValidatorConfigurationChecker(private val validators: List<Validator> = emptyList()) {
 
     private val log = Logger.getLogger(ValidatorConfigurationChecker::class.simpleName)
 
@@ -15,7 +14,7 @@ class ValidatorConfigurationChecker(private val validators: List<Validator<BetEv
         validators.forEach { this.checkConfiguration(it) }
     }
 
-    private fun checkConfiguration(validator: Validator<BetEvent>) {
+    private fun checkConfiguration(validator: Validator) {
         log.info { "checking validator '${validator.name}'" }
         if (validator.isDowngradeAccepting) {
             check(validator.isPriceRequired) { "downgrade accepting while price not required" }

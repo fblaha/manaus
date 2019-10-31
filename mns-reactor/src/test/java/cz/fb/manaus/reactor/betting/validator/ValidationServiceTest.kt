@@ -55,7 +55,7 @@ class ValidationServiceTest : AbstractLocalTestCase() {
     }
 
 
-    private data class TestValidator(private val result: ValidationResult) : Validator<BetEvent> {
+    private data class TestValidator(private val result: ValidationResult) : Validator {
 
         override fun validate(event: BetEvent): ValidationResult {
             return result

@@ -12,7 +12,7 @@ import java.time.temporal.ChronoUnit
 @BackLoserBet
 @LayLoserBet
 @Component
-object CloseStartValidator : Validator<BetEvent> {
+object CloseStartValidator : Validator {
 
     override fun validate(event: BetEvent): ValidationResult {
         val openDate = event.market.event.openDate

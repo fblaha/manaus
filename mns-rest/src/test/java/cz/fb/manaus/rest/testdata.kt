@@ -19,7 +19,7 @@ object BestPriceProposer : AbstractBestPriceProposer(1)
 class BackAdviser(proposers: List<PriceProposer>) : ProposerAdviser(proposers)
 
 @Component
-object AcceptAllValidator : Validator<BetEvent> {
+object AcceptAllValidator : Validator {
     override fun validate(event: BetEvent): ValidationResult {
         return ValidationResult.ACCEPT
     }

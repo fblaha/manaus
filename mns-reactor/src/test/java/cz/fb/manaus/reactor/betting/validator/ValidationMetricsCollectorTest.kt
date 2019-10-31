@@ -16,7 +16,7 @@ class ValidationMetricsCollectorTest : AbstractLocalTestCase() {
 
     @Test
     fun `validation metrics`() {
-        val validator = object : Validator<BetEvent> {
+        val validator: Validator = object : Validator {
             override fun validate(event: BetEvent): ValidationResult {
                 return ValidationResult.ACCEPT
             }

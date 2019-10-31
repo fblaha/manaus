@@ -7,7 +7,7 @@ import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.beans.factory.annotation.Autowired
 
-abstract class AbstractTooCloseUpdateValidator(private val closeSteps: Set<Int>) : Validator<BetEvent> {
+abstract class AbstractTooCloseUpdateValidator(private val closeSteps: Set<Int>) : Validator {
     @Autowired
     private lateinit var roundingService: RoundingService
 
