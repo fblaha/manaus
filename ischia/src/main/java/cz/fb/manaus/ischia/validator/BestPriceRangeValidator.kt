@@ -18,9 +18,7 @@ object BestPriceRangeValidator : Validator {
         val bestLay = event.runnerPrices.getHomogeneous(Side.LAY).bestPrice
         val bestBack = event.runnerPrices.getHomogeneous(Side.BACK).bestPrice
         return if (bestBack != null && bestLay != null) {
-            val backPrice = bestBack.price
-            val layPrice = bestLay.price
-            ValidationResult.of(listOf(backPrice, layPrice).all { it in 1.3..6.0 })
+            ValidationResult.of(listOf(bestBack.price, bestLay.price).all { it in 1.3..6.0 })
         } else {
             REJECT
         }
