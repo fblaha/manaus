@@ -14,7 +14,7 @@ abstract class AbstractLastMatchedValidator(private val passEqual: Boolean) : Va
     override val tags get() = setOf(LastMatchedPrice)
 
     override fun validate(event: BetEvent): ValidationResult {
-        val lastMatchedPrice = event.runnerPrices.lastMatchedPrice ?: return ValidationResult.REJECT
+        val lastMatchedPrice = event.runnerPrices.lastMatchedPrice ?: return REJECT
         if (event.newPrice!!.price priceEq lastMatchedPrice) {
             return if (passEqual) ACCEPT else REJECT
         }
