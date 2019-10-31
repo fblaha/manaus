@@ -16,8 +16,5 @@ class ValidatorConfigurationChecker(private val validators: List<Validator> = em
 
     private fun checkConfiguration(validator: Validator) {
         log.info { "checking validator '${validator.name}'" }
-        if (validator.isDowngradeAccepting) {
-            check(validator.isPriceRequired) { "downgrade accepting while price not required" }
-        }
     }
 }

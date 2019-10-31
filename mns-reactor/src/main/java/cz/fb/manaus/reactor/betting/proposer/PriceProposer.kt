@@ -12,14 +12,8 @@ interface PriceProposer : Validator, NameAware {
 
     fun getProposedPrice(event: BetEvent): Double?
 
-
     override val isDowngradeAccepting: Boolean
         get() = false
-
-
-    override val isPriceRequired: Boolean
-        get() = false
-
 
     override fun validate(event: BetEvent): ValidationResult {
         return ValidationResult.OK

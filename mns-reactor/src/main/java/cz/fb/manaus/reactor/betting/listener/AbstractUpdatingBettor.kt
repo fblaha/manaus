@@ -4,6 +4,7 @@ import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.betting.*
 import cz.fb.manaus.reactor.betting.listener.ProbabilityComparator.Companion.COMPARATORS
+import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.ValidationService
 import cz.fb.manaus.reactor.betting.validator.Validator
@@ -14,11 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import java.util.logging.Logger
 
-abstract class AbstractUpdatingBettor(private val side: Side,
-                                      validators: List<Validator>,
-                                      private val priceAdviser: PriceAdviser) : MarketSnapshotListener {
+abstract class AbstractUpdatingBettor(
+        private val side: Side,
+        validators: List<Validator>,
+        private val priceAdviser: PriceAdviser
+) : MarketSnapshotListener {
 
-    private val validators = validators.partition { it.isPriceRequired }
+    private val validators = validators.partition { it is PriceProposer }
 
     @Autowired
     private lateinit var validationService: ValidationService
@@ -45,7 +48,7 @@ abstract class AbstractUpdatingBettor(private val side: Side,
             val sortedPrices = marketPrices.sortedWith(ordering)
             check(sortedPrices.map { it.selectionId }.distinct().count() ==
                     sortedPrices.map { it.selectionId }.count())
-            val (priceValidators, prePriceValidators) = validators
+            val (prePriceValidators, priceValidators) = validators
             for ((i, runnerPrices) in sortedPrices.withIndex()) {
                 val selectionId = runnerPrices.selectionId
                 val runner = market.getRunner(selectionId)

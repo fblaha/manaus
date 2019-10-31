@@ -12,9 +12,6 @@ interface Validator : NameAware, ProviderSelector {
     val isUpdateOnly: Boolean
         get() = false
 
-    val isPriceRequired: Boolean
-        get() = true
-
     fun validate(event: BetEvent): ValidationResult
 
 }

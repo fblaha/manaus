@@ -54,9 +54,6 @@ class ValidationService(private val priceService: PriceService,
             if (validator.isUpdateOnly && event.oldBet == null) {
                 return false
             }
-            if (validator.isPriceRequired && event.newPrice == null) {
-                return false
-            }
             val provider = event.account.provider
             return provider.matches(validator)
         }
