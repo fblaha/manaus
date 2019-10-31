@@ -13,7 +13,7 @@ abstract class AbstractFairnessProposer(private val side: Side, private vararg v
     private lateinit var priceService: PriceService
 
     override fun validate(event: BetEvent): ValidationResult {
-        return ValidationResult.of(event.metrics.fairness[side] != null)
+        return if (event.metrics.fairness[side] != null) ValidationResult.ACCEPT else ValidationResult.REJECT
     }
 
     override fun getProposedPrice(event: BetEvent): Double {

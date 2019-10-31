@@ -9,7 +9,7 @@ open class AbstractAccountMoneyValidator(private val minimalAvailable: Double) :
     override fun validate(event: BetEvent): ValidationResult {
         val money = event.account.money
         return if (money != null)
-            ValidationResult.of(money.available > minimalAvailable)
+            if (money.available > minimalAvailable) ValidationResult.ACCEPT else ValidationResult.NOP
         else
             ValidationResult.ACCEPT
     }
