@@ -17,9 +17,15 @@ class ValidationServiceTest : AbstractLocalTestCase() {
     private lateinit var service: ValidationService
 
     @Test
-    fun `reduce ACCEPT - REJECT combinations`() {
-        assertEquals(ValidationResult.REJECT, service.reduce(listOf(ValidationResult.ACCEPT, ValidationResult.REJECT, ValidationResult.ACCEPT)))
+    fun `reduce ACCEPT - NOP - REJECT combinations`() {
+        assertEquals(ValidationResult.REJECT, service.reduce(listOf(
+                ValidationResult.ACCEPT,
+                ValidationResult.NOP,
+                ValidationResult.REJECT,
+                ValidationResult.ACCEPT
+        )))
         assertEquals(ValidationResult.ACCEPT, service.reduce(listOf(ValidationResult.ACCEPT, ValidationResult.ACCEPT)))
+        assertEquals(ValidationResult.NOP, service.reduce(listOf(ValidationResult.NOP, ValidationResult.ACCEPT)))
     }
 
     @Test

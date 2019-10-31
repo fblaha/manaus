@@ -29,11 +29,11 @@ class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
         val prices = factory.newMarketPrices(0.1, listOf(0.4, 0.3, 0.3))
         val context = factory.newBetEvent(Side.BACK, prices, oldBet)
         context.newPrice = oldPrice
-        assertEquals(ValidationResult.REJECT, validator.validate(context))
+        assertEquals(ValidationResult.NOP, validator.validate(context))
 
 
         context.newPrice = roundingService.decrement(oldPrice, 1, provider.minPrice, provider::matches)
-        assertEquals(ValidationResult.REJECT, validator.validate(context))
+        assertEquals(ValidationResult.NOP, validator.validate(context))
 
         context.newPrice = roundingService.decrement(oldPrice, 3, provider.minPrice, provider::matches)
         assertEquals(ValidationResult.ACCEPT, validator.validate(context))
@@ -47,14 +47,14 @@ class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
 
         val context = factory.newBetEvent(Side.LAY, runnerPrices, oldBet)
         context.newPrice = newOne.copy(price = 3.65)
-        assertEquals(ValidationResult.REJECT, validator.validate(context))
+        assertEquals(ValidationResult.NOP, validator.validate(context))
         context.newPrice = newOne.copy(price = 3.7)
         assertEquals(ValidationResult.ACCEPT, validator.validate(context))
         context.newPrice = newOne.copy(price = 3.75)
         assertEquals(ValidationResult.ACCEPT, validator.validate(context))
 
         context.newPrice = newOne.copy(price = 3.55)
-        assertEquals(ValidationResult.REJECT, validator.validate(context))
+        assertEquals(ValidationResult.NOP, validator.validate(context))
         context.newPrice = newOne.copy(price = 3.5)
         assertEquals(ValidationResult.ACCEPT, validator.validate(context))
     }

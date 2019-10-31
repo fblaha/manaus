@@ -28,13 +28,13 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
 
         val context = factory.newBetEvent(Side.BACK, runnerPrices, oldBet)
         context.newPrice = oldPrice
-        assertEquals(ValidationResult.REJECT, validator.validate(context))
+        assertEquals(ValidationResult.NOP, validator.validate(context))
 
         context.newPrice = roundingService.decrement(oldPrice, 1, provider.minPrice, provider::matches)
-        assertEquals(ValidationResult.REJECT, validator.validate(context))
+        assertEquals(ValidationResult.NOP, validator.validate(context))
 
         context.newPrice = roundingService.decrement(oldPrice, 2, provider.minPrice, provider::matches)
-        assertEquals(ValidationResult.REJECT, validator.validate(context))
+        assertEquals(ValidationResult.NOP, validator.validate(context))
 
         context.newPrice = roundingService.decrement(oldPrice, 3, provider.minPrice, provider::matches)
         assertEquals(ValidationResult.ACCEPT, validator.validate(context))
@@ -49,11 +49,11 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
 
         val context = factory.newBetEvent(Side.LAY, runnerPrices, oldBet)
         context.newPrice = newOne
-        assertEquals(ValidationResult.REJECT, validator.validate(context))
+        assertEquals(ValidationResult.NOP, validator.validate(context))
         context.newPrice = newOne.copy(price = 3.2)
-        assertEquals(ValidationResult.REJECT, validator.validate(context))
+        assertEquals(ValidationResult.NOP, validator.validate(context))
         context.newPrice = newOne.copy(price = 3.05)
-        assertEquals(ValidationResult.REJECT, validator.validate(context))
+        assertEquals(ValidationResult.NOP, validator.validate(context))
         context.newPrice = newOne.copy(price = 3.25)
         assertEquals(ValidationResult.ACCEPT, validator.validate(context))
     }

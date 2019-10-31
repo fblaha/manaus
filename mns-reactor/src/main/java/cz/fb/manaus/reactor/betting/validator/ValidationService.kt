@@ -25,7 +25,7 @@ class ValidationService(private val priceService: PriceService,
     internal fun reduce(results: List<ValidationResult>): ValidationResult {
         check(results.isNotEmpty())
         return results.find { it === ValidationResult.REJECT }
-                ?: results.find { it === ValidationResult.SKIP }
+                ?: results.find { it === ValidationResult.NOP }
                 ?: ValidationResult.ACCEPT
     }
 

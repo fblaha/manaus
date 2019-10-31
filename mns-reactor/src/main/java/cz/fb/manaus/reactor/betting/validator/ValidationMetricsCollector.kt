@@ -8,14 +8,12 @@ import org.springframework.stereotype.Component
 class ValidationMetricsCollector(private val metricRegistry: MetricRegistry) {
 
     fun updateMetrics(result: ValidationResult, type: Side, validatorName: String) {
-        val name = getName(type, result.isSuccess, validatorName)
+        val name = getName(type, result, validatorName)
         metricRegistry.counter(name).inc()
     }
 
-    private fun getName(type: Side, pass: Boolean, validatorName: String): String {
-        val result = if (pass) "pass" else "fail"
-        val strSide = type.name.toLowerCase()
-        return "$PREFIX.$strSide.$validatorName.$result"
+    private fun getName(type: Side, result: ValidationResult, validatorName: String): String {
+        return "$PREFIX.${type.name.toLowerCase()}.$validatorName.${result.name.toLowerCase()}"
     }
 
     companion object {

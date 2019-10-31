@@ -19,7 +19,7 @@ abstract class AbstractDelayUpdateValidator(private val pausePeriod: Duration) :
         val betId = event.oldBet!!.betId!!
         val actionDate = betActionRepository.findRecentBetAction(betId)!!.time
         val untilNow = actionDate.until(Instant.now(), ChronoUnit.MILLIS)
-        return if (untilNow > pausePeriod.toMillis()) ValidationResult.ACCEPT else ValidationResult.SKIP
+        return if (untilNow > pausePeriod.toMillis()) ValidationResult.ACCEPT else ValidationResult.NOP
     }
 
 }

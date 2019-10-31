@@ -41,7 +41,7 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `close place`() {
-        checkValidation(BetActionType.PLACE, 29, Side.LAY, ValidationResult.REJECT)
+        checkValidation(BetActionType.PLACE, 29, Side.LAY, ValidationResult.NOP)
     }
 
     @Test
@@ -52,7 +52,7 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `early update`() {
-        checkValidation(BetActionType.UPDATE, 29, Side.LAY, ValidationResult.REJECT)
+        checkValidation(BetActionType.UPDATE, 29, Side.LAY, ValidationResult.NOP)
     }
 
     @Test
@@ -62,7 +62,7 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `close update back`() {
-        checkValidation(BetActionType.UPDATE, 15, Side.BACK, ValidationResult.REJECT)
+        checkValidation(BetActionType.UPDATE, 15, Side.BACK, ValidationResult.NOP)
     }
 
     @Test

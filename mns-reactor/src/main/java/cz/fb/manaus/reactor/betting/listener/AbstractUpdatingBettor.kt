@@ -4,6 +4,7 @@ import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.betting.*
 import cz.fb.manaus.reactor.betting.listener.ProbabilityComparator.Companion.COMPARATORS
+import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.ValidationService
 import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.reactor.charge.ChargeGrowthForecaster
@@ -54,23 +55,23 @@ abstract class AbstractUpdatingBettor(private val side: Side,
                     val event = buildEvent(selectionId, snapshot, fairness, account, coverage)
                     val oldBet = coverage[sideSelection]
                     val prePriceValidation = validationService.validate(event, prePriceValidators)
-                    if (!prePriceValidation.isSuccess) {
+                    if (prePriceValidation === ValidationResult.REJECT) {
                         cancelBet(oldBet, collector)
-                        continue
                     }
+                    if (prePriceValidation === ValidationResult.ACCEPT) {
+                        val newPrice = priceAdviser.getNewPrice(event)
+                        if (newPrice == null) {
+                            cancelBet(oldBet, collector)
+                            continue
+                        }
+                        event.newPrice = newPrice.price
+                        event.proposers = newPrice.proposers
 
-                    val newPrice = priceAdviser.getNewPrice(event)
-                    if (newPrice == null) {
-                        cancelBet(oldBet, collector)
-                        continue
-                    }
-                    event.newPrice = newPrice.price
-                    event.proposers = newPrice.proposers
-
-                    if (oldBet != null && oldBet.isMatched) continue
-                    val priceValidation = validationService.validate(event, priceValidators)
-                    if (priceValidation.isSuccess) {
-                        bet(event, collector)
+                        if (oldBet != null && oldBet.isMatched) continue
+                        val priceValidation = validationService.validate(event, priceValidators)
+                        if (priceValidation === ValidationResult.ACCEPT) {
+                            bet(event, collector)
+                        }
                     }
                 }
             }

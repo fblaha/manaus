@@ -11,7 +11,7 @@ abstract class AbstractTooCloseUpdateEpsilonValidator(private val epsilon: Doubl
         val oldOne = event.oldBet!!.requestedPrice.price
         val newOne = event.newPrice!!.price
         val epsilon = (oldOne - 1) * this.epsilon
-        return ValidationResult.of(newOne !in oldOne - epsilon..oldOne + epsilon)
+        return if (newOne in oldOne - epsilon..oldOne + epsilon) ValidationResult.NOP else ValidationResult.ACCEPT
     }
 
     override val isUpdateOnly: Boolean = true
