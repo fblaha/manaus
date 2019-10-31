@@ -1,14 +1,9 @@
 package cz.fb.manaus.reactor.betting.validator
 
-enum class ValidationResult {
-    ACCEPT {
-        override val isSuccess: Boolean = true
-    },
-    REJECT {
-        override val isSuccess: Boolean = false
-    };
-
-    abstract val isSuccess: Boolean
+enum class ValidationResult(val isSuccess: Boolean) {
+    ACCEPT(true),
+    REJECT(false),
+    SKIP(false);
 
     companion object {
         fun of(condition: Boolean): ValidationResult {

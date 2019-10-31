@@ -24,7 +24,9 @@ class ValidationService(private val priceService: PriceService,
 
     internal fun reduce(results: List<ValidationResult>): ValidationResult {
         check(results.isNotEmpty())
-        return ValidationResult.of(results.all { it.isSuccess })
+        return results.find { it === ValidationResult.REJECT }
+                ?: results.find { it === ValidationResult.SKIP }
+                ?: ValidationResult.ACCEPT
     }
 
     fun validate(event: BetEvent, validators: List<Validator>): ValidationResult {
