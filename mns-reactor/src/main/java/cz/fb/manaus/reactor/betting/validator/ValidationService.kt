@@ -29,7 +29,7 @@ class ValidationService(private val priceService: PriceService,
                 ?: ValidationResult.ACCEPT
     }
 
-    fun validate(event: BetEvent, validators: List<Validator>): ValidationResult {
+    fun validate(event: BetEvent, validators: List<Validator<BetEvent>>): ValidationResult {
         val filteredValidators = validators.filter(createPredicate(event))
         check(filteredValidators.isNotEmpty())
 
@@ -44,13 +44,13 @@ class ValidationService(private val priceService: PriceService,
         return reduce(collected)
     }
 
-    private fun validate(event: BetEvent, validator: Validator): ValidationResult {
+    private fun validate(event: BetEvent, validator: Validator<BetEvent>): ValidationResult {
         val downgradeResult = handleDowngrade(event.newPrice, event.oldBet, validator.isDowngradeAccepting)
         return downgradeResult ?: validator.validate(event)
     }
 
-    private fun createPredicate(event: BetEvent): (Validator) -> Boolean {
-        return fun(validator: Validator): Boolean {
+    private fun createPredicate(event: BetEvent): (Validator<BetEvent>) -> Boolean {
+        return fun(validator: Validator<BetEvent>): Boolean {
             if (validator.isUpdateOnly && event.oldBet == null) {
                 return false
             }

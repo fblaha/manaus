@@ -9,7 +9,7 @@ import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-abstract class AbstractDelayUpdateValidator(private val pausePeriod: Duration) : Validator {
+abstract class AbstractDelayUpdateValidator(private val pausePeriod: Duration) : Validator<BetEvent> {
     @Autowired
     private lateinit var betActionRepository: BetActionRepository
 

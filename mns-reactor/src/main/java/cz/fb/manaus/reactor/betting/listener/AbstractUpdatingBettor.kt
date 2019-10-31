@@ -15,7 +15,7 @@ import java.time.Instant
 import java.util.logging.Logger
 
 abstract class AbstractUpdatingBettor(private val side: Side,
-                                      private val validators: List<Validator>,
+                                      private val validators: List<Validator<BetEvent>>,
                                       private val priceAdviser: PriceAdviser) : MarketSnapshotListener {
     @Autowired
     private lateinit var validationService: ValidationService

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 
 @ManilaBet
 @Component
-object BestPriceRangeValidator : Validator {
+object BestPriceRangeValidator : Validator<BetEvent> {
 
     override fun validate(event: BetEvent): ValidationResult {
         return when (val bestBack = event.runnerPrices.getHomogeneous(Side.BACK).bestPrice) {

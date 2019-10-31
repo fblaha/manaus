@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 @BackLoserBet
 @LayLoserBet
 @Component
-object TradedVolumeValidator : Validator {
+object TradedVolumeValidator : Validator<BetEvent> {
 
     override val tags get() = setOf(TradedVolume)
 

@@ -9,7 +9,7 @@ import cz.fb.manaus.reactor.betting.validator.ValidationResult.ACCEPT
 import cz.fb.manaus.reactor.betting.validator.ValidationResult.REJECT
 import cz.fb.manaus.reactor.betting.validator.Validator
 
-abstract class AbstractLastMatchedValidator(private val passEqual: Boolean) : Validator {
+abstract class AbstractLastMatchedValidator(private val passEqual: Boolean) : Validator<BetEvent> {
 
     override val tags get() = setOf(LastMatchedPrice)
 
