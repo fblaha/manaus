@@ -22,6 +22,6 @@ interface PriceProposer : Validator, NameAware {
 
 
     override fun validate(event: BetEvent): ValidationResult {
-        return ValidationResult.ACCEPT
+        return ValidationResult.OK
     }
 }

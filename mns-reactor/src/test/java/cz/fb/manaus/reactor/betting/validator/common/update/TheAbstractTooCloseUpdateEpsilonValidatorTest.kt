@@ -36,7 +36,7 @@ class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
         assertEquals(ValidationResult.NOP, validator.validate(context))
 
         context.newPrice = roundingService.decrement(oldPrice, 3, provider.minPrice, provider::matches)
-        assertEquals(ValidationResult.ACCEPT, validator.validate(context))
+        assertEquals(ValidationResult.OK, validator.validate(context))
     }
 
     @Test
@@ -49,14 +49,14 @@ class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
         context.newPrice = newOne.copy(price = 3.65)
         assertEquals(ValidationResult.NOP, validator.validate(context))
         context.newPrice = newOne.copy(price = 3.7)
-        assertEquals(ValidationResult.ACCEPT, validator.validate(context))
+        assertEquals(ValidationResult.OK, validator.validate(context))
         context.newPrice = newOne.copy(price = 3.75)
-        assertEquals(ValidationResult.ACCEPT, validator.validate(context))
+        assertEquals(ValidationResult.OK, validator.validate(context))
 
         context.newPrice = newOne.copy(price = 3.55)
         assertEquals(ValidationResult.NOP, validator.validate(context))
         context.newPrice = newOne.copy(price = 3.5)
-        assertEquals(ValidationResult.ACCEPT, validator.validate(context))
+        assertEquals(ValidationResult.OK, validator.validate(context))
     }
 
     @Component

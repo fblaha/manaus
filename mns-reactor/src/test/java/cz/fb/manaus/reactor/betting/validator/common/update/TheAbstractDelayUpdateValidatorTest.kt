@@ -36,7 +36,7 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
     fun `no bet action`() {
         marketRepository.saveOrUpdate(market)
         val result = validator.validate(reactorTestFactory.newUpdateBetContext(runnerPrices, Side.LAY))
-        assertEquals(ValidationResult.REJECT, result)
+        assertEquals(ValidationResult.DROP, result)
     }
 
     @Test
@@ -46,7 +46,7 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `far place`() {
-        checkValidation(BetActionType.PLACE, 31, Side.LAY, ValidationResult.ACCEPT)
+        checkValidation(BetActionType.PLACE, 31, Side.LAY, ValidationResult.OK)
     }
 
 
@@ -57,7 +57,7 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `far place back`() {
-        checkValidation(BetActionType.PLACE, 31, Side.BACK, ValidationResult.ACCEPT)
+        checkValidation(BetActionType.PLACE, 31, Side.BACK, ValidationResult.OK)
     }
 
     @Test
@@ -67,7 +67,7 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `far update`() {
-        checkValidation(BetActionType.UPDATE, 150, Side.BACK, ValidationResult.ACCEPT)
+        checkValidation(BetActionType.UPDATE, 150, Side.BACK, ValidationResult.OK)
     }
 
     @Component

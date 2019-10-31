@@ -20,7 +20,7 @@ class TradedVolumeProposer(private val priceService: PriceService) : PricePropos
     override fun validate(event: BetEvent): ValidationResult {
         val tradedVolume = event.metrics.actualTradedVolume!!
         return if (tradedVolume.volume.isEmpty() || tradedVolume.weightedMean!! > 100) {
-            ValidationResult.REJECT
+            ValidationResult.DROP
         } else {
             super.validate(event)
         }

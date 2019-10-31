@@ -25,7 +25,7 @@ abstract class AbstractTooCloseUpdateValidator(private val closeSteps: Set<Int>)
                         else -> roundingService.decrement(oldOne, -it, minPrice, tagPredicate)
                     }
                 }.any { newOne priceEq it }
-        return if (containsEqualPrice) ValidationResult.NOP else ValidationResult.ACCEPT
+        return if (containsEqualPrice) ValidationResult.NOP else ValidationResult.OK
     }
 
 }

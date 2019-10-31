@@ -21,7 +21,7 @@ class BackAdviser(proposers: List<PriceProposer>) : ProposerAdviser(proposers)
 @Component
 object AcceptAllValidator : Validator {
     override fun validate(event: BetEvent): ValidationResult {
-        return ValidationResult.ACCEPT
+        return ValidationResult.OK
     }
 }
 

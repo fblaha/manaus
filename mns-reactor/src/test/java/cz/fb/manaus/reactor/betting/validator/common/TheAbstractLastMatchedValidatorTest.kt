@@ -20,12 +20,12 @@ class TheAbstractLastMatchedValidatorTest : AbstractLocalTestCase() {
 
     @Test
     fun `accept lay`() {
-        checkValidator(Side.LAY, ValidationResult.ACCEPT, ValidationResult.REJECT)
+        checkValidator(Side.LAY, ValidationResult.OK, ValidationResult.DROP)
     }
 
     @Test
     fun `accept back`() {
-        checkValidator(Side.BACK, ValidationResult.REJECT, ValidationResult.ACCEPT)
+        checkValidator(Side.BACK, ValidationResult.DROP, ValidationResult.OK)
     }
 
     private fun checkValidator(side: Side, lowerResult: ValidationResult, higherResult: ValidationResult) {

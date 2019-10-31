@@ -17,6 +17,6 @@ object CloseStartValidator : Validator {
     override fun validate(event: BetEvent): ValidationResult {
         val openDate = event.market.event.openDate
         val seconds = Instant.now().until(openDate, ChronoUnit.SECONDS)
-        return if (seconds > 30) ValidationResult.ACCEPT else ValidationResult.REJECT
+        return if (seconds > 30) ValidationResult.OK else ValidationResult.NOP
     }
 }

@@ -18,11 +18,11 @@ class ValidationMetricsCollectorTest : AbstractLocalTestCase() {
     fun `validation metrics`() {
         val validator: Validator = object : Validator {
             override fun validate(event: BetEvent): ValidationResult {
-                return ValidationResult.ACCEPT
+                return ValidationResult.OK
             }
         }
-        metricsCollector.updateMetrics(ValidationResult.ACCEPT, Side.BACK, validator.name)
-        metricsCollector.updateMetrics(ValidationResult.REJECT, Side.BACK, validator.name)
+        metricsCollector.updateMetrics(ValidationResult.OK, Side.BACK, validator.name)
+        metricsCollector.updateMetrics(ValidationResult.DROP, Side.BACK, validator.name)
         val keys = metricRegistry.counters.keys
                 .filter { it.startsWith(ValidationMetricsCollector.PREFIX) }
                 .filter { validator.name in it }

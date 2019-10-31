@@ -16,11 +16,7 @@ abstract class AbstractBestPriceProposer(private val step: Int) : PriceProposer 
         val runnerPrices = event.runnerPrices
         val homogeneous = runnerPrices.getHomogeneous(event.side.opposite)
         val bestPrice = homogeneous.bestPrice
-        return if (bestPrice != null) {
-            ValidationResult.ACCEPT
-        } else {
-            ValidationResult.REJECT
-        }
+        return if (bestPrice != null) ValidationResult.OK else ValidationResult.DROP
     }
 
     override fun getProposedPrice(event: BetEvent): Double? {

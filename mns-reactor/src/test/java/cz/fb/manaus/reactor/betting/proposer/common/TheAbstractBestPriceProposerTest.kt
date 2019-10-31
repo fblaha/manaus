@@ -24,22 +24,22 @@ class TheAbstractBestPriceProposerTest : AbstractLocalTestCase() {
     fun `lay propose`() {
         val context = HOME_EVENT.copy(side = Side.LAY,
                 marketPrices = factory.newMarketPrices(2.0, 4.5))
-        assertEquals(ValidationResult.ACCEPT, layProposer.validate(context))
+        assertEquals(ValidationResult.OK, layProposer.validate(context))
         assertEquals(2.02, layProposer.getProposedPrice(context))
     }
 
     @Test
     fun check() {
         val context = HOME_EVENT.copy(side = Side.LAY)
-        assertEquals(ValidationResult.ACCEPT, layProposer.validate(context))
-        assertEquals(ValidationResult.ACCEPT, backProposer.validate(context.copy(side = Side.BACK)))
+        assertEquals(ValidationResult.OK, layProposer.validate(context))
+        assertEquals(ValidationResult.OK, backProposer.validate(context.copy(side = Side.BACK)))
     }
 
     @Test
     fun `back propose`() {
         val prices = factory.newMarketPrices(2.5, 3.5)
         val context = HOME_EVENT.copy(marketPrices = prices)
-        assertEquals(ValidationResult.ACCEPT, backProposer.validate(context))
+        assertEquals(ValidationResult.OK, backProposer.validate(context))
         assertEquals(3.45, backProposer.getProposedPrice(context))
     }
 

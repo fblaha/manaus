@@ -19,7 +19,7 @@ class LastMatchedProposer(private val priceService: PriceService) : PricePropose
 
     override fun validate(event: BetEvent): ValidationResult {
         val lastMatchedPrice = event.runnerPrices.lastMatchedPrice
-        return if (lastMatchedPrice != null) ValidationResult.ACCEPT else ValidationResult.REJECT
+        return if (lastMatchedPrice != null) ValidationResult.OK else ValidationResult.DROP
     }
 
     override fun getProposedPrice(event: BetEvent): Double {

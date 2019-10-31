@@ -56,8 +56,8 @@ abstract class AbstractUpdatingBettor(private val side: Side,
                     val event = buildEvent(selectionId, snapshot, fairness, account, coverage)
                     val oldBet = coverage[sideSelection]
                     val prePriceValidation = validationService.validate(event, prePriceValidators)
-                    cancelOnReject(prePriceValidation, oldBet, collector)
-                    if (prePriceValidation === ValidationResult.ACCEPT) {
+                    cancelOnDrop(prePriceValidation, oldBet, collector)
+                    if (prePriceValidation === ValidationResult.OK) {
                         val newPrice = priceAdviser.getNewPrice(event)
                         if (newPrice == null) {
                             cancelBet(oldBet, collector)
@@ -68,8 +68,8 @@ abstract class AbstractUpdatingBettor(private val side: Side,
 
                         if (oldBet != null && oldBet.isMatched) continue
                         val priceValidation = validationService.validate(event, priceValidators)
-                        cancelOnReject(priceValidation, oldBet, collector)
-                        if (priceValidation === ValidationResult.ACCEPT) {
+                        cancelOnDrop(priceValidation, oldBet, collector)
+                        if (priceValidation === ValidationResult.OK) {
                             bet(event, collector)
                         }
                     }
@@ -78,8 +78,8 @@ abstract class AbstractUpdatingBettor(private val side: Side,
         }
     }
 
-    private fun cancelOnReject(prePriceValidation: ValidationResult, oldBet: Bet?, collector: BetCollector) {
-        if (prePriceValidation === ValidationResult.REJECT) {
+    private fun cancelOnDrop(prePriceValidation: ValidationResult, oldBet: Bet?, collector: BetCollector) {
+        if (prePriceValidation === ValidationResult.DROP) {
             cancelBet(oldBet, collector)
         }
     }
@@ -89,7 +89,8 @@ abstract class AbstractUpdatingBettor(private val side: Side,
             snapshot: MarketSnapshot,
             fairness: Fairness,
             account: Account, coverage:
-            Map<SideSelection, Bet>): BetEvent {
+            Map<SideSelection, Bet>
+    ): BetEvent {
 
         val forecast = forecaster.getForecast(
                 selectionId = selectionId,

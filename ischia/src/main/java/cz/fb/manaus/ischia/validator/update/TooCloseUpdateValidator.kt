@@ -20,7 +20,7 @@ object TooCloseUpdateValidator : AbstractTooCloseUpdateValidator(setOf(-1, 1)) {
 
     override fun validate(event: BetEvent): ValidationResult {
         return if (event.isCounterHalfMatched) {
-            ValidationResult.ACCEPT
+            ValidationResult.OK
         } else {
             super.validate(event)
         }
