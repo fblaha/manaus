@@ -38,6 +38,8 @@ class MarketSnapshotNotifier(
                 sortedSnapshotListeners
                         .filter { it.javaClass.simpleName !in disabledListeners }
                         .forEach { it.onMarketSnapshot(MarketSnapshotEvent(snapshot, account, collector)) }
+
+                // TODO create event for each bet and and save action in event handler
                 saveActions(collector.placeCommands)
                 saveActions(collector.updateCommands)
             }
