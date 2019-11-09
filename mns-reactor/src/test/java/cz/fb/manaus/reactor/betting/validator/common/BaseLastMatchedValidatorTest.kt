@@ -6,12 +6,13 @@ import cz.fb.manaus.core.model.homePrices
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
+import cz.fb.manaus.reactor.betting.validator.Validator
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 
-class TheAbstractLastMatchedValidatorTest : AbstractLocalTestCase() {
+class BaseLastMatchedValidatorTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var validator: TestValidator
@@ -37,6 +38,6 @@ class TheAbstractLastMatchedValidatorTest : AbstractLocalTestCase() {
     }
 
     @Component
-    private class TestValidator : AbstractLastMatchedValidator(true)
+    private class TestValidator : Validator by BaseLastMatchedValidator(true)
 }
 
