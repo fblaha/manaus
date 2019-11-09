@@ -4,6 +4,7 @@ import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
+import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.reactor.rounding.RoundingService
 import cz.fb.manaus.reactor.rounding.decrement
 import org.junit.Test
@@ -11,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 
-class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
+class TooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var validator: TestValidator
@@ -60,6 +61,6 @@ class TheAbstractTooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
     }
 
     @Component
-    private class TestValidator : AbstractTooCloseUpdateEpsilonValidator(0.02)
+    private class TestValidator : Validator by TooCloseUpdateEpsilonValidator(0.02)
 
 }

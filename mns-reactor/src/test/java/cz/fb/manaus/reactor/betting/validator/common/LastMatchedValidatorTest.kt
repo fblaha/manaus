@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 
-class BaseLastMatchedValidatorTest : AbstractLocalTestCase() {
+class LastMatchedValidatorTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var validator: TestValidator
@@ -38,6 +38,6 @@ class BaseLastMatchedValidatorTest : AbstractLocalTestCase() {
     }
 
     @Component
-    private class TestValidator : Validator by BaseLastMatchedValidator(true)
+    private class TestValidator : Validator by LastMatchedValidator(true)
 }
 

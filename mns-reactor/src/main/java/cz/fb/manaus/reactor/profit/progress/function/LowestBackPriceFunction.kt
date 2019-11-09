@@ -5,4 +5,4 @@ import org.springframework.stereotype.Component
 import kotlin.math.min
 
 @Component
-object LowestBackPriceFunction : AbstractPriceReduceFunction(Side.BACK, { a, b -> min(a, b) })
+object LowestBackPriceFunction : ProgressFunction by PriceReduceFunction(Side.BACK, { a, b -> min(a, b) })

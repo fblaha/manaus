@@ -5,4 +5,4 @@ import org.springframework.stereotype.Component
 import kotlin.math.max
 
 @Component
-object HighestLayPriceFunction : AbstractPriceReduceFunction(Side.LAY, { a, b -> max(a, b) })
+object HighestLayPriceFunction : ProgressFunction by PriceReduceFunction(Side.LAY, { a, b -> max(a, b) })
