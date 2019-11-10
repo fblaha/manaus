@@ -44,9 +44,9 @@ class MarketSnapshotNotifier(
     }
 
     private fun validateOpenDate(market: Market) {
-        val currDate = Instant.now()
+        val now = Instant.now()
         val openDate = market.event.openDate
-        check(currDate.isBefore(openDate)) { "current $currDate open date $openDate" }
+        check(now.isBefore(openDate)) { "current $now open date $openDate" }
     }
 
     private fun callHandlers(commands: List<BetCommand>): List<BetCommand> {
