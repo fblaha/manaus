@@ -4,11 +4,11 @@ import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class NameAwareTest {
+class NamingTest {
 
     @Test
     fun `default name`() {
-        assertEquals("veryProfitableProposer", VeryProfitableProposer().name)
+        assertEquals("veryProfitableProposer", makeName(VeryProfitableProposer()))
     }
 
     private class VeryProfitableProposer : PriceProposer {

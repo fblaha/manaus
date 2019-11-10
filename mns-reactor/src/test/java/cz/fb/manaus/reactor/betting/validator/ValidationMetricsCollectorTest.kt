@@ -4,6 +4,7 @@ import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.betting.BetEvent
+import cz.fb.manaus.reactor.betting.makeName
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
@@ -21,11 +22,11 @@ class ValidationMetricsCollectorTest : AbstractLocalTestCase() {
                 return ValidationResult.OK
             }
         }
-        metricsCollector.updateMetrics(ValidationResult.OK, Side.BACK, validator.name)
-        metricsCollector.updateMetrics(ValidationResult.DROP, Side.BACK, validator.name)
+        metricsCollector.updateMetrics(ValidationResult.OK, Side.BACK, makeName(validator))
+        metricsCollector.updateMetrics(ValidationResult.DROP, Side.BACK, makeName(validator))
         val keys = metricRegistry.counters.keys
                 .filter { it.startsWith(ValidationMetricsCollector.PREFIX) }
-                .filter { validator.name in it }
+                .filter { makeName(validator) in it }
 
         assertEquals(2, keys.size)
         keys.forEach { assertEquals(1L, metricRegistry.counter(it).count) }

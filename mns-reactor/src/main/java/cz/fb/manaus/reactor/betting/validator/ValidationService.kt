@@ -3,6 +3,7 @@ package cz.fb.manaus.reactor.betting.validator
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.reactor.betting.BetEvent
+import cz.fb.manaus.reactor.betting.makeName
 import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.stereotype.Service
 
@@ -38,7 +39,7 @@ class ValidationService(private val priceService: PriceService,
         }
 
         val collected = filteredValidators
-                .map { it.name to validate(event, it) }
+                .map { makeName(it) to validate(event, it) }
                 .onEach { recorder.updateMetrics(it.second, event.side, it.first) }
                 .map { it.second }
         return reduce(collected)

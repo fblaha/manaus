@@ -1,13 +1,13 @@
 package cz.fb.manaus.reactor.profit.progress.function
 
 import cz.fb.manaus.core.model.RealizedBet
-import cz.fb.manaus.reactor.betting.NameAware
+import cz.fb.manaus.reactor.betting.makeName
 
-interface ProgressFunction : NameAware, (RealizedBet) -> Double? {
+interface ProgressFunction : (RealizedBet) -> Double? {
 
-    override val name: String
+    val name: String
         get() {
-            return super.name.removeSuffix("Function")
+            return makeName(this).removeSuffix("Function")
         }
 
     val includeNoValues: Boolean get() = true

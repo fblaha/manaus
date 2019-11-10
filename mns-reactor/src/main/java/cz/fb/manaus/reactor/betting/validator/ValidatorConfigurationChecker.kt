@@ -1,5 +1,6 @@
 package cz.fb.manaus.reactor.betting.validator
 
+import cz.fb.manaus.reactor.betting.makeName
 import org.springframework.stereotype.Component
 import java.util.logging.Logger
 import javax.annotation.PostConstruct
@@ -15,6 +16,6 @@ class ValidatorConfigurationChecker(private val validators: List<Validator> = em
     }
 
     private fun checkConfiguration(validator: Validator) {
-        log.info { "checking validator '${validator.name}'" }
+        log.info { "checking validator '${makeName(validator)}'" }
     }
 }
