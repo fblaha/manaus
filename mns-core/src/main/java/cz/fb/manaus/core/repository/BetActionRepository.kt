@@ -14,8 +14,7 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile(ManausProfiles.DB)
-class BetActionRepository(private val db: Nitrite) :
-        AbstractRepository<BetAction, Long>({ db.getRepository {} }, BetAction::id) {
+class BetActionRepository(db: Nitrite) : AbstractRepository<BetAction, Long>(db.getRepository {}, BetAction::id) {
 
     fun idSafeSave(betAction: BetAction): Long {
         val action = when (betAction.id) {

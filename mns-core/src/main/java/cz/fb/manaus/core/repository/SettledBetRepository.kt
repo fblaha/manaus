@@ -18,8 +18,7 @@ import java.time.Instant
 
 @Component
 @Profile(ManausProfiles.DB)
-class SettledBetRepository(private val db: Nitrite) :
-        AbstractRepository<SettledBet, String>({ db.getRepository {} }, SettledBet::id) {
+class SettledBetRepository(db: Nitrite) : AbstractRepository<SettledBet, String>(db.getRepository {}, SettledBet::id) {
 
     fun update(settledBet: SettledBet) {
         check(repository.update(SettledBet::id eq settledBet.id, settledBet).affectedCount == 1)

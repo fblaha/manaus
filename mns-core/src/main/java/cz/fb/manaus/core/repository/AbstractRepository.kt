@@ -5,10 +5,10 @@ import org.dizitart.no2.objects.ObjectRepository
 import kotlin.reflect.KProperty1
 
 
-abstract class AbstractRepository<T, U>(loader: () -> ObjectRepository<T>,
-                                        val key: KProperty1<T, U>) {
-
-    internal val repository: ObjectRepository<T> by lazy(loader)
+abstract class AbstractRepository<T, U>(
+        internal val repository: ObjectRepository<T>,
+        val key: KProperty1<T, U>
+) {
 
     fun saveOrUpdate(entity: T) {
         repository.update(entity, true)
