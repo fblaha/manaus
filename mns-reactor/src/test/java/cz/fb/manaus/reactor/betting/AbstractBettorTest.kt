@@ -22,24 +22,22 @@ abstract class AbstractBettorTest<T : AbstractUpdatingBettor> : AbstractDatabase
     private fun check(marketPrices: List<RunnerPrices>,
                       bets: List<Bet>,
                       placeCount: Int,
-                      updateCount: Int): BetCollector {
-        val collector = BetCollector()
+                      updateCount: Int): List<BetCommand> {
         val snapshot = MarketSnapshot(marketPrices, market, bets, createTradedVolume(marketPrices))
-        bettor.onMarketSnapshot(MarketSnapshotEvent(snapshot, account, collector))
-        assertEquals(placeCount, collector.placeCommands.size)
-        assertEquals(updateCount, collector.updateCommands.size)
-        return collector
+        val collected = bettor.onMarketSnapshot(MarketSnapshotEvent(snapshot, account))
+        assertEquals(placeCount, collected.filter { it.isPlace }.size)
+        assertEquals(updateCount, collected.filter { it.isUpdate }.size)
+        return collected
     }
 
     protected fun checkPlace(marketPrices: List<RunnerPrices>,
                              expectedCount: Int,
-                             expectedPrice: Double?): BetCollector {
+                             expectedPrice: Double?) {
         val result = check(marketPrices, listOf(), expectedCount, 0)
-        val toPlace = result.placeCommands
+        val toPlace = result.filter { it.isPlace }
         if (expectedPrice != null) {
             toPlace.forEach { assertEquals(expectedPrice, it.bet.requestedPrice.price) }
         }
-        return result
     }
 
 

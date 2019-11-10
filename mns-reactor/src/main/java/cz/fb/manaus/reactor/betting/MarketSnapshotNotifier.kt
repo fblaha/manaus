@@ -5,8 +5,7 @@ import cz.fb.manaus.core.model.Account
 import cz.fb.manaus.core.model.CollectedBets
 import cz.fb.manaus.core.model.Market
 import cz.fb.manaus.core.model.MarketSnapshot
-import cz.fb.manaus.core.repository.BetActionRepository
-import cz.fb.manaus.reactor.betting.action.BetActionListener
+import cz.fb.manaus.reactor.betting.action.BetCommandHandler
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotEvent
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
@@ -17,9 +16,9 @@ import java.util.logging.Logger
 class MarketSnapshotNotifier(
         snapshotListeners: List<MarketSnapshotListener>,
         private val filterService: MarketFilterService,
-        private val betActionRepository: BetActionRepository,
-        private val actionListeners: List<BetActionListener>,
-        private val disabledListeners: Set<String>) {
+        private val handlers: List<BetCommandHandler>,
+        private val disabledListeners: Set<String>
+) {
 
     private val sortedSnapshotListeners: List<MarketSnapshotListener> =
             snapshotListeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
@@ -27,7 +26,6 @@ class MarketSnapshotNotifier(
     private val log = Logger.getLogger(MarketSnapshotNotifier::class.simpleName)
 
     fun notify(snapshot: MarketSnapshot, myBets: Set<String>, account: Account): CollectedBets {
-        val collector = BetCollector()
 
         if (filterService.accept(snapshot.market, myBets.isNotEmpty(), account.provider::matches)) {
             validateOpenDate(snapshot.market)
@@ -35,16 +33,14 @@ class MarketSnapshotNotifier(
             val unknownBets = BetUtils.getUnknownBets(snapshot.currentBets, myBets)
             unknownBets.forEach { log.warning { "unknown bet '$it'" } }
             if (unknownBets.isEmpty()) {
-                sortedSnapshotListeners
+                val bets = sortedSnapshotListeners
                         .filter { it.javaClass.simpleName !in disabledListeners }
-                        .forEach { it.onMarketSnapshot(MarketSnapshotEvent(snapshot, account, collector)) }
+                        .flatMap { it.onMarketSnapshot(MarketSnapshotEvent(snapshot, account)) }
 
-                // TODO create event for each bet and and save action in event handler
-                saveActions(collector.placeCommands)
-                saveActions(collector.updateCommands)
+                return toCollectedBets(callHandlers(bets))
             }
         }
-        return collector.toCollectedBets()
+        return CollectedBets(emptyList(), emptyList(), emptyList())
     }
 
     private fun validateOpenDate(market: Market) {
@@ -53,11 +49,16 @@ class MarketSnapshotNotifier(
         check(currDate.isBefore(openDate)) { "current $currDate open date $openDate" }
     }
 
-    private fun saveActions(commands: List<BetCommand>) {
-        for (command in commands) {
-            val actionId = betActionRepository.idSafeSave(command.action)
-            command.bet = command.bet.copy(actionId = actionId)
-            actionListeners.forEach { it.onAction(command.action) }
+    private fun callHandlers(commands: List<BetCommand>): List<BetCommand> {
+        var result = commands
+        for (handler in handlers) {
+            result = result.map { handler.onBetCommand(it) }
         }
+        validateCommands(result)
+        return result
+    }
+
+    private fun validateCommands(commands: List<BetCommand>) {
+        commands.filter { !it.isCancel }.forEach { check(it.bet.actionId > 0) }
     }
 }

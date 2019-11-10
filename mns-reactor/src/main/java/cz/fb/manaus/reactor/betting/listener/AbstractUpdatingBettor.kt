@@ -2,7 +2,10 @@ package cz.fb.manaus.reactor.betting.listener
 
 import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.reactor.betting.*
+import cz.fb.manaus.reactor.betting.BetCommand
+import cz.fb.manaus.reactor.betting.BetEvent
+import cz.fb.manaus.reactor.betting.BetMetrics
+import cz.fb.manaus.reactor.betting.PriceAdviser
 import cz.fb.manaus.reactor.betting.listener.ProbabilityComparator.Companion.COMPARATORS
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
@@ -36,13 +39,14 @@ abstract class AbstractUpdatingBettor(
 
     private val log = Logger.getLogger(AbstractUpdatingBettor::class.simpleName)
 
-    override fun onMarketSnapshot(marketSnapshotEvent: MarketSnapshotEvent) {
-        val (snapshot, account, collector) = marketSnapshotEvent
+    override fun onMarketSnapshot(marketSnapshotEvent: MarketSnapshotEvent): List<BetCommand> {
+        val (snapshot, account) = marketSnapshotEvent
         val (marketPrices, market) = snapshot
         val coverage = snapshot.coverage
         val flowFilter = flowFilterRegistry.getFlowFilter(market.type!!)
         val fairness = calculator.getFairness(marketPrices)
         val credibleSide = fairness.moreCredibleSide
+        val collector = mutableListOf<BetCommand>()
         if (credibleSide != null) {
             val ordering = COMPARATORS[credibleSide] ?: error("no such side")
             val sortedPrices = marketPrices.sortedWith(ordering)
@@ -79,9 +83,10 @@ abstract class AbstractUpdatingBettor(
                 }
             }
         }
+        return collector.toList()
     }
 
-    private fun cancelOnDrop(prePriceValidation: ValidationResult, oldBet: Bet?, collector: BetCollector) {
+    private fun cancelOnDrop(prePriceValidation: ValidationResult, oldBet: Bet?, collector: MutableList<BetCommand>) {
         if (prePriceValidation === ValidationResult.DROP) {
             cancelBet(oldBet, collector)
         }
@@ -118,28 +123,28 @@ abstract class AbstractUpdatingBettor(
         )
     }
 
-    private fun bet(event: BetEvent, betCollector: BetCollector) {
+    private fun bet(event: BetEvent, betCollector: MutableList<BetCommand>) {
         val action = event.betAction
         val newPrice = event.newPrice!!
 
         val oldBet = event.oldBet
         if (oldBet != null) {
-            betCollector.updateBet(BetCommand(oldBet replacePrice newPrice.price, action))
+            betCollector.add(BetCommand(oldBet replacePrice newPrice.price, action))
         } else {
             val market = event.market
             val bet = Bet(marketId = market.id,
                     placedDate = Instant.now(),
                     selectionId = event.runnerPrices.selectionId,
                     requestedPrice = newPrice)
-            betCollector.placeBet(BetCommand(bet, action))
+            betCollector.add(BetCommand(bet, action))
         }
         log.info { "bet ${action.betActionType} action '$action'" }
     }
 
-    private fun cancelBet(oldBet: Bet?, betCollector: BetCollector) {
+    private fun cancelBet(oldBet: Bet?, betCollector: MutableList<BetCommand>) {
         if (oldBet != null && !oldBet.isMatched) {
             metricRegistry.counter("bet.cancel").inc()
-            betCollector.cancelBet(oldBet)
+            betCollector.add(BetCommand(oldBet, null))
             log.info { "bet cancel - unable propose price for bet '$oldBet'" }
         }
     }

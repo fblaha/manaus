@@ -19,20 +19,24 @@ data class BetEvent(
     var proposers: Set<String> = emptySet()
     var newPrice: Price? = null
         set(value) {
-            if (value != null) {
-                val newSide = value.side
-                check(side === newSide)
-                if (oldBet != null) {
-                    val oldSide = oldBet.requestedPrice.side
-                    check(oldSide === newSide)
-                }
-                if (counterBet != null) {
-                    val otherSide = counterBet.requestedPrice.side
-                    check(otherSide === newSide.opposite)
-                }
-            }
+            validateNewPrice(value)
             field = value
         }
+
+    private fun validateNewPrice(value: Price?) {
+        if (value != null) {
+            val newSide = value.side
+            check(side === newSide)
+            if (oldBet != null) {
+                val oldSide = oldBet.requestedPrice.side
+                check(oldSide === newSide)
+            }
+            if (counterBet != null) {
+                val otherSide = counterBet.requestedPrice.side
+                check(otherSide === newSide.opposite)
+            }
+        }
+    }
 
     val betAction: BetAction
         get() {

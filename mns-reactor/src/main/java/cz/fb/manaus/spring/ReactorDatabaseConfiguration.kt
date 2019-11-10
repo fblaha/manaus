@@ -1,9 +1,8 @@
 package cz.fb.manaus.spring
 
 import cz.fb.manaus.core.manager.MarketFilterService
-import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.reactor.betting.MarketSnapshotNotifier
-import cz.fb.manaus.reactor.betting.action.BetActionListener
+import cz.fb.manaus.reactor.betting.action.BetCommandHandler
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
 import cz.fb.manaus.reactor.price.PriceFilter
 import cz.fb.manaus.spring.conf.BettingConf
@@ -21,17 +20,17 @@ import org.springframework.context.annotation.Profile
 open class ReactorDatabaseConfiguration {
 
     @Bean
-    open fun betManager(filterService: MarketFilterService,
-                        priceFilter: PriceFilter?,
-                        betActionRepository: BetActionRepository,
-                        actionListeners: List<BetActionListener>,
-                        bettingConf: BettingConf,
-                        snapshotListeners: List<MarketSnapshotListener>): MarketSnapshotNotifier {
+    open fun marketSnapshotNotifier(filterService: MarketFilterService,
+                                    priceFilter: PriceFilter?,
+                                    handlers: List<BetCommandHandler>,
+                                    bettingConf: BettingConf,
+                                    snapshotListeners: List<MarketSnapshotListener>): MarketSnapshotNotifier {
         val disabledListeners = bettingConf.disabledListeners.toSet()
-        return MarketSnapshotNotifier(snapshotListeners,
+        return MarketSnapshotNotifier(
+                snapshotListeners,
                 filterService,
-                betActionRepository,
-                actionListeners,
-                disabledListeners)
+                handlers,
+                disabledListeners
+        )
     }
 }
