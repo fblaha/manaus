@@ -26,14 +26,14 @@ data class BetEvent(
     private fun validateNewPrice(value: Price?) {
         if (value != null) {
             val newSide = value.side
-            check(side === newSide)
+            check(side == newSide)
             if (oldBet != null) {
                 val oldSide = oldBet.requestedPrice.side
-                check(oldSide === newSide)
+                check(oldSide == newSide)
             }
             if (counterBet != null) {
                 val otherSide = counterBet.requestedPrice.side
-                check(otherSide === newSide.opposite)
+                check(otherSide == newSide.opposite)
             }
         }
     }

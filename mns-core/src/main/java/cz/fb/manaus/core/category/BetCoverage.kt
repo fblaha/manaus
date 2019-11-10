@@ -10,7 +10,7 @@ data class BetCoverage(private val coverage: Map<MarketSelection, List<RealizedB
     fun getBets(marketId: String, selectionId: Long, side: Side?): List<RealizedBet> {
         val bets = coverage[MarketSelection(marketId, selectionId)]!!
         if (side != null) {
-            return bets.filter { it.settledBet.price.side === side }
+            return bets.filter { it.settledBet.price.side == side }
         }
         return bets
     }
@@ -27,12 +27,12 @@ data class BetCoverage(private val coverage: Map<MarketSelection, List<RealizedB
 
     fun getAmount(marketId: String, selectionId: Long, side: Side): Double {
         return coverage[MarketSelection(marketId, selectionId)]!!
-                .filter { it.settledBet.price.side === side }.map { it.settledBet.price.amount }.sum()
+                .filter { it.settledBet.price.side == side }.map { it.settledBet.price.amount }.sum()
     }
 
     fun getPrice(marketId: String, selectionId: Long, side: Side): Double {
         return coverage[MarketSelection(marketId, selectionId)]!!
-                .filter { it.settledBet.price.side === side }.map { it.settledBet.price.price }.average()
+                .filter { it.settledBet.price.side == side }.map { it.settledBet.price.price }.average()
     }
 
     companion object {

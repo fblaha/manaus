@@ -13,7 +13,7 @@ class ValidationService(private val priceService: PriceService,
     internal fun handleDowngrade(newOne: Price?, oldOne: Bet?, isDowngradeAccepting: Boolean): ValidationResult? {
         if (oldOne != null && newOne != null) {
             val oldPrice = oldOne.requestedPrice
-            check(newOne.side === oldPrice.side)
+            check(newOne.side == oldPrice.side)
             val isDowngrade = priceService.isDowngrade(newOne.price, oldPrice.price, newOne.side)
             if (isDowngrade && isDowngradeAccepting) {
                 return ValidationResult.OK
@@ -24,8 +24,8 @@ class ValidationService(private val priceService: PriceService,
 
     internal fun reduce(results: List<ValidationResult>): ValidationResult {
         check(results.isNotEmpty())
-        return results.find { it === ValidationResult.DROP }
-                ?: results.find { it === ValidationResult.NOP }
+        return results.find { it == ValidationResult.DROP }
+                ?: results.find { it == ValidationResult.NOP }
                 ?: ValidationResult.OK
     }
 

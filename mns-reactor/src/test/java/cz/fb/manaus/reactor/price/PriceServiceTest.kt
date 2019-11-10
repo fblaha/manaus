@@ -39,17 +39,9 @@ class PriceServiceTest : AbstractLocalTestCase() {
         checkDownGrade(3.0, 2.0, Side.BACK)
     }
 
-    private fun checkDownGrade(newPrice: Double, oldPrice: Double, type: Side) {
-        val newOne = Price(newPrice, 10.0, type)
-        val oldOne = Price(oldPrice, 10.0, type)
-        assertTrue(isDowngrade(newOne, oldOne))
-        assertFalse(isDowngrade(oldOne, newOne))
-    }
-
-    private fun isDowngrade(newOne: Price, oldOne: Price): Boolean {
-        val newPrice = newOne.price
-        val oldPrice = oldOne.price
-        return priceService.isDowngrade(newPrice, oldPrice, newOne.side)
+    private fun checkDownGrade(newPrice: Double, oldPrice: Double, side: Side) {
+        assertTrue(priceService.isDowngrade(newPrice, oldPrice, side))
+        assertFalse(priceService.isDowngrade(oldPrice, newPrice, side))
     }
 
     private fun getFairness(side: Side, marketPrices: List<RunnerPrices>): Double {

@@ -64,7 +64,7 @@ abstract class AbstractUpdatingBettor(
                     val oldBet = coverage[sideSelection]
                     val prePriceValidation = validationService.validate(event, prePriceValidators)
                     cancelOnDrop(prePriceValidation, oldBet, collector)
-                    if (prePriceValidation === ValidationResult.OK) {
+                    if (prePriceValidation == ValidationResult.OK) {
                         val newPrice = priceAdviser.getNewPrice(event)
                         if (newPrice == null) {
                             cancelBet(oldBet, collector)
@@ -76,7 +76,8 @@ abstract class AbstractUpdatingBettor(
                         if (oldBet != null && oldBet.isMatched) continue
                         val priceValidation = validationService.validate(event, priceValidators)
                         cancelOnDrop(priceValidation, oldBet, collector)
-                        if (priceValidation === ValidationResult.OK) {
+                        if (priceValidation == ValidationResult.OK) {
+                            check(prePriceValidation == ValidationResult.OK && priceValidation == ValidationResult.OK)
                             bet(event, collector)
                         }
                     }
@@ -87,7 +88,7 @@ abstract class AbstractUpdatingBettor(
     }
 
     private fun cancelOnDrop(prePriceValidation: ValidationResult, oldBet: Bet?, collector: MutableList<BetCommand>) {
-        if (prePriceValidation === ValidationResult.DROP) {
+        if (prePriceValidation == ValidationResult.DROP) {
             cancelBet(oldBet, collector)
         }
     }

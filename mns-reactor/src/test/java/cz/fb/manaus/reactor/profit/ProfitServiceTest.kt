@@ -122,8 +122,8 @@ class ProfitServiceTest : AbstractLocalTestCase() {
         val result = profitService.getProfitRecords(betList, null, false)
         val all = result.find { ProfitRecord.isAllCategory(it) }!!
         Assert.assertEquals(expectedAllProfit, all.profit, 0.01)
-        val backCount = betList.filter { it.settledBet.price.side === Side.BACK }.count()
-        val layCount = betList.filter { it.settledBet.price.side === Side.LAY }.count()
+        val backCount = betList.filter { it.settledBet.price.side == Side.BACK }.count()
+        val layCount = betList.filter { it.settledBet.price.side == Side.LAY }.count()
         assertEquals(backCount, all.backCount)
         assertEquals(layCount, all.layCount)
         assertEquals(layCount + backCount, all.totalCount)

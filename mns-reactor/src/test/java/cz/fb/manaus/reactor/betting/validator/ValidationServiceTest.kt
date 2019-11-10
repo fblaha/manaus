@@ -26,8 +26,8 @@ class ValidationServiceTest : AbstractLocalTestCase() {
         )
         assertEquals(ValidationResult.DROP,
                 service.reduce(results))
-        assertEquals(ValidationResult.OK, service.reduce(results.filter { it === ValidationResult.OK }))
-        assertEquals(ValidationResult.NOP, service.reduce(results.filter { it !== ValidationResult.DROP }))
+        assertEquals(ValidationResult.OK, service.reduce(results.filter { it == ValidationResult.OK }))
+        assertEquals(ValidationResult.NOP, service.reduce(results.filter { it != ValidationResult.DROP }))
     }
 
     @Test

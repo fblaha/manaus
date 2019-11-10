@@ -19,7 +19,7 @@ class LastMatchedValidator(private val passEqual: Boolean) : Validator {
             return if (passEqual) OK else DROP
         }
         val side = event.side
-        return if (side === Side.LAY) {
+        return if (side == Side.LAY) {
             if (event.newPrice!!.price < lastMatchedPrice) OK else DROP
         } else {
             if (event.newPrice!!.price > lastMatchedPrice) OK else DROP

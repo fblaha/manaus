@@ -21,7 +21,7 @@ class MinimizeChargeStrategy(
     }
 
     internal fun getUpperBoundary(side: Side): Double {
-        return if (side === Side.BACK) fairnessReductionHighBack else fairnessReductionHighLay
+        return if (side == Side.BACK) fairnessReductionHighBack else fairnessReductionHighLay
     }
 
     private fun getRawRate(event: BetEvent): Double {

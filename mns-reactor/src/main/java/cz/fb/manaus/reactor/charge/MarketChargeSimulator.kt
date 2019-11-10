@@ -44,7 +44,7 @@ object MarketChargeSimulator {
 
     private fun profitWinner(price: Price): Double {
         val result = (price.price - 1) * price.amount
-        return if (price.side === Side.BACK) {
+        return if (price.side == Side.BACK) {
             // DRAW (ENG/RUS) 03/06/16 11:08 Back 52500304 Standard 3.66 11/06/16 22:55 2 5.32
             // Fixtures 13 June Nadezhda Mogilev (W) v Zorka-BDU Minsk (W) / Match Odds / The Draw
             // Back	 	5.70	0.69	Won	 	3.24	2,133.79
@@ -58,7 +58,7 @@ object MarketChargeSimulator {
     }
 
     private fun profitLoser(price: Price): Double {
-        return if (price.side === Side.BACK) {
+        return if (price.side == Side.BACK) {
             // DRAW (INT/AME) 10/06/16 23:32 Back 52710984 Standard 4.75 11/06/16 23:23 2 -2
             // Fixtures 13 June Madura Utd v Persiba Balikpapan / Match Odds / The Draw
             // Back	 	4.70	2.00	Lost	(2.00)	 	2,123.59

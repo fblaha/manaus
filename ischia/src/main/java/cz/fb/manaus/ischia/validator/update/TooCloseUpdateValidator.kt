@@ -19,6 +19,7 @@ object TooCloseUpdateValidator : AbstractTooCloseUpdateValidator(setOf(-1, 1)) {
     override val tags get() = setOf(PriceShiftFixedStep)
 
     override fun validate(event: BetEvent): ValidationResult {
+        // TODO suspicious
         return if (event.isCounterHalfMatched) {
             ValidationResult.OK
         } else {

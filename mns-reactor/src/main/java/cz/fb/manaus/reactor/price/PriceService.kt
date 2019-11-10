@@ -12,17 +12,16 @@ class PriceService {
         val targetFairness = 1 - downgradeFraction
         check(targetFairness in 0.0..1.0)
 
-        if (side === Side.LAY) {
-            return 1 + aboveOne * targetFairness
-        } else if (side === Side.BACK) {
-            return 1 + aboveOne / targetFairness
+        return when (side) {
+            Side.LAY -> 1 + aboveOne * targetFairness
+            Side.BACK -> 1 + aboveOne / targetFairness
+            else -> throw IllegalStateException()
         }
-        throw IllegalStateException()
     }
 
     fun isDowngrade(newPrice: Double, oldPrice: Double, type: Side): Boolean {
         if (newPrice priceEq oldPrice) return false
-        return if (type === Side.BACK) {
+        return if (type == Side.BACK) {
             newPrice > oldPrice
         } else {
             newPrice < oldPrice
