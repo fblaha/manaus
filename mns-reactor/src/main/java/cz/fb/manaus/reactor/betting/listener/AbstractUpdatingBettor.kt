@@ -131,7 +131,7 @@ abstract class AbstractUpdatingBettor(
         val oldBet = event.oldBet
         if (oldBet != null) {
             // TODO remove it after debug
-            log.info { "DGB: new price '$newPrice' old price '${oldBet.requestedPrice}'" }
+            log.info { "DBG: diff '${newPrice.price - oldBet.requestedPrice.price}' new price '$newPrice' old price '${oldBet.requestedPrice}'" }
             betCollector.add(BetCommand(oldBet replacePrice newPrice.price, action))
         } else {
             val market = event.market
