@@ -4,9 +4,11 @@ import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.reactor.betting.BetCommand
 import cz.fb.manaus.reactor.betting.BetEvent
+import org.springframework.stereotype.Component
 import java.time.Instant
 import java.util.logging.Logger
 
+@Component
 class BetCommandIssuer(private val metricRegistry: MetricRegistry) {
 
     private val log = Logger.getLogger(BetCommandIssuer::class.simpleName)

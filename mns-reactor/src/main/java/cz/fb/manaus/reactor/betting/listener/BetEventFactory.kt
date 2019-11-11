@@ -8,7 +8,9 @@ import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.BetMetrics
 import cz.fb.manaus.reactor.charge.ChargeGrowthForecaster
 import cz.fb.manaus.reactor.price.Fairness
+import org.springframework.stereotype.Component
 
+@Component
 class BetEventFactory(private val forecaster: ChargeGrowthForecaster) {
 
     fun create(
