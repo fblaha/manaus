@@ -49,7 +49,7 @@ abstract class AbstractUpdatingBettor(
                 val activeSelection = sideSelection in coverage || sideSelection.oppositeSide in coverage
                 val accepted = i in flowFilter.indexRange && flowFilter.runnerPredicate(market, runner)
                 if (activeSelection || accepted) {
-                    val event = betEventFactory.create(sideSelection, snapshot, fairness, account, coverage)
+                    val event = betEventFactory.create(sideSelection, snapshot, fairness, account)
                     val oldBet = coverage[sideSelection]
                     val prePriceValidation = validationService.validate(event, prePriceValidators)
                     cancelOnDrop(prePriceValidation, oldBet, collector)

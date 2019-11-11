@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.betting.listener
 
 import cz.fb.manaus.core.model.Account
-import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.MarketSnapshot
 import cz.fb.manaus.core.model.SideSelection
 import cz.fb.manaus.reactor.betting.BetEvent
@@ -17,8 +16,7 @@ class BetEventFactory(private val forecaster: ChargeGrowthForecaster) {
             sideSelection: SideSelection,
             snapshot: MarketSnapshot,
             fairness: Fairness,
-            account: Account, coverage:
-            Map<SideSelection, Bet>
+            account: Account
     ): BetEvent {
         val (side, selectionId) = sideSelection
         val forecast = forecaster.getForecast(
@@ -39,7 +37,7 @@ class BetEventFactory(private val forecaster: ChargeGrowthForecaster) {
                 selectionId = selectionId,
                 marketPrices = snapshot.runnerPrices,
                 account = account,
-                coverage = coverage,
+                coverage = snapshot.coverage,
                 metrics = metrics
         )
     }
