@@ -15,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired
 
 abstract class AbstractUpdatingBettor(
         private val side: Side,
-        validators: List<Validator>,
-        private val priceAdviser: PriceAdviser
+        validators: List<Validator>, // TODO validation coordinator
+        private val priceAdviser: PriceAdviser // TODO another name
 ) : MarketSnapshotListener {
 
     private val validators = validators.partition { it is PriceProposer }
@@ -61,7 +61,7 @@ abstract class AbstractUpdatingBettor(
                         event.newPrice = newPrice.price
                         event.proposers = newPrice.proposers
 
-                        if (event.oldBet?.isMatched == true) continue
+                        if (event.isOldMatched) continue
                         val priceValidation = validationService.validate(event, priceValidators)
                         cancelOnDrop(priceValidation, event.oldBet, collector)
                         if (priceValidation == ValidationResult.OK) {

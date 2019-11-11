@@ -8,6 +8,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -35,6 +36,11 @@ class BetEventTest : AbstractLocalTestCase() {
     fun `counter half matched`() {
         assertTrue(factory.newBetEvent(Side.BACK, 3.5, 4.6).isCounterHalfMatched)
         assertTrue(factory.newBetEvent(Side.LAY, 3.5, 4.6).isCounterHalfMatched)
+    }
+
+    @Test
+    fun `old matched`() {
+        assertFalse { factory.newBetEvent(Side.BACK, 3.5, 4.6).isOldMatched }
     }
 
     @Test

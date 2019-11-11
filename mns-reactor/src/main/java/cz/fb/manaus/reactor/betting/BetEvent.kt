@@ -17,6 +17,7 @@ data class BetEvent(
     val oldBet: Bet? = coverage[sideSelection]
     val counterBet: Bet? = coverage[sideSelection.oppositeSide]
     val isCounterHalfMatched: Boolean = counterBet?.isHalfMatched ?: false
+    val isOldMatched: Boolean = oldBet?.isMatched == true
     var proposers: Set<String> = emptySet()
     var newPrice: Price? = null
         set(value) {
