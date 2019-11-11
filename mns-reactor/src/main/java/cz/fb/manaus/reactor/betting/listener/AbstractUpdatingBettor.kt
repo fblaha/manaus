@@ -50,21 +50,20 @@ abstract class AbstractUpdatingBettor(
                 val accepted = i in flowFilter.indexRange && flowFilter.runnerPredicate(market, runner)
                 if (coverage.isActive(selectionId) || accepted) {
                     val event = betEventFactory.create(sideSelection, snapshot, fairness, account)
-                    val oldBet = coverage[sideSelection]
                     val prePriceValidation = validationService.validate(event, prePriceValidators)
-                    cancelOnDrop(prePriceValidation, oldBet, collector)
+                    cancelOnDrop(prePriceValidation, event.oldBet, collector)
                     if (prePriceValidation == ValidationResult.OK) {
                         val newPrice = priceAdviser.getNewPrice(event)
                         if (newPrice == null) {
-                            betCommandIssuer.tryCancel(oldBet)?.let { collector.add(it) }
+                            betCommandIssuer.tryCancel(event.oldBet)?.let { collector.add(it) }
                             continue
                         }
                         event.newPrice = newPrice.price
                         event.proposers = newPrice.proposers
 
-                        if (oldBet != null && oldBet.isMatched) continue
+                        if (event.oldBet?.isMatched == true) continue
                         val priceValidation = validationService.validate(event, priceValidators)
-                        cancelOnDrop(priceValidation, oldBet, collector)
+                        cancelOnDrop(priceValidation, event.oldBet, collector)
                         if (priceValidation == ValidationResult.OK) {
                             check(prePriceValidation == ValidationResult.OK && priceValidation == ValidationResult.OK)
                             collector.add(betCommandIssuer.placeOrUpdate(event))
