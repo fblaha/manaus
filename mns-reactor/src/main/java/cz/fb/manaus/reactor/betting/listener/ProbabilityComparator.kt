@@ -22,3 +22,11 @@ class ProbabilityComparator(private val side: Side) : Comparator<RunnerPrices> {
     }
 
 }
+
+fun sortPrices(side: Side, marketPrices: List<RunnerPrices>): List<RunnerPrices> {
+    val ordering = ProbabilityComparator.COMPARATORS[side] ?: error("no such side")
+    val sortedPrices = marketPrices.sortedWith(ordering)
+    check(sortedPrices.map { it.selectionId }.distinct().count() ==
+            sortedPrices.map { it.selectionId }.count())
+    return sortedPrices
+}
