@@ -3,6 +3,7 @@ package cz.fb.manaus.reactor.betting.listener
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.SideSelection
+import cz.fb.manaus.core.model.isActive
 import cz.fb.manaus.reactor.betting.BetCommand
 import cz.fb.manaus.reactor.betting.PriceAdviser
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
@@ -46,9 +47,8 @@ abstract class AbstractUpdatingBettor(
                 val selectionId = runnerPrices.selectionId
                 val runner = market.getRunner(selectionId)
                 val sideSelection = SideSelection(side, selectionId)
-                val activeSelection = sideSelection in coverage || sideSelection.oppositeSide in coverage
                 val accepted = i in flowFilter.indexRange && flowFilter.runnerPredicate(market, runner)
-                if (activeSelection || accepted) {
+                if (coverage.isActive(selectionId) || accepted) {
                     val event = betEventFactory.create(sideSelection, snapshot, fairness, account)
                     val oldBet = coverage[sideSelection]
                     val prePriceValidation = validationService.validate(event, prePriceValidators)

@@ -12,9 +12,10 @@ data class BetEvent(
         val account: Account,
         val metrics: BetMetrics
 ) {
+    private val sideSelection = SideSelection(side, selectionId)
     val runnerPrices: RunnerPrices = marketPrices.first { it.selectionId == selectionId }
-    val oldBet: Bet? = coverage[SideSelection(side, selectionId)]
-    val counterBet: Bet? = coverage[SideSelection(side.opposite, selectionId)]
+    val oldBet: Bet? = coverage[sideSelection]
+    val counterBet: Bet? = coverage[sideSelection.oppositeSide]
     val isCounterHalfMatched: Boolean = counterBet?.isHalfMatched ?: false
     var proposers: Set<String> = emptySet()
     var newPrice: Price? = null
