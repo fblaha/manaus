@@ -11,6 +11,7 @@ import cz.fb.manaus.reactor.betting.validator.ValidationCoordinator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
+import kotlin.reflect.full.findAnnotation
 
 @Configuration
 @Profile("ischia")
@@ -19,6 +20,7 @@ open class BettorConfiguration {
     @Bean
     @LayLoserBet
     open fun layAdviser(@LayLoserBet proposers: List<PriceProposer>): PriceAdviser {
+        proposers.forEach { checkNotNull(it::class.findAnnotation<LayLoserBet>()) }
         return MinReduceProposerAdviser(proposers)
     }
 
@@ -32,6 +34,7 @@ open class BettorConfiguration {
     @Bean
     @BackLoserBet
     open fun backAdviser(@BackLoserBet proposers: List<PriceProposer>): PriceAdviser {
+        proposers.forEach { checkNotNull(it::class.findAnnotation<BackLoserBet>()) }
         return MinReduceProposerAdviser(proposers)
     }
 

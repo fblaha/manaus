@@ -8,6 +8,7 @@ import cz.fb.manaus.reactor.betting.validator.Validator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
+import kotlin.reflect.full.findAnnotation
 
 @Configuration
 @Profile("ischia")
@@ -16,6 +17,7 @@ open class ValidationConfiguration {
     @Bean
     @LayLoserBet
     open fun layValidationCoordinator(validationService: ValidationService, @LayLoserBet validators: List<Validator>): ValidationCoordinator {
+        validators.forEach { checkNotNull(it::class.findAnnotation<LayLoserBet>()) }
         return ValidationCoordinator(validators, validationService)
 
     }
@@ -23,6 +25,7 @@ open class ValidationConfiguration {
     @Bean
     @BackLoserBet
     open fun backValidationCoordinator(validationService: ValidationService, @BackLoserBet validators: List<Validator>): ValidationCoordinator {
+        validators.forEach { checkNotNull(it::class.findAnnotation<BackLoserBet>()) }
         return ValidationCoordinator(validators, validationService)
     }
 
