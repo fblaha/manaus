@@ -13,14 +13,12 @@ import cz.fb.manaus.reactor.price.PriceFilter
 import cz.fb.manaus.spring.conf.MarketRunnerConf
 import cz.fb.manaus.spring.conf.PriceConf
 import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
+import org.springframework.context.annotation.*
 
 @Configuration
 @Profile("ischia")
 @ComponentScan(value = ["cz.fb.manaus.ischia"])
+@Import(ValidationConfiguration::class, BettorConfiguration::class)
 @EnableConfigurationProperties(MarketRunnerConf::class, PriceConf::class)
 open class IschiaLocalConfiguration {
 

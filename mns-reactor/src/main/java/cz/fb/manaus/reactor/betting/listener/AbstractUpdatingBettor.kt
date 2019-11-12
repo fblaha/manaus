@@ -6,20 +6,17 @@ import cz.fb.manaus.core.model.SideSelection
 import cz.fb.manaus.core.model.isActive
 import cz.fb.manaus.reactor.betting.BetCommand
 import cz.fb.manaus.reactor.betting.PriceAdviser
-import cz.fb.manaus.reactor.betting.proposer.PriceProposer
+import cz.fb.manaus.reactor.betting.validator.ValidationCoordinator
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.ValidationService
-import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.springframework.beans.factory.annotation.Autowired
 
 abstract class AbstractUpdatingBettor(
         private val side: Side,
-        validators: List<Validator>, // TODO validation coordinator
-        private val priceAdviser: PriceAdviser // TODO another name
+        private val validationCoordinator: ValidationCoordinator,
+        private val priceAdviser: PriceAdviser
 ) : MarketSnapshotListener {
-
-    private val validators = validators.partition { it is PriceProposer }
 
     @Autowired
     private lateinit var validationService: ValidationService
@@ -35,22 +32,20 @@ abstract class AbstractUpdatingBettor(
     override fun onMarketSnapshot(marketSnapshotEvent: MarketSnapshotEvent): List<BetCommand> {
         val (snapshot, account) = marketSnapshotEvent
         val (marketPrices, market) = snapshot
-        val coverage = snapshot.coverage
         val flowFilter = flowFilterRegistry.getFlowFilter(market.type!!)
         val fairness = calculator.getFairness(marketPrices)
         val credibleSide = fairness.moreCredibleSide
         val collector = mutableListOf<BetCommand>()
         if (credibleSide != null) {
             val sortedPrices = sortPrices(credibleSide, marketPrices)
-            val (prePriceValidators, priceValidators) = validators
             for ((i, runnerPrices) in sortedPrices.withIndex()) {
                 val selectionId = runnerPrices.selectionId
                 val runner = market.getRunner(selectionId)
                 val sideSelection = SideSelection(side, selectionId)
                 val accepted = i in flowFilter.indexRange && flowFilter.runnerPredicate(market, runner)
-                if (coverage.isActive(selectionId) || accepted) {
+                if (snapshot.coverage.isActive(selectionId) || accepted) {
                     val event = betEventFactory.create(sideSelection, snapshot, fairness, account)
-                    val prePriceValidation = validationService.validate(event, prePriceValidators)
+                    val prePriceValidation = validationCoordinator.validatePrePrice(event)
                     cancelOnDrop(prePriceValidation, event.oldBet, collector)
                     if (prePriceValidation == ValidationResult.OK) {
                         val newPrice = priceAdviser.getNewPrice(event)
@@ -62,7 +57,7 @@ abstract class AbstractUpdatingBettor(
                         event.proposers = newPrice.proposers
 
                         if (event.isOldMatched) continue
-                        val priceValidation = validationService.validate(event, priceValidators)
+                        val priceValidation = validationCoordinator.validatePrice(event)
                         cancelOnDrop(priceValidation, event.oldBet, collector)
                         if (priceValidation == ValidationResult.OK) {
                             check(prePriceValidation == ValidationResult.OK && priceValidation == ValidationResult.OK)

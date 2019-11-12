@@ -1,6 +1,13 @@
 package cz.fb.manaus.spring
 
+import cz.fb.manaus.manila.ManilaBet
+import cz.fb.manaus.reactor.betting.PriceAdviser
 import cz.fb.manaus.reactor.betting.listener.FlowFilter
+import cz.fb.manaus.reactor.betting.proposer.PriceProposer
+import cz.fb.manaus.reactor.betting.proposer.ProposerAdviser
+import cz.fb.manaus.reactor.betting.validator.ValidationCoordinator
+import cz.fb.manaus.reactor.betting.validator.ValidationService
+import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.reactor.price.PriceBulldozer
 import cz.fb.manaus.reactor.price.PriceFilter
 import org.springframework.context.annotation.Bean
@@ -23,4 +30,15 @@ open class ManilaLocalConfiguration {
         return PriceFilter(3, 100.0, 0.0..100.0, priceBulldozer)
     }
 
+    @Bean
+    @ManilaBet
+    open fun adviser(proposers: List<PriceProposer>): PriceAdviser {
+        return ProposerAdviser(proposers)
+    }
+
+    @Bean
+    @ManilaBet
+    open fun validationCoordinator(validationService: ValidationService, validators: List<Validator>): ValidationCoordinator {
+        return ValidationCoordinator(validators, validationService)
+    }
 }

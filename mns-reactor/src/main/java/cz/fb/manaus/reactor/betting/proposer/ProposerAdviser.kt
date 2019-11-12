@@ -10,7 +10,7 @@ import java.util.logging.Logger
 import javax.annotation.PostConstruct
 import kotlin.math.max
 
-open class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAdviser {
+class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAdviser {
 
     @Autowired
     private lateinit var adviser: AmountAdviser

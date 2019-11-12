@@ -1,8 +1,9 @@
 package cz.fb.manaus.ischia
 
 import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.reactor.betting.PriceAdviser
 import cz.fb.manaus.reactor.betting.listener.AbstractUpdatingBettor
-import cz.fb.manaus.reactor.betting.validator.Validator
+import cz.fb.manaus.reactor.betting.validator.ValidationCoordinator
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile(ManausProfiles.DB)
-class BackLoserBettor @BackLoserBet @Autowired constructor(validators: List<Validator>, coordinator: BackLoserAdviser) :
-        AbstractUpdatingBettor(
-                side = Side.BACK,
-                validators = validators,
-                priceAdviser = coordinator)
+class BackLoserBettor @BackLoserBet @Autowired constructor(
+        validationCoordinator: ValidationCoordinator,
+        adviser: PriceAdviser
+) : AbstractUpdatingBettor(
+        side = Side.BACK,
+        validationCoordinator = validationCoordinator,
+        priceAdviser = adviser)
