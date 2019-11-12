@@ -20,6 +20,7 @@ open class BettorConfiguration {
     @Bean
     @LayLoserBet
     open fun layAdviser(@LayLoserBet proposers: List<PriceProposer>): PriceAdviser {
+        check(proposers.isNotEmpty())
         proposers.forEach { checkNotNull(it::class.findAnnotation<LayLoserBet>()) }
         return MinReduceProposerAdviser(proposers)
     }
@@ -34,6 +35,7 @@ open class BettorConfiguration {
     @Bean
     @BackLoserBet
     open fun backAdviser(@BackLoserBet proposers: List<PriceProposer>): PriceAdviser {
+        check(proposers.isNotEmpty())
         proposers.forEach { checkNotNull(it::class.findAnnotation<BackLoserBet>()) }
         return MinReduceProposerAdviser(proposers)
     }

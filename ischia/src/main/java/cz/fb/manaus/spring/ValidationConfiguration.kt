@@ -18,6 +18,7 @@ open class ValidationConfiguration {
     @LayLoserBet
     open fun layValidationCoordinator(validationService: ValidationService, @LayLoserBet validators: List<Validator>): ValidationCoordinator {
         validators.forEach { checkNotNull(it::class.findAnnotation<LayLoserBet>()) }
+        check(validators.isNotEmpty())
         return ValidationCoordinator(validators, validationService)
 
     }
@@ -26,6 +27,7 @@ open class ValidationConfiguration {
     @BackLoserBet
     open fun backValidationCoordinator(validationService: ValidationService, @BackLoserBet validators: List<Validator>): ValidationCoordinator {
         validators.forEach { checkNotNull(it::class.findAnnotation<BackLoserBet>()) }
+        check(validators.isNotEmpty())
         return ValidationCoordinator(validators, validationService)
     }
 
