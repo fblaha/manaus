@@ -10,7 +10,7 @@ import java.util.logging.Logger
 import javax.annotation.PostConstruct
 import kotlin.math.max
 
-class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAdviser {
+class MinReduceProposerAdviser(private val proposers: List<PriceProposer>) : PriceAdviser {
 
     @Autowired
     private lateinit var adviser: AmountAdviser
@@ -19,7 +19,7 @@ class ProposerAdviser(private val proposers: List<PriceProposer>) : PriceAdviser
     @Autowired
     private lateinit var roundingService: RoundingService
 
-    private val log = Logger.getLogger(ProposerAdviser::class.simpleName)
+    private val log = Logger.getLogger(MinReduceProposerAdviser::class.simpleName)
 
     override fun getNewPrice(betEvent: BetEvent): ProposedPrice<Price>? {
         val proposedPrice = proposalService.reducePrices(betEvent, proposers)

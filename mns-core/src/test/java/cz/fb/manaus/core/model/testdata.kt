@@ -97,7 +97,7 @@ val BF_TAGS: Set<ProviderTag> = setOf(
         ProviderTag.VendorBetfair,
         ProviderTag.MatchedAmount,
         ProviderTag.PriceShiftFixedStep,
-        ProviderTag.TradedVolume,
+//        ProviderTag.TradedVolume,
         ProviderTag.LastMatchedPrice
 )
 

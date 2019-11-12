@@ -1,10 +1,12 @@
 package cz.fb.manaus.spring
 
+import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.manila.ManilaBet
 import cz.fb.manaus.reactor.betting.PriceAdviser
+import cz.fb.manaus.reactor.betting.listener.BetCoordinator
 import cz.fb.manaus.reactor.betting.listener.FlowFilter
+import cz.fb.manaus.reactor.betting.proposer.MinReduceProposerAdviser
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
-import cz.fb.manaus.reactor.betting.proposer.ProposerAdviser
 import cz.fb.manaus.reactor.betting.validator.ValidationCoordinator
 import cz.fb.manaus.reactor.betting.validator.ValidationService
 import cz.fb.manaus.reactor.betting.validator.Validator
@@ -33,7 +35,7 @@ open class ManilaLocalConfiguration {
     @Bean
     @ManilaBet
     open fun adviser(proposers: List<PriceProposer>): PriceAdviser {
-        return ProposerAdviser(proposers)
+        return MinReduceProposerAdviser(proposers)
     }
 
     @Bean
@@ -41,4 +43,16 @@ open class ManilaLocalConfiguration {
     open fun validationCoordinator(validationService: ValidationService, validators: List<Validator>): ValidationCoordinator {
         return ValidationCoordinator(validators, validationService)
     }
+
+    @Bean
+    @ManilaBet
+    open fun layBettor(@ManilaBet priceAdviser: PriceAdviser,
+                       @ManilaBet validationCoordinator: ValidationCoordinator): BetCoordinator {
+        return BetCoordinator(
+                side = Side.LAY,
+                validationCoordinator = validationCoordinator,
+                priceAdviser = priceAdviser
+        )
+    }
+
 }

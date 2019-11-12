@@ -8,18 +8,15 @@ import cz.fb.manaus.reactor.betting.BetCommand
 import cz.fb.manaus.reactor.betting.PriceAdviser
 import cz.fb.manaus.reactor.betting.validator.ValidationCoordinator
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
-import cz.fb.manaus.reactor.betting.validator.ValidationService
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.springframework.beans.factory.annotation.Autowired
 
-abstract class AbstractUpdatingBettor(
+class BetCoordinator(
         private val side: Side,
         private val validationCoordinator: ValidationCoordinator,
         private val priceAdviser: PriceAdviser
 ) : MarketSnapshotListener {
 
-    @Autowired
-    private lateinit var validationService: ValidationService
     @Autowired
     private lateinit var flowFilterRegistry: FlowFilterRegistry
     @Autowired
