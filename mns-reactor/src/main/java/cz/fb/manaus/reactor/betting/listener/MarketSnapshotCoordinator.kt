@@ -31,10 +31,9 @@ class MarketSnapshotCoordinator(
             for ((i, runnerPrices) in sortedPrices.withIndex()) {
                 val selectionId = runnerPrices.selectionId
                 val runner = market.getRunner(selectionId)
-                val sideSelection = SideSelection(side, selectionId)
                 val accepted = i in flowFilter.indexRange && flowFilter.runnerPredicate(market, runner)
                 if (snapshot.coverage.isActive(selectionId) || accepted) {
-                    val event = betEventFactory.create(sideSelection, snapshot, fairness, account)
+                    val event = betEventFactory.create(SideSelection(side, selectionId), snapshot, fairness, account)
                     collector.addAll(betEventListener.onBetEvent(event))
                 }
             }
