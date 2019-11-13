@@ -44,6 +44,14 @@ class ReactorTestFactory(
     }
 
     fun newBetEvent(side: Side, bestBack: Double, bestLay: Double): BetEvent {
+        val snapshot = newSnapshot(side, bestBack, bestLay)
+        val fairness = calculator.getFairness(snapshot.runnerPrices)
+        val runnerPrices = snapshot.runnerPrices.first()
+        val selectionId = runnerPrices.selectionId
+        return newEvent(side, selectionId, fairness, snapshot)
+    }
+
+    fun newSnapshot(side: Side, bestBack: Double, bestLay: Double): MarketSnapshot {
         val marketPrices = newMarketPrices(bestBack, bestLay, 3.0)
         val runnerPrices = marketPrices.first()
         val selectionId = runnerPrices.selectionId
@@ -56,9 +64,7 @@ class ReactorTestFactory(
             val counterBet = Bet("1", marketId, selectionId, requestedPrice, date, provider.minAmount)
             listOf(counterBet)
         } else emptyList()
-        val snapshot = MarketSnapshot(marketPrices, market, bets)
-        val fairness = calculator.getFairness(marketPrices)
-        return newEvent(side, selectionId, fairness, snapshot)
+        return MarketSnapshot(marketPrices, market, bets)
     }
 
     private fun newEvent(side: Side, selectionId: Long, fairness: Fairness, snapshot: MarketSnapshot): BetEvent {
