@@ -4,7 +4,9 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.ischia.BackLoserBet
 import cz.fb.manaus.ischia.LayLoserBet
 import cz.fb.manaus.reactor.betting.PriceAdviser
-import cz.fb.manaus.reactor.betting.listener.BetCoordinator
+import cz.fb.manaus.reactor.betting.listener.BetEventCoordinator
+import cz.fb.manaus.reactor.betting.listener.BetEventListener
+import cz.fb.manaus.reactor.betting.listener.MarketSnapshotCoordinator
 import cz.fb.manaus.reactor.betting.proposer.MinReduceProposerAdviser
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationCoordinator
@@ -27,9 +29,15 @@ open class BettorConfiguration {
 
     @Bean
     @LayLoserBet
-    open fun layBettor(@LayLoserBet priceAdviser: PriceAdviser,
-                       @LayLoserBet validationCoordinator: ValidationCoordinator): BetCoordinator {
-        return BetCoordinator(Side.LAY, validationCoordinator, priceAdviser)
+    open fun layBetEventCoordinator(@LayLoserBet priceAdviser: PriceAdviser,
+                                    @LayLoserBet validationCoordinator: ValidationCoordinator): BetEventCoordinator {
+        return BetEventCoordinator(validationCoordinator, priceAdviser)
+    }
+
+    @Bean
+    @LayLoserBet
+    open fun layBettor(@LayLoserBet betEventListener: BetEventListener): MarketSnapshotCoordinator {
+        return MarketSnapshotCoordinator(Side.LAY, betEventListener)
     }
 
     @Bean
@@ -42,8 +50,14 @@ open class BettorConfiguration {
 
     @Bean
     @BackLoserBet
-    open fun backBettor(@BackLoserBet priceAdviser: PriceAdviser,
-                        @BackLoserBet validationCoordinator: ValidationCoordinator): BetCoordinator {
-        return BetCoordinator(Side.BACK, validationCoordinator, priceAdviser)
+    open fun backBetEventCoordinator(@BackLoserBet priceAdviser: PriceAdviser,
+                                     @BackLoserBet validationCoordinator: ValidationCoordinator): BetEventCoordinator {
+        return BetEventCoordinator(validationCoordinator, priceAdviser)
+    }
+
+    @Bean
+    @BackLoserBet
+    open fun backBettor(@BackLoserBet betEventListener: BetEventListener): MarketSnapshotCoordinator {
+        return MarketSnapshotCoordinator(Side.BACK, betEventListener)
     }
 }

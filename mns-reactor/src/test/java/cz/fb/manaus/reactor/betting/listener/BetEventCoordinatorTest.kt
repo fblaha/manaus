@@ -2,11 +2,10 @@ package cz.fb.manaus.reactor.betting.listener
 
 import org.junit.Test
 
-class BetCoordinatorTest {
+class BetEventCoordinatorTest {
 
     @Test
-    fun onMarketSnapshot() {
+    fun onBetEvent() {
         // TODO test
     }
-
 }
