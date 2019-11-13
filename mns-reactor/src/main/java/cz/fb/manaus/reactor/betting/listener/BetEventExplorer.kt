@@ -7,7 +7,7 @@ import cz.fb.manaus.reactor.betting.BetCommand
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.springframework.beans.factory.annotation.Autowired
 
-class MarketSnapshotCoordinator(
+class BetEventExplorer(
         private val side: Side,
         private val betEventListener: BetEventListener
 ) : MarketSnapshotListener {

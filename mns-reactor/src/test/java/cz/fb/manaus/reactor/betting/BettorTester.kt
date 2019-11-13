@@ -2,14 +2,14 @@ package cz.fb.manaus.reactor.betting
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.repository.BetActionRepository
-import cz.fb.manaus.reactor.betting.listener.MarketSnapshotCoordinator
+import cz.fb.manaus.reactor.betting.listener.BetEventExplorer
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotEvent
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.test.assertEquals
 
 class BettorTester(
-        private val bettor: MarketSnapshotCoordinator,
+        private val bettor: BetEventExplorer,
         private val betActionRepository: BetActionRepository
 ) {
 

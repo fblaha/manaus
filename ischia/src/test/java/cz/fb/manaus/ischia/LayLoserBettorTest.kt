@@ -4,7 +4,7 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.BettorTester
-import cz.fb.manaus.reactor.betting.listener.MarketSnapshotCoordinator
+import cz.fb.manaus.reactor.betting.listener.BetEventExplorer
 import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +15,7 @@ class LayLoserBettorTest : AbstractDatabaseTestCase() {
 
     @LayLoserBet
     @Autowired
-    private lateinit var bettor: MarketSnapshotCoordinator
+    private lateinit var bettor: BetEventExplorer
     @Autowired
     private lateinit var reactorTestFactory: ReactorTestFactory
 
