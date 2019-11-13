@@ -9,13 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import kotlin.test.assertTrue
 
+
 @Component
 class MockBetEventListener : BetEventListener {
     override val side: Side = Side.BACK
 
+    val testAccount = account.copy()
+
     override fun onBetEvent(event: BetEvent): List<BetCommand> {
-        event.newPrice = Price(3.0, 3.0, Side.BACK)
-        return listOf(BetCommand(betTemplate, event.betAction))
+        if (event.account === testAccount) {
+            event.newPrice = Price(3.0, 3.0, Side.BACK)
+            return listOf(BetCommand(betTemplate, event.betAction))
+        }
+        return emptyList()
     }
 }
 
@@ -25,11 +31,13 @@ class BetEventExplorerTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var betEventExplorer: BetEventExplorer
+    @Autowired
+    private lateinit var listener: MockBetEventListener
 
 
     @Test
     fun onMarketSnapshot() {
-        val bets = betEventExplorer.onMarketSnapshot(MarketSnapshotEvent(snapshot, account))
+        val bets = betEventExplorer.onMarketSnapshot(MarketSnapshotEvent(snapshot, listener.testAccount))
         assertTrue { bets.isNotEmpty() }
         assertTrue { bets.all { it.action?.price == Price(3.0, 3.0, Side.BACK) } }
     }
