@@ -25,12 +25,10 @@ open class ReactorDatabaseConfiguration {
                                     handlers: List<BetCommandHandler>,
                                     bettingConf: BettingConf,
                                     snapshotListeners: List<MarketSnapshotListener>): MarketSnapshotNotifier {
-        val disabledListeners = bettingConf.disabledListeners.toSet()
         return MarketSnapshotNotifier(
                 snapshotListeners,
                 filterService,
-                handlers,
-                disabledListeners
+                handlers
         )
     }
 }

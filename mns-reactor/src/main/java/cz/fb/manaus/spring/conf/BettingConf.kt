@@ -7,8 +7,7 @@ import javax.annotation.PostConstruct
 
 @ConstructorBinding
 @ConfigurationProperties("betting")
-data class BettingConf(val disabledListeners: List<String> = emptyList(),
-                       val amount: Double = -1.0) {
+data class BettingConf(val amount: Double = -1.0) {
 
     private val log = Logger.getLogger(BettingConf::class.simpleName)
 

@@ -16,8 +16,7 @@ import java.util.logging.Logger
 class MarketSnapshotNotifier(
         snapshotListeners: List<MarketSnapshotListener>,
         private val filterService: MarketFilterService,
-        private val handlers: List<BetCommandHandler>,
-        private val disabledListeners: Set<String>
+        private val handlers: List<BetCommandHandler>
 ) {
 
     private val sortedSnapshotListeners: List<MarketSnapshotListener> =
@@ -34,7 +33,6 @@ class MarketSnapshotNotifier(
             unknownBets.forEach { log.warning { "unknown bet '$it'" } }
             if (unknownBets.isEmpty()) {
                 val bets = sortedSnapshotListeners
-                        .filter { it.javaClass.simpleName !in disabledListeners }
                         .flatMap { it.onMarketSnapshot(MarketSnapshotEvent(snapshot, account)) }
 
                 return toCollectedBets(callHandlers(bets))

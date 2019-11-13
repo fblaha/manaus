@@ -4,5 +4,4 @@ markets:
   history: 300d
   lookAhead: 7d
 betting:
-  disabledListeners: []
   amount: 2.0
