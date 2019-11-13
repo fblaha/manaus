@@ -13,7 +13,6 @@ import org.springframework.test.context.ActiveProfiles
 @ActiveProfiles("ischia")
 class LayLoserBettorTest : AbstractDatabaseTestCase() {
 
-    @LayLoserBet
     @Autowired
     private lateinit var bettor: BetEventExplorer
     @Autowired
@@ -23,7 +22,7 @@ class LayLoserBettorTest : AbstractDatabaseTestCase() {
 
     @Before
     fun setUp() {
-        bettorTester = BettorTester(bettor, betActionRepository)
+        bettorTester = BettorTester(Side.LAY, bettor, betActionRepository)
     }
 
     @Test

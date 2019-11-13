@@ -1,6 +1,7 @@
 package cz.fb.manaus.reactor.betting.listener
 
 import cz.fb.manaus.core.model.Bet
+import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetCommand
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.PriceAdviser
@@ -9,6 +10,7 @@ import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import org.springframework.beans.factory.annotation.Autowired
 
 class BetEventCoordinator(
+        override val side: Side,
         private val validationCoordinator: ValidationCoordinator,
         private val priceAdviser: PriceAdviser
 ) : BetEventListener {

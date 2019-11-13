@@ -1,5 +1,6 @@
 package cz.fb.manaus.manila
 
+import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import cz.fb.manaus.reactor.ReactorTestFactory
 import cz.fb.manaus.reactor.betting.BettorTester
@@ -13,7 +14,6 @@ import org.springframework.test.context.ActiveProfiles
 @ActiveProfiles("manila")
 class BestChanceLayBettorTest : AbstractDatabaseTestCase() {
 
-    @ManilaBet
     @Autowired
     private lateinit var bettor: BetEventExplorer
     @Autowired
@@ -22,7 +22,7 @@ class BestChanceLayBettorTest : AbstractDatabaseTestCase() {
 
     @Before
     fun setUp() {
-        bettorTester = BettorTester(bettor, betActionRepository)
+        bettorTester = BettorTester(Side.LAY, bettor, betActionRepository)
     }
 
     @Test

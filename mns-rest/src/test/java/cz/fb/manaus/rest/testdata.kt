@@ -4,8 +4,6 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.PriceAdviser
 import cz.fb.manaus.reactor.betting.listener.BetEventCoordinator
-import cz.fb.manaus.reactor.betting.listener.BetEventExplorer
-import cz.fb.manaus.reactor.betting.listener.BetEventListener
 import cz.fb.manaus.reactor.betting.proposer.MinReduceProposerAdviser
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.proposer.common.AbstractBestPriceProposer
@@ -43,15 +41,7 @@ open class TestLocalConfiguration {
     @Bean
     open fun backBetEventCoordinator(priceAdviser: PriceAdviser,
                                      validationCoordinator: ValidationCoordinator): BetEventCoordinator {
-        return BetEventCoordinator(validationCoordinator, priceAdviser)
-    }
-
-    @Bean
-    open fun backBettor(betEventListener: BetEventListener): BetEventExplorer {
-        return BetEventExplorer(
-                side = Side.BACK,
-                betEventListener = betEventListener
-        )
+        return BetEventCoordinator(Side.BACK, validationCoordinator, priceAdviser)
     }
 
 }

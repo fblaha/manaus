@@ -9,6 +9,7 @@ import java.time.temporal.ChronoUnit
 import kotlin.test.assertEquals
 
 class BettorTester(
+        private val side: Side,
         private val bettor: BetEventExplorer,
         private val betActionRepository: BetActionRepository
 ) {
@@ -19,6 +20,7 @@ class BettorTester(
                       updateCount: Int): List<BetCommand> {
         val snapshot = MarketSnapshot(marketPrices, market, bets, emptyMap())
         val collected = bettor.onMarketSnapshot(MarketSnapshotEvent(snapshot, account))
+                .filter { it.bet.requestedPrice.side == side }
         assertEquals(placeCount, collected.filter { it.isPlace }.size)
         assertEquals(updateCount, collected.filter { it.isUpdate }.size)
         return collected

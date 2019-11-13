@@ -1,23 +1,18 @@
 package cz.fb.manaus.reactor.betting.listener
 
-import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.SideSelection
 import cz.fb.manaus.core.model.isActive
 import cz.fb.manaus.reactor.betting.BetCommand
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 
+@Component
 class BetEventExplorer(
-        private val side: Side,
-        private val betEventListener: BetEventListener
+        private val flowFilterRegistry: FlowFilterRegistry,
+        private val calculator: FairnessPolynomialCalculator,
+        private val betEventFactory: BetEventFactory,
+        private val betEventListeners: List<BetEventListener>
 ) : MarketSnapshotListener {
-
-    @Autowired
-    private lateinit var flowFilterRegistry: FlowFilterRegistry
-    @Autowired
-    private lateinit var calculator: FairnessPolynomialCalculator
-    @Autowired
-    private lateinit var betEventFactory: BetEventFactory
 
     override fun onMarketSnapshot(marketSnapshotEvent: MarketSnapshotEvent): List<BetCommand> {
         val (snapshot, account) = marketSnapshotEvent
@@ -33,8 +28,10 @@ class BetEventExplorer(
                 val runner = market.getRunner(selectionId)
                 val accepted = i in flowFilter.indexRange && flowFilter.runnerPredicate(market, runner)
                 if (snapshot.coverage.isActive(selectionId) || accepted) {
-                    val event = betEventFactory.create(SideSelection(side, selectionId), snapshot, fairness, account)
-                    collector.addAll(betEventListener.onBetEvent(event))
+                    for (betEventListener in betEventListeners) {
+                        val event = betEventFactory.create(SideSelection(betEventListener.side, selectionId), snapshot, fairness, account)
+                        collector.addAll(betEventListener.onBetEvent(event))
+                    }
                 }
             }
         }

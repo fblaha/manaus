@@ -5,8 +5,6 @@ import cz.fb.manaus.ischia.BackLoserBet
 import cz.fb.manaus.ischia.LayLoserBet
 import cz.fb.manaus.reactor.betting.PriceAdviser
 import cz.fb.manaus.reactor.betting.listener.BetEventCoordinator
-import cz.fb.manaus.reactor.betting.listener.BetEventExplorer
-import cz.fb.manaus.reactor.betting.listener.BetEventListener
 import cz.fb.manaus.reactor.betting.proposer.MinReduceProposerAdviser
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationCoordinator
@@ -31,13 +29,7 @@ open class BettorConfiguration {
     @LayLoserBet
     open fun layBetEventCoordinator(@LayLoserBet priceAdviser: PriceAdviser,
                                     @LayLoserBet validationCoordinator: ValidationCoordinator): BetEventCoordinator {
-        return BetEventCoordinator(validationCoordinator, priceAdviser)
-    }
-
-    @Bean
-    @LayLoserBet
-    open fun layBettor(@LayLoserBet betEventListener: BetEventListener): BetEventExplorer {
-        return BetEventExplorer(Side.LAY, betEventListener)
+        return BetEventCoordinator(Side.LAY, validationCoordinator, priceAdviser)
     }
 
     @Bean
@@ -52,12 +44,7 @@ open class BettorConfiguration {
     @BackLoserBet
     open fun backBetEventCoordinator(@BackLoserBet priceAdviser: PriceAdviser,
                                      @BackLoserBet validationCoordinator: ValidationCoordinator): BetEventCoordinator {
-        return BetEventCoordinator(validationCoordinator, priceAdviser)
+        return BetEventCoordinator(Side.BACK, validationCoordinator, priceAdviser)
     }
 
-    @Bean
-    @BackLoserBet
-    open fun backBettor(@BackLoserBet betEventListener: BetEventListener): BetEventExplorer {
-        return BetEventExplorer(Side.BACK, betEventListener)
-    }
 }

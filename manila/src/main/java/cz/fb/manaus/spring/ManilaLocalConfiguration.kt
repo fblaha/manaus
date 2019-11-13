@@ -4,8 +4,6 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.manila.ManilaBet
 import cz.fb.manaus.reactor.betting.PriceAdviser
 import cz.fb.manaus.reactor.betting.listener.BetEventCoordinator
-import cz.fb.manaus.reactor.betting.listener.BetEventExplorer
-import cz.fb.manaus.reactor.betting.listener.BetEventListener
 import cz.fb.manaus.reactor.betting.listener.FlowFilter
 import cz.fb.manaus.reactor.betting.proposer.MinReduceProposerAdviser
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
@@ -49,16 +47,7 @@ open class ManilaLocalConfiguration {
     @Bean
     @ManilaBet
     open fun betEventCoordinator(priceAdviser: PriceAdviser, validationCoordinator: ValidationCoordinator): BetEventCoordinator {
-        return BetEventCoordinator(validationCoordinator, priceAdviser)
-    }
-
-    @Bean
-    @ManilaBet
-    open fun layBettor(betEventListener: BetEventListener): BetEventExplorer {
-        return BetEventExplorer(
-                side = Side.LAY,
-                betEventListener = betEventListener
-        )
+        return BetEventCoordinator(Side.LAY, validationCoordinator, priceAdviser)
     }
 
 }
