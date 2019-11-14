@@ -2,6 +2,7 @@ package cz.fb.manaus.reactor.betting.listener
 
 import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.Bet
+import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.reactor.betting.BetCommand
 import cz.fb.manaus.reactor.betting.BetEvent
 import org.springframework.stereotype.Component
@@ -21,7 +22,7 @@ class BetCommandIssuer(private val metricRegistry: MetricRegistry) {
         log.info { "bet ${action.betActionType} action '$action'" }
         return if (oldBet != null) {
             // TODO remove it after debug
-            log.info { "DBG: diff '${newPrice.price - oldBet.requestedPrice.price}' new price '$newPrice' old price '${oldBet.requestedPrice}'" }
+            DEBUG(newPrice, oldBet)
             BetCommand(oldBet replacePrice newPrice.price, action)
         } else {
             val market = event.market
@@ -31,6 +32,12 @@ class BetCommandIssuer(private val metricRegistry: MetricRegistry) {
                     requestedPrice = newPrice)
             BetCommand(bet, action)
         }
+    }
+
+    private fun DEBUG(newPrice: Price, oldBet: Bet) {
+        val old = oldBet.requestedPrice.price
+        val diff = newPrice.price - old
+        log.info { "DBG: diff '${diff / (old - 1)}' new price '$newPrice' old price '${oldBet.requestedPrice}'" }
     }
 
     fun tryCancel(oldBet: Bet?): BetCommand? {
