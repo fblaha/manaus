@@ -1,9 +1,6 @@
 package cz.fb.manaus.reactor.betting.listener
 
-import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.model.SideSelection
-import cz.fb.manaus.core.model.account
-import cz.fb.manaus.core.model.homePrices
+import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.price.Fairness
 import org.junit.Test
@@ -16,6 +13,12 @@ class BetEventFactoryTest : AbstractLocalTestCase() {
 
     @Test
     fun create() {
+        val snapshot = MarketSnapshot(
+                runnerPrices = runnerPrices,
+                currentBets = emptyList(),
+                market = market
+        )
+
         val fairness = Fairness(0.9, null)
         val sideSelection = SideSelection(Side.BACK, homePrices.selectionId)
         val event = betEventFactory.create(

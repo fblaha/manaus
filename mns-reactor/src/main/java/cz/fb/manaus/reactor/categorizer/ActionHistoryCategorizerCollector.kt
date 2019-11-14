@@ -24,7 +24,6 @@ class ActionHistoryCategorizerCollector(
         val market = realizedBet.market
         val side = realizedBet.settledBet.price.side
         val selectionId = realizedBet.settledBet.selectionId
-        // TODO filter in DB
         val betActions = betActionRepository.find(market.id)
                 .filter { it.selectionId == selectionId && side == it.price.side }
         if (betActions.isEmpty()) {

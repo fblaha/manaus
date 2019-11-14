@@ -14,10 +14,10 @@ import kotlin.test.assertTrue
 class MockBetEventListener : BetEventListener {
     override val side: Side = Side.BACK
 
-    val testAccount = account.copy()
+    val mockEvent = market.event.copy(name = "mockEvent")
 
     override fun onBetEvent(event: BetEvent): List<BetCommand> {
-        if (event.account === testAccount) {
+        if (event.market.event === mockEvent) {
             event.newPrice = Price(3.0, 3.0, Side.BACK)
             return listOf(BetCommand(betTemplate, event.betAction))
         }
@@ -25,7 +25,6 @@ class MockBetEventListener : BetEventListener {
     }
 }
 
-val snapshot = MarketSnapshot(runnerPrices = runnerPrices, currentBets = emptyList(), market = market)
 
 class BetEventExplorerTest : AbstractLocalTestCase() {
 
@@ -37,7 +36,12 @@ class BetEventExplorerTest : AbstractLocalTestCase() {
 
     @Test
     fun onMarketSnapshot() {
-        val bets = betEventExplorer.onMarketSnapshot(MarketSnapshotEvent(snapshot, listener.testAccount))
+        val snapshot = MarketSnapshot(
+                runnerPrices = runnerPrices,
+                currentBets = emptyList(),
+                market = market.copy(event = listener.mockEvent)
+        )
+        val bets = betEventExplorer.onMarketSnapshot(MarketSnapshotEvent(snapshot, account))
         assertTrue { bets.isNotEmpty() }
         assertTrue { bets.all { it.action?.price == Price(3.0, 3.0, Side.BACK) } }
     }

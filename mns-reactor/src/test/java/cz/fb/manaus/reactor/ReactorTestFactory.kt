@@ -46,8 +46,7 @@ class ReactorTestFactory(
     fun newBetEvent(side: Side, bestBack: Double, bestLay: Double): BetEvent {
         val snapshot = newSnapshot(side, bestBack, bestLay)
         val fairness = calculator.getFairness(snapshot.runnerPrices)
-        val runnerPrices = snapshot.runnerPrices.first()
-        val selectionId = runnerPrices.selectionId
+        val selectionId = snapshot.runnerPrices.first().selectionId
         return newEvent(side, selectionId, fairness, snapshot)
     }
 
