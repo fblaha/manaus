@@ -22,15 +22,15 @@ class ReactorTestFactory(
         private val priceService: PriceService,
         private val forecaster: ChargeGrowthForecaster) {
 
-    fun newUpdateBetContext(marketPrices: List<RunnerPrices>, side: Side): BetEvent {
-        val oldBet = Bet(betId = "1",
-                marketId = "1",
+    fun newUpdateBetEvent(side: Side, marketPrices: List<RunnerPrices>): BetEvent {
+        val oldBet = Bet(betId = betAction.betId,
+                marketId = market.id,
                 selectionId = SEL_HOME,
                 requestedPrice = Price(5.0, 5.0, side),
                 placedDate = Instant.now())
-        val context = newBetEvent(side, marketPrices, oldBet)
-        context.newPrice = oldBet.requestedPrice
-        return context
+        val event = newBetEvent(side, marketPrices, oldBet)
+        event.newPrice = oldBet.requestedPrice
+        return event
     }
 
     fun newBetEvent(side: Side, marketPrices: List<RunnerPrices>, oldBet: Bet?): BetEvent {
@@ -51,7 +51,7 @@ class ReactorTestFactory(
         return newEvent(side, selectionId, fairness, snapshot)
     }
 
-    fun newSnapshot(side: Side, bestBack: Double, bestLay: Double): MarketSnapshot {
+    private fun newSnapshot(side: Side, bestBack: Double, bestLay: Double): MarketSnapshot {
         val marketPrices = newMarketPrices(bestBack, bestLay, 3.0)
         val runnerPrices = marketPrices.first()
         val selectionId = runnerPrices.selectionId

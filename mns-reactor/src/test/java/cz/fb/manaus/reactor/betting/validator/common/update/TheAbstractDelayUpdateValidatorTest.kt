@@ -20,22 +20,22 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
     @Autowired
     private lateinit var reactorTestFactory: ReactorTestFactory
 
-    private fun checkValidation(actionType: BetActionType, beforeMinutes: Long, lay: Side, validationResult: ValidationResult) {
+    private fun checkValidation(actionType: BetActionType, beforeMinutes: Long, side: Side, validationResult: ValidationResult) {
         marketRepository.saveOrUpdate(market)
         val now = Instant.now()
         val place = betAction.copy(
                 time = now.minus(beforeMinutes, ChronoUnit.MINUTES),
-                price = Price(2.0, 30.0, lay),
+                price = Price(2.0, 30.0, side),
                 betActionType = actionType)
         betActionRepository.idSafeSave(place)
-        val result = validator.validate(reactorTestFactory.newUpdateBetContext(runnerPrices, lay))
+        val result = validator.validate(reactorTestFactory.newUpdateBetEvent(side, runnerPrices))
         assertEquals(validationResult, result)
     }
 
     @Test(expected = NullPointerException::class)
     fun `no bet action`() {
         marketRepository.saveOrUpdate(market)
-        val result = validator.validate(reactorTestFactory.newUpdateBetContext(runnerPrices, Side.LAY))
+        val result = validator.validate(reactorTestFactory.newUpdateBetEvent(Side.LAY, runnerPrices))
         assertEquals(ValidationResult.DROP, result)
     }
 
