@@ -65,7 +65,6 @@ data class BetEvent(
     // TODO not used
     val simulatedBet: RealizedBet get() = simulate(betAction, market)
 
-
     val placeOrUpdate: BetCommand
         get() {
             val action = betAction
@@ -74,8 +73,6 @@ data class BetEvent(
             val oldBet = oldBet
             log.info { "bet ${action.betActionType} action '$action'" }
             return if (oldBet != null) {
-                // TODO remove it after debug
-                DEBUG(newPrice, oldBet)
                 BetCommand(oldBet replacePrice newPrice.price, action)
             } else {
                 val market = market
@@ -86,13 +83,6 @@ data class BetEvent(
                 BetCommand(bet, action)
             }
         }
-
-    private fun DEBUG(newPrice: Price, oldBet: Bet) {
-        val old = oldBet.requestedPrice.price
-        val diff = newPrice.price - old
-        log.info { "DBG: diff '${diff / (old - 1)}' new price '$newPrice' old price '${oldBet.requestedPrice}'" }
-    }
-
 
     val cancel: BetCommand?
         get() {
