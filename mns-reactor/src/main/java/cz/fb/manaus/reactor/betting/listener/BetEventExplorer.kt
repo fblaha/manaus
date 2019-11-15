@@ -29,7 +29,12 @@ class BetEventExplorer(
                 val accepted = i in flowFilter.indexRange && flowFilter.runnerPredicate(market, runner)
                 if (snapshot.coverage.isActive(selectionId) || accepted) {
                     for (betEventListener in betEventListeners) {
-                        val event = betEventFactory.create(SideSelection(betEventListener.side, selectionId), snapshot, fairness, account)
+                        val event = betEventFactory.create(
+                                sideSelection = SideSelection(betEventListener.side, selectionId),
+                                snapshot = snapshot,
+                                fairness = fairness,
+                                account = account
+                        )
                         collector.addAll(betEventListener.onBetEvent(event))
                     }
                 }
