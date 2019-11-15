@@ -7,10 +7,7 @@ import cz.fb.manaus.reactor.price.Fairness
 import org.junit.Assert
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 val HOME_EVENT: BetEvent = BetEvent(
         selectionId = SEL_HOME,
@@ -52,4 +49,21 @@ class BetEventTest : AbstractLocalTestCase() {
         Assert.assertEquals(5.0, settledBet.settledBet.price.amount, 0.0001)
         assertNotNull(settledBet.betAction)
     }
+
+    @Test
+    fun placeOrUpdate() {
+        val homeEvent = HOME_EVENT
+        val price = Price(3.0, 3.0, Side.BACK)
+        homeEvent.newPrice = price
+        val command = homeEvent.placeOrUpdate
+        assertEquals(price, command.action?.price)
+        assertEquals(BetActionType.PLACE, command.action?.betActionType)
+        assertEquals(price, command.bet.requestedPrice)
+    }
+
+    @Test
+    fun cancel() {
+        assertNull(HOME_EVENT.cancel)
+    }
 }
+

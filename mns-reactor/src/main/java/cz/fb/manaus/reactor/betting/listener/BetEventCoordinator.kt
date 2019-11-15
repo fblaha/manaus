@@ -1,6 +1,6 @@
 package cz.fb.manaus.reactor.betting.listener
 
-import cz.fb.manaus.core.model.Bet
+import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetCommand
 import cz.fb.manaus.reactor.betting.BetEvent
@@ -16,16 +16,16 @@ class BetEventCoordinator(
 ) : BetEventListener {
 
     @Autowired
-    private lateinit var betCommandIssuer: BetCommandIssuer
+    private lateinit var metricRegistry: MetricRegistry
 
     override fun onBetEvent(event: BetEvent): List<BetCommand> {
         val collector = mutableListOf<BetCommand>()
         val prePriceValidation = validationCoordinator.validatePrePrice(event)
-        cancelOnDrop(prePriceValidation, event.oldBet, collector)
+        cancelOnDrop(prePriceValidation, event, collector)
         if (prePriceValidation == ValidationResult.OK) {
             val newPrice = priceAdviser.getNewPrice(event)
             if (newPrice == null) {
-                betCommandIssuer.tryCancel(event.oldBet)?.let { collector.add(it) }
+                cancel(event, collector)
                 return collector.toList()
             }
             event.newPrice = newPrice.price
@@ -33,19 +33,26 @@ class BetEventCoordinator(
 
             if (!event.isOldMatched) {
                 val priceValidation = validationCoordinator.validatePrice(event)
-                cancelOnDrop(priceValidation, event.oldBet, collector)
+                cancelOnDrop(priceValidation, event, collector)
                 if (priceValidation == ValidationResult.OK) {
                     check(prePriceValidation == ValidationResult.OK && priceValidation == ValidationResult.OK)
-                    collector.add(betCommandIssuer.placeOrUpdate(event))
+                    collector.add(event.placeOrUpdate)
                 }
             }
         }
         return collector.toList()
     }
 
-    private fun cancelOnDrop(prePriceValidation: ValidationResult, oldBet: Bet?, collector: MutableList<BetCommand>) {
+    private fun cancelOnDrop(prePriceValidation: ValidationResult, event: BetEvent, collector: MutableList<BetCommand>) {
         if (prePriceValidation == ValidationResult.DROP) {
-            betCommandIssuer.tryCancel(oldBet)?.let { collector.add(it) }
+            cancel(event, collector)
+        }
+    }
+
+    private fun cancel(event: BetEvent, collector: MutableList<BetCommand>) {
+        event.cancel?.let {
+            metricRegistry.counter("bet.cancel").inc()
+            collector.add(it)
         }
     }
 
