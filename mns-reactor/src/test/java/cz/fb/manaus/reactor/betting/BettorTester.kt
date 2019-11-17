@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.betting
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.repository.BetActionRepository
-import cz.fb.manaus.reactor.betting.listener.BetEventExplorer
+import cz.fb.manaus.reactor.betting.listener.BetEventDigger
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotEvent
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
@@ -14,7 +14,7 @@ import kotlin.test.assertEquals
 @Component
 @Profile(ManausProfiles.DB)
 class BettorTester(
-        private val bettor: BetEventExplorer,
+        private val betEventDigger: BetEventDigger,
         private val betActionRepository: BetActionRepository
 ) {
 
@@ -26,7 +26,7 @@ class BettorTester(
             expectedUpdateCount: Int): List<BetCommand> {
 
         val snapshot = MarketSnapshot(marketPrices, market, bets, emptyMap())
-        val collected = bettor.onMarketSnapshot(MarketSnapshotEvent(snapshot, account))
+        val collected = betEventDigger.onMarketSnapshot(MarketSnapshotEvent(snapshot, account))
                 .filter { it.bet.requestedPrice.side == side }
         assertEquals(expectedPlaceCount, collected.filter { it.isPlace }.size)
         assertEquals(expectedUpdateCount, collected.filter { it.isUpdate }.size)

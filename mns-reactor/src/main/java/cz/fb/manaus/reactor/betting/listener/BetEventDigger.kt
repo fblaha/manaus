@@ -7,7 +7,7 @@ import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.springframework.stereotype.Component
 
 @Component
-class BetEventExplorer(
+class BetEventDigger(
         private val flowFilterRegistry: FlowFilterRegistry,
         private val calculator: FairnessPolynomialCalculator,
         private val betEventFactory: BetEventFactory,

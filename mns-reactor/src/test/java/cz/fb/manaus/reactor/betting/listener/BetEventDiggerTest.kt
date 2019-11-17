@@ -26,10 +26,10 @@ class MockBetEventListener : BetEventListener {
 }
 
 
-class BetEventExplorerTest : AbstractLocalTestCase() {
+class BetEventDiggerTest : AbstractLocalTestCase() {
 
     @Autowired
-    private lateinit var betEventExplorer: BetEventExplorer
+    private lateinit var betEventDigger: BetEventDigger
     @Autowired
     private lateinit var listener: MockBetEventListener
 
@@ -41,7 +41,7 @@ class BetEventExplorerTest : AbstractLocalTestCase() {
                 currentBets = emptyList(),
                 market = market.copy(event = listener.mockEvent)
         )
-        val bets = betEventExplorer.onMarketSnapshot(MarketSnapshotEvent(snapshot, account))
+        val bets = betEventDigger.onMarketSnapshot(MarketSnapshotEvent(snapshot, account))
         assertTrue { bets.isNotEmpty() }
         assertTrue { bets.all { it.action?.price == Price(3.0, 3.0, Side.BACK) } }
     }
