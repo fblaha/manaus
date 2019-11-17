@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.betting
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.reactor.ReactorTestFactory
+import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.price.Fairness
 import org.junit.Assert
 import org.junit.Test
@@ -28,7 +28,7 @@ val HOME_EVENT_LAY: BetEvent = HOME_EVENT_BACK.copy(sideSelection = SideSelectio
 class BetEventTest : AbstractLocalTestCase() {
 
     @Autowired
-    private lateinit var factory: ReactorTestFactory
+    private lateinit var factory: BetEventTestFactory
 
     @Test
     fun `counter half matched`() {

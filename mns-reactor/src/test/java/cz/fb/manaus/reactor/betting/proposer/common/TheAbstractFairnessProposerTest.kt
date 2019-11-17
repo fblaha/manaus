@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.betting.proposer.common
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.reactor.ReactorTestFactory
+import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.betting.proposer.FixedDowngradeStrategy
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +19,7 @@ class TheAbstractFairnessProposerTest : AbstractLocalTestCase() {
     @Autowired
     private lateinit var backProposer: TestBackProposer
     @Autowired
-    private lateinit var factory: ReactorTestFactory
+    private lateinit var factory: BetEventTestFactory
 
     @Test
     fun `lay price by lay proposer`() {

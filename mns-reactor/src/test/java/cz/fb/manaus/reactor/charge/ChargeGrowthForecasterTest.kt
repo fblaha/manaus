@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.charge
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.reactor.ReactorTestFactory
+import cz.fb.manaus.reactor.PricesTestFactory
 import cz.fb.manaus.reactor.betting.AmountAdviser
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.junit.Test
@@ -17,7 +17,7 @@ class ChargeGrowthForecasterTest : AbstractLocalTestCase() {
     @Autowired
     private lateinit var forecaster: ChargeGrowthForecaster
     @Autowired
-    private lateinit var factory: ReactorTestFactory
+    private lateinit var factory: PricesTestFactory
     @Autowired
     private lateinit var calculator: FairnessPolynomialCalculator
     @Autowired

@@ -4,7 +4,7 @@ import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.provider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.reactor.ReactorTestFactory
+import cz.fb.manaus.reactor.PricesTestFactory
 import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +15,7 @@ class PriceFilterTest : AbstractLocalTestCase() {
 
     private lateinit var filter: PriceFilter
     @Autowired
-    private lateinit var testFactory: ReactorTestFactory
+    private lateinit var testFactory: PricesTestFactory
     @Autowired
     private lateinit var priceBulldozer: PriceBulldozer
 

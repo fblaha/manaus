@@ -2,7 +2,8 @@ package cz.fb.manaus.reactor.betting.validator.common.update
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.reactor.ReactorTestFactory
+import cz.fb.manaus.reactor.BetEventTestFactory
+import cz.fb.manaus.reactor.PricesTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.reactor.rounding.RoundingService
@@ -19,7 +20,9 @@ class TooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
     @Autowired
     private lateinit var roundingService: RoundingService
     @Autowired
-    private lateinit var factory: ReactorTestFactory
+    private lateinit var pricesTestFactory: PricesTestFactory
+    @Autowired
+    private lateinit var factory: BetEventTestFactory
 
 
     @Test
@@ -27,7 +30,7 @@ class TooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
         val oldPrice = Price(2.5, 5.0, Side.BACK)
         val oldBet = betTemplate.copy(requestedPrice = oldPrice)
 
-        val prices = factory.newMarketPrices(0.1, listOf(0.4, 0.3, 0.3))
+        val prices = pricesTestFactory.newMarketPrices(0.1, listOf(0.4, 0.3, 0.3))
         val context = factory.newBetEvent(Side.BACK, prices, oldBet)
         context.newPrice = oldPrice
         assertEquals(ValidationResult.NOP, validator.validate(context))

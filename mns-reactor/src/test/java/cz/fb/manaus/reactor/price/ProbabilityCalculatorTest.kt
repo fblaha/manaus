@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.price
 import cz.fb.manaus.core.model.SEL_HOME
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.reactor.ReactorTestFactory
+import cz.fb.manaus.reactor.PricesTestFactory
 import org.junit.Assert
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 class ProbabilityCalculatorTest : AbstractLocalTestCase() {
 
     @Autowired
-    private lateinit var factory: ReactorTestFactory
+    private lateinit var factory: PricesTestFactory
     @Autowired
     private lateinit var calculator: ProbabilityCalculator
     @Autowired

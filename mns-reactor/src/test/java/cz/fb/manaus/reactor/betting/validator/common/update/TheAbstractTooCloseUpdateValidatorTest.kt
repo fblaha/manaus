@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.betting.validator.common.update
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.reactor.ReactorTestFactory
+import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.rounding.RoundingService
 import cz.fb.manaus.reactor.rounding.decrement
@@ -18,7 +18,7 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
     @Autowired
     private lateinit var roundingService: RoundingService
     @Autowired
-    private lateinit var factory: ReactorTestFactory
+    private lateinit var factory: BetEventTestFactory
 
 
     @Test

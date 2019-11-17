@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.betting.proposer.common
 
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.reactor.ReactorTestFactory
+import cz.fb.manaus.reactor.PricesTestFactory
 import cz.fb.manaus.reactor.betting.HOME_EVENT_BACK
 import cz.fb.manaus.reactor.betting.HOME_EVENT_LAY
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
@@ -18,7 +18,7 @@ class TheAbstractBestPriceProposerTest : AbstractLocalTestCase() {
     @Autowired
     private lateinit var backProposer: BackProposer
     @Autowired
-    private lateinit var factory: ReactorTestFactory
+    private lateinit var factory: PricesTestFactory
 
     @Test
     fun `lay propose`() {

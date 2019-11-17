@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.price
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.reactor.ReactorTestFactory
+import cz.fb.manaus.reactor.PricesTestFactory
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -18,7 +18,7 @@ class PriceServiceTest : AbstractLocalTestCase() {
     @Autowired
     private lateinit var roundingService: RoundingService
     @Autowired
-    private lateinit var factory: ReactorTestFactory
+    private lateinit var factory: PricesTestFactory
     @Autowired
     private lateinit var calculator: FairnessPolynomialCalculator
 

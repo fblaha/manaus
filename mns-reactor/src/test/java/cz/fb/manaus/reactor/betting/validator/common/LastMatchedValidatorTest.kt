@@ -4,7 +4,7 @@ import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.homePrices
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import cz.fb.manaus.reactor.ReactorTestFactory
+import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
 import org.junit.Test
@@ -17,7 +17,7 @@ class LastMatchedValidatorTest : AbstractLocalTestCase() {
     @Autowired
     private lateinit var validator: TestValidator
     @Autowired
-    private lateinit var factory: ReactorTestFactory
+    private lateinit var factory: BetEventTestFactory
 
     @Test
     fun `accept lay`() {

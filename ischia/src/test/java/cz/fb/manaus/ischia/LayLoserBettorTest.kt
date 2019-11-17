@@ -2,7 +2,7 @@ package cz.fb.manaus.ischia
 
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
-import cz.fb.manaus.reactor.ReactorTestFactory
+import cz.fb.manaus.reactor.PricesTestFactory
 import cz.fb.manaus.reactor.betting.BettorTester
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,7 +12,7 @@ import org.springframework.test.context.ActiveProfiles
 class LayLoserBettorTest : AbstractDatabaseTestCase() {
 
     @Autowired
-    private lateinit var reactorTestFactory: ReactorTestFactory
+    private lateinit var factory: PricesTestFactory
 
     @Autowired
     private lateinit var bettorTester: BettorTester
@@ -21,7 +21,7 @@ class LayLoserBettorTest : AbstractDatabaseTestCase() {
     @Test
     fun `place bet - based on fairness`() {
         bettorTester.checkPlace(Side.LAY,
-                reactorTestFactory.newMarketPrices(2.98, 3.2, 3.05),
+                factory.newMarketPrices(2.98, 3.2, 3.05),
                 3, 2.88)
     }
 
@@ -29,7 +29,7 @@ class LayLoserBettorTest : AbstractDatabaseTestCase() {
     fun `place bet - based on best price`() {
         bettorTester.checkPlace(
                 Side.LAY,
-                reactorTestFactory.newMarketPrices(2.58, 3.15, 3.0),
+                factory.newMarketPrices(2.58, 3.15, 3.0),
                 3, 2.6)
     }
 
@@ -37,13 +37,13 @@ class LayLoserBettorTest : AbstractDatabaseTestCase() {
     fun `place bet - based on last matched or traded volume`() {
         bettorTester.checkPlace(
                 Side.LAY,
-                reactorTestFactory.newMarketPrices(2.8, 3.2, 2.5),
+                factory.newMarketPrices(2.8, 3.2, 2.5),
                 3, 2.48)
     }
 
     @Test
     fun `too close price for update`() {
-        val market = reactorTestFactory.newMarketPrices(2.90, 3.2, 3.0)
+        val market = factory.newMarketPrices(2.90, 3.2, 3.0)
 
         bettorTester.checkUpdate(Side.LAY, 2.86, market, 0, 0)
         bettorTester.checkUpdate(Side.LAY, 2.88, market, 0, 0)

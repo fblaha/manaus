@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.betting.validator.common.update
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
-import cz.fb.manaus.reactor.ReactorTestFactory
+import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.spring.ManausProfiles.DB
 import org.junit.Test
@@ -18,7 +18,7 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
     @Autowired
     private lateinit var validator: TestValidator
     @Autowired
-    private lateinit var reactorTestFactory: ReactorTestFactory
+    private lateinit var factory: BetEventTestFactory
 
     private fun checkValidation(actionType: BetActionType, beforeMinutes: Long, side: Side, validationResult: ValidationResult) {
         marketRepository.saveOrUpdate(market)
@@ -28,14 +28,14 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
                 price = Price(2.0, 30.0, side),
                 betActionType = actionType)
         betActionRepository.idSafeSave(place)
-        val result = validator.validate(reactorTestFactory.newUpdateBetEvent(side, runnerPrices))
+        val result = validator.validate(factory.newUpdateBetEvent(side, runnerPrices))
         assertEquals(validationResult, result)
     }
 
     @Test(expected = NullPointerException::class)
     fun `no bet action`() {
         marketRepository.saveOrUpdate(market)
-        val result = validator.validate(reactorTestFactory.newUpdateBetEvent(Side.LAY, runnerPrices))
+        val result = validator.validate(factory.newUpdateBetEvent(Side.LAY, runnerPrices))
         assertEquals(ValidationResult.DROP, result)
     }
 
