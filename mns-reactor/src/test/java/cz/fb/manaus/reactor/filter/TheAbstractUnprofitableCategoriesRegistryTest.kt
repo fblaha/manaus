@@ -3,7 +3,10 @@ package cz.fb.manaus.reactor.filter
 import cz.fb.manaus.core.MarketCategories
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.repository.RealizedBetLoader
+import cz.fb.manaus.core.repository.SettledBetRepository
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import cz.fb.manaus.reactor.profit.ProfitService
 import cz.fb.manaus.spring.ManausProfiles
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.hasItem
@@ -88,9 +91,19 @@ class TheAbstractUnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase()
 
     @Component
     @Profile(ManausProfiles.DB)
-    private class TestUnprofitableCategoriesRegistry :
-            AbstractUnprofitableCategoriesRegistry("test",
-                    Duration.ofDays(30), Side.LAY, 0.0, "weak",
-                    mapOf(5 to 2, 2 to 7))
-
+    class TestUnprofitableCategoriesRegistry(
+            profitService: ProfitService,
+            settledBetRepository: SettledBetRepository,
+            realizedBetLoader: RealizedBetLoader
+    ) : AbstractUnprofitableCategoriesRegistry(
+            "test",
+            Duration.ofDays(30),
+            Side.LAY,
+            0.0,
+            "weak",
+            mapOf(5 to 2, 2 to 7),
+            profitService,
+            settledBetRepository,
+            realizedBetLoader
+    )
 }

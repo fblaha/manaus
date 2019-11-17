@@ -6,7 +6,6 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.repository.RealizedBetLoader
 import cz.fb.manaus.core.repository.SettledBetRepository
 import cz.fb.manaus.reactor.profit.ProfitService
-import org.springframework.beans.factory.annotation.Autowired
 import java.time.Duration
 import java.time.Instant
 import java.util.logging.Logger
@@ -18,14 +17,11 @@ abstract class AbstractUnprofitableCategoriesRegistry(
         private val side: Side? = null,
         private val maximalProfit: Double,
         private val filterPrefix: String,
-        private val thresholds: Map<Int, Int>) {
-
-    @Autowired
-    private lateinit var profitService: ProfitService
-    @Autowired
-    private lateinit var settledBetRepository: SettledBetRepository
-    @Autowired
-    private lateinit var realizedBetLoader: RealizedBetLoader
+        private val thresholds: Map<Int, Int>,
+        private val profitService: ProfitService,
+        private val settledBetRepository: SettledBetRepository,
+        private val realizedBetLoader: RealizedBetLoader
+) {
 
     private val log = Logger.getLogger(AbstractUnprofitableCategoriesRegistry::class.simpleName)
 

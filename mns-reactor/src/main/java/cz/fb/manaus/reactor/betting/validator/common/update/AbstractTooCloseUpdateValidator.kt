@@ -6,11 +6,11 @@ import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.validator.UpdateOnlyValidator
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.rounding.RoundingService
-import org.springframework.beans.factory.annotation.Autowired
 
-abstract class AbstractTooCloseUpdateValidator(private val closeSteps: Set<Int>) : UpdateOnlyValidator {
-    @Autowired
-    private lateinit var roundingService: RoundingService
+abstract class AbstractTooCloseUpdateValidator(
+        private val closeSteps: Set<Int>,
+        private val roundingService: RoundingService
+) : UpdateOnlyValidator {
 
     override val tags get() = setOf(ProviderTag.PriceShiftFixedStep)
 

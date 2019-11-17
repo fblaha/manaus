@@ -5,19 +5,16 @@ import cz.fb.manaus.reactor.betting.AmountAdviser
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.PriceAdviser
 import cz.fb.manaus.reactor.rounding.RoundingService
-import org.springframework.beans.factory.annotation.Autowired
 import java.util.logging.Logger
 import javax.annotation.PostConstruct
 import kotlin.math.max
 
-class MinReduceProposerAdviser(private val proposers: List<PriceProposer>) : PriceAdviser {
-
-    @Autowired
-    private lateinit var adviser: AmountAdviser
-    @Autowired
-    private lateinit var proposalService: PriceProposalService
-    @Autowired
-    private lateinit var roundingService: RoundingService
+class MinReduceProposerAdviser(
+        private val proposers: List<PriceProposer>,
+        private val adviser: AmountAdviser,
+        private val proposalService: PriceProposalService,
+        private val roundingService: RoundingService
+) : PriceAdviser {
 
     private val log = Logger.getLogger(MinReduceProposerAdviser::class.simpleName)
 

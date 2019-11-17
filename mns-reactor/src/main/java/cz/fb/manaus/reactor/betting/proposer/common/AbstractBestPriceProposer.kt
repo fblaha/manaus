@@ -5,12 +5,11 @@ import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.rounding.RoundingService
-import org.springframework.beans.factory.annotation.Autowired
 
-abstract class AbstractBestPriceProposer(private val step: Int) : PriceProposer {
-
-    @Autowired
-    private lateinit var roundingService: RoundingService
+abstract class AbstractBestPriceProposer(
+        private val step: Int,
+        private val roundingService: RoundingService
+) : PriceProposer {
 
     override fun validate(event: BetEvent): ValidationResult {
         val runnerPrices = event.runnerPrices

@@ -7,16 +7,13 @@ import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.PriceAdviser
 import cz.fb.manaus.reactor.betting.validator.ValidationCoordinator
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
-import org.springframework.beans.factory.annotation.Autowired
 
 class BetEventCoordinator(
         override val side: Side,
         private val validationCoordinator: ValidationCoordinator,
-        private val priceAdviser: PriceAdviser
+        private val priceAdviser: PriceAdviser,
+        private val metricRegistry: MetricRegistry
 ) : BetEventListener {
-
-    @Autowired
-    private lateinit var metricRegistry: MetricRegistry
 
     override fun onBetEvent(event: BetEvent): List<BetCommand> {
         val collector = mutableListOf<BetCommand>()

@@ -1,9 +1,11 @@
 package cz.fb.manaus.reactor.betting.validator.common.update
 
 import cz.fb.manaus.core.model.*
+import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
+import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.spring.ManausProfiles.DB
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,7 +16,7 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.test.assertEquals
 
-class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
+class DelayUpdateValidatorTest : AbstractDatabaseTestCase() {
     @Autowired
     private lateinit var validator: TestValidator
     @Autowired
@@ -72,6 +74,7 @@ class TheAbstractDelayUpdateValidatorTest : AbstractDatabaseTestCase() {
 
     @Component
     @Profile(DB)
-    private class TestValidator : AbstractDelayUpdateValidator(Duration.ofMinutes(30))
+    class TestValidator(betActionRepository: BetActionRepository)
+        : Validator by DelayUpdateValidator(Duration.ofMinutes(30), betActionRepository)
 
 }

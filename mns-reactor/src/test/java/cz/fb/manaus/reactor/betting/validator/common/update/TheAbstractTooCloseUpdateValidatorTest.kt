@@ -70,6 +70,7 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
     }
 
     @Component
-    private class TestValidator : AbstractTooCloseUpdateValidator(setOf(-2, -1, 1, 2))
+    class TestValidator(roundingService: RoundingService)
+        : AbstractTooCloseUpdateValidator(setOf(-2, -1, 1, 2), roundingService)
 
 }

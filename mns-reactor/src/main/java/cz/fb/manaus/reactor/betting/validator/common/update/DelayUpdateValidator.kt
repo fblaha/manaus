@@ -4,14 +4,14 @@ import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.validator.UpdateOnlyValidator
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
-import org.springframework.beans.factory.annotation.Autowired
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-abstract class AbstractDelayUpdateValidator(private val pausePeriod: Duration) : UpdateOnlyValidator {
-    @Autowired
-    private lateinit var betActionRepository: BetActionRepository
+class DelayUpdateValidator(
+        private val pausePeriod: Duration,
+        private val betActionRepository: BetActionRepository
+) : UpdateOnlyValidator {
 
     override fun validate(event: BetEvent): ValidationResult {
         val betId = event.oldBet!!.betId!!

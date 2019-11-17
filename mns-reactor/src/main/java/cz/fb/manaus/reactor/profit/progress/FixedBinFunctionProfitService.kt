@@ -8,17 +8,16 @@ import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.reactor.profit.ProfitService
 import cz.fb.manaus.reactor.profit.progress.function.ProgressFunction
 import org.apache.commons.math3.util.Precision
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.math.RoundingMode
 
 @Component
-class FixedBinFunctionProfitService(functions: List<ProgressFunction>) {
+class FixedBinFunctionProfitService(
+        functions: List<ProgressFunction>,
+        private val categoryService: CategoryService,
+        private val profitService: ProfitService
+) {
     private val functions: Map<String, ProgressFunction> = functions.map { it.name to it }.toMap()
-    @Autowired
-    private lateinit var categoryService: CategoryService
-    @Autowired
-    private lateinit var profitService: ProfitService
 
     fun getProfitRecords(bets: List<RealizedBet>,
                          funcName: String? = null,
