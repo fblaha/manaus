@@ -2,8 +2,7 @@ package cz.fb.manaus.reactor
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.betting.BetEvent
-import cz.fb.manaus.reactor.betting.BetMetrics
-import cz.fb.manaus.reactor.charge.ChargeGrowthForecaster
+import cz.fb.manaus.reactor.betting.listener.BetEventFactory
 import cz.fb.manaus.reactor.price.Fairness
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import cz.fb.manaus.reactor.price.PriceService
@@ -20,7 +19,7 @@ class ReactorTestFactory(
         private val roundingService: RoundingService,
         private val calculator: FairnessPolynomialCalculator,
         private val priceService: PriceService,
-        private val forecaster: ChargeGrowthForecaster) {
+        private val betEventFactory: BetEventFactory) {
 
     fun newUpdateBetEvent(side: Side, marketPrices: List<RunnerPrices>): BetEvent {
         val oldBet = Bet(betId = betAction.betId,
@@ -40,14 +39,14 @@ class ReactorTestFactory(
                 market = market,
                 currentBets = oldBet?.let { listOf(it) }.orEmpty()
         )
-        return newEvent(side, SEL_HOME, fairness, snapshot)
+        return betEventFactory.create(SideSelection(side, SEL_HOME), snapshot, fairness, account)
     }
 
     fun newBetEvent(side: Side, bestBack: Double, bestLay: Double): BetEvent {
         val snapshot = newSnapshot(side, bestBack, bestLay)
         val fairness = calculator.getFairness(snapshot.runnerPrices)
         val selectionId = snapshot.runnerPrices.first().selectionId
-        return newEvent(side, selectionId, fairness, snapshot)
+        return betEventFactory.create(SideSelection(side, selectionId), snapshot, fairness, account)
     }
 
     private fun newSnapshot(side: Side, bestBack: Double, bestLay: Double): MarketSnapshot {
@@ -64,29 +63,6 @@ class ReactorTestFactory(
             listOf(counterBet)
         } else emptyList()
         return MarketSnapshot(marketPrices, market, bets)
-    }
-
-    private fun newEvent(side: Side, selectionId: Long, fairness: Fairness, snapshot: MarketSnapshot): BetEvent {
-        val forecast = forecaster.getForecast(selectionId = selectionId,
-                betSide = side,
-                snapshot = snapshot,
-                fairness = fairness,
-                commission = account.provider.commission
-        )
-        val metrics = BetMetrics(
-                chargeGrowthForecast = forecast,
-                fairness = fairness,
-                actualTradedVolume = snapshot.tradedVolume?.get(key = selectionId)
-        )
-        return BetEvent(
-                market = snapshot.market,
-                side = side,
-                selectionId = selectionId,
-                marketPrices = snapshot.runnerPrices,
-                account = account,
-                coverage = snapshot.coverage,
-                metrics = metrics
-        )
     }
 
     fun newRunnerPrices(selectionId: Long, bestBack: Double, bestLay: Double, lastMatchedPrice: Double? = null): RunnerPrices {

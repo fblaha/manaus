@@ -3,7 +3,8 @@ package cz.fb.manaus.reactor.betting.proposer
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.betting.BetEvent
-import cz.fb.manaus.reactor.betting.HOME_EVENT
+import cz.fb.manaus.reactor.betting.HOME_EVENT_BACK
+import cz.fb.manaus.reactor.betting.HOME_EVENT_LAY
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
@@ -29,11 +30,15 @@ class PriceProposalServiceTest : AbstractLocalTestCase() {
                 return null
             }
         }
-        service.reducePrices(HOME_EVENT.copy(side = Side.LAY), listOf(proposer))
+        service.reducePrices(HOME_EVENT_LAY, listOf(proposer))
     }
 
     private fun checkProposal(expectedPrice: Double, side: Side, proposers: List<PriceProposer>) {
-        val price = service.reducePrices(HOME_EVENT.copy(side = side), proposers).price
+        val event = when (side) {
+            Side.LAY -> HOME_EVENT_LAY
+            Side.BACK -> HOME_EVENT_BACK
+        }
+        val price = service.reducePrices(event, proposers).price
         assertEquals(expectedPrice, price)
     }
 

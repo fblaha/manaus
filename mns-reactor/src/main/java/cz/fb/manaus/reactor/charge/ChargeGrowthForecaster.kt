@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.charge
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.MarketSnapshot
 import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.SideSelection
 import cz.fb.manaus.reactor.betting.AmountAdviser
 import cz.fb.manaus.reactor.price.Fairness
 import cz.fb.manaus.reactor.price.ProbabilityCalculator
@@ -25,12 +25,11 @@ class ChargeGrowthForecaster(
         })
     }
 
-    fun getForecast(selectionId: Long,
-                    betSide: Side,
+    fun getForecast(sideSelection: SideSelection,
                     snapshot: MarketSnapshot,
                     fairness: Fairness,
                     commission: Double): Double? {
-
+        val (side, selectionId) = sideSelection
         val fairnessSide = fairness.moreCredibleSide
         if (fairnessSide != null) {
             val sideFairness = fairness[fairnessSide]!!
@@ -45,12 +44,12 @@ class ChargeGrowthForecaster(
                     probabilities = probabilities,
                     bets = bets
             )
-            val bestPrice = runnerPrices.getHomogeneous(betSide.opposite).bestPrice
+            val bestPrice = runnerPrices.getHomogeneous(side.opposite).bestPrice
             if (bestPrice != null) {
                 val price = bestPrice.price
                 val amount = amountAdviser.amount
                 val selBets = bets[selectionId] ?: emptyList()
-                bets[selectionId] = selBets + listOf(Price(price, amount, betSide))
+                bets[selectionId] = selBets + listOf(Price(price, amount, side))
                 val newCharge = simulator.getChargeMean(
                         winnerCount = 1,
                         commission = commission,

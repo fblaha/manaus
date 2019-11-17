@@ -5,8 +5,7 @@ import java.time.Instant
 import java.util.logging.Logger
 
 data class BetEvent(
-        val selectionId: Long,
-        val side: Side,
+        val sideSelection: SideSelection,
         val market: Market,
         val marketPrices: List<RunnerPrices>,
         val coverage: Map<SideSelection, Bet>,
@@ -16,8 +15,9 @@ data class BetEvent(
 
     private val log = Logger.getLogger(BetEvent::class.simpleName)
 
-    private val sideSelection = SideSelection(side, selectionId)
-    val runnerPrices: RunnerPrices = marketPrices.first { it.selectionId == selectionId }
+    val side: Side = sideSelection.side
+    val selectionId: Long = sideSelection.selectionId
+    val runnerPrices: RunnerPrices = marketPrices.first { it.selectionId == sideSelection.selectionId }
     val oldBet: Bet? = coverage[sideSelection]
     val counterBet: Bet? = coverage[sideSelection.oppositeSide]
     val isCounterHalfMatched: Boolean = counterBet?.isHalfMatched ?: false
@@ -32,7 +32,7 @@ data class BetEvent(
     private fun validateNewPrice(value: Price?) {
         if (value != null) {
             val newSide = value.side
-            check(side == newSide)
+            check(sideSelection.side == newSide)
             if (oldBet != null) {
                 val oldSide = oldBet.requestedPrice.side
                 check(oldSide == newSide)
@@ -51,7 +51,7 @@ data class BetEvent(
                 else -> BetActionType.UPDATE
             }
             return BetAction(
-                    selectionId = selectionId,
+                    selectionId = sideSelection.selectionId,
                     price = newPrice!!,
                     id = 0,
                     time = Instant.now(),

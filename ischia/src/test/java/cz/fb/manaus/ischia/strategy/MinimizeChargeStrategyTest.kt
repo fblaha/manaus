@@ -2,7 +2,7 @@ package cz.fb.manaus.ischia.strategy
 
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.betting.BetEvent
-import cz.fb.manaus.reactor.betting.HOME_EVENT
+import cz.fb.manaus.reactor.betting.HOME_EVENT_BACK
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,7 +16,7 @@ class MinimizeChargeStrategyTest : AbstractLocalTestCase() {
 
     @Test
     fun strategy() {
-        val event = HOME_EVENT
+        val event = HOME_EVENT_BACK
         assertEquals(strategy.getUpperBoundary(event.side), strategy(event.replaceForecast(null)), 0.000001)
         assertEquals(strategy.getUpperBoundary(event.side), strategy(event.replaceForecast(Double.NaN)), 0.000001)
         assertEquals(strategy.getUpperBoundary(event.side), strategy(event.replaceForecast(1.5)), 0.000001)

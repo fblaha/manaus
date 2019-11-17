@@ -5,7 +5,7 @@ import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.betting.BetEvent
-import cz.fb.manaus.reactor.betting.HOME_EVENT
+import cz.fb.manaus.reactor.betting.HOME_EVENT_BACK
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
@@ -53,7 +53,7 @@ class ValidationServiceTest : AbstractLocalTestCase() {
                 Price(newPrice, 2.0, Side.LAY),
                 oldBet, dropping.isDowngradeAccepting)
         assertEquals(expected, result)
-        assertEquals(ValidationResult.DROP, dropping.validate(HOME_EVENT.copy()))
+        assertEquals(ValidationResult.DROP, dropping.validate(HOME_EVENT_BACK))
     }
 
 

@@ -9,9 +9,8 @@ import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.*
 
-val HOME_EVENT: BetEvent = BetEvent(
-        selectionId = SEL_HOME,
-        side = Side.BACK,
+val HOME_EVENT_BACK: BetEvent = BetEvent(
+        sideSelection = SideSelection(Side.BACK, SEL_HOME),
         account = account,
         coverage = mutableMapOf(),
         marketPrices = runnerPrices,
@@ -22,6 +21,8 @@ val HOME_EVENT: BetEvent = BetEvent(
                 chargeGrowthForecast = 1.0
         )
 )
+
+val HOME_EVENT_LAY: BetEvent = HOME_EVENT_BACK.copy(sideSelection = SideSelection(Side.LAY, SEL_HOME))
 
 
 class BetEventTest : AbstractLocalTestCase() {
@@ -45,14 +46,14 @@ class BetEventTest : AbstractLocalTestCase() {
         val context = factory.newBetEvent(Side.LAY, 3.5, 4.6)
         context.newPrice = Price(3.0, 5.0, Side.LAY)
         val settledBet = context.simulatedBet
-        assertEquals(context.side, settledBet.settledBet.price.side)
+        assertEquals(context.sideSelection.side, settledBet.settledBet.price.side)
         Assert.assertEquals(5.0, settledBet.settledBet.price.amount, 0.0001)
         assertNotNull(settledBet.betAction)
     }
 
     @Test
     fun placeOrUpdate() {
-        val homeEvent = HOME_EVENT
+        val homeEvent = HOME_EVENT_BACK
         val price = Price(3.0, 3.0, Side.BACK)
         homeEvent.newPrice = price
         val command = homeEvent.placeOrUpdate
@@ -63,7 +64,7 @@ class BetEventTest : AbstractLocalTestCase() {
 
     @Test
     fun cancel() {
-        assertNull(HOME_EVENT.cancel)
+        assertNull(HOME_EVENT_BACK.cancel)
     }
 }
 

@@ -18,10 +18,8 @@ class BetEventFactory(private val forecaster: ChargeGrowthForecaster) {
             fairness: Fairness,
             account: Account
     ): BetEvent {
-        val (side, selectionId) = sideSelection
         val forecast = forecaster.getForecast(
-                selectionId = selectionId,
-                betSide = side,
+                sideSelection,
                 snapshot = snapshot,
                 fairness = fairness,
                 commission = account.provider.commission
@@ -29,12 +27,11 @@ class BetEventFactory(private val forecaster: ChargeGrowthForecaster) {
         val metrics = BetMetrics(
                 chargeGrowthForecast = forecast,
                 fairness = fairness,
-                actualTradedVolume = snapshot.tradedVolume?.get(key = selectionId)
+                actualTradedVolume = snapshot.tradedVolume?.get(key = sideSelection.selectionId)
         )
         return BetEvent(
+                sideSelection = sideSelection,
                 market = snapshot.market,
-                side = side,
-                selectionId = selectionId,
                 marketPrices = snapshot.runnerPrices,
                 account = account,
                 coverage = snapshot.coverage,
