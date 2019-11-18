@@ -1,5 +1,6 @@
 package cz.fb.manaus.core.category.categorizer
 
+import org.springframework.stereotype.Component
 import java.util.regex.Pattern
 
 
@@ -7,9 +8,10 @@ fun compile(regex: String): Pattern {
     return Pattern.compile(regex, Pattern.CASE_INSENSITIVE)
 }
 
-abstract class AbstractRegexpResolver(private val prefix: String) {
+@Component
+class RegexpCategoryService {
 
-    protected fun getCategories(name: String?, patterns: Map<String, Pattern>): Set<String> {
+    fun getCategories(name: String?, patterns: Map<String, Pattern>): Set<String> {
         if (name == null) {
             return emptySet()
         }
@@ -25,10 +27,6 @@ abstract class AbstractRegexpResolver(private val prefix: String) {
             }
         }
         return result
-    }
-
-    protected fun addPrefix(key: String): String {
-        return prefix + key
     }
 
 }

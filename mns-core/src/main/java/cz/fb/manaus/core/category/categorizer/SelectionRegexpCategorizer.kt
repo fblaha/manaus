@@ -10,7 +10,9 @@ val SELECTION_MAP = mapOf(
         "no" to compile("^No$"))
 
 @Component
-object SelectionRegexpCategorizer : AbstractRegexpResolver("selectionRegexp_"), RealizedBetCategorizer {
+class SelectionRegexpCategorizer(
+        private val regexpCategoryService: RegexpCategoryService
+) : RealizedBetCategorizer {
 
     override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
         val selectionName = realizedBet.settledBet.selectionName
@@ -18,7 +20,7 @@ object SelectionRegexpCategorizer : AbstractRegexpResolver("selectionRegexp_"), 
     }
 
     internal fun getCategories(selectionName: String): Set<String> {
-        val selectionBased = getCategories(selectionName, SELECTION_MAP)
-        return selectionBased.map { this.addPrefix(it) }.toSet()
+        val selectionBased = regexpCategoryService.getCategories(selectionName, SELECTION_MAP)
+        return selectionBased.map { "selectionRegexp_$it" }.toSet()
     }
 }

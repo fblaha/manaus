@@ -17,7 +17,11 @@ val EVENT_MAP = mapOf(
 
 
 @Component
-object MarketRegexpCategorizer : AbstractRegexpResolver(Category.MARKET_PREFIX + "regexp_"), RealizedBetCategorizer, Categorizer {
+class MarketRegexpCategorizer(
+        private val regexpCategoryService: RegexpCategoryService
+) : RealizedBetCategorizer, Categorizer {
+
+    private val prefix = Category.MARKET_PREFIX + "regexp_"
 
     override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
         val marketName = realizedBet.market.name
@@ -31,8 +35,8 @@ object MarketRegexpCategorizer : AbstractRegexpResolver(Category.MARKET_PREFIX +
 
     internal fun getCategories(marketName: String, eventName: String): Set<String> {
         val result = mutableSetOf<String>()
-        result.addAll(getCategories(marketName, MATCH_MAP).map { this.addPrefix(it) })
-        result.addAll(getCategories(eventName, EVENT_MAP).map { this.addPrefix(it) })
+        result.addAll(regexpCategoryService.getCategories(marketName, MATCH_MAP).map { this.prefix + it })
+        result.addAll(regexpCategoryService.getCategories(eventName, EVENT_MAP).map { this.prefix + it })
         return result
     }
 }
