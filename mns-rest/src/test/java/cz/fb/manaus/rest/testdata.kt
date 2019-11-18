@@ -9,7 +9,7 @@ import cz.fb.manaus.reactor.betting.listener.BetEventCoordinator
 import cz.fb.manaus.reactor.betting.proposer.MinReduceProposerAdviser
 import cz.fb.manaus.reactor.betting.proposer.PriceProposalService
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
-import cz.fb.manaus.reactor.betting.proposer.common.AbstractBestPriceProposer
+import cz.fb.manaus.reactor.betting.proposer.common.BestPriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationCoordinator
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.ValidationService
@@ -20,7 +20,8 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Component
 
 @Component
-class BestPriceProposer(roundingService: RoundingService) : AbstractBestPriceProposer(1, roundingService)
+class BestPriceProposer(roundingService: RoundingService)
+    : PriceProposer by BestPriceProposer(1, roundingService)
 
 @Component
 object AcceptAllValidator : Validator {

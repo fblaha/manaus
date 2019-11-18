@@ -9,7 +9,6 @@ fun compile(regex: String): Pattern {
 
 abstract class AbstractRegexpResolver(private val prefix: String) {
 
-
     protected fun getCategories(name: String?, patterns: Map<String, Pattern>): Set<String> {
         if (name == null) {
             return emptySet()

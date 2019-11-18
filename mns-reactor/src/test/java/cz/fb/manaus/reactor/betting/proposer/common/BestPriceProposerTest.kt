@@ -4,6 +4,7 @@ import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.PricesTestFactory
 import cz.fb.manaus.reactor.betting.HOME_EVENT_BACK
 import cz.fb.manaus.reactor.betting.HOME_EVENT_LAY
+import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.junit.Test
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 
 
-class TheAbstractBestPriceProposerTest : AbstractLocalTestCase() {
+class BestPriceProposerTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var layProposer: LayProposer
@@ -43,9 +44,11 @@ class TheAbstractBestPriceProposerTest : AbstractLocalTestCase() {
     }
 
     @Component
-    class LayProposer(roundingService: RoundingService) : AbstractBestPriceProposer(1, roundingService)
+    class LayProposer(roundingService: RoundingService)
+        : PriceProposer by BestPriceProposer(1, roundingService)
 
     @Component
-    class BackProposer(roundingService: RoundingService) : AbstractBestPriceProposer(1, roundingService)
+    class BackProposer(roundingService: RoundingService)
+        : PriceProposer by BestPriceProposer(1, roundingService)
 
 }

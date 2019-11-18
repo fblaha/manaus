@@ -7,7 +7,7 @@ import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.price.PriceService
 
-abstract class AbstractFairnessProposer(
+class FairnessProposer(
         private val side: Side,
         private val priceService: PriceService,
         private vararg val downgradeStrategies: DowngradeStrategy

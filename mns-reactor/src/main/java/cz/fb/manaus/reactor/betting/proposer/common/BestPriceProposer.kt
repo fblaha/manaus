@@ -6,7 +6,7 @@ import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.rounding.RoundingService
 
-abstract class AbstractBestPriceProposer(
+class BestPriceProposer(
         private val step: Int,
         private val roundingService: RoundingService
 ) : PriceProposer {
