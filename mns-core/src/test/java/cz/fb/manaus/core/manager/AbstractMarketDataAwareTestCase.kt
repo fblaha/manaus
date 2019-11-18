@@ -21,12 +21,8 @@ abstract class AbstractMarketDataAwareTestCase : AbstractLocalTestCase() {
     @Before
     fun setUp() {
         val resource = resourceLoader.getResource("classpath:cz/fb/manaus/core/service/markets.json")
-        markets = objectMapper.readValue(resource.inputStream, TYPE_REF)
+        markets = objectMapper.readValue(resource.inputStream, object : TypeReference<List<Market>>() {})
         markets = markets.map { it.copy(event = it.event.copy(openDate = Instant.now().plus(5, ChronoUnit.HOURS))) }
-    }
-
-    companion object {
-        val TYPE_REF: TypeReference<List<Market>> = object : TypeReference<List<Market>>() {}
     }
 
 }

@@ -7,7 +7,7 @@ import cz.fb.manaus.reactor.betting.validator.UpdateOnlyValidator
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.rounding.RoundingService
 
-abstract class AbstractTooCloseUpdateValidator(
+class TooCloseUpdateValidator(
         private val closeSteps: Set<Int>,
         private val roundingService: RoundingService
 ) : UpdateOnlyValidator {

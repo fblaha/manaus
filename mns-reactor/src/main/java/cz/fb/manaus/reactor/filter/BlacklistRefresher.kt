@@ -10,11 +10,12 @@ import java.util.logging.Logger
 
 @Component
 @Profile(ManausProfiles.DB)
-class UnprofitableCategoriesRefresher(
+class BlacklistRefresher(
         private val blacklistedCategoryRepository: BlacklistedCategoryRepository,
-        private val registries: List<AbstractUnprofitableCategoriesRegistry>) : PeriodicTask {
+        private val suppliers: List<BlacklistSupplier>
+) : PeriodicTask {
 
-    private val log = Logger.getLogger(UnprofitableCategoriesRefresher::class.simpleName)
+    private val log = Logger.getLogger(BlacklistRefresher::class.simpleName)
 
     override val name: String = "unprofitableCategoriesRefresh"
 
@@ -22,7 +23,7 @@ class UnprofitableCategoriesRefresher(
 
     override fun execute() {
         val old = blacklistedCategoryRepository.list()
-        val current = registries.flatMap { it.getBlacklist() }
+        val current = suppliers.flatMap { it.getBlacklist() }
         val currentNames = current.map { it.name }.toSet()
         old.filter { it.name !in currentNames }
                 .onEach { log.info { "deleting blacklisted category '$it'" } }

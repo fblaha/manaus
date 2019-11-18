@@ -11,7 +11,7 @@ import java.time.Instant
 import java.util.logging.Logger
 
 
-abstract class AbstractUnprofitableCategoriesRegistry(
+class UnprofitableCategoriesRegistry(
         private val name: String,
         private val period: Duration,
         private val side: Side? = null,
@@ -21,14 +21,14 @@ abstract class AbstractUnprofitableCategoriesRegistry(
         private val profitService: ProfitService,
         private val settledBetRepository: SettledBetRepository,
         private val realizedBetLoader: RealizedBetLoader
-) {
+) : BlacklistSupplier {
 
-    private val log = Logger.getLogger(AbstractUnprofitableCategoriesRegistry::class.simpleName)
+    private val log = Logger.getLogger(UnprofitableCategoriesRegistry::class.simpleName)
 
     private val logPrefix: String
         get() = "unprofitable registry '$name': "
 
-    fun getBlacklist(): List<BlacklistedCategory> {
+    override fun getBlacklist(): List<BlacklistedCategory> {
         log.info { logPrefix + "black list update started" }
         val now = Instant.now()
         val settledBets = settledBetRepository.find(now.minusSeconds(period.toSeconds()), now, side)

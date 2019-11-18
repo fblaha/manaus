@@ -4,6 +4,7 @@ import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
+import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.reactor.rounding.RoundingService
 import cz.fb.manaus.reactor.rounding.decrement
 import org.junit.Test
@@ -11,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 
-class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
+class TooCloseUpdateValidatorTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var validator: TestValidator
@@ -71,6 +72,9 @@ class TheAbstractTooCloseUpdateValidatorTest : AbstractLocalTestCase() {
 
     @Component
     class TestValidator(roundingService: RoundingService)
-        : AbstractTooCloseUpdateValidator(setOf(-2, -1, 1, 2), roundingService)
+        : Validator by TooCloseUpdateValidator(
+            setOf(-2, -1, 1, 2),
+            roundingService
+    )
 
 }

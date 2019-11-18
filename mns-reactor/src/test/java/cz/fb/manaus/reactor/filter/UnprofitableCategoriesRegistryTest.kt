@@ -4,27 +4,42 @@ import cz.fb.manaus.core.MarketCategories
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.repository.RealizedBetLoader
-import cz.fb.manaus.core.repository.SettledBetRepository
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import cz.fb.manaus.reactor.profit.ProfitService
-import cz.fb.manaus.spring.ManausProfiles
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.hasItem
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsNot.not
+import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.Profile
-import org.springframework.stereotype.Component
 import java.time.Duration
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class TheAbstractUnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase() {
+class UnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase() {
 
+    private lateinit var registry: UnprofitableCategoriesRegistry
     @Autowired
-    private lateinit var registry: TestUnprofitableCategoriesRegistry
+    private lateinit var profitService: ProfitService
+    @Autowired
+    private lateinit var realizedBetLoader: RealizedBetLoader
+
+    @Before
+    fun setUp() {
+        registry = UnprofitableCategoriesRegistry(
+                name = "test",
+                period = Duration.ofDays(30),
+                side = Side.LAY,
+                maximalProfit = 0.0,
+                filterPrefix = "weak",
+                thresholds = mapOf(5 to 2, 2 to 7),
+                profitService = profitService,
+                settledBetRepository = settledBetRepository,
+                realizedBetLoader = realizedBetLoader
+        )
+    }
 
     private fun pr(category: String, profitAndLoss: Double, betCount: Int): ProfitRecord {
         return ProfitRecord(category, profitAndLoss, 2.0, 0.06, betCount, 0)
@@ -89,21 +104,4 @@ class TheAbstractUnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase()
         assertEquals(0.1, registry.getThreshold(10))
     }
 
-    @Component
-    @Profile(ManausProfiles.DB)
-    class TestUnprofitableCategoriesRegistry(
-            profitService: ProfitService,
-            settledBetRepository: SettledBetRepository,
-            realizedBetLoader: RealizedBetLoader
-    ) : AbstractUnprofitableCategoriesRegistry(
-            "test",
-            Duration.ofDays(30),
-            Side.LAY,
-            0.0,
-            "weak",
-            mapOf(5 to 2, 2 to 7),
-            profitService,
-            settledBetRepository,
-            realizedBetLoader
-    )
 }

@@ -7,11 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import java.time.Duration
 import kotlin.test.assertTrue
 
-class UnprofitableCategoriesRefresherTest : AbstractDatabaseTestCase() {
-
+class BlacklistRefresherTest : AbstractDatabaseTestCase() {
 
     @Autowired
-    private lateinit var refresher: UnprofitableCategoriesRefresher
+    private lateinit var refresher: BlacklistRefresher
 
     @Test
     fun cleanUp() {
