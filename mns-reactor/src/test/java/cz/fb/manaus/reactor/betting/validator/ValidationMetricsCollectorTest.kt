@@ -7,7 +7,7 @@ import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.makeName
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ValidationMetricsCollectorTest : AbstractLocalTestCase() {
     @Autowired
@@ -28,8 +28,8 @@ class ValidationMetricsCollectorTest : AbstractLocalTestCase() {
                 .filter { it.startsWith(ValidationMetricsCollector.PREFIX) }
                 .filter { makeName(validator) in it }
 
-        assertEquals(2, keys.size)
-        keys.forEach { assertEquals(1L, metricRegistry.counter(it).count) }
+        assertTrue { keys.size >= 2 }
+        keys.forEach { assertTrue { metricRegistry.counter(it).count >= 1 } }
     }
 
 }

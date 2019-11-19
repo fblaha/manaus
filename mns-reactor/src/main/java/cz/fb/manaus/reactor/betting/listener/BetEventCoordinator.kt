@@ -15,41 +15,32 @@ class BetEventCoordinator(
         private val metricRegistry: MetricRegistry
 ) : BetEventListener {
 
-    override fun onBetEvent(event: BetEvent): List<BetCommand> {
-        val collector = mutableListOf<BetCommand>()
-        val prePriceValidation = validationCoordinator.validatePrePrice(event)
-        cancelOnDrop(prePriceValidation, event, collector)
-        if (prePriceValidation == ValidationResult.OK) {
-            val newPrice = priceAdviser.getNewPrice(event)
-            if (newPrice == null) {
-                cancel(event, collector)
-                return collector.toList()
-            }
-            event.newPrice = newPrice.price
-            event.proposers = newPrice.proposers
+    override fun onBetEvent(event: BetEvent): BetCommand? {
+        when (val prePriceValidation = validationCoordinator.validatePrePrice(event)) {
+            ValidationResult.DROP -> return cancel(event)
+            ValidationResult.OK -> {
+                val newPrice = priceAdviser.getNewPrice(event) ?: return cancel(event)
+                event.newPrice = newPrice.price
+                event.proposers = newPrice.proposers
 
-            if (!event.isOldMatched) {
-                val priceValidation = validationCoordinator.validatePrice(event)
-                cancelOnDrop(priceValidation, event, collector)
-                if (priceValidation == ValidationResult.OK) {
-                    check(prePriceValidation == ValidationResult.OK && priceValidation == ValidationResult.OK)
-                    collector.add(event.placeOrUpdate)
+                if (!event.isOldMatched) {
+                    when (val priceValidation = validationCoordinator.validatePrice(event)) {
+                        ValidationResult.DROP -> return cancel(event)
+                        ValidationResult.OK -> {
+                            check(prePriceValidation == ValidationResult.OK && priceValidation == ValidationResult.OK)
+                            return event.placeOrUpdate
+                        }
+                    }
                 }
             }
         }
-        return collector.toList()
+        return null
     }
 
-    private fun cancelOnDrop(prePriceValidation: ValidationResult, event: BetEvent, collector: MutableList<BetCommand>) {
-        if (prePriceValidation == ValidationResult.DROP) {
-            cancel(event, collector)
-        }
-    }
-
-    private fun cancel(event: BetEvent, collector: MutableList<BetCommand>) {
-        event.cancel?.let {
+    private fun cancel(event: BetEvent): BetCommand? {
+        return event.cancel?.let {
             metricRegistry.counter("bet.cancel").inc()
-            collector.add(it)
+            it
         }
     }
 

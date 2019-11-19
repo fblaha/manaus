@@ -35,7 +35,7 @@ class BetEventSeeker(
                                 fairness = fairness,
                                 account = account
                         )
-                        collector.addAll(betEventListener.onBetEvent(event))
+                        betEventListener.onBetEvent(event)?.let { collector.add(it) }
                     }
                 }
             }

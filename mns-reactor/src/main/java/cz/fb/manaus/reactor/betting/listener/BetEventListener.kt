@@ -8,6 +8,6 @@ interface BetEventListener {
 
     val side: Side
 
-    fun onBetEvent(event: BetEvent): List<BetCommand>
+    fun onBetEvent(event: BetEvent): BetCommand?
 
 }
