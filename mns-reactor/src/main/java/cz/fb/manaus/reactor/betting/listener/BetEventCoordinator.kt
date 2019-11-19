@@ -16,7 +16,7 @@ class BetEventCoordinator(
 ) : BetEventListener {
 
     override fun onBetEvent(event: BetEvent): BetCommand? {
-        when (val prePriceValidation = validationCoordinator.validatePrePrice(event)) {
+        when (validationCoordinator.validatePrePrice(event)) {
             ValidationResult.DROP -> return cancel(event)
             ValidationResult.OK -> {
                 val newPrice = priceAdviser.getNewPrice(event) ?: return cancel(event)
@@ -24,17 +24,16 @@ class BetEventCoordinator(
                 event.proposers = newPrice.proposers
 
                 if (!event.isOldMatched) {
-                    when (val priceValidation = validationCoordinator.validatePrice(event)) {
-                        ValidationResult.DROP -> return cancel(event)
-                        ValidationResult.OK -> {
-                            check(prePriceValidation == ValidationResult.OK && priceValidation == ValidationResult.OK)
-                            return event.placeOrUpdate
-                        }
+                    return when (validationCoordinator.validatePrice(event)) {
+                        ValidationResult.DROP -> cancel(event)
+                        ValidationResult.OK -> event.placeOrUpdate
+                        else -> null
                     }
                 }
+                return null
             }
+            ValidationResult.NOP -> return null
         }
-        return null
     }
 
     private fun cancel(event: BetEvent): BetCommand? {
