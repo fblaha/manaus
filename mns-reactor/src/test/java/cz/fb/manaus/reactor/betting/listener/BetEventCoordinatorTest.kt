@@ -21,7 +21,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 
-class MockValidator(private val result: ValidationResult) : Validator {
+class MockValidator(
+        private val result: ValidationResult
+) : Validator {
     override fun validate(event: BetEvent): ValidationResult {
         return result
     }
@@ -29,11 +31,11 @@ class MockValidator(private val result: ValidationResult) : Validator {
 
 class MockPriceProposer(
         private val validationResult: ValidationResult,
-        private val price: Price?
+        private val price: Double?
 ) : PriceProposer {
 
     override fun getProposedPrice(event: BetEvent): Double? {
-        return price?.price
+        return price
     }
 
     override fun validate(event: BetEvent): ValidationResult {
@@ -88,7 +90,7 @@ class BetEventCoordinatorTest : AbstractLocalTestCase() {
             prePriceValidation: ValidationResult,
             priceValidation: ValidationResult
     ): BetEventCoordinator {
-        val proposerAdviser = MockPriceProposer(prePriceValidation, price)
+        val proposerAdviser = MockPriceProposer(prePriceValidation, price?.price)
         return BetEventCoordinator(
                 side = Side.BACK,
                 validationCoordinator = ValidationCoordinator(

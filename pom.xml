@@ -154,12 +154,6 @@
                 <artifactId>metrics-core</artifactId>
                 <version>3.2.5</version>
             </dependency>
-            <dependency>
-                <groupId>com.nhaarman</groupId>
-                <artifactId>mockito-kotlin</artifactId>
-                <version>1.6.0</version>
-                <scope>test</scope>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
