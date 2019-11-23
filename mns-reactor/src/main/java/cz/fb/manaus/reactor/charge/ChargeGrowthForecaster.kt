@@ -31,6 +31,7 @@ class ChargeGrowthForecaster(
                     commission: Double): Double? {
         val (side, selectionId) = sideSelection
         val fairnessSide = fairness.moreCredibleSide
+        if (snapshot.currentBets.isEmpty()) return 1000.0
         if (fairnessSide != null) {
             val sideFairness = fairness[fairnessSide]!!
             val probabilities = probabilityCalculator.fromFairness(
