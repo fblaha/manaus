@@ -8,6 +8,7 @@ import cz.fb.manaus.reactor.betting.AmountAdviser
 import cz.fb.manaus.reactor.price.Fairness
 import cz.fb.manaus.reactor.price.ProbabilityCalculator
 import cz.fb.manaus.reactor.price.getRunnerPrices
+import org.apache.commons.math3.util.Precision
 import org.springframework.stereotype.Component
 
 @Component
@@ -31,7 +32,6 @@ class ChargeGrowthForecaster(
                     commission: Double): Double? {
         val (side, selectionId) = sideSelection
         val fairnessSide = fairness.moreCredibleSide
-        if (snapshot.currentBets.isEmpty()) return 1000.0
         if (fairnessSide != null) {
             val sideFairness = fairness[fairnessSide]!!
             val probabilities = probabilityCalculator.fromFairness(
@@ -57,7 +57,8 @@ class ChargeGrowthForecaster(
                         probabilities = probabilities,
                         bets = bets
                 )
-                return newCharge / oldCharge
+                val oldZero = Precision.equals(oldCharge, 0.0, 0.000001)
+                return if (oldZero) 1000.0 else newCharge / oldCharge
             }
         }
         return null
