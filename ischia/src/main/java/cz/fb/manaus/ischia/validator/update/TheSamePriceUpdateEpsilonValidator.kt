@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 @LayLoserBet
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-object TheSamePriceUpdateEpsilonValidator : Validator by TooCloseUpdateEpsilonValidator(0.025) {
+object TheSamePriceUpdateEpsilonValidator : Validator by TooCloseUpdateEpsilonValidator(0.05) {
 
     override val isDowngradeAccepting: Boolean = false
 
