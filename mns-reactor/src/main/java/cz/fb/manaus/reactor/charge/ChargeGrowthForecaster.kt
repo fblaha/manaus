@@ -8,8 +8,8 @@ import cz.fb.manaus.reactor.betting.AmountAdviser
 import cz.fb.manaus.reactor.price.Fairness
 import cz.fb.manaus.reactor.price.ProbabilityCalculator
 import cz.fb.manaus.reactor.price.getRunnerPrices
-import org.apache.commons.math3.util.Precision
 import org.springframework.stereotype.Component
+import kotlin.math.min
 
 @Component
 class ChargeGrowthForecaster(
@@ -57,8 +57,7 @@ class ChargeGrowthForecaster(
                         probabilities = probabilities,
                         bets = bets
                 )
-                val oldZero = Precision.equals(oldCharge, 0.0, 0.000001)
-                return if (oldZero) 1000.0 else newCharge / oldCharge
+                return min(1000.0, newCharge / oldCharge)
             }
         }
         return null
