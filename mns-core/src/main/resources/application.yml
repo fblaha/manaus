@@ -5,3 +5,8 @@ markets:
   lookAhead: 7d
 betting:
   amount: 2.0
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
