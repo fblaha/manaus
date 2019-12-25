@@ -6,6 +6,7 @@ import com.codahale.metrics.SlidingWindowReservoir
 import cz.fb.manaus.core.metrics.MetricRecord
 import cz.fb.manaus.core.metrics.MetricsService
 import cz.fb.manaus.spring.ManausProfiles
+import io.micrometer.core.instrument.Metrics
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -25,6 +26,7 @@ class MetricsController(private val metricsService: MetricsService,
     @RequestMapping(value = ["/metrics/{prefix}"], method = [RequestMethod.GET])
     fun getMetrics(@PathVariable prefix: String): List<MetricRecord<*>> {
         metricRegistry.counter("metric.get").inc()
+        Metrics.counter("metric_get").increment()
         return metricsService.getCollectedMetrics(prefix)
     }
 
