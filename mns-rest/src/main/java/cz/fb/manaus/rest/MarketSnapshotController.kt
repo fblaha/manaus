@@ -6,6 +6,7 @@ import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.reactor.betting.MarketSnapshotNotifier
 import cz.fb.manaus.spring.ManausProfiles
+import io.micrometer.core.instrument.Metrics
 import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -41,6 +42,7 @@ class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
         val account = snapshotCrate.account
         account.provider.validate()
         metricRegistry.meter("market.snapshot.post").mark()
+        Metrics.counter("market_snapshot_post").increment()
         try {
             val marketPrices = snapshotCrate.prices
             val market = marketRepository.read(id)!!
@@ -52,6 +54,7 @@ class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
             return toResponse(collectedBets)
         } catch (e: RuntimeException) {
             metricRegistry.counter("_SNAPSHOT_ERROR_").inc()
+            Metrics.counter("snapshot_error").increment()
             logException(snapshotCrate, e)
             throw e
         }

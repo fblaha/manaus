@@ -30,6 +30,7 @@ class MetricsController(private val metricsService: MetricsService,
         return metricsService.getCollectedMetrics(prefix)
     }
 
+    // TODO remove metrics update endpoints
     @ResponseBody
     @RequestMapping(value = ["/metrics/histogram/{name}"], method = [RequestMethod.POST])
     fun updateHistogram(@PathVariable name: String,
