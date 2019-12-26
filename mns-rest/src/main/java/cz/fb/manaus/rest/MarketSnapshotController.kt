@@ -41,6 +41,7 @@ class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
         validateMarket(snapshotCrate)
         val account = snapshotCrate.account
         account.provider.validate()
+        updateMoneyMetrics(account.money)
         metricRegistry.meter("market.snapshot.post").mark()
         Metrics.counter("market_snapshot_post").increment()
         try {
@@ -57,6 +58,13 @@ class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
             Metrics.counter("snapshot_error").increment()
             logException(snapshotCrate, e)
             throw e
+        }
+    }
+
+    private fun updateMoneyMetrics(money: AccountMoney?) {
+        money?.let {
+            Metrics.gauge("account_money_total", it.total)
+            Metrics.gauge("account_money_available", it.available)
         }
     }
 
