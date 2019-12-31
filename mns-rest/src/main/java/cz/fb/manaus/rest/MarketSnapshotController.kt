@@ -35,8 +35,8 @@ class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
                                private val metricRegistry: MetricRegistry,
                                private val betMetricUpdater: MatchedBetMetricUpdater) {
 
-    private val availableMoney: AtomicDouble by lazy { Metrics.gauge("account_money_total", AtomicDouble()) }
-    private val totalMoney: AtomicDouble by lazy { Metrics.gauge("account_money_available", AtomicDouble()) }
+    private val availableMoney: AtomicDouble by lazy { Metrics.gauge("account_money_available", AtomicDouble()) }
+    private val totalMoney: AtomicDouble by lazy { Metrics.gauge("account_money_total", AtomicDouble()) }
 
     private val log = Logger.getLogger(MarketSnapshotController::class.simpleName)
 
