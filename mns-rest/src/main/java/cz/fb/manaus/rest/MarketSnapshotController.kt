@@ -1,6 +1,7 @@
 package cz.fb.manaus.rest
 
 import com.codahale.metrics.MetricRegistry
+import com.google.common.util.concurrent.AtomicDouble
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
@@ -34,6 +35,9 @@ class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
                                private val metricRegistry: MetricRegistry,
                                private val betMetricUpdater: MatchedBetMetricUpdater) {
 
+    private val availableMoney: AtomicDouble by lazy { Metrics.gauge("account_money_total", AtomicDouble()) }
+    private val totalMoney: AtomicDouble by lazy { Metrics.gauge("account_money_available", AtomicDouble()) }
+
     private val log = Logger.getLogger(MarketSnapshotController::class.simpleName)
 
     @RequestMapping(value = ["/markets/{id}/snapshot"], method = [RequestMethod.POST])
@@ -62,9 +66,9 @@ class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
     }
 
     private fun updateMoneyMetrics(money: AccountMoney?) {
-        money?.let {
-            Metrics.gauge("account_money_total", it.total)
-            Metrics.gauge("account_money_available", it.available)
+        if (money != null) {
+            availableMoney.set(money.available)
+            totalMoney.set(money.total)
         }
     }
 
