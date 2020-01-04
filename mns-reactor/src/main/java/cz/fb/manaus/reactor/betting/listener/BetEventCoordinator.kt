@@ -1,18 +1,17 @@
 package cz.fb.manaus.reactor.betting.listener
 
-import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetCommand
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.PriceAdviser
 import cz.fb.manaus.reactor.betting.validator.ValidationCoordinator
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
+import io.micrometer.core.instrument.Metrics
 
 class BetEventCoordinator(
         override val side: Side,
         private val validationCoordinator: ValidationCoordinator,
-        private val priceAdviser: PriceAdviser,
-        private val metricRegistry: MetricRegistry
+        private val priceAdviser: PriceAdviser
 ) : BetEventListener {
 
     override fun onBetEvent(event: BetEvent): BetCommand? {
@@ -38,7 +37,7 @@ class BetEventCoordinator(
 
     private fun cancel(event: BetEvent): BetCommand? {
         return event.cancel?.let {
-            metricRegistry.counter("bet.cancel").inc()
+            Metrics.counter("bet_cancel").increment()
             it
         }
     }
