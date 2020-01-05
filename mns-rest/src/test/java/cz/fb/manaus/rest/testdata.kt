@@ -1,6 +1,5 @@
 package cz.fb.manaus.rest
 
-import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.AmountAdviser
 import cz.fb.manaus.reactor.betting.BetEvent
@@ -32,7 +31,6 @@ object AcceptAllValidator : Validator {
 
 @Configuration
 open class TestLocalConfiguration(
-        private val metricRegistry: MetricRegistry,
         private val adviser: AmountAdviser,
         private val proposalService: PriceProposalService,
         private val roundingService: RoundingService

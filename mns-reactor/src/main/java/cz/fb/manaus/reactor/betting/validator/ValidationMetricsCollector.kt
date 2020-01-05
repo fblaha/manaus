@@ -1,15 +1,15 @@
 package cz.fb.manaus.reactor.betting.validator
 
-import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.Side
 import org.springframework.stereotype.Component
 
 @Component
-class ValidationMetricsCollector(private val metricRegistry: MetricRegistry) {
+class ValidationMetricsCollector {
 
+    // TODO micrometer
     fun updateMetrics(result: ValidationResult, type: Side, validatorName: String) {
         val name = getName(type, result, validatorName)
-        metricRegistry.counter(name).inc()
+//        metricRegistry.counter(name).inc()
     }
 
     private fun getName(type: Side, result: ValidationResult, validatorName: String): String {

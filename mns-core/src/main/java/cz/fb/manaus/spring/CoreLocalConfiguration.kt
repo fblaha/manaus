@@ -1,6 +1,5 @@
 package cz.fb.manaus.spring
 
-import com.codahale.metrics.MetricRegistry
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
@@ -20,12 +19,6 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 @ComponentScan(value = ["cz.fb.manaus.core"])
 @EnableConfigurationProperties(MarketConf::class)
 open class CoreLocalConfiguration {
-
-    @Bean
-    open fun metricRegistry(): MetricRegistry {
-        return MetricRegistry()
-    }
-
 
     @Bean
     open fun objectMapperBuilder(): Jackson2ObjectMapperBuilder {

@@ -1,6 +1,5 @@
 package cz.fb.manaus.rest
 
-import com.codahale.metrics.MetricRegistry
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.net.HttpHeaders
 import cz.fb.manaus.core.model.market
@@ -15,12 +14,7 @@ import kotlin.test.assertNotNull
 class MarketControllerTest : AbstractControllerTest() {
 
     @Autowired
-    private lateinit var metricRegistry: MetricRegistry
-    @Autowired
     private lateinit var objectMapper: ObjectMapper
-
-    private val exceptionCount: Long
-        get() = metricRegistry.counter("_ERROR_").count
 
     @Test
     fun `market list`() {
