@@ -56,7 +56,7 @@ open class ManilaLocalConfiguration(
     @Bean
     @ManilaBet
     open fun betEventCoordinator(priceAdviser: PriceAdviser, validationCoordinator: ValidationCoordinator): BetEventCoordinator {
-        return BetEventCoordinator(Side.LAY, validationCoordinator, priceAdviser, metricRegistry)
+        return BetEventCoordinator(Side.LAY, validationCoordinator, priceAdviser)
     }
 
 }
