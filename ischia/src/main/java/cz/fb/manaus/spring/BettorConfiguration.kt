@@ -1,6 +1,5 @@
 package cz.fb.manaus.spring
 
-import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.ischia.BackLoserBet
 import cz.fb.manaus.ischia.LayLoserBet
@@ -20,7 +19,6 @@ import kotlin.reflect.full.findAnnotation
 @Configuration
 @Profile("ischia")
 open class BettorConfiguration(
-        private val metricRegistry: MetricRegistry,
         private val adviser: AmountAdviser,
         private val proposalService: PriceProposalService,
         private val roundingService: RoundingService
@@ -41,7 +39,7 @@ open class BettorConfiguration(
             @LayLoserBet priceAdviser: PriceAdviser,
             @LayLoserBet validationCoordinator: ValidationCoordinator
     ): BetEventCoordinator {
-        return BetEventCoordinator(Side.LAY, validationCoordinator, priceAdviser, metricRegistry)
+        return BetEventCoordinator(Side.LAY, validationCoordinator, priceAdviser)
     }
 
     @Bean
@@ -57,7 +55,7 @@ open class BettorConfiguration(
     open fun backBetEventCoordinator(@BackLoserBet priceAdviser: PriceAdviser,
                                      @BackLoserBet validationCoordinator: ValidationCoordinator
     ): BetEventCoordinator {
-        return BetEventCoordinator(Side.BACK, validationCoordinator, priceAdviser, metricRegistry)
+        return BetEventCoordinator(Side.BACK, validationCoordinator, priceAdviser)
     }
 
 }
