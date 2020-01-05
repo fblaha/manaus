@@ -52,7 +52,7 @@ open class TestLocalConfiguration(
     @Bean
     open fun backBetEventCoordinator(priceAdviser: PriceAdviser,
                                      validationCoordinator: ValidationCoordinator): BetEventCoordinator {
-        return BetEventCoordinator(Side.BACK, validationCoordinator, priceAdviser, metricRegistry)
+        return BetEventCoordinator(Side.BACK, validationCoordinator, priceAdviser)
     }
 
 }
