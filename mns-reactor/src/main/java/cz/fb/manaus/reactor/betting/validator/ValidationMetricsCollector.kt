@@ -12,6 +12,6 @@ class ValidationMetricsCollector {
                 "side", type.name.toLowerCase(),
                 "validator", validatorName,
                 "result", result.name.toLowerCase()
-        )
+        ).increment()
     }
 }
