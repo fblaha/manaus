@@ -1,6 +1,5 @@
 package cz.fb.manaus.spring
 
-import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.manila.ManilaBet
 import cz.fb.manaus.reactor.betting.AmountAdviser
@@ -25,7 +24,6 @@ import org.springframework.context.annotation.Profile
 @Profile("manila")
 @ComponentScan(value = ["cz.fb.manaus.manila"])
 open class ManilaLocalConfiguration(
-        private val metricRegistry: MetricRegistry,
         private val adviser: AmountAdviser,
         private val proposalService: PriceProposalService,
         private val roundingService: RoundingService
