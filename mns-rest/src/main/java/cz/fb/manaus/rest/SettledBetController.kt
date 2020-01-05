@@ -1,10 +1,10 @@
 package cz.fb.manaus.rest
 
-import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.repository.SettledBetRepository
 import cz.fb.manaus.core.settlement.SettledBetSaver
 import cz.fb.manaus.spring.ManausProfiles
+import io.micrometer.core.instrument.Metrics
 import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -16,9 +16,8 @@ import java.time.Instant
 @Controller
 @Profile(ManausProfiles.DB)
 class SettledBetController(private val settledBetRepository: SettledBetRepository,
-                           private val betSaver: SettledBetSaver,
-                           private val metricRegistry: MetricRegistry) {
-
+                           private val betSaver: SettledBetSaver
+) {
 
     @ResponseBody
     @RequestMapping(value = ["/bets"], method = [RequestMethod.GET])
@@ -37,7 +36,7 @@ class SettledBetController(private val settledBetRepository: SettledBetRepositor
 
     @RequestMapping(value = ["/bets"], method = [RequestMethod.POST])
     fun addBet(builder: UriComponentsBuilder, @RequestBody bet: SettledBet): ResponseEntity<*> {
-        metricRegistry.counter("settled.bet.post").inc()
+        Metrics.counter("settled_bet_post").increment()
         return if (betSaver.saveBet(bet)) {
             val uriComponents = builder.path("/bets/{id}").buildAndExpand(bet.id)
             ResponseEntity.created(uriComponents.toUri()).build<Any>()

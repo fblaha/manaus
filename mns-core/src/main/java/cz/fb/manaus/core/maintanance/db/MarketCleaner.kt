@@ -1,12 +1,12 @@
 package cz.fb.manaus.core.maintanance.db
 
-import com.codahale.metrics.MetricRegistry
 import com.google.common.base.Stopwatch
 import cz.fb.manaus.core.maintanance.PeriodicTask
 import cz.fb.manaus.core.repository.MarketFootprintLoader
 import cz.fb.manaus.core.repository.MarketPurger
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.spring.ManausProfiles
+import io.micrometer.core.instrument.Metrics
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.time.Duration
@@ -19,8 +19,8 @@ import java.util.logging.Logger
 class MarketCleaner(private val marketRepository: MarketRepository,
                     private val marketFootprintLoader: MarketFootprintLoader,
                     private val marketPurger: MarketPurger,
-                    private val metricRegistry: MetricRegistry,
-                    private val approvers: List<MarketDeletionApprover>) : PeriodicTask {
+                    private val approvers: List<MarketDeletionApprover>
+) : PeriodicTask {
 
     override val name: String = "marketCleanup"
 
@@ -41,7 +41,7 @@ class MarketCleaner(private val marketRepository: MarketRepository,
                 }
             }
         }
-        metricRegistry.counter("purge.market").inc(count)
+        Metrics.counter("market_purge").increment(count.toDouble())
         val elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
         log.info { "market deletion - '$count' obsolete markets removed in '$elapsed' seconds" }
     }

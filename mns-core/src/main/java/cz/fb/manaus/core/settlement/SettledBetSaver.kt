@@ -1,6 +1,5 @@
 package cz.fb.manaus.core.settlement
 
-import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.model.Market
 import cz.fb.manaus.core.model.SettledBet
@@ -9,6 +8,7 @@ import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.core.repository.SettledBetRepository
 import cz.fb.manaus.spring.ManausProfiles
+import io.micrometer.core.instrument.Metrics
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.time.temporal.ChronoUnit
@@ -18,8 +18,8 @@ import java.util.logging.Logger
 @Profile(ManausProfiles.DB)
 class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
                       private val betActionRepository: BetActionRepository,
-                      private val marketRepository: MarketRepository,
-                      private val metricRegistry: MetricRegistry) {
+                      private val marketRepository: MarketRepository
+) {
 
     private val log = Logger.getLogger(SettledBetSaver::class.simpleName)
 
@@ -31,10 +31,10 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
                 val market = marketRepository.read(action.marketId)
                 validate(settledBet, action, market!!)
                 settledBetRepository.save(settledBet)
-                metricRegistry.counter("settled.bet.new").inc()
+                Metrics.counter("settled_bet_new").increment()
                 true
             } else {
-                metricRegistry.counter("settled.bet.NO_ACTION").inc()
+                Metrics.counter("settled_bet_no_action").increment()
                 log.warning { "no bet action for '$settledBet'" }
                 false
             }
@@ -79,7 +79,7 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
                 log.warning { "too big latency $latency sec for '$bet'" }
             }
             if (placed.isAfter(openDate)) {
-                metricRegistry.counter("settled.bet.PLACED_AFTER_START").inc()
+                Metrics.counter("settled_bet_placed_after_start").increment()
                 log.severe { "placed after open date '$bet'" }
             }
         }

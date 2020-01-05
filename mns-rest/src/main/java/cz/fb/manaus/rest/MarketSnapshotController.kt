@@ -1,6 +1,5 @@
 package cz.fb.manaus.rest
 
-import com.codahale.metrics.MetricRegistry
 import com.google.common.util.concurrent.AtomicDouble
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.repository.BetActionRepository
@@ -32,7 +31,6 @@ data class MarketSnapshotCrate(
 class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
                                private val marketRepository: MarketRepository,
                                private val actionRepository: BetActionRepository,
-                               private val metricRegistry: MetricRegistry,
                                private val betMetricUpdater: MatchedBetMetricUpdater) {
 
     private val availableMoney: AtomicDouble by lazy { Metrics.gauge("account_money_available", AtomicDouble()) }
@@ -46,7 +44,6 @@ class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
         val account = snapshotCrate.account
         account.provider.validate()
         updateMoneyMetrics(account.money)
-        metricRegistry.meter("market.snapshot.post").mark()
         Metrics.counter("market_snapshot_post").increment()
         try {
             val marketPrices = snapshotCrate.prices
@@ -58,8 +55,7 @@ class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
             val collectedBets = notifier.notify(snapshot, myBets, account)
             return toResponse(collectedBets)
         } catch (e: RuntimeException) {
-            metricRegistry.counter("_SNAPSHOT_ERROR_").inc()
-            Metrics.counter("snapshot_error").increment()
+            Metrics.counter("exception_snapshot_count").increment()
             logException(snapshotCrate, e)
             throw e
         }

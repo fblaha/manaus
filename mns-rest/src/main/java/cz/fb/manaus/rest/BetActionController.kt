@@ -1,10 +1,10 @@
 package cz.fb.manaus.rest
 
-import com.codahale.metrics.MetricRegistry
 import com.google.common.base.CharMatcher
 import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.spring.ManausProfiles
+import io.micrometer.core.instrument.Metrics
 import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*
 
 @Controller
 @Profile(ManausProfiles.DB)
-class BetActionController(private val betActionRepository: BetActionRepository,
-                          private val metricRegistry: MetricRegistry) {
-
+class BetActionController(
+        private val betActionRepository: BetActionRepository
+) {
 
     @ResponseBody
     @RequestMapping(value = ["/markets/{id}/actions"], method = [RequestMethod.GET])
@@ -32,11 +32,11 @@ class BetActionController(private val betActionRepository: BetActionRepository,
     fun setBetId(@PathVariable id: Long,
                  @RequestBody betId: String): ResponseEntity<*> {
         val changedRows = betActionRepository.setBetId(id, sanitizeId(betId))
-        metricRegistry.counter("action.betId.put").inc()
+        Metrics.counter("action_betId_put").increment()
         return if (changedRows > 0) {
             ResponseEntity.ok().build<Any>()
         } else {
-            metricRegistry.counter("action.betId.notFound").inc()
+            Metrics.counter("action_betId_notFound").increment()
             ResponseEntity.notFound().build<Any>()
         }
     }
