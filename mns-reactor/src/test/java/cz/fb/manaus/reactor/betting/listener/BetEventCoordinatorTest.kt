@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.betting.listener
 
-import com.codahale.metrics.MetricRegistry
 import cz.fb.manaus.core.model.BetActionType
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
@@ -58,13 +57,11 @@ class BetEventCoordinatorTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var validationService: ValidationService
-    @Autowired
-    private lateinit var metricRegistry: MetricRegistry
 
     @Test
     fun `happy path`() {
         val price = Price(3.0, 3.0, Side.BACK)
-        val coordinator = createCoordinator(price, ValidationResult.OK, OK)
+        val coordinator = createCoordinator(price, OK, OK)
         val (bet, action) = coordinator.onBetEvent(HOME_EVENT_BACK)!!
         assertEquals(price, bet.requestedPrice)
         assertEquals(price, action!!.price)
@@ -97,8 +94,7 @@ class BetEventCoordinatorTest : AbstractLocalTestCase() {
                         validators = listOf(MockValidator(priceValidation), proposerAdviser),
                         validationService = validationService
                 ),
-                priceAdviser = MockPriceAdviser(price),
-                metricRegistry = metricRegistry
+                priceAdviser = MockPriceAdviser(price)
         )
     }
 
