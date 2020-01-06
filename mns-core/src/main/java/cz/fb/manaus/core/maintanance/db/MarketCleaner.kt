@@ -41,7 +41,7 @@ class MarketCleaner(private val marketRepository: MarketRepository,
                 }
             }
         }
-        Metrics.counter("market_purge").increment(count.toDouble())
+        Metrics.counter("mns_market_purge").increment(count.toDouble())
         val elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
         log.info { "market deletion - '$count' obsolete markets removed in '$elapsed' seconds" }
     }

@@ -32,11 +32,11 @@ class BetActionController(
     fun setBetId(@PathVariable id: Long,
                  @RequestBody betId: String): ResponseEntity<*> {
         val changedRows = betActionRepository.setBetId(id, sanitizeId(betId))
-        Metrics.counter("action_betId_put").increment()
+        Metrics.counter("mns_action_betId_put").increment()
         return if (changedRows > 0) {
             ResponseEntity.ok().build<Any>()
         } else {
-            Metrics.counter("action_betId_notFound").increment()
+            Metrics.counter("mns_action_betId_notFound").increment()
             ResponseEntity.notFound().build<Any>()
         }
     }

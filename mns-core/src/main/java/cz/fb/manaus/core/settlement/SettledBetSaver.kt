@@ -31,10 +31,10 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
                 val market = marketRepository.read(action.marketId)
                 validate(settledBet, action, market!!)
                 settledBetRepository.save(settledBet)
-                Metrics.counter("settled_bet_new").increment()
+                Metrics.counter("mns_settled_bet_new").increment()
                 true
             } else {
-                Metrics.counter("settled_bet_no_action").increment()
+                Metrics.counter("mns_settled_bet_no_action").increment()
                 log.warning { "no bet action for '$settledBet'" }
                 false
             }
@@ -79,7 +79,7 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
                 log.warning { "too big latency $latency sec for '$bet'" }
             }
             if (placed.isAfter(openDate)) {
-                Metrics.counter("settled_bet_placed_after_start").increment()
+                Metrics.counter("mns_settled_bet_placed_after_start").increment()
                 log.severe { "placed after open date '$bet'" }
             }
         }

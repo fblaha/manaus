@@ -10,7 +10,7 @@ class ExceptionCounter {
     @ExceptionHandler(value = [Throwable::class])
     @Throws(Throwable::class)
     fun defaultErrorHandler(e: Throwable) {
-        Metrics.counter("exception_count").increment()
+        Metrics.counter("mns_exception_count").increment()
         throw e
     }
 

@@ -33,8 +33,8 @@ class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
                                private val actionRepository: BetActionRepository,
                                private val betMetricUpdater: MatchedBetMetricUpdater) {
 
-    private val availableMoney: AtomicDouble by lazy { Metrics.gauge("account_money_available", AtomicDouble()) }
-    private val totalMoney: AtomicDouble by lazy { Metrics.gauge("account_money_total", AtomicDouble()) }
+    private val availableMoney: AtomicDouble by lazy { Metrics.gauge("mns_account_money_available", AtomicDouble()) }
+    private val totalMoney: AtomicDouble by lazy { Metrics.gauge("mns_account_money_total", AtomicDouble()) }
 
     private val log = Logger.getLogger(MarketSnapshotController::class.simpleName)
 
@@ -44,7 +44,7 @@ class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
         val account = snapshotCrate.account
         account.provider.validate()
         updateMoneyMetrics(account.money)
-        Metrics.counter("market_snapshot_post").increment()
+        Metrics.counter("mns_market_snapshot_post").increment()
         try {
             val marketPrices = snapshotCrate.prices
             val market = marketRepository.read(id)!!
@@ -55,7 +55,7 @@ class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
             val collectedBets = notifier.notify(snapshot, myBets, account)
             return toResponse(collectedBets)
         } catch (e: RuntimeException) {
-            Metrics.counter("exception_snapshot_count").increment()
+            Metrics.counter("mns_exception_snapshot_count").increment()
             logException(snapshotCrate, e)
             throw e
         }

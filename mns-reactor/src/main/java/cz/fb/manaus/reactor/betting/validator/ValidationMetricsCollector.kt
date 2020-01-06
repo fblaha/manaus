@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 class ValidationMetricsCollector {
 
     fun updateMetrics(result: ValidationResult, type: Side, validatorName: String) {
-        Metrics.counter("validator_stats",
+        Metrics.counter("mns_validator_stats",
                 "side", type.name.toLowerCase(),
                 "validator", validatorName,
                 "result", result.name.toLowerCase()

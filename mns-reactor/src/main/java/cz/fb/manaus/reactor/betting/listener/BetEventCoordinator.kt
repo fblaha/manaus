@@ -37,7 +37,7 @@ class BetEventCoordinator(
 
     private fun cancel(event: BetEvent): BetCommand? {
         return event.cancel?.let {
-            Metrics.counter("bet_cancel").increment()
+            Metrics.counter("mns_bet_cancel").increment()
             it
         }
     }

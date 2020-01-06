@@ -22,7 +22,7 @@ class BlacklistedCategoryFilter(private val blacklistedCategoryRepository: Black
         val blacklist = blacklistedCategoryRepository.list().map { it.name }.toSet()
         val intersection = categories intersect blacklist
         if (intersection.isNotEmpty()) {
-            Metrics.counter("blacklist.market").increment()
+            Metrics.counter("mns_blacklist_market").increment()
             log.info { "blacklist category '$intersection' for market '$market'" }
         }
         return intersection.isEmpty()

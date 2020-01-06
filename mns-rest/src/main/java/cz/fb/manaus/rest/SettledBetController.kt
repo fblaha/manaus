@@ -36,7 +36,7 @@ class SettledBetController(private val settledBetRepository: SettledBetRepositor
 
     @RequestMapping(value = ["/bets"], method = [RequestMethod.POST])
     fun addBet(builder: UriComponentsBuilder, @RequestBody bet: SettledBet): ResponseEntity<*> {
-        Metrics.counter("settled_bet_post").increment()
+        Metrics.counter("mns_settled_bet_post").increment()
         return if (betSaver.saveBet(bet)) {
             val uriComponents = builder.path("/bets/{id}").buildAndExpand(bet.id)
             ResponseEntity.created(uriComponents.toUri()).build<Any>()
