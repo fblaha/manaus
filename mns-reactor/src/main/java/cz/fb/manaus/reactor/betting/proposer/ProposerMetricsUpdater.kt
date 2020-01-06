@@ -13,7 +13,7 @@ class ProposerMetricsUpdater : BetCommandHandler {
         if (action != null) {
             val side = action.price.side.name.toLowerCase()
             action.proposers.forEach {
-                Metrics.counter("proposer.stats",
+                Metrics.counter("proposer_stats",
                         "side", side,
                         "proposer", it
                 ).increment()
