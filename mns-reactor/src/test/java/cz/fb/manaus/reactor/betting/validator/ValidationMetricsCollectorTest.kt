@@ -25,7 +25,7 @@ class ValidationMetricsCollectorTest : AbstractLocalTestCase() {
         metricsCollector.updateMetrics(ValidationResult.OK, Side.BACK, makeName(validator))
         metricsCollector.updateMetrics(ValidationResult.DROP, Side.BACK, makeName(validator))
         val meters = Metrics.globalRegistry.meters
-                .filter { it.id.name.startsWith("validator.stats") }
+                .filter { it.id.name.startsWith("validator_stats") }
         assertTrue { meters.size >= 2 }
     }
 
