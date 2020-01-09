@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicLong
 @Component
 class MatchedBetMetricUpdater {
     private val lastScan = AtomicLong(0)
+    // TODO lay/back labels
     private val matchedBets: AtomicLong by lazy { Metrics.gauge("mns_bet_matched_count", AtomicLong()) }
 
 
