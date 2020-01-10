@@ -1,25 +1,37 @@
 package cz.fb.manaus.rest
 
 import cz.fb.manaus.core.model.Bet
+import cz.fb.manaus.core.model.Side
 import io.micrometer.core.instrument.Metrics
+import io.micrometer.core.instrument.Tag
 import org.springframework.stereotype.Component
 import java.util.concurrent.atomic.AtomicLong
 
 @Component
 class MatchedBetMetricUpdater {
     private val lastScan = AtomicLong(0)
-    // TODO lay/back labels
-    private val matchedBets: AtomicLong by lazy { Metrics.gauge("mns_bet_matched_count", AtomicLong()) }
 
+    private val matchedLayBets: AtomicLong by lazy {
+        Metrics.gauge("mns_bet_matched_count", listOf(Tag.of("side", "lay")), AtomicLong())
+    }
+    private val matchedBackBets: AtomicLong by lazy {
+        Metrics.gauge("mns_bet_matched_count", listOf(Tag.of("side", "back")), AtomicLong())
+    }
 
     fun update(scanTime: Long, bets: List<Bet>) {
         val last = lastScan.getAndSet(scanTime)
         if (last > 0 && last != scanTime) {
-            matchedBets.set(0)
+            matchedBackBets.set(0)
+            matchedLayBets.set(0)
         }
-        val currentCount = bets.filter { it.isHalfMatched }.count()
-        if (currentCount > 0) {
-            matchedBets.addAndGet(currentCount.toLong())
+        val matched = bets.filter { it.isHalfMatched }
+        update(matched.count { it.requestedPrice.side == Side.BACK }, matchedBackBets)
+        update(matched.count { it.requestedPrice.side == Side.LAY }, matchedLayBets)
+    }
+
+    private fun update(count: Int, counter: AtomicLong) {
+        if (count > 0) {
+            counter.addAndGet(count.toLong())
         }
     }
 }
