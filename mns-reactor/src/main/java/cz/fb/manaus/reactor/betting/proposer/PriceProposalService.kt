@@ -1,9 +1,9 @@
 package cz.fb.manaus.reactor.betting.proposer
 
+import cz.fb.manaus.core.makeName
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.priceEq
 import cz.fb.manaus.reactor.betting.BetEvent
-import cz.fb.manaus.reactor.betting.makeName
 import org.springframework.stereotype.Service
 
 @Service

@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.profit.progress.function
 
+import cz.fb.manaus.core.makeName
 import cz.fb.manaus.core.model.RealizedBet
-import cz.fb.manaus.reactor.betting.makeName
 
 interface ProgressFunction : (RealizedBet) -> Double? {
 

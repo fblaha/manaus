@@ -1,4 +1,4 @@
-package cz.fb.manaus.reactor.betting
+package cz.fb.manaus.core
 
 import com.google.common.base.CaseFormat
 

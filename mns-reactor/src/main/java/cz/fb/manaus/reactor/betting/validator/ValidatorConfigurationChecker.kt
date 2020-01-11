@@ -1,6 +1,6 @@
 package cz.fb.manaus.reactor.betting.validator
 
-import cz.fb.manaus.reactor.betting.makeName
+import cz.fb.manaus.core.makeName
 import org.springframework.stereotype.Component
 import java.util.logging.Logger
 import javax.annotation.PostConstruct

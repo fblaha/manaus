@@ -1,9 +1,9 @@
 package cz.fb.manaus.reactor.betting.validator
 
+import cz.fb.manaus.core.makeName
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.reactor.betting.BetEvent
-import cz.fb.manaus.reactor.betting.makeName
 import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.stereotype.Service
 

@@ -1,9 +1,9 @@
 package cz.fb.manaus.reactor.betting.validator
 
+import cz.fb.manaus.core.makeName
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.betting.BetEvent
-import cz.fb.manaus.reactor.betting.makeName
 import io.micrometer.core.instrument.Metrics
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
