@@ -31,7 +31,8 @@ class SettledBetSaver(private val settledBetRepository: SettledBetRepository,
                 val market = marketRepository.read(action.marketId)
                 validate(settledBet, action, market!!)
                 settledBetRepository.save(settledBet)
-                Metrics.counter("mns_settled_bet_new").increment()
+                val sideLabel = settledBet.side.toString().toLowerCase()
+                Metrics.counter("mns_settled_bet_new", "side", sideLabel).increment()
                 true
             } else {
                 Metrics.counter("mns_settled_bet_no_action").increment()
