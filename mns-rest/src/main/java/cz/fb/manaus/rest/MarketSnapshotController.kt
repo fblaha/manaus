@@ -28,10 +28,12 @@ data class MarketSnapshotCrate(
 
 @Controller
 @Profile(ManausProfiles.DB)
-class MarketSnapshotController(private val notifier: MarketSnapshotNotifier,
-                               private val marketRepository: MarketRepository,
-                               private val actionRepository: BetActionRepository,
-                               private val betMetricUpdater: MatchedBetMetricUpdater) {
+class MarketSnapshotController(
+        private val notifier: MarketSnapshotNotifier,
+        private val marketRepository: MarketRepository,
+        private val actionRepository: BetActionRepository,
+        private val betMetricUpdater: MatchedBetMetricUpdater
+) {
 
     private val availableMoney: AtomicDouble by lazy { Metrics.gauge("mns_account_money_available", AtomicDouble()) }
     private val totalMoney: AtomicDouble by lazy { Metrics.gauge("mns_account_money_total", AtomicDouble()) }

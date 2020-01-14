@@ -1,14 +1,12 @@
 package cz.fb.manaus.reactor.betting
 
 import cz.fb.manaus.core.manager.MarketFilterService
-import cz.fb.manaus.core.model.Account
-import cz.fb.manaus.core.model.CollectedBets
-import cz.fb.manaus.core.model.Market
-import cz.fb.manaus.core.model.MarketSnapshot
+import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.betting.action.BetCommandHandler
 import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotEvent
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
+import io.micrometer.core.instrument.Metrics
 import org.springframework.core.annotation.AnnotationAwareOrderComparator
 import java.time.Instant
 import java.util.logging.Logger
@@ -35,7 +33,9 @@ class MarketSnapshotNotifier(
                 val bets = sortedSnapshotListeners
                         .flatMap { it.onMarketSnapshot(MarketSnapshotEvent(snapshot, account)) }
 
-                return toCollectedBets(callHandlers(bets))
+                val collectedBets = toCollectedBets(callHandlers(bets))
+                collectedBets.updateMetrics()
+                return collectedBets
             }
         }
         return CollectedBets(emptyList(), emptyList(), emptyList())
@@ -59,4 +59,22 @@ class MarketSnapshotNotifier(
     private fun validateCommands(commands: List<BetCommand>) {
         commands.filter { !it.isCancel }.forEach { check(it.bet.actionId > 0) }
     }
+}
+
+const val betCommandMetricName = "mns_bet_command_total"
+
+fun CollectedBets.updateMetrics() {
+    Metrics.counter(betCommandMetricName, "type", "cancel").increment(cancel.size.toDouble())
+    updateCounter(Side.BACK, "place", place)
+    updateCounter(Side.LAY, "place", place)
+    updateCounter(Side.BACK, "update", update)
+    updateCounter(Side.LAY, "update", update)
+}
+
+private fun updateCounter(side: Side, type: String, bets: List<Bet>) {
+    val count = bets.count { it.requestedPrice.side == side }
+    Metrics.counter(betCommandMetricName,
+            "type", type,
+            "side", side.name.toLowerCase()
+    ).increment(count.toDouble())
 }
