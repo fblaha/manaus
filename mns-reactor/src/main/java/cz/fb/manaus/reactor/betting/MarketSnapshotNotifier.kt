@@ -61,10 +61,7 @@ class MarketSnapshotNotifier(
     }
 }
 
-const val betCommandMetricName = "mns_bet_command_total"
-
 fun CollectedBets.updateMetrics() {
-    Metrics.counter(betCommandMetricName, "type", "cancel").increment(cancel.size.toDouble())
     updateCounter(Side.BACK, "place", place)
     updateCounter(Side.LAY, "place", place)
     updateCounter(Side.BACK, "update", update)
@@ -73,7 +70,7 @@ fun CollectedBets.updateMetrics() {
 
 private fun updateCounter(side: Side, type: String, bets: List<Bet>) {
     val count = bets.count { it.requestedPrice.side == side }
-    Metrics.counter(betCommandMetricName,
+    Metrics.counter("mns_bet_command_count",
             "type", type,
             "side", side.name.toLowerCase()
     ).increment(count.toDouble())
