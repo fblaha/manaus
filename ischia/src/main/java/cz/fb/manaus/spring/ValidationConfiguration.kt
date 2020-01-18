@@ -1,7 +1,7 @@
 package cz.fb.manaus.spring
 
-import cz.fb.manaus.ischia.BackLoserBet
-import cz.fb.manaus.ischia.LayLoserBet
+import cz.fb.manaus.ischia.BackUniverse
+import cz.fb.manaus.ischia.LayUniverse
 import cz.fb.manaus.reactor.betting.validator.ValidationCoordinator
 import cz.fb.manaus.reactor.betting.validator.ValidationService
 import cz.fb.manaus.reactor.betting.validator.Validator
@@ -15,18 +15,18 @@ import kotlin.reflect.full.findAnnotation
 open class ValidationConfiguration {
 
     @Bean
-    @LayLoserBet
-    open fun layValidationCoordinator(validationService: ValidationService, @LayLoserBet validators: List<Validator>): ValidationCoordinator {
-        validators.forEach { checkNotNull(it::class.findAnnotation<LayLoserBet>()) }
+    @LayUniverse
+    open fun layValidationCoordinator(validationService: ValidationService, @LayUniverse validators: List<Validator>): ValidationCoordinator {
+        validators.forEach { checkNotNull(it::class.findAnnotation<LayUniverse>()) }
         check(validators.isNotEmpty())
         return ValidationCoordinator(validators, validationService)
 
     }
 
     @Bean
-    @BackLoserBet
-    open fun backValidationCoordinator(validationService: ValidationService, @BackLoserBet validators: List<Validator>): ValidationCoordinator {
-        validators.forEach { checkNotNull(it::class.findAnnotation<BackLoserBet>()) }
+    @BackUniverse
+    open fun backValidationCoordinator(validationService: ValidationService, @BackUniverse validators: List<Validator>): ValidationCoordinator {
+        validators.forEach { checkNotNull(it::class.findAnnotation<BackUniverse>()) }
         check(validators.isNotEmpty())
         return ValidationCoordinator(validators, validationService)
     }

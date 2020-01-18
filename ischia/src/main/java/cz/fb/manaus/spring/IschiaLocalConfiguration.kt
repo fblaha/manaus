@@ -1,6 +1,8 @@
 package cz.fb.manaus.spring
 
 import cz.fb.manaus.core.provider.ProviderTag.VendorMatchbook
+import cz.fb.manaus.ischia.BackUniverse
+import cz.fb.manaus.ischia.LayUniverse
 import cz.fb.manaus.ischia.filter.MarketTypeFilter
 import cz.fb.manaus.ischia.filter.moneyLineLoserFilter
 import cz.fb.manaus.ischia.filter.runnerNameFilter
@@ -23,6 +25,8 @@ import org.springframework.context.annotation.*
 open class IschiaLocalConfiguration {
 
     @Bean
+    @LayUniverse
+    @BackUniverse
     open fun fixedDowngradeStrategy(priceConf: PriceConf): DowngradeStrategy {
         return FixedDowngradeStrategy(
                 back = priceConf.downgradeBackRate,
@@ -32,6 +36,8 @@ open class IschiaLocalConfiguration {
     }
 
     @Bean
+    @LayUniverse
+    @BackUniverse
     open fun minimizeChargeStrategy(): MinimizeChargeStrategy {
         return MinimizeChargeStrategy(
                 fairnessReductionLow = 0.01,

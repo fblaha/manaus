@@ -1,8 +1,8 @@
 package cz.fb.manaus.spring
 
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.ischia.BackLoserBet
-import cz.fb.manaus.ischia.LayLoserBet
+import cz.fb.manaus.ischia.BackUniverse
+import cz.fb.manaus.ischia.LayUniverse
 import cz.fb.manaus.reactor.betting.AmountAdviser
 import cz.fb.manaus.reactor.betting.PriceAdviser
 import cz.fb.manaus.reactor.betting.listener.BetEventCoordinator
@@ -26,34 +26,34 @@ open class BettorConfiguration(
 ) {
 
     @Bean
-    @LayLoserBet
-    open fun layAdviser(@LayLoserBet proposers: List<PriceProposer>): PriceAdviser {
+    @LayUniverse
+    open fun layAdviser(@LayUniverse proposers: List<PriceProposer>): PriceAdviser {
         check(proposers.isNotEmpty())
-        proposers.forEach { checkNotNull(it::class.findAnnotation<LayLoserBet>()) }
+        proposers.forEach { checkNotNull(it::class.findAnnotation<LayUniverse>()) }
         return MinReduceProposerAdviser(proposers, adviser, proposalService, roundingService)
     }
 
     @Bean
-    @LayLoserBet
+    @LayUniverse
     open fun layBetEventCoordinator(
-            @LayLoserBet priceAdviser: PriceAdviser,
-            @LayLoserBet validationCoordinator: ValidationCoordinator
+            @LayUniverse priceAdviser: PriceAdviser,
+            @LayUniverse validationCoordinator: ValidationCoordinator
     ): BetEventCoordinator {
         return BetEventCoordinator(Side.LAY, validationCoordinator, priceAdviser)
     }
 
     @Bean
-    @BackLoserBet
-    open fun backAdviser(@BackLoserBet proposers: List<PriceProposer>): PriceAdviser {
+    @BackUniverse
+    open fun backAdviser(@BackUniverse proposers: List<PriceProposer>): PriceAdviser {
         check(proposers.isNotEmpty())
-        proposers.forEach { checkNotNull(it::class.findAnnotation<BackLoserBet>()) }
+        proposers.forEach { checkNotNull(it::class.findAnnotation<BackUniverse>()) }
         return MinReduceProposerAdviser(proposers, adviser, proposalService, roundingService)
     }
 
     @Bean
-    @BackLoserBet
-    open fun backBetEventCoordinator(@BackLoserBet priceAdviser: PriceAdviser,
-                                     @BackLoserBet validationCoordinator: ValidationCoordinator
+    @BackUniverse
+    open fun backBetEventCoordinator(@BackUniverse priceAdviser: PriceAdviser,
+                                     @BackUniverse validationCoordinator: ValidationCoordinator
     ): BetEventCoordinator {
         return BetEventCoordinator(Side.BACK, validationCoordinator, priceAdviser)
     }

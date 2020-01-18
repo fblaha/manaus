@@ -1,7 +1,7 @@
 package cz.fb.manaus.ischia.validator
 
-import cz.fb.manaus.ischia.BackLoserBet
-import cz.fb.manaus.ischia.LayLoserBet
+import cz.fb.manaus.ischia.BackUniverse
+import cz.fb.manaus.ischia.LayUniverse
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-@BackLoserBet
-@LayLoserBet
+@BackUniverse
+@LayUniverse
 @Component
 object CloseStartValidator : Validator {
 

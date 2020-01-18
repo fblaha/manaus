@@ -10,5 +10,5 @@ import org.springframework.beans.factory.annotation.Qualifier
         AnnotationTarget.VALUE_PARAMETER,
         AnnotationTarget.FIELD,
         AnnotationTarget.CONSTRUCTOR)
-@Retention(AnnotationRetention.RUNTIME)
-annotation class LayLoserBet
+@Retention
+annotation class BackUniverse
