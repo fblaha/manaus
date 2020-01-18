@@ -14,6 +14,7 @@ import cz.fb.manaus.reactor.price.PriceBulldozer
 import cz.fb.manaus.reactor.price.PriceFilter
 import cz.fb.manaus.spring.conf.MarketRunnerConf
 import cz.fb.manaus.spring.conf.PriceConf
+import cz.fb.manaus.spring.conf.ProposerConf
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.*
 
@@ -21,25 +22,25 @@ import org.springframework.context.annotation.*
 @Profile("ischia")
 @ComponentScan(value = ["cz.fb.manaus.ischia"])
 @Import(ValidationConfiguration::class, BettorConfiguration::class)
-@EnableConfigurationProperties(MarketRunnerConf::class, PriceConf::class)
+@EnableConfigurationProperties(MarketRunnerConf::class, PriceConf::class, ProposerConf::class)
 open class IschiaLocalConfiguration {
 
     @Bean
     @BackUniverse
-    open fun fixedBackDowngradeStrategy(priceConf: PriceConf): DowngradeStrategy {
+    open fun fixedBackDowngradeStrategy(proposerConf: ProposerConf): DowngradeStrategy {
         return FixedDowngradeStrategy(
-                back = priceConf.downgradeBackProposerBackPrice,
-                lay = priceConf.downgradeBackProposerLayPrice,
+                back = proposerConf.downgradeBackProposerBackPrice,
+                lay = proposerConf.downgradeBackProposerLayPrice,
                 tags = setOf(VendorMatchbook)
         )
     }
 
     @Bean
     @LayUniverse
-    open fun fixedLayDowngradeStrategy(priceConf: PriceConf): DowngradeStrategy {
+    open fun fixedLayDowngradeStrategy(proposerConf: ProposerConf): DowngradeStrategy {
         return FixedDowngradeStrategy(
-                back = priceConf.downgradeLayProposerBackPrice,
-                lay = priceConf.downgradeLayProposerLayPrice,
+                back = proposerConf.downgradeLayProposerBackPrice,
+                lay = proposerConf.downgradeLayProposerLayPrice,
                 tags = setOf(VendorMatchbook)
         )
     }
