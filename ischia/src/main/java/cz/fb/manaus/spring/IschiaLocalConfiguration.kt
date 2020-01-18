@@ -25,12 +25,21 @@ import org.springframework.context.annotation.*
 open class IschiaLocalConfiguration {
 
     @Bean
-    @LayUniverse
     @BackUniverse
-    open fun fixedDowngradeStrategy(priceConf: PriceConf): DowngradeStrategy {
+    open fun fixedBackDowngradeStrategy(priceConf: PriceConf): DowngradeStrategy {
         return FixedDowngradeStrategy(
-                back = priceConf.downgradeBackRate,
-                lay = priceConf.downgradeLayRate,
+                back = priceConf.downgradeBackProposerBackPrice,
+                lay = priceConf.downgradeBackProposerLayPrice,
+                tags = setOf(VendorMatchbook)
+        )
+    }
+
+    @Bean
+    @LayUniverse
+    open fun fixedLayDowngradeStrategy(priceConf: PriceConf): DowngradeStrategy {
+        return FixedDowngradeStrategy(
+                back = priceConf.downgradeLayProposerBackPrice,
+                lay = priceConf.downgradeLayProposerLayPrice,
                 tags = setOf(VendorMatchbook)
         )
     }

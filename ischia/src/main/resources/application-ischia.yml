@@ -6,8 +6,10 @@ market-runner:
     - rt_match_odds
     - moneyline
 price:
-  downgradeBackRate: 0.1
-  downgradeLayRate: 0.1
+  downgradeBackProposerBackPrice: 0.1
+  downgradeBackProposerLayPrice: 0.1
+  downgradeLayProposerBackPrice: 0.1
+  downgradeLayProposerLayPrice: 0.1
   bulldoze: 10
   limit: 3
   min: 1.0
