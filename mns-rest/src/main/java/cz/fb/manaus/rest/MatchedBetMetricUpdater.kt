@@ -26,6 +26,7 @@ class MatchedBetMetricUpdater {
         if (last > 0 && last != scanTime) {
             matchedBackBets.set(0)
             matchedLayBets.set(0)
+            coveredBets.set(0)
         }
         val matched = bets.filter { it.isHalfMatched }
         update(matched.count { it.requestedPrice.side == Side.BACK }, matchedBackBets)
