@@ -5,6 +5,7 @@ import cz.fb.manaus.core.repository.Importer
 import cz.fb.manaus.core.repository.MarketFootprintLoader
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.spring.ManausProfiles
+import io.micrometer.core.instrument.Metrics
 import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -21,7 +22,8 @@ class MarketFootprintController(
 
     @ResponseBody
     @RequestMapping(value = ["/footprints/{id}"], method = [RequestMethod.GET])
-    fun getFootprint(@PathVariable id: String): ResponseEntity<MarketFootprint> {
+    fun export(@PathVariable id: String): ResponseEntity<MarketFootprint> {
+        Metrics.counter("market_footprint_export").increment()
         val footprint = marketRepository.read(id)?.let { marketFootprintLoader.toFootprint(it) }
         return handleNotFound(footprint)
     }
@@ -29,6 +31,7 @@ class MarketFootprintController(
     @ResponseBody
     @RequestMapping(value = ["/footprints"], method = [RequestMethod.POST])
     fun import(@RequestBody footprint: MarketFootprint): ResponseEntity<*> {
+        Metrics.counter("market_footprint_import").increment()
         importer.import(footprint)
         val location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
