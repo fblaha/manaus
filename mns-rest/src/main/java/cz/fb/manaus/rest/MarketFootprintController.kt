@@ -23,7 +23,7 @@ class MarketFootprintController(
     @ResponseBody
     @RequestMapping(value = ["/footprints/{id}"], method = [RequestMethod.GET])
     fun export(@PathVariable id: String): ResponseEntity<MarketFootprint> {
-        Metrics.counter("market_footprint_export").increment()
+        Metrics.counter("mns_market_footprint_export").increment()
         val footprint = marketRepository.read(id)?.let { marketFootprintLoader.toFootprint(it) }
         return handleNotFound(footprint)
     }
@@ -31,7 +31,7 @@ class MarketFootprintController(
     @ResponseBody
     @RequestMapping(value = ["/footprints"], method = [RequestMethod.POST])
     fun import(@RequestBody footprint: MarketFootprint): ResponseEntity<*> {
-        Metrics.counter("market_footprint_import").increment()
+        Metrics.counter("mns_market_footprint_import").increment()
         importer.import(footprint)
         val location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
