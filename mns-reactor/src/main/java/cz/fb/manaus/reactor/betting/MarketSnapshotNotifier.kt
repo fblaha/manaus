@@ -2,8 +2,8 @@ package cz.fb.manaus.reactor.betting
 
 import cz.fb.manaus.core.manager.MarketFilterService
 import cz.fb.manaus.core.model.*
+import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.reactor.betting.action.BetCommandHandler
-import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotEvent
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
 import io.micrometer.core.instrument.Metrics
@@ -14,6 +14,7 @@ import java.util.logging.Logger
 class MarketSnapshotNotifier(
         snapshotListeners: List<MarketSnapshotListener>,
         private val filterService: MarketFilterService,
+        private val betActionRepository: BetActionRepository,
         private val handlers: List<BetCommandHandler>
 ) {
 
@@ -22,20 +23,23 @@ class MarketSnapshotNotifier(
 
     private val log = Logger.getLogger(MarketSnapshotNotifier::class.simpleName)
 
-    fun notify(snapshot: MarketSnapshot, myBets: Set<String>, account: Account): CollectedBets {
+    fun notify(snapshot: MarketSnapshot, account: Account): CollectedBets {
 
-        if (filterService.accept(snapshot.market, myBets.isNotEmpty(), account.provider::matches)) {
-            validateOpenDate(snapshot.market)
+        val market = snapshot.market
+        val myBets = betActionRepository.find(market.id).mapNotNull { it.betId }.toSet()
+        if (filterService.accept(market, myBets.isNotEmpty(), account.provider::matches)) {
+            validateOpenDate(market)
 
-            val unknownBets = BetUtils.getUnknownBets(snapshot.currentBets, myBets)
-            unknownBets.forEach { log.warning { "unknown bet '$it'" } }
-            if (unknownBets.isEmpty()) {
+            // TODO not check here
+            if (snapshot.currentBets.all { it.betId in myBets }) {
                 val bets = sortedSnapshotListeners
                         .flatMap { it.onMarketSnapshot(MarketSnapshotEvent(snapshot, account)) }
 
                 val collectedBets = toCollectedBets(callHandlers(bets))
                 collectedBets.updateMetrics()
                 return collectedBets
+            } else {
+                log.warning { "contains unknown bets '${snapshot.currentBets}'" }
             }
         }
         return CollectedBets(emptyList(), emptyList(), emptyList())

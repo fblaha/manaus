@@ -14,3 +14,9 @@ interface MarketSnapshotListener {
     fun onMarketSnapshot(marketSnapshotEvent: MarketSnapshotEvent): List<BetCommand>
 
 }
+
+interface MarketSnapshotValidator {
+
+    fun accept(marketSnapshotEvent: MarketSnapshotEvent): Boolean
+
+}

@@ -2,7 +2,6 @@ package cz.fb.manaus.rest
 
 import com.google.common.util.concurrent.AtomicDouble
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.reactor.betting.MarketSnapshotNotifier
 import cz.fb.manaus.spring.ManausProfiles
@@ -31,7 +30,6 @@ data class MarketSnapshotCrate(
 class MarketSnapshotController(
         private val notifier: MarketSnapshotNotifier,
         private val marketRepository: MarketRepository,
-        private val actionRepository: BetActionRepository,
         private val betMetricUpdater: MatchedBetMetricUpdater
 ) {
 
@@ -53,8 +51,7 @@ class MarketSnapshotController(
             val bets = snapshotCrate.bets
             betMetricUpdater.update(snapshotCrate.scanTime, bets)
             val snapshot = MarketSnapshot(marketPrices, market, bets, snapshotCrate.tradedVolume)
-            val myBets = actionRepository.find(id).mapNotNull { it.betId }.toSet()
-            val collectedBets = notifier.notify(snapshot, myBets, account)
+            val collectedBets = notifier.notify(snapshot, account)
             return toResponse(collectedBets)
         } catch (e: RuntimeException) {
             Metrics.counter("mns_exception_snapshot_count").increment()

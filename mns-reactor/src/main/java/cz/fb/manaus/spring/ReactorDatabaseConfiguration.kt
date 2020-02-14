@@ -1,6 +1,7 @@
 package cz.fb.manaus.spring
 
 import cz.fb.manaus.core.manager.MarketFilterService
+import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.reactor.betting.MarketSnapshotNotifier
 import cz.fb.manaus.reactor.betting.action.BetCommandHandler
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
@@ -24,10 +25,12 @@ open class ReactorDatabaseConfiguration {
                                     priceFilter: PriceFilter?,
                                     handlers: List<BetCommandHandler>,
                                     bettingConf: BettingConf,
+                                    betActionRepository: BetActionRepository,
                                     snapshotListeners: List<MarketSnapshotListener>): MarketSnapshotNotifier {
         return MarketSnapshotNotifier(
                 snapshotListeners,
                 filterService,
+                betActionRepository,
                 handlers
         )
     }
