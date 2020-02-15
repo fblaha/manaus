@@ -3,7 +3,6 @@ package cz.fb.manaus.reactor.betting
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.reactor.betting.listener.BetEventSeeker
-import cz.fb.manaus.reactor.betting.listener.MarketSnapshotEvent
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component

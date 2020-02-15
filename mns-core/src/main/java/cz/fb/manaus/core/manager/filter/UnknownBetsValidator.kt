@@ -1,0 +1,29 @@
+package cz.fb.manaus.core.manager.filter
+
+import cz.fb.manaus.core.model.Bet
+import cz.fb.manaus.core.model.MarketSnapshotEvent
+import cz.fb.manaus.core.repository.BetActionRepository
+import cz.fb.manaus.spring.ManausProfiles
+import org.springframework.context.annotation.Profile
+import org.springframework.stereotype.Component
+import java.util.logging.Logger
+
+@Component
+@Profile(ManausProfiles.DB)
+class UnknownBetsValidator(
+        private val betActionRepository: BetActionRepository
+) : MarketSnapshotEventValidator {
+
+    private val log = Logger.getLogger(UnknownBetsValidator::class.simpleName)
+
+    override fun accept(event: MarketSnapshotEvent): Boolean {
+        val myBets = betActionRepository.find(event.snapshot.market.id).mapNotNull { it.betId }.toSet()
+        val unknownBets = getUnknownBets(event.snapshot.currentBets, myBets)
+                .onEach { log.warning { "unknown bet '${it.betId}'" } }
+        return unknownBets.isEmpty()
+    }
+}
+
+fun getUnknownBets(bets: List<Bet>, myBets: Set<String>): List<Bet> {
+    return bets.filter { it.betId !in myBets }
+}

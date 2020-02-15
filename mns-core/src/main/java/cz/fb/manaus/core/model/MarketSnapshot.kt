@@ -24,3 +24,9 @@ data class MarketSnapshot(val runnerPrices: List<RunnerPrices>,
 }
 
 fun Map<SideSelection, Bet>.isActive(selectionId: Long): Boolean = Side.values().any { SideSelection(it, selectionId) in this }
+
+
+data class MarketSnapshotEvent(
+        val snapshot: MarketSnapshot,
+        val account: Account
+)

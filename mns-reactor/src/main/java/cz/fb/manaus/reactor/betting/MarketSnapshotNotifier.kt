@@ -1,46 +1,31 @@
 package cz.fb.manaus.reactor.betting
 
-import cz.fb.manaus.core.manager.MarketFilterService
+import cz.fb.manaus.core.manager.MarketSnapshotEventValidationService
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.reactor.betting.action.BetCommandHandler
-import cz.fb.manaus.reactor.betting.listener.MarketSnapshotEvent
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
 import io.micrometer.core.instrument.Metrics
 import org.springframework.core.annotation.AnnotationAwareOrderComparator
 import java.time.Instant
-import java.util.logging.Logger
 
 class MarketSnapshotNotifier(
         snapshotListeners: List<MarketSnapshotListener>,
-        private val filterService: MarketFilterService,
-        private val betActionRepository: BetActionRepository,
+        private val eventValidationService: MarketSnapshotEventValidationService,
         private val handlers: List<BetCommandHandler>
 ) {
 
     private val sortedSnapshotListeners: List<MarketSnapshotListener> =
             snapshotListeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
 
-    private val log = Logger.getLogger(MarketSnapshotNotifier::class.simpleName)
-
-    fun notify(snapshot: MarketSnapshot, account: Account): CollectedBets {
-
-        val market = snapshot.market
-        val myBets = betActionRepository.find(market.id).mapNotNull { it.betId }.toSet()
-        if (filterService.accept(market, myBets.isNotEmpty(), account.provider::matches)) {
+    fun notify(event: MarketSnapshotEvent): CollectedBets {
+        val market = event.snapshot.market
+        if (eventValidationService.accept(event)) {
             validateOpenDate(market)
+            val bets = sortedSnapshotListeners.flatMap { it.onMarketSnapshot(event) }
 
-            // TODO not check here
-            if (snapshot.currentBets.all { it.betId in myBets }) {
-                val bets = sortedSnapshotListeners
-                        .flatMap { it.onMarketSnapshot(MarketSnapshotEvent(snapshot, account)) }
-
-                val collectedBets = toCollectedBets(callHandlers(bets))
-                collectedBets.updateMetrics()
-                return collectedBets
-            } else {
-                log.warning { "contains unknown bets '${snapshot.currentBets}'" }
-            }
+            val collectedBets = toCollectedBets(callHandlers(bets))
+            collectedBets.updateMetrics()
+            return collectedBets
         }
         return CollectedBets(emptyList(), emptyList(), emptyList())
     }

@@ -51,7 +51,7 @@ class MarketSnapshotController(
             val bets = snapshotCrate.bets
             betMetricUpdater.update(snapshotCrate.scanTime, bets)
             val snapshot = MarketSnapshot(marketPrices, market, bets, snapshotCrate.tradedVolume)
-            val collectedBets = notifier.notify(snapshot, account)
+            val collectedBets = notifier.notify(MarketSnapshotEvent(snapshot, account))
             return toResponse(collectedBets)
         } catch (e: RuntimeException) {
             Metrics.counter("mns_exception_snapshot_count").increment()

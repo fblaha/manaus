@@ -1,5 +1,6 @@
 package cz.fb.manaus.reactor.betting.listener
 
+import cz.fb.manaus.core.model.MarketSnapshotEvent
 import cz.fb.manaus.core.model.SideSelection
 import cz.fb.manaus.core.model.isActive
 import cz.fb.manaus.reactor.betting.BetCommand

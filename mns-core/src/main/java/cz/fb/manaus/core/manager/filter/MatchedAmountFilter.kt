@@ -1,12 +1,17 @@
 package cz.fb.manaus.core.manager.filter
 
 import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.model.MarketSnapshotEvent
 import cz.fb.manaus.core.model.amountEq
 import cz.fb.manaus.core.provider.ProviderTag
 import org.springframework.stereotype.Component
 
 @Component
-class MatchedAmountFilter : MarketFilter {
+class MatchedAmountFilter : MarketFilter, MarketSnapshotEventValidator {
+
+    override fun accept(event: MarketSnapshotEvent): Boolean {
+        return accept(event.snapshot.market)
+    }
 
     override val tags get() = setOf(ProviderTag.MatchedAmount)
 

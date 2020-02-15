@@ -1,6 +1,9 @@
 package cz.fb.manaus.reactor.betting.action
 
-import cz.fb.manaus.core.model.*
+import cz.fb.manaus.core.model.BetAction
+import cz.fb.manaus.core.model.BetActionType
+import cz.fb.manaus.core.model.Price
+import cz.fb.manaus.core.model.RealizedBet
 
 object BetUtils {
 
@@ -20,9 +23,6 @@ object BetUtils {
         nextZip.forEach { check(it.first.price.side == it.second.price.side) }
     }
 
-    fun getUnknownBets(bets: List<Bet>, myBets: Set<String>): List<Bet> {
-        return bets.filter { it.betId !in myBets }
-    }
 
     fun limitBetAmount(ceiling: Double, bet: RealizedBet): RealizedBet {
         val newBetPrice = limitPriceAmount(ceiling, bet.settledBet.price)
