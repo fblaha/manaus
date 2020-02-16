@@ -4,7 +4,7 @@ import cz.fb.manaus.reactor.betting.listener.FlowFilter
 
 
 fun runnerNameFilter(runnerName: String): FlowFilter {
-    return FlowFilter(FlowFilter.ALL_INDICES,
+    return FlowFilter(IntRange.EMPTY,
             { _, runner -> runnerName.toLowerCase() in runner.name.toLowerCase() },
             emptySet())
 }

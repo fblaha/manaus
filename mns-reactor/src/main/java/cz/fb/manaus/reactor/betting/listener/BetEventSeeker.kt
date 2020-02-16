@@ -19,25 +19,27 @@ class BetEventSeeker(
         val (snapshot, account) = marketSnapshotEvent
         val (marketPrices, market) = snapshot
         val flowFilter = flowFilterRegistry.getFlowFilter(market.type!!)
+        val collector = mutableListOf<BetCommand>()
         val fairness = calculator.getFairness(marketPrices)
         val credibleSide = fairness.moreCredibleSide
-        val collector = mutableListOf<BetCommand>()
-        if (credibleSide != null) {
-            val sortedPrices = sortPrices(credibleSide, marketPrices)
-            for ((i, runnerPrices) in sortedPrices.withIndex()) {
-                val selectionId = runnerPrices.selectionId
-                val runner = market.getRunner(selectionId)
-                val accepted = i in flowFilter.indexRange && flowFilter.runnerPredicate(market, runner)
-                if (snapshot.coverage.isActive(selectionId) || accepted) {
-                    for (side in betEventNotifier.activeSides) {
-                        val betEvent = betEventFactory.create(
-                                sideSelection = SideSelection(side, selectionId),
-                                snapshot = snapshot,
-                                fairness = fairness,
-                                account = account
-                        )
-                        collector.addAll(betEventNotifier.notify(betEvent))
-                    }
+        val sortedPrices = if (flowFilter.indexRestriction && credibleSide != null) {
+            sortPrices(credibleSide, marketPrices)
+        } else {
+            marketPrices
+        }
+        for ((i, runnerPrices) in sortedPrices.withIndex()) {
+            val selectionId = runnerPrices.selectionId
+            val runner = market.getRunner(selectionId)
+            val accepted = flowFilter.acceptIndex(i) && flowFilter.runnerPredicate(market, runner)
+            if (snapshot.coverage.isActive(selectionId) || accepted) {
+                for (side in betEventNotifier.activeSides) {
+                    val betEvent = betEventFactory.create(
+                            sideSelection = SideSelection(side, selectionId),
+                            snapshot = snapshot,
+                            fairness = fairness,
+                            account = account
+                    )
+                    collector.addAll(betEventNotifier.notify(betEvent))
                 }
             }
         }

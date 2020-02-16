@@ -7,8 +7,13 @@ data class FlowFilter(val indexRange: IntRange,
                       val runnerPredicate: (Market, Runner) -> Boolean,
                       val marketTypes: Set<String>) {
 
+    val indexRestriction: Boolean = !indexRange.isEmpty()
+
+    fun acceptIndex(index: Int): Boolean {
+        return indexRange.isEmpty() || index in indexRange
+    }
+
     companion object {
-        val ALL_INDICES = 0..9999
-        val ALLOW_ALL = FlowFilter(ALL_INDICES, { _, _ -> true }, emptySet())
+        val ALLOW_ALL = FlowFilter(IntRange.EMPTY, { _, _ -> true }, emptySet())
     }
 }
