@@ -10,10 +10,7 @@ class BetEventNotifier(
         private val listeners: List<BetEventListener>
 ) {
 
-    val activeSides: Set<Side>
-        get() {
-            return listeners.map { it.side }.toSet()
-        }
+    val activeSides: Set<Side> = listeners.map { it.side }.toSet()
 
     fun notify(betEvent: BetEvent): List<BetCommand> {
         return listeners
