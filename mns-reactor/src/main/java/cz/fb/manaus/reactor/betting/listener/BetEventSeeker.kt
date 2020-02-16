@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.betting.listener
 
 import cz.fb.manaus.core.model.MarketSnapshotEvent
-import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.SideSelection
 import cz.fb.manaus.core.model.isActive
 import cz.fb.manaus.reactor.betting.BetCommand
@@ -30,7 +29,7 @@ class BetEventSeeker(
                 val runner = market.getRunner(selectionId)
                 val accepted = i in flowFilter.indexRange && flowFilter.runnerPredicate(market, runner)
                 if (snapshot.coverage.isActive(selectionId) || accepted) {
-                    for (side in Side.values()) {
+                    for (side in betEventNotifier.activeSides) {
                         val betEvent = betEventFactory.create(
                                 sideSelection = SideSelection(side, selectionId),
                                 snapshot = snapshot,
