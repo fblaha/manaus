@@ -12,7 +12,7 @@ class BetEventSeeker(
         private val flowFilterRegistry: FlowFilterRegistry,
         private val calculator: FairnessPolynomialCalculator,
         private val betEventFactory: BetEventFactory,
-        private val betEventListeners: List<BetEventListener>
+        private val betEventListeners: List<BetEventListener> // TODO notifier
 ) : MarketSnapshotListener {
 
     override fun onMarketSnapshot(marketSnapshotEvent: MarketSnapshotEvent): List<BetCommand> {

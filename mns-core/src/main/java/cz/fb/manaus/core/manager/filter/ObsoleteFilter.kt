@@ -7,7 +7,7 @@ import java.time.Instant
 import java.util.logging.Logger
 
 @Component
-class ObsoleteFilter : MarketFilter, MarketSnapshotEventValidator {
+class ObsoleteFilter : MarketSnapshotEventValidator {
 
     private val log = Logger.getLogger(ObsoleteFilter::class.simpleName)
 
@@ -15,7 +15,7 @@ class ObsoleteFilter : MarketFilter, MarketSnapshotEventValidator {
         return accept(event.snapshot.market)
     }
 
-    override fun accept(market: Market): Boolean {
+    private fun accept(market: Market): Boolean {
         val result = market.event.openDate.isAfter(Instant.now())
         if (!result) {
             log.finest { "omitting obsolete date '${market.event.openDate}' for '$market'" }
@@ -23,5 +23,4 @@ class ObsoleteFilter : MarketFilter, MarketSnapshotEventValidator {
         return result
     }
 
-    override val isStrict: Boolean = true
 }
