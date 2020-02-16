@@ -19,7 +19,7 @@ class MockBetEventListener : BetEventListener {
     override fun onBetEvent(event: BetEvent): BetCommand? {
         if (event.market.event === mockEvent) {
             event.newPrice = Price(3.0, 3.0, Side.BACK)
-            return BetCommand(betTemplate, event.betAction)
+            return BetCommand(betTemplate, event.betAction(emptySet()))
         }
         return null
     }
