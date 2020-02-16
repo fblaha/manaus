@@ -10,13 +10,8 @@ class BetEventNotifier(
 ) {
 
     fun notify(betEvent: BetEvent): List<BetCommand> {
-        val collector = mutableListOf<BetCommand>()
-        for (listener in listeners) {
-            if (listener.side == betEvent.side) {
-                listener.onBetEvent(betEvent)?.let { collector.add(it) }
-            }
-        }
-        return collector.toList()
+        return listeners.filter { it.side == betEvent.side }
+                .mapNotNull { it.onBetEvent(betEvent) }
     }
 
 }
