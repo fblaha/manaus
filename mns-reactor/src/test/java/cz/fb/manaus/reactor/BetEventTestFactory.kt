@@ -24,8 +24,7 @@ class BetEventTestFactory(
                 requestedPrice = Price(5.0, 5.0, side),
                 placedDate = Instant.now())
         val event = newBetEvent(side, marketPrices, oldBet)
-        event.newPrice = oldBet.requestedPrice
-        return event
+        return event.copy(newPrice = oldBet.requestedPrice)
     }
 
     fun newBetEvent(side: Side, marketPrices: List<RunnerPrices>, oldBet: Bet?): BetEvent {

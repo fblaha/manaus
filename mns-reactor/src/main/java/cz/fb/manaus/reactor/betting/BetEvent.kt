@@ -10,7 +10,8 @@ data class BetEvent(
         val marketPrices: List<RunnerPrices>,
         val coverage: Map<SideSelection, Bet>,
         val account: Account,
-        val metrics: BetMetrics
+        val metrics: BetMetrics,
+        val newPrice: Price? = null
 ) {
 
     private val log = Logger.getLogger(BetEvent::class.simpleName)
@@ -22,15 +23,10 @@ data class BetEvent(
     val counterBet: Bet? = coverage[sideSelection.oppositeSide]
     val isCounterHalfMatched: Boolean = counterBet?.isHalfMatched ?: false
     val isOldMatched: Boolean = oldBet?.isMatched == true
-    var newPrice: Price? = null
-        set(value) {
-            validateNewPrice(value)
-            field = value
-        }
 
-    private fun validateNewPrice(value: Price?) {
-        if (value != null) {
-            val newSide = value.side
+    init {
+        if (newPrice != null) {
+            val newSide = newPrice.side
             check(sideSelection.side == newSide)
             if (oldBet != null) {
                 val oldSide = oldBet.requestedPrice.side

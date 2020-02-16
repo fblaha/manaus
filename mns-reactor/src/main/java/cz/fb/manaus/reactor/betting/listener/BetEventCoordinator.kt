@@ -19,11 +19,11 @@ class BetEventCoordinator(
             ValidationResult.DROP -> return cancel(event)
             ValidationResult.OK -> {
                 val newPrice = priceAdviser.getNewPrice(event) ?: return cancel(event)
-                event.newPrice = newPrice.price
+                val priceEvent = event.copy(newPrice = newPrice.price)
                 if (!event.isOldMatched) {
-                    return when (validationCoordinator.validatePrice(event)) {
-                        ValidationResult.DROP -> cancel(event)
-                        ValidationResult.OK -> event.placeOrUpdate(newPrice.proposers)
+                    return when (validationCoordinator.validatePrice(priceEvent)) {
+                        ValidationResult.DROP -> cancel(priceEvent)
+                        ValidationResult.OK -> priceEvent.placeOrUpdate(newPrice.proposers)
                         else -> null
                     }
                 }

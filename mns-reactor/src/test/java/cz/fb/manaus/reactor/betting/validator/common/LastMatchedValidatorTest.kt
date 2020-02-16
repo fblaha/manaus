@@ -30,11 +30,9 @@ class LastMatchedValidatorTest : AbstractLocalTestCase() {
     }
 
     private fun checkValidator(side: Side, lowerResult: ValidationResult, higherResult: ValidationResult) {
-        val context = factory.newBetEvent(side, listOf(homePrices.copy(lastMatchedPrice = 2.1)), null)
-        context.newPrice = Price(2.0, 2.0, side)
-        assertEquals(lowerResult, validator.validate(context))
-        context.newPrice = Price(2.2, 2.0, side)
-        assertEquals(higherResult, validator.validate(context))
+        val event = factory.newBetEvent(side, listOf(homePrices.copy(lastMatchedPrice = 2.1)), null)
+        assertEquals(lowerResult, validator.validate(event.copy(newPrice = Price(2.0, 2.0, side))))
+        assertEquals(higherResult, validator.validate(event.copy(newPrice = Price(2.2, 2.0, side))))
     }
 
     @Component

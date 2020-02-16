@@ -31,16 +31,14 @@ class TooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
         val oldBet = betTemplate.copy(requestedPrice = oldPrice)
 
         val prices = pricesTestFactory.newMarketPrices(0.1, listOf(0.4, 0.3, 0.3))
-        val context = factory.newBetEvent(Side.BACK, prices, oldBet)
-        context.newPrice = oldPrice
-        assertEquals(ValidationResult.NOP, validator.validate(context))
+        val event = factory.newBetEvent(Side.BACK, prices, oldBet)
+        assertEquals(ValidationResult.NOP, validator.validate(event.copy(newPrice = oldPrice)))
 
+        var newPrice = roundingService.decrement(oldPrice, 1, provider.minPrice, provider::matches)
+        assertEquals(ValidationResult.NOP, validator.validate(event.copy(newPrice = newPrice)))
 
-        context.newPrice = roundingService.decrement(oldPrice, 1, provider.minPrice, provider::matches)
-        assertEquals(ValidationResult.NOP, validator.validate(context))
-
-        context.newPrice = roundingService.decrement(oldPrice, 3, provider.minPrice, provider::matches)
-        assertEquals(ValidationResult.OK, validator.validate(context))
+        newPrice = roundingService.decrement(oldPrice, 3, provider.minPrice, provider::matches)
+        assertEquals(ValidationResult.OK, validator.validate(event.copy(newPrice = newPrice)))
     }
 
     @Test
@@ -49,18 +47,13 @@ class TooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
         val oldOne = Price(3.6, 3.0, Side.LAY)
         val oldBet = betTemplate.copy(requestedPrice = oldOne)
 
-        val context = factory.newBetEvent(Side.LAY, runnerPrices, oldBet)
-        context.newPrice = newOne.copy(price = 3.65)
-        assertEquals(ValidationResult.NOP, validator.validate(context))
-        context.newPrice = newOne.copy(price = 3.7)
-        assertEquals(ValidationResult.OK, validator.validate(context))
-        context.newPrice = newOne.copy(price = 3.75)
-        assertEquals(ValidationResult.OK, validator.validate(context))
+        val event = factory.newBetEvent(Side.LAY, runnerPrices, oldBet)
+        assertEquals(ValidationResult.NOP, validator.validate(event.copy(newPrice = newOne.copy(price = 3.65))))
+        assertEquals(ValidationResult.OK, validator.validate(event.copy(newPrice = newOne.copy(price = 3.7))))
+        assertEquals(ValidationResult.OK, validator.validate(event.copy(newPrice = newOne.copy(price = 3.75))))
 
-        context.newPrice = newOne.copy(price = 3.55)
-        assertEquals(ValidationResult.NOP, validator.validate(context))
-        context.newPrice = newOne.copy(price = 3.5)
-        assertEquals(ValidationResult.OK, validator.validate(context))
+        assertEquals(ValidationResult.NOP, validator.validate(event.copy(newPrice = newOne.copy(price = 3.55))))
+        assertEquals(ValidationResult.OK, validator.validate(event.copy(newPrice = newOne.copy(price = 3.5))))
     }
 
     @Component
