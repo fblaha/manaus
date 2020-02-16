@@ -18,7 +18,7 @@ class MockBetEventListener : BetEventListener {
 
     override fun onBetEvent(event: BetEvent): BetCommand? {
         if (event.market.event === mockEvent) {
-            val priceEvent = event.copy(newPrice = Price(3.0, 3.0, Side.BACK))
+            val priceEvent = event.copy(proposedPrice = Price(3.0, 3.0, Side.BACK))
             return BetCommand(betTemplate, priceEvent.betAction(emptySet()))
         }
         return null

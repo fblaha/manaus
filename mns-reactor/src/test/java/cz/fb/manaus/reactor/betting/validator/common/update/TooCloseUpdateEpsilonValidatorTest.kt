@@ -32,13 +32,13 @@ class TooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
 
         val prices = pricesTestFactory.newMarketPrices(0.1, listOf(0.4, 0.3, 0.3))
         val event = factory.newBetEvent(Side.BACK, prices, oldBet)
-        assertEquals(ValidationResult.NOP, validator.validate(event.copy(newPrice = oldPrice)))
+        assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = oldPrice)))
 
         var newPrice = roundingService.decrement(oldPrice, 1, provider.minPrice, provider::matches)
-        assertEquals(ValidationResult.NOP, validator.validate(event.copy(newPrice = newPrice)))
+        assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = newPrice)))
 
         newPrice = roundingService.decrement(oldPrice, 3, provider.minPrice, provider::matches)
-        assertEquals(ValidationResult.OK, validator.validate(event.copy(newPrice = newPrice)))
+        assertEquals(ValidationResult.OK, validator.validate(event.copy(proposedPrice = newPrice)))
     }
 
     @Test
@@ -48,12 +48,12 @@ class TooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
         val oldBet = betTemplate.copy(requestedPrice = oldOne)
 
         val event = factory.newBetEvent(Side.LAY, runnerPrices, oldBet)
-        assertEquals(ValidationResult.NOP, validator.validate(event.copy(newPrice = newOne.copy(price = 3.65))))
-        assertEquals(ValidationResult.OK, validator.validate(event.copy(newPrice = newOne.copy(price = 3.7))))
-        assertEquals(ValidationResult.OK, validator.validate(event.copy(newPrice = newOne.copy(price = 3.75))))
+        assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = newOne.copy(price = 3.65))))
+        assertEquals(ValidationResult.OK, validator.validate(event.copy(proposedPrice = newOne.copy(price = 3.7))))
+        assertEquals(ValidationResult.OK, validator.validate(event.copy(proposedPrice = newOne.copy(price = 3.75))))
 
-        assertEquals(ValidationResult.NOP, validator.validate(event.copy(newPrice = newOne.copy(price = 3.55))))
-        assertEquals(ValidationResult.OK, validator.validate(event.copy(newPrice = newOne.copy(price = 3.5))))
+        assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = newOne.copy(price = 3.55))))
+        assertEquals(ValidationResult.OK, validator.validate(event.copy(proposedPrice = newOne.copy(price = 3.5))))
     }
 
     @Component

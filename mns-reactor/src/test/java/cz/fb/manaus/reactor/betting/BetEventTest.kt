@@ -40,7 +40,7 @@ class BetEventTest : AbstractLocalTestCase() {
 
     @Test
     fun `simulate settled bet`() {
-        val event = factory.newBetEvent(Side.LAY, 3.5, 4.6).copy(newPrice = Price(3.0, 5.0, Side.LAY))
+        val event = factory.newBetEvent(Side.LAY, 3.5, 4.6).copy(proposedPrice = Price(3.0, 5.0, Side.LAY))
         val settledBet = event.simulatedBet
         assertEquals(event.sideSelection.side, settledBet.settledBet.price.side)
         Assert.assertEquals(5.0, settledBet.settledBet.price.amount, 0.0001)
@@ -50,7 +50,7 @@ class BetEventTest : AbstractLocalTestCase() {
     @Test
     fun placeOrUpdate() {
         val price = Price(3.0, 3.0, Side.BACK)
-        val homeEvent = HOME_EVENT_BACK.copy(newPrice = price)
+        val homeEvent = HOME_EVENT_BACK.copy(proposedPrice = price)
         val command = homeEvent.placeOrUpdate(emptySet())
         assertEquals(price, command.action?.price)
         assertEquals(BetActionType.PLACE, command.action?.betActionType)

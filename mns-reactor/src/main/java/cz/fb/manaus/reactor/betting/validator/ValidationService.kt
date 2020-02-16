@@ -46,7 +46,7 @@ class ValidationService(private val priceService: PriceService,
     }
 
     private fun validate(event: BetEvent, validator: Validator): ValidationResult {
-        val downgradeResult = handleDowngrade(event.newPrice, event.oldBet, validator.isDowngradeAccepting)
+        val downgradeResult = handleDowngrade(event.proposedPrice, event.oldBet, validator.isDowngradeAccepting)
         return downgradeResult ?: validator.validate(event)
     }
 

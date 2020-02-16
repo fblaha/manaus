@@ -15,14 +15,14 @@ class LastMatchedValidator(private val passEqual: Boolean) : Validator {
 
     override fun validate(event: BetEvent): ValidationResult {
         val lastMatchedPrice = event.runnerPrices.lastMatchedPrice ?: return DROP
-        if (event.newPrice!!.price priceEq lastMatchedPrice) {
+        if (event.proposedPrice!!.price priceEq lastMatchedPrice) {
             return if (passEqual) OK else DROP
         }
         val side = event.side
         return if (side == Side.LAY) {
-            if (event.newPrice!!.price < lastMatchedPrice) OK else DROP
+            if (event.proposedPrice.price < lastMatchedPrice) OK else DROP
         } else {
-            if (event.newPrice!!.price > lastMatchedPrice) OK else DROP
+            if (event.proposedPrice.price > lastMatchedPrice) OK else DROP
         }
     }
 

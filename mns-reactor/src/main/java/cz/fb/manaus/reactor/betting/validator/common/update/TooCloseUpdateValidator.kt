@@ -16,7 +16,7 @@ class TooCloseUpdateValidator(
 
     override fun validate(event: BetEvent): ValidationResult {
         val oldOne = event.oldBet!!.requestedPrice.price
-        val newOne = event.newPrice!!.price
+        val newOne = event.proposedPrice!!.price
         if (newOne priceEq oldOne) return ValidationResult.NOP
         val minPrice = event.account.provider.minPrice
         val tagPredicate = event.account.provider::matches

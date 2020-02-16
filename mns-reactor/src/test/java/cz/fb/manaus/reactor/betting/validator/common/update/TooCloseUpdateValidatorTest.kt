@@ -28,16 +28,16 @@ class TooCloseUpdateValidatorTest : AbstractLocalTestCase() {
         val oldBet = betTemplate.copy(requestedPrice = oldPrice)
 
         val event = factory.newBetEvent(Side.BACK, runnerPrices, oldBet)
-        assertEquals(ValidationResult.NOP, validator.validate(event.copy(newPrice = oldPrice)))
+        assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = oldPrice)))
 
         var newPrice = roundingService.decrement(oldPrice, 1, provider.minPrice, provider::matches)
-        assertEquals(ValidationResult.NOP, validator.validate(event.copy(newPrice = newPrice)))
+        assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = newPrice)))
 
         newPrice = roundingService.decrement(oldPrice, 2, provider.minPrice, provider::matches)
-        assertEquals(ValidationResult.NOP, validator.validate(event.copy(newPrice = newPrice)))
+        assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = newPrice)))
 
         newPrice = roundingService.decrement(oldPrice, 3, provider.minPrice, provider::matches)
-        assertEquals(ValidationResult.OK, validator.validate(event.copy(newPrice = newPrice)))
+        assertEquals(ValidationResult.OK, validator.validate(event.copy(proposedPrice = newPrice)))
     }
 
     @Test
@@ -48,10 +48,10 @@ class TooCloseUpdateValidatorTest : AbstractLocalTestCase() {
         val oldBet = betTemplate.copy(requestedPrice = oldOne)
 
         val event = factory.newBetEvent(Side.LAY, runnerPrices, oldBet)
-        assertEquals(ValidationResult.NOP, validator.validate(event.copy(newPrice = newOne)))
-        assertEquals(ValidationResult.NOP, validator.validate(event.copy(newPrice = newOne.copy(price = 3.2))))
-        assertEquals(ValidationResult.NOP, validator.validate(event.copy(newPrice = newOne.copy(price = 3.05))))
-        assertEquals(ValidationResult.OK, validator.validate(event.copy(newPrice = newOne.copy(price = 3.25))))
+        assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = newOne)))
+        assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = newOne.copy(price = 3.2))))
+        assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = newOne.copy(price = 3.05))))
+        assertEquals(ValidationResult.OK, validator.validate(event.copy(proposedPrice = newOne.copy(price = 3.25))))
     }
 
     @Test
@@ -61,7 +61,7 @@ class TooCloseUpdateValidatorTest : AbstractLocalTestCase() {
         val oldBet = betTemplate.copy(requestedPrice = oldOne)
 
         val event = factory.newBetEvent(Side.LAY, runnerPrices, oldBet)
-        assertEquals(ValidationResult.OK, validator.validate(event.copy(newPrice = newOne)))
+        assertEquals(ValidationResult.OK, validator.validate(event.copy(proposedPrice = newOne)))
     }
 
     @Component

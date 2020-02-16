@@ -11,7 +11,7 @@ data class BetEvent(
         val coverage: Map<SideSelection, Bet>,
         val account: Account,
         val metrics: BetMetrics,
-        val newPrice: Price? = null
+        val proposedPrice: Price? = null
 ) {
 
     private val log = Logger.getLogger(BetEvent::class.simpleName)
@@ -23,8 +23,8 @@ data class BetEvent(
     val isOldMatched: Boolean = oldBet?.isMatched == true
 
     init {
-        if (newPrice != null) {
-            val newSide = newPrice.side
+        if (proposedPrice != null) {
+            val newSide = proposedPrice.side
             check(sideSelection.side == newSide)
             if (oldBet != null) {
                 val oldSide = oldBet.requestedPrice.side
@@ -44,7 +44,7 @@ data class BetEvent(
         }
         return BetAction(
                 selectionId = sideSelection.selectionId,
-                price = newPrice!!,
+                price = proposedPrice!!,
                 id = 0,
                 time = Instant.now(),
                 marketId = market.id,
@@ -59,7 +59,7 @@ data class BetEvent(
 
     fun placeOrUpdate(proposers: Set<String>): BetCommand {
         val action = betAction(proposers)
-        val newPrice = newPrice!!
+        val newPrice = proposedPrice!!
 
         val oldBet = oldBet
         log.info { "bet ${action.betActionType} action '$action'" }
