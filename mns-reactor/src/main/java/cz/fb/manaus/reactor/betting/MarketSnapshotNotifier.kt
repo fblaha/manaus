@@ -1,6 +1,6 @@
 package cz.fb.manaus.reactor.betting
 
-import cz.fb.manaus.core.manager.MarketSnapshotEventValidationService
+import cz.fb.manaus.core.manager.MarketSnapshotEventFilterService
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.betting.action.BetCommandHandler
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
@@ -10,7 +10,7 @@ import java.time.Instant
 
 class MarketSnapshotNotifier(
         snapshotListeners: List<MarketSnapshotListener>,
-        private val eventValidationService: MarketSnapshotEventValidationService,
+        private val eventFilterService: MarketSnapshotEventFilterService,
         private val handlers: List<BetCommandHandler>
 ) {
 
@@ -19,7 +19,7 @@ class MarketSnapshotNotifier(
 
     fun notify(event: MarketSnapshotEvent): CollectedBets {
         val market = event.snapshot.market
-        if (eventValidationService.accept(event)) {
+        if (eventFilterService.accept(event)) {
             validateOpenDate(market)
             val bets = sortedSnapshotListeners.flatMap { it.onMarketSnapshot(event) }
 

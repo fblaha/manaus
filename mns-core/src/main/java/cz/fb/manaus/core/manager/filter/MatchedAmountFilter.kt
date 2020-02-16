@@ -6,7 +6,7 @@ import cz.fb.manaus.core.provider.ProviderTag
 import org.springframework.stereotype.Component
 
 @Component
-class MatchedAmountFilter : FreshMarketValidator {
+class MatchedAmountFilter : FreshMarketFilter {
 
     override val tags get() = setOf(ProviderTag.MatchedAmount)
 

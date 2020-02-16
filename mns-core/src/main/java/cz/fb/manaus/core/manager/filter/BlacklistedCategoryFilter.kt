@@ -14,7 +14,7 @@ import java.util.logging.Logger
 class BlacklistedCategoryFilter(
         private val blacklistedCategoryRepository: BlacklistedCategoryRepository,
         private val categoryService: CategoryService
-) : FreshMarketValidator {
+) : FreshMarketFilter {
 
     private val log = Logger.getLogger(BlacklistedCategoryFilter::class.simpleName)
 

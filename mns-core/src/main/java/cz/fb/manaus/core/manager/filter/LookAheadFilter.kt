@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit
 
 class LookAheadFilter(
         private val lookAhead: Duration
-) : FreshMarketValidator {
+) : FreshMarketFilter {
 
     override fun accept(market: Market): Boolean {
         val start = market.openDate

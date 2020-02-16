@@ -7,7 +7,7 @@ import java.time.Instant
 import java.util.logging.Logger
 
 @Component
-class ObsoleteFilter : MarketSnapshotEventValidator {
+class ObsoleteFilter : MarketSnapshotEventFilter {
 
     private val log = Logger.getLogger(ObsoleteFilter::class.simpleName)
 

@@ -1,6 +1,6 @@
 package cz.fb.manaus.spring
 
-import cz.fb.manaus.core.manager.MarketSnapshotEventValidationService
+import cz.fb.manaus.core.manager.MarketSnapshotEventFilterService
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.reactor.betting.MarketSnapshotNotifier
 import cz.fb.manaus.reactor.betting.action.BetCommandHandler
@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Profile
 open class ReactorDatabaseConfiguration {
 
     @Bean
-    open fun marketSnapshotNotifier(marketSnapshotEventValidationService: MarketSnapshotEventValidationService,
+    open fun marketSnapshotNotifier(marketSnapshotEventFilterService: MarketSnapshotEventFilterService,
                                     priceFilter: PriceFilter?,
                                     handlers: List<BetCommandHandler>,
                                     bettingConf: BettingConf,
@@ -29,7 +29,7 @@ open class ReactorDatabaseConfiguration {
                                     snapshotListeners: List<MarketSnapshotListener>): MarketSnapshotNotifier {
         return MarketSnapshotNotifier(
                 snapshotListeners,
-                marketSnapshotEventValidationService,
+                marketSnapshotEventFilterService,
                 handlers
         )
     }

@@ -3,7 +3,7 @@ package cz.fb.manaus.core.manager.filter
 import cz.fb.manaus.core.model.Market
 import cz.fb.manaus.core.model.MarketSnapshotEvent
 
-interface FreshMarketValidator : MarketSnapshotEventValidator {
+interface FreshMarketFilter : MarketSnapshotEventFilter {
 
     override fun accept(event: MarketSnapshotEvent): Boolean {
         if (event.snapshot.currentBets.isNotEmpty()) {

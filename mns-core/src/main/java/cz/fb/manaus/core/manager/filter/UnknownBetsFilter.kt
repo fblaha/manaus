@@ -10,11 +10,11 @@ import java.util.logging.Logger
 
 @Component
 @Profile(ManausProfiles.DB)
-class UnknownBetsValidator(
+class UnknownBetsFilter(
         private val betActionRepository: BetActionRepository
-) : MarketSnapshotEventValidator {
+) : MarketSnapshotEventFilter {
 
-    private val log = Logger.getLogger(UnknownBetsValidator::class.simpleName)
+    private val log = Logger.getLogger(UnknownBetsFilter::class.simpleName)
 
     override fun accept(event: MarketSnapshotEvent): Boolean {
         val myBets = betActionRepository.find(event.snapshot.market.id).mapNotNull { it.betId }.toSet()
