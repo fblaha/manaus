@@ -7,7 +7,10 @@ import cz.fb.manaus.reactor.price.Fairness
 import org.junit.Assert
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
-import kotlin.test.*
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 val HOME_EVENT_BACK: BetEvent = BetEvent(
         sideSelection = SideSelection(Side.BACK, SEL_HOME),
@@ -29,12 +32,6 @@ class BetEventTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var factory: BetEventTestFactory
-
-    @Test
-    fun `counter half matched`() {
-        assertTrue(factory.newBetEvent(Side.BACK, 3.5, 4.6).isCounterHalfMatched)
-        assertTrue(factory.newBetEvent(Side.LAY, 3.5, 4.6).isCounterHalfMatched)
-    }
 
     @Test
     fun `old matched`() {

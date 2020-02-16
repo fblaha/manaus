@@ -17,11 +17,9 @@ data class BetEvent(
     private val log = Logger.getLogger(BetEvent::class.simpleName)
 
     val side: Side = sideSelection.side
-    val selectionId: Long = sideSelection.selectionId
     val runnerPrices: RunnerPrices = marketPrices.first { it.selectionId == sideSelection.selectionId }
     val oldBet: Bet? = coverage[sideSelection]
     val counterBet: Bet? = coverage[sideSelection.oppositeSide]
-    val isCounterHalfMatched: Boolean = counterBet?.isHalfMatched ?: false
     val isOldMatched: Boolean = oldBet?.isMatched == true
 
     init {

@@ -27,7 +27,7 @@ class BetEventFactoryTest : AbstractLocalTestCase() {
                 fairness = fairness,
                 account = account)
         assertEquals(account, event.account)
-        assertEquals(homePrices.selectionId, event.selectionId)
+        assertEquals(homePrices.selectionId, event.sideSelection.selectionId)
         assertEquals(homePrices, event.runnerPrices)
         assertEquals(Side.BACK, event.side)
     }
