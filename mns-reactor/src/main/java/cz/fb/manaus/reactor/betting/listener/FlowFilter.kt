@@ -7,7 +7,7 @@ data class FlowFilter(val indexRange: IntRange,
                       val runnerPredicate: (Market, Runner) -> Boolean,
                       val marketTypes: Set<String>) {
 
-    val indexRestriction: Boolean = !indexRange.isEmpty()
+    val checkIndex: Boolean = !indexRange.isEmpty()
 
     fun acceptIndex(index: Int): Boolean {
         return indexRange.isEmpty() || index in indexRange

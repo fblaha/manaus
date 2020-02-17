@@ -22,15 +22,16 @@ class BetEventSeeker(
         val collector = mutableListOf<BetCommand>()
         val fairness = calculator.getFairness(marketPrices)
         val credibleSide = fairness.moreCredibleSide
-        val sortedPrices = if (flowFilter.indexRestriction && credibleSide != null) {
+        val sortedPrices = if (flowFilter.checkIndex && credibleSide != null) {
             sortPrices(credibleSide, marketPrices)
         } else {
-            marketPrices
+            null
         }
-        for ((i, runnerPrices) in sortedPrices.withIndex()) {
+        for ((i, runnerPrices) in (sortedPrices ?: marketPrices).withIndex()) {
             val selectionId = runnerPrices.selectionId
             val runner = market.getRunner(selectionId)
-            val accepted = flowFilter.acceptIndex(i) && flowFilter.runnerPredicate(market, runner)
+            val acceptIndex = !flowFilter.checkIndex || (sortedPrices != null && flowFilter.acceptIndex(i))
+            val accepted = acceptIndex && flowFilter.runnerPredicate(market, runner)
             if (snapshot.coverage.isActive(selectionId) || accepted) {
                 for (side in betEventNotifier.activeSides) {
                     val betEvent = betEventFactory.create(

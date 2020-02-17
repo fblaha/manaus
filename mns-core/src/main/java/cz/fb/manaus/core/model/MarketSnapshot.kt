@@ -13,14 +13,13 @@ fun getMarketCoverage(bets: List<Bet>): Map<SideSelection, Bet> {
             .mapValues { it.value.maxBy { bet -> bet.placedDate }!! }
 }
 
-data class MarketSnapshot(val runnerPrices: List<RunnerPrices>,
-                          val market: Market,
-                          val currentBets: List<Bet>,
-                          val tradedVolume: Map<Long, TradedVolume>? = null) {
-
-
+data class MarketSnapshot(
+        val runnerPrices: List<RunnerPrices>,
+        val market: Market,
+        val currentBets: List<Bet>,
+        val tradedVolume: Map<Long, TradedVolume>? = null
+) {
     val coverage: Map<SideSelection, Bet> = getMarketCoverage(currentBets)
-
 }
 
 fun Map<SideSelection, Bet>.isActive(selectionId: Long): Boolean = Side.values().any { SideSelection(it, selectionId) in this }
