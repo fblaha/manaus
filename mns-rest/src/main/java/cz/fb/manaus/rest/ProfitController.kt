@@ -15,9 +15,11 @@ import java.util.logging.Logger
 
 @Controller
 @Profile(ManausProfiles.DB)
-class ProfitController(private val profitService: ProfitService,
-                       private val fixedBinFunctionProfitService: FixedBinFunctionProfitService,
-                       private val betLoader: SettledBetLoader) {
+class ProfitController(
+        private val profitService: ProfitService,
+        private val fixedBinFunctionProfitService: FixedBinFunctionProfitService,
+        private val betLoader: SettledBetLoader
+) {
 
 
     private val comparators: Map<String, Comparator<ProfitRecord>> = mapOf(

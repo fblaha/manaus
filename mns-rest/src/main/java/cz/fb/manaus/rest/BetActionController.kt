@@ -1,6 +1,5 @@
 package cz.fb.manaus.rest
 
-import com.google.common.base.CharMatcher
 import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.spring.ManausProfiles
@@ -42,6 +41,6 @@ class BetActionController(
     }
 
     private fun sanitizeId(betId: String): String {
-        return CharMatcher.`is`('"').removeFrom(betId)
+        return betId.trim('"')
     }
 }

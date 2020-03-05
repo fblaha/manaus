@@ -1,6 +1,5 @@
 package cz.fb.manaus.rest
 
-import com.google.common.base.CharMatcher
 import cz.fb.manaus.core.maintanance.db.TimeRange
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -18,8 +17,8 @@ object IntervalParser {
         val split = interval.split('-')
         val intervalOnly = split[0]
 
-        val count = Integer.parseInt(CharMatcher.digit().retainFrom(intervalOnly))
-        val unitChar = CharMatcher.digit().removeFrom(intervalOnly)[0]
+        val count = Integer.parseInt(intervalOnly.filter { it.isDigit() })
+        val unitChar = intervalOnly.filter { it.isLetter() }[0]
         val unit = units[unitChar]
 
         if (split.size == 2) {

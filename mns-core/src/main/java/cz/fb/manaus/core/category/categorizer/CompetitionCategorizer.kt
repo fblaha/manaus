@@ -1,9 +1,7 @@
 package cz.fb.manaus.core.category.categorizer
 
-import com.google.common.base.CharMatcher
 import cz.fb.manaus.core.model.Market
 import org.springframework.stereotype.Component
-import kotlin.math.min
 
 @Component
 class CompetitionCategorizer : AbstractDelegatingCategorizer(PREFIX) {
@@ -13,7 +11,7 @@ class CompetitionCategorizer : AbstractDelegatingCategorizer(PREFIX) {
         return if (competition == null || competition.name.isBlank()) {
             setOf("none")
         } else {
-            setOf(normalize(competition.name))
+            setOf(sanitize(competition.name))
         }
     }
 
@@ -22,10 +20,8 @@ class CompetitionCategorizer : AbstractDelegatingCategorizer(PREFIX) {
     }
 }
 
-private fun normalize(name: String): String {
-    var result = name
-    result = CharMatcher.whitespace().or(CharMatcher.javaLetterOrDigit()).retainFrom(result)
-    result = CharMatcher.whitespace().replaceFrom(result, '_')
-    result = result.substring(0, min(result.length, 30))
-    return result
+private fun sanitize(name: String): String {
+    return name.filter { it.isLetterOrDigit() || it.isWhitespace() }
+            .replace("\\s".toRegex(), "_")
+            .take(30)
 }
