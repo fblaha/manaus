@@ -3,7 +3,6 @@ package cz.fb.manaus.spring
 import cz.fb.manaus.core.provider.ProviderTag.VendorMatchbook
 import cz.fb.manaus.ischia.BackUniverse
 import cz.fb.manaus.ischia.LayUniverse
-import cz.fb.manaus.ischia.filter.MarketTypeFilter
 import cz.fb.manaus.ischia.filter.moneyLineLoserFilter
 import cz.fb.manaus.ischia.filter.runnerNameFilter
 import cz.fb.manaus.ischia.strategy.MinimizeChargeStrategy
@@ -54,11 +53,6 @@ open class IschiaLocalConfiguration {
                 fairnessReductionHighBack = 0.05,
                 fairnessReductionHighLay = 0.06
         )
-    }
-
-    @Bean
-    open fun marketTypeFilter(marketRunnerConf: MarketRunnerConf): MarketTypeFilter {
-        return MarketTypeFilter(marketRunnerConf.types!!.toSet())
     }
 
     @Bean

@@ -7,14 +7,12 @@ import javax.annotation.PostConstruct
 
 @ConstructorBinding
 @ConfigurationProperties("market-runner")
-data class MarketRunnerConf(val runnerName: String?,
-                            val types: List<String>?) {
+data class MarketRunnerConf(val runnerName: String?) {
 
     private val log = Logger.getLogger(MarketRunnerConf::class.simpleName)
 
     @PostConstruct
     fun validate() {
         log.info { "$this" }
-        check(!types.isNullOrEmpty())
     }
 }

@@ -2,7 +2,6 @@ db:
   file:
 markets:
   history: 300d
-  lookAhead: 7d
 betting:
   amount: 2.0
 management:

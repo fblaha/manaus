@@ -8,8 +8,9 @@ import javax.annotation.PostConstruct
 
 @ConstructorBinding
 @ConfigurationProperties("markets")
-data class MarketConf(val history: Duration = Duration.ZERO,
-                      val lookAhead: Duration = Duration.ZERO) {
+data class MarketConf(
+        val history: Duration = Duration.ZERO
+) {
 
     private val log = Logger.getLogger(MarketConf::class.simpleName)
 
@@ -17,6 +18,5 @@ data class MarketConf(val history: Duration = Duration.ZERO,
     fun validate() {
         log.info { "$this" }
         check(!history.isZero)
-        check(!lookAhead.isZero)
     }
 }

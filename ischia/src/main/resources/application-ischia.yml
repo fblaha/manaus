@@ -1,10 +1,5 @@
 market-runner:
   runnerName:
-  types:
-    - three_way
-    - match_odds
-    - rt_match_odds
-    - moneyline
 price:
   bulldoze: 10
   limit: 3
