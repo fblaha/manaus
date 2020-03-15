@@ -2,6 +2,7 @@ package cz.fb.manaus.core.manager.filter
 
 import cz.fb.manaus.core.category.CategoryService
 import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.model.MarketSnapshotEvent
 import cz.fb.manaus.core.repository.BlacklistedCategoryRepository
 import cz.fb.manaus.spring.ManausProfiles
 import io.micrometer.core.instrument.Metrics
@@ -14,11 +15,18 @@ import java.util.logging.Logger
 class BlacklistedCategoryFilter(
         private val blacklistedCategoryRepository: BlacklistedCategoryRepository,
         private val categoryService: CategoryService
-) : FreshMarketFilter {
+) : MarketSnapshotEventFilter {
 
     private val log = Logger.getLogger(BlacklistedCategoryFilter::class.simpleName)
 
-    override fun accept(market: Market): Boolean {
+    override fun accept(event: MarketSnapshotEvent): Boolean {
+        if (event.snapshot.currentBets.isNotEmpty()) {
+            return true
+        }
+        return accept(event.snapshot.market)
+    }
+
+    fun accept(market: Market): Boolean {
         val categories = categoryService.getMarketCategories(market, false)
         val blacklist = blacklistedCategoryRepository.list().map { it.name }.toSet()
         val intersection = categories intersect blacklist
