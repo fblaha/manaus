@@ -8,19 +8,20 @@ import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.stereotype.Service
 
 @Service
-class ValidationService(private val priceService: PriceService,
-                        private val recorder: ValidationMetricsCollector) {
+class ValidationService(
+        private val priceService: PriceService,
+        private val recorder: ValidationMetricsCollector
+) {
 
-    internal fun handleDowngrade(newOne: Price?, oldOne: Bet?, isDowngradeAccepting: Boolean): ValidationResult? {
+    internal fun isDowngrade(newOne: Price?, oldOne: Bet?): Boolean {
         if (oldOne != null && newOne != null) {
             val oldPrice = oldOne.requestedPrice
             check(newOne.side == oldPrice.side)
-            val isDowngrade = priceService.isDowngrade(newOne.price, oldPrice.price, newOne.side)
-            if (isDowngrade && isDowngradeAccepting) {
-                return ValidationResult.OK
+            if (priceService.isDowngrade(newOne.price, oldPrice.price, newOne.side)) {
+                return true
             }
         }
-        return null
+        return false
     }
 
     internal fun reduce(results: List<ValidationResult>): ValidationResult {
@@ -30,24 +31,26 @@ class ValidationService(private val priceService: PriceService,
                 ?: ValidationResult.OK
     }
 
-    fun validate(event: BetEvent, validators: List<Validator>): ValidationResult {
-        val filteredValidators = validators.filter(createPredicate(event))
-        check(filteredValidators.isNotEmpty())
+    fun validator(validators: List<Validator>): (BetEvent) -> ValidationResult {
+        return { event ->
+            val filteredValidators = validators.filter(createPredicate(event))
+            check(filteredValidators.isNotEmpty())
 
-        if (filteredValidators.any { it.isUpdateOnly }) {
-            check(event.oldBet != null)
+            if (filteredValidators.any { it.isUpdateOnly }) {
+                check(event.oldBet != null)
+            }
+
+            val collected = filteredValidators
+                    .map { makeName(it) to validate(event, it) }
+                    .onEach { recorder.updateMetrics(it.second, event.side, it.first) }
+                    .map { it.second }
+            reduce(collected)
         }
-
-        val collected = filteredValidators
-                .map { makeName(it) to validate(event, it) }
-                .onEach { recorder.updateMetrics(it.second, event.side, it.first) }
-                .map { it.second }
-        return reduce(collected)
     }
 
     private fun validate(event: BetEvent, validator: Validator): ValidationResult {
-        val downgradeResult = handleDowngrade(event.proposedPrice, event.oldBet, validator.isDowngradeAccepting)
-        return downgradeResult ?: validator.validate(event)
+        val skip = validator.isDowngradeAccepting && isDowngrade(event.proposedPrice, event.oldBet)
+        return if (skip) ValidationResult.OK else validator.validate(event)
     }
 
     private fun createPredicate(event: BetEvent): (Validator) -> Boolean {

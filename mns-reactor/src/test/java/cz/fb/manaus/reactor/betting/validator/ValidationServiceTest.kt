@@ -37,21 +37,19 @@ class ValidationServiceTest : AbstractLocalTestCase() {
 
     @Test
     fun `downgrade price`() {
-        checkDownGrade(2.0, ValidationResult.OK)
+        checkDownGrade(2.0, true)
     }
 
     @Test
     fun `upgrade price`() {
-        checkDownGrade(2.4, null)
+        checkDownGrade(2.4, false)
     }
 
-    private fun checkDownGrade(newPrice: Double, expected: ValidationResult?) {
+    private fun checkDownGrade(newPrice: Double, expected: Boolean) {
         val oldBet = Bet(marketId = "1", selectionId = 1, requestedPrice = Price(2.2, 2.0, Side.LAY),
                 placedDate = Instant.now(), matchedAmount = 5.0)
         val dropping = MockValidator(ValidationResult.DROP)
-        val result = service.handleDowngrade(
-                Price(newPrice, 2.0, Side.LAY),
-                oldBet, dropping.isDowngradeAccepting)
+        val result = service.isDowngrade(Price(newPrice, 2.0, Side.LAY), oldBet)
         assertEquals(expected, result)
         assertEquals(ValidationResult.DROP, dropping.validate(HOME_EVENT_BACK))
     }
@@ -62,5 +60,6 @@ class ValidationServiceTest : AbstractLocalTestCase() {
         override fun validate(event: BetEvent): ValidationResult {
             return result
         }
+
     }
 }
