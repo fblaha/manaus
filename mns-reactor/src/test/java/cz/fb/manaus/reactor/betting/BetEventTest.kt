@@ -59,7 +59,7 @@ class BetEventTest : AbstractLocalTestCase() {
 
     @Test
     fun cancel() {
-        assertNull(HOME_EVENT_BACK.cancel)
+        assertFalse { HOME_EVENT_BACK.cancelable }
     }
 }
 
