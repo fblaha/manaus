@@ -34,10 +34,11 @@ class BetEventCoordinator(
     }
 
     private fun cancel(event: BetEvent): BetCommand? {
-        return event.cancel?.let {
+        return if (event.cancelable) {
             Metrics.counter("mns_bet_cancel").increment()
-            it
+            event.cancel
+        } else {
+            null
         }
     }
-
 }

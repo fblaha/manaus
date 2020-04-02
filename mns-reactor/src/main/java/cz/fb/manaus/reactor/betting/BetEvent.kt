@@ -21,6 +21,8 @@ data class BetEvent(
     val oldBet: Bet? = coverage[sideSelection]
     val counterBet: Bet? = coverage[sideSelection.oppositeSide]
     val isOldMatched: Boolean = oldBet?.isMatched == true
+    val betActionType = if (oldBet == null) BetActionType.PLACE else BetActionType.UPDATE
+    val cancelable = oldBet != null && !oldBet.isMatched
 
     init {
         if (proposedPrice != null) {
@@ -38,10 +40,6 @@ data class BetEvent(
     }
 
     fun betAction(proposers: Set<String>): BetAction {
-        val type = when (oldBet) {
-            null -> BetActionType.PLACE
-            else -> BetActionType.UPDATE
-        }
         return BetAction(
                 selectionId = sideSelection.selectionId,
                 price = proposedPrice!!,
@@ -49,9 +47,10 @@ data class BetEvent(
                 time = Instant.now(),
                 marketId = market.id,
                 runnerPrices = marketPrices,
-                betActionType = type,
+                betActionType = betActionType,
                 chargeGrowth = metrics.chargeGrowthForecast,
-                proposers = proposers)
+                proposers = proposers
+        )
     }
 
     // TODO not used
@@ -61,26 +60,20 @@ data class BetEvent(
         val action = betAction(proposers)
         val newPrice = proposedPrice!!
 
-        val oldBet = oldBet
-        log.info { "bet ${action.betActionType} action '$action'" }
-        return if (oldBet != null) {
-            BetCommand(oldBet replacePrice newPrice.price, action)
-        } else {
-            val market = market
-            val bet = Bet(marketId = market.id,
+        log.info { "bet $betActionType action '$action'" }
+        return if (betActionType == BetActionType.PLACE) {
+            val bet = Bet(
+                    marketId = market.id,
                     placedDate = Instant.now(),
                     selectionId = runnerPrices.selectionId,
-                    requestedPrice = newPrice)
+                    requestedPrice = newPrice
+            )
             BetCommand(bet, action)
+        } else {
+            BetCommand(oldBet!! replacePrice newPrice.price, action)
         }
     }
 
-    val cancel: BetCommand?
-        get() {
-            if (oldBet != null && !oldBet.isMatched) {
-                return BetCommand(oldBet, null)
-            }
-            return null
-        }
-
+    val cancel: BetCommand
+        get() = BetCommand(oldBet!!, null)
 }
