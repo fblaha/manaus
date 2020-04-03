@@ -16,7 +16,7 @@ class ProfitService(private val categoryService: CategoryService) {
         val coverage = BetCoverage.from(filtered)
 
         if (projection != null) {
-            filtered = categoryService.filterBets(filtered, projection, coverage)
+            filtered = categoryService.filterBets(filtered, projection)
         }
 
         val betRecords = computeProfitRecords(filtered, simulationAwareOnly, coverage)
@@ -52,7 +52,7 @@ class ProfitService(private val categoryService: CategoryService) {
 
     private fun computeProfitRecords(bets: List<RealizedBet>, simulationAwareOnly: Boolean, coverage: BetCoverage): List<ProfitRecord> {
         return bets.flatMap { bet ->
-            val categories = categoryService.getRealizedBetCategories(bet, simulationAwareOnly, coverage)
+            val categories = categoryService.getRealizedBetCategories(bet, simulationAwareOnly)
             categories.map {
                 val charge = bet.settledBet.commission ?: 0.0
                 check(charge >= 0) { charge }

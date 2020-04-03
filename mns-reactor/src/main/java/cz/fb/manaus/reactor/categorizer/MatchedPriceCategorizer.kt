@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.categorizer
 
 
-import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
 import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.Side
@@ -14,7 +13,7 @@ class MatchedPriceCategorizer(private val priceService: PriceService) : Realized
 
     override val isSimulationSupported: Boolean = false
 
-    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
+    override fun getCategories(realizedBet: RealizedBet): Set<String> {
         val matched = realizedBet.settledBet.price.price
         val requested = realizedBet.betAction.price.price
         val side = realizedBet.settledBet.price.side

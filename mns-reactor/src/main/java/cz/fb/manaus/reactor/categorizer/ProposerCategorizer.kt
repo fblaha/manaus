@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.categorizer
 
-import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
 import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.Side
@@ -14,7 +13,7 @@ open class ProposerCategorizer : RealizedBetCategorizer {
         return "$prefix$strSide.$category"
     }
 
-    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
+    override fun getCategories(realizedBet: RealizedBet): Set<String> {
         val proposers = realizedBet.betAction.proposers
         val side = realizedBet.settledBet.price.side
         return proposers.map { getSideAware("proposer_", side, it) }.toSet()

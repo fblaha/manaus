@@ -1,6 +1,5 @@
 package cz.fb.manaus.reactor.categorizer
 
-import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
 import cz.fb.manaus.core.model.RealizedBet
 import org.springframework.stereotype.Component
@@ -14,7 +13,7 @@ class RandomCategorizer : RealizedBetCategorizer {
 
     override val isSimulationSupported: Boolean = false
 
-    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
+    override fun getCategories(realizedBet: RealizedBet): Set<String> {
         val randInt = random.nextInt(5)
         return setOf("random_$randInt")
     }

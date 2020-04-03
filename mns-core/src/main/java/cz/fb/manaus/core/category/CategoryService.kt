@@ -12,28 +12,27 @@ class CategoryService(private val categorizers: List<Categorizer> = emptyList(),
                       private val settledBetCategorizers: List<RealizedBetCategorizer> = emptyList()) {
 
     fun getMarketCategories(market: Market, simulationAwareOnly: Boolean): Set<String> {
-        return filterCategorizers(categorizers, simulationAwareOnly)
+        return filter(categorizers, simulationAwareOnly)
                 .flatMap { it.getCategories(market).asSequence() }.toSet()
     }
 
-    fun getRealizedBetCategories(realizedBet: RealizedBet, simulationAwareOnly: Boolean, coverage: BetCoverage): Set<String> {
-        val prices = realizedBet.betAction.runnerPrices
-        return filterCategorizers(settledBetCategorizers, simulationAwareOnly)
-                .filter { prices.isNotEmpty() || !it.isMarketSnapshotRequired }
-                .flatMap { it.getCategories(realizedBet, coverage).asSequence() }
+    fun getRealizedBetCategories(realizedBet: RealizedBet, simulationAwareOnly: Boolean): Set<String> {
+        return filter(settledBetCategorizers, simulationAwareOnly)
+                .flatMap { it.getCategories(realizedBet).asSequence() }
                 .toSet()
     }
 
-    fun filterBets(realizedBets: List<RealizedBet>, projection: String, coverage: BetCoverage): List<RealizedBet> {
+    fun filterBets(realizedBets: List<RealizedBet>, projection: String): List<RealizedBet> {
         return realizedBets.filter { input ->
-            val categories = getRealizedBetCategories(input, false, coverage)
+            val categories = getRealizedBetCategories(input, false)
             categories.any { projection in it }
         }
     }
 
-    private fun <T : SimulationAware> filterCategorizers(
+    private fun <T : SimulationAware> filter(
             categorizers: List<T>,
-            simulationAwareOnly: Boolean): Sequence<T> {
+            simulationAwareOnly: Boolean
+    ): Sequence<T> {
         val catSeq = categorizers.asSequence()
         return if (simulationAwareOnly)
             catSeq.filter { it.isSimulationSupported }

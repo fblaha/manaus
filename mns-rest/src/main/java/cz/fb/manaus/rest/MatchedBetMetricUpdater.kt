@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicLong
 
 @Component
 class MatchedBetMetricUpdater {
+
     private val lastScan = AtomicLong(0)
 
     private val coveredBets: AtomicLong by lazy {

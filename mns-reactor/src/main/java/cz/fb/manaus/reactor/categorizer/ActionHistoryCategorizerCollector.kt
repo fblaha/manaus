@@ -1,10 +1,9 @@
 package cz.fb.manaus.reactor.categorizer
 
-import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
 import cz.fb.manaus.core.model.RealizedBet
+import cz.fb.manaus.core.model.getCurrentActions
 import cz.fb.manaus.core.repository.BetActionRepository
-import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
@@ -20,7 +19,7 @@ class ActionHistoryCategorizerCollector(
 
     override val isSimulationSupported: Boolean = false
 
-    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
+    override fun getCategories(realizedBet: RealizedBet): Set<String> {
         val market = realizedBet.market
         val side = realizedBet.settledBet.price.side
         val selectionId = realizedBet.settledBet.selectionId
@@ -30,7 +29,7 @@ class ActionHistoryCategorizerCollector(
             log.warning { "missing  bet actions '$realizedBet'" }
             return emptySet()
         }
-        val current = BetUtils.getCurrentActions(betActions)
+        val current = getCurrentActions(betActions)
         return categorizers.flatMap { it.getCategories(current, market) }.toSet()
     }
 }

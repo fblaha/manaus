@@ -17,8 +17,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 class MarketFootprintController(
         private val marketRepository: MarketRepository,
         private val importer: Importer,
-        private val marketFootprintLoader: MarketFootprintLoader) {
-
+        private val marketFootprintLoader: MarketFootprintLoader
+) {
 
     @ResponseBody
     @RequestMapping(value = ["/footprints/{id}"], method = [RequestMethod.GET])
@@ -38,5 +38,4 @@ class MarketFootprintController(
                 .buildAndExpand(footprint.market.id).toUri()
         return ResponseEntity.created(location).build<Any>()
     }
-
 }

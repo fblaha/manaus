@@ -15,9 +15,10 @@ import java.util.logging.Logger
 
 @Component
 @Profile(ManausProfiles.DB)
-class SettledBetLoader(private val settledBetRepository: SettledBetRepository,
-                       private val realizedBetLoader: RealizedBetLoader) {
-
+class SettledBetLoader(
+        private val settledBetRepository: SettledBetRepository,
+        private val realizedBetLoader: RealizedBetLoader
+) {
 
     private val log = Logger.getLogger(SettledBetLoader::class.simpleName)
 

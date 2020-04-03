@@ -1,6 +1,5 @@
 package cz.fb.manaus.core.category.categorizer
 
-import cz.fb.manaus.core.category.BetCoverage
 import cz.fb.manaus.core.model.RealizedBet
 import org.springframework.stereotype.Component
 
@@ -14,7 +13,7 @@ class SelectionRegexpCategorizer(
         private val regexpCategoryService: RegexpCategoryService
 ) : RealizedBetCategorizer {
 
-    override fun getCategories(realizedBet: RealizedBet, coverage: BetCoverage): Set<String> {
+    override fun getCategories(realizedBet: RealizedBet): Set<String> {
         val selectionName = realizedBet.settledBet.selectionName
         return getCategories(selectionName)
     }

@@ -2,7 +2,6 @@ package cz.fb.manaus.rest
 
 import com.google.common.base.Stopwatch
 import cz.fb.manaus.core.model.ProfitRecord
-import cz.fb.manaus.reactor.betting.action.BetUtils
 import cz.fb.manaus.reactor.profit.ProfitService
 import cz.fb.manaus.reactor.profit.progress.FixedBinFunctionProfitService
 import cz.fb.manaus.spring.ManausProfiles
@@ -21,29 +20,24 @@ class ProfitController(
         private val betLoader: SettledBetLoader
 ) {
 
+    private val log = Logger.getLogger(ProfitController::class.simpleName)
 
     private val comparators: Map<String, Comparator<ProfitRecord>> = mapOf(
             "category" to compareBy { it.category },
             "betProfit" to compareBy { it.betProfit },
             "profit" to compareBy { it.profit })
 
-
-    private val log = Logger.getLogger(ProfitController::class.simpleName)
-
     @ResponseBody
     @RequestMapping(value = ["/profit/" + IntervalParser.INTERVAL], method = [RequestMethod.GET])
-    fun getProfitRecords(@PathVariable interval: String,
-                         @RequestParam(required = false) filter: String?,
-                         @RequestParam(required = false) sort: String?,
-                         @RequestParam(required = false) projection: String?,
-                         @RequestParam(required = false) ceiling: Double?,
-                         @RequestParam(defaultValue = "true") cache: Boolean): List<ProfitRecord> {
-        var settledBets = betLoader.load(interval, cache)
+    fun getProfitRecords(
+            @PathVariable interval: String,
+            @RequestParam(required = false) filter: String?,
+            @RequestParam(required = false) sort: String?,
+            @RequestParam(required = false) projection: String?,
+            @RequestParam(defaultValue = "true") cache: Boolean
+    ): List<ProfitRecord> {
+        val settledBets = betLoader.load(interval, cache)
 
-        val ceil = ceiling ?: -1.0
-        if (ceil > 0) {
-            settledBets = settledBets.map { BetUtils.limitBetAmount(ceil, it) }
-        }
         val stopwatch = Stopwatch.createStarted()
         var profitRecords = profitService.getProfitRecords(settledBets, projection,
                 false)
@@ -61,11 +55,13 @@ class ProfitController(
 
     @ResponseBody
     @RequestMapping(value = ["/fc-progress/" + IntervalParser.INTERVAL], method = [RequestMethod.GET])
-    fun getProgressRecords(@PathVariable interval: String,
-                           @RequestParam(defaultValue = "5") binCount: Int,
-                           @RequestParam(required = false) function: String?,
-                           @RequestParam(required = false) projection: String?,
-                           @RequestParam(defaultValue = "true") cache: Boolean): List<ProfitRecord> {
+    fun getProgressRecords(
+            @PathVariable interval: String,
+            @RequestParam(defaultValue = "5") binCount: Int,
+            @RequestParam(required = false) function: String?,
+            @RequestParam(required = false) projection: String?,
+            @RequestParam(defaultValue = "true") cache: Boolean
+    ): List<ProfitRecord> {
         val bets = betLoader.load(interval, cache)
         val stopwatch = Stopwatch.createStarted()
         val records = fixedBinFunctionProfitService.getProfitRecords(bets, function, binCount, projection)

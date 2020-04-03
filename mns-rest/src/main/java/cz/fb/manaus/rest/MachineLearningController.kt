@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*
 
 @Controller
 @Profile(ManausProfiles.DB)
-class MachineLearningController(private val betFeatureService: BetFeatureService,
-                                private val betLoader: SettledBetLoader) {
+class MachineLearningController(
+        private val betFeatureService: BetFeatureService,
+        private val betLoader: SettledBetLoader
+) {
 
     @ResponseBody
     @RequestMapping(value = ["/ml/bet-features/" + IntervalParser.INTERVAL], method = [RequestMethod.GET])

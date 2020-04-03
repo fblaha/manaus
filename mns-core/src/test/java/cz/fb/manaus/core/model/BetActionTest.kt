@@ -1,25 +1,11 @@
-package cz.fb.manaus.reactor.betting.listener
+package cz.fb.manaus.core.model
 
-import cz.fb.manaus.core.model.*
-import cz.fb.manaus.reactor.betting.action.BetUtils
-import org.hamcrest.Matchers.closeTo
-import org.junit.Assert.assertThat
-import org.junit.Before
 import org.junit.Test
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.test.assertEquals
-import kotlin.test.assertNotSame
 
-class BetUtilsTest {
-
-    private lateinit var bet: SettledBet
-
-    @Before
-    fun setUp() {
-        val price = Price(5.0, 3.0, Side.BACK)
-        bet = homeSettledBet.copy(price = price)
-    }
+class BetActionTest {
 
     @Test
     fun `current actions`() {
@@ -51,48 +37,17 @@ class BetUtilsTest {
                 betActionType = BetActionType.PLACE,
                 time = currDate.minus(4, ChronoUnit.HOURS),
                 price = priceLay)
-        var filtered = BetUtils.getCurrentActions(listOf(back1, back2, back3))
+        var filtered = getCurrentActions(listOf(back1, back2, back3))
         assertEquals(1, filtered.size)
         assertEquals(back3, filtered[filtered.size - 1])
 
-        filtered = BetUtils.getCurrentActions(listOf(lay1, lay2))
+        filtered = getCurrentActions(listOf(lay1, lay2))
         assertEquals(2, filtered.size)
         assertEquals(lay1, filtered[0])
         assertEquals(lay2, filtered[filtered.size - 1])
 
-        filtered = BetUtils.getCurrentActions(listOf(lay1, lay2, lay3))
+        filtered = getCurrentActions(listOf(lay1, lay2, lay3))
         assertEquals(1, filtered.size)
         assertEquals(lay3, filtered[filtered.size - 1])
-    }
-
-
-    @Test
-    fun `ceil amount settled bet`() {
-        val bet = realizedBet
-        val ceilCopy = BetUtils.limitBetAmount(2.0, bet)
-        assertNotSame(bet, ceilCopy)
-        assertEquals(bet.settledBet.selectionName, ceilCopy.settledBet.selectionName)
-        assertEquals(bet.settledBet.selectionId, ceilCopy.settledBet.selectionId)
-        assertThat(ceilCopy.settledBet.profitAndLoss,
-                closeTo(bet.settledBet.profitAndLoss * 2.0 / 3, 0.001))
-    }
-
-    @Test
-    fun `ceil amount bet action`() {
-        val bet = realizedBet
-        val ceilCopy = BetUtils.limitBetAmount(2.0, bet)
-        val action = bet.betAction
-        val actionCopy = ceilCopy.betAction
-        assertNotSame(action, actionCopy)
-        assertEquals(betAction.time, actionCopy.time)
-        assertEquals(betAction.selectionId, actionCopy.selectionId)
-        assertEquals(2.0, actionCopy.price.amount)
-    }
-
-    @Test
-    fun `bellow ceiling - returns the same instances`() {
-        val bet = realizedBet
-        val ceilCopy = BetUtils.limitBetAmount(100.0, bet)
-        assertEquals(bet, ceilCopy)
     }
 }

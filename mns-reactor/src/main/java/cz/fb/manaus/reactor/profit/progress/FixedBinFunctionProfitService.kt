@@ -27,7 +27,7 @@ class FixedBinFunctionProfitService(
         val coverage = BetCoverage.from(bets)
         val filtered = when (projection) {
             null -> bets
-            else -> categoryService.filterBets(bets, projection, coverage)
+            else -> categoryService.filterBets(bets, projection)
         }
         val functions = getProgressFunctions(funcName)
         return functions.flatMap { computeProfitRecords(it, binCount, coverage, filtered) }

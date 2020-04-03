@@ -30,7 +30,7 @@ class CategoryServiceTest : AbstractLocalTestCase() {
 
     @Test
     fun `bet category`() {
-        val categories = categoryService.getRealizedBetCategories(realizedBet, false, BetCoverage.EMPTY)
+        val categories = categoryService.getRealizedBetCategories(realizedBet, false)
         assertTrue { categories.containsAll(listOf("market_country_cz", "market_sport_soccer", "market_type_match_odds")) }
     }
 
