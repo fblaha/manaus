@@ -3,7 +3,7 @@ package cz.fb.manaus.spring
 import cz.fb.manaus.core.provider.ProviderTag.VendorMatchbook
 import cz.fb.manaus.ischia.BackUniverse
 import cz.fb.manaus.ischia.LayUniverse
-import cz.fb.manaus.ischia.filter.moneyLineLoserFilter
+import cz.fb.manaus.ischia.filter.moneyLineFilter
 import cz.fb.manaus.ischia.filter.runnerNameFilter
 import cz.fb.manaus.ischia.strategy.MinimizeChargeStrategy
 import cz.fb.manaus.reactor.betting.listener.FlowFilter
@@ -62,8 +62,8 @@ open class IschiaLocalConfiguration {
     }
 
     @Bean
-    open fun moneyLineLoserFilter(): FlowFilter {
-        return moneyLineLoserFilter
+    open fun moneyLineFilter(): FlowFilter {
+        return moneyLineFilter
     }
 
     @Bean

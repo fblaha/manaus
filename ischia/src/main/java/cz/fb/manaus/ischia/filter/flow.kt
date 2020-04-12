@@ -9,5 +9,5 @@ fun runnerNameFilter(runnerName: String): FlowFilter {
             emptySet())
 }
 
-val moneyLineLoserFilter = FlowFilter(1..1, { _, _ -> true }, setOf("moneyline"))
+val moneyLineFilter = FlowFilter(IntRange.EMPTY, { _, _ -> true }, setOf("moneyline"))
 
