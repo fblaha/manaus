@@ -3,6 +3,7 @@ package cz.fb.manaus.rest
 import cz.fb.manaus.core.model.Market
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.spring.ManausProfiles
+import io.micrometer.core.instrument.Metrics
 import org.springframework.context.annotation.Profile
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -34,6 +35,7 @@ class MarketController(private val marketRepository: MarketRepository) {
     @RequestMapping(value = ["/markets"], method = [RequestMethod.POST])
     internal fun addOrUpdateMarket(@RequestBody market: Market): ResponseEntity<*> {
         validateMarket(market)
+        Metrics.counter("mns_market_post", "eventType", market.eventType.name).increment()
         marketRepository.saveOrUpdate(market)
         val location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
