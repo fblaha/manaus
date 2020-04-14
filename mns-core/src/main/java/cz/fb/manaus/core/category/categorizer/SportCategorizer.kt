@@ -24,6 +24,7 @@ object SportCategorizer : AbstractDelegatingCategorizer(SPORT_PREFIX) {
             "volleyball" == typeName -> return MarketCategories.VOLLEYBALL
             "soccer" == typeName -> return MarketCategories.SOCCER
             "esports" == typeName -> return MarketCategories.ESPORTS
+            "table-tennis" == typeName -> return MarketCategories.TABLE_TENNIS
             "snooker" == typeName -> return MarketCategories.SNOOKER
             "cricket" == typeName -> return MarketCategories.CRICKET
             "handball" == typeName -> return MarketCategories.HANDBALL

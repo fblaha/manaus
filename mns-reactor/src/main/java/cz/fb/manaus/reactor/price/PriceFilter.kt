@@ -7,10 +7,12 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.provider.ProviderMatcher
 
 // TODO not used in prod code
-class PriceFilter(private val limit: Int,
-                  private val bulldozeThreshold: Double,
-                  private val priceRange: ClosedRange<Double>,
-                  private val bulldozer: PriceBulldozer) {
+class PriceFilter(
+        private val limit: Int,
+        private val bulldozeThreshold: Double,
+        private val priceRange: ClosedRange<Double>,
+        private val bulldozer: PriceBulldozer
+) {
 
     internal fun getSignificantPrices(limit: Int, prices: List<Price>, providerMatcher: ProviderMatcher): List<Price> {
         val (back, lay) = prices.filter { it.price in this.priceRange }.partition { it.side == Side.BACK }

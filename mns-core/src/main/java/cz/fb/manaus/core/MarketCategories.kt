@@ -3,6 +3,7 @@ package cz.fb.manaus.core
 object MarketCategories {
     const val SOCCER = "soccer"
     const val ESPORTS = "esports"
+    const val TABLE_TENNIS = "tableTennis"
     const val TENNIS = "tennis"
     const val ALL = "_all_"
     const val BASKETBALL = "basketball"
