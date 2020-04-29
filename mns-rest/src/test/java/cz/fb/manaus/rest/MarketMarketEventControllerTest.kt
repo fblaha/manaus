@@ -15,7 +15,7 @@ import kotlin.test.assertEquals
 
 
 @ActiveProfiles("ischia")
-class MarketBetControllerTest : AbstractControllerTest() {
+class MarketMarketEventControllerTest : AbstractControllerTest() {
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -25,7 +25,7 @@ class MarketBetControllerTest : AbstractControllerTest() {
         createLiveMarket()
         val bet = Bet("1", market.id, SEL_DRAW, Price(3.0, 5.0, Side.BACK),
                 Instant.now().minus(2, ChronoUnit.HOURS))
-        val crate = BetEvent(
+        val crate = MarketEvent(
                 prices = runnerPrices,
                 bets = listOf(bet),
                 account = account,
@@ -33,7 +33,7 @@ class MarketBetControllerTest : AbstractControllerTest() {
                 tradedVolume = tradedVolume)
 
         val snapshot = objectMapper.writer().writeValueAsString(crate)
-        val result = mvc.perform(post("/markets/{id}/snapshot", market.id)
+        val result = mvc.perform(post("/markets/{id}/event", market.id)
                 .content(snapshot)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)

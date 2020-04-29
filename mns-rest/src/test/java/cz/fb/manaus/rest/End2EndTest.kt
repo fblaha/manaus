@@ -46,7 +46,7 @@ class End2EndTest : AbstractControllerTest() {
     }
 
     private fun `And I post snapshot and I collect bets`() {
-        val crate = BetEvent(
+        val crate = MarketEvent(
                 prices = runnerPrices,
                 bets = emptyList(),
                 scanTime = 1000,
@@ -54,7 +54,7 @@ class End2EndTest : AbstractControllerTest() {
                 tradedVolume = tradedVolume)
 
         val snapshot = objectMapper.writer().writeValueAsString(crate)
-        val result = mvc.perform(MockMvcRequestBuilders.post("/markets/{id}/snapshot", market.id)
+        val result = mvc.perform(MockMvcRequestBuilders.post("/markets/{id}/event", market.id)
                 .content(snapshot)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk)
