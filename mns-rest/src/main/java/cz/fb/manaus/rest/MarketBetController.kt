@@ -17,7 +17,7 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 
-data class MarketSnapshotCrate(
+data class BetEvent(
         var prices: List<RunnerPrices>,
         var bets: List<Bet>,
         var account: Account,
@@ -27,7 +27,7 @@ data class MarketSnapshotCrate(
 
 @Controller
 @Profile(ManausProfiles.DB)
-class MarketSnapshotController(
+class MarketBetController(
         private val notifier: MarketSnapshotNotifier,
         private val marketRepository: MarketRepository,
         private val betMetricUpdater: MatchedBetMetricUpdater
@@ -36,26 +36,26 @@ class MarketSnapshotController(
     private val availableMoney: AtomicDouble by lazy { Metrics.gauge("mns_account_money_available", AtomicDouble()) }
     private val totalMoney: AtomicDouble by lazy { Metrics.gauge("mns_account_money_total", AtomicDouble()) }
 
-    private val log = Logger.getLogger(MarketSnapshotController::class.simpleName)
+    private val log = Logger.getLogger(MarketBetController::class.simpleName)
 
     @RequestMapping(value = ["/markets/{id}/snapshot"], method = [RequestMethod.POST])
-    fun pushMarketSnapshot(@PathVariable id: String, @RequestBody snapshotCrate: MarketSnapshotCrate): ResponseEntity<CollectedBets> {
-        validateMarket(snapshotCrate)
-        val account = snapshotCrate.account
+    fun onBetEvent(@PathVariable id: String, @RequestBody betEvent: BetEvent): ResponseEntity<CollectedBets> {
+        validateMarket(betEvent)
+        val account = betEvent.account
         account.provider.validate()
         updateMoneyMetrics(account.money)
         Metrics.counter("mns_market_snapshot_post").increment()
         try {
-            val marketPrices = snapshotCrate.prices
+            val marketPrices = betEvent.prices
             val market = marketRepository.read(id)!!
-            val bets = snapshotCrate.bets
-            betMetricUpdater.update(snapshotCrate.scanTime, bets)
-            val snapshot = MarketSnapshot(marketPrices, market, bets, snapshotCrate.tradedVolume)
+            val bets = betEvent.bets
+            betMetricUpdater.update(betEvent.scanTime, bets)
+            val snapshot = MarketSnapshot(marketPrices, market, bets, betEvent.tradedVolume)
             val collectedBets = notifier.notify(MarketSnapshotEvent(snapshot, account))
             return toResponse(collectedBets)
         } catch (e: RuntimeException) {
             Metrics.counter("mns_exception_snapshot_count").increment()
-            logException(snapshotCrate, e)
+            logException(betEvent, e)
             throw e
         }
     }
@@ -75,12 +75,12 @@ class MarketSnapshotController(
         }
     }
 
-    private fun validateMarket(snapshotCrate: MarketSnapshotCrate) {
-        check(snapshotCrate.prices.isNotEmpty())
+    private fun validateMarket(betEvent: BetEvent) {
+        check(betEvent.prices.isNotEmpty())
     }
 
-    private fun logException(snapshot: MarketSnapshotCrate, e: RuntimeException) {
-        log.severe { "error emerged for '$snapshot'" }
+    private fun logException(snapshot: BetEvent, e: RuntimeException) {
+        log.severe { "error occurred for '$snapshot'" }
         log.log(Level.SEVERE, "fix it!", e)
     }
 }

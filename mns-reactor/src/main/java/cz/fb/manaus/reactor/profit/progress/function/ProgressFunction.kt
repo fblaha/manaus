@@ -6,9 +6,7 @@ import cz.fb.manaus.core.model.RealizedBet
 interface ProgressFunction : (RealizedBet) -> Double? {
 
     val name: String
-        get() {
-            return makeName(this).removeSuffix("Function")
-        }
+        get() = makeName(this).removeSuffix("Function")
 
     val includeNoValues: Boolean get() = true
 

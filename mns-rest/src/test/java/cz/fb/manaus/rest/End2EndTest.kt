@@ -46,7 +46,7 @@ class End2EndTest : AbstractControllerTest() {
     }
 
     private fun `And I post snapshot and I collect bets`() {
-        val crate = MarketSnapshotCrate(
+        val crate = BetEvent(
                 prices = runnerPrices,
                 bets = emptyList(),
                 scanTime = 1000,

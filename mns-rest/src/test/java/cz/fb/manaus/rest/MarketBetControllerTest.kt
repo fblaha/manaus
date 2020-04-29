@@ -15,7 +15,7 @@ import kotlin.test.assertEquals
 
 
 @ActiveProfiles("ischia")
-class MarketSnapshotControllerTest : AbstractControllerTest() {
+class MarketBetControllerTest : AbstractControllerTest() {
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -25,7 +25,7 @@ class MarketSnapshotControllerTest : AbstractControllerTest() {
         createLiveMarket()
         val bet = Bet("1", market.id, SEL_DRAW, Price(3.0, 5.0, Side.BACK),
                 Instant.now().minus(2, ChronoUnit.HOURS))
-        val crate = MarketSnapshotCrate(
+        val crate = BetEvent(
                 prices = runnerPrices,
                 bets = listOf(bet),
                 account = account,

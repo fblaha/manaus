@@ -3,9 +3,7 @@ package cz.fb.manaus.core.model
 
 data class SideSelection(val side: Side, val selectionId: Long) {
     val oppositeSide: SideSelection
-        get() {
-            return copy(side = side.opposite)
-        }
+        get() = copy(side = side.opposite)
 }
 
 fun getMarketCoverage(bets: List<Bet>): Map<SideSelection, Bet> {
