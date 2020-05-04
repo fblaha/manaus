@@ -12,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 
-val downgradeStrategy = FixedDowngradeStrategy(0.02, 0.02)
+val downgradeStrategy = FixedDowngradeStrategy(
+        mapOf<String, Double>().withDefault { 0.02 },
+        mapOf<String, Double>().withDefault { 0.02 }
+)
 
 class FairnessProposerTest : AbstractLocalTestCase() {
 

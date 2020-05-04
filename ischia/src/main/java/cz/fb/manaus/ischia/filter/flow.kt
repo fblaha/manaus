@@ -1,5 +1,6 @@
 package cz.fb.manaus.ischia.filter
 
+import cz.fb.manaus.core.model.TYPE_MONEY_LINE
 import cz.fb.manaus.reactor.betting.listener.FlowFilter
 
 
@@ -9,5 +10,5 @@ fun runnerNameFilter(runnerName: String): FlowFilter {
             emptySet())
 }
 
-val moneyLineFilter = FlowFilter(IntRange.EMPTY, { _, _ -> true }, setOf("moneyline"))
+val moneyLineFilter = FlowFilter(IntRange.EMPTY, { _, _ -> true }, setOf(TYPE_MONEY_LINE))
 

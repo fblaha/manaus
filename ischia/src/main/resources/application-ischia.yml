@@ -5,8 +5,3 @@ price:
   limit: 3
   min: 1.0
   max: 1000
-proposer:
-  downgradeBackProposerBackPrice: 0.1
-  downgradeBackProposerLayPrice: 0.1
-  downgradeLayProposerBackPrice: 0.1
-  downgradeLayProposerLayPrice: 0.1

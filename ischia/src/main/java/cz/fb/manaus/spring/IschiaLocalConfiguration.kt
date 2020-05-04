@@ -1,5 +1,6 @@
 package cz.fb.manaus.spring
 
+import cz.fb.manaus.core.model.TYPE_MONEY_LINE
 import cz.fb.manaus.core.provider.ProviderTag.VendorMatchbook
 import cz.fb.manaus.ischia.BackUniverse
 import cz.fb.manaus.ischia.LayUniverse
@@ -13,33 +14,33 @@ import cz.fb.manaus.reactor.price.PriceBulldozer
 import cz.fb.manaus.reactor.price.PriceFilter
 import cz.fb.manaus.spring.conf.MarketRunnerConf
 import cz.fb.manaus.spring.conf.PriceConf
-import cz.fb.manaus.spring.conf.ProposerConf
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.*
+
 
 @Configuration
 @Profile("ischia")
 @ComponentScan(value = ["cz.fb.manaus.ischia"])
 @Import(ValidationConfiguration::class, BettorConfiguration::class)
-@EnableConfigurationProperties(MarketRunnerConf::class, PriceConf::class, ProposerConf::class)
+@EnableConfigurationProperties(MarketRunnerConf::class, PriceConf::class)
 open class IschiaLocalConfiguration {
 
     @Bean
     @BackUniverse
-    open fun fixedBackDowngradeStrategy(proposerConf: ProposerConf): DowngradeStrategy {
+    open fun fixedBackDowngradeStrategy(): DowngradeStrategy {
         return FixedDowngradeStrategy(
-                back = proposerConf.downgradeBackProposerBackPrice,
-                lay = proposerConf.downgradeBackProposerLayPrice,
+                back = mapOf(TYPE_MONEY_LINE to 0.08).withDefault { 0.07 },
+                lay = mapOf(TYPE_MONEY_LINE to 0.087).withDefault { 0.077 },
                 tags = setOf(VendorMatchbook)
         )
     }
 
     @Bean
     @LayUniverse
-    open fun fixedLayDowngradeStrategy(proposerConf: ProposerConf): DowngradeStrategy {
+    open fun fixedLayDowngradeStrategy(): DowngradeStrategy {
         return FixedDowngradeStrategy(
-                back = proposerConf.downgradeLayProposerBackPrice,
-                lay = proposerConf.downgradeLayProposerLayPrice,
+                back = mapOf(TYPE_MONEY_LINE to 0.077).withDefault { 0.067 },
+                lay = mapOf(TYPE_MONEY_LINE to 0.087).withDefault { 0.077 },
                 tags = setOf(VendorMatchbook)
         )
     }

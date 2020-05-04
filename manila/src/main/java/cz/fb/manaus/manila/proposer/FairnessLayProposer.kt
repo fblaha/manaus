@@ -11,4 +11,11 @@ import org.springframework.stereotype.Component
 @Component
 @ManilaBet
 class FairnessLayProposer(priceService: PriceService)
-    : PriceProposer by FairnessProposer(Side.LAY, priceService, FixedDowngradeStrategy(0.07, 0.07))
+    : PriceProposer by FairnessProposer(
+        Side.LAY,
+        priceService,
+        FixedDowngradeStrategy(
+                mapOf<String, Double>().withDefault { 0.07 },
+                mapOf<String, Double>().withDefault { 0.07 }
+        )
+)

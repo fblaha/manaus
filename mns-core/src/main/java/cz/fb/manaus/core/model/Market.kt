@@ -6,6 +6,8 @@ import org.dizitart.no2.objects.Id
 import org.dizitart.no2.objects.Index
 import java.time.Instant
 
+const val TYPE_MONEY_LINE = "moneyline"
+
 @Index(value = "event.openDate", type = IndexType.NonUnique)
 @JsonIgnoreProperties("openDate\$manaus_core")
 data class Market(
