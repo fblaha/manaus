@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 
 val downgradeStrategy = FixedDowngradeStrategy(
-        mapOf<String, Double>().withDefault { 0.02 },
-        mapOf<String, Double>().withDefault { 0.02 }
+        mapOf<String?, Double>().withDefault { 0.02 },
+        mapOf<String?, Double>().withDefault { 0.02 }
 )
 
 class FairnessProposerTest : AbstractLocalTestCase() {

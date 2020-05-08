@@ -29,8 +29,8 @@ open class IschiaLocalConfiguration {
     @BackUniverse
     open fun fixedBackDowngradeStrategy(): DowngradeStrategy {
         return FixedDowngradeStrategy(
-                back = mapOf(TYPE_MONEY_LINE to 0.08).withDefault { 0.07 },
-                lay = mapOf(TYPE_MONEY_LINE to 0.087).withDefault { 0.077 },
+                back = mapOf<String?, Double>(TYPE_MONEY_LINE to 0.08).withDefault { 0.07 },
+                lay = mapOf<String?, Double>(TYPE_MONEY_LINE to 0.087).withDefault { 0.077 },
                 tags = setOf(VendorMatchbook)
         )
     }
@@ -39,8 +39,8 @@ open class IschiaLocalConfiguration {
     @LayUniverse
     open fun fixedLayDowngradeStrategy(): DowngradeStrategy {
         return FixedDowngradeStrategy(
-                back = mapOf(TYPE_MONEY_LINE to 0.077).withDefault { 0.067 },
-                lay = mapOf(TYPE_MONEY_LINE to 0.087).withDefault { 0.077 },
+                back = mapOf<String?, Double>(TYPE_MONEY_LINE to 0.077).withDefault { 0.067 },
+                lay = mapOf<String?, Double>(TYPE_MONEY_LINE to 0.087).withDefault { 0.077 },
                 tags = setOf(VendorMatchbook)
         )
     }
