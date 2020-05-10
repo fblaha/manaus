@@ -11,7 +11,9 @@ import cz.fb.manaus.reactor.betting.proposer.common.FairnessProposer
 import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.stereotype.Component
 
-val matchOddsPredicate: (BetEvent) -> Boolean = { TYPE_MATCH_ODDS == it.market.type }
+fun isMatchOdds(e: BetEvent): Boolean {
+    return TYPE_MATCH_ODDS == e.market.type
+}
 
 @Component
 @LayUniverse
@@ -20,8 +22,8 @@ class FairnessBackProposer(priceService: PriceService)
     : PriceProposer by FairnessProposer(
         Side.BACK,
         priceService,
-        FixedDowngradeStrategy(Side.LAY, 0.077, matchOddsPredicate),
+        FixedDowngradeStrategy(Side.LAY, 0.077, ::isMatchOdds),
         FixedDowngradeStrategy(Side.LAY, 0.087),
-        FixedDowngradeStrategy(Side.BACK, 0.07, matchOddsPredicate),
+        FixedDowngradeStrategy(Side.BACK, 0.07, ::isMatchOdds),
         FixedDowngradeStrategy(Side.BACK, 0.08)
 )
