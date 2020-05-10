@@ -22,7 +22,7 @@ class LayLoserBettorTest : AbstractDatabaseTestCase() {
     fun `place bet - based on fairness`() {
         bettorTester.checkPlace(Side.LAY,
                 factory.newMarketPrices(2.98, 3.2, 3.05),
-                3, 2.88)
+                3, 2.84)
     }
 
     @Test
@@ -45,13 +45,13 @@ class LayLoserBettorTest : AbstractDatabaseTestCase() {
     fun `too close price for update`() {
         val market = factory.newMarketPrices(2.90, 3.2, 3.0)
 
-        bettorTester.checkUpdate(Side.LAY, 2.86, market, 0, 0)
-        bettorTester.checkUpdate(Side.LAY, 2.88, market, 0, 0)
+        bettorTester.checkUpdate(Side.LAY, 2.84, market, 0, 0)
+        bettorTester.checkUpdate(Side.LAY, 2.82, market, 0, 0)
 
-        bettorTester.checkUpdate(Side.LAY, 2.9, market, 0, 3)
-        bettorTester.checkUpdate(Side.LAY, 2.84, market, 0, 3)
-        bettorTester.checkUpdate(Side.LAY, 2.92, market, 0, 3)
-        bettorTester.checkUpdate(Side.LAY, 2.94, market, 0, 3)
+        bettorTester.checkUpdate(Side.LAY, 2.86, market, 0, 3)
+        bettorTester.checkUpdate(Side.LAY, 2.88, market, 0, 3)
+        bettorTester.checkUpdate(Side.LAY, 2.8, market, 0, 3)
+        bettorTester.checkUpdate(Side.LAY, 2.78, market, 0, 3)
     }
 
 }

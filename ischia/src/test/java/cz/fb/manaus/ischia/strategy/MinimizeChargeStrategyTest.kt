@@ -1,18 +1,17 @@
 package cz.fb.manaus.ischia.strategy
 
-import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.HOME_EVENT_BACK
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.test.context.ActiveProfiles
 
-@ActiveProfiles("ischia")
-class MinimizeChargeStrategyTest : AbstractLocalTestCase() {
+class MinimizeChargeStrategyTest {
 
-    @Autowired
-    private lateinit var strategy: MinimizeChargeStrategy
+    private val strategy: MinimizeChargeStrategy = MinimizeChargeStrategy(
+            fairnessReductionLow = 0.01,
+            fairnessReductionHighBack = 0.05,
+            fairnessReductionHighLay = 0.06
+    )
 
     @Test
     fun strategy() {

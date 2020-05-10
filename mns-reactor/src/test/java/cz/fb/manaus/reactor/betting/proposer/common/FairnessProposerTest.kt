@@ -12,17 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 
-val downgradeStrategy = FixedDowngradeStrategy(
-        mapOf<String?, Double>().withDefault { 0.02 },
-        mapOf<String?, Double>().withDefault { 0.02 }
-)
 
 class FairnessProposerTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var layProposer: TestLayProposer
+
     @Autowired
     private lateinit var backProposer: TestBackProposer
+
     @Autowired
     private lateinit var factory: BetEventTestFactory
 
@@ -57,11 +55,20 @@ class FairnessProposerTest : AbstractLocalTestCase() {
 
     @Component
     class TestLayProposer(priceService: PriceService)
-        : PriceProposer by FairnessProposer(Side.LAY, priceService, downgradeStrategy)
+        : PriceProposer by FairnessProposer(
+            Side.LAY, priceService,
+            FixedDowngradeStrategy(Side.LAY, 0.02),
+            FixedDowngradeStrategy(Side.BACK, 0.02)
+    )
 
     @Component
     class TestBackProposer(priceService: PriceService)
-        : PriceProposer by FairnessProposer(Side.BACK, priceService, downgradeStrategy)
+        : PriceProposer by FairnessProposer(
+            Side.BACK,
+            priceService,
+            FixedDowngradeStrategy(Side.BACK, 0.02),
+            FixedDowngradeStrategy(Side.LAY, 0.02)
+    )
 
 }
 

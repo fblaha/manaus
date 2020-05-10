@@ -28,7 +28,7 @@ class BestChanceLayBettorTest : AbstractDatabaseTestCase() {
     }
 
     @Test
-    fun `no bet plced because to low proposed price`() {
+    fun `no bet placed because to low proposed price`() {
         bettorTester.checkPlace(Side.LAY,
                 factory.newMarketPrices(0.3, listOf(0.9, 0.05, 0.05)),
                 0, null)

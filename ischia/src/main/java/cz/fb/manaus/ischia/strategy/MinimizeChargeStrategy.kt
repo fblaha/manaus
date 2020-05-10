@@ -12,7 +12,8 @@ import kotlin.math.min
 class MinimizeChargeStrategy(
         internal val fairnessReductionLow: Double,
         private val fairnessReductionHighBack: Double,
-        private val fairnessReductionHighLay: Double) : DowngradeStrategy, ProviderSelector {
+        private val fairnessReductionHighLay: Double
+) : DowngradeStrategy, ProviderSelector {
 
     override fun invoke(event: BetEvent): Double {
         val rawRate = getRawRate(event)

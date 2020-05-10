@@ -14,8 +14,6 @@ class FairnessLayProposer(priceService: PriceService)
     : PriceProposer by FairnessProposer(
         Side.LAY,
         priceService,
-        FixedDowngradeStrategy(
-                mapOf<String?, Double>().withDefault { 0.07 },
-                mapOf<String?, Double>().withDefault { 0.07 }
-        )
+        FixedDowngradeStrategy(Side.LAY, 0.07),
+        FixedDowngradeStrategy(Side.BACK, 0.07)
 )
