@@ -22,8 +22,7 @@ class FairnessProposer(
         val bestPrice = event.runnerPrices.getHomogeneous(side).bestPrice!!
         val fairPrice = priceService.getFairnessFairPrice(bestPrice.price, fairness)
         val provider = event.account.provider
-        val s = downgradeStrategies.filter(provider::matches)
-        val downgradeFraction = s.mapNotNull { it(event) }.first()
+        val downgradeFraction = downgradeStrategies.filter(provider::matches).mapNotNull { it(event) }.first()
         return priceService.downgrade(fairPrice, downgradeFraction, event.side)
     }
 }
