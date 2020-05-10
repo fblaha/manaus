@@ -7,6 +7,7 @@ import org.dizitart.no2.objects.Index
 import java.time.Instant
 
 const val TYPE_MONEY_LINE = "moneyline"
+const val TYPE_MATCH_ODDS = "match_odds"
 
 @Index(value = "event.openDate", type = IndexType.NonUnique)
 @JsonIgnoreProperties("openDate\$manaus_core")

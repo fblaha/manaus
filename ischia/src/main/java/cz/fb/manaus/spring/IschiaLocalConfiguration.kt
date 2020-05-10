@@ -1,6 +1,6 @@
 package cz.fb.manaus.spring
 
-import cz.fb.manaus.core.model.TYPE_MONEY_LINE
+import cz.fb.manaus.core.model.TYPE_MATCH_ODDS
 import cz.fb.manaus.core.provider.ProviderTag.VendorMatchbook
 import cz.fb.manaus.ischia.BackUniverse
 import cz.fb.manaus.ischia.LayUniverse
@@ -29,8 +29,8 @@ open class IschiaLocalConfiguration {
     @BackUniverse
     open fun fixedBackDowngradeStrategy(): DowngradeStrategy {
         return FixedDowngradeStrategy(
-                back = mapOf<String?, Double>(TYPE_MONEY_LINE to 0.08).withDefault { 0.07 },
-                lay = mapOf<String?, Double>(TYPE_MONEY_LINE to 0.087).withDefault { 0.077 },
+                back = mapOf<String?, Double>(TYPE_MATCH_ODDS to 0.07).withDefault { 0.08 },
+                lay = mapOf<String?, Double>(TYPE_MATCH_ODDS to 0.077).withDefault { 0.087 },
                 tags = setOf(VendorMatchbook)
         )
     }
@@ -39,8 +39,8 @@ open class IschiaLocalConfiguration {
     @LayUniverse
     open fun fixedLayDowngradeStrategy(): DowngradeStrategy {
         return FixedDowngradeStrategy(
-                back = mapOf<String?, Double>(TYPE_MONEY_LINE to 0.077).withDefault { 0.067 },
-                lay = mapOf<String?, Double>(TYPE_MONEY_LINE to 0.087).withDefault { 0.077 },
+                back = mapOf<String?, Double>(TYPE_MATCH_ODDS to 0.067).withDefault { 0.077 },
+                lay = mapOf<String?, Double>(TYPE_MATCH_ODDS to 0.077).withDefault { 0.087 },
                 tags = setOf(VendorMatchbook)
         )
     }
