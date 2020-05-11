@@ -1,7 +1,5 @@
 package cz.fb.manaus.spring
 
-import cz.fb.manaus.ischia.filter.moneyLineFilter
-import cz.fb.manaus.ischia.filter.runnerNameFilter
 import cz.fb.manaus.reactor.betting.listener.FlowFilter
 import cz.fb.manaus.reactor.price.PriceBulldozer
 import cz.fb.manaus.reactor.price.PriceFilter
@@ -19,14 +17,8 @@ import org.springframework.context.annotation.*
 open class IschiaLocalConfiguration {
 
     @Bean
-    open fun runnerNameFilter(marketRunnerConf: MarketRunnerConf): FlowFilter {
-        val runnerName = marketRunnerConf.runnerName ?: ""
-        return runnerNameFilter(runnerName)
-    }
-
-    @Bean
-    open fun moneyLineFilter(): FlowFilter {
-        return moneyLineFilter
+    open fun nopFilter(): FlowFilter {
+        return FlowFilter(IntRange.EMPTY, { _, _ -> true }, emptySet())
     }
 
     @Bean
