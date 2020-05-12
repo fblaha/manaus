@@ -97,16 +97,35 @@ val BF_TAGS: Set<ProviderTag> = setOf(
         ProviderTag.VendorBetfair,
         ProviderTag.MatchedAmount,
         ProviderTag.PriceShiftFixedStep,
-//        ProviderTag.TradedVolume,
+        ProviderTag.TradedVolume,
         ProviderTag.LastMatchedPrice
 )
 
 
-val provider = ExchangeProvider(
+val MB_TAGS: Set<ProviderTag> = setOf(
+        ProviderTag.VendorMatchbook,
+        ProviderTag.MatchedAmount,
+        ProviderTag.PriceShiftContinuous,
+        ProviderTag.LastMatchedPrice
+)
+
+
+val bfProvider = ExchangeProvider(
         name = "test",
         minAmount = 2.0,
         minPrice = 1.001,
         commission = 0.02,
-        tags = BF_TAGS)
+        tags = BF_TAGS
+)
 
-val account = Account(provider, accountMoney)
+val mbProvider = ExchangeProvider(
+        name = "test",
+        minAmount = 2.0,
+        minPrice = 1.001,
+        commission = 0.02,
+        tags = MB_TAGS
+)
+
+val bfAccount = Account(bfProvider, accountMoney)
+
+val mbAccount = Account(mbProvider, accountMoney)

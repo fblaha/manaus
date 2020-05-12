@@ -34,10 +34,10 @@ class TooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
         val event = factory.newBetEvent(Side.BACK, prices, oldBet)
         assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = oldPrice)))
 
-        var newPrice = roundingService.decrement(oldPrice, 1, provider.minPrice, provider::matches)
+        var newPrice = roundingService.decrement(oldPrice, 1, bfProvider.minPrice, bfProvider::matches)
         assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = newPrice)))
 
-        newPrice = roundingService.decrement(oldPrice, 3, provider.minPrice, provider::matches)
+        newPrice = roundingService.decrement(oldPrice, 3, bfProvider.minPrice, bfProvider::matches)
         assertEquals(ValidationResult.OK, validator.validate(event.copy(proposedPrice = newPrice)))
     }
 

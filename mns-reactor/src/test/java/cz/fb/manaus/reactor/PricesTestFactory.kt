@@ -16,7 +16,7 @@ class PricesTestFactory(
 
     fun newRunnerPrices(selectionId: Long, bestBack: Double, bestLay: Double, lastMatchedPrice: Double? = null): RunnerPrices {
         val avgPrice = (bestBack + bestLay) / 2
-        val lastMatched = lastMatchedPrice ?: roundingService.roundBet(avgPrice, provider::matches)!!
+        val lastMatched = lastMatchedPrice ?: roundingService.roundBet(avgPrice, bfProvider::matches)!!
         val backBestPrice = Price(bestBack, 100.0, Side.BACK)
         val layBestPrice = Price(bestLay, 100.0, Side.LAY)
         return RunnerPrices(
@@ -24,10 +24,10 @@ class PricesTestFactory(
                 prices = listOf(
                         backBestPrice,
                         layBestPrice,
-                        roundingService.decrement(backBestPrice, 1, provider.minPrice, provider::matches)!!,
-                        roundingService.decrement(backBestPrice, 2, provider.minPrice, provider::matches)!!,
-                        roundingService.increment(layBestPrice, 1, provider::matches)!!,
-                        roundingService.increment(layBestPrice, 2, provider::matches)!!),
+                        roundingService.decrement(backBestPrice, 1, bfProvider.minPrice, bfProvider::matches)!!,
+                        roundingService.decrement(backBestPrice, 2, bfProvider.minPrice, bfProvider::matches)!!,
+                        roundingService.increment(layBestPrice, 1, bfProvider::matches)!!,
+                        roundingService.increment(layBestPrice, 2, bfProvider::matches)!!),
                 lastMatchedPrice = lastMatchedPrice,
                 matchedAmount = lastMatched)
     }
@@ -44,11 +44,11 @@ class PricesTestFactory(
         for ((i, p) in probabilities.withIndex()) {
             val fairPrice = 1 / p
             val backPrice = priceService.downgrade(fairPrice, downgradeFraction, Side.LAY)
-            val backRounded = roundingService.roundBet(backPrice, provider::matches)
+            val backRounded = roundingService.roundBet(backPrice, bfProvider::matches)
             val layPrice = priceService.downgrade(fairPrice, downgradeFraction, Side.BACK)
-            val layRounded = roundingService.roundBet(layPrice, provider::matches)
+            val layRounded = roundingService.roundBet(layPrice, bfProvider::matches)
             val selectionId = SEL_HOME * (i + 1)
-            val lastMatched = roundingService.roundBet(fairPrice, provider::matches)
+            val lastMatched = roundingService.roundBet(fairPrice, bfProvider::matches)
             runnerPrices.add(newRunnerPrices(selectionId, backRounded!!, layRounded!!, lastMatched!!))
         }
         return runnerPrices

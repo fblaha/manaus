@@ -29,7 +29,7 @@ class ChargeGrowthForecasterTest : AbstractLocalTestCase() {
         val currentBets = mutableListOf<Bet>()
         val snapshot = MarketSnapshot(marketPrices, market, currentBets)
         val fairness = calculator.getFairness(marketPrices)
-        val commission = provider.commission
+        val commission = bfProvider.commission
         val homeBack = SideSelection(Side.BACK, SEL_HOME)
         var forecast = forecaster.getForecast(homeBack, snapshot, fairness, commission)
         assertTrue(forecast!! > 1)

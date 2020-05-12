@@ -22,7 +22,7 @@ class LayLoserBettorTest : AbstractDatabaseTestCase() {
     fun `place bet - based on fairness`() {
         bettorTester.checkPlace(Side.LAY,
                 factory.newMarketPrices(2.98, 3.2, 3.05),
-                3, 2.84)
+                3, 2.826, 2.846)
     }
 
     @Test
@@ -30,15 +30,7 @@ class LayLoserBettorTest : AbstractDatabaseTestCase() {
         bettorTester.checkPlace(
                 Side.LAY,
                 factory.newMarketPrices(2.58, 3.15, 3.0),
-                3, 2.6)
-    }
-
-    @Test
-    fun `place bet - based on last matched or traded volume`() {
-        bettorTester.checkPlace(
-                Side.LAY,
-                factory.newMarketPrices(2.8, 3.2, 2.5),
-                3, 2.48)
+                3, 2.612)
     }
 
     @Test
@@ -48,9 +40,7 @@ class LayLoserBettorTest : AbstractDatabaseTestCase() {
         bettorTester.checkUpdate(Side.LAY, 2.84, market, 0, 0)
         bettorTester.checkUpdate(Side.LAY, 2.82, market, 0, 0)
 
-        bettorTester.checkUpdate(Side.LAY, 2.86, market, 0, 3)
-        bettorTester.checkUpdate(Side.LAY, 2.88, market, 0, 3)
-        bettorTester.checkUpdate(Side.LAY, 2.8, market, 0, 3)
+        bettorTester.checkUpdate(Side.LAY, 2.9, market, 0, 3)
         bettorTester.checkUpdate(Side.LAY, 2.78, market, 0, 3)
     }
 

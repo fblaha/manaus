@@ -98,9 +98,9 @@ class MarketChargeSimulatorTest : AbstractLocalTestCase() {
                                      bets: MutableMap<Long, MutableList<Price>>,
                                      probabilities: Map<Long, Double>,
                                      assertion: (Double, Double) -> Unit) {
-        val before = simulator.getChargeMean(1, provider.commission, probabilities, bets)
+        val before = simulator.getChargeMean(1, bfProvider.commission, probabilities, bets)
         bets.getOrPut(selection) { mutableListOf() }.add(newBet)
-        val after = simulator.getChargeMean(1, provider.commission, probabilities, bets)
+        val after = simulator.getChargeMean(1, bfProvider.commission, probabilities, bets)
         assertion(before, after)
     }
 }

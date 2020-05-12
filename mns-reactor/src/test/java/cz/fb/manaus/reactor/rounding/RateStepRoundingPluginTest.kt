@@ -1,6 +1,6 @@
 package cz.fb.manaus.reactor.rounding
 
-import cz.fb.manaus.core.model.provider
+import cz.fb.manaus.core.model.bfProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.spring.ManausProfiles.TEST
 import org.junit.Assert.assertEquals
@@ -53,7 +53,7 @@ class RateStepRoundingPluginTest : AbstractLocalTestCase() {
     @Test
     fun `rounding - big range`() {
         var previous = -1.0
-        var price = provider.minPrice
+        var price = bfProvider.minPrice
         while (price < 5) {
             val current = plugin.round(price)
             assertTrue(previous <= current)

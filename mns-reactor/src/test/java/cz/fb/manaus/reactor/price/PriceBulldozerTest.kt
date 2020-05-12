@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.price
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.PriceComparator
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.model.provider
+import cz.fb.manaus.core.model.bfProvider
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -59,14 +59,14 @@ class PriceBulldozerTest : AbstractLocalTestCase() {
     @Test(expected = IllegalStateException::class)
     fun `bulldozed prices are in wrong order - back`() {
         val badOrder = realSample.sortedWith(PriceComparator).reversed()
-        bulldozer.bulldoze(10.0, badOrder, provider::matches)
+        bulldozer.bulldoze(10.0, badOrder, bfProvider::matches)
     }
 
     @Test(expected = IllegalStateException::class)
     fun `bulldozed prices are in wrong order - lay`() {
         bulldozer.bulldoze(10.0,
                 listOf(Price(5.0, 2.0, Side.LAY), Price(4.0, 2.0, Side.LAY)),
-                provider::matches)
+                bfProvider::matches)
     }
 
     private fun checkResult(threshold: Double,
@@ -74,7 +74,7 @@ class PriceBulldozerTest : AbstractLocalTestCase() {
                             expectedCount: Int,
                             expectedPrice: Double,
                             expectedAmount: Double) {
-        val bulldozed = bulldozer.bulldoze(threshold, prices, provider::matches)
+        val bulldozed = bulldozer.bulldoze(threshold, prices, bfProvider::matches)
         assertEquals(expectedCount, bulldozed.size)
         assertEquals(expectedPrice, bulldozed[0].price, 0.0001)
         assertEquals(expectedAmount, bulldozed[0].amount, 0.0001)

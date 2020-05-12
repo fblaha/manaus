@@ -63,7 +63,7 @@ class PriceServiceTest : AbstractLocalTestCase() {
 
     private fun getRoundedFairnessFairPrice(unfairPrice: Double, fairness: Double): Double? {
         val fairPrice = priceService.getFairnessFairPrice(unfairPrice, fairness)
-        return roundingService.roundBet(fairPrice, provider::matches)
+        return roundingService.roundBet(fairPrice, bfProvider::matches)
     }
 
     @Test
@@ -189,6 +189,6 @@ class PriceServiceTest : AbstractLocalTestCase() {
         val overround = winnerCount / targetReciprocal
         val selectionOverround = (overround - winnerCount) / runnerCount
         val probability = 1 / fairPrice
-        return max(1 / (selectionOverround + probability), provider.minPrice)
+        return max(1 / (selectionOverround + probability), bfProvider.minPrice)
     }
 }

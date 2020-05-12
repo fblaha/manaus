@@ -10,11 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 
 val HOME_EVENT_BACK: BetEvent = BetEvent(
         sideSelection = SideSelection(Side.BACK, SEL_HOME),
-        account = account,
+        account = bfAccount,
         coverage = mutableMapOf(),
         marketPrices = runnerPrices,
         market = market,

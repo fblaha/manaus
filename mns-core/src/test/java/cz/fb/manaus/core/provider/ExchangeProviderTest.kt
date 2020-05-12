@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.provider
 
-import cz.fb.manaus.core.model.provider
+import cz.fb.manaus.core.model.bfProvider
 import cz.fb.manaus.core.provider.ProviderTag.*
 import org.junit.Test
 import kotlin.test.assertFailsWith
@@ -13,20 +13,20 @@ class ExchangeProviderTest {
 
     @Test
     fun validate() {
-        provider.validate()
+        bfProvider.validate()
     }
 
     @Test
     fun `invalid tags`() {
-        val invalid = provider.copy(tags = setOf(PriceShiftContinuous, PriceShiftFixedStep))
+        val invalid = bfProvider.copy(tags = setOf(PriceShiftContinuous, PriceShiftFixedStep))
         assertFailsWith<IllegalStateException> { invalid.validate() }
     }
 
     @Test
     fun `match tags`() {
-        assertFalse { provider.matches(MockSelector(setOf(VendorMatchbook))) }
-        assertTrue { provider.matches(MockSelector(setOf(VendorBetfair))) }
-        assertTrue { provider.matches(MockSelector(setOf(VendorBetfair, PriceShiftFixedStep))) }
-        assertFalse { provider.matches(MockSelector(setOf(VendorBetfair, PriceShiftContinuous))) }
+        assertFalse { bfProvider.matches(MockSelector(setOf(VendorMatchbook))) }
+        assertTrue { bfProvider.matches(MockSelector(setOf(VendorBetfair))) }
+        assertTrue { bfProvider.matches(MockSelector(setOf(VendorBetfair, PriceShiftFixedStep))) }
+        assertFalse { bfProvider.matches(MockSelector(setOf(VendorBetfair, PriceShiftContinuous))) }
     }
 }

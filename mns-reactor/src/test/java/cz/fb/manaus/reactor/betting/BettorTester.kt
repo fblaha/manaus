@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @Component
 @Profile(ManausProfiles.DB)
@@ -25,7 +26,7 @@ class BettorTester(
             expectedUpdateCount: Int): List<BetCommand> {
 
         val snapshot = MarketSnapshot(marketPrices, market, bets, emptyMap())
-        val collected = betEventSeeker.onMarketSnapshot(MarketSnapshotEvent(snapshot, account))
+        val collected = betEventSeeker.onMarketSnapshot(MarketSnapshotEvent(snapshot, mbAccount))
                 .filter { it.bet.requestedPrice.side == side }
         assertEquals(expectedPlaceCount, collected.filter { it.isPlace }.size)
         assertEquals(expectedUpdateCount, collected.filter { it.isUpdate }.size)
@@ -36,11 +37,12 @@ class BettorTester(
             side: Side,
             marketPrices: List<RunnerPrices>,
             expectedCount: Int,
-            expectedPrice: Double?) {
+            vararg expectedPrices: Double) {
         val result = check(side, marketPrices, listOf(), expectedCount, 0)
         val toPlace = result.filter { it.isPlace }
-        if (expectedPrice != null) {
-            toPlace.forEach { assertEquals(expectedPrice, it.bet.requestedPrice.price) }
+        val expected = expectedPrices.toSet()
+        if (expected.isNotEmpty()) {
+            toPlace.map { it.bet.requestedPrice.price }.forEach { assertTrue("actual: $it") { it in expected } }
         }
     }
 
