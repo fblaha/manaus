@@ -79,13 +79,6 @@ val market = Market(id = "2",
 
 val realizedBet = RealizedBet(homeSettledBet, betAction, market)
 
-fun RealizedBet.replacePrice(price: Price): RealizedBet {
-    return this.copy(
-            settledBet = this.settledBet.copy(price = price),
-            betAction = this.betAction.copy(price = price)
-    )
-}
-
 val tradedVolume = mapOf(
         SEL_HOME to TradedVolume(listOf(TradedAmount(3.0, 10.0))),
         SEL_DRAW to TradedVolume(listOf(TradedAmount(3.0, 10.0))),
@@ -101,7 +94,6 @@ val BF_TAGS: Set<ProviderTag> = setOf(
         ProviderTag.LastMatchedPrice
 )
 
-
 val MB_TAGS: Set<ProviderTag> = setOf(
         ProviderTag.VendorMatchbook,
         ProviderTag.MatchedAmount,
@@ -109,9 +101,8 @@ val MB_TAGS: Set<ProviderTag> = setOf(
         ProviderTag.LastMatchedPrice
 )
 
-
 val bfProvider = ExchangeProvider(
-        name = "test",
+        name = "test_mb",
         minAmount = 2.0,
         minPrice = 1.001,
         commission = 0.02,
@@ -119,13 +110,11 @@ val bfProvider = ExchangeProvider(
 )
 
 val mbProvider = ExchangeProvider(
-        name = "test",
+        name = "test_bf",
         minAmount = 2.0,
         minPrice = 1.001,
         commission = 0.02,
         tags = MB_TAGS
 )
-
-val bfAccount = Account(bfProvider, accountMoney)
 
 val mbAccount = Account(mbProvider, accountMoney)

@@ -34,14 +34,14 @@ class BetEventTestFactory(
                 market = market,
                 currentBets = oldBet?.let { listOf(it) }.orEmpty()
         )
-        return betEventFactory.create(SideSelection(side, SEL_HOME), snapshot, fairness, bfAccount)
+        return betEventFactory.create(SideSelection(side, SEL_HOME), snapshot, fairness, mbAccount)
     }
 
     fun newBetEvent(side: Side, bestBack: Double, bestLay: Double): BetEvent {
         val snapshot = newSnapshot(side, bestBack, bestLay)
         val fairness = calculator.getFairness(snapshot.runnerPrices)
         val selectionId = snapshot.runnerPrices.first().selectionId
-        return betEventFactory.create(SideSelection(side, selectionId), snapshot, fairness, bfAccount)
+        return betEventFactory.create(SideSelection(side, selectionId), snapshot, fairness, mbAccount)
     }
 
     private fun newSnapshot(side: Side, bestBack: Double, bestLay: Double): MarketSnapshot {
@@ -52,9 +52,9 @@ class BetEventTestFactory(
         val bets = if (bestPrice != null) {
             val marketId = "marketId"
             val price = bestPrice.price
-            val requestedPrice = Price(price, bfProvider.minAmount, side.opposite)
+            val requestedPrice = Price(price, mbProvider.minAmount, side.opposite)
             val date = Instant.now().minus(2, ChronoUnit.HOURS)
-            val counterBet = Bet("1", marketId, selectionId, requestedPrice, date, bfProvider.minAmount)
+            val counterBet = Bet("1", marketId, selectionId, requestedPrice, date, mbProvider.minAmount)
             listOf(counterBet)
         } else emptyList()
         return MarketSnapshot(marketPrices, market, bets)

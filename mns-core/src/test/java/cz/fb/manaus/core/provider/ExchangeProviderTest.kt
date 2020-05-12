@@ -1,6 +1,7 @@
 package cz.fb.manaus.core.provider
 
 import cz.fb.manaus.core.model.bfProvider
+import cz.fb.manaus.core.model.mbProvider
 import cz.fb.manaus.core.provider.ProviderTag.*
 import org.junit.Test
 import kotlin.test.assertFailsWith
@@ -18,7 +19,7 @@ class ExchangeProviderTest {
 
     @Test
     fun `invalid tags`() {
-        val invalid = bfProvider.copy(tags = setOf(PriceShiftContinuous, PriceShiftFixedStep))
+        val invalid = mbProvider.copy(tags = setOf(PriceShiftContinuous, PriceShiftFixedStep))
         assertFailsWith<IllegalStateException> { invalid.validate() }
     }
 

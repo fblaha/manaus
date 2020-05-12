@@ -23,7 +23,7 @@ class BetTest : AbstractLocalTestCase() {
 
     @Test
     fun `half matched`() {
-        assertTrue(createBet(bfProvider.minAmount).isHalfMatched)
+        assertTrue(createBet(mbProvider.minAmount).isHalfMatched)
         assertTrue(createBet(1.5).isHalfMatched)
         assertFalse(createBet(0.0).isHalfMatched)
         assertFalse(createBet(0.8).isHalfMatched)
@@ -31,7 +31,7 @@ class BetTest : AbstractLocalTestCase() {
 
     @Test
     fun `fully matched`() {
-        assertTrue(createBet(bfProvider.minAmount).isMatched)
+        assertTrue(createBet(mbProvider.minAmount).isMatched)
         assertTrue(createBet(1.5).isMatched)
         assertFalse(createBet(0.0).isMatched)
         assertTrue(createBet(0.8).isMatched)
@@ -49,7 +49,7 @@ class BetTest : AbstractLocalTestCase() {
     }
 
     private fun createBet(matchedAmount: Double): Bet {
-        val requestedPrice = Price(3.0, bfProvider.minAmount, Side.LAY)
+        val requestedPrice = Price(3.0, mbProvider.minAmount, Side.LAY)
         val date = Instant.now().minus(2, ChronoUnit.HOURS)
         return Bet(betId = "1",
                 marketId = market.id,

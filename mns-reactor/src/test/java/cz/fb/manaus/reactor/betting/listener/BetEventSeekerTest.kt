@@ -41,7 +41,7 @@ class BetEventSeekerTest : AbstractLocalTestCase() {
                 currentBets = emptyList(),
                 market = market.copy(event = listener.mockEvent)
         )
-        val bets = betEventSeeker.onMarketSnapshot(MarketSnapshotEvent(snapshot, bfAccount))
+        val bets = betEventSeeker.onMarketSnapshot(MarketSnapshotEvent(snapshot, mbAccount))
         assertTrue { bets.isNotEmpty() }
         assertTrue { bets.all { it.action?.price == Price(3.0, 3.0, Side.BACK) } }
     }

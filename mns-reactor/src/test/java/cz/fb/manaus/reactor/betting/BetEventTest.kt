@@ -13,7 +13,7 @@ import kotlin.test.assertNotNull
 
 val HOME_EVENT_BACK: BetEvent = BetEvent(
         sideSelection = SideSelection(Side.BACK, SEL_HOME),
-        account = bfAccount,
+        account = mbAccount,
         coverage = mutableMapOf(),
         marketPrices = runnerPrices,
         market = market,

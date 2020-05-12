@@ -28,7 +28,7 @@ class MarketMarketEventControllerTest : AbstractControllerTest() {
         val crate = MarketEvent(
                 prices = runnerPrices,
                 bets = listOf(bet),
-                account = bfAccount,
+                account = mbAccount,
                 scanTime = 1000,
                 tradedVolume = tradedVolume)
 
