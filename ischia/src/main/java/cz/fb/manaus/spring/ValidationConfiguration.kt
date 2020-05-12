@@ -20,7 +20,6 @@ open class ValidationConfiguration {
         validators.forEach { checkNotNull(it::class.findAnnotation<LayUniverse>()) }
         check(validators.isNotEmpty())
         return ValidationCoordinator(validators, validationService)
-
     }
 
     @Bean

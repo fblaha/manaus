@@ -17,15 +17,15 @@ import org.springframework.context.annotation.*
 open class IschiaLocalConfiguration {
 
     @Bean
-    open fun nopFilter(): FlowFilter {
-        return FlowFilter(IntRange.EMPTY, { _, _ -> true }, emptySet())
-    }
+    open fun allowAll(): FlowFilter = FlowFilter.ALLOW_ALL
 
     @Bean
-    open fun abnormalPriceFilter(priceConf: PriceConf, priceBulldozer: PriceBulldozer): PriceFilter {
-        return PriceFilter(priceConf.limit,
-                priceConf.bulldoze,
-                priceConf.min..priceConf.max,
-                priceBulldozer)
-    }
+    open fun abnormalPriceFilter(priceConf: PriceConf, priceBulldozer: PriceBulldozer): PriceFilter =
+            PriceFilter(
+                    priceConf.limit,
+                    priceConf.bulldoze,
+                    priceConf.min..priceConf.max,
+                    priceBulldozer
+            )
+
 }

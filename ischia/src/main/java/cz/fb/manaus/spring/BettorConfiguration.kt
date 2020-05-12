@@ -38,9 +38,8 @@ open class BettorConfiguration(
     open fun layBetEventCoordinator(
             @LayUniverse priceAdviser: PriceAdviser,
             @LayUniverse validationCoordinator: ValidationCoordinator
-    ): BetEventCoordinator {
-        return BetEventCoordinator(Side.LAY, validationCoordinator, priceAdviser)
-    }
+    ): BetEventCoordinator =
+            BetEventCoordinator(Side.LAY, validationCoordinator, priceAdviser)
 
     @Bean
     @BackUniverse
@@ -54,8 +53,7 @@ open class BettorConfiguration(
     @BackUniverse
     open fun backBetEventCoordinator(@BackUniverse priceAdviser: PriceAdviser,
                                      @BackUniverse validationCoordinator: ValidationCoordinator
-    ): BetEventCoordinator {
-        return BetEventCoordinator(Side.BACK, validationCoordinator, priceAdviser)
-    }
+    ): BetEventCoordinator =
+            BetEventCoordinator(Side.BACK, validationCoordinator, priceAdviser)
 
 }
