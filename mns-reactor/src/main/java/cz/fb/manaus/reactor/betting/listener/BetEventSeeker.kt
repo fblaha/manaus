@@ -6,6 +6,7 @@ import cz.fb.manaus.core.model.isActive
 import cz.fb.manaus.reactor.betting.BetCommand
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.springframework.stereotype.Component
+import java.util.logging.Logger
 
 @Component
 class BetEventSeeker(
@@ -14,6 +15,8 @@ class BetEventSeeker(
         private val betEventNotifier: BetEventNotifier,
         private val betEventFactory: BetEventFactory
 ) : MarketSnapshotListener {
+
+    private val log = Logger.getLogger(BetEventSeeker::class.simpleName)
 
     override fun onMarketSnapshot(marketSnapshotEvent: MarketSnapshotEvent): List<BetCommand> {
         val (snapshot, account) = marketSnapshotEvent
@@ -40,6 +43,7 @@ class BetEventSeeker(
                             fairness = fairness,
                             account = account
                     )
+                    log.info { "bet event ${market.event.name} - ${runner.name} ($side)" }
                     collector.addAll(betEventNotifier.notify(betEvent))
                 }
             }
