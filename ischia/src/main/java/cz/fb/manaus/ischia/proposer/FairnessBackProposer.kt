@@ -11,8 +11,7 @@ import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.stereotype.Component
 
 fun isDraw(e: BetEvent): Boolean {
-    val selectionId = e.sideSelection.selectionId
-    val (_, name, _, _) = e.market.getRunner(selectionId)
+    val (_, name, _, _) = e.runner
     return "draw" in name.toLowerCase()
 }
 

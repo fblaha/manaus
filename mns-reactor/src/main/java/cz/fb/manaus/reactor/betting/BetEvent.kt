@@ -17,6 +17,7 @@ data class BetEvent(
     private val log = Logger.getLogger(BetEvent::class.simpleName)
 
     val side: Side = sideSelection.side
+    val runner: Runner = market.getRunner(sideSelection.selectionId)
     val runnerPrices: RunnerPrices = marketPrices.first { it.selectionId == sideSelection.selectionId }
     val oldBet: Bet? = coverage[sideSelection]
     val counterBet: Bet? = coverage[sideSelection.oppositeSide]
