@@ -31,21 +31,19 @@ class ValidationService(
                 ?: ValidationResult.OK
     }
 
-    fun validator(validators: List<Validator>): (BetEvent) -> ValidationResult {
-        return { event ->
-            val filteredValidators = validators.filter(createPredicate(event))
-            check(filteredValidators.isNotEmpty())
+    fun validator(validators: List<Validator>): (BetEvent) -> ValidationResult = { event ->
+        val filteredValidators = validators.filter(createPredicate(event))
+        check(filteredValidators.isNotEmpty())
 
-            if (filteredValidators.any { it.isUpdateOnly }) {
-                check(event.oldBet != null)
-            }
-
-            val collected = filteredValidators
-                    .map { makeName(it) to validate(event, it) }
-                    .onEach { recorder.updateMetrics(it.second, event.side, it.first) }
-                    .map { it.second }
-            reduce(collected)
+        if (filteredValidators.any { it.isUpdateOnly }) {
+            check(event.oldBet != null)
         }
+
+        val collected = filteredValidators
+                .map { makeName(it) to validate(event, it) }
+                .onEach { recorder.updateMetrics(it.second, event.side, it.first) }
+                .map { it.second }
+        reduce(collected)
     }
 
     private fun validate(event: BetEvent, validator: Validator): ValidationResult {

@@ -5,5 +5,9 @@ import cz.fb.manaus.reactor.betting.BetEvent
 
 typealias BetEventPredicate = (BetEvent) -> Boolean
 
-fun fixedDowngradeStrategy(side: Side, value: Double, predicate: BetEventPredicate = { true })
-        : DowngradeStrategy = { if (side == it.side && predicate(it)) value else null }
+fun fixedDowngradeStrategy(
+        side: Side,
+        value: Double,
+        predicate: BetEventPredicate = { true }
+): DowngradeStrategy =
+        { if (side == it.side && predicate(it)) value else null }
