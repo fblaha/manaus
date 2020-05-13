@@ -13,25 +13,20 @@ class BackLoserBettorTest : AbstractDatabaseTestCase() {
 
     @Autowired
     private lateinit var factory: PricesTestFactory
+
     @Autowired
     private lateinit var bettorTester: BettorTester
 
     @Test
     fun `place bet - based on best price`() {
-        bettorTester.checkPlace(
-                Side.BACK,
-                factory.newMarketPrices(2.98, 3.8, 3.0),
-                3,
-                3.744
-        )
+        val marketPrices = factory.newMarketPrices(2.98, 3.8, 3.0)
+        bettorTester.checkPlace(Side.BACK, marketPrices, 3, 3.744)
     }
 
     @Test
     fun `place bet - based on fairness`() {
-        bettorTester.checkPlace(
-                Side.BACK,
-                factory.newMarketPrices(2.98, 3.3, 3.0),
-                3, 3.254)
+        val marketPrices = factory.newMarketPrices(2.98, 3.1, 3.0)
+        bettorTester.checkPlace(Side.BACK, marketPrices, 3, 3.174, 3.151)
     }
 
 
