@@ -97,8 +97,7 @@ val BF_TAGS: Set<ProviderTag> = setOf(
 val MB_TAGS: Set<ProviderTag> = setOf(
         ProviderTag.VendorMatchbook,
         ProviderTag.MatchedAmount,
-        ProviderTag.PriceShiftContinuous,
-        ProviderTag.LastMatchedPrice
+        ProviderTag.PriceShiftContinuous
 )
 
 val bfProvider = ExchangeProvider(
