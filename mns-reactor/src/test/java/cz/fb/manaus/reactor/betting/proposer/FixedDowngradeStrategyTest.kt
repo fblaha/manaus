@@ -23,4 +23,14 @@ class FixedDowngradeStrategy {
         assertNull(strategy(HOME_EVENT_BACK))
     }
 
+    @Test
+    fun combine() {
+        val strategy = combine(
+                fixedDowngradeStrategy(Side.BACK, 0.01),
+                fixedDowngradeStrategy(Side.LAY, 0.02)
+        )
+        assertEquals(0.01, strategy(HOME_EVENT_BACK))
+        assertEquals(0.02, strategy(HOME_EVENT_LAY))
+    }
+
 }
