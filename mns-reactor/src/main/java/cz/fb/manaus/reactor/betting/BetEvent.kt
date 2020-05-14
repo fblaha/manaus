@@ -71,10 +71,11 @@ data class BetEvent(
             )
             BetCommand(bet, action)
         } else {
-            BetCommand(oldBet!! replacePrice newPrice.price, action)
+            val old = oldBet ?: error("no old bet")
+            BetCommand(old replacePrice newPrice.price, action)
         }
     }
 
     val cancel: BetCommand
-        get() = BetCommand(oldBet!!, null)
+        get() = BetCommand(oldBet ?: error("no old bet"), null)
 }
