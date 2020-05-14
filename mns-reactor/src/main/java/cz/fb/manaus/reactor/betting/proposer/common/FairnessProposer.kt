@@ -10,7 +10,7 @@ import cz.fb.manaus.reactor.price.PriceService
 class FairnessProposer(
         private val side: Side,
         private val priceService: PriceService,
-        private vararg val downgradeStrategies: DowngradeStrategy
+        private val downgradeStrategy: DowngradeStrategy
 ) : PriceProposer {
 
     override fun validate(event: BetEvent): ValidationResult {
@@ -21,7 +21,7 @@ class FairnessProposer(
         val fairness = event.metrics.fairness[side]!!
         val bestPrice = event.runnerPrices.getHomogeneous(side).bestPrice!!
         val fairPrice = priceService.getFairnessFairPrice(bestPrice.price, fairness)
-        val downgradeFraction = downgradeStrategies.asSequence().mapNotNull { it(event) }.first()
+        val downgradeFraction = downgradeStrategy(event) ?: error("no val provided")
         return priceService.downgrade(fairPrice, downgradeFraction, event.side)
     }
 }

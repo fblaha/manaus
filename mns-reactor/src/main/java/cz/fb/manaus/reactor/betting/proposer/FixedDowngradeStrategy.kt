@@ -5,6 +5,12 @@ import cz.fb.manaus.reactor.betting.BetEvent
 
 typealias BetEventPredicate = (BetEvent) -> Boolean
 
+
+fun combine(vararg strategies: DowngradeStrategy): DowngradeStrategy {
+    val sequence = strategies.toList().asSequence()
+    return { event -> sequence.mapNotNull { it(event) }.firstOrNull() }
+}
+
 fun fixedDowngradeStrategy(
         side: Side,
         value: Double,
