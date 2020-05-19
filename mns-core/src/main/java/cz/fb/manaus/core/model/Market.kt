@@ -8,6 +8,8 @@ import java.time.Instant
 
 const val TYPE_MONEY_LINE = "moneyline"
 const val TYPE_MATCH_ODDS = "match_odds"
+const val TYPE_TOTAL = "total"
+const val TYPE_HANDICAP = "handicap"
 
 @Index(value = "event.openDate", type = IndexType.NonUnique)
 @JsonIgnoreProperties("openDate\$manaus_core")
