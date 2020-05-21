@@ -24,7 +24,7 @@ open class IschiaLocalConfiguration {
             runnerNameFilter(marketRunnerConf.runnerName ?: "")
 
     @Bean
-    open fun moneyLineFilter(): FlowFilter =
+    open fun allowedTwoRunner(): FlowFilter =
             FlowFilter(IntRange.EMPTY, { _, _ -> true }, setOf(TYPE_MONEY_LINE, TYPE_TOTAL, TYPE_HANDICAP))
 
     @Bean

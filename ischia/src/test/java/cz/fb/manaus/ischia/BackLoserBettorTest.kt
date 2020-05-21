@@ -26,18 +26,14 @@ class BackLoserBettorTest : AbstractDatabaseTestCase() {
     @Test
     fun `place bet - based on fairness`() {
         val marketPrices = factory.newMarketPrices(2.98, 3.1, 3.0)
-        bettorTester.checkPlace(Side.BACK, marketPrices, 3, 3.174, 3.151)
+        bettorTester.checkPlace(Side.BACK, marketPrices, 3, 3.186, 3.151)
     }
 
 
     @Test
-    fun `too close price for update`() {
+    fun `update bet`() {
         val market = factory.newMarketPrices(2.8, 3.4, 3.0)
-        bettorTester.checkUpdate(Side.BACK, 3.4, market, 0, 0)
-        bettorTester.checkUpdate(Side.BACK, 3.35, market, 0, 0)
-        bettorTester.checkUpdate(Side.BACK, 3.5, market, 0, 3)
-        bettorTester.checkUpdate(Side.BACK, 3.2, market, 0, 3)
-        bettorTester.checkUpdate(Side.BACK, 3.1, market, 0, 3)
+        bettorTester.checkUpdate(Side.BACK, 3.0, market, 0, 3)
     }
 
 }

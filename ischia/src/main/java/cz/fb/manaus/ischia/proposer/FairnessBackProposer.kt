@@ -1,9 +1,6 @@
 package cz.fb.manaus.ischia.proposer
 
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.model.TYPE_HANDICAP
-import cz.fb.manaus.core.model.TYPE_MONEY_LINE
-import cz.fb.manaus.core.model.TYPE_TOTAL
 import cz.fb.manaus.ischia.BackUniverse
 import cz.fb.manaus.ischia.LayUniverse
 import cz.fb.manaus.reactor.betting.BetEvent
@@ -19,9 +16,6 @@ fun isDraw(e: BetEvent): Boolean {
     return "draw" in name.toLowerCase()
 }
 
-fun isMoneyTotalOrHandicap(e: BetEvent): Boolean {
-    return e.market.type in setOf(TYPE_MONEY_LINE, TYPE_HANDICAP, TYPE_TOTAL)
-}
 
 @Component
 @LayUniverse
@@ -31,12 +25,10 @@ class FairnessBackProposer(priceService: PriceService)
         Side.BACK,
         priceService,
         combine(
-                fixedDowngradeStrategy(Side.LAY, 0.092, ::isMoneyTotalOrHandicap),
                 fixedDowngradeStrategy(Side.LAY, 0.077, ::isDraw),
-                fixedDowngradeStrategy(Side.LAY, 0.087),
+                fixedDowngradeStrategy(Side.LAY, 0.092),
 
-                fixedDowngradeStrategy(Side.BACK, 0.085, ::isMoneyTotalOrHandicap),
                 fixedDowngradeStrategy(Side.BACK, 0.07, ::isDraw),
-                fixedDowngradeStrategy(Side.BACK, 0.08)
+                fixedDowngradeStrategy(Side.BACK, 0.085)
         )
 )
