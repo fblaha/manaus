@@ -48,6 +48,7 @@ class MarketBetEventController(
         try {
             val marketPrices = marketEvent.prices
             val market = marketRepository.read(id)!!
+            log.info { "MEEE ${marketEvent}" }
             val bets = marketEvent.bets
             betMetricUpdater.update(marketEvent.scanTime, bets)
             val snapshot = MarketSnapshot(marketPrices, market, bets, marketEvent.tradedVolume)
