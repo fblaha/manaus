@@ -21,6 +21,12 @@ class MatchedBetMetricUpdater {
     private val matchedBackBets: AtomicLong by lazy {
         Metrics.gauge("mns_bet_matched_count", listOf(Tag.of("side", "back")), AtomicLong())
     }
+    private val perMarketLayBets: AtomicLong by lazy {
+        Metrics.gauge("mns_bet_per_market_count", listOf(Tag.of("side", "lay")), AtomicLong())
+    }
+    private val perMarketBackBets: AtomicLong by lazy {
+        Metrics.gauge("mns_bet_per_market_count", listOf(Tag.of("side", "back")), AtomicLong())
+    }
 
     fun update(scanTime: Long, bets: List<Bet>) {
         val last = lastScan.getAndSet(scanTime)
@@ -29,6 +35,10 @@ class MatchedBetMetricUpdater {
             matchedLayBets.set(0)
             coveredBets.set(0)
         }
+
+        update(bets.count { it.requestedPrice.side == Side.BACK }, perMarketBackBets)
+        update(bets.count { it.requestedPrice.side == Side.LAY }, perMarketLayBets)
+
         val matched = bets.filter { it.isHalfMatched }
         update(matched.count { it.requestedPrice.side == Side.BACK }, matchedBackBets)
         update(matched.count { it.requestedPrice.side == Side.LAY }, matchedLayBets)
