@@ -36,8 +36,8 @@ class MatchedBetMetricUpdater {
             coveredBets.set(0)
         }
 
-        update(bets.count { it.requestedPrice.side == Side.BACK }, perMarketBackBets)
-        update(bets.count { it.requestedPrice.side == Side.LAY }, perMarketLayBets)
+        perMarketBackBets.set(bets.count { it.requestedPrice.side == Side.BACK }.toLong())
+        perMarketLayBets.set(bets.count { it.requestedPrice.side == Side.LAY }.toLong())
 
         val matched = bets.filter { it.isHalfMatched }
         update(matched.count { it.requestedPrice.side == Side.BACK }, matchedBackBets)
