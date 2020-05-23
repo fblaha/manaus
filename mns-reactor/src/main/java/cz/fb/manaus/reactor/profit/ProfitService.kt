@@ -12,12 +12,8 @@ import org.springframework.stereotype.Service
 class ProfitService(private val categoryService: CategoryService) {
 
     fun getProfitRecords(bets: List<RealizedBet>, projection: String? = null, simulationAwareOnly: Boolean): List<ProfitRecord> {
-        var filtered = bets
-        val coverage = BetCoverage.from(filtered)
-
-        if (projection != null) {
-            filtered = categoryService.filterBets(filtered, projection)
-        }
+        val coverage = BetCoverage.from(bets)
+        val filtered = if (projection == null) bets else categoryService.filterBets(bets, projection)
 
         val betRecords = computeProfitRecords(filtered, simulationAwareOnly, coverage)
         return mergeProfitRecords(betRecords)
