@@ -1,11 +1,11 @@
-package cz.fb.manaus.rest
+package cz.fb.manaus.core.batch
 
 import com.google.common.base.Stopwatch
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
 import cz.fb.manaus.core.model.RealizedBet
-import cz.fb.manaus.core.repository.RealizedBetLoader
 import cz.fb.manaus.core.repository.SettledBetRepository
+import cz.fb.manaus.core.time.IntervalParser
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
@@ -43,8 +43,6 @@ class SettledBetLoader(
         log.info { "bets fetched in '$elapsed' seconds" }
         return result
     }
-
-
     private fun loadFromDatabase(interval: String): List<RealizedBet> {
         val (from, to) = IntervalParser.parse(Instant.now(), interval)
         val stopwatch = Stopwatch.createStarted()
@@ -58,7 +56,7 @@ class SettledBetLoader(
         return realizedBets
     }
 
-    internal fun invalidateCache() {
+    fun invalidateCache() {
         cache.invalidateAll()
     }
 

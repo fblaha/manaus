@@ -1,8 +1,8 @@
 package cz.fb.manaus.ischia.filter
 
+import cz.fb.manaus.core.batch.RealizedBetLoader
 import cz.fb.manaus.core.category.Category
 import cz.fb.manaus.core.category.categorizer.COUNTRY_PREFIX
-import cz.fb.manaus.core.repository.RealizedBetLoader
 import cz.fb.manaus.core.repository.SettledBetRepository
 import cz.fb.manaus.ischia.BackUniverse
 import cz.fb.manaus.ischia.LayUniverse

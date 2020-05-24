@@ -1,5 +1,7 @@
 package cz.fb.manaus.rest
 
+import cz.fb.manaus.core.batch.SettledBetLoader
+import cz.fb.manaus.core.time.IntervalParser
 import cz.fb.manaus.reactor.ml.BetFeatureService
 import cz.fb.manaus.reactor.ml.BetFeatureVector
 import cz.fb.manaus.spring.ManausProfiles

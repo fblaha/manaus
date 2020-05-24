@@ -1,5 +1,6 @@
 package cz.fb.manaus.rest
 
+import cz.fb.manaus.core.batch.SettledBetLoader
 import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.betAction
 import cz.fb.manaus.core.model.homeSettledBet

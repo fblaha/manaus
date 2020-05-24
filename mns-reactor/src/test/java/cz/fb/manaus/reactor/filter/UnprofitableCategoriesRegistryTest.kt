@@ -1,9 +1,9 @@
 package cz.fb.manaus.reactor.filter
 
 import cz.fb.manaus.core.MarketCategories
+import cz.fb.manaus.core.batch.RealizedBetLoader
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.repository.RealizedBetLoader
 import cz.fb.manaus.core.test.AbstractDatabaseTestCase
 import cz.fb.manaus.reactor.profit.ProfitService
 import org.hamcrest.CoreMatchers.allOf

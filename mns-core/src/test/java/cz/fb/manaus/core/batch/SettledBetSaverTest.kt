@@ -1,4 +1,4 @@
-package cz.fb.manaus.core.settlement
+package cz.fb.manaus.core.batch
 
 import cz.fb.manaus.core.model.betAction
 import cz.fb.manaus.core.model.homeSettledBet

@@ -1,4 +1,4 @@
-package cz.fb.manaus.rest
+package cz.fb.manaus.core.time
 
 import org.junit.Test
 import java.time.Instant

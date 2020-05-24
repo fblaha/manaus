@@ -1,7 +1,9 @@
-package cz.fb.manaus.core.repository
+package cz.fb.manaus.core.batch
 
 import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.SettledBet
+import cz.fb.manaus.core.repository.BetActionRepository
+import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component

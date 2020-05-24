@@ -1,8 +1,9 @@
 package cz.fb.manaus.rest
 
+import cz.fb.manaus.core.batch.SettledBetSaver
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.repository.SettledBetRepository
-import cz.fb.manaus.core.settlement.SettledBetSaver
+import cz.fb.manaus.core.time.IntervalParser
 import cz.fb.manaus.spring.ManausProfiles
 import io.micrometer.core.instrument.Metrics
 import org.springframework.context.annotation.Profile

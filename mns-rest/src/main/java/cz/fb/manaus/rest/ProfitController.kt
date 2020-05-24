@@ -1,7 +1,9 @@
 package cz.fb.manaus.rest
 
 import com.google.common.base.Stopwatch
+import cz.fb.manaus.core.batch.SettledBetLoader
 import cz.fb.manaus.core.model.ProfitRecord
+import cz.fb.manaus.core.time.IntervalParser
 import cz.fb.manaus.reactor.profit.ProfitService
 import cz.fb.manaus.reactor.profit.progress.FixedBinFunctionProfitService
 import cz.fb.manaus.spring.ManausProfiles
@@ -48,7 +50,7 @@ class ProfitController(
                     .filter { filters.any { token -> token in it.category } }
         }
         if (sort != null) {
-            profitRecords = profitRecords.sortedWith(comparators[sort]!!)
+            profitRecords = profitRecords.sortedWith(comparators[sort] ?: error("no such comparator"))
         }
         return profitRecords
     }

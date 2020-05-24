@@ -1,9 +1,9 @@
 package cz.fb.manaus.reactor.filter
 
+import cz.fb.manaus.core.batch.RealizedBetLoader
 import cz.fb.manaus.core.model.BlacklistedCategory
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.repository.RealizedBetLoader
 import cz.fb.manaus.core.repository.SettledBetRepository
 import cz.fb.manaus.reactor.profit.ProfitService
 import java.time.Duration
