@@ -1,28 +1,19 @@
 package cz.fb.manaus.rest
 
-import com.google.common.base.Stopwatch
-import cz.fb.manaus.core.batch.SettledBetLoader
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.time.IntervalParser
-import cz.fb.manaus.reactor.profit.ProfitService
-import cz.fb.manaus.reactor.profit.progress.FixedBinFunctionProfitService
+import cz.fb.manaus.reactor.profit.ProfitLoader
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import java.util.*
-import java.util.concurrent.TimeUnit
-import java.util.logging.Logger
 
 @Controller
 @Profile(ManausProfiles.DB)
 class ProfitController(
-        private val profitService: ProfitService,
-        private val fixedBinFunctionProfitService: FixedBinFunctionProfitService,
-        private val betLoader: SettledBetLoader
+        private val profitLoader: ProfitLoader
 ) {
-
-    private val log = Logger.getLogger(ProfitController::class.simpleName)
 
     private val comparators: Map<String, Comparator<ProfitRecord>> = mapOf(
             "category" to compareBy { it.category },
@@ -38,16 +29,10 @@ class ProfitController(
             @RequestParam(required = false) projection: String?,
             @RequestParam(defaultValue = "true") cache: Boolean
     ): List<ProfitRecord> {
-        val settledBets = betLoader.load(interval, cache)
-
-        val stopwatch = Stopwatch.createStarted()
-        var profitRecords = profitService.getProfitRecords(settledBets, projection,
-                false)
-        logTime(stopwatch, "profit records computed")
+        var profitRecords = profitLoader.loadProfitRecords(interval, cache, projection)
         if (filter != null) {
             val filters = parseFilter(filter)
-            profitRecords = profitRecords
-                    .filter { filters.any { token -> token in it.category } }
+            profitRecords = profitRecords.filter { filters.any { token -> token in it.category } }
         }
         if (sort != null) {
             profitRecords = profitRecords.sortedWith(comparators[sort] ?: error("no such comparator"))
@@ -64,21 +49,10 @@ class ProfitController(
             @RequestParam(required = false) projection: String?,
             @RequestParam(defaultValue = "true") cache: Boolean
     ): List<ProfitRecord> {
-        val bets = betLoader.load(interval, cache)
-        val stopwatch = Stopwatch.createStarted()
-        val records = fixedBinFunctionProfitService.getProfitRecords(bets, function, binCount, projection)
-        logTime(stopwatch, "profit records computed")
-        return records
-    }
-
-
-    private fun logTime(stopwatch: Stopwatch, messagePrefix: String) {
-        val elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
-        log.info { "$messagePrefix in '$elapsed' seconds" }
+        return profitLoader.loadFixedBinRecords(interval, binCount, function, projection, cache)
     }
 
     private fun parseFilter(rawFilter: String): List<String> {
         return rawFilter.split(',')
     }
-
 }
