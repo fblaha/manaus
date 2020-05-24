@@ -22,7 +22,7 @@ class LayLoserBettorTest : AbstractDatabaseTestCase() {
     fun `place bet - based on fairness`() {
         bettorTester.checkPlace(Side.LAY,
                 factory.newMarketPrices(2.98, 3.2, 3.05),
-                3, 2.816, 2.846)
+                3, 2.8, 2.846)
     }
 
     @Test
