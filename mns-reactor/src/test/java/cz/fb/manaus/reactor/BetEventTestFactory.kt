@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.betting.BetEvent
-import cz.fb.manaus.reactor.betting.listener.BetEventFactory
+import cz.fb.manaus.reactor.betting.createBetEvent
 import cz.fb.manaus.reactor.price.Fairness
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.springframework.stereotype.Component
@@ -13,8 +13,7 @@ import java.time.temporal.ChronoUnit
 @Component
 class BetEventTestFactory(
         private val calculator: FairnessPolynomialCalculator,
-        private val pricesTestFactory: PricesTestFactory,
-        private val betEventFactory: BetEventFactory
+        private val pricesTestFactory: PricesTestFactory
 ) {
 
     fun newUpdateBetEvent(side: Side, marketPrices: List<RunnerPrices>): BetEvent {
@@ -34,14 +33,14 @@ class BetEventTestFactory(
                 market = market,
                 currentBets = oldBet?.let { listOf(it) }.orEmpty()
         )
-        return betEventFactory.create(SideSelection(side, SEL_HOME), snapshot, fairness, mbAccount)
+        return createBetEvent(SideSelection(side, SEL_HOME), snapshot, mbAccount, fairness)
     }
 
     fun newBetEvent(side: Side, bestBack: Double, bestLay: Double): BetEvent {
         val snapshot = newSnapshot(side, bestBack, bestLay)
         val fairness = calculator.getFairness(snapshot.runnerPrices)
         val selectionId = snapshot.runnerPrices.first().selectionId
-        return betEventFactory.create(SideSelection(side, selectionId), snapshot, fairness, mbAccount)
+        return createBetEvent(SideSelection(side, selectionId), snapshot, mbAccount, fairness)
     }
 
     private fun newSnapshot(side: Side, bestBack: Double, bestLay: Double): MarketSnapshot {

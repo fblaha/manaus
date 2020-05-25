@@ -1,6 +1,7 @@
 package cz.fb.manaus.reactor.betting
 
 import cz.fb.manaus.core.model.*
+import cz.fb.manaus.reactor.price.Fairness
 import java.time.Instant
 import java.util.logging.Logger
 
@@ -78,4 +79,27 @@ data class BetEvent(
 
     val cancel: BetCommand
         get() = BetCommand(oldBet ?: error("no old bet"), null)
+}
+
+
+fun createBetEvent(
+        sideSelection: SideSelection,
+        snapshot: MarketSnapshot,
+        account: Account,
+        fairness: Fairness,
+        forecast: Double? = null
+): BetEvent {
+    val metrics = BetMetrics(
+            chargeGrowthForecast = forecast,
+            fairness = fairness,
+            actualTradedVolume = snapshot.tradedVolume?.get(key = sideSelection.selectionId)
+    )
+    return BetEvent(
+            sideSelection = sideSelection,
+            market = snapshot.market,
+            marketPrices = snapshot.runnerPrices,
+            account = account,
+            coverage = snapshot.coverage,
+            metrics = metrics
+    )
 }

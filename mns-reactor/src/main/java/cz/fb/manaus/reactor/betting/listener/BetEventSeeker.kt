@@ -4,6 +4,8 @@ import cz.fb.manaus.core.model.MarketSnapshotEvent
 import cz.fb.manaus.core.model.SideSelection
 import cz.fb.manaus.core.model.isActive
 import cz.fb.manaus.reactor.betting.BetCommand
+import cz.fb.manaus.reactor.betting.createBetEvent
+import cz.fb.manaus.reactor.charge.ChargeGrowthForecaster
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.springframework.stereotype.Component
 import java.util.logging.Logger
@@ -13,7 +15,7 @@ class BetEventSeeker(
         private val flowFilterRegistry: FlowFilterRegistry,
         private val calculator: FairnessPolynomialCalculator,
         private val betEventNotifier: BetEventNotifier,
-        private val betEventFactory: BetEventFactory
+        private val chargeGrowthForecaster: ChargeGrowthForecaster
 ) : MarketSnapshotListener {
 
     private val log = Logger.getLogger(BetEventSeeker::class.simpleName)
@@ -37,11 +39,19 @@ class BetEventSeeker(
             val accepted = acceptIndex && flowFilter.runnerPredicate(market, runner)
             if (snapshot.coverage.isActive(selectionId) || accepted) {
                 for (side in betEventNotifier.activeSides) {
-                    val betEvent = betEventFactory.create(
-                            sideSelection = SideSelection(side, selectionId),
+                    val sideSelection = SideSelection(side, selectionId)
+                    val forecast = chargeGrowthForecaster.getForecast(
+                            sideSelection = sideSelection,
                             snapshot = snapshot,
                             fairness = fairness,
-                            account = account
+                            commission = account.provider.commission
+                    )
+                    val betEvent = createBetEvent(
+                            sideSelection = sideSelection,
+                            snapshot = snapshot,
+                            fairness = fairness,
+                            account = account,
+                            forecast = forecast
                     )
                     log.info { "bet event ${market.event.name} - ${runner.name} ($side)" }
                     collector.addAll(betEventNotifier.notify(betEvent))
