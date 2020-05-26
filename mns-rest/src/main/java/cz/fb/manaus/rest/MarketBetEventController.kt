@@ -39,7 +39,7 @@ class MarketBetEventController(
     private val log = Logger.getLogger(MarketBetEventController::class.simpleName)
 
     @RequestMapping(value = ["/markets/{id}/event"], method = [RequestMethod.POST])
-    fun onBetEvent(@PathVariable id: String, @RequestBody marketEvent: MarketEvent): ResponseEntity<CollectedBets> {
+    fun onMarketEvent(@PathVariable id: String, @RequestBody marketEvent: MarketEvent): ResponseEntity<CollectedBets> {
         validateMarket(marketEvent)
         val account = marketEvent.account
         account.provider.validate()
