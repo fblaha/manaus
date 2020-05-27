@@ -1,8 +1,6 @@
 package cz.fb.manaus.reactor.betting.listener
 
-import cz.fb.manaus.core.model.MarketSnapshotEvent
-import cz.fb.manaus.core.model.SideSelection
-import cz.fb.manaus.core.model.isActive
+import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.betting.BetCommand
 import cz.fb.manaus.reactor.betting.createBetEvent
 import cz.fb.manaus.reactor.charge.ChargeGrowthForecaster
@@ -10,12 +8,14 @@ import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
 import org.springframework.stereotype.Component
 import java.util.logging.Logger
 
+typealias MarketRunnerPredicate = (Market, Runner) -> Boolean
+
 @Component
 class BetEventSeeker(
-        private val flowFilterRegistry: FlowFilterRegistry,
         private val calculator: FairnessPolynomialCalculator,
         private val betEventNotifier: BetEventNotifier,
-        private val chargeGrowthForecaster: ChargeGrowthForecaster
+        private val chargeGrowthForecaster: ChargeGrowthForecaster,
+        private val marketRunnerPredicate: MarketRunnerPredicate = { _, _ -> true }
 ) : MarketSnapshotListener {
 
     private val log = Logger.getLogger(BetEventSeeker::class.simpleName)
@@ -23,20 +23,12 @@ class BetEventSeeker(
     override fun onMarketSnapshot(marketSnapshotEvent: MarketSnapshotEvent): List<BetCommand> {
         val (snapshot, account) = marketSnapshotEvent
         val (marketPrices, market) = snapshot
-        val flowFilter = flowFilterRegistry.getFlowFilter(market.type!!)
         val collector = mutableListOf<BetCommand>()
         val fairness = calculator.getFairness(marketPrices)
-        val credibleSide = fairness.moreCredibleSide
-        val sortedPrices = if (flowFilter.checkIndex && credibleSide != null) {
-            sortPrices(credibleSide, marketPrices)
-        } else {
-            null
-        }
-        for ((i, runnerPrices) in (sortedPrices ?: marketPrices).withIndex()) {
+        for (runnerPrices in marketPrices) {
             val selectionId = runnerPrices.selectionId
             val runner = market.getRunner(selectionId)
-            val acceptIndex = !flowFilter.checkIndex || (sortedPrices != null && flowFilter.acceptIndex(i))
-            val accepted = acceptIndex && flowFilter.runnerPredicate(market, runner)
+            val accepted = marketRunnerPredicate(market, runner)
             if (snapshot.coverage.isActive(selectionId) || accepted) {
                 for (side in betEventNotifier.activeSides) {
                     val sideSelection = SideSelection(side, selectionId)

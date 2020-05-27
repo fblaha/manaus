@@ -55,10 +55,6 @@
             <groupId>cz.fb.manaus</groupId>
             <artifactId>ischia</artifactId>
         </dependency>
-        <dependency>
-            <groupId>cz.fb.manaus</groupId>
-            <artifactId>manila</artifactId>
-        </dependency>
     </dependencies>
 
 </project>
