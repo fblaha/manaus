@@ -6,7 +6,7 @@ import cz.fb.manaus.reactor.betting.BetEvent
 typealias BetEventPredicate = (BetEvent) -> Boolean
 
 
-fun combine(vararg strategies: DowngradeStrategy): DowngradeStrategy {
+fun chain(vararg strategies: DowngradeStrategy): DowngradeStrategy {
     val sequence = strategies.toList().asSequence()
     return { event -> sequence.mapNotNull { it(event) }.firstOrNull() }
 }

@@ -5,7 +5,7 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
-import cz.fb.manaus.reactor.betting.proposer.combine
+import cz.fb.manaus.reactor.betting.proposer.chain
 import cz.fb.manaus.reactor.betting.proposer.fixedDowngradeStrategy
 import cz.fb.manaus.reactor.price.PriceService
 import org.junit.Test
@@ -58,7 +58,7 @@ class FairnessProposerTest : AbstractLocalTestCase() {
     class TestLayProposer(priceService: PriceService)
         : PriceProposer by FairnessProposer(
             Side.LAY, priceService,
-            combine(
+            chain(
                     fixedDowngradeStrategy(Side.LAY, 0.02),
                     fixedDowngradeStrategy(Side.BACK, 0.02)
             )
@@ -69,7 +69,7 @@ class FairnessProposerTest : AbstractLocalTestCase() {
         : PriceProposer by FairnessProposer(
             Side.BACK,
             priceService,
-            combine(
+            chain(
                     fixedDowngradeStrategy(Side.BACK, 0.02),
                     fixedDowngradeStrategy(Side.LAY, 0.02)
             )

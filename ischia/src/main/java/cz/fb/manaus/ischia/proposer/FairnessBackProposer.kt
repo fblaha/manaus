@@ -5,7 +5,7 @@ import cz.fb.manaus.ischia.BackUniverse
 import cz.fb.manaus.ischia.LayUniverse
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
-import cz.fb.manaus.reactor.betting.proposer.combine
+import cz.fb.manaus.reactor.betting.proposer.chain
 import cz.fb.manaus.reactor.betting.proposer.common.FairnessProposer
 import cz.fb.manaus.reactor.betting.proposer.fixedDowngradeStrategy
 import cz.fb.manaus.reactor.price.PriceService
@@ -24,7 +24,7 @@ class FairnessBackProposer(priceService: PriceService)
     : PriceProposer by FairnessProposer(
         Side.BACK,
         priceService,
-        combine(
+        chain(
                 fixedDowngradeStrategy(Side.LAY, 0.077, ::isDraw),
                 fixedDowngradeStrategy(Side.LAY, 0.1),
 

@@ -25,7 +25,7 @@ class FixedDowngradeStrategy {
 
     @Test
     fun combine() {
-        val strategy = combine(
+        val strategy = chain(
                 fixedDowngradeStrategy(Side.BACK, 0.01),
                 fixedDowngradeStrategy(Side.LAY, 0.02)
         )
