@@ -170,11 +170,11 @@ class ProfitServiceTest : AbstractLocalTestCase() {
     @Test
     fun `merge category`() {
         val r1 = ProfitRecord("test", 100.0, 2.0, 0.06, 1, 1)
-        r1.coverRate = 0.2
+        r1.coverIndex = 0.2
         r1.coverCount = 1
         val r2 = ProfitRecord("test", 100.0, 2.0, 0.06, 1, 1)
         val record = profitService.mergeCategory("test", listOf(r1, r2))
-        Assert.assertEquals(record.coverRate!!, r1.coverRate!!, 0.00001)
+        Assert.assertEquals(record.coverIndex!!, r1.coverIndex!!, 0.00001)
     }
 }
 
