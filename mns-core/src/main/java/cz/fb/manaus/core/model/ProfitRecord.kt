@@ -11,7 +11,7 @@ data class ProfitRecord(
         var charge: Double,
         var layCount: Int,
         var backCount: Int,
-        var coverDiff: Double? = null,
+        var coverRate: Double? = null,
         var coverCount: Int = 0) {
 
     val totalCount: Int

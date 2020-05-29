@@ -120,7 +120,7 @@ class ProfitServiceTest : AbstractLocalTestCase() {
     private fun checkRecords(expectedAllProfit: Double, vararg bets: SettledBet): List<ProfitRecord> {
         val betList = listOf(*bets).map { toRealizedBet(it) }
         val result = profitService.getProfitRecords(betList, null, false)
-        val all = result.find { ProfitRecord.isAllCategory(it) }!!
+        val all = result.first { ProfitRecord.isAllCategory(it) }
         Assert.assertEquals(expectedAllProfit, all.profit, 0.01)
         val backCount = betList.filter { it.settledBet.price.side == Side.BACK }.count()
         val layCount = betList.filter { it.settledBet.price.side == Side.LAY }.count()
@@ -166,11 +166,11 @@ class ProfitServiceTest : AbstractLocalTestCase() {
     @Test
     fun `merge category`() {
         val r1 = ProfitRecord("test", 100.0, 2.0, 0.06, 1, 1)
-        r1.coverDiff = 0.2
+        r1.coverRate = 0.2
         r1.coverCount = 1
         val r2 = ProfitRecord("test", 100.0, 2.0, 0.06, 1, 1)
         val record = profitService.mergeCategory("test", listOf(r1, r2))
-        Assert.assertEquals(record.coverDiff!!, r1.coverDiff!!, 0.00001)
+        Assert.assertEquals(record.coverRate!!, r1.coverRate!!, 0.00001)
     }
 }
 

@@ -39,8 +39,8 @@ class ProfitService(private val categoryService: CategoryService) {
         val coverCount = records.map { it.coverCount }.sum()
         val result = ProfitRecord(category, theoreticalProfit, avgPrice, charge, layCount, backCount)
         if (coverCount > 0) {
-            val diff = records.filter { it.coverDiff != null }.mapNotNull { it.coverDiff }.average()
-            result.coverDiff = diff
+            val diff = records.filter { it.coverRate != null }.mapNotNull { it.coverRate }.average()
+            result.coverRate = diff
             result.coverCount = coverCount
         }
         return result
@@ -70,7 +70,7 @@ class ProfitService(private val categoryService: CategoryService) {
         if (coverage.isCovered(marketId, selectionId)) {
             val backPrice = coverage.getPrice(marketId, selectionId, Side.BACK)
             val layPrice = coverage.getPrice(marketId, selectionId, Side.LAY)
-            result.coverDiff = backPrice - layPrice
+            result.coverRate = backPrice / layPrice
             result.coverCount = 1
         }
         return result
