@@ -151,12 +151,16 @@ class ProfitServiceTest : AbstractLocalTestCase() {
         assertEquals(1, byCategory["market_country_cz"]!!.layCount)
         Assert.assertEquals(withCharge(3.0), byCategory["market_country_cz"]!!.profit, 0.01)
 
-        assertTrue(profitService.getProfitRecords(bets = bets,
+        assertTrue(profitService.getProfitRecords(
+                bets = bets,
                 projection = "market_country_ua",
-                simulationAwareOnly = true).isEmpty())
-        assertFalse(profitService.getProfitRecords(bets = bets,
+                simulationAwareOnly = true).isEmpty()
+        )
+        assertFalse(profitService.getProfitRecords(
+                bets = bets,
                 projection = "market_country_cz",
-                simulationAwareOnly = true).isEmpty())
+                simulationAwareOnly = true).isEmpty()
+        )
     }
 
     private fun byCategory(records: List<ProfitRecord>): Map<String, ProfitRecord> {
