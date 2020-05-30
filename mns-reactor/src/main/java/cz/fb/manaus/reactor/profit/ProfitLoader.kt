@@ -24,7 +24,7 @@ class ProfitLoader(
     fun loadProfitRecords(
             interval: String,
             cache: Boolean,
-            projection: String?
+            projection: String? = null
     ): List<ProfitRecord> {
         val settledBets = betLoader.load(interval, cache)
         val stopwatch = Stopwatch.createStarted()

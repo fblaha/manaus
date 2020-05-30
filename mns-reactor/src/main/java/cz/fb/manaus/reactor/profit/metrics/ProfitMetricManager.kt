@@ -32,14 +32,16 @@ class ProfitMetricManager(
 
     @Scheduled(fixedRateString = "PT30M")
     fun computeMetrics() {
-        for (spec in descriptors) {
-            val records = profitLoader.loadProfitRecords(spec.interval, true, spec.projection)
-            val relevantRecords = records.filter { it.category.startsWith(spec.categoryPrefix) }
-            val metrics = allMetrics[spec.metricName] ?: error("missing metric")
-            for (r in relevantRecords) {
-                val categoryVal = spec.extractVal(r.category)
-                log.info { "updating profit metric ${spec.metricName} - value: $categoryVal, profit: ${r.profit}" }
-                metrics[categoryVal]?.set(r.profit)
+        for ((interval, descriptors) in descriptors.groupBy { it.interval }.entries) {
+            val records = profitLoader.loadProfitRecords(interval, true)
+            for (descriptor in descriptors) {
+                val relevantRecords = records.filter { it.category.startsWith(descriptor.categoryPrefix) }
+                val metrics = allMetrics[descriptor.metricName] ?: error("missing metric")
+                for (r in relevantRecords) {
+                    val categoryVal = descriptor.extractVal(r.category)
+                    log.info { "updating profit metric ${descriptor.metricName} - value: $categoryVal, profit: ${r.profit}" }
+                    metrics[categoryVal]?.set(r.profit)
+                }
             }
         }
     }
