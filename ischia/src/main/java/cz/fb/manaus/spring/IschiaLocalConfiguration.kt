@@ -2,6 +2,7 @@ package cz.fb.manaus.spring
 
 import cz.fb.manaus.core.model.TYPE_MATCH_ODDS
 import cz.fb.manaus.reactor.betting.listener.MarketRunnerPredicate
+import cz.fb.manaus.reactor.profit.metrics.ProfitMetricDescriptor
 import cz.fb.manaus.spring.conf.MarketRunnerConf
 import cz.fb.manaus.spring.conf.PriceConf
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -25,5 +26,12 @@ open class IschiaLocalConfiguration {
             }
         }
     }
+
+    @Bean
+    open fun typeProfitMetric(): ProfitMetricDescriptor = ProfitMetricDescriptor(
+            interval = "1d",
+            categoryPrefix = "market_type",
+            categoryValues = setOf("match_odds", "handicap", "moneyline", "total")
+    )
 
 }
