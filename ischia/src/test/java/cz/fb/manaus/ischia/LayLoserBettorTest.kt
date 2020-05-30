@@ -20,17 +20,14 @@ class LayLoserBettorTest : AbstractDatabaseTestCase() {
 
     @Test
     fun `place bet - based on fairness`() {
-        bettorTester.checkPlace(Side.LAY,
-                factory.newMarketPrices(2.98, 3.2, 3.05),
-                3, 2.82, 2.86)
+        val marketPrices = factory.newMarketPrices(2.98, 3.2, 3.05)
+        bettorTester.checkPlace(Side.LAY, marketPrices, 3, 2.82, 2.846)
     }
 
     @Test
     fun `place bet - based on best price`() {
-        bettorTester.checkPlace(
-                Side.LAY,
-                factory.newMarketPrices(2.58, 3.15, 3.0),
-                3, 2.612)
+        val marketPrices = factory.newMarketPrices(2.58, 3.15, 3.0)
+        bettorTester.checkPlace(Side.LAY, marketPrices, 3, 2.612)
     }
 
     @Test

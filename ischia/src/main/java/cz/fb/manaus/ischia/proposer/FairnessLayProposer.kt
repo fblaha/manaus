@@ -18,7 +18,7 @@ class FairnessLayProposer(priceService: PriceService)
         Side.LAY,
         priceService,
         chain(
-                fixedDowngradeStrategy(Side.LAY, 0.07, ::isDraw),
+                fixedDowngradeStrategy(Side.LAY, 0.077, ::isDraw),
                 fixedDowngradeStrategy(Side.LAY, 0.09),
 
                 fixedDowngradeStrategy(Side.BACK, 0.06, ::isDraw),
