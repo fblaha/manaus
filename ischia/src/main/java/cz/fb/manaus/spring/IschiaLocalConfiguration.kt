@@ -34,4 +34,11 @@ open class IschiaLocalConfiguration {
             categoryValues = setOf("match_odds", "handicap", "total")
     )
 
+    @Bean
+    open fun sideProfitMetric(): ProfitMetricDescriptor = ProfitMetricDescriptor(
+            interval = "1d",
+            categoryPrefix = "side",
+            categoryValues = setOf("lay", "back")
+    )
+
 }

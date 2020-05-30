@@ -10,4 +10,4 @@ import org.springframework.stereotype.Component
 @LayUniverse
 @Component
 object RunnerMatchedAmountThresholdValidator :
-        Validator by RunnerMatchedAmountThresholdValidator(2.0) // TODO no hardcoded val
+        Validator by RunnerMatchedAmountThresholdValidator(2.0)
