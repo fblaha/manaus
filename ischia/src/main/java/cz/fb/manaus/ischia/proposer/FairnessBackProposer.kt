@@ -25,10 +25,10 @@ class FairnessBackProposer(priceService: PriceService)
         Side.BACK,
         priceService,
         chain(
-                fixedDowngradeStrategy(Side.LAY, 0.077, ::isDraw),
-                fixedDowngradeStrategy(Side.LAY, 0.1),
+                fixedDowngradeStrategy(Side.LAY, 0.07, ::isDraw),
+                fixedDowngradeStrategy(Side.LAY, 0.09),
 
-                fixedDowngradeStrategy(Side.BACK, 0.07, ::isDraw),
-                fixedDowngradeStrategy(Side.BACK, 0.09)
+                fixedDowngradeStrategy(Side.BACK, 0.06, ::isDraw),
+                fixedDowngradeStrategy(Side.BACK, 0.08)
         )
 )

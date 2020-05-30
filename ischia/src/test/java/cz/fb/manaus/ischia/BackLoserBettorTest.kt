@@ -26,7 +26,7 @@ class BackLoserBettorTest : AbstractDatabaseTestCase() {
     @Test
     fun `place bet - based on fairness`() {
         val marketPrices = factory.newMarketPrices(2.98, 3.1, 3.0)
-        bettorTester.checkPlace(Side.BACK, marketPrices, 3, 3.21, 3.151)
+        bettorTester.checkPlace(Side.BACK, marketPrices, 3, 3.186, 3.128)
     }
 
 
