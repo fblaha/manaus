@@ -8,6 +8,7 @@ import io.micrometer.core.instrument.Tag
 import org.springframework.context.annotation.Profile
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+import java.util.logging.Logger
 
 // TODO unit test
 
@@ -17,6 +18,8 @@ class ProfitMetricManager(
         private val profitLoader: ProfitLoader,
         private val descriptors: List<ProfitMetricDescriptor> = emptyList()
 ) {
+
+    private val log = Logger.getLogger(ProfitMetricManager::class.simpleName)
 
     private fun makeMetrics(descriptor: ProfitMetricDescriptor): Map<String, AtomicDouble> =
             descriptor.categoryValues
@@ -35,6 +38,7 @@ class ProfitMetricManager(
             val metrics = allMetrics[spec.metricName] ?: error("missing metric")
             for (r in relevantRecords) {
                 val categoryVal = spec.extractVal(r.category)
+                log.info { "updating profit metric ${spec.metricName} - value: $categoryVal, profit: ${r.profit}" }
                 metrics[categoryVal]?.set(r.profit)
             }
         }

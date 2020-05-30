@@ -31,7 +31,7 @@ open class IschiaLocalConfiguration {
     open fun typeProfitMetric(): ProfitMetricDescriptor = ProfitMetricDescriptor(
             interval = "1d",
             categoryPrefix = "market_type",
-            categoryValues = setOf("match_odds", "handicap", "moneyline", "total")
+            categoryValues = setOf("match_odds", "handicap", "total")
     )
 
 }
