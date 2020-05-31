@@ -10,13 +10,12 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.util.logging.Logger
 
-// TODO unit test
 
 @Component
 @Profile(ManausProfiles.DB)
 class ProfitMetricManager(
         private val profitLoader: ProfitLoader,
-        private val descriptors: List<ProfitMetricDescriptor> = emptyList()
+        descriptors: List<ProfitMetricDescriptor> = emptyList()
 ) {
 
     private val log = Logger.getLogger(ProfitMetricManager::class.simpleName)
@@ -30,20 +29,21 @@ class ProfitMetricManager(
             .map { it.metricName to makeMetrics(it) }
             .toMap()
 
+    private val byInterval = descriptors.groupBy { it.interval }
+
     @Scheduled(fixedRateString = "PT30M")
     fun computeMetrics() {
-        for ((interval, descriptors) in descriptors.groupBy { it.interval }.entries) {
+        for ((interval, descriptors) in byInterval.entries) {
             val records = profitLoader.loadProfitRecords(interval, true)
             for (descriptor in descriptors) {
                 val relevantRecords = records.filter { it.category.startsWith(descriptor.categoryPrefix) }
                 val metrics = allMetrics[descriptor.metricName] ?: error("missing metric")
-                for (r in relevantRecords) {
-                    val categoryVal = descriptor.extractVal(r.category)
-                    log.info { "updating profit metric ${descriptor.metricName} - value: $categoryVal, profit: ${r.profit}" }
-                    metrics[categoryVal]?.set(r.profit)
+                for (record in relevantRecords) {
+                    val categoryVal = descriptor.extractVal(record.category)
+                    log.info { "updating profit metric ${descriptor.metricName} - value: $categoryVal, profit: ${record.profit}" }
+                    metrics[categoryVal]?.set(record.profit)
                 }
             }
         }
     }
-
 }
