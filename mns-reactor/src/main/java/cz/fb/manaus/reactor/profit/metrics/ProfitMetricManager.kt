@@ -15,32 +15,32 @@ import java.util.logging.Logger
 @Profile(ManausProfiles.DB)
 class ProfitMetricManager(
         private val profitLoader: ProfitLoader,
-        descriptors: List<ProfitMetricDescriptor> = emptyList()
+        specs: List<ProfitMetricSpec> = emptyList()
 ) {
 
     private val log = Logger.getLogger(ProfitMetricManager::class.simpleName)
 
-    private fun makeMetrics(descriptor: ProfitMetricDescriptor): Map<String, AtomicDouble> =
-            descriptor.categoryValues
-                    .map { it to Metrics.gauge(descriptor.metricName, listOf(Tag.of(descriptor.categoryPrefix, it)), AtomicDouble()) }
+    private fun makeMetrics(spec: ProfitMetricSpec): Map<String, AtomicDouble> =
+            spec.categoryValues
+                    .map { it to Metrics.gauge(spec.metricName, listOf(Tag.of(spec.categoryPrefix, it)), AtomicDouble()) }
                     .toMap()
 
-    private val allMetrics: Map<String, Map<String, AtomicDouble>> = descriptors
+    private val allMetrics: Map<String, Map<String, AtomicDouble>> = specs
             .map { it.metricName to makeMetrics(it) }
             .toMap()
 
-    private val byInterval = descriptors.groupBy { it.interval }
+    private val byInterval = specs.groupBy { it.interval }
 
     @Scheduled(fixedRateString = "PT30M")
     fun computeMetrics() {
-        for ((interval, descriptors) in byInterval.entries) {
+        for ((interval, specs) in byInterval.entries) {
             val records = profitLoader.loadProfitRecords(interval, true)
-            for (descriptor in descriptors) {
-                val relevantRecords = records.filter { it.category.startsWith(descriptor.categoryPrefix) }
-                val metrics = allMetrics[descriptor.metricName] ?: error("missing metric")
+            for (spec in specs) {
+                val relevantRecords = records.filter(spec.recordPredicate)
+                val metrics = allMetrics[spec.metricName] ?: error("missing metric")
                 for (record in relevantRecords) {
-                    val categoryVal = descriptor.extractVal(record.category)
-                    log.info { "updating profit metric ${descriptor.metricName} - value: $categoryVal, profit: ${record.profit}" }
+                    val categoryVal = spec.extractVal(record.category)
+                    log.info { "updating profit metric ${spec.metricName} - value: $categoryVal, profit: ${record.profit}" }
                     metrics[categoryVal]?.set(record.profit)
                 }
             }
