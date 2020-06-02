@@ -49,10 +49,9 @@ class ProfitMetricUpdater(
     private fun computeMetrics(updateFrequency: UpdateFrequency) {
         log.info { "updating profit metric for frequency $updateFrequency" }
         for ((interval, specs) in byInterval.entries) {
-            val actualSpecs = specs.filter { it.updateFrequency == updateFrequency }
-            if (actualSpecs.isNotEmpty()) {
+            if (specs.any { it.updateFrequency == updateFrequency }) {
                 val records = profitLoader.loadProfitRecords(interval, true)
-                for (spec in actualSpecs) {
+                for (spec in specs) {
                     val relevantRecords = records.filter(spec.recordPredicate)
                     val metrics = allMetrics[spec.metricName] ?: error("missing metric")
                     for (record in relevantRecords) {
