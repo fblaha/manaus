@@ -10,6 +10,7 @@ class ProfitMetricSpecTest {
 
     private val spec = ProfitMetricSpec(
             interval = "24h",
+            updateFrequency = UpdateFrequency.HIGH,
             categoryPrefix = "market_type",
             categoryValues = setOf("match_odds", "total")
     )
