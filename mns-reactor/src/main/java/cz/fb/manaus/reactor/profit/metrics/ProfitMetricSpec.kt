@@ -2,8 +2,14 @@ package cz.fb.manaus.reactor.profit.metrics
 
 import cz.fb.manaus.core.model.ProfitRecord
 
+
+enum class UpdateFrequency {
+    LOW, MEDIUM, HIGH
+}
+
 data class ProfitMetricSpec(
         val interval: String,
+        val updateFrequency: UpdateFrequency,
         val categoryPrefix: String,
         val categoryValues: Set<String>
 ) {

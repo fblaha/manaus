@@ -31,11 +31,26 @@ class ProfitMetricManager(
 
     private val byInterval = specs.groupBy { it.interval }
 
+    @Scheduled(fixedRateString = "PT15M")
+    fun computeMetricsHighFreq() {
+        computeMetrics(UpdateFrequency.HIGH)
+    }
+
     @Scheduled(fixedRateString = "PT60M")
-    fun computeMetrics() {
+    fun computeMetricsMediumFreq() {
+        computeMetrics(UpdateFrequency.MEDIUM)
+    }
+
+    @Scheduled(fixedRateString = "PT240M")
+    fun computeMetricsLowFreq() {
+        computeMetrics(UpdateFrequency.LOW)
+    }
+
+    private fun computeMetrics(updateFrequency: UpdateFrequency) {
+        log.info { "updating profit metric for frequency $updateFrequency" }
         for ((interval, specs) in byInterval.entries) {
             val records = profitLoader.loadProfitRecords(interval, true)
-            for (spec in specs) {
+            for (spec in specs.filter { it.updateFrequency == updateFrequency }) {
                 val relevantRecords = records.filter(spec.recordPredicate)
                 val metrics = allMetrics[spec.metricName] ?: error("missing metric")
                 for (record in relevantRecords) {
