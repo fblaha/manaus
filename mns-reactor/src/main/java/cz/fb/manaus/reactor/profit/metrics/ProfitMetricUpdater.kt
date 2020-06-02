@@ -13,12 +13,12 @@ import java.util.logging.Logger
 
 @Component
 @Profile(ManausProfiles.DB)
-class ProfitMetricManager(
+class ProfitMetricUpdater(
         private val profitLoader: ProfitLoader,
         specs: List<ProfitMetricSpec> = emptyList()
 ) {
 
-    private val log = Logger.getLogger(ProfitMetricManager::class.simpleName)
+    private val log = Logger.getLogger(ProfitMetricUpdater::class.simpleName)
 
     private fun makeMetrics(spec: ProfitMetricSpec): Map<String, AtomicDouble> =
             spec.categoryValues
