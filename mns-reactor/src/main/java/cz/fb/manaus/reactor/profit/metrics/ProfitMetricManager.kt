@@ -31,7 +31,7 @@ class ProfitMetricManager(
 
     private val byInterval = specs.groupBy { it.interval }
 
-    @Scheduled(fixedRateString = "PT30M")
+    @Scheduled(fixedRateString = "PT60M")
     fun computeMetrics() {
         for ((interval, specs) in byInterval.entries) {
             val records = profitLoader.loadProfitRecords(interval, true)

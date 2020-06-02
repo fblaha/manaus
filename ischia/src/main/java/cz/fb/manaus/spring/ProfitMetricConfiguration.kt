@@ -37,4 +37,17 @@ open class ProfitMetricConfiguration {
             categoryValues = setOf("lay", "back")
     )
 
+    @Bean
+    open fun monthlyTypeProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
+            interval = "30d",
+            categoryPrefix = "market_type",
+            categoryValues = setOf("match_odds", "handicap", "total")
+    )
+
+    @Bean
+    open fun monthlySideProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
+            interval = "30d",
+            categoryPrefix = "side",
+            categoryValues = setOf("lay", "back")
+    )
 }
