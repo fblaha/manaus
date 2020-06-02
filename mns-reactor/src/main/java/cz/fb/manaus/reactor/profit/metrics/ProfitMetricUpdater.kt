@@ -49,14 +49,17 @@ class ProfitMetricUpdater(
     private fun computeMetrics(updateFrequency: UpdateFrequency) {
         log.info { "updating profit metric for frequency $updateFrequency" }
         for ((interval, specs) in byInterval.entries) {
-            val records = profitLoader.loadProfitRecords(interval, true)
-            for (spec in specs.filter { it.updateFrequency == updateFrequency }) {
-                val relevantRecords = records.filter(spec.recordPredicate)
-                val metrics = allMetrics[spec.metricName] ?: error("missing metric")
-                for (record in relevantRecords) {
-                    val categoryVal = spec.extractVal(record.category)
-                    log.info { "updating profit metric ${spec.metricName} - value: $categoryVal, profit: ${record.profit}" }
-                    metrics[categoryVal]?.set(record.profit)
+            val actualSpecs = specs.filter { it.updateFrequency == updateFrequency }
+            if (actualSpecs.isNotEmpty()) {
+                val records = profitLoader.loadProfitRecords(interval, true)
+                for (spec in actualSpecs) {
+                    val relevantRecords = records.filter(spec.recordPredicate)
+                    val metrics = allMetrics[spec.metricName] ?: error("missing metric")
+                    for (record in relevantRecords) {
+                        val categoryVal = spec.extractVal(record.category)
+                        log.info { "updating profit metric ${spec.metricName} - value: $categoryVal, profit: ${record.profit}" }
+                        metrics[categoryVal]?.set(record.profit)
+                    }
                 }
             }
         }
