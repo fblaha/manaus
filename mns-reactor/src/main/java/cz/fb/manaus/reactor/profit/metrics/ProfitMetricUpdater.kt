@@ -36,18 +36,18 @@ class ProfitMetricUpdater(
         computeMetrics(UpdateFrequency.HIGH)
     }
 
-    @Scheduled(fixedRateString = "PT60M")
+    @Scheduled(fixedRateString = "PT1H")
     fun computeMetricsMediumFreq() {
         computeMetrics(UpdateFrequency.MEDIUM)
     }
 
-    @Scheduled(fixedRateString = "PT240M")
+    @Scheduled(fixedRateString = "PT4H")
     fun computeMetricsLowFreq() {
         computeMetrics(UpdateFrequency.LOW)
     }
 
     private fun computeMetrics(updateFrequency: UpdateFrequency) {
-        log.info { "updating profit metric for frequency $updateFrequency" }
+        log.info { "updating profit metric for frequency: $updateFrequency" }
         for ((interval, specs) in byInterval.entries) {
             if (specs.any { it.updateFrequency == updateFrequency }) {
                 val records = profitLoader.loadProfitRecords(interval, true)
