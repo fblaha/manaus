@@ -29,7 +29,7 @@ class ProfitMetricUpdater(
             .map { it.metricName to makeMetrics(it) }
             .toMap()
 
-    private val byInterval = specs.groupBy { it.interval }
+    private val byQuery = specs.groupBy { it.query }
 
     @Scheduled(fixedRateString = "PT15M")
     fun computeMetricsHighFreq() {
@@ -48,9 +48,9 @@ class ProfitMetricUpdater(
 
     private fun computeMetrics(updateFrequency: UpdateFrequency) {
         log.info { "updating profit metric for frequency: $updateFrequency" }
-        for ((interval, specs) in byInterval.entries) {
-            if (specs.any { it.updateFrequency == updateFrequency }) {
-                val records = profitLoader.loadProfitRecords(interval, true)
+        for ((query, specs) in byQuery.entries) {
+            if (query.updateFrequency == updateFrequency) {
+                val records = profitLoader.loadProfitRecords(query.interval, true, query.projection)
                 for (spec in specs) {
                     val relevantRecords = records.filter(spec.recordPredicate)
                     val metrics = allMetrics[spec.metricName] ?: error("missing metric")
