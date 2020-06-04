@@ -49,7 +49,7 @@ class MarketBetEventController(
             val marketPrices = marketEvent.prices
             val market = marketRepository.read(id) ?: error("no such market")
             val bets = marketEvent.bets
-            log.info { "event: ${market.event.name}, market: ${market.name}, betCount: ${bets.size}" }
+            marketEvent.prices.forEach { log.info { "MATCHED AMOUNT ${it.matchedAmount}" } }
             betMetricUpdater.update(marketEvent.scanTime, bets)
             val snapshot = MarketSnapshot(marketPrices, market, bets, marketEvent.tradedVolume)
             val collectedBets = notifier.notify(MarketSnapshotEvent(snapshot, account))
