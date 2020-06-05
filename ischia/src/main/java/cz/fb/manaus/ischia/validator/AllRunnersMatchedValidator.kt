@@ -16,7 +16,8 @@ object AllRunnersMatchedValidator : Validator {
     override fun validate(event: BetEvent): ValidationResult {
         val prices = event.marketPrices
         if (prices.size > 2) return ValidationResult.OK
-        return if (prices.mapNotNull { it.matchedAmount }.all { it > 0.0 }) ValidationResult.OK else ValidationResult.NOP
+        val allMatched = prices.mapNotNull { it.matchedAmount }.all { it > 0.0 }
+        return if (allMatched) ValidationResult.OK else ValidationResult.NOP
     }
 
 }
