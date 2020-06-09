@@ -9,8 +9,7 @@ class SelectionOrderCategorizer : RealizedBetCategorizer {
 
     override fun getCategories(realizedBet: RealizedBet): Set<String> {
         val market = realizedBet.market
-        val runner = market.runners
-                .find { it.selectionId == realizedBet.settledBet.selectionId }
-        return setOf("selectionOrder_" + runner!!.sortPriority)
+        val runner = market.runners.first { it.selectionId == realizedBet.settledBet.selectionId }
+        return setOf("selectionOrder_" + runner.sortPriority)
     }
 }
