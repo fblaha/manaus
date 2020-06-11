@@ -27,10 +27,10 @@ open class ProfitMetricConfiguration {
     )
 
     @Bean
-    open fun dailyTypeProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
+    open fun dailyMatchOddsProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
             query = dailyQuery,
-            categoryPrefix = "market_type",
-            categoryValues = setOf("match_odds", "handicap", "total")
+            categoryPrefix = "matchOdds",
+            categoryValues = setOf("home", "draw", "away")
     )
 
     @Bean
@@ -41,10 +41,10 @@ open class ProfitMetricConfiguration {
     )
 
     @Bean
-    open fun weeklyTypeProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
+    open fun weeklyMatchOddsProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
             query = weeklyQuery,
-            categoryPrefix = "market_type",
-            categoryValues = setOf("match_odds", "handicap", "total")
+            categoryPrefix = "matchOdds",
+            categoryValues = setOf("home", "draw", "away")
     )
 
     @Bean
@@ -55,10 +55,10 @@ open class ProfitMetricConfiguration {
     )
 
     @Bean
-    open fun monthlyTypeProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
+    open fun monthlyMatchOddsProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
             query = monthlyQuery,
-            categoryPrefix = "market_type",
-            categoryValues = setOf("match_odds", "handicap", "total")
+            categoryPrefix = "matchOdds",
+            categoryValues = setOf("home", "draw", "away")
     )
 
     @Bean
