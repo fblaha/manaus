@@ -12,5 +12,10 @@ import org.springframework.stereotype.Component
 @Component
 object RunnerMatchedAmountThresholdValidator :
         Validator by RunnerMatchedAmountThresholdValidator(
-                { if (isDraw(it)) 2.0 else 5.0 }
+                {
+                    when {
+                        isDraw(it) -> 2.0
+                        else -> 5.0
+                    }
+                }
         )
