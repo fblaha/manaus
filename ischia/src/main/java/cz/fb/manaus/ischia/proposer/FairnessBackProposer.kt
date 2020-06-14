@@ -5,9 +5,9 @@ import cz.fb.manaus.ischia.BackUniverse
 import cz.fb.manaus.ischia.LayUniverse
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
-import cz.fb.manaus.reactor.betting.proposer.chain
 import cz.fb.manaus.reactor.betting.proposer.common.FairnessProposer
-import cz.fb.manaus.reactor.betting.proposer.fixedDowngradeStrategy
+import cz.fb.manaus.reactor.betting.strategy.chain
+import cz.fb.manaus.reactor.betting.strategy.fixedStrategy
 import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.stereotype.Component
 
@@ -25,10 +25,10 @@ class FairnessBackProposer(priceService: PriceService)
         Side.BACK,
         priceService,
         chain(
-                fixedDowngradeStrategy(Side.LAY, 0.077, ::isDraw),
-                fixedDowngradeStrategy(Side.LAY, 0.09),
+                fixedStrategy(Side.LAY, 0.077, ::isDraw),
+                fixedStrategy(Side.LAY, 0.09),
 
-                fixedDowngradeStrategy(Side.BACK, 0.06, ::isDraw),
-                fixedDowngradeStrategy(Side.BACK, 0.08)
+                fixedStrategy(Side.BACK, 0.06, ::isDraw),
+                fixedStrategy(Side.BACK, 0.08)
         )
 )

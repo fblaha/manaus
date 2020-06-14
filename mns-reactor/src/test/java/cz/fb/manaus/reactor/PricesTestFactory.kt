@@ -15,8 +15,6 @@ class PricesTestFactory(
 ) {
 
     fun newRunnerPrices(selectionId: Long, bestBack: Double, bestLay: Double, lastMatchedPrice: Double? = null): RunnerPrices {
-        val avgPrice = (bestBack + bestLay) / 2
-        val lastMatched = lastMatchedPrice ?: roundingService.roundBet(avgPrice, bfProvider::matches)!!
         val backBestPrice = Price(bestBack, 100.0, Side.BACK)
         val layBestPrice = Price(bestLay, 100.0, Side.LAY)
         return RunnerPrices(
@@ -29,7 +27,8 @@ class PricesTestFactory(
                         roundingService.increment(layBestPrice, 1, bfProvider::matches)!!,
                         roundingService.increment(layBestPrice, 2, bfProvider::matches)!!),
                 lastMatchedPrice = lastMatchedPrice,
-                matchedAmount = lastMatched)
+                matchedAmount = 10.0
+        )
     }
 
     fun newMarketPrices(betBack: Double, bestLay: Double, lastMatched: Double? = null): List<RunnerPrices> {
