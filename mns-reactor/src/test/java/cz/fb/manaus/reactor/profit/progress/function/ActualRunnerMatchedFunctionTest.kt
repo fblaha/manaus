@@ -6,9 +6,9 @@ import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 
-class ActualSelectionMatchedFunctionTest : AbstractLocalTestCase() {
+class ActualRunnerMatchedFunctionTest : AbstractLocalTestCase() {
     @Autowired
-    private lateinit var fc: ActualSelectionMatchedFunction
+    private lateinit var fc: ActualRunnerMatchedFunction
 
     @Test
     fun `get value`() {

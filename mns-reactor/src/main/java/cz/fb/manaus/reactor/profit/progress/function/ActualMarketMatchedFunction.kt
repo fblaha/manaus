@@ -4,7 +4,7 @@ import cz.fb.manaus.core.model.RealizedBet
 import org.springframework.stereotype.Component
 
 @Component
-object ActualMatchedFunction : ProgressFunction {
+object ActualMarketMatchedFunction : ProgressFunction {
 
     override val includeNoValues: Boolean get() = false
 

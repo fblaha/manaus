@@ -4,11 +4,11 @@ import cz.fb.manaus.core.model.RealizedBet
 import org.springframework.stereotype.Component
 
 @Component
-object RunnerMatchedAmountFunction : ProgressFunction {
+object ActualRunnerMatchedFunction : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double? {
-        val prices = bet.betAction.runnerPrices.first { it.selectionId == bet.betAction.selectionId }
-        return prices.matchedAmount
+        return bet.betAction.runnerPrices
+                .find { it.selectionId == bet.settledBet.selectionId }?.matchedAmount
     }
 
 }
