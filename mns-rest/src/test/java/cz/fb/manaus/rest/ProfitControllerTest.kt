@@ -14,13 +14,13 @@ class ProfitControllerTest : AbstractControllerTest() {
     @Test
     fun `progress records`() {
         createLiveMarket()
-        checkResponse("/fc-progress/1d", "category", "actualMatched", "actualMatched", "fairnessBack")
+        checkResponse("/fc-progress/1d", "category", "actualMarketMatched", "actualRunnerMatched", "fairnessBack")
     }
 
     @Test
     fun `progress single function`() {
         createLiveMarket()
-        checkResponse("/fc-progress/1d?function=actualMatched", "actualMatched")
+        checkResponse("/fc-progress/1d?function=actualMarketMatched", "actualMarketMatched")
     }
 
 }
