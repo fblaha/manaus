@@ -22,6 +22,7 @@ data class Market(
         val eventType: EventType,
         val competition: Competition?,
         val event: Event,
+        val latestEvent: Instant?,
         val runners: List<Runner>
 ) {
     internal val openDate: Instant = event.openDate

@@ -25,7 +25,7 @@ class CountryCodeUnprofitableCategoriesFilter(
 ) : BlacklistSupplier by UnprofitableCategoriesRegistry(
         name = "countryCodeLay",
         period = Duration.ofDays(30),
-        maximalProfit = -60.0,
+        maximalProfit = -150.0,
         filterPrefix = Category.MARKET_PREFIX + COUNTRY_PREFIX,
         thresholds = mapOf(20 to 3),
         profitService = profitService,

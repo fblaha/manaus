@@ -25,7 +25,7 @@ class CompetitionUnprofitableCategoriesFilter(
 ) : BlacklistSupplier by UnprofitableCategoriesRegistry(
         name = "competition",
         period = Duration.ofDays(30),
-        maximalProfit = -60.0,
+        maximalProfit = -150.0,
         filterPrefix = Category.MARKET_PREFIX + CompetitionCategorizer.PREFIX,
         thresholds = mapOf(20 to 2, 15 to 2, 10 to 2),
         profitService = profitService,

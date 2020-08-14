@@ -70,6 +70,7 @@ val market = Market(id = "2",
                 venue = "bazaly"),
         competition = Competition("100", "Czech League"),
         eventType = EventType("1000", "soccer"),
+        latestEvent = Instant.now(),
         runners = listOf(
                 Runner(SEL_HOME, "Banik Ostrava", 0.0, 0),
                 Runner(SEL_AWAY, "Sparta Prague", 0.0, 1),

@@ -15,7 +15,7 @@ import kotlin.test.assertEquals
 
 
 @ActiveProfiles("ischia")
-class MarketMarketEventControllerTest : AbstractControllerTest() {
+class MarketEventControllerTest : AbstractControllerTest() {
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper

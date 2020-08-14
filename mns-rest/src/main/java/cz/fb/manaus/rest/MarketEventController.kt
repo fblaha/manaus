@@ -27,7 +27,7 @@ data class MarketEvent(
 
 @Controller
 @Profile(ManausProfiles.DB)
-class MarketBetEventController(
+class MarketEventController(
         private val notifier: MarketSnapshotNotifier,
         private val marketRepository: MarketRepository,
         private val betMetricUpdater: MatchedBetMetricUpdater
@@ -36,7 +36,7 @@ class MarketBetEventController(
     private val availableMoney: AtomicDouble by lazy { Metrics.gauge("mns_account_money_available", AtomicDouble()) }
     private val totalMoney: AtomicDouble by lazy { Metrics.gauge("mns_account_money_total", AtomicDouble()) }
 
-    private val log = Logger.getLogger(MarketBetEventController::class.simpleName)
+    private val log = Logger.getLogger(MarketEventController::class.simpleName)
 
     @RequestMapping(value = ["/markets/{id}/event"], method = [RequestMethod.POST])
     fun onMarketEvent(@PathVariable id: String, @RequestBody marketEvent: MarketEvent): ResponseEntity<CollectedBets> {
@@ -47,7 +47,7 @@ class MarketBetEventController(
         Metrics.counter("mns_market_event_post").increment()
         try {
             val marketPrices = marketEvent.prices
-            val market = marketRepository.read(id) ?: error("no such market")
+            val market = marketRepository.read(id) ?: error("no such market $id")
             val bets = marketEvent.bets
             marketEvent.prices.forEach { log.info { "MATCHED AMOUNT ${market.type} ${it.matchedAmount}" } }
             betMetricUpdater.update(marketEvent.scanTime, bets)
