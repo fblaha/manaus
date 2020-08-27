@@ -2,14 +2,13 @@ package cz.fb.manaus.reactor.categorizer
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import org.hamcrest.CoreMatchers.hasItems
-import org.junit.Assert.assertThat
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 
 class DowngradeCategorizerTest : AbstractLocalTestCase() {
 
@@ -28,7 +27,9 @@ class DowngradeCategorizerTest : AbstractLocalTestCase() {
         assertEquals(emptySet(), categorizer.getCategories(listOf(place, update), market))
 
         update = update.copy(price = Price(1.9, 5.0, Side.LAY))
-        assertThat(categorizer.getCategories(listOf(place, update), market), hasItems(DowngradeCategorizer.DOWNGRADE, DowngradeCategorizer.DOWNGRADE_LAST))
+        val categories = categorizer.getCategories(listOf(place, update), market)
+        assertTrue { DowngradeCategorizer.DOWNGRADE in categories }
+        assertTrue { DowngradeCategorizer.DOWNGRADE_LAST in categories }
 
 
         val update2 = betAction.copy(betActionType = BetActionType.UPDATE,

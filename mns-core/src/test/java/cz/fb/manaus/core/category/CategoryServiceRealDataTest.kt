@@ -5,8 +5,6 @@ import cz.fb.manaus.core.category.categorizer.COUNTRY_PREFIX
 import cz.fb.manaus.core.category.categorizer.SPORT_PREFIX
 import cz.fb.manaus.core.manager.AbstractMarketDataAwareTestCase
 import junit.framework.TestCase.assertTrue
-import org.hamcrest.CoreMatchers.containsString
-import org.junit.Assert.assertThat
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
@@ -93,7 +91,7 @@ class CategoryServiceRealDataTest : AbstractMarketDataAwareTestCase() {
             categories.forEach { counts[it] = counts.getValue(it) + 1 }
             if (category in categories) {
                 if (mustContainLower != null) {
-                    assertThat(market.eventType.name.toLowerCase(), containsString(mustContainLower))
+                    assertTrue(mustContainLower in market.eventType.name.toLowerCase())
                 }
             }
         }

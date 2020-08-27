@@ -5,6 +5,7 @@ import org.hamcrest.CoreMatchers.hasItem
 import org.junit.Assert.assertThat
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
+import kotlin.test.assertTrue
 
 class SelectionRegexpCategorizerTest : AbstractLocalTestCase() {
 
@@ -13,7 +14,7 @@ class SelectionRegexpCategorizerTest : AbstractLocalTestCase() {
 
     @Test
     fun `draw category`() {
-        assertThat(categorizer.getCategories("The Draw"), hasItem("selectionRegexp_draw"))
+        assertTrue { "selectionRegexp_draw" in categorizer.getCategories("The Draw") }
     }
 
 }

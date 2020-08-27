@@ -1,10 +1,11 @@
 package cz.fb.manaus.reactor.price
 
+import cz.fb.manaus.core.model.priceEq
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import org.hamcrest.CoreMatchers.`is`
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
+import kotlin.test.assertTrue
 
 
 class FairnessPolynomialCalculatorTest : AbstractLocalTestCase() {
@@ -25,24 +26,25 @@ class FairnessPolynomialCalculatorTest : AbstractLocalTestCase() {
     @Test
     fun `fairness - complex case`() {
         val fairness = calculator.getFairness(1, BEST_PRICES_HARD)!!
-        assertTrue(fairness > 0)
+        assertTrue { fairness > 0 }
     }
 
     @Test
     fun `fairness 1 winner`() {
-        assertThat(calculator.getFairness(1, listOf(3.0, 3.0, 3.0))!!, `is`(1.0))
+        assertTrue { 1.0 priceEq calculator.getFairness(1, listOf(3.0, 3.0, 3.0))!! }
     }
 
     @Test
     fun `fairness 2 winners`() {
-        assertEquals(1.0, calculator.getFairness(2,
-                listOf(1.5, 1.5, 1.5))!!, 0.0001)
+        assertEquals(1.0, calculator.getFairness(2, listOf(1.5, 1.5, 1.5))!!, 0.0001)
     }
 
     @Test
     fun `fairness 2 winners - comparison`() {
-        assertTrue(calculator.getFairness(2, listOf(1.4, 1.5, 1.5))!! <
-                calculator.getFairness(2, listOf(1.5, 1.5, 1.5))!!)
+        assertTrue {
+            calculator.getFairness(2, listOf(1.4, 1.5, 1.5))!! <
+                    calculator.getFairness(2, listOf(1.5, 1.5, 1.5))!!
+        }
     }
 
     @Test

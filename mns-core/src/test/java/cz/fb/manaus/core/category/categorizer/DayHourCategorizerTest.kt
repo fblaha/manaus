@@ -3,11 +3,11 @@ package cz.fb.manaus.core.category.categorizer
 import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.test.AbstractLocalTestCase
 import org.hamcrest.CoreMatchers.containsString
-import org.junit.Assert.assertThat
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
+import kotlin.test.assertTrue
 
 class DayHourCategorizerTest : AbstractLocalTestCase() {
 
@@ -20,15 +20,15 @@ class DayHourCategorizerTest : AbstractLocalTestCase() {
         var event = market.event
 
         event = event.copy(openDate = dayStart)
-        assertThat(categorizer.getCategories(market.copy(event = event)).first(), containsString("0_3"))
+        assertTrue {  "0_3" in  categorizer.getCategories(market.copy(event = event)).first()}
 
         event = event.copy(openDate = dayStart.plus(3 * 60 + 59, ChronoUnit.MINUTES))
-        assertThat(categorizer.getCategories(market.copy(event = event)).first(), containsString("0_3"))
+        assertTrue { "0_3" in  categorizer.getCategories(market.copy(event = event)).first()}
 
         event = event.copy(openDate = dayStart.plus(4, ChronoUnit.HOURS))
-        assertThat(categorizer.getCategories(market.copy(event = event)).first(), containsString("4_7"))
+        assertTrue { "4_7" in  categorizer.getCategories(market.copy(event = event)).first()}
 
         event = event.copy(openDate = dayStart.plus(23, ChronoUnit.HOURS))
-        assertThat(categorizer.getCategories(market.copy(event = event)).first(), containsString("20_23"))
+        assertTrue { "20_23" in  categorizer.getCategories(market.copy(event = event)).first()}
     }
 }
