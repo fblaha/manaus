@@ -27,13 +27,6 @@ open class ProfitMetricConfiguration {
     )
 
     @Bean
-    open fun dailyMatchOddsProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
-            query = dailyQuery,
-            categoryPrefix = "matchOdds",
-            categoryValues = setOf("home", "draw", "away")
-    )
-
-    @Bean
     open fun dailySideProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
             query = dailyQuery,
             categoryPrefix = "side",
@@ -41,24 +34,10 @@ open class ProfitMetricConfiguration {
     )
 
     @Bean
-    open fun weeklyMatchOddsProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
-            query = weeklyQuery,
-            categoryPrefix = "matchOdds",
-            categoryValues = setOf("home", "draw", "away")
-    )
-
-    @Bean
     open fun weeklySideProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
             query = weeklyQuery,
             categoryPrefix = "side",
             categoryValues = setOf("lay", "back")
-    )
-
-    @Bean
-    open fun monthlyMatchOddsProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
-            query = monthlyQuery,
-            categoryPrefix = "matchOdds",
-            categoryValues = setOf("home", "draw", "away")
     )
 
     @Bean
