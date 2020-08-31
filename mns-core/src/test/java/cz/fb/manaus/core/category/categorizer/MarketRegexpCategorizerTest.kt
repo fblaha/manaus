@@ -1,8 +1,6 @@
 package cz.fb.manaus.core.category.categorizer
 
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import org.hamcrest.CoreMatchers.*
-import org.junit.Assert.assertThat
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertTrue
@@ -14,7 +12,7 @@ class MarketRegexpCategorizerTest : AbstractLocalTestCase() {
 
     @Test
     fun `over-under market type`() {
-        assertTrue { "market_regexp_overUnderGoals" in categorizer.getCategories("Over/Under 2.5 goals", "event")  }
+        assertTrue { "market_regexp_overUnderGoals" in categorizer.getCategories("Over/Under 2.5 goals", "event") }
     }
 
     @Test

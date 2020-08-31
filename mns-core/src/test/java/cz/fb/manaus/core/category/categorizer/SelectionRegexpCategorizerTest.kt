@@ -1,8 +1,6 @@
 package cz.fb.manaus.core.category.categorizer
 
 import cz.fb.manaus.core.test.AbstractLocalTestCase
-import org.hamcrest.CoreMatchers.hasItem
-import org.junit.Assert.assertThat
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertTrue
