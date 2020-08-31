@@ -16,6 +16,8 @@ import kotlin.test.assertTrue
 
 class UnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase() {
 
+    private val p = ProfitRecord("", -10.0, 2.0, 0.06, 10, 0)
+
     private lateinit var registry: UnprofitableCategoriesRegistry
 
     @Autowired
@@ -39,11 +41,6 @@ class UnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase() {
         )
     }
 
-    private fun pr(category: String, profitAndLoss: Double, betCount: Int): ProfitRecord {
-        return ProfitRecord(category, profitAndLoss, 2.0, 0.06, betCount, 0)
-    }
-
-
     @Test
     fun `blacklist threshold`() {
         assertTrue {
@@ -51,7 +48,7 @@ class UnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase() {
                     threshold = 0.1,
                     blackCount = 1,
                     totalCount = 110,
-                    profitRecords = listOf(pr("horror", -10.0, 10)),
+                    profitRecords = listOf(p.copy(category = "horror")),
                     actualBlacklist = setOf()).map { it.name }
         }
         assertFalse {
@@ -59,7 +56,7 @@ class UnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase() {
                     threshold = 0.1,
                     blackCount = 1,
                     totalCount = 90,
-                    profitRecords = listOf(pr("horror", -10.0, 10)),
+                    profitRecords = listOf(p.copy(category = "horror")),
                     actualBlacklist = setOf()).map { it.name }
         }
         assertFalse {
@@ -67,22 +64,23 @@ class UnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase() {
                     threshold = 0.1,
                     blackCount = 0,
                     totalCount = 110,
-                    profitRecords = listOf(pr("horror", -10.0, 10)),
+                    profitRecords = listOf(p.copy(category = "horror")),
                     actualBlacklist = setOf()).map { it.name }
         }
     }
 
     @Test
     fun `blacklist sort`() {
+        val records = listOf(
+                p.copy(category = "horror", theoreticalProfit = -10.0),
+                p.copy(category = "weak", theoreticalProfit = -1.0),
+                p.copy(category = "bad", theoreticalProfit = -5.0)
+        )
         var blacklist = registry.getBlacklist(
                 threshold = 0.1,
                 blackCount = 1,
                 totalCount = 110,
-                profitRecords = listOf(
-                        pr("horror", -10.0, 10),
-                        pr("weak", -1.0, 10),
-                        pr("bad", -5.0, 10)
-                ),
+                profitRecords = records,
                 actualBlacklist = emptySet()).map { it.name }
         assertTrue { "horror" in blacklist }
         assertFalse { "weak" in blacklist }
@@ -91,11 +89,7 @@ class UnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase() {
                 threshold = 0.1,
                 blackCount = 2,
                 totalCount = 110,
-                profitRecords = listOf(
-                        pr("horror", -10.0, 10),
-                        pr("weak", -1.0, 10),
-                        pr("bad", -5.0, 10)
-                ),
+                profitRecords = records,
                 actualBlacklist = emptySet()).map { it.name }
         assertTrue { "horror" in blacklist }
         assertFalse { "weak" in blacklist }
@@ -104,11 +98,7 @@ class UnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase() {
                 threshold = 0.1,
                 blackCount = 3,
                 totalCount = 110,
-                profitRecords = listOf(
-                        pr("horror", -10.0, 10),
-                        pr("weak", -1.0, 10),
-                        pr("bad", -5.0, 10)
-                ),
+                profitRecords = records,
                 actualBlacklist = setOf()).map { it.name }
         assertTrue { "horror" in blacklist }
         assertTrue { "weak" in blacklist }
@@ -118,9 +108,9 @@ class UnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase() {
     @Test
     fun `blacklist duplicate`() {
         val records = listOf(
-                pr("horror", -10.0, 10),
-                pr("weak", -1.0, 10),
-                pr("bad", -5.0, 10)
+                p.copy(category = "horror", theoreticalProfit = -10.0),
+                p.copy(category = "weak", theoreticalProfit = -1.0),
+                p.copy(category = "bad", theoreticalProfit = -5.0)
         )
         val blacklist = registry.getBlacklist(
                 threshold = 0.1,
@@ -137,10 +127,10 @@ class UnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase() {
     @Test
     fun `update filter prefix`() {
         val blacklist = registry.getBlacklist(listOf(
-                pr(MarketCategories.ALL, 10.0, 100),
-                pr("weak1", -1.0, 5),
-                pr("not_match", -1.0, 2),
-                pr("weak2", -1.0, 5)))
+                p.copy(category = MarketCategories.ALL, theoreticalProfit = 10.0, layCount = 100),
+                p.copy(category = "weak1", theoreticalProfit = -1.0, layCount = 5),
+                p.copy(category = "not_match", theoreticalProfit = -1.0, layCount = 2),
+                p.copy(category = "weak2", theoreticalProfit = -1.0, layCount = 5)))
 
         assertEquals(listOf("weak1", "weak2"), blacklist.map { it.name }.toList())
     }
