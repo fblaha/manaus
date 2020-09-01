@@ -26,21 +26,25 @@ class MarketFootprintControllerTest : AbstractControllerTest() {
 
     @Test
     fun `get by ID - missing`() {
-        mvc.perform(get("/footprints/123456")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound)
-                .andReturn()
+        mvc.perform(
+            get("/footprints/123456")
+                .accept(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isNotFound)
+            .andReturn()
     }
 
     @Test
     fun import() {
         val footprint = MarketFootprint(market, emptyList(), emptyList())
         val market = objectMapper.writer().writeValueAsString(footprint)
-        val result = mvc.perform(MockMvcRequestBuilders.post("/footprints")
+        val result = mvc.perform(
+            MockMvcRequestBuilders.post("/footprints")
                 .content(market)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isCreated)
-                .andReturn()
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(MockMvcResultMatchers.status().isCreated)
+            .andReturn()
         assertNotNull(result.response.getHeader(HttpHeaders.LOCATION))
     }
 }

@@ -7,6 +7,6 @@ import java.time.Instant
 
 @Index(value = "name", type = IndexType.Unique)
 data class TaskExecution(
-        @Id val name: String,
-        val time: Instant
+    @Id val name: String,
+    val time: Instant
 )

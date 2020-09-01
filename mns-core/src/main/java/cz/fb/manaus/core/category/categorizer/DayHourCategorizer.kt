@@ -8,7 +8,7 @@ import java.util.*
 object DayHourCategorizer : AbstractDelegatingCategorizer("dayHour_") {
 
     private val ranges: List<ClosedRange<Int>> = listOf(
-            0..3, 4..7, 8..11, 12..15, 16..19, 20..23
+        0..3, 4..7, 8..11, 12..15, 16..19, 20..23
     )
 
     public override fun getCategoryRaw(market: Market): Set<String> {

@@ -30,6 +30,7 @@ class BetEventSeekerTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var betEventSeeker: BetEventSeeker
+
     @Autowired
     private lateinit var listener: MockBetEventListener
 
@@ -37,9 +38,9 @@ class BetEventSeekerTest : AbstractLocalTestCase() {
     @Test
     fun onMarketSnapshot() {
         val snapshot = MarketSnapshot(
-                runnerPrices = runnerPrices,
-                currentBets = emptyList(),
-                market = market.copy(event = listener.mockEvent)
+            runnerPrices = runnerPrices,
+            currentBets = emptyList(),
+            market = market.copy(event = listener.mockEvent)
         )
         val bets = betEventSeeker.onMarketSnapshot(MarketSnapshotEvent(snapshot, mbAccount))
         assertTrue { bets.isNotEmpty() }

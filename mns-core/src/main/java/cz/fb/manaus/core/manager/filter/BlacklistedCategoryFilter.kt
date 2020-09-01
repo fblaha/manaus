@@ -13,8 +13,8 @@ import java.util.logging.Logger
 @Component
 @Profile(ManausProfiles.DB)
 class BlacklistedCategoryFilter(
-        private val blacklistedCategoryRepository: BlacklistedCategoryRepository,
-        private val categoryService: CategoryService
+    private val blacklistedCategoryRepository: BlacklistedCategoryRepository,
+    private val categoryService: CategoryService
 ) : MarketSnapshotEventFilter {
 
     private val log = Logger.getLogger(BlacklistedCategoryFilter::class.simpleName)

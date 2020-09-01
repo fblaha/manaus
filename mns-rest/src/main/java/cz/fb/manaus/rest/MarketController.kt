@@ -38,8 +38,8 @@ class MarketController(private val marketRepository: MarketRepository) {
         Metrics.counter("mns_market_post", "eventType", market.eventType.name).increment()
         marketRepository.saveOrUpdate(market)
         val location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(market.id).toUri()
+            .fromCurrentRequest().path("/{id}")
+            .buildAndExpand(market.id).toUri()
         return ResponseEntity.created(location).build<Any>()
     }
 

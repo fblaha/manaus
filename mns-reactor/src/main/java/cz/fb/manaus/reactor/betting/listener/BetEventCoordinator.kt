@@ -9,9 +9,9 @@ import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import io.micrometer.core.instrument.Metrics
 
 class BetEventCoordinator(
-        override val side: Side,
-        private val validationCoordinator: ValidationCoordinator,
-        private val priceAdviser: PriceAdviser
+    override val side: Side,
+    private val validationCoordinator: ValidationCoordinator,
+    private val priceAdviser: PriceAdviser
 ) : BetEventListener {
 
     override fun onBetEvent(event: BetEvent): BetCommand? {

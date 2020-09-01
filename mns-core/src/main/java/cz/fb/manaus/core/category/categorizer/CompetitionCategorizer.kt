@@ -22,6 +22,6 @@ class CompetitionCategorizer : AbstractDelegatingCategorizer(PREFIX) {
 
 private fun sanitize(name: String): String {
     return name.filter { it.isLetterOrDigit() || it.isWhitespace() }
-            .replace("\\s".toRegex(), "_")
-            .take(30)
+        .replace("\\s".toRegex(), "_")
+        .take(30)
 }

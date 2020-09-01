@@ -14,8 +14,8 @@ fun chain(vararg strategies: Strategy): Strategy {
 }
 
 fun fixedStrategy(
-        side: Side,
-        value: Double,
-        predicate: BetEventPredicate = { true }
+    side: Side,
+    value: Double,
+    predicate: BetEventPredicate = { true }
 ): Strategy =
-        { if (side == it.side && predicate(it)) value else null }
+    { if (side == it.side && predicate(it)) value else null }

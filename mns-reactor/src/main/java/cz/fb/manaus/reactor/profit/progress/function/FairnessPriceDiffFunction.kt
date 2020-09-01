@@ -9,8 +9,10 @@ import org.springframework.stereotype.Component
 import kotlin.math.abs
 
 @Component
-class FairnessPriceDiffFunction(private val calculator: FairnessPolynomialCalculator,
-                                private val priceService: PriceService) : ProgressFunction {
+class FairnessPriceDiffFunction(
+    private val calculator: FairnessPolynomialCalculator,
+    private val priceService: PriceService
+) : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double? {
         val marketPrices = bet.betAction.runnerPrices

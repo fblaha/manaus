@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class ValidationService(
-        private val priceService: PriceService,
-        private val recorder: ValidationMetricsCollector
+    private val priceService: PriceService,
+    private val recorder: ValidationMetricsCollector
 ) {
 
     internal fun isDowngrade(newOne: Price?, oldOne: Bet?): Boolean {
@@ -27,8 +27,8 @@ class ValidationService(
     internal fun reduce(results: List<ValidationResult>): ValidationResult {
         check(results.isNotEmpty())
         return results.find { it == ValidationResult.DROP }
-                ?: results.find { it == ValidationResult.NOP }
-                ?: ValidationResult.OK
+            ?: results.find { it == ValidationResult.NOP }
+            ?: ValidationResult.OK
     }
 
     fun validator(validators: List<Validator>): (BetEvent) -> ValidationResult = { event ->
@@ -40,9 +40,9 @@ class ValidationService(
         }
 
         val collected = filteredValidators
-                .map { makeName(it) to validate(event, it) }
-                .onEach { recorder.updateMetrics(it.second, event.side, it.first) }
-                .map { it.second }
+            .map { makeName(it) to validate(event, it) }
+            .onEach { recorder.updateMetrics(it.second, event.side, it.first) }
+            .map { it.second }
         reduce(collected)
     }
 

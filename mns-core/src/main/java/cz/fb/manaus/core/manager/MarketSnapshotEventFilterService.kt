@@ -17,9 +17,10 @@ class MarketSnapshotEventFilterService(private val marketEventFilters: List<Mark
 
     fun accept(filter: MarketSnapshotEventFilter, event: MarketSnapshotEvent): Boolean {
         val result = filter.accept(event)
-        Metrics.counter("mns_market_validator_stats",
-                "validator", makeName(filter),
-                "result", result.toString().toLowerCase()
+        Metrics.counter(
+            "mns_market_validator_stats",
+            "validator", makeName(filter),
+            "result", result.toString().toLowerCase()
         ).increment()
         return result
     }

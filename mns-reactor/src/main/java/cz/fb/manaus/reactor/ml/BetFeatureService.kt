@@ -10,9 +10,10 @@ class BetFeatureService(private val functions: List<ProgressFunction>) {
     fun toFeatureVector(bet: RealizedBet): BetFeatureVector {
         val features = this.functions.map { it.name to it(bet) }.toMap()
         return BetFeatureVector(
-                id = bet.settledBet.id,
-                side = bet.settledBet.price.side,
-                profit = bet.settledBet.profitAndLoss,
-                features = features)
+            id = bet.settledBet.id,
+            side = bet.settledBet.price.side,
+            profit = bet.settledBet.profitAndLoss,
+            features = features
+        )
     }
 }

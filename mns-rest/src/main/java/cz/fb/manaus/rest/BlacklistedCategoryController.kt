@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 @Controller
 @Profile(ManausProfiles.DB)
 class BlacklistedCategoryController(
-        private val blacklistedCategoryRepository: BlacklistedCategoryRepository
+    private val blacklistedCategoryRepository: BlacklistedCategoryRepository
 ) {
 
     val blacklist: List<BlacklistedCategory>

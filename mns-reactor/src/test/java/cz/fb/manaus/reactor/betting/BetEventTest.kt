@@ -12,16 +12,16 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 
 val HOME_EVENT_BACK: BetEvent = BetEvent(
-        sideSelection = SideSelection(Side.BACK, SEL_HOME),
-        account = mbAccount,
-        coverage = mutableMapOf(),
-        marketPrices = runnerPrices,
-        market = market,
-        metrics = BetMetrics(
-                actualTradedVolume = tradedVolume[SEL_HOME],
-                fairness = Fairness(0.9, 1.1),
-                chargeGrowthForecast = 1.0
-        )
+    sideSelection = SideSelection(Side.BACK, SEL_HOME),
+    account = mbAccount,
+    coverage = mutableMapOf(),
+    marketPrices = runnerPrices,
+    market = market,
+    metrics = BetMetrics(
+        actualTradedVolume = tradedVolume[SEL_HOME],
+        fairness = Fairness(0.9, 1.1),
+        chargeGrowthForecast = 1.0
+    )
 )
 
 val HOME_EVENT_LAY: BetEvent = HOME_EVENT_BACK.copy(sideSelection = SideSelection(Side.LAY, SEL_HOME))
@@ -64,18 +64,19 @@ class BetEventTest : AbstractLocalTestCase() {
     @Test
     fun create() {
         val snapshot = MarketSnapshot(
-                runnerPrices = runnerPrices,
-                currentBets = emptyList(),
-                market = market
+            runnerPrices = runnerPrices,
+            currentBets = emptyList(),
+            market = market
         )
 
         val fairness = Fairness(0.9, null)
         val sideSelection = SideSelection(Side.BACK, homePrices.selectionId)
         val event = createBetEvent(
-                sideSelection = sideSelection,
-                snapshot = snapshot,
-                fairness = fairness,
-                account = mbAccount)
+            sideSelection = sideSelection,
+            snapshot = snapshot,
+            fairness = fairness,
+            account = mbAccount
+        )
         assertEquals(mbAccount, event.account)
         assertEquals(homePrices.selectionId, event.sideSelection.selectionId)
         assertEquals(homePrices, event.runnerPrices)

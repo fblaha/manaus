@@ -6,18 +6,20 @@ import cz.fb.manaus.core.model.RealizedBet
 import org.springframework.stereotype.Component
 
 val MATCH_MAP = mapOf(
-        "overUnderGoals" to compile("^Over/Under\\s+\\d+\\.5\\s+goals$"),
-        "regularTimeMatchOdd" to compile("^Regular\\s+Time\\s+Match\\s+Odds$"))
+    "overUnderGoals" to compile("^Over/Under\\s+\\d+\\.5\\s+goals$"),
+    "regularTimeMatchOdd" to compile("^Regular\\s+Time\\s+Match\\s+Odds$")
+)
 val EVENT_MAP = mapOf(
-        "underAge" to compile("^.*\\s+U[12]\\d\\s+.*\\s+U[12]\\d(?:\\s+.*)?$"),
-        "underAge_{1}" to compile("^.*\\s+U([12]\\d)\\s+.*\\s+U[12]\\d(?:\\s+.*)?$"),
-        "women" to compile("^.*\\s+\\(w\\)\\s+.*\\s+\\(w\\)(?:\\s+.*)?$"),
-        "reserveTeam" to compile("^.*\\s+\\(Res\\)\\s+.*\\s+\\(Res\\)(?:\\s+.*)?$"))
+    "underAge" to compile("^.*\\s+U[12]\\d\\s+.*\\s+U[12]\\d(?:\\s+.*)?$"),
+    "underAge_{1}" to compile("^.*\\s+U([12]\\d)\\s+.*\\s+U[12]\\d(?:\\s+.*)?$"),
+    "women" to compile("^.*\\s+\\(w\\)\\s+.*\\s+\\(w\\)(?:\\s+.*)?$"),
+    "reserveTeam" to compile("^.*\\s+\\(Res\\)\\s+.*\\s+\\(Res\\)(?:\\s+.*)?$")
+)
 
 
 @Component
 class MarketRegexpCategorizer(
-        private val regexpCategoryService: RegexpCategoryService
+    private val regexpCategoryService: RegexpCategoryService
 ) : RealizedBetCategorizer, Categorizer {
 
     private val prefix = Category.MARKET_PREFIX + "regexp_"

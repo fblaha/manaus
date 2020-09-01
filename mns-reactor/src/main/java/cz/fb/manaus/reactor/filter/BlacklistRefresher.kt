@@ -11,8 +11,8 @@ import java.util.logging.Logger
 @Component
 @Profile(ManausProfiles.DB)
 class BlacklistRefresher(
-        private val blacklistedCategoryRepository: BlacklistedCategoryRepository,
-        private val suppliers: List<BlacklistSupplier>
+    private val blacklistedCategoryRepository: BlacklistedCategoryRepository,
+    private val suppliers: List<BlacklistSupplier>
 ) : PeriodicTask {
 
     private val log = Logger.getLogger(BlacklistRefresher::class.simpleName)
@@ -26,10 +26,10 @@ class BlacklistRefresher(
         val current = suppliers.flatMap { it.getBlacklist() }
         val currentNames = current.map { it.name }.toSet()
         old.filter { it.name !in currentNames }
-                .onEach { log.info { "deleting blacklisted category '$it'" } }
-                .forEach { blacklistedCategoryRepository.delete(it.name) }
+            .onEach { log.info { "deleting blacklisted category '$it'" } }
+            .forEach { blacklistedCategoryRepository.delete(it.name) }
         current.onEach { log.info { "saving blacklisted category '$it'" } }
-                .forEach { blacklistedCategoryRepository.saveOrUpdate(it) }
+            .forEach { blacklistedCategoryRepository.saveOrUpdate(it) }
     }
 
 }

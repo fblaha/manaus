@@ -7,15 +7,15 @@ import org.springframework.stereotype.Component
 
 @Component
 class BetEventNotifier(
-        private val listeners: List<BetEventListener>
+    private val listeners: List<BetEventListener>
 ) {
 
     val activeSides: Set<Side> = listeners.map { it.side }.toSet()
 
     fun notify(betEvent: BetEvent): List<BetCommand> {
         return listeners
-                .filter { it.side == betEvent.side }
-                .mapNotNull { it.onBetEvent(betEvent) }
+            .filter { it.side == betEvent.side }
+            .mapNotNull { it.onBetEvent(betEvent) }
     }
 
 }

@@ -10,10 +10,10 @@ import javax.annotation.PostConstruct
 import kotlin.math.max
 
 class MinReduceProposerAdviser(
-        private val proposers: List<PriceProposer>,
-        private val adviser: AmountAdviser,
-        private val proposalService: PriceProposalService,
-        private val roundingService: RoundingService
+    private val proposers: List<PriceProposer>,
+    private val adviser: AmountAdviser,
+    private val proposalService: PriceProposalService,
+    private val roundingService: RoundingService
 ) : PriceAdviser {
 
     private val log = Logger.getLogger(MinReduceProposerAdviser::class.simpleName)
@@ -40,7 +40,7 @@ class MinReduceProposerAdviser(
     @PostConstruct
     fun logConfig() {
         val proposerList = proposers.map { it.javaClass }
-                .map { it.simpleName }.sorted().joinToString(",")
+            .map { it.simpleName }.sorted().joinToString(",")
         log.info { "proposer coordinator class: '${this.javaClass.simpleName}', proposers: '$proposerList'" }
     }
 }

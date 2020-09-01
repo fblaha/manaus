@@ -8,9 +8,10 @@ object IntervalParser {
 
     const val INTERVAL = "{interval:\\d+[hmd](?:-\\d+)?}"
     private var units = mapOf(
-            'h' to ChronoUnit.HOURS,
-            'm' to ChronoUnit.MINUTES,
-            'd' to ChronoUnit.DAYS)
+        'h' to ChronoUnit.HOURS,
+        'm' to ChronoUnit.MINUTES,
+        'd' to ChronoUnit.DAYS
+    )
 
     fun parse(date: Instant, interval: String): TimeRange {
         var shiftedDate = date

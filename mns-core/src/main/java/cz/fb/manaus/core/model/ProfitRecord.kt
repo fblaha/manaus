@@ -3,16 +3,27 @@ package cz.fb.manaus.core.model
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import cz.fb.manaus.core.category.Category
 
-@JsonPropertyOrder("category", "profit", "theoreticalProfit", "betProfit", "charge", "avgPrice", "backCount", "layCount", "totalCount")
+@JsonPropertyOrder(
+    "category",
+    "profit",
+    "theoreticalProfit",
+    "betProfit",
+    "charge",
+    "avgPrice",
+    "backCount",
+    "layCount",
+    "totalCount"
+)
 data class ProfitRecord(
-        var category: String,
-        var theoreticalProfit: Double,
-        var avgPrice: Double,
-        var charge: Double,
-        var layCount: Int,
-        var backCount: Int,
-        var coverIndex: Double? = null,
-        var coverCount: Int = 0) {
+    var category: String,
+    var theoreticalProfit: Double,
+    var avgPrice: Double,
+    var charge: Double,
+    var layCount: Int,
+    var backCount: Int,
+    var coverIndex: Double? = null,
+    var coverCount: Int = 0
+) {
 
     val totalCount: Int
         get() = backCount + layCount

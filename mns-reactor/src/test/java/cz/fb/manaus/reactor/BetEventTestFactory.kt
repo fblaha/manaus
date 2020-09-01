@@ -12,16 +12,18 @@ import java.time.temporal.ChronoUnit
 
 @Component
 class BetEventTestFactory(
-        private val calculator: FairnessPolynomialCalculator,
-        private val pricesTestFactory: PricesTestFactory
+    private val calculator: FairnessPolynomialCalculator,
+    private val pricesTestFactory: PricesTestFactory
 ) {
 
     fun newUpdateBetEvent(side: Side, marketPrices: List<RunnerPrices>): BetEvent {
-        val oldBet = Bet(betId = betAction.betId,
-                marketId = market.id,
-                selectionId = SEL_HOME,
-                requestedPrice = Price(5.0, 5.0, side),
-                placedDate = Instant.now())
+        val oldBet = Bet(
+            betId = betAction.betId,
+            marketId = market.id,
+            selectionId = SEL_HOME,
+            requestedPrice = Price(5.0, 5.0, side),
+            placedDate = Instant.now()
+        )
         val event = newBetEvent(side, marketPrices, oldBet)
         return event.copy(proposedPrice = oldBet.requestedPrice)
     }
@@ -29,9 +31,9 @@ class BetEventTestFactory(
     fun newBetEvent(side: Side, marketPrices: List<RunnerPrices>, oldBet: Bet?): BetEvent {
         val fairness = Fairness(0.9, 1.1)
         val snapshot = MarketSnapshot(
-                runnerPrices = marketPrices,
-                market = market,
-                currentBets = oldBet?.let { listOf(it) }.orEmpty()
+            runnerPrices = marketPrices,
+            market = market,
+            currentBets = oldBet?.let { listOf(it) }.orEmpty()
         )
         return createBetEvent(SideSelection(side, SEL_HOME), snapshot, mbAccount, fairness)
     }

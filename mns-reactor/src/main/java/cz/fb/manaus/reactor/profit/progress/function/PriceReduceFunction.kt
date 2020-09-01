@@ -4,8 +4,9 @@ import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.Side
 
 class PriceReduceFunction(
-        private val side: Side,
-        private val operator: (Double, Double) -> Double) : ProgressFunction {
+    private val side: Side,
+    private val operator: (Double, Double) -> Double
+) : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double? {
         val bestPrices = bet.betAction.runnerPrices.map { it.getHomogeneous(side).bestPrice }

@@ -15,10 +15,13 @@ class PriceServiceTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var priceService: PriceService
+
     @Autowired
     private lateinit var roundingService: RoundingService
+
     @Autowired
     private lateinit var factory: PricesTestFactory
+
     @Autowired
     private lateinit var calculator: FairnessPolynomialCalculator
 
@@ -50,7 +53,11 @@ class PriceServiceTest : AbstractLocalTestCase() {
 
     @Test
     fun `fair price`() {
-        val marketPrices = listOf(factory.newRunnerPrices(1, 4.2, 6.0), factory.newRunnerPrices(2, 2.87, 4.0), factory.newRunnerPrices(1, 1.8, 3.0))
+        val marketPrices = listOf(
+            factory.newRunnerPrices(1, 4.2, 6.0),
+            factory.newRunnerPrices(2, 2.87, 4.0),
+            factory.newRunnerPrices(1, 1.8, 3.0)
+        )
         val layFairness = getFairness(Side.LAY, marketPrices)
         assertEquals(1.5, layFairness, 0.1)
         val backFairness = getFairness(Side.BACK, marketPrices)
@@ -133,8 +140,10 @@ class PriceServiceTest : AbstractLocalTestCase() {
         assertTrue(overround > 1)
 
         val overroundPrices = unfairPrices.map {
-            val fair = priceService.getOverroundFairPrice(it, overround,
-                    unfairPrices.size)
+            val fair = priceService.getOverroundFairPrice(
+                it, overround,
+                unfairPrices.size
+            )
             assertTrue(it < fair)
             fair
         }
@@ -154,7 +163,12 @@ class PriceServiceTest : AbstractLocalTestCase() {
         assertEquals(winnerCount.toDouble(), overOverroundBased!!, 0.001)
     }
 
-    private fun checkOverroundUnfairPrices(reciprocal: Double, winnerCount: Int, unfairPrices: List<Double>, fairPrices: List<Double>) {
+    private fun checkOverroundUnfairPrices(
+        reciprocal: Double,
+        winnerCount: Int,
+        unfairPrices: List<Double>,
+        fairPrices: List<Double>
+    ) {
         for ((unfairOrig, fair) in unfairPrices.zip(fairPrices)) {
             val unfairPrice = getOverroundUnfairPrice(fair, reciprocal, winnerCount, unfairPrices.size)
             assertEquals(unfairOrig, unfairPrice, 0.000001)
@@ -185,7 +199,12 @@ class PriceServiceTest : AbstractLocalTestCase() {
         assertEquals(fairnessBackFairPrice, fairnessLayFairPrice, 0.01)
     }
 
-    private fun getOverroundUnfairPrice(fairPrice: Double, targetReciprocal: Double, winnerCount: Int, runnerCount: Int): Double {
+    private fun getOverroundUnfairPrice(
+        fairPrice: Double,
+        targetReciprocal: Double,
+        winnerCount: Int,
+        runnerCount: Int
+    ): Double {
         val overround = winnerCount / targetReciprocal
         val selectionOverround = (overround - winnerCount) / runnerCount
         val probability = 1 / fairPrice

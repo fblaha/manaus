@@ -8,8 +8,10 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile(ManausProfiles.DB)
-class MarketFootprintLoader(private val betActionRepository: BetActionRepository,
-                            private val settledBetRepository: SettledBetRepository) {
+class MarketFootprintLoader(
+    private val betActionRepository: BetActionRepository,
+    private val settledBetRepository: SettledBetRepository
+) {
 
     fun toFootprint(market: Market): MarketFootprint {
         val betActions = betActionRepository.find(market.id)

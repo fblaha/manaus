@@ -17,8 +17,8 @@ import java.time.Instant
 @Controller
 @Profile(ManausProfiles.DB)
 class SettledBetController(
-        private val settledBetRepository: SettledBetRepository,
-        private val betSaver: SettledBetSaver
+    private val settledBetRepository: SettledBetRepository,
+    private val betSaver: SettledBetSaver
 ) {
 
     @ResponseBody

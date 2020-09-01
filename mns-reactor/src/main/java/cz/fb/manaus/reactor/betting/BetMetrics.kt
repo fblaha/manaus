@@ -4,7 +4,7 @@ import cz.fb.manaus.core.model.TradedVolume
 import cz.fb.manaus.reactor.price.Fairness
 
 data class BetMetrics(
-        val chargeGrowthForecast: Double?,
-        val fairness: Fairness,
-        val actualTradedVolume: TradedVolume?
+    val chargeGrowthForecast: Double?,
+    val fairness: Fairness,
+    val actualTradedVolume: TradedVolume?
 )

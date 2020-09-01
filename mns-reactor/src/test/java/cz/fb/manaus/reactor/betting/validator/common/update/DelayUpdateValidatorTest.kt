@@ -19,16 +19,23 @@ import kotlin.test.assertEquals
 class DelayUpdateValidatorTest : AbstractDatabaseTestCase() {
     @Autowired
     private lateinit var validator: TestValidator
+
     @Autowired
     private lateinit var factory: BetEventTestFactory
 
-    private fun checkValidation(actionType: BetActionType, beforeMinutes: Long, side: Side, validationResult: ValidationResult) {
+    private fun checkValidation(
+        actionType: BetActionType,
+        beforeMinutes: Long,
+        side: Side,
+        validationResult: ValidationResult
+    ) {
         marketRepository.saveOrUpdate(market)
         val now = Instant.now()
         val place = betAction.copy(
-                time = now.minus(beforeMinutes, ChronoUnit.MINUTES),
-                price = Price(2.0, 30.0, side),
-                betActionType = actionType)
+            time = now.minus(beforeMinutes, ChronoUnit.MINUTES),
+            price = Price(2.0, 30.0, side),
+            betActionType = actionType
+        )
         betActionRepository.idSafeSave(place)
         val result = validator.validate(factory.newUpdateBetEvent(side, runnerPrices))
         assertEquals(validationResult, result)
@@ -74,7 +81,7 @@ class DelayUpdateValidatorTest : AbstractDatabaseTestCase() {
 
     @Component
     @Profile(DB)
-    class TestValidator(betActionRepository: BetActionRepository)
-        : Validator by DelayUpdateValidator(Duration.ofMinutes(30), betActionRepository)
+    class TestValidator(betActionRepository: BetActionRepository) :
+        Validator by DelayUpdateValidator(Duration.ofMinutes(30), betActionRepository)
 
 }

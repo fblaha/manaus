@@ -34,9 +34,9 @@ class MatchedBetMetricUpdater {
         update(matched.count { it.requestedPrice.side == Side.BACK }, matchedBackBets)
         update(matched.count { it.requestedPrice.side == Side.LAY }, matchedLayBets)
         val covered = 2 * matched
-                .groupBy { it.marketId to it.selectionId }.values
-                .map { it.distinctBy { bet -> bet.requestedPrice.side }.size }
-                .count { it == 2 }
+            .groupBy { it.marketId to it.selectionId }.values
+            .map { it.distinctBy { bet -> bet.requestedPrice.side }.size }
+            .count { it == 2 }
         update(covered, coveredBets)
     }
 

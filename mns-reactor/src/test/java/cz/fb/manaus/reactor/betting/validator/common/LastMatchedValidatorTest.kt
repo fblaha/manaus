@@ -16,6 +16,7 @@ class LastMatchedValidatorTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var validator: TestValidator
+
     @Autowired
     private lateinit var factory: BetEventTestFactory
 

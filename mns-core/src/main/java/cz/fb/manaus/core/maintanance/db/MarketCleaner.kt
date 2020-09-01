@@ -16,10 +16,11 @@ import java.util.logging.Logger
 
 @Component
 @Profile(ManausProfiles.DB)
-class MarketCleaner(private val marketRepository: MarketRepository,
-                    private val marketFootprintLoader: MarketFootprintLoader,
-                    private val marketPurger: MarketPurger,
-                    private val approvers: List<MarketDeletionApprover>
+class MarketCleaner(
+    private val marketRepository: MarketRepository,
+    private val marketFootprintLoader: MarketFootprintLoader,
+    private val marketPurger: MarketPurger,
+    private val approvers: List<MarketDeletionApprover>
 ) : PeriodicTask {
 
     override val name: String = "marketCleanup"

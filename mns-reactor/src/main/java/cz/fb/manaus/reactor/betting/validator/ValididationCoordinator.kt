@@ -4,8 +4,8 @@ import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 
 class ValidationCoordinator(
-        validators: List<Validator>,
-        private val validationService: ValidationService
+    validators: List<Validator>,
+    private val validationService: ValidationService
 ) {
 
     private val validators = validators.partition { it is PriceProposer }

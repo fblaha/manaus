@@ -19,9 +19,9 @@ import kotlin.reflect.full.findAnnotation
 @Configuration
 @Profile("ischia")
 open class BettorConfiguration(
-        private val adviser: AmountAdviser,
-        private val proposalService: PriceProposalService,
-        private val roundingService: RoundingService
+    private val adviser: AmountAdviser,
+    private val proposalService: PriceProposalService,
+    private val roundingService: RoundingService
 
 ) {
 
@@ -36,10 +36,10 @@ open class BettorConfiguration(
     @Bean
     @LayUniverse
     open fun layBetEventCoordinator(
-            @LayUniverse priceAdviser: PriceAdviser,
-            @LayUniverse validationCoordinator: ValidationCoordinator
+        @LayUniverse priceAdviser: PriceAdviser,
+        @LayUniverse validationCoordinator: ValidationCoordinator
     ): BetEventCoordinator =
-            BetEventCoordinator(Side.LAY, validationCoordinator, priceAdviser)
+        BetEventCoordinator(Side.LAY, validationCoordinator, priceAdviser)
 
     @Bean
     @BackUniverse
@@ -51,9 +51,10 @@ open class BettorConfiguration(
 
     @Bean
     @BackUniverse
-    open fun backBetEventCoordinator(@BackUniverse priceAdviser: PriceAdviser,
-                                     @BackUniverse validationCoordinator: ValidationCoordinator
+    open fun backBetEventCoordinator(
+        @BackUniverse priceAdviser: PriceAdviser,
+        @BackUniverse validationCoordinator: ValidationCoordinator
     ): BetEventCoordinator =
-            BetEventCoordinator(Side.BACK, validationCoordinator, priceAdviser)
+        BetEventCoordinator(Side.BACK, validationCoordinator, priceAdviser)
 
 }

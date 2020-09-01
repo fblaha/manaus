@@ -8,10 +8,10 @@ import javax.annotation.PostConstruct
 @ConstructorBinding
 @ConfigurationProperties("price")
 data class PriceConf(
-        val bulldoze: Double = 0.0,
-        val min: Double = 0.0,
-        val max: Double = 0.0,
-        val limit: Int = 0
+    val bulldoze: Double = 0.0,
+    val min: Double = 0.0,
+    val max: Double = 0.0,
+    val limit: Int = 0
 ) {
 
     private val log = Logger.getLogger(PriceConf::class.simpleName)

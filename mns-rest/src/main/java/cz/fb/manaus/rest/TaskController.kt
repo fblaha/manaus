@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 @Controller
 @Profile(ManausProfiles.DB)
 class TaskController(
-        private val taskExecutionRepository: TaskExecutionRepository
+    private val taskExecutionRepository: TaskExecutionRepository
 ) {
 
     val tasks: List<TaskExecution>

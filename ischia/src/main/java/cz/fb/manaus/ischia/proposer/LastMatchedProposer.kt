@@ -24,8 +24,10 @@ class LastMatchedProposer(private val priceService: PriceService) : PricePropose
 
     override fun getProposedPrice(event: BetEvent): Double {
         val lastMatchedPrice = event.runnerPrices.lastMatchedPrice!!
-        return priceService.downgrade(lastMatchedPrice,
-                0.01, event.side)
+        return priceService.downgrade(
+            lastMatchedPrice,
+            0.01, event.side
+        )
     }
 
 }

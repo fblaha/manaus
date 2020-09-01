@@ -6,8 +6,8 @@ import kotlin.reflect.KProperty1
 
 
 abstract class AbstractRepository<T, U>(
-        internal val repository: ObjectRepository<T>,
-        val key: KProperty1<T, U>
+    internal val repository: ObjectRepository<T>,
+    val key: KProperty1<T, U>
 ) {
 
     fun saveOrUpdate(entity: T) {

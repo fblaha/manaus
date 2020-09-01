@@ -61,9 +61,10 @@ class PriceProposalServiceTest : AbstractLocalTestCase() {
     companion object {
 
         val PROPOSERS = listOf(
-                TestProposer1(),
-                TestProposer2(),
-                FooProposer())
+            TestProposer1(),
+            TestProposer2(),
+            FooProposer()
+        )
         const val MIN_PRICE = 1.5
         const val MAX_PRICE = 2.0
     }

@@ -13,16 +13,18 @@ import java.math.RoundingMode
 
 @Component
 class FixedBinFunctionProfitService(
-        functions: List<ProgressFunction>,
-        private val categoryService: CategoryService,
-        private val profitService: ProfitService
+    functions: List<ProgressFunction>,
+    private val categoryService: CategoryService,
+    private val profitService: ProfitService
 ) {
     private val functions: Map<String, ProgressFunction> = functions.map { it.name to it }.toMap()
 
-    fun getProfitRecords(bets: List<RealizedBet>,
-                         funcName: String? = null,
-                         binCount: Int,
-                         projection: String? = null): List<ProfitRecord> {
+    fun getProfitRecords(
+        bets: List<RealizedBet>,
+        funcName: String? = null,
+        binCount: Int,
+        projection: String? = null
+    ): List<ProfitRecord> {
 
         val coverage = BetCoverage.from(bets)
         val filtered = when (projection) {
@@ -34,10 +36,12 @@ class FixedBinFunctionProfitService(
     }
 
 
-    private fun computeProfitRecords(function: ProgressFunction,
-                                     binCount: Int,
-                                     coverage: BetCoverage,
-                                     bets: List<RealizedBet>): List<ProfitRecord> {
+    private fun computeProfitRecords(
+        function: ProgressFunction,
+        binCount: Int,
+        coverage: BetCoverage,
+        bets: List<RealizedBet>
+    ): List<ProfitRecord> {
         val computed = bets.map { it to function(it) }
 
         val (hasValue, noValues) = computed.partition { it.second != null }
@@ -70,9 +74,11 @@ class FixedBinFunctionProfitService(
         }
     }
 
-    private fun computeBinRecord(name: String,
-                                 bin: List<Pair<RealizedBet, Double?>>,
-                                 coverage: BetCoverage): ProfitRecord {
+    private fun computeBinRecord(
+        name: String,
+        bin: List<Pair<RealizedBet, Double?>>,
+        coverage: BetCoverage
+    ): ProfitRecord {
         val average = bin.mapNotNull { it.second }.average()
         val category = getValueCategory(name, average)
         val bets = bin.map { it.first }
@@ -86,9 +92,11 @@ class FixedBinFunctionProfitService(
         }
     }
 
-    private fun computeFunctionRecord(category: String,
-                                      bets: List<RealizedBet>,
-                                      coverage: BetCoverage): ProfitRecord {
+    private fun computeFunctionRecord(
+        category: String,
+        bets: List<RealizedBet>,
+        coverage: BetCoverage
+    ): ProfitRecord {
         val binRecords = bets.map {
             profitService.toProfitRecord(it, category, it.settledBet.commission ?: 0.0, coverage)
         }

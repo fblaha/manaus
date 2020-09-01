@@ -37,28 +37,33 @@ class End2EndTest : AbstractControllerTest() {
 
     private fun `When I post market`() {
         val market = objectMapper.writer().writeValueAsString(market)
-        val result = mvc.perform(MockMvcRequestBuilders.post("/markets")
+        val result = mvc.perform(
+            MockMvcRequestBuilders.post("/markets")
                 .content(market)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isCreated)
-                .andReturn()
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(MockMvcResultMatchers.status().isCreated)
+            .andReturn()
         assertNotNull(result.response.getHeader(HttpHeaders.LOCATION))
     }
 
     private fun `And I post snapshot and I collect bets`() {
         val crate = MarketEvent(
-                prices = runnerPrices,
-                bets = emptyList(),
-                scanTime = 1000,
-                account = mbAccount,
-                tradedVolume = tradedVolume)
+            prices = runnerPrices,
+            bets = emptyList(),
+            scanTime = 1000,
+            account = mbAccount,
+            tradedVolume = tradedVolume
+        )
 
         val snapshot = objectMapper.writer().writeValueAsString(crate)
-        val result = mvc.perform(MockMvcRequestBuilders.post("/markets/{id}/event", market.id)
+        val result = mvc.perform(
+            MockMvcRequestBuilders.post("/markets/{id}/event", market.id)
                 .content(snapshot)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk)
-                .andReturn()
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andReturn()
         collectedBets = objectMapper.readValue(result.response.contentAsString)
         assertEquals(3, collectedBets.place.size)
         assertEquals(0, collectedBets.update.size)
@@ -66,12 +71,15 @@ class End2EndTest : AbstractControllerTest() {
 
     private fun `When I set bet ID for all bet actions`() {
         for ((i, bet) in collectedBets.place.withIndex()) {
-            mvc.perform(MockMvcRequestBuilders.put(
-                    "/actions/{id}/betId", bet.actionId)
+            mvc.perform(
+                MockMvcRequestBuilders.put(
+                    "/actions/{id}/betId", bet.actionId
+                )
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(i.toString()))
-                    .andExpect(MockMvcResultMatchers.status().isOk)
-                    .andReturn()
+                    .content(i.toString())
+            )
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andReturn()
         }
     }
 
@@ -79,26 +87,28 @@ class End2EndTest : AbstractControllerTest() {
     private fun `When I post settled bets for all bet actions`() {
         for ((i, bet) in collectedBets.place.withIndex()) {
             val settledBet = homeSettledBet.copy(
-                    selectionId = bet.selectionId,
-                    id = i.toString(),
-                    price = bet.requestedPrice,
-                    profitAndLoss = 10.0,
-                    commission = 0.1
+                selectionId = bet.selectionId,
+                id = i.toString(),
+                price = bet.requestedPrice,
+                profitAndLoss = 10.0,
+                commission = 0.1
             )
             val serialized = objectMapper.writer().writeValueAsString(settledBet)
-            mvc.perform(MockMvcRequestBuilders.post("/bets")
+            mvc.perform(
+                MockMvcRequestBuilders.post("/bets")
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(serialized))
-                    .andExpect(MockMvcResultMatchers.status().`is`(201))
-                    .andReturn()
+                    .content(serialized)
+            )
+                .andExpect(MockMvcResultMatchers.status().`is`(201))
+                .andReturn()
         }
     }
 
     private fun `Then settled bets should be reflected in profit records`() {
         val result = mvc.perform(MockMvcRequestBuilders.get("/profit/1d").accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk)
-                .andReturn()
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andReturn()
         val profitRecords: List<ProfitRecord> = objectMapper.readValue(result.response.contentAsString)
         val allRecord = profitRecords.first()
         assertEquals(MarketCategories.ALL, allRecord.category)
@@ -110,16 +120,16 @@ class End2EndTest : AbstractControllerTest() {
 
     private fun `And settled bets should be reflected in fc progress records`() {
         val result = mvc.perform(MockMvcRequestBuilders.get("/fc-progress/1d").accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk)
-                .andReturn()
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andReturn()
         val profitRecords: List<ProfitRecord> = objectMapper.readValue(result.response.contentAsString)
         assertTrue(profitRecords.isNotEmpty())
     }
 
     private fun `And settled bets should be reflected in ML bet features`() {
         val result = mvc.perform(MockMvcRequestBuilders.get("/ml/bet-features/1d").accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk)
-                .andReturn()
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andReturn()
         val vectors: List<BetFeatureVector> = objectMapper.readValue(result.response.contentAsString)
         assertTrue(vectors.isNotEmpty())
     }
@@ -138,10 +148,12 @@ class End2EndTest : AbstractControllerTest() {
     }
 
     private fun checkAction(expectedCount: Int, actionCheck: (BetAction) -> Unit) {
-        val result = mvc.perform(MockMvcRequestBuilders.get("/markets/" + market.id + "/actions")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk)
-                .andReturn()
+        val result = mvc.perform(
+            MockMvcRequestBuilders.get("/markets/" + market.id + "/actions")
+                .accept(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andReturn()
         val betActions: List<BetAction> = objectMapper.readValue(result.response.contentAsString)
         assertEquals(expectedCount, betActions.size)
         betActions.forEach { actionCheck(it) }

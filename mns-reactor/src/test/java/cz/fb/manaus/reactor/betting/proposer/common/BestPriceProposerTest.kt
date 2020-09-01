@@ -17,8 +17,10 @@ class BestPriceProposerTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var layProposer: LayProposer
+
     @Autowired
     private lateinit var backProposer: BackProposer
+
     @Autowired
     private lateinit var factory: PricesTestFactory
 
@@ -44,11 +46,9 @@ class BestPriceProposerTest : AbstractLocalTestCase() {
     }
 
     @Component
-    class LayProposer(roundingService: RoundingService)
-        : PriceProposer by BestPriceProposer(1, roundingService)
+    class LayProposer(roundingService: RoundingService) : PriceProposer by BestPriceProposer(1, roundingService)
 
     @Component
-    class BackProposer(roundingService: RoundingService)
-        : PriceProposer by BestPriceProposer(1, roundingService)
+    class BackProposer(roundingService: RoundingService) : PriceProposer by BestPriceProposer(1, roundingService)
 
 }

@@ -9,12 +9,12 @@ import kotlin.test.assertTrue
 class ProfitMetricSpecTest {
 
     private val spec = ProfitMetricSpec(
-            query = ProfitQuery(
-                    updateFrequency = UpdateFrequency.HIGH,
-                    interval = "24h"
-            ),
-            categoryPrefix = "market_type",
-            categoryValues = setOf("match_odds", "total")
+        query = ProfitQuery(
+            updateFrequency = UpdateFrequency.HIGH,
+            interval = "24h"
+        ),
+        categoryPrefix = "market_type",
+        categoryValues = setOf("match_odds", "total")
     )
 
     @Test

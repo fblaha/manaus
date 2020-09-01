@@ -14,43 +14,43 @@ import java.util.logging.Logger
 @Component
 @Profile(ManausProfiles.DB)
 class ProfitLoader(
-        private val betLoader: SettledBetLoader,
-        private val profitService: ProfitService,
-        private val fixedBinFunctionProfitService: FixedBinFunctionProfitService
+    private val betLoader: SettledBetLoader,
+    private val profitService: ProfitService,
+    private val fixedBinFunctionProfitService: FixedBinFunctionProfitService
 ) {
 
     private val log = Logger.getLogger(ProfitLoader::class.simpleName)
 
     fun loadProfitRecords(
-            interval: String,
-            cache: Boolean,
-            projection: String? = null
+        interval: String,
+        cache: Boolean,
+        projection: String? = null
     ): List<ProfitRecord> {
         val settledBets = betLoader.load(interval, cache)
         val stopwatch = Stopwatch.createStarted()
         val records = profitService.getProfitRecords(
-                settledBets,
-                projection,
-                false
+            settledBets,
+            projection,
+            false
         )
         logTime(stopwatch, "profit records computed")
         return records
     }
 
     fun loadFixedBinRecords(
-            interval: String,
-            binCount: Int,
-            function: String?,
-            projection: String?,
-            cache: Boolean
+        interval: String,
+        binCount: Int,
+        function: String?,
+        projection: String?,
+        cache: Boolean
     ): List<ProfitRecord> {
         val settledBets = betLoader.load(interval, cache)
         val stopwatch = Stopwatch.createStarted()
         val records = fixedBinFunctionProfitService.getProfitRecords(
-                settledBets,
-                function,
-                binCount,
-                projection
+            settledBets,
+            function,
+            binCount,
+            projection
         )
         logTime(stopwatch, "profit records computed")
         return records

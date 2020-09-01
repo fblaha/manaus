@@ -33,8 +33,8 @@ class PriceProposalService {
         }
 
         val proposers = values
-                .filter { it.price priceEq result.price }
-                .flatMap { it.proposers }.toSet()
+            .filter { it.price priceEq result.price }
+            .flatMap { it.proposers }.toSet()
         return ProposedPrice(result.price, proposers)
     }
 }

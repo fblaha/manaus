@@ -10,14 +10,17 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile(ManausProfiles.DB)
-class RealizedBetLoader(private val betActionRepository: BetActionRepository,
-                        private val marketRepository: MarketRepository) {
+class RealizedBetLoader(
+    private val betActionRepository: BetActionRepository,
+    private val marketRepository: MarketRepository
+) {
 
     fun toRealizedBet(settledBet: SettledBet): RealizedBet {
         val action = betActionRepository.findRecentBetAction(settledBet.id)!!
         return RealizedBet(
-                settledBet = settledBet,
-                betAction = action,
-                market = marketRepository.read(action.marketId)!!)
+            settledBet = settledBet,
+            betAction = action,
+            market = marketRepository.read(action.marketId)!!
+        )
     }
 }

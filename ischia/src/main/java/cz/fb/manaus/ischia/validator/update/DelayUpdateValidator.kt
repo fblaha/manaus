@@ -15,5 +15,5 @@ import java.time.Duration
 @LayUniverse
 @Component
 @Profile(ManausProfiles.DB)
-class DelayUpdateValidator(betActionRepository: BetActionRepository)
-    : Validator by DelayUpdateValidator(Duration.ofMinutes(10), betActionRepository)
+class DelayUpdateValidator(betActionRepository: BetActionRepository) :
+    Validator by DelayUpdateValidator(Duration.ofMinutes(10), betActionRepository)

@@ -16,7 +16,10 @@ open class ValidationConfiguration {
 
     @Bean
     @LayUniverse
-    open fun layValidationCoordinator(validationService: ValidationService, @LayUniverse validators: List<Validator>): ValidationCoordinator {
+    open fun layValidationCoordinator(
+        validationService: ValidationService,
+        @LayUniverse validators: List<Validator>
+    ): ValidationCoordinator {
         validators.forEach { checkNotNull(it::class.findAnnotation<LayUniverse>()) }
         check(validators.isNotEmpty())
         return ValidationCoordinator(validators, validationService)
@@ -24,7 +27,10 @@ open class ValidationConfiguration {
 
     @Bean
     @BackUniverse
-    open fun backValidationCoordinator(validationService: ValidationService, @BackUniverse validators: List<Validator>): ValidationCoordinator {
+    open fun backValidationCoordinator(
+        validationService: ValidationService,
+        @BackUniverse validators: List<Validator>
+    ): ValidationCoordinator {
         validators.forEach { checkNotNull(it::class.findAnnotation<BackUniverse>()) }
         check(validators.isNotEmpty())
         return ValidationCoordinator(validators, validationService)

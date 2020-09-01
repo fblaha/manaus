@@ -18,19 +18,19 @@ import java.util.logging.Logger
 
 
 data class MarketEvent(
-        var prices: List<RunnerPrices>,
-        var bets: List<Bet>,
-        var account: Account,
-        val tradedVolume: Map<Long, TradedVolume>? = null,
-        var scanTime: Long = 0
+    var prices: List<RunnerPrices>,
+    var bets: List<Bet>,
+    var account: Account,
+    val tradedVolume: Map<Long, TradedVolume>? = null,
+    var scanTime: Long = 0
 )
 
 @Controller
 @Profile(ManausProfiles.DB)
 class MarketEventController(
-        private val notifier: MarketSnapshotNotifier,
-        private val marketRepository: MarketRepository,
-        private val betMetricUpdater: MatchedBetMetricUpdater
+    private val notifier: MarketSnapshotNotifier,
+    private val marketRepository: MarketRepository,
+    private val betMetricUpdater: MatchedBetMetricUpdater
 ) {
 
     private val availableMoney: AtomicDouble by lazy { Metrics.gauge("mns_account_money_available", AtomicDouble()) }

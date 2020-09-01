@@ -17,15 +17,15 @@ import kotlin.test.assertTrue
 
 @Index(value = "name", type = IndexType.Unique)
 data class Foo(
-        @Id val name: String,
-        val description: String
+    @Id val name: String,
+    val description: String
 )
 
 
 @Component
 @Profile(ManausProfiles.DB)
 class FooRepository(db: Nitrite) :
-        AbstractRepository<Foo, String>(db.getRepository {}, Foo::name)
+    AbstractRepository<Foo, String>(db.getRepository {}, Foo::name)
 
 class FooRepositoryTest : AbstractDatabaseTestCase() {
 

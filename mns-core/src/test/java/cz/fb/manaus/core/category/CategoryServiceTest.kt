@@ -25,13 +25,24 @@ class CategoryServiceTest : AbstractLocalTestCase() {
         assertTrue { SPORT_TENNIS in categoryService.getMarketCategories(market, false) }
 
         market = market.copy(eventType = eventType.copy(name = "Golf"))
-        assertTrue { Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.GOLF in categoryService.getMarketCategories(market, false) }
+        assertTrue {
+            val cat = Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.GOLF
+            cat in categoryService.getMarketCategories(market, false)
+        }
     }
 
     @Test
     fun `bet category`() {
         val categories = categoryService.getRealizedBetCategories(realizedBet, false)
-        assertTrue { categories.containsAll(listOf("market_country_cz", "market_sport_soccer", "market_type_match_odds")) }
+        assertTrue {
+            categories.containsAll(
+                listOf(
+                    "market_country_cz",
+                    "market_sport_soccer",
+                    "market_type_match_odds"
+                )
+            )
+        }
     }
 
     companion object {

@@ -9,8 +9,8 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 
 class DelayUpdateValidator(
-        private val pausePeriod: Duration,
-        private val betActionRepository: BetActionRepository
+    private val pausePeriod: Duration,
+    private val betActionRepository: BetActionRepository
 ) : UpdateOnlyValidator {
 
     override fun validate(event: BetEvent): ValidationResult {

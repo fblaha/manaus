@@ -24,11 +24,13 @@ class SettledBetRepository(db: Nitrite) : AbstractRepository<SettledBet, String>
         check(repository.update(SettledBet::id eq settledBet.id, settledBet).affectedCount == 1)
     }
 
-    fun find(from: Instant? = null,
-             to: Instant? = null,
-             side: Side? = null,
-             maxResults: Int? = null,
-             asc: Boolean = true): List<SettledBet> {
+    fun find(
+        from: Instant? = null,
+        to: Instant? = null,
+        side: Side? = null,
+        maxResults: Int? = null,
+        asc: Boolean = true
+    ): List<SettledBet> {
         var filter = ObjectFilters.ALL
         if (from != null) {
             val fromFilter = SettledBet::settled gte from

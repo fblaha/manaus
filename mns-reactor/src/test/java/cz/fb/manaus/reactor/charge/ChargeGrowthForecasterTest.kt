@@ -16,10 +16,13 @@ class ChargeGrowthForecasterTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var forecaster: ChargeGrowthForecaster
+
     @Autowired
     private lateinit var factory: PricesTestFactory
+
     @Autowired
     private lateinit var calculator: FairnessPolynomialCalculator
+
     @Autowired
     private lateinit var adviser: AmountAdviser
 
@@ -34,8 +37,12 @@ class ChargeGrowthForecasterTest : AbstractLocalTestCase() {
         var forecast = forecaster.getForecast(homeBack, snapshot, fairness, commission)
         assertTrue(forecast!! > 1)
         val betAmount = adviser.amount
-        currentBets.add(Bet("1", "1", SEL_DRAW,
-                Price(3.0, betAmount, Side.LAY), Instant.now(), betAmount))
+        currentBets.add(
+            Bet(
+                "1", "1", SEL_DRAW,
+                Price(3.0, betAmount, Side.LAY), Instant.now(), betAmount
+            )
+        )
         val drawBack = SideSelection(Side.BACK, SEL_DRAW)
         forecast = forecaster.getForecast(drawBack, snapshot, fairness, commission)
         assertFalse(forecast!! > 1)

@@ -18,8 +18,10 @@ import kotlin.test.assertEquals
 class MinReduceProposerAdviserTest : AbstractLocalTestCase() {
 
     private lateinit var adviser: MinReduceProposerAdviser
+
     @Autowired
     private lateinit var roundingService: RoundingService
+
     @Autowired
     private lateinit var proposalService: PriceProposalService
 

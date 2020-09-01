@@ -20,15 +20,17 @@ import kotlin.test.assertTrue
 @WebAppConfiguration
 abstract class AbstractControllerTest : AbstractDatabaseTestCase() {
     protected lateinit var mvc: MockMvc
+
     @Autowired
     private lateinit var context: WebApplicationContext
+
     @Autowired
     private lateinit var settledBetLoader: SettledBetLoader
 
     protected fun checkResponse(url: String, vararg substrings: String) {
         val result = mvc.perform(get(url).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk)
-                .andReturn()
+            .andExpect(status().isOk)
+            .andReturn()
         val content = result.response.contentAsString
         substrings.forEach { assertTrue(it in content) }
     }

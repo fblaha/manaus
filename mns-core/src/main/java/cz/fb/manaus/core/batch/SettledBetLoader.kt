@@ -16,21 +16,21 @@ import java.util.logging.Logger
 @Component
 @Profile(ManausProfiles.DB)
 class SettledBetLoader(
-        private val settledBetRepository: SettledBetRepository,
-        private val realizedBetLoader: RealizedBetLoader
+    private val settledBetRepository: SettledBetRepository,
+    private val realizedBetLoader: RealizedBetLoader
 ) {
 
     private val log = Logger.getLogger(SettledBetLoader::class.simpleName)
 
     private var cache = CacheBuilder.newBuilder()
-            .maximumSize(100)
-            .expireAfterAccess(10, TimeUnit.MINUTES)
-            .expireAfterWrite(30, TimeUnit.MINUTES)
-            .build(object : CacheLoader<String, List<RealizedBet>>() {
-                override fun load(key: String): List<RealizedBet> {
-                    return loadFromDatabase(key)
-                }
-            })
+        .maximumSize(100)
+        .expireAfterAccess(10, TimeUnit.MINUTES)
+        .expireAfterWrite(30, TimeUnit.MINUTES)
+        .build(object : CacheLoader<String, List<RealizedBet>>() {
+            override fun load(key: String): List<RealizedBet> {
+                return loadFromDatabase(key)
+            }
+        })
 
     fun load(interval: String, useCache: Boolean): List<RealizedBet> {
         val stopwatch = Stopwatch.createStarted()
@@ -43,6 +43,7 @@ class SettledBetLoader(
         log.info { "bets fetched in '$elapsed' seconds" }
         return result
     }
+
     private fun loadFromDatabase(interval: String): List<RealizedBet> {
         val (from, to) = IntervalParser.parse(Instant.now(), interval)
         val stopwatch = Stopwatch.createStarted()

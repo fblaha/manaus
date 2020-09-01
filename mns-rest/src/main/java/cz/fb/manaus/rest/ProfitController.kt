@@ -12,22 +12,22 @@ import java.util.*
 @Controller
 @Profile(ManausProfiles.DB)
 class ProfitController(
-        private val profitLoader: ProfitLoader
+    private val profitLoader: ProfitLoader
 ) {
 
     private val comparators: Map<String, Comparator<ProfitRecord>> = mapOf(
-            "category" to compareBy { it.category },
-            "betProfit" to compareBy { it.betProfit },
-            "profit" to compareBy { it.profit })
+        "category" to compareBy { it.category },
+        "betProfit" to compareBy { it.betProfit },
+        "profit" to compareBy { it.profit })
 
     @ResponseBody
     @RequestMapping(value = ["/profit/" + IntervalParser.INTERVAL], method = [RequestMethod.GET])
     fun getProfitRecords(
-            @PathVariable interval: String,
-            @RequestParam(required = false) filter: String?,
-            @RequestParam(required = false) sort: String?,
-            @RequestParam(required = false) projection: String?,
-            @RequestParam(defaultValue = "true") cache: Boolean
+        @PathVariable interval: String,
+        @RequestParam(required = false) filter: String?,
+        @RequestParam(required = false) sort: String?,
+        @RequestParam(required = false) projection: String?,
+        @RequestParam(defaultValue = "true") cache: Boolean
     ): List<ProfitRecord> {
         var profitRecords = profitLoader.loadProfitRecords(interval, cache, projection)
         if (filter != null) {
@@ -43,11 +43,11 @@ class ProfitController(
     @ResponseBody
     @RequestMapping(value = ["/fc-progress/" + IntervalParser.INTERVAL], method = [RequestMethod.GET])
     fun getProgressRecords(
-            @PathVariable interval: String,
-            @RequestParam(defaultValue = "5") binCount: Int,
-            @RequestParam(required = false) function: String?,
-            @RequestParam(required = false) projection: String?,
-            @RequestParam(defaultValue = "true") cache: Boolean
+        @PathVariable interval: String,
+        @RequestParam(defaultValue = "5") binCount: Int,
+        @RequestParam(required = false) function: String?,
+        @RequestParam(required = false) projection: String?,
+        @RequestParam(defaultValue = "true") cache: Boolean
     ): List<ProfitRecord> {
         return profitLoader.loadFixedBinRecords(interval, binCount, function, projection, cache)
     }

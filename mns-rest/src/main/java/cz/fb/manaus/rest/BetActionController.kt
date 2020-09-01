@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 @Controller
 @Profile(ManausProfiles.DB)
 class BetActionController(
-        private val betActionRepository: BetActionRepository
+    private val betActionRepository: BetActionRepository
 ) {
 
     @ResponseBody
@@ -28,8 +28,10 @@ class BetActionController(
     }
 
     @RequestMapping(value = ["/actions/{id}/betId"], method = [RequestMethod.PUT])
-    fun setBetId(@PathVariable id: Long,
-                 @RequestBody betId: String): ResponseEntity<*> {
+    fun setBetId(
+        @PathVariable id: Long,
+        @RequestBody betId: String
+    ): ResponseEntity<*> {
         val changedRows = betActionRepository.setBetId(id, sanitizeId(betId))
         Metrics.counter("mns_action_betId_put").increment()
         return if (changedRows > 0) {

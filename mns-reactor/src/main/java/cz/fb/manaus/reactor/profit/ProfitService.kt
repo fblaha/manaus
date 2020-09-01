@@ -11,7 +11,11 @@ import org.springframework.stereotype.Service
 @Service
 class ProfitService(private val categoryService: CategoryService) {
 
-    fun getProfitRecords(bets: List<RealizedBet>, projection: String? = null, simulationAwareOnly: Boolean): List<ProfitRecord> {
+    fun getProfitRecords(
+        bets: List<RealizedBet>,
+        projection: String? = null,
+        simulationAwareOnly: Boolean
+    ): List<ProfitRecord> {
         val coverage = BetCoverage.from(bets)
         val filtered = if (projection == null) bets else categoryService.filterBets(bets, projection)
 
@@ -22,16 +26,16 @@ class ProfitService(private val categoryService: CategoryService) {
     private fun mergeProfitRecords(records: Collection<ProfitRecord>): List<ProfitRecord> {
         val categories = records.groupBy { it.category }
         return categories.entries
-                .map { mergeCategory(it.key, it.value) }
-                .sortedBy { it.category }
+            .map { mergeCategory(it.key, it.value) }
+            .sortedBy { it.category }
     }
 
     fun mergeCategory(category: String, records: Collection<ProfitRecord>): ProfitRecord {
         require(records.map { it.category }
-                .all { category == it })
+            .all { category == it })
         val avgPrice = records
-                .map { it.avgPrice }
-                .average()
+            .map { it.avgPrice }
+            .average()
         val theoreticalProfit = records.map { it.theoreticalProfit }.sum()
         val charge = records.map { it.charge }.sum()
         val layCount = records.map { it.layCount }.sum()
@@ -46,7 +50,11 @@ class ProfitService(private val categoryService: CategoryService) {
         return result
     }
 
-    private fun computeProfitRecords(bets: List<RealizedBet>, simulationAwareOnly: Boolean, coverage: BetCoverage): List<ProfitRecord> {
+    private fun computeProfitRecords(
+        bets: List<RealizedBet>,
+        simulationAwareOnly: Boolean,
+        coverage: BetCoverage
+    ): List<ProfitRecord> {
         return bets.flatMap { bet ->
             val categories = categoryService.getRealizedBetCategories(bet, simulationAwareOnly)
             categories.map {
@@ -57,7 +65,12 @@ class ProfitService(private val categoryService: CategoryService) {
         }
     }
 
-    fun toProfitRecord(bet: RealizedBet, category: String, chargeContribution: Double, coverage: BetCoverage): ProfitRecord {
+    fun toProfitRecord(
+        bet: RealizedBet,
+        category: String,
+        chargeContribution: Double,
+        coverage: BetCoverage
+    ): ProfitRecord {
         val side = bet.settledBet.price.side
         val price = bet.settledBet.price.price
         val result = if (side == Side.BACK) {

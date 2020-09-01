@@ -11,9 +11,11 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile(ManausProfiles.DB)
-class Importer(private val marketRepository: MarketRepository,
-               private val settledBetRepository: SettledBetRepository,
-               private val betActionRepository: BetActionRepository) {
+class Importer(
+    private val marketRepository: MarketRepository,
+    private val settledBetRepository: SettledBetRepository,
+    private val betActionRepository: BetActionRepository
+) {
 
     fun import(footprint: MarketFootprint) {
         val (market, actions, settledBets) = footprint

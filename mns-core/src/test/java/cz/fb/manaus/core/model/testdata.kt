@@ -25,7 +25,8 @@ val homeSettledBet: SettledBet = SettledBet(
 val drawSettledBet: SettledBet = homeSettledBet.copy(
         selectionName = "The Draw",
         selectionId = SEL_DRAW,
-        id = "2")
+        id = "2"
+)
 
 val homePrices = RunnerPrices(
         selectionId = SEL_HOME,
@@ -56,7 +57,8 @@ val betAction = BetAction(
         proposers = setOf("bestPrice")
 )
 
-val market = Market(id = "2",
+val market = Market(
+        id = "2",
         name = "Match Odds",
         inPlay = true,
         type = "match_odds",
@@ -67,7 +69,8 @@ val market = Market(id = "2",
                 openDate = Instant.now().plus(2, ChronoUnit.DAYS),
                 timezone = "CET",
                 countryCode = "cz",
-                venue = "bazaly"),
+                venue = "bazaly"
+        ),
         competition = Competition("100", "Czech League"),
         eventType = EventType("1000", "soccer"),
         latestEvent = Instant.now(),
@@ -83,7 +86,8 @@ val realizedBet = RealizedBet(homeSettledBet, betAction, market)
 val tradedVolume = mapOf(
         SEL_HOME to TradedVolume(listOf(TradedAmount(3.0, 10.0))),
         SEL_DRAW to TradedVolume(listOf(TradedAmount(3.0, 10.0))),
-        SEL_AWAY to TradedVolume(listOf(TradedAmount(3.0, 10.0))))
+        SEL_AWAY to TradedVolume(listOf(TradedAmount(3.0, 10.0)))
+)
 
 val accountMoney = AccountMoney(2000.0, 1000.0)
 

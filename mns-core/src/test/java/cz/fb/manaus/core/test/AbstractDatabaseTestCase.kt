@@ -14,14 +14,19 @@ abstract class AbstractDatabaseTestCase : AbstractLocalTestCase() {
 
     @Autowired
     protected lateinit var betActionRepository: BetActionRepository
+
     @Autowired
     protected lateinit var settledBetRepository: SettledBetRepository
+
     @Autowired
     protected lateinit var marketRepository: MarketRepository
+
     @Autowired
     protected lateinit var taskExecutionRepository: TaskExecutionRepository
+
     @Autowired
     protected lateinit var blacklistedCategoryRepository: BlacklistedCategoryRepository
+
     @Autowired
     protected lateinit var fooRepository: FooRepository
 

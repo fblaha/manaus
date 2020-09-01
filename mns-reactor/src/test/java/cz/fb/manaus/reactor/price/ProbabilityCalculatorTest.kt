@@ -12,8 +12,10 @@ class ProbabilityCalculatorTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var factory: PricesTestFactory
+
     @Autowired
     private lateinit var calculator: ProbabilityCalculator
+
     @Autowired
     private lateinit var fairnessPolynomialCalculator: FairnessPolynomialCalculator
 

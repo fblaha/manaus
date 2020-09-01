@@ -10,5 +10,4 @@ import org.springframework.stereotype.Component
 @Component
 @BackUniverse
 @LayUniverse
-class BestPriceProposer(roundingService: RoundingService)
-    : PriceProposer by BestPriceProposer(1, roundingService)
+class BestPriceProposer(roundingService: RoundingService) : PriceProposer by BestPriceProposer(1, roundingService)

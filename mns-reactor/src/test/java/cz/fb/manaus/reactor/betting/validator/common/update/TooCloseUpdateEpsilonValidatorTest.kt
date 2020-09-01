@@ -17,10 +17,13 @@ class TooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
 
     @Autowired
     private lateinit var validator: TestValidator
+
     @Autowired
     private lateinit var roundingService: RoundingService
+
     @Autowired
     private lateinit var pricesTestFactory: PricesTestFactory
+
     @Autowired
     private lateinit var factory: BetEventTestFactory
 

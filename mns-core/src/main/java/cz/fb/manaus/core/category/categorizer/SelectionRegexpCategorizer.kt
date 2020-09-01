@@ -4,13 +4,14 @@ import cz.fb.manaus.core.model.RealizedBet
 import org.springframework.stereotype.Component
 
 val SELECTION_MAP = mapOf(
-        "draw" to compile("^The\\s+Draw$"),
-        "yes" to compile("^Yes$"),
-        "no" to compile("^No$"))
+    "draw" to compile("^The\\s+Draw$"),
+    "yes" to compile("^Yes$"),
+    "no" to compile("^No$")
+)
 
 @Component
 class SelectionRegexpCategorizer(
-        private val regexpCategoryService: RegexpCategoryService
+    private val regexpCategoryService: RegexpCategoryService
 ) : RealizedBetCategorizer {
 
     override fun getCategories(realizedBet: RealizedBet): Set<String> {

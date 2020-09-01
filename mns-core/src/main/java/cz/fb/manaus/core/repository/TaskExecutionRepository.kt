@@ -10,4 +10,5 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile(ManausProfiles.DB)
-class TaskExecutionRepository(db: Nitrite) : AbstractRepository<TaskExecution, String>(db.getRepository {}, TaskExecution::name)
+class TaskExecutionRepository(db: Nitrite) :
+    AbstractRepository<TaskExecution, String>(db.getRepository {}, TaskExecution::name)

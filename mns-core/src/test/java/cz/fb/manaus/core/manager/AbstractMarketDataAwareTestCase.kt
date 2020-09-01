@@ -12,8 +12,10 @@ import java.time.temporal.ChronoUnit
 
 abstract class AbstractMarketDataAwareTestCase : AbstractLocalTestCase() {
     protected lateinit var markets: List<Market>
+
     @Autowired
     private lateinit var resourceLoader: ResourceLoader
+
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 

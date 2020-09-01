@@ -19,8 +19,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Component
 
 @Component
-class BestPriceProposer(roundingService: RoundingService)
-    : PriceProposer by BestPriceProposer(1, roundingService)
+class BestPriceProposer(roundingService: RoundingService) : PriceProposer by BestPriceProposer(1, roundingService)
 
 @Component
 object AcceptAllValidator : Validator {
@@ -31,9 +30,9 @@ object AcceptAllValidator : Validator {
 
 @Configuration
 open class TestLocalConfiguration(
-        private val adviser: AmountAdviser,
-        private val proposalService: PriceProposalService,
-        private val roundingService: RoundingService
+    private val adviser: AmountAdviser,
+    private val proposalService: PriceProposalService,
+    private val roundingService: RoundingService
 
 ) {
 
@@ -43,13 +42,18 @@ open class TestLocalConfiguration(
     }
 
     @Bean
-    open fun validationCoordinator(validators: List<Validator>, validationService: ValidationService): ValidationCoordinator {
+    open fun validationCoordinator(
+        validators: List<Validator>,
+        validationService: ValidationService
+    ): ValidationCoordinator {
         return ValidationCoordinator(validators, validationService)
     }
 
     @Bean
-    open fun backBetEventCoordinator(priceAdviser: PriceAdviser,
-                                     validationCoordinator: ValidationCoordinator): BetEventCoordinator {
+    open fun backBetEventCoordinator(
+        priceAdviser: PriceAdviser,
+        validationCoordinator: ValidationCoordinator
+    ): BetEventCoordinator {
         return BetEventCoordinator(Side.BACK, validationCoordinator, priceAdviser)
     }
 

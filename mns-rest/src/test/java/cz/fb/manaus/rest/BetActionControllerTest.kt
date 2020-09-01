@@ -26,11 +26,14 @@ class BetActionControllerTest : AbstractControllerTest() {
 
     @Test
     fun `set bet ID`() {
-        mvc.perform(put(
-                "/actions/{id}/betId", bet.betAction.id)
+        mvc.perform(
+            put(
+                "/actions/{id}/betId", bet.betAction.id
+            )
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("100"))
-                .andExpect(status().isOk)
-                .andReturn()
+                .content("100")
+        )
+            .andExpect(status().isOk)
+            .andReturn()
     }
 }

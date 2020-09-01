@@ -20,7 +20,12 @@ class MarketRegexpCategorizerTest : AbstractLocalTestCase() {
         assertTrue { "market_regexp_underAge" in categorizer.getCategories("-", "Czech Rep U19 v Moldova U19") }
         assertTrue { "market_regexp_underAge_19" in categorizer.getCategories("-", "Czech Rep U19 v Moldova U19") }
         assertTrue { "market_regexp_women" in categorizer.getCategories("-", "Roa IL (W) v Arna Bjornar (W)") }
-        assertTrue { "market_regexp_reserveTeam" in categorizer.getCategories("-", "Kocaelispor (Res) v Fenerbahce (Res)") }
+        assertTrue {
+            "market_regexp_reserveTeam" in categorizer.getCategories(
+                "-",
+                "Kocaelispor (Res) v Fenerbahce (Res)"
+            )
+        }
     }
 
 }

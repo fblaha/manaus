@@ -10,13 +10,15 @@ class CollectedBetsTest {
     @Test
     fun serialization() {
         val mapper = ObjectMapper()
-        val original = Bet(betId = "111", marketId = "222", selectionId = 333,
-                requestedPrice = Price(3.0, 2.0, Side.BACK), placedDate = Instant.now())
+        val original = Bet(
+            betId = "111", marketId = "222", selectionId = 333,
+            requestedPrice = Price(3.0, 2.0, Side.BACK), placedDate = Instant.now()
+        )
 
         val bets = CollectedBets(
-                place = listOf(original),
-                update = listOf(original),
-                cancel = listOf("100")
+            place = listOf(original),
+            update = listOf(original),
+            cancel = listOf("100")
         )
 
         val serialized = mapper.writer().writeValueAsString(bets)

@@ -17,8 +17,9 @@ class ProbabilityComparator(private val side: Side) : Comparator<RunnerPrices> {
 
     companion object {
         var COMPARATORS = mapOf(
-                Side.BACK to ProbabilityComparator(Side.BACK),
-                Side.LAY to ProbabilityComparator(Side.LAY))
+            Side.BACK to ProbabilityComparator(Side.BACK),
+            Side.LAY to ProbabilityComparator(Side.LAY)
+        )
     }
 
 }
@@ -26,7 +27,9 @@ class ProbabilityComparator(private val side: Side) : Comparator<RunnerPrices> {
 fun sortPrices(side: Side, marketPrices: List<RunnerPrices>): List<RunnerPrices> {
     val ordering = ProbabilityComparator.COMPARATORS[side] ?: error("no such side")
     val sortedPrices = marketPrices.sortedWith(ordering)
-    check(sortedPrices.map { it.selectionId }.distinct().count() ==
-            sortedPrices.map { it.selectionId }.count())
+    check(
+        sortedPrices.map { it.selectionId }.distinct().count() ==
+                sortedPrices.map { it.selectionId }.count()
+    )
     return sortedPrices
 }

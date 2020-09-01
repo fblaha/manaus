@@ -19,35 +19,43 @@ class ProfitServiceTest : AbstractLocalTestCase() {
     @Test
     fun `single selection`() {
         val lay = homeSettledBet.copy(
-                profitAndLoss = 5.0,
-                commission = 0.5 * chargeRate,
-                price = Price(2.0, 4.0, Side.LAY)
+            profitAndLoss = 5.0,
+            commission = 0.5 * chargeRate,
+            price = Price(2.0, 4.0, Side.LAY)
         )
         val back = lay.copy(
-                profitAndLoss = -4.5,
-                commission = 0.0,
-                price = Price(2.2, 3.5, Side.BACK),
-                id = "222"
+            profitAndLoss = -4.5,
+            commission = 0.0,
+            price = Price(2.2, 3.5, Side.BACK),
+            id = "222"
         )
         checkRecords(withCharge(0.5), lay, back)
     }
 
     @Test
     fun `multi selection`() {
-        val layHome = homeSettledBet.copy(profitAndLoss = 5.0,
-                id = "111",
-                commission = 1 * chargeRate / 2, // 2% net win - 2 win bets
-                price = Price(2.0, 4.0, Side.LAY))
-        val backHome = homeSettledBet.copy(profitAndLoss = -4.1,
-                id = "222",
-                price = Price(2.2, 3.5, Side.BACK))
-        val layDraw = drawSettledBet.copy(profitAndLoss = 5.0,
-                id = "333",
-                commission = 1 * chargeRate / 2,
-                price = Price(2.0, 4.0, Side.LAY))
-        val backDraw = drawSettledBet.copy(profitAndLoss = -4.9,
-                id = "444",
-                price = Price(2.2, 3.5, Side.BACK))
+        val layHome = homeSettledBet.copy(
+            profitAndLoss = 5.0,
+            id = "111",
+            commission = 1 * chargeRate / 2, // 2% net win - 2 win bets
+            price = Price(2.0, 4.0, Side.LAY)
+        )
+        val backHome = homeSettledBet.copy(
+            profitAndLoss = -4.1,
+            id = "222",
+            price = Price(2.2, 3.5, Side.BACK)
+        )
+        val layDraw = drawSettledBet.copy(
+            profitAndLoss = 5.0,
+            id = "333",
+            commission = 1 * chargeRate / 2,
+            price = Price(2.0, 4.0, Side.LAY)
+        )
+        val backDraw = drawSettledBet.copy(
+            profitAndLoss = -4.9,
+            id = "444",
+            price = Price(2.2, 3.5, Side.BACK)
+        )
         val records = checkRecords(withCharge(1.0), layHome, backHome, layDraw, backDraw)
         checkCategories(records, "selectionRegexp_draw" to 0.09)
     }
@@ -56,15 +64,19 @@ class ProfitServiceTest : AbstractLocalTestCase() {
     @Test
     fun `real back win`() {
         //22263	2012-04-26 15:37:47.0	2012-04-26 06:11:23.0	6.4	    2.14	1	-7.3	47973	Over 2.5 Goals	105524600	105524600	RUS	2012-04-26 16:00:00.0	1524.3	Over/Under 2.5 goals	26837433
-        val lay = homeSettledBet.copy(selectionId = SEL_HOME,
-                selectionName = "Over 2.5 Goals",
-                profitAndLoss = -7.3,
-                id = "22263",
-                price = Price(2.14, 6.4, Side.LAY))
+        val lay = homeSettledBet.copy(
+            selectionId = SEL_HOME,
+            selectionName = "Over 2.5 Goals",
+            profitAndLoss = -7.3,
+            id = "22263",
+            price = Price(2.14, 6.4, Side.LAY)
+        )
         //22264	2012-04-26 15:53:26.0	2012-04-26 15:53:07.0	5.44	2.34	0	7.29	47973	Over 2.5 Goals	105524600	105524600	RUS	2012-04-26 16:00:00.0	1524.3	Over/Under 2.5 goals	26837433
-        val back = lay.copy(profitAndLoss = 7.29,
-                id = "22264",
-                price = Price(2.34, 5.44, Side.BACK))
+        val back = lay.copy(
+            profitAndLoss = 7.29,
+            id = "22264",
+            price = Price(2.34, 5.44, Side.BACK)
+        )
         checkRecords(withCharge(-0.01), lay, back)
     }
 
@@ -77,21 +89,25 @@ class ProfitServiceTest : AbstractLocalTestCase() {
 
     private fun createKamazBack(): SettledBet {
         //22256	2012-04-26 12:40:33.0	2012-04-26 12:14:07.0	4.22	2.98	0	-4.22	2460921	Kamaz	105486372	105486372	RUS	2012-04-26 16:00:00.0	4314.43	Match Odds	26836220
-        return homeSettledBet.copy(selectionId = SEL_HOME,
-                id = "kmzBack",
-                selectionName = "Kamaz",
-                profitAndLoss = -4.22,
-                price = Price(2.98, 4.22, Side.BACK))
+        return homeSettledBet.copy(
+            selectionId = SEL_HOME,
+            id = "kmzBack",
+            selectionName = "Kamaz",
+            profitAndLoss = -4.22,
+            price = Price(2.98, 4.22, Side.BACK)
+        )
     }
 
     private fun createKamazLay(): SettledBet {
         //22255	2012-04-26 06:56:08.0	2012-04-26 02:00:51.0	5.27	2.92	1	5.27	2460921	Kamaz	105486372	105486372	RUS	2012-04-26 16:00:00.0	4314.43	Match Odds	26836220
-        return homeSettledBet.copy(selectionId = SEL_HOME,
-                selectionName = "Kamaz",
-                profitAndLoss = 5.27,
-                commission = 0.021,
-                id = "kmzLay",
-                price = Price(2.92, 5.27, Side.LAY))
+        return homeSettledBet.copy(
+            selectionId = SEL_HOME,
+            selectionName = "Kamaz",
+            profitAndLoss = 5.27,
+            commission = 0.021,
+            id = "kmzLay",
+            price = Price(2.92, 5.27, Side.LAY)
+        )
     }
 
     @Test
@@ -100,11 +116,13 @@ class ProfitServiceTest : AbstractLocalTestCase() {
         val kamazLay = createKamazLay()
         val bets = listOf(kamazBack, kamazLay).map { toRealizedBet(it) }
         val simulationOnly = profitService.getProfitRecords(
-                bets = bets,
-                simulationAwareOnly = true)
+            bets = bets,
+            simulationAwareOnly = true
+        )
         val all = profitService.getProfitRecords(
-                bets = bets,
-                simulationAwareOnly = false)
+            bets = bets,
+            simulationAwareOnly = false
+        )
         assertTrue(simulationOnly.size < all.size)
         assertTrue(simulationOnly.isNotEmpty())
     }
@@ -133,33 +151,40 @@ class ProfitServiceTest : AbstractLocalTestCase() {
     @Test
     fun `get profit records`() {
         val bet1 = drawSettledBet.copy(
-                profitAndLoss = 5.0,
-                commission = 3.0 * chargeRate,
-                price = Price(2.0, 4.0, Side.LAY))
+            profitAndLoss = 5.0,
+            commission = 3.0 * chargeRate,
+            price = Price(2.0, 4.0, Side.LAY)
+        )
         val bet2 = drawSettledBet.copy(
-                profitAndLoss = -2.0,
-                commission = 0.0,
-                id = "bet2",
-                price = Price(2.0, 5.0, Side.BACK))
+            profitAndLoss = -2.0,
+            commission = 0.0,
+            id = "bet2",
+            price = Price(2.0, 5.0, Side.BACK)
+        )
         val bets = listOf(bet1, bet2).map { toRealizedBet(it) }
         val records = profitService.getProfitRecords(
-                bets = bets,
-                simulationAwareOnly = true)
+            bets = bets,
+            simulationAwareOnly = true
+        )
 
         val byCategory = byCategory(records)
 
         assertEquals(1, byCategory["market_country_cz"]!!.layCount)
         Assert.assertEquals(withCharge(3.0), byCategory["market_country_cz"]!!.profit, 0.01)
 
-        assertTrue(profitService.getProfitRecords(
+        assertTrue(
+            profitService.getProfitRecords(
                 bets = bets,
                 projection = "market_country_ua",
-                simulationAwareOnly = true).isEmpty()
+                simulationAwareOnly = true
+            ).isEmpty()
         )
-        assertFalse(profitService.getProfitRecords(
+        assertFalse(
+            profitService.getProfitRecords(
                 bets = bets,
                 projection = "market_country_cz",
-                simulationAwareOnly = true).isEmpty()
+                simulationAwareOnly = true
+            ).isEmpty()
         )
     }
 
