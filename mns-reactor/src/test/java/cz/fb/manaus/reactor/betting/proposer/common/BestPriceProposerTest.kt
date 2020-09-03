@@ -1,6 +1,6 @@
 package cz.fb.manaus.reactor.betting.proposer.common
 
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.PricesTestFactory
 import cz.fb.manaus.reactor.betting.HOME_EVENT_BACK
 import cz.fb.manaus.reactor.betting.HOME_EVENT_LAY
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 
 
-class BestPriceProposerTest : AbstractLocalTestCase() {
+class BestPriceProposerTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var layProposer: LayProposer

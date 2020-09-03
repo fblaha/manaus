@@ -3,14 +3,14 @@ package cz.fb.manaus.core.manager
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import cz.fb.manaus.core.model.Market
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import org.junit.Before
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.ResourceLoader
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-abstract class AbstractMarketDataAwareTestCase : AbstractLocalTestCase() {
+abstract class AbstractMarketDataAwareTestCase : AbstractTestCase() {
     protected lateinit var markets: List<Market>
 
     @Autowired

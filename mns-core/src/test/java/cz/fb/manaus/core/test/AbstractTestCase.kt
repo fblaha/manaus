@@ -23,4 +23,4 @@ open class TestConfiguration
 @RunWith(SpringJUnit4ClassRunner::class)
 @ContextConfiguration(classes = [TestConfiguration::class])
 @ActiveProfiles("betfair", TEST)
-abstract class AbstractLocalTestCase
+abstract class AbstractTestCase

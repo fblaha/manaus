@@ -1,7 +1,7 @@
 package cz.fb.manaus.core.maintanance
 
 import cz.fb.manaus.core.model.TaskExecution
-import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
@@ -10,7 +10,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-class PeriodicTaskManagerTest : AbstractDatabaseTestCase() {
+class PeriodicTaskManagerTest : AbstractIntegrationTestCase() {
 
     @Autowired
     private lateinit var periodicTaskManager: PeriodicTaskManager

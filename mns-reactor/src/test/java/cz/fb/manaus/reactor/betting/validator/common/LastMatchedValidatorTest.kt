@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.betting.validator.common
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.homePrices
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 
-class LastMatchedValidatorTest : AbstractLocalTestCase() {
+class LastMatchedValidatorTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var validator: TestValidator

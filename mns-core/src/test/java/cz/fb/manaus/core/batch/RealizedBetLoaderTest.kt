@@ -3,12 +3,12 @@ package cz.fb.manaus.core.batch
 import cz.fb.manaus.core.model.betAction
 import cz.fb.manaus.core.model.homeSettledBet
 import cz.fb.manaus.core.model.market
-import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 
-class RealizedBetLoaderTest : AbstractDatabaseTestCase() {
+class RealizedBetLoaderTest : AbstractIntegrationTestCase() {
 
     @Autowired
     private lateinit var realizedBetLoader: RealizedBetLoader

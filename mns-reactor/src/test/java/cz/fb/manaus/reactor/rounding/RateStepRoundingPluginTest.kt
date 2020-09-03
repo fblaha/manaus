@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.rounding
 
 import cz.fb.manaus.core.model.bfProvider
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.spring.ManausProfiles.TEST
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ActiveProfiles
 
 @ActiveProfiles(TEST, inheritProfiles = false)
-class RateStepRoundingPluginTest : AbstractLocalTestCase() {
+class RateStepRoundingPluginTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var plugin: RateStepRoundingPlugin

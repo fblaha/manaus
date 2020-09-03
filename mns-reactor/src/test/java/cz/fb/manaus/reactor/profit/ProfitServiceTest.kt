@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.profit
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import org.junit.Assert
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,7 +11,7 @@ import kotlin.test.assertTrue
 
 const val chargeRate = 0.02
 
-class ProfitServiceTest : AbstractLocalTestCase() {
+class ProfitServiceTest : AbstractTestCase() {
     @Autowired
     private lateinit var profitService: ProfitService
 

@@ -2,7 +2,7 @@ package cz.fb.manaus.core.maintanance.db
 
 import cz.fb.manaus.core.model.betAction
 import cz.fb.manaus.core.model.market
-import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
@@ -10,7 +10,7 @@ import java.time.temporal.ChronoUnit
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
-class MarketCleanerTest : AbstractDatabaseTestCase() {
+class MarketCleanerTest : AbstractIntegrationTestCase() {
 
     @Autowired
     private lateinit var marketCleaner: MarketCleaner

@@ -5,7 +5,7 @@ import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.betAction
 import cz.fb.manaus.core.model.homeSettledBet
 import cz.fb.manaus.core.model.market
-import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import org.junit.Before
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -18,7 +18,7 @@ import org.springframework.web.context.WebApplicationContext
 import kotlin.test.assertTrue
 
 @WebAppConfiguration
-abstract class AbstractControllerTest : AbstractDatabaseTestCase() {
+abstract class AbstractControllerTest : AbstractIntegrationTestCase() {
     protected lateinit var mvc: MockMvc
 
     @Autowired

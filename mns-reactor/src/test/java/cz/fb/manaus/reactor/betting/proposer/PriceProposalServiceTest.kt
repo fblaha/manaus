@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.betting.proposer
 
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.HOME_EVENT_BACK
 import cz.fb.manaus.reactor.betting.HOME_EVENT_LAY
@@ -9,7 +9,7 @@ import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 
-class PriceProposalServiceTest : AbstractLocalTestCase() {
+class PriceProposalServiceTest : AbstractTestCase() {
     @Autowired
     private lateinit var service: PriceProposalService
 

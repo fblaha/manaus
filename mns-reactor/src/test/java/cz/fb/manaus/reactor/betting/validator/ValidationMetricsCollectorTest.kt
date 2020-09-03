@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.betting.validator
 
 import cz.fb.manaus.core.makeName
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.betting.BetEvent
 import io.micrometer.core.instrument.Metrics
 import org.junit.Test
@@ -15,7 +15,7 @@ class TestValidator : Validator {
     }
 }
 
-class ValidationMetricsCollectorTest : AbstractLocalTestCase() {
+class ValidationMetricsCollectorTest : AbstractTestCase() {
     @Autowired
     private lateinit var metricsCollector: ValidationMetricsCollector
 

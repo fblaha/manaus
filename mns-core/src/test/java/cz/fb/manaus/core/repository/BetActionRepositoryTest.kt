@@ -1,14 +1,14 @@
 package cz.fb.manaus.core.repository
 
 import cz.fb.manaus.core.model.betAction
-import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 
-class BetActionRepositoryTest : AbstractDatabaseTestCase() {
+class BetActionRepositoryTest : AbstractIntegrationTestCase() {
 
     @Test
     fun save() {

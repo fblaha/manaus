@@ -1,14 +1,14 @@
 package cz.fb.manaus.reactor.price
 
 import cz.fb.manaus.core.model.priceEq
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertTrue
 
 
-class FairnessPolynomialCalculatorTest : AbstractLocalTestCase() {
+class FairnessPolynomialCalculatorTest : AbstractTestCase() {
 
 
     @Autowired

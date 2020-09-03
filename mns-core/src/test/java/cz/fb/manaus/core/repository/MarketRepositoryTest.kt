@@ -1,14 +1,14 @@
 package cz.fb.manaus.core.repository
 
 import cz.fb.manaus.core.model.market
-import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 
-class MarketRepositoryTest : AbstractDatabaseTestCase() {
+class MarketRepositoryTest : AbstractIntegrationTestCase() {
 
     @Test
     fun `save - read`() {

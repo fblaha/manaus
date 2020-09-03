@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.price
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.PricesTestFactory
 import cz.fb.manaus.reactor.rounding.RoundingService
 import org.junit.Assert.assertEquals
@@ -11,7 +11,7 @@ import kotlin.math.max
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class PriceServiceTest : AbstractLocalTestCase() {
+class PriceServiceTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var priceService: PriceService

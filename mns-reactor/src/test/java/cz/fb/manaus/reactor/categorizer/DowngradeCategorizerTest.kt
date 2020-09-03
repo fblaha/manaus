@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.categorizer
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
-class DowngradeCategorizerTest : AbstractLocalTestCase() {
+class DowngradeCategorizerTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var categorizer: DowngradeCategorizer

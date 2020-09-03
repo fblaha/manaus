@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.betting.validator
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.HOME_EVENT_BACK
 import org.junit.Test
@@ -12,7 +12,7 @@ import java.time.Instant
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ValidationServiceTest : AbstractLocalTestCase() {
+class ValidationServiceTest : AbstractTestCase() {
     @Autowired
     private lateinit var service: ValidationService
 

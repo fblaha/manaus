@@ -4,12 +4,12 @@ import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.PriceComparator
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.bfProvider
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-class PriceBulldozerTest : AbstractLocalTestCase() {
+class PriceBulldozerTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var bulldozer: PriceBulldozer

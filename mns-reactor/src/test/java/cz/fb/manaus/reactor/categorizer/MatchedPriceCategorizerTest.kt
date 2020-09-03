@@ -1,12 +1,12 @@
 package cz.fb.manaus.reactor.categorizer
 
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-class MatchedPriceCategorizerTest : AbstractLocalTestCase() {
+class MatchedPriceCategorizerTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var categorizer: MatchedPriceCategorizer

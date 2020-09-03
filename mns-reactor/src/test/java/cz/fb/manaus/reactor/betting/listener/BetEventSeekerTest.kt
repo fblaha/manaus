@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.betting.listener
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.betting.BetCommand
 import cz.fb.manaus.reactor.betting.BetEvent
 import org.junit.Test
@@ -26,7 +26,7 @@ class MockBetEventListener : BetEventListener {
 }
 
 
-class BetEventSeekerTest : AbstractLocalTestCase() {
+class BetEventSeekerTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var betEventSeeker: BetEventSeeker

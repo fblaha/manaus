@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.betting.proposer.common
 
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.strategy.chain
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 
 
-class FairnessProposerTest : AbstractLocalTestCase() {
+class FairnessProposerTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var layProposer: TestLayProposer

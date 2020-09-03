@@ -1,7 +1,7 @@
 package cz.fb.manaus.ischia
 
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import cz.fb.manaus.reactor.PricesTestFactory
 import cz.fb.manaus.reactor.betting.BettorTester
 import org.junit.Test
@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ActiveProfiles
 
 @ActiveProfiles("ischia")
-class LayLoserBettorTest : AbstractDatabaseTestCase() {
+class LayLoserBettorTest : AbstractIntegrationTestCase() {
 
     @Autowired
     private lateinit var factory: PricesTestFactory

@@ -1,11 +1,11 @@
 package cz.fb.manaus.core.category.categorizer
 
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertTrue
 
-class MarketRegexpCategorizerTest : AbstractLocalTestCase() {
+class MarketRegexpCategorizerTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var categorizer: MarketRegexpCategorizer

@@ -1,7 +1,7 @@
 package cz.fb.manaus.core.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import org.junit.Assert.*
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,7 +17,7 @@ val betTemplate = Bet(
 )
 
 
-class BetTest : AbstractLocalTestCase() {
+class BetTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var mapper: ObjectMapper

@@ -4,7 +4,7 @@ import cz.fb.manaus.core.MarketCategories
 import cz.fb.manaus.core.batch.RealizedBetLoader
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import cz.fb.manaus.reactor.profit.ProfitService
 import org.junit.Before
 import org.junit.Test
@@ -14,7 +14,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class UnprofitableCategoriesRegistryTest : AbstractDatabaseTestCase() {
+class UnprofitableCategoriesRegistryTest : AbstractIntegrationTestCase() {
 
     private val pr = ProfitRecord(
         category = "",

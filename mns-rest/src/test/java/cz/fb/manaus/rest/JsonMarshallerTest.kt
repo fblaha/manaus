@@ -5,12 +5,12 @@ import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.betAction
 import cz.fb.manaus.core.model.drawSettledBet
 import cz.fb.manaus.core.model.homeSettledBet
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertTrue
 
-class JsonMarshallerTest : AbstractLocalTestCase() {
+class JsonMarshallerTest : AbstractTestCase() {
     @Autowired
     private lateinit var mapper: ObjectMapper
 

@@ -1,13 +1,13 @@
 package cz.fb.manaus.reactor.charge
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 
-class MarketChargeSimulatorTest : AbstractLocalTestCase() {
+class MarketChargeSimulatorTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var simulator: MarketChargeSimulator

@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.betting.proposer
 
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.betting.FixedAmountAdviser
 import cz.fb.manaus.reactor.betting.HOME_EVENT_BACK
 import cz.fb.manaus.reactor.betting.HOME_EVENT_LAY
@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 
 
-class MinReduceProposerAdviserTest : AbstractLocalTestCase() {
+class MinReduceProposerAdviserTest : AbstractTestCase() {
 
     private lateinit var adviser: MinReduceProposerAdviser
 

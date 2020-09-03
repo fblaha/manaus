@@ -3,13 +3,13 @@ package cz.fb.manaus.reactor.rounding
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.bfProvider
 import cz.fb.manaus.core.provider.ProviderMatcher
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 
 
-class RoundingServiceTest : AbstractLocalTestCase() {
+class RoundingServiceTest : AbstractTestCase() {
     private val start = 1.01
     private val repeat = 200
 

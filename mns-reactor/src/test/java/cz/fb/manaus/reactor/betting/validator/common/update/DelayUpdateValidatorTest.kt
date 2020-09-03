@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.betting.validator.common.update
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.repository.BetActionRepository
-import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
@@ -16,7 +16,7 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.test.assertEquals
 
-class DelayUpdateValidatorTest : AbstractDatabaseTestCase() {
+class DelayUpdateValidatorTest : AbstractIntegrationTestCase() {
     @Autowired
     private lateinit var validator: TestValidator
 

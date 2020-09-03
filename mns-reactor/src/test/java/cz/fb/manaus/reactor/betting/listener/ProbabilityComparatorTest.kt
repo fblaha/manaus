@@ -2,13 +2,13 @@ package cz.fb.manaus.reactor.betting.listener
 
 import cz.fb.manaus.core.model.RunnerPrices
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.PricesTestFactory
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 
-class ProbabilityComparatorTest : AbstractLocalTestCase() {
+class ProbabilityComparatorTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var factory: PricesTestFactory

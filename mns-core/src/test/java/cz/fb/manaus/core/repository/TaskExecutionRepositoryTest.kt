@@ -1,12 +1,12 @@
 package cz.fb.manaus.core.repository
 
 import cz.fb.manaus.core.model.TaskExecution
-import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import org.junit.Test
 import java.time.Instant
 import kotlin.test.assertEquals
 
-class TaskExecutionRepositoryTest : AbstractDatabaseTestCase() {
+class TaskExecutionRepositoryTest : AbstractIntegrationTestCase() {
 
     @Test
     fun `save - read`() {

@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.betting
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.price.Fairness
 import org.junit.Assert
@@ -27,7 +27,7 @@ val HOME_EVENT_BACK: BetEvent = BetEvent(
 val HOME_EVENT_LAY: BetEvent = HOME_EVENT_BACK.copy(sideSelection = SideSelection(Side.LAY, SEL_HOME))
 
 
-class BetEventTest : AbstractLocalTestCase() {
+class BetEventTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var factory: BetEventTestFactory

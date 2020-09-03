@@ -1,12 +1,12 @@
 package cz.fb.manaus.core.repository
 
 import cz.fb.manaus.core.model.BlacklistedCategory
-import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import org.junit.Test
 import java.time.Duration
 import kotlin.test.assertEquals
 
-class BlacklistedCategoryRepositoryTest : AbstractDatabaseTestCase() {
+class BlacklistedCategoryRepositoryTest : AbstractIntegrationTestCase() {
 
     @Test
     fun `save - read`() {

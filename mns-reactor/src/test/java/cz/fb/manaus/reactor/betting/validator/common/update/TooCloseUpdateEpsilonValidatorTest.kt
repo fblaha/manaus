@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.betting.validator.common.update
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.PricesTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 
-class TooCloseUpdateEpsilonValidatorTest : AbstractLocalTestCase() {
+class TooCloseUpdateEpsilonValidatorTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var validator: TestValidator

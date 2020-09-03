@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.charge
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.PricesTestFactory
 import cz.fb.manaus.reactor.betting.AmountAdviser
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
@@ -12,7 +12,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 
-class ChargeGrowthForecasterTest : AbstractLocalTestCase() {
+class ChargeGrowthForecasterTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var forecaster: ChargeGrowthForecaster

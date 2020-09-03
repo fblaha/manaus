@@ -3,12 +3,12 @@ package cz.fb.manaus.core.repository
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.homeSettledBet
-import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-class SettledBetRepositoryTest : AbstractDatabaseTestCase() {
+class SettledBetRepositoryTest : AbstractIntegrationTestCase() {
 
     @Test
     fun `save - read`() {

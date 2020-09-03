@@ -4,12 +4,12 @@ import cz.fb.manaus.core.MarketCategories
 import cz.fb.manaus.core.category.categorizer.SPORT_PREFIX
 import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.model.realizedBet
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertTrue
 
-class CategoryServiceTest : AbstractLocalTestCase() {
+class CategoryServiceTest : AbstractTestCase() {
     @Autowired
     private lateinit var categoryService: CategoryService
 

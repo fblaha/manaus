@@ -1,6 +1,6 @@
 package cz.fb.manaus.reactor.profit.progress
 
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.profit.generateBets
 import cz.fb.manaus.reactor.profit.toRealizedBet
 import junit.framework.TestCase.assertTrue
@@ -8,7 +8,7 @@ import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 
-class FixedBinFunctionProfitServiceTest : AbstractLocalTestCase() {
+class FixedBinFunctionProfitServiceTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var service: FixedBinFunctionProfitService

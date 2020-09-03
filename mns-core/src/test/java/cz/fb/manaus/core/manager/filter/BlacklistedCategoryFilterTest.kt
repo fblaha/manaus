@@ -2,14 +2,14 @@ package cz.fb.manaus.core.manager.filter
 
 import cz.fb.manaus.core.model.BlacklistedCategory
 import cz.fb.manaus.core.model.market
-import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Duration
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class BlacklistedCategoryFilterTest : AbstractDatabaseTestCase() {
+class BlacklistedCategoryFilterTest : AbstractIntegrationTestCase() {
     @Autowired
     private lateinit var filter: BlacklistedCategoryFilter
 

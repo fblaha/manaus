@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.betting.listener
 import cz.fb.manaus.core.model.BetActionType
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractLocalTestCase
+import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.HOME_EVENT_BACK
 import cz.fb.manaus.reactor.betting.PriceAdviser
@@ -53,7 +53,7 @@ class MockPriceAdviser(
 
 }
 
-class BetEventCoordinatorTest : AbstractLocalTestCase() {
+class BetEventCoordinatorTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var validationService: ValidationService

@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.repository
 
-import cz.fb.manaus.core.test.AbstractDatabaseTestCase
+import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import cz.fb.manaus.spring.ManausProfiles
 import org.dizitart.kno2.getRepository
 import org.dizitart.no2.IndexType
@@ -27,7 +27,7 @@ data class Foo(
 class FooRepository(db: Nitrite) :
     AbstractRepository<Foo, String>(db.getRepository {}, Foo::name)
 
-class FooRepositoryTest : AbstractDatabaseTestCase() {
+class FooRepositoryTest : AbstractIntegrationTestCase() {
 
     @Test
     fun `save - read`() {

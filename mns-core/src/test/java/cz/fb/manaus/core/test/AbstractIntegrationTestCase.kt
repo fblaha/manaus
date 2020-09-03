@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ActiveProfiles
 
 @ActiveProfiles(DB)
-abstract class AbstractDatabaseTestCase : AbstractLocalTestCase() {
+abstract class AbstractIntegrationTestCase : AbstractTestCase() {
 
     @Autowired
     protected lateinit var betActionRepository: BetActionRepository
