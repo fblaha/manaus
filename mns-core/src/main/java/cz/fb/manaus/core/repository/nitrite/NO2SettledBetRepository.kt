@@ -2,7 +2,6 @@ package cz.fb.manaus.core.repository.nitrite
 
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.repository.Repository
 import cz.fb.manaus.core.repository.SettledBetRepository
 import cz.fb.manaus.spring.ManausProfiles
 import org.dizitart.kno2.filters.and
@@ -20,20 +19,20 @@ import java.time.Instant
 
 @Component
 @Profile(ManausProfiles.DB)
-class SettledBetRepositoryImpl(db: Nitrite) :
-        RepositoryAware<SettledBet> by RepositoryImpl(db.getRepository {}, SettledBet::id),
-        SettledBetRepository {
+class NO2SettledBetRepository(db: Nitrite) :
+    NO2RepositoryAware<SettledBet> by NO2Repository(db.getRepository {}, SettledBet::id),
+    SettledBetRepository {
 
     override fun update(settledBet: SettledBet) {
         check(repository.update(SettledBet::id eq settledBet.id, settledBet).affectedCount == 1)
     }
 
     override fun find(
-            from: Instant?,
-            to: Instant?,
-            side: Side?,
-            maxResults: Int?,
-            asc: Boolean
+        from: Instant?,
+        to: Instant?,
+        side: Side?,
+        maxResults: Int?,
+        asc: Boolean
     ): List<SettledBet> {
         var filter = ObjectFilters.ALL
         if (from != null) {

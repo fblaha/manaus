@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile(ManausProfiles.DB)
-class BetActionRepositoryImpl(db: Nitrite) :
-        RepositoryAware<BetAction> by RepositoryImpl(db.getRepository {}, BetAction::id),
-        BetActionRepository {
+class NO2BetActionRepository(db: Nitrite) :
+    NO2RepositoryAware<BetAction> by NO2Repository(db.getRepository {}, BetAction::id),
+    BetActionRepository {
 
     override fun idSafeSave(betAction: BetAction): Long {
         val action = when (betAction.id) {

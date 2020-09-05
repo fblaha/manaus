@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.repository.nitrite
 
-import cz.fb.manaus.core.model.TaskExecution
+import cz.fb.manaus.core.model.BlacklistedCategory
 import cz.fb.manaus.core.repository.Repository
 import cz.fb.manaus.spring.ManausProfiles
 import org.dizitart.kno2.getRepository
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile(ManausProfiles.DB)
-class TaskExecutionRepositoryImpl(db: Nitrite) :
-        Repository<TaskExecution> by RepositoryImpl(db.getRepository {}, TaskExecution::name)
+class NO2BlacklistedCategoryRepository(db: Nitrite) :
+        Repository<BlacklistedCategory> by NO2Repository(db.getRepository {}, BlacklistedCategory::name)

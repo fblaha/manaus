@@ -7,10 +7,10 @@ import org.dizitart.no2.objects.filters.ObjectFilters
 import kotlin.reflect.KProperty1
 
 
-class RepositoryImpl<T, U>(
-        override val repository: ObjectRepository<T>,
-        private val key: KProperty1<T, U>
-) : Repository<T>, RepositoryAware<T> {
+class NO2Repository<T, U>(
+    override val repository: ObjectRepository<T>,
+    private val key: KProperty1<T, U>
+) : Repository<T>, NO2RepositoryAware<T> {
 
     override fun saveOrUpdate(entity: T) {
         repository.update(entity, true)

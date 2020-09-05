@@ -20,9 +20,9 @@ import java.time.Instant
 
 @Component
 @Profile(ManausProfiles.DB)
-class MarketRepositoryImpl(db: Nitrite) :
-        RepositoryAware<Market> by RepositoryImpl(db.getRepository {}, Market::id),
-        MarketRepository {
+class NO2MarketRepository(db: Nitrite) :
+    NO2RepositoryAware<Market> by NO2Repository(db.getRepository {}, Market::id),
+    MarketRepository {
 
     override fun delete(olderThan: Instant): Int {
         return repository.remove(Market::openDate lt olderThan).affectedCount

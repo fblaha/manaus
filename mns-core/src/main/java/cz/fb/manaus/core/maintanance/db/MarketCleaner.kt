@@ -1,9 +1,9 @@
 package cz.fb.manaus.core.maintanance.db
 
 import com.google.common.base.Stopwatch
+import cz.fb.manaus.core.batch.MarketFootprintLoader
+import cz.fb.manaus.core.batch.MarketPurger
 import cz.fb.manaus.core.maintanance.PeriodicTask
-import cz.fb.manaus.core.repository.MarketFootprintLoader
-import cz.fb.manaus.core.repository.MarketPurger
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.spring.ManausProfiles
 import io.micrometer.core.instrument.Metrics
@@ -17,10 +17,10 @@ import java.util.logging.Logger
 @Component
 @Profile(ManausProfiles.DB)
 class MarketCleaner(
-        private val marketRepository: MarketRepository,
-        private val marketFootprintLoader: MarketFootprintLoader,
-        private val marketPurger: MarketPurger,
-        private val approvers: List<MarketDeletionApprover>
+    private val marketRepository: MarketRepository,
+    private val marketFootprintLoader: MarketFootprintLoader,
+    private val marketPurger: MarketPurger,
+    private val approvers: List<MarketDeletionApprover>
 ) : PeriodicTask {
 
     override val name: String = "marketCleanup"

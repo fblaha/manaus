@@ -4,9 +4,7 @@ package cz.fb.manaus.core.test
 import cz.fb.manaus.core.model.BlacklistedCategory
 import cz.fb.manaus.core.model.TaskExecution
 import cz.fb.manaus.core.repository.*
-import cz.fb.manaus.core.repository.nitrite.RepositoryAware
 import cz.fb.manaus.spring.ManausProfiles.DB
-import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.After
 import org.junit.Before
 import org.springframework.beans.factory.annotation.Autowired

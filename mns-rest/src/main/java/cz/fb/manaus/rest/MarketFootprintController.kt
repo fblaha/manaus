@@ -1,8 +1,8 @@
 package cz.fb.manaus.rest
 
 import cz.fb.manaus.core.batch.Importer
+import cz.fb.manaus.core.batch.MarketFootprintLoader
 import cz.fb.manaus.core.model.MarketFootprint
-import cz.fb.manaus.core.repository.MarketFootprintLoader
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.spring.ManausProfiles
 import io.micrometer.core.instrument.Metrics
