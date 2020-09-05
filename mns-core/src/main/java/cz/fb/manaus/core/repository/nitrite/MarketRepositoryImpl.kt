@@ -36,7 +36,7 @@ class MarketRepositoryImpl(db: Nitrite) :
         return findLazy(from, to, null).map { it.id }.toList()
     }
 
-    override fun findLazy(from: Instant?, to: Instant?, maxResults: Int?): Cursor<Market> {
+    private fun findLazy(from: Instant?, to: Instant?, maxResults: Int?): Cursor<Market> {
         var filter = ObjectFilters.ALL
         if (from != null) {
             val fromFilter = Market::openDate gte from
