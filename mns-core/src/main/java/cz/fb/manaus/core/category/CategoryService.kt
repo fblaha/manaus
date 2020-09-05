@@ -9,19 +9,19 @@ import org.springframework.stereotype.Service
 
 @Service
 class CategoryService(
-    private val categorizers: List<Categorizer> = emptyList(),
-    private val settledBetCategorizers: List<RealizedBetCategorizer> = emptyList()
+        private val categorizers: List<Categorizer> = emptyList(),
+        private val settledBetCategorizers: List<RealizedBetCategorizer> = emptyList()
 ) {
 
     fun getMarketCategories(market: Market, simulationAwareOnly: Boolean): Set<String> {
         return filter(categorizers, simulationAwareOnly)
-            .flatMap { it.getCategories(market).asSequence() }.toSet()
+                .flatMap { it.getCategories(market).asSequence() }.toSet()
     }
 
     fun getRealizedBetCategories(realizedBet: RealizedBet, simulationAwareOnly: Boolean): Set<String> {
         return filter(settledBetCategorizers, simulationAwareOnly)
-            .flatMap { it.getCategories(realizedBet).asSequence() }
-            .toSet()
+                .flatMap { it.getCategories(realizedBet).asSequence() }
+                .toSet()
     }
 
     fun filterBets(realizedBets: List<RealizedBet>, projection: String): List<RealizedBet> {
@@ -32,8 +32,8 @@ class CategoryService(
     }
 
     private fun <T : SimulationAware> filter(
-        categorizers: List<T>,
-        simulationAwareOnly: Boolean
+            categorizers: List<T>,
+            simulationAwareOnly: Boolean
     ): Sequence<T> {
         val catSeq = categorizers.asSequence()
         return if (simulationAwareOnly)

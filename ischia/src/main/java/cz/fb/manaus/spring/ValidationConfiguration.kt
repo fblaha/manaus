@@ -17,8 +17,8 @@ open class ValidationConfiguration {
     @Bean
     @LayUniverse
     open fun layValidationCoordinator(
-        validationService: ValidationService,
-        @LayUniverse validators: List<Validator>
+            validationService: ValidationService,
+            @LayUniverse validators: List<Validator>
     ): ValidationCoordinator {
         validators.forEach { checkNotNull(it::class.findAnnotation<LayUniverse>()) }
         check(validators.isNotEmpty())
@@ -28,8 +28,8 @@ open class ValidationConfiguration {
     @Bean
     @BackUniverse
     open fun backValidationCoordinator(
-        validationService: ValidationService,
-        @BackUniverse validators: List<Validator>
+            validationService: ValidationService,
+            @BackUniverse validators: List<Validator>
     ): ValidationCoordinator {
         validators.forEach { checkNotNull(it::class.findAnnotation<BackUniverse>()) }
         check(validators.isNotEmpty())

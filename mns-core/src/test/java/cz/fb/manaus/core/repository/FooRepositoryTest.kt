@@ -1,5 +1,6 @@
 package cz.fb.manaus.core.repository
 
+import cz.fb.manaus.core.repository.nitrite.RepositoryImpl
 import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import cz.fb.manaus.spring.ManausProfiles
 import org.dizitart.kno2.getRepository
@@ -17,15 +18,15 @@ import kotlin.test.assertTrue
 
 @Index(value = "name", type = IndexType.Unique)
 data class Foo(
-    @Id val name: String,
-    val description: String
+        @Id val name: String,
+        val description: String
 )
 
 
 @Component
 @Profile(ManausProfiles.DB)
-class FooRepository(db: Nitrite) :
-    AbstractRepository<Foo, String>(db.getRepository {}, Foo::name)
+class FooRepository(db: Nitrite) : Repository<Foo> by
+RepositoryImpl(db.getRepository {}, Foo::name)
 
 class FooRepositoryTest : AbstractIntegrationTestCase() {
 

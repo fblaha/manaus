@@ -1,7 +1,10 @@
 package cz.fb.manaus.core.test
 
 
+import cz.fb.manaus.core.model.BlacklistedCategory
+import cz.fb.manaus.core.model.TaskExecution
 import cz.fb.manaus.core.repository.*
+import cz.fb.manaus.core.repository.nitrite.RepositoryAware
 import cz.fb.manaus.spring.ManausProfiles.DB
 import org.dizitart.no2.objects.filters.ObjectFilters
 import org.junit.After
@@ -22,22 +25,20 @@ abstract class AbstractIntegrationTestCase : AbstractTestCase() {
     protected lateinit var marketRepository: MarketRepository
 
     @Autowired
-    protected lateinit var taskExecutionRepository: TaskExecutionRepository
+    protected lateinit var taskExecutionRepository: Repository<TaskExecution>
 
     @Autowired
-    protected lateinit var blacklistedCategoryRepository: BlacklistedCategoryRepository
+    protected lateinit var blacklistedCategoryRepository: Repository<BlacklistedCategory>
 
     @Autowired
-    protected lateinit var fooRepository: FooRepository
+    protected lateinit var fooRepository: Repository<Foo>
+
+    @Autowired
+    private lateinit var repositories: List<Repository<*>>
 
     @After
     @Before
     fun clean() {
-        marketRepository.repository.remove(ObjectFilters.ALL)
-        betActionRepository.repository.remove(ObjectFilters.ALL)
-        settledBetRepository.repository.remove(ObjectFilters.ALL)
-        taskExecutionRepository.repository.remove(ObjectFilters.ALL)
-        blacklistedCategoryRepository.repository.remove(ObjectFilters.ALL)
-        fooRepository.repository.remove(ObjectFilters.ALL)
+        repositories.forEach { it.purge() }
     }
 }

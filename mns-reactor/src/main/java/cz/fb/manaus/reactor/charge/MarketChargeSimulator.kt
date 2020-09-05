@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component
 object MarketChargeSimulator {
 
     fun getChargeMean(
-        winnerCount: Int,
-        commission: Double,
-        probabilities: Map<Long, Double>,
-        bets: Map<Long, List<Price>>
+            winnerCount: Int,
+            commission: Double,
+            probabilities: Map<Long, Double>,
+            bets: Map<Long, List<Price>>
     ): Double {
 
         val defaultBets = bets.withDefault { emptyList() }

@@ -9,13 +9,13 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator
 import java.time.Instant
 
 class MarketSnapshotNotifier(
-    snapshotListeners: List<MarketSnapshotListener>,
-    private val eventFilterService: MarketSnapshotEventFilterService,
-    private val handlers: List<BetCommandHandler>
+        snapshotListeners: List<MarketSnapshotListener>,
+        private val eventFilterService: MarketSnapshotEventFilterService,
+        private val handlers: List<BetCommandHandler>
 ) {
 
     private val sortedSnapshotListeners: List<MarketSnapshotListener> =
-        snapshotListeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
+            snapshotListeners.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
 
     fun notify(event: MarketSnapshotEvent): CollectedBets {
         val market = event.snapshot.market
@@ -60,8 +60,8 @@ fun CollectedBets.updateMetrics() {
 private fun updateCounter(side: Side, type: String, bets: List<Bet>) {
     val count = bets.count { it.requestedPrice.side == side }
     Metrics.counter(
-        "mns_bet_command_count",
-        "type", type,
-        "side", side.name.toLowerCase()
+            "mns_bet_command_count",
+            "type", type,
+            "side", side.name.toLowerCase()
     ).increment(count.toDouble())
 }

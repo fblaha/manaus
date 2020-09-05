@@ -8,7 +8,7 @@ object ActualRunnerMatchedFunction : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double? {
         return bet.betAction.runnerPrices
-            .find { it.selectionId == bet.settledBet.selectionId }?.matchedAmount
+                .find { it.selectionId == bet.settledBet.selectionId }?.matchedAmount
     }
 
 }

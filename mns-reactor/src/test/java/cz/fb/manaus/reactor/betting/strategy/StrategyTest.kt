@@ -26,8 +26,8 @@ class StrategyTest {
     @Test
     fun chain() {
         val strategy = chain(
-            fixedStrategy(Side.BACK, 0.01),
-            fixedStrategy(Side.LAY, 0.02)
+                fixedStrategy(Side.BACK, 0.01),
+                fixedStrategy(Side.LAY, 0.02)
         )
         assertEquals(0.01, strategy(HOME_EVENT_BACK))
         assertEquals(0.02, strategy(HOME_EVENT_LAY))

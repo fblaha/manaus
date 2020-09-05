@@ -7,7 +7,7 @@ import java.time.Duration
 
 @Index(value = "name", type = IndexType.Unique)
 data class BlacklistedCategory(
-    @Id val name: String,
-    val period: Duration,
-    val profit: Double
+        @Id val name: String,
+        val period: Duration,
+        val profit: Double
 )

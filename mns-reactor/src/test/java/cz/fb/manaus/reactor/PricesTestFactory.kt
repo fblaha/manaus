@@ -10,30 +10,30 @@ import org.springframework.stereotype.Component
 
 @Component
 class PricesTestFactory(
-    private val roundingService: RoundingService,
-    private val priceService: PriceService
+        private val roundingService: RoundingService,
+        private val priceService: PriceService
 ) {
 
     fun newRunnerPrices(
-        selectionId: Long,
-        bestBack: Double,
-        bestLay: Double,
-        lastMatchedPrice: Double? = null
+            selectionId: Long,
+            bestBack: Double,
+            bestLay: Double,
+            lastMatchedPrice: Double? = null
     ): RunnerPrices {
         val backBestPrice = Price(bestBack, 100.0, Side.BACK)
         val layBestPrice = Price(bestLay, 100.0, Side.LAY)
         return RunnerPrices(
-            selectionId = selectionId,
-            prices = listOf(
-                backBestPrice,
-                layBestPrice,
-                roundingService.decrement(backBestPrice, 1, bfProvider.minPrice, bfProvider::matches)!!,
-                roundingService.decrement(backBestPrice, 2, bfProvider.minPrice, bfProvider::matches)!!,
-                roundingService.increment(layBestPrice, 1, bfProvider::matches)!!,
-                roundingService.increment(layBestPrice, 2, bfProvider::matches)!!
-            ),
-            lastMatchedPrice = lastMatchedPrice,
-            matchedAmount = 10.0
+                selectionId = selectionId,
+                prices = listOf(
+                        backBestPrice,
+                        layBestPrice,
+                        roundingService.decrement(backBestPrice, 1, bfProvider.minPrice, bfProvider::matches)!!,
+                        roundingService.decrement(backBestPrice, 2, bfProvider.minPrice, bfProvider::matches)!!,
+                        roundingService.increment(layBestPrice, 1, bfProvider::matches)!!,
+                        roundingService.increment(layBestPrice, 2, bfProvider::matches)!!
+                ),
+                lastMatchedPrice = lastMatchedPrice,
+                matchedAmount = 10.0
         )
     }
 

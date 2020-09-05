@@ -14,31 +14,31 @@ import kotlin.test.assertTrue
 @Component
 @Profile(ManausProfiles.DB)
 class BettorTester(
-    private val betEventSeeker: BetEventSeeker,
-    private val betActionRepository: BetActionRepository
+        private val betEventSeeker: BetEventSeeker,
+        private val betActionRepository: BetActionRepository
 ) {
 
     private fun check(
-        side: Side,
-        marketPrices: List<RunnerPrices>,
-        bets: List<Bet>,
-        expectedPlaceCount: Int,
-        expectedUpdateCount: Int
+            side: Side,
+            marketPrices: List<RunnerPrices>,
+            bets: List<Bet>,
+            expectedPlaceCount: Int,
+            expectedUpdateCount: Int
     ): List<BetCommand> {
 
         val snapshot = MarketSnapshot(marketPrices, market, bets, emptyMap())
         val collected = betEventSeeker.onMarketSnapshot(MarketSnapshotEvent(snapshot, mbAccount))
-            .filter { it.bet.requestedPrice.side == side }
+                .filter { it.bet.requestedPrice.side == side }
         assertEquals(expectedPlaceCount, collected.filter { it.isPlace }.size)
         assertEquals(expectedUpdateCount, collected.filter { it.isUpdate }.size)
         return collected
     }
 
     fun checkPlace(
-        side: Side,
-        marketPrices: List<RunnerPrices>,
-        expectedCount: Int,
-        vararg expectedPrices: Double
+            side: Side,
+            marketPrices: List<RunnerPrices>,
+            expectedCount: Int,
+            vararg expectedPrices: Double
     ) {
         val result = check(side, marketPrices, listOf(), expectedCount, 0)
         val toPlace = result.filter { it.isPlace }
@@ -49,11 +49,11 @@ class BettorTester(
     }
 
     fun checkUpdate(
-        side: Side,
-        oldPrice: Double,
-        marketPrices: List<RunnerPrices>,
-        expectedPlaceCount: Int,
-        expectedUpdateCount: Int
+            side: Side,
+            oldPrice: Double,
+            marketPrices: List<RunnerPrices>,
+            expectedPlaceCount: Int,
+            expectedUpdateCount: Int
     ) {
         val oldOne = Price(oldPrice, 3.72, side)
         val minus10h = Instant.now().minus(10, ChronoUnit.HOURS)
@@ -63,11 +63,11 @@ class BettorTester(
         val bets = listOf(unmatchedHome, unmatchedDraw, unmatchedAway)
         bets.forEach {
             betActionRepository.idSafeSave(
-                betAction.copy(
-                    selectionId = it.selectionId,
-                    price = oldOne,
-                    betId = it.betId
-                )
+                    betAction.copy(
+                            selectionId = it.selectionId,
+                            price = oldOne,
+                            betId = it.betId
+                    )
             )
         }
         check(side, marketPrices, bets, expectedPlaceCount, expectedUpdateCount)

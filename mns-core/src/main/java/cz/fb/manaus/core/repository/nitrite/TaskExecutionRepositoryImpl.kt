@@ -1,6 +1,7 @@
-package cz.fb.manaus.core.repository
+package cz.fb.manaus.core.repository.nitrite
 
 import cz.fb.manaus.core.model.TaskExecution
+import cz.fb.manaus.core.repository.Repository
 import cz.fb.manaus.spring.ManausProfiles
 import org.dizitart.kno2.getRepository
 import org.dizitart.no2.Nitrite
@@ -10,5 +11,5 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile(ManausProfiles.DB)
-class TaskExecutionRepository(db: Nitrite) :
-    AbstractRepository<TaskExecution, String>(db.getRepository {}, TaskExecution::name)
+class TaskExecutionRepositoryImpl(db: Nitrite) :
+        Repository<TaskExecution> by RepositoryImpl(db.getRepository {}, TaskExecution::name)

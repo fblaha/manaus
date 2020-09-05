@@ -36,11 +36,11 @@ class CategoryServiceTest : AbstractTestCase() {
         val categories = categoryService.getRealizedBetCategories(realizedBet, false)
         assertTrue {
             categories.containsAll(
-                listOf(
-                    "market_country_cz",
-                    "market_sport_soccer",
-                    "market_type_match_odds"
-                )
+                    listOf(
+                            "market_country_cz",
+                            "market_sport_soccer",
+                            "market_type_match_odds"
+                    )
             )
         }
     }

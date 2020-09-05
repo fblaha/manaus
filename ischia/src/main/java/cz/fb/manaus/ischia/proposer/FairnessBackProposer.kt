@@ -21,13 +21,13 @@ fun isDraw(e: BetEvent): Boolean {
 @LayUniverse
 @BackUniverse
 class FairnessBackProposer(priceService: PriceService) : PriceProposer by FairnessProposer(
-    Side.BACK,
-    priceService,
-    chain(
-        fixedStrategy(Side.LAY, 0.077, ::isDraw),
-        fixedStrategy(Side.LAY, 0.09),
+        Side.BACK,
+        priceService,
+        chain(
+                fixedStrategy(Side.LAY, 0.077, ::isDraw),
+                fixedStrategy(Side.LAY, 0.09),
 
-        fixedStrategy(Side.BACK, 0.06, ::isDraw),
-        fixedStrategy(Side.BACK, 0.08)
-    )
+                fixedStrategy(Side.BACK, 0.06, ::isDraw),
+                fixedStrategy(Side.BACK, 0.08)
+        )
 )

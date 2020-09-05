@@ -19,14 +19,14 @@ class ValidationServiceTest : AbstractTestCase() {
     @Test
     fun `reduce OK - NOP - DROP combinations`() {
         val results = listOf(
-            ValidationResult.OK,
-            ValidationResult.NOP,
-            ValidationResult.DROP,
-            ValidationResult.OK
+                ValidationResult.OK,
+                ValidationResult.NOP,
+                ValidationResult.DROP,
+                ValidationResult.OK
         )
         assertEquals(
-            ValidationResult.DROP,
-            service.reduce(results)
+                ValidationResult.DROP,
+                service.reduce(results)
         )
         assertEquals(ValidationResult.OK, service.reduce(results.filter { it == ValidationResult.OK }))
         assertEquals(ValidationResult.NOP, service.reduce(results.filter { it != ValidationResult.DROP }))
@@ -49,8 +49,8 @@ class ValidationServiceTest : AbstractTestCase() {
 
     private fun checkDownGrade(newPrice: Double, expected: Boolean) {
         val oldBet = Bet(
-            marketId = "1", selectionId = 1, requestedPrice = Price(2.2, 2.0, Side.LAY),
-            placedDate = Instant.now(), matchedAmount = 5.0
+                marketId = "1", selectionId = 1, requestedPrice = Price(2.2, 2.0, Side.LAY),
+                placedDate = Instant.now(), matchedAmount = 5.0
         )
         val dropping = MockValidator(ValidationResult.DROP)
         val result = service.isDowngrade(Price(newPrice, 2.0, Side.LAY), oldBet)

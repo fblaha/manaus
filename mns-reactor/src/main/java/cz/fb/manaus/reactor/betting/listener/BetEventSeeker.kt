@@ -12,10 +12,10 @@ typealias MarketRunnerPredicate = (Market, Runner) -> Boolean
 
 @Component
 class BetEventSeeker(
-    private val calculator: FairnessPolynomialCalculator,
-    private val betEventNotifier: BetEventNotifier,
-    private val chargeGrowthForecaster: ChargeGrowthForecaster,
-    private val marketRunnerPredicate: MarketRunnerPredicate = { _, _ -> true }
+        private val calculator: FairnessPolynomialCalculator,
+        private val betEventNotifier: BetEventNotifier,
+        private val chargeGrowthForecaster: ChargeGrowthForecaster,
+        private val marketRunnerPredicate: MarketRunnerPredicate = { _, _ -> true }
 ) : MarketSnapshotListener {
 
     private val log = Logger.getLogger(BetEventSeeker::class.simpleName)
@@ -33,17 +33,17 @@ class BetEventSeeker(
                 for (side in betEventNotifier.activeSides) {
                     val sideSelection = SideSelection(side, selectionId)
                     val forecast = chargeGrowthForecaster.getForecast(
-                        sideSelection = sideSelection,
-                        snapshot = snapshot,
-                        fairness = fairness,
-                        commission = account.provider.commission
+                            sideSelection = sideSelection,
+                            snapshot = snapshot,
+                            fairness = fairness,
+                            commission = account.provider.commission
                     )
                     val betEvent = createBetEvent(
-                        sideSelection = sideSelection,
-                        snapshot = snapshot,
-                        fairness = fairness,
-                        account = account,
-                        forecast = forecast
+                            sideSelection = sideSelection,
+                            snapshot = snapshot,
+                            fairness = fairness,
+                            account = account,
+                            forecast = forecast
                     )
                     log.info { "bet event ${market.event.name} - ${runner.name} ($side)" }
                     collector.addAll(betEventNotifier.notify(betEvent))

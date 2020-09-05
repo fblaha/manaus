@@ -14,16 +14,16 @@ const val TYPE_HANDICAP = "handicap"
 @Index(value = "event.openDate", type = IndexType.NonUnique)
 @JsonIgnoreProperties("openDate\$manaus_core")
 data class Market(
-    @Id val id: String,
-    val name: String,
-    val matchedAmount: Double,
-    val inPlay: Boolean,
-    val type: String?,
-    val eventType: EventType,
-    val competition: Competition?,
-    val event: Event,
-    val latestEvent: Instant?,
-    val runners: List<Runner>
+        @Id val id: String,
+        val name: String,
+        val matchedAmount: Double,
+        val inPlay: Boolean,
+        val type: String?,
+        val eventType: EventType,
+        val competition: Competition?,
+        val event: Event,
+        val latestEvent: Instant?,
+        val runners: List<Runner>
 ) {
     internal val openDate: Instant = event.openDate
 

@@ -1,7 +1,7 @@
 package cz.fb.manaus.core.maintanance
 
 import cz.fb.manaus.core.model.TaskExecution
-import cz.fb.manaus.core.repository.TaskExecutionRepository
+import cz.fb.manaus.core.repository.Repository
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
 import org.springframework.scheduling.annotation.Scheduled
@@ -12,17 +12,17 @@ import java.util.logging.Logger
 @Component
 @Profile(ManausProfiles.DB)
 class PeriodicTaskManager(
-    private val periodicTasks: List<PeriodicTask>,
-    private val taskExecutionRepository: TaskExecutionRepository
+        private val periodicTasks: List<PeriodicTask>,
+        private val taskExecutionRepository: Repository<TaskExecution>
 ) {
     private val log = Logger.getLogger(PeriodicTaskManager::class.simpleName)
 
     fun cleanUp() {
         val registered = periodicTasks.map { it.name }.toSet()
         taskExecutionRepository.list()
-            .filter { it.name !in registered }
-            .onEach { log.info { "deleting orphan execution '$it'" } }
-            .forEach { taskExecutionRepository.delete(it.name) }
+                .filter { it.name !in registered }
+                .onEach { log.info { "deleting orphan execution '$it'" } }
+                .forEach { taskExecutionRepository.delete(it.name) }
     }
 
     @Scheduled(fixedDelayString = "PT5M")

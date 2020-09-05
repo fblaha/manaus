@@ -4,9 +4,9 @@ import org.apache.commons.math3.util.Precision
 
 
 data class Price(
-    val price: Double,
-    val amount: Double,
-    val side: Side
+        val price: Double,
+        val amount: Double,
+        val side: Side
 ) {
     companion object {
         fun round(value: Double): Double {

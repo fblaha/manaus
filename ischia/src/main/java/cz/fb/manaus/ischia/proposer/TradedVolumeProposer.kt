@@ -29,8 +29,8 @@ class TradedVolumeProposer(private val priceService: PriceService) : PricePropos
     override fun getProposedPrice(event: BetEvent): Double {
         val weightedMean = event.metrics.actualTradedVolume!!.weightedMean!!
         return priceService.downgrade(
-            weightedMean, 0.01,
-            event.side
+                weightedMean, 0.01,
+                event.side
         )
     }
 

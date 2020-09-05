@@ -12,8 +12,8 @@ import java.util.logging.Logger
 @Component
 @Profile(ManausProfiles.DB)
 class ActionHistoryCategorizerCollector(
-    private val betActionRepository: BetActionRepository,
-    private val categorizers: List<ActionHistoryCategorizer>
+        private val betActionRepository: BetActionRepository,
+        private val categorizers: List<ActionHistoryCategorizer>
 ) : RealizedBetCategorizer {
 
     private val log = Logger.getLogger(ActionHistoryCategorizerCollector::class.simpleName)
@@ -25,7 +25,7 @@ class ActionHistoryCategorizerCollector(
         val side = realizedBet.settledBet.price.side
         val selectionId = realizedBet.settledBet.selectionId
         val betActions = betActionRepository.find(market.id)
-            .filter { it.selectionId == selectionId && side == it.price.side }
+                .filter { it.selectionId == selectionId && side == it.price.side }
         if (betActions.isEmpty()) {
             log.warning { "missing  bet actions '$realizedBet'" }
             return emptySet()

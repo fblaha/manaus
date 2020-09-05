@@ -13,9 +13,9 @@ import kotlin.math.min
 
 @Component
 class ChargeGrowthForecaster(
-    private val simulator: MarketChargeSimulator,
-    private val probabilityCalculator: ProbabilityCalculator,
-    private val amountAdviser: AmountAdviser
+        private val simulator: MarketChargeSimulator,
+        private val probabilityCalculator: ProbabilityCalculator,
+        private val amountAdviser: AmountAdviser
 ) {
 
     private fun convertBetData(currentBets: List<Bet>): Map<Long, List<Price>> {
@@ -28,26 +28,26 @@ class ChargeGrowthForecaster(
     }
 
     fun getForecast(
-        sideSelection: SideSelection,
-        snapshot: MarketSnapshot,
-        fairness: Fairness,
-        commission: Double
+            sideSelection: SideSelection,
+            snapshot: MarketSnapshot,
+            fairness: Fairness,
+            commission: Double
     ): Double? {
         val (side, selectionId) = sideSelection
         val fairnessSide = fairness.moreCredibleSide
         if (fairnessSide != null) {
             val sideFairness = fairness[fairnessSide]!!
             val probabilities = probabilityCalculator.fromFairness(
-                sideFairness, fairnessSide, snapshot.runnerPrices
+                    sideFairness, fairnessSide, snapshot.runnerPrices
             )
             val marketPrices = snapshot.runnerPrices
             val bets = convertBetData(snapshot.currentBets).toMutableMap()
             val runnerPrices = getRunnerPrices(marketPrices, selectionId)
             val oldCharge = simulator.getChargeMean(
-                winnerCount = 1,
-                commission = commission,
-                probabilities = probabilities,
-                bets = bets
+                    winnerCount = 1,
+                    commission = commission,
+                    probabilities = probabilities,
+                    bets = bets
             )
             val bestPrice = runnerPrices.getHomogeneous(side.opposite).bestPrice
             if (bestPrice != null) {
@@ -56,10 +56,10 @@ class ChargeGrowthForecaster(
                 val selBets = bets[selectionId] ?: emptyList()
                 bets[selectionId] = selBets + listOf(Price(price, amount, side))
                 val newCharge = simulator.getChargeMean(
-                    winnerCount = 1,
-                    commission = commission,
-                    probabilities = probabilities,
-                    bets = bets
+                        winnerCount = 1,
+                        commission = commission,
+                        probabilities = probabilities,
+                        bets = bets
                 )
                 return min(1000.0, newCharge / oldCharge)
             }

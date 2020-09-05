@@ -8,9 +8,9 @@ import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.price.PriceService
 
 class FairnessProposer(
-    private val side: Side,
-    private val priceService: PriceService,
-    private val strategy: Strategy
+        private val side: Side,
+        private val priceService: PriceService,
+        private val strategy: Strategy
 ) : PriceProposer {
 
     override fun validate(event: BetEvent): ValidationResult {

@@ -21,16 +21,16 @@ open class ReactorDatabaseConfiguration {
 
     @Bean
     open fun marketSnapshotNotifier(
-        marketSnapshotEventFilterService: MarketSnapshotEventFilterService,
-        handlers: List<BetCommandHandler>,
-        bettingConf: BettingConf,
-        betActionRepository: BetActionRepository,
-        snapshotListeners: List<MarketSnapshotListener>
+            marketSnapshotEventFilterService: MarketSnapshotEventFilterService,
+            handlers: List<BetCommandHandler>,
+            bettingConf: BettingConf,
+            betActionRepository: BetActionRepository,
+            snapshotListeners: List<MarketSnapshotListener>
     ): MarketSnapshotNotifier {
         return MarketSnapshotNotifier(
-            snapshotListeners,
-            marketSnapshotEventFilterService,
-            handlers
+                snapshotListeners,
+                marketSnapshotEventFilterService,
+                handlers
         )
     }
 }

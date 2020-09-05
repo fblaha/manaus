@@ -24,17 +24,17 @@ class DelayUpdateValidatorTest : AbstractIntegrationTestCase() {
     private lateinit var factory: BetEventTestFactory
 
     private fun checkValidation(
-        actionType: BetActionType,
-        beforeMinutes: Long,
-        side: Side,
-        validationResult: ValidationResult
+            actionType: BetActionType,
+            beforeMinutes: Long,
+            side: Side,
+            validationResult: ValidationResult
     ) {
         marketRepository.saveOrUpdate(market)
         val now = Instant.now()
         val place = betAction.copy(
-            time = now.minus(beforeMinutes, ChronoUnit.MINUTES),
-            price = Price(2.0, 30.0, side),
-            betActionType = actionType
+                time = now.minus(beforeMinutes, ChronoUnit.MINUTES),
+                price = Price(2.0, 30.0, side),
+                betActionType = actionType
         )
         betActionRepository.idSafeSave(place)
         val result = validator.validate(factory.newUpdateBetEvent(side, runnerPrices))
@@ -82,6 +82,6 @@ class DelayUpdateValidatorTest : AbstractIntegrationTestCase() {
     @Component
     @Profile(DB)
     class TestValidator(betActionRepository: BetActionRepository) :
-        Validator by DelayUpdateValidator(Duration.ofMinutes(30), betActionRepository)
+            Validator by DelayUpdateValidator(Duration.ofMinutes(30), betActionRepository)
 
 }

@@ -23,7 +23,7 @@ open class CoreLocalConfiguration {
     open fun objectMapperBuilder(): Jackson2ObjectMapperBuilder {
         val builder = Jackson2ObjectMapperBuilder()
         builder.modules(KotlinModule(), Jdk8Module(), JavaTimeModule())
-            .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         builder.indentOutput(true)
         return builder
     }

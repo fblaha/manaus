@@ -9,11 +9,11 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 
 val betTemplate = Bet(
-    betId = "111",
-    marketId = "222",
-    selectionId = SEL_HOME,
-    requestedPrice = Price(3.0, 2.0, Side.BACK),
-    placedDate = Instant.now()
+        betId = "111",
+        marketId = "222",
+        selectionId = SEL_HOME,
+        requestedPrice = Price(3.0, 2.0, Side.BACK),
+        placedDate = Instant.now()
 )
 
 
@@ -53,12 +53,12 @@ class BetTest : AbstractTestCase() {
         val requestedPrice = Price(3.0, mbProvider.minAmount, Side.LAY)
         val date = Instant.now().minus(2, ChronoUnit.HOURS)
         return Bet(
-            betId = "1",
-            marketId = market.id,
-            selectionId = 1000L,
-            requestedPrice = requestedPrice,
-            placedDate = date,
-            matchedAmount = matchedAmount
+                betId = "1",
+                marketId = market.id,
+                selectionId = 1000L,
+                requestedPrice = requestedPrice,
+                placedDate = date,
+                matchedAmount = matchedAmount
         )
     }
 }

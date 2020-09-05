@@ -21,7 +21,7 @@ import kotlin.test.assertNull
 
 
 class MockValidator(
-    private val result: ValidationResult
+        private val result: ValidationResult
 ) : Validator {
     override fun validate(event: BetEvent): ValidationResult {
         return result
@@ -29,8 +29,8 @@ class MockValidator(
 }
 
 class MockPriceProposer(
-    private val validationResult: ValidationResult,
-    private val price: Double?
+        private val validationResult: ValidationResult,
+        private val price: Double?
 ) : PriceProposer {
 
     override fun getProposedPrice(event: BetEvent): Double? {
@@ -44,7 +44,7 @@ class MockPriceProposer(
 }
 
 class MockPriceAdviser(
-    private val price: Price?
+        private val price: Price?
 ) : PriceAdviser {
 
     override fun getNewPrice(betEvent: BetEvent): ProposedPrice<Price>? {
@@ -83,18 +83,18 @@ class BetEventCoordinatorTest : AbstractTestCase() {
     }
 
     private fun createCoordinator(
-        price: Price?,
-        prePriceValidation: ValidationResult,
-        priceValidation: ValidationResult
+            price: Price?,
+            prePriceValidation: ValidationResult,
+            priceValidation: ValidationResult
     ): BetEventCoordinator {
         val proposerAdviser = MockPriceProposer(prePriceValidation, price?.price)
         return BetEventCoordinator(
-            side = Side.BACK,
-            validationCoordinator = ValidationCoordinator(
-                validators = listOf(MockValidator(priceValidation), proposerAdviser),
-                validationService = validationService
-            ),
-            priceAdviser = MockPriceAdviser(price)
+                side = Side.BACK,
+                validationCoordinator = ValidationCoordinator(
+                        validators = listOf(MockValidator(priceValidation), proposerAdviser),
+                        validationService = validationService
+                ),
+                priceAdviser = MockPriceAdviser(price)
         )
     }
 

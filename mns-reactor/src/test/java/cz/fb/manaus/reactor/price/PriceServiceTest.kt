@@ -54,9 +54,9 @@ class PriceServiceTest : AbstractTestCase() {
     @Test
     fun `fair price`() {
         val marketPrices = listOf(
-            factory.newRunnerPrices(1, 4.2, 6.0),
-            factory.newRunnerPrices(2, 2.87, 4.0),
-            factory.newRunnerPrices(1, 1.8, 3.0)
+                factory.newRunnerPrices(1, 4.2, 6.0),
+                factory.newRunnerPrices(2, 2.87, 4.0),
+                factory.newRunnerPrices(1, 1.8, 3.0)
         )
         val layFairness = getFairness(Side.LAY, marketPrices)
         assertEquals(1.5, layFairness, 0.1)
@@ -141,8 +141,8 @@ class PriceServiceTest : AbstractTestCase() {
 
         val overroundPrices = unfairPrices.map {
             val fair = priceService.getOverroundFairPrice(
-                it, overround,
-                unfairPrices.size
+                    it, overround,
+                    unfairPrices.size
             )
             assertTrue(it < fair)
             fair
@@ -164,10 +164,10 @@ class PriceServiceTest : AbstractTestCase() {
     }
 
     private fun checkOverroundUnfairPrices(
-        reciprocal: Double,
-        winnerCount: Int,
-        unfairPrices: List<Double>,
-        fairPrices: List<Double>
+            reciprocal: Double,
+            winnerCount: Int,
+            unfairPrices: List<Double>,
+            fairPrices: List<Double>
     ) {
         for ((unfairOrig, fair) in unfairPrices.zip(fairPrices)) {
             val unfairPrice = getOverroundUnfairPrice(fair, reciprocal, winnerCount, unfairPrices.size)
@@ -200,10 +200,10 @@ class PriceServiceTest : AbstractTestCase() {
     }
 
     private fun getOverroundUnfairPrice(
-        fairPrice: Double,
-        targetReciprocal: Double,
-        winnerCount: Int,
-        runnerCount: Int
+            fairPrice: Double,
+            targetReciprocal: Double,
+            winnerCount: Int,
+            runnerCount: Int
     ): Double {
         val overround = winnerCount / targetReciprocal
         val selectionOverround = (overround - winnerCount) / runnerCount

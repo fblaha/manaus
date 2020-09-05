@@ -38,10 +38,10 @@ class ChargeGrowthForecasterTest : AbstractTestCase() {
         assertTrue(forecast!! > 1)
         val betAmount = adviser.amount
         currentBets.add(
-            Bet(
-                "1", "1", SEL_DRAW,
-                Price(3.0, betAmount, Side.LAY), Instant.now(), betAmount
-            )
+                Bet(
+                        "1", "1", SEL_DRAW,
+                        Price(3.0, betAmount, Side.LAY), Instant.now(), betAmount
+                )
         )
         val drawBack = SideSelection(Side.BACK, SEL_DRAW)
         forecast = forecaster.getForecast(drawBack, snapshot, fairness, commission)

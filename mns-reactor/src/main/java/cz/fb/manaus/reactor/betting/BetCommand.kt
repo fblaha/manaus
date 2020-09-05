@@ -15,8 +15,8 @@ fun toCollectedBets(commands: List<BetCommand>): CollectedBets {
     val (cancel, placeOrUpdate) = commands.partition { it.isCancel }
     val (place, update) = placeOrUpdate.partition { it.isPlace }
     return CollectedBets(
-        place = place.map { it.bet },
-        update = update.map { it.bet },
-        cancel = cancel.mapNotNull { it.bet.betId }
+            place = place.map { it.bet },
+            update = update.map { it.bet },
+            cancel = cancel.mapNotNull { it.bet.betId }
     )
 }

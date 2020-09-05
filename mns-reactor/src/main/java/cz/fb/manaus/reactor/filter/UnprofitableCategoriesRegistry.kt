@@ -12,15 +12,15 @@ import java.util.logging.Logger
 
 
 class UnprofitableCategoriesRegistry(
-    private val name: String,
-    private val period: Duration,
-    private val side: Side? = null,
-    private val maximalProfit: Double,
-    private val filterPrefix: String,
-    private val thresholds: Map<Int, Int>,
-    private val profitService: ProfitService,
-    private val settledBetRepository: SettledBetRepository,
-    private val realizedBetLoader: RealizedBetLoader
+        private val name: String,
+        private val period: Duration,
+        private val side: Side? = null,
+        private val maximalProfit: Double,
+        private val filterPrefix: String,
+        private val thresholds: Map<Int, Int>,
+        private val profitService: ProfitService,
+        private val settledBetRepository: SettledBetRepository,
+        private val realizedBetLoader: RealizedBetLoader
 ) : BlacklistSupplier {
 
     private val log = Logger.getLogger(UnprofitableCategoriesRegistry::class.simpleName)
@@ -35,9 +35,9 @@ class UnprofitableCategoriesRegistry(
         if (settledBets.isEmpty()) return emptyList()
         val realizedBets = settledBets.map { realizedBetLoader.toRealizedBet(it) }
         val profitRecords = profitService.getProfitRecords(
-            bets = realizedBets,
-            projection = null,
-            simulationAwareOnly = true
+                bets = realizedBets,
+                projection = null,
+                simulationAwareOnly = true
         )
 
         log.info { logPrefix + "updating registry '$name'" }
@@ -75,21 +75,21 @@ class UnprofitableCategoriesRegistry(
     }
 
     internal fun getBlacklist(
-        threshold: Double,
-        blackCount: Int,
-        totalCount: Int,
-        profitRecords: List<ProfitRecord>,
-        actualBlacklist: Set<String>
+            threshold: Double,
+            blackCount: Int,
+            totalCount: Int,
+            profitRecords: List<ProfitRecord>,
+            actualBlacklist: Set<String>
     ): List<BlacklistedCategory> {
 
         val sorted = profitRecords.asSequence()
-            .filter { it.category !in actualBlacklist }
-            .filter { it.totalCount.toDouble() / totalCount <= threshold }
-            .sortedBy { it.profit }
+                .filter { it.category !in actualBlacklist }
+                .filter { it.totalCount.toDouble() / totalCount <= threshold }
+                .sortedBy { it.profit }
 
         return sorted.takeWhile { it.profit < maximalProfit }
-            .take(blackCount)
-            .map { BlacklistedCategory(it.category, period, it.profit) }
-            .toList()
+                .take(blackCount)
+                .map { BlacklistedCategory(it.category, period, it.profit) }
+                .toList()
     }
 }

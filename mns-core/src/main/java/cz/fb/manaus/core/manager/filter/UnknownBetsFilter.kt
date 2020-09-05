@@ -11,7 +11,7 @@ import java.util.logging.Logger
 @Component
 @Profile(ManausProfiles.DB)
 class UnknownBetsFilter(
-    private val betActionRepository: BetActionRepository
+        private val betActionRepository: BetActionRepository
 ) : MarketSnapshotEventFilter {
 
     private val log = Logger.getLogger(UnknownBetsFilter::class.simpleName)
@@ -19,7 +19,7 @@ class UnknownBetsFilter(
     override fun accept(event: MarketSnapshotEvent): Boolean {
         val myBets = betActionRepository.find(event.snapshot.market.id).mapNotNull { it.betId }.toSet()
         val unknownBets = getUnknownBets(event.snapshot.currentBets, myBets)
-            .onEach { log.warning { "unknown bet '${it.betId}'" } }
+                .onEach { log.warning { "unknown bet '${it.betId}'" } }
         return unknownBets.isEmpty()
     }
 }

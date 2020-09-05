@@ -9,10 +9,10 @@ class ValidationMetricsCollector {
 
     fun updateMetrics(result: ValidationResult, type: Side, validatorName: String) {
         Metrics.counter(
-            "mns_validator_stats",
-            "side", type.name.toLowerCase(),
-            "validator", validatorName,
-            "result", result.name.toLowerCase()
+                "mns_validator_stats",
+                "side", type.name.toLowerCase(),
+                "validator", validatorName,
+                "result", result.name.toLowerCase()
         ).increment()
     }
 }

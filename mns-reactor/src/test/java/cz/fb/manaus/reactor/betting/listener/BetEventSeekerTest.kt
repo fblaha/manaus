@@ -38,9 +38,9 @@ class BetEventSeekerTest : AbstractTestCase() {
     @Test
     fun onMarketSnapshot() {
         val snapshot = MarketSnapshot(
-            runnerPrices = runnerPrices,
-            currentBets = emptyList(),
-            market = market.copy(event = listener.mockEvent)
+                runnerPrices = runnerPrices,
+                currentBets = emptyList(),
+                market = market.copy(event = listener.mockEvent)
         )
         val bets = betEventSeeker.onMarketSnapshot(MarketSnapshotEvent(snapshot, mbAccount))
         assertTrue { bets.isNotEmpty() }

@@ -15,9 +15,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 @Controller
 @Profile(ManausProfiles.DB)
 class MarketFootprintController(
-    private val marketRepository: MarketRepository,
-    private val importer: Importer,
-    private val marketFootprintLoader: MarketFootprintLoader
+        private val marketRepository: MarketRepository,
+        private val importer: Importer,
+        private val marketFootprintLoader: MarketFootprintLoader
 ) {
 
     @ResponseBody
@@ -34,8 +34,8 @@ class MarketFootprintController(
         Metrics.counter("mns_market_footprint_import").increment()
         importer.import(footprint)
         val location = ServletUriComponentsBuilder
-            .fromCurrentRequest().path("/{id}")
-            .buildAndExpand(footprint.market.id).toUri()
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(footprint.market.id).toUri()
         return ResponseEntity.created(location).build<Any>()
     }
 }

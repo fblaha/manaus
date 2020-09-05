@@ -10,8 +10,8 @@ import kotlin.math.abs
 
 @Component
 class FairnessPriceDiffFunction(
-    private val calculator: FairnessPolynomialCalculator,
-    private val priceService: PriceService
+        private val calculator: FairnessPolynomialCalculator,
+        private val priceService: PriceService
 ) : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double? {

@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component
 @Component
 @Profile(ManausProfiles.DB)
 class MarketPurger(
-    private val marketRepository: MarketRepository,
-    private val settledBetRepository: SettledBetRepository,
-    private val betActionRepository: BetActionRepository
+        private val marketRepository: MarketRepository,
+        private val settledBetRepository: SettledBetRepository,
+        private val betActionRepository: BetActionRepository
 ) {
 
     fun purge(footprint: MarketFootprint) {

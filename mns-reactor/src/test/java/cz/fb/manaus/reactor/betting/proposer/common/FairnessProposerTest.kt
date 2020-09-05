@@ -56,21 +56,21 @@ class FairnessProposerTest : AbstractTestCase() {
 
     @Component
     class TestLayProposer(priceService: PriceService) : PriceProposer by FairnessProposer(
-        Side.LAY, priceService,
-        chain(
-            fixedStrategy(Side.LAY, 0.02),
-            fixedStrategy(Side.BACK, 0.02)
-        )
+            Side.LAY, priceService,
+            chain(
+                    fixedStrategy(Side.LAY, 0.02),
+                    fixedStrategy(Side.BACK, 0.02)
+            )
     )
 
     @Component
     class TestBackProposer(priceService: PriceService) : PriceProposer by FairnessProposer(
-        Side.BACK,
-        priceService,
-        chain(
-            fixedStrategy(Side.BACK, 0.02),
-            fixedStrategy(Side.LAY, 0.02)
-        )
+            Side.BACK,
+            priceService,
+            chain(
+                    fixedStrategy(Side.BACK, 0.02),
+                    fixedStrategy(Side.LAY, 0.02)
+            )
     )
 
 }

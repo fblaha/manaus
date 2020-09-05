@@ -9,7 +9,7 @@ import javax.annotation.PostConstruct
 @ConstructorBinding
 @ConfigurationProperties("markets")
 data class MarketConf(
-    val history: Duration = Duration.ZERO
+        val history: Duration = Duration.ZERO
 ) {
 
     private val log = Logger.getLogger(MarketConf::class.simpleName)

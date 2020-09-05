@@ -100,22 +100,22 @@ class CategoryServiceRealDataTest : AbstractMarketDataAwareTestCase() {
 
     companion object {
         val DISJUNCTIVE_CATEGORIES = setOf(
-            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.BASKETBALL,
-            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.VOLLEYBALL,
-            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.BASEBALL,
-            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.SOCCER,
-            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.AMERICAN_FOOTBALL,
-            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.GOLF,
-            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.HANDBALL,
-            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.GREY_HOUNDS,
-            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.TENNIS,
-            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.FINANCIAL,
-            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.SNOOKER,
-            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.CRICKET,
-            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.RUGBY,
-            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.ICE_HOCKEY,
-            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.MOTOR_SPORT,
-            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.HORSES
+                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.BASKETBALL,
+                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.VOLLEYBALL,
+                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.BASEBALL,
+                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.SOCCER,
+                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.AMERICAN_FOOTBALL,
+                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.GOLF,
+                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.HANDBALL,
+                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.GREY_HOUNDS,
+                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.TENNIS,
+                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.FINANCIAL,
+                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.SNOOKER,
+                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.CRICKET,
+                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.RUGBY,
+                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.ICE_HOCKEY,
+                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.MOTOR_SPORT,
+                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.HORSES
         )
     }
 }

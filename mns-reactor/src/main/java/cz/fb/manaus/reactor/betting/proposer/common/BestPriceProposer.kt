@@ -7,8 +7,8 @@ import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.rounding.RoundingService
 
 class BestPriceProposer(
-    private val step: Int,
-    private val roundingService: RoundingService
+        private val step: Int,
+        private val roundingService: RoundingService
 ) : PriceProposer {
 
     override fun validate(event: BetEvent): ValidationResult {

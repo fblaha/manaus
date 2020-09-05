@@ -6,13 +6,13 @@ import java.time.Instant
 import java.util.logging.Logger
 
 data class BetEvent(
-    val sideSelection: SideSelection,
-    val market: Market,
-    val marketPrices: List<RunnerPrices>,
-    val coverage: Map<SideSelection, Bet>,
-    val account: Account,
-    val metrics: BetMetrics,
-    val proposedPrice: Price? = null
+        val sideSelection: SideSelection,
+        val market: Market,
+        val marketPrices: List<RunnerPrices>,
+        val coverage: Map<SideSelection, Bet>,
+        val account: Account,
+        val metrics: BetMetrics,
+        val proposedPrice: Price? = null
 ) {
 
     private val log = Logger.getLogger(BetEvent::class.simpleName)
@@ -43,15 +43,15 @@ data class BetEvent(
 
     fun betAction(proposers: Set<String>): BetAction {
         return BetAction(
-            selectionId = sideSelection.selectionId,
-            price = proposedPrice!!,
-            id = 0,
-            time = Instant.now(),
-            marketId = market.id,
-            runnerPrices = marketPrices,
-            betActionType = betActionType,
-            chargeGrowth = metrics.chargeGrowthForecast,
-            proposers = proposers
+                selectionId = sideSelection.selectionId,
+                price = proposedPrice!!,
+                id = 0,
+                time = Instant.now(),
+                marketId = market.id,
+                runnerPrices = marketPrices,
+                betActionType = betActionType,
+                chargeGrowth = metrics.chargeGrowthForecast,
+                proposers = proposers
         )
     }
 
@@ -65,10 +65,10 @@ data class BetEvent(
         log.info { "bet $betActionType action '$action'" }
         return if (betActionType == BetActionType.PLACE) {
             val bet = Bet(
-                marketId = market.id,
-                placedDate = Instant.now(),
-                selectionId = runnerPrices.selectionId,
-                requestedPrice = newPrice
+                    marketId = market.id,
+                    placedDate = Instant.now(),
+                    selectionId = runnerPrices.selectionId,
+                    requestedPrice = newPrice
             )
             BetCommand(bet, action)
         } else {
@@ -83,23 +83,23 @@ data class BetEvent(
 
 
 fun createBetEvent(
-    sideSelection: SideSelection,
-    snapshot: MarketSnapshot,
-    account: Account,
-    fairness: Fairness,
-    forecast: Double? = null
+        sideSelection: SideSelection,
+        snapshot: MarketSnapshot,
+        account: Account,
+        fairness: Fairness,
+        forecast: Double? = null
 ): BetEvent {
     val metrics = BetMetrics(
-        chargeGrowthForecast = forecast,
-        fairness = fairness,
-        actualTradedVolume = snapshot.tradedVolume?.get(key = sideSelection.selectionId)
+            chargeGrowthForecast = forecast,
+            fairness = fairness,
+            actualTradedVolume = snapshot.tradedVolume?.get(key = sideSelection.selectionId)
     )
     return BetEvent(
-        sideSelection = sideSelection,
-        market = snapshot.market,
-        marketPrices = snapshot.runnerPrices,
-        account = account,
-        coverage = snapshot.coverage,
-        metrics = metrics
+            sideSelection = sideSelection,
+            market = snapshot.market,
+            marketPrices = snapshot.runnerPrices,
+            account = account,
+            coverage = snapshot.coverage,
+            metrics = metrics
     )
 }

@@ -10,8 +10,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc
 @EnableWebMvc
 @EnableScheduling
 @ComponentScan(
-    useDefaultFilters = false,
-    includeFilters = [ComponentScan.Filter(type = FilterType.ANNOTATION, classes = arrayOf(Configuration::class))],
-    basePackages = ["cz.fb.manaus.spring"]
+        useDefaultFilters = false,
+        includeFilters = [ComponentScan.Filter(type = FilterType.ANNOTATION, classes = arrayOf(Configuration::class))],
+        basePackages = ["cz.fb.manaus.spring"]
 )
 open class ManausConfiguration

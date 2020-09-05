@@ -12,11 +12,11 @@ class UnknownBetsValidatorTest {
     @Test
     fun `unknown bets`() {
         val bet = Bet(
-            betId = "1",
-            marketId = "1",
-            selectionId = 1,
-            requestedPrice = Price(3.0, 3.0, Side.BACK),
-            placedDate = Instant.now()
+                betId = "1",
+                marketId = "1",
+                selectionId = 1,
+                requestedPrice = Price(3.0, 3.0, Side.BACK),
+                placedDate = Instant.now()
         )
         assertEquals(0, getUnknownBets(listOf(bet), setOf("1")).size)
         assertEquals(1, getUnknownBets(listOf(bet), setOf("2")).size)

@@ -32,12 +32,12 @@ class MarketControllerTest : AbstractControllerTest() {
     fun `market create`() {
         val market = objectMapper.writer().writeValueAsString(market)
         val result = mvc.perform(
-            post("/markets")
-                .content(market)
-                .contentType(MediaType.APPLICATION_JSON)
+                post("/markets")
+                        .content(market)
+                        .contentType(MediaType.APPLICATION_JSON)
         )
-            .andExpect(status().isCreated)
-            .andReturn()
+                .andExpect(status().isCreated)
+                .andReturn()
         assertNotNull(result.response.getHeader(HttpHeaders.LOCATION))
     }
 

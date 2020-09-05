@@ -30,9 +30,9 @@ object AcceptAllValidator : Validator {
 
 @Configuration
 open class TestLocalConfiguration(
-    private val adviser: AmountAdviser,
-    private val proposalService: PriceProposalService,
-    private val roundingService: RoundingService
+        private val adviser: AmountAdviser,
+        private val proposalService: PriceProposalService,
+        private val roundingService: RoundingService
 
 ) {
 
@@ -43,16 +43,16 @@ open class TestLocalConfiguration(
 
     @Bean
     open fun validationCoordinator(
-        validators: List<Validator>,
-        validationService: ValidationService
+            validators: List<Validator>,
+            validationService: ValidationService
     ): ValidationCoordinator {
         return ValidationCoordinator(validators, validationService)
     }
 
     @Bean
     open fun backBetEventCoordinator(
-        priceAdviser: PriceAdviser,
-        validationCoordinator: ValidationCoordinator
+            priceAdviser: PriceAdviser,
+            validationCoordinator: ValidationCoordinator
     ): BetEventCoordinator {
         return BetEventCoordinator(Side.BACK, validationCoordinator, priceAdviser)
     }

@@ -22,8 +22,8 @@ class MarketRegexpCategorizerTest : AbstractTestCase() {
         assertTrue { "market_regexp_women" in categorizer.getCategories("-", "Roa IL (W) v Arna Bjornar (W)") }
         assertTrue {
             "market_regexp_reserveTeam" in categorizer.getCategories(
-                "-",
-                "Kocaelispor (Res) v Fenerbahce (Res)"
+                    "-",
+                    "Kocaelispor (Res) v Fenerbahce (Res)"
             )
         }
     }

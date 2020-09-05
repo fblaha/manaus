@@ -29,8 +29,8 @@ abstract class AbstractControllerTest : AbstractIntegrationTestCase() {
 
     protected fun checkResponse(url: String, vararg substrings: String) {
         val result = mvc.perform(get(url).accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk)
-            .andReturn()
+                .andExpect(status().isOk)
+                .andReturn()
         val content = result.response.contentAsString
         substrings.forEach { assertTrue(it in content) }
     }

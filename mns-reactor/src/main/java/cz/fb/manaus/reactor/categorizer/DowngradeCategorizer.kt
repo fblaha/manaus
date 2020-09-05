@@ -28,8 +28,8 @@ class DowngradeCategorizer : ActionHistoryCategorizer {
 
     private fun validate(actions: List<BetAction>) {
         check(actions
-            .map { it.price.side }
-            .distinct().count() <= 1) { "mixed sides" }
+                .map { it.price.side }
+                .distinct().count() <= 1) { "mixed sides" }
         check(actions.zipWithNext().all { it.first.time < it.second.time }) { "time disorder" }
     }
 

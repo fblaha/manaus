@@ -30,13 +30,13 @@ class SettledBetControllerTest : AbstractControllerTest() {
     fun `post settled bet`() {
         val serialized = objectMapper.writer().writeValueAsString(homeSettledBet)
         mvc.perform(
-            post("/bets")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(serialized)
+                post("/bets")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(serialized)
         )
-            .andExpect(status().`is`(204))
-            .andReturn()
+                .andExpect(status().`is`(204))
+                .andReturn()
     }
 
 }

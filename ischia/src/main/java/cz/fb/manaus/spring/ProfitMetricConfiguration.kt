@@ -12,38 +12,38 @@ import org.springframework.context.annotation.Profile
 open class ProfitMetricConfiguration {
 
     private val dailyQuery = ProfitQuery(
-        interval = "1d",
-        updateFrequency = UpdateFrequency.HIGH
+            interval = "1d",
+            updateFrequency = UpdateFrequency.HIGH
     )
 
     private val weeklyQuery = ProfitQuery(
-        interval = "7d",
-        updateFrequency = UpdateFrequency.MEDIUM
+            interval = "7d",
+            updateFrequency = UpdateFrequency.MEDIUM
     )
 
     private val monthlyQuery = ProfitQuery(
-        interval = "30d",
-        updateFrequency = UpdateFrequency.LOW
+            interval = "30d",
+            updateFrequency = UpdateFrequency.LOW
     )
 
     @Bean
     open fun dailySideProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
-        query = dailyQuery,
-        categoryPrefix = "side",
-        categoryValues = setOf("lay", "back")
+            query = dailyQuery,
+            categoryPrefix = "side",
+            categoryValues = setOf("lay", "back")
     )
 
     @Bean
     open fun weeklySideProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
-        query = weeklyQuery,
-        categoryPrefix = "side",
-        categoryValues = setOf("lay", "back")
+            query = weeklyQuery,
+            categoryPrefix = "side",
+            categoryValues = setOf("lay", "back")
     )
 
     @Bean
     open fun monthlySideProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
-        query = monthlyQuery,
-        categoryPrefix = "side",
-        categoryValues = setOf("lay", "back")
+            query = monthlyQuery,
+            categoryPrefix = "side",
+            categoryValues = setOf("lay", "back")
     )
 }

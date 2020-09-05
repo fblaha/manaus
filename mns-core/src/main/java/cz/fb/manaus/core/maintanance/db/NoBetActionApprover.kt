@@ -10,8 +10,8 @@ class NoBetActionApprover : MarketDeletionApprover {
 
     override val timeRange: TimeRange?
         get() = TimeRange(
-            Instant.now().minus(7, ChronoUnit.DAYS),
-            Instant.now().minus(6, ChronoUnit.HOURS)
+                Instant.now().minus(7, ChronoUnit.DAYS),
+                Instant.now().minus(6, ChronoUnit.HOURS)
         )
 
     override fun isDeletable(marketFootprint: MarketFootprint): Boolean {

@@ -13,17 +13,17 @@ import java.math.RoundingMode
 
 @Component
 class FixedBinFunctionProfitService(
-    functions: List<ProgressFunction>,
-    private val categoryService: CategoryService,
-    private val profitService: ProfitService
+        functions: List<ProgressFunction>,
+        private val categoryService: CategoryService,
+        private val profitService: ProfitService
 ) {
     private val functions: Map<String, ProgressFunction> = functions.map { it.name to it }.toMap()
 
     fun getProfitRecords(
-        bets: List<RealizedBet>,
-        funcName: String? = null,
-        binCount: Int,
-        projection: String? = null
+            bets: List<RealizedBet>,
+            funcName: String? = null,
+            binCount: Int,
+            projection: String? = null
     ): List<ProfitRecord> {
 
         val coverage = BetCoverage.from(bets)
@@ -37,10 +37,10 @@ class FixedBinFunctionProfitService(
 
 
     private fun computeProfitRecords(
-        function: ProgressFunction,
-        binCount: Int,
-        coverage: BetCoverage,
-        bets: List<RealizedBet>
+            function: ProgressFunction,
+            binCount: Int,
+            coverage: BetCoverage,
+            bets: List<RealizedBet>
     ): List<ProfitRecord> {
         val computed = bets.map { it to function(it) }
 
@@ -75,9 +75,9 @@ class FixedBinFunctionProfitService(
     }
 
     private fun computeBinRecord(
-        name: String,
-        bin: List<Pair<RealizedBet, Double?>>,
-        coverage: BetCoverage
+            name: String,
+            bin: List<Pair<RealizedBet, Double?>>,
+            coverage: BetCoverage
     ): ProfitRecord {
         val average = bin.mapNotNull { it.second }.average()
         val category = getValueCategory(name, average)
@@ -93,9 +93,9 @@ class FixedBinFunctionProfitService(
     }
 
     private fun computeFunctionRecord(
-        category: String,
-        bets: List<RealizedBet>,
-        coverage: BetCoverage
+            category: String,
+            bets: List<RealizedBet>,
+            coverage: BetCoverage
     ): ProfitRecord {
         val binRecords = bets.map {
             profitService.toProfitRecord(it, category, it.settledBet.commission ?: 0.0, coverage)

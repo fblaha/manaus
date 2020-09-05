@@ -17,9 +17,9 @@ import java.util.logging.Logger
 @Component
 @Profile(ManausProfiles.DB)
 class SettledBetSaver(
-    private val settledBetRepository: SettledBetRepository,
-    private val betActionRepository: BetActionRepository,
-    private val marketRepository: MarketRepository
+        private val settledBetRepository: SettledBetRepository,
+        private val betActionRepository: BetActionRepository,
+        private val marketRepository: MarketRepository
 ) {
 
     private val log = Logger.getLogger(SettledBetSaver::class.simpleName)
