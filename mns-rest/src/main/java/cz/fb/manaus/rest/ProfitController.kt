@@ -8,8 +8,10 @@ import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import java.util.*
+import kotlin.time.ExperimentalTime
 
 @Controller
+@ExperimentalTime
 @Profile(ManausProfiles.DB)
 class ProfitController(
         private val profitLoader: ProfitLoader

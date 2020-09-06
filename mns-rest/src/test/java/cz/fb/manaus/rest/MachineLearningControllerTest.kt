@@ -1,8 +1,10 @@
 package cz.fb.manaus.rest
 
 import org.junit.Test
+import kotlin.time.ExperimentalTime
 
 
+@ExperimentalTime
 class MachineLearningControllerTest : AbstractControllerTest() {
 
     @Test

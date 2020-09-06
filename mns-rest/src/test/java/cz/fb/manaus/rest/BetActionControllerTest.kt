@@ -7,8 +7,10 @@ import org.junit.Test
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import kotlin.time.ExperimentalTime
 
 
+@ExperimentalTime
 class BetActionControllerTest : AbstractControllerTest() {
 
     private lateinit var bet: RealizedBet

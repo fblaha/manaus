@@ -16,7 +16,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import kotlin.test.assertTrue
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 @WebAppConfiguration
 abstract class AbstractControllerTest : AbstractIntegrationTestCase() {
     protected lateinit var mvc: MockMvc
@@ -32,7 +34,9 @@ abstract class AbstractControllerTest : AbstractIntegrationTestCase() {
                 .andExpect(status().isOk)
                 .andReturn()
         val content = result.response.contentAsString
-        substrings.forEach { assertTrue(it in content) }
+        substrings.forEach {
+            assertTrue { it in content }
+        }
     }
 
     @Before

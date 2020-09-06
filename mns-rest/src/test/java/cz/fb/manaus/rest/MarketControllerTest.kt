@@ -9,8 +9,10 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import kotlin.test.assertNotNull
+import kotlin.time.ExperimentalTime
 
 
+@ExperimentalTime
 class MarketControllerTest : AbstractControllerTest() {
 
     @Autowired

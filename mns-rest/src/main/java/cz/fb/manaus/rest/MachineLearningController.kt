@@ -8,8 +8,10 @@ import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
+import kotlin.time.ExperimentalTime
 
 @Controller
+@ExperimentalTime
 @Profile(ManausProfiles.DB)
 class MachineLearningController(
         private val betFeatureService: BetFeatureService,

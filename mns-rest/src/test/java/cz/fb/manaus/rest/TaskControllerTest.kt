@@ -3,8 +3,10 @@ package cz.fb.manaus.rest
 import cz.fb.manaus.core.model.BlacklistedCategory
 import org.junit.Test
 import java.time.Duration
+import kotlin.time.ExperimentalTime
 
 
+@ExperimentalTime
 class TaskControllerTest : AbstractControllerTest() {
 
     @Test

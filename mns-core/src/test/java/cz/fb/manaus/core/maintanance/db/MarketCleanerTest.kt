@@ -9,7 +9,9 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 class MarketCleanerTest : AbstractIntegrationTestCase() {
 
     @Autowired

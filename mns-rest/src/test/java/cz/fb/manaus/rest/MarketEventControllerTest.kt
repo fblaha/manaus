@@ -12,8 +12,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.test.assertEquals
+import kotlin.time.ExperimentalTime
 
 
+@ExperimentalTime
 @ActiveProfiles("ischia")
 class MarketEventControllerTest : AbstractControllerTest() {
 

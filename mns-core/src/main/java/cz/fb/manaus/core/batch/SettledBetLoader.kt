@@ -1,6 +1,5 @@
 package cz.fb.manaus.core.batch
 
-import com.google.common.base.Stopwatch
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
 import cz.fb.manaus.core.model.RealizedBet
@@ -12,8 +11,11 @@ import org.springframework.stereotype.Component
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 import java.util.logging.Logger
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTimedValue
 
 @Component
+@ExperimentalTime
 @Profile(ManausProfiles.DB)
 class SettledBetLoader(
         private val settledBetRepository: SettledBetRepository,
@@ -33,28 +35,24 @@ class SettledBetLoader(
             })
 
     fun load(interval: String, useCache: Boolean): List<RealizedBet> {
-        val stopwatch = Stopwatch.createStarted()
-        val result = if (useCache) {
-            cache.getUnchecked(interval)
-        } else {
-            loadFromDatabase(interval)
+        val (value, duration) = measureTimedValue {
+            if (useCache) {
+                cache.getUnchecked(interval)
+            } else {
+                loadFromDatabase(interval)
+            }
         }
-        val elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
-        log.info { "bets fetched in '$elapsed' seconds" }
-        return result
+        log.info { "bets fetched in '${duration}'" }
+        return value
     }
 
     private fun loadFromDatabase(interval: String): List<RealizedBet> {
         val (from, to) = IntervalParser.parse(Instant.now(), interval)
-        val stopwatch = Stopwatch.createStarted()
-        val settledBets = settledBetRepository.find(from = from, to = to)
-        var elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
-        log.info { "settle bets loaded in '$elapsed' seconds" }
-        stopwatch.reset().start()
-        val realizedBets = settledBets.map { realizedBetLoader.toRealizedBet(it) }
-        elapsed = stopwatch.stop().elapsed(TimeUnit.SECONDS)
-        log.info { "realized bets loaded in '$elapsed' seconds" }
-        return realizedBets
+        val (settledBets, sDur) = measureTimedValue { settledBetRepository.find(from = from, to = to) }
+        log.info { "settle bets loaded in '$sDur'" }
+        val (bets, rDur) = measureTimedValue { settledBets.map { realizedBetLoader.toRealizedBet(it) } }
+        log.info { "realized bets loaded in '${rDur}'" }
+        return bets
     }
 
     fun invalidateCache() {

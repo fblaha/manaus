@@ -12,8 +12,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import kotlin.test.assertNotNull
+import kotlin.time.ExperimentalTime
 
 
+@ExperimentalTime
 class MarketFootprintControllerTest : AbstractControllerTest() {
     @Autowired
     private lateinit var objectMapper: ObjectMapper

@@ -15,7 +15,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 class End2EndTest : AbstractControllerTest() {
 
     @Autowired
@@ -41,9 +43,7 @@ class End2EndTest : AbstractControllerTest() {
                 MockMvcRequestBuilders.post("/markets")
                         .content(market)
                         .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(MockMvcResultMatchers.status().isCreated)
-                .andReturn()
+        ).andExpect(MockMvcResultMatchers.status().isCreated).andReturn()
         assertNotNull(result.response.getHeader(HttpHeaders.LOCATION))
     }
 
@@ -61,9 +61,7 @@ class End2EndTest : AbstractControllerTest() {
                 MockMvcRequestBuilders.post("/markets/{id}/event", market.id)
                         .content(snapshot)
                         .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(MockMvcResultMatchers.status().isOk)
-                .andReturn()
+        ).andExpect(MockMvcResultMatchers.status().isOk).andReturn()
         collectedBets = objectMapper.readValue(result.response.contentAsString)
         assertEquals(3, collectedBets.place.size)
         assertEquals(0, collectedBets.update.size)
@@ -74,12 +72,8 @@ class End2EndTest : AbstractControllerTest() {
             mvc.perform(
                     MockMvcRequestBuilders.put(
                             "/actions/{id}/betId", bet.actionId
-                    )
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(i.toString())
-            )
-                    .andExpect(MockMvcResultMatchers.status().isOk)
-                    .andReturn()
+                    ).contentType(MediaType.APPLICATION_JSON).content(i.toString())
+            ).andExpect(MockMvcResultMatchers.status().isOk).andReturn()
         }
     }
 
@@ -99,9 +93,7 @@ class End2EndTest : AbstractControllerTest() {
                             .accept(MediaType.APPLICATION_JSON)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(serialized)
-            )
-                    .andExpect(MockMvcResultMatchers.status().`is`(201))
-                    .andReturn()
+            ).andExpect(MockMvcResultMatchers.status().`is`(201)).andReturn()
         }
     }
 

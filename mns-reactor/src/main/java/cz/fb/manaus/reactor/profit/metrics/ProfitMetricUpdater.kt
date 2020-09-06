@@ -9,9 +9,11 @@ import org.springframework.context.annotation.Profile
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.util.logging.Logger
+import kotlin.time.ExperimentalTime
 
 
 @Component
+@ExperimentalTime
 @Profile(ManausProfiles.DB)
 class ProfitMetricUpdater(
         private val profitLoader: ProfitLoader,
