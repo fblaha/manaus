@@ -1,4 +1,4 @@
-package cz.fb.manaus.core.repository.nitrite
+package cz.fb.manaus.core.repository.no2
 
 import cz.fb.manaus.core.model.BetAction
 import cz.fb.manaus.core.repository.BetActionRepository
@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile(ManausProfiles.DB)
-class NO2BetActionRepository(db: Nitrite) :
-    NO2RepositoryAware<BetAction> by NO2Repository(db.getRepository {}, BetAction::id),
+class NitriteBetActionRepository(db: Nitrite) :
+    NitriteRepositoryAware<BetAction> by NitriteRepository(db.getRepository {}, BetAction::id),
     BetActionRepository {
 
     override fun idSafeSave(betAction: BetAction): Long {

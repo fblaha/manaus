@@ -1,4 +1,4 @@
-package cz.fb.manaus.core.repository.nitrite
+package cz.fb.manaus.core.repository.no2
 
 import cz.fb.manaus.core.model.TaskExecution
 import cz.fb.manaus.core.repository.Repository
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile(ManausProfiles.DB)
-class NO2TaskExecutionRepository(db: Nitrite) :
-        Repository<TaskExecution> by NO2Repository(db.getRepository {}, TaskExecution::name)
+class NitriteTaskExecutionRepository(db: Nitrite) :
+        Repository<TaskExecution> by NitriteRepository(db.getRepository {}, TaskExecution::name)

@@ -1,4 +1,4 @@
-package cz.fb.manaus.core.repository.nitrite
+package cz.fb.manaus.core.repository.no2
 
 import cz.fb.manaus.core.model.SettledBet
 import cz.fb.manaus.core.model.Side
@@ -19,8 +19,8 @@ import java.time.Instant
 
 @Component
 @Profile(ManausProfiles.DB)
-class NO2SettledBetRepository(db: Nitrite) :
-    NO2RepositoryAware<SettledBet> by NO2Repository(db.getRepository {}, SettledBet::id),
+class NitriteSettledBetRepository(db: Nitrite) :
+    NitriteRepositoryAware<SettledBet> by NitriteRepository(db.getRepository {}, SettledBet::id),
     SettledBetRepository {
 
     override fun update(settledBet: SettledBet) {

@@ -1,6 +1,6 @@
-package cz.fb.manaus.core.repository
+package cz.fb.manaus.core.repository.no2
 
-import cz.fb.manaus.core.repository.nitrite.NO2Repository
+import cz.fb.manaus.core.repository.Repository
 import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import cz.fb.manaus.spring.ManausProfiles
 import org.dizitart.kno2.getRepository
@@ -26,7 +26,7 @@ data class Foo(
 @Component
 @Profile(ManausProfiles.DB)
 class FooRepository(db: Nitrite) : Repository<Foo> by
-NO2Repository(db.getRepository {}, Foo::name)
+NitriteRepository(db.getRepository {}, Foo::name)
 
 class FooRepositoryTest : AbstractIntegrationTestCase() {
 

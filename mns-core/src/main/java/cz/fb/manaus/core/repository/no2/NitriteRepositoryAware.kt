@@ -1,8 +1,8 @@
-package cz.fb.manaus.core.repository.nitrite
+package cz.fb.manaus.core.repository.no2
 
 import cz.fb.manaus.core.repository.Repository
 import org.dizitart.no2.objects.ObjectRepository
 
-interface NO2RepositoryAware<T> : Repository<T> {
+interface NitriteRepositoryAware<T> : Repository<T> {
     val repository: ObjectRepository<T>
 }

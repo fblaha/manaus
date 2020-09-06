@@ -1,4 +1,4 @@
-package cz.fb.manaus.core.repository.nitrite
+package cz.fb.manaus.core.repository.no2
 
 import cz.fb.manaus.core.model.BlacklistedCategory
 import cz.fb.manaus.core.repository.Repository
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile(ManausProfiles.DB)
-class NO2BlacklistedCategoryRepository(db: Nitrite) :
-        Repository<BlacklistedCategory> by NO2Repository(db.getRepository {}, BlacklistedCategory::name)
+class NitriteBlacklistedCategoryRepository(db: Nitrite) :
+        Repository<BlacklistedCategory> by NitriteRepository(db.getRepository {}, BlacklistedCategory::name)

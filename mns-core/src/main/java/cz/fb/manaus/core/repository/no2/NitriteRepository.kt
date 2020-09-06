@@ -1,16 +1,15 @@
-package cz.fb.manaus.core.repository.nitrite
+package cz.fb.manaus.core.repository.no2
 
-import cz.fb.manaus.core.repository.Repository
 import org.dizitart.kno2.filters.eq
 import org.dizitart.no2.objects.ObjectRepository
 import org.dizitart.no2.objects.filters.ObjectFilters
 import kotlin.reflect.KProperty1
 
 
-class NO2Repository<T, U>(
+class NitriteRepository<T, U>(
     override val repository: ObjectRepository<T>,
     private val key: KProperty1<T, U>
-) : Repository<T>, NO2RepositoryAware<T> {
+) : NitriteRepositoryAware<T> {
 
     override fun saveOrUpdate(entity: T) {
         repository.update(entity, true)
