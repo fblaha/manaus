@@ -40,7 +40,6 @@ class BetTest : AbstractTestCase() {
 
     @Test
     fun `json marshall`() {
-
         val serialized = mapper.writer().writeValueAsString(betTemplate)
         val restored = mapper.readerFor(Bet::class.java).readValue<Bet>(serialized)
         assertEquals(betTemplate.requestedPrice, restored.requestedPrice)

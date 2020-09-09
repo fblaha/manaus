@@ -10,8 +10,10 @@ class ProbabilityComparator(private val side: Side) : Comparator<RunnerPrices> {
     override fun compare(list1: RunnerPrices, list2: RunnerPrices): Int {
         val backList1 = list1.getHomogeneous(side)
         val backList2 = list2.getHomogeneous(side)
-        val price1 = backList1.bestPrice!!.price
-        val price2 = backList2.bestPrice!!.price
+        val bestPrice1 = backList1.bestPrice ?: error("empty price list")
+        val bestPrice2 = backList2.bestPrice ?: error("empty price list")
+        val price1 = bestPrice1.price
+        val price2 = bestPrice2.price
         return Doubles.compare(price1, price2)
     }
 

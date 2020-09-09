@@ -16,6 +16,7 @@ object TradedVolumeValidator : Validator {
     override val tags get() = setOf(TradedVolume)
 
     override fun validate(event: BetEvent): ValidationResult {
-        return if (event.metrics.actualTradedVolume!!.volume.size >= 3) ValidationResult.OK else ValidationResult.DROP
+        val actualTradedVolume = event.metrics.actualTradedVolume ?: error("no vol")
+        return if (actualTradedVolume.volume.size >= 3) ValidationResult.OK else ValidationResult.DROP
     }
 }
