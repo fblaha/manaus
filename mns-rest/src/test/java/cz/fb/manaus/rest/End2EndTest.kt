@@ -70,9 +70,9 @@ class End2EndTest : AbstractControllerTest() {
     private fun `When I set bet ID for all bet actions`() {
         for ((i, bet) in collectedBets.place.withIndex()) {
             mvc.perform(
-                    MockMvcRequestBuilders.put(
-                            "/actions/{id}/betId", bet.actionId
-                    ).contentType(MediaType.APPLICATION_JSON).content(i.toString())
+                MockMvcRequestBuilders.put(
+                    "/actions/{id}/ack", bet.actionId
+                ).contentType(MediaType.APPLICATION_JSON).content(i.toString())
             ).andExpect(MockMvcResultMatchers.status().isOk).andReturn()
         }
     }

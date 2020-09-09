@@ -27,15 +27,13 @@ class BetActionControllerTest : AbstractControllerTest() {
     }
 
     @Test
-    fun `set bet ID`() {
+    fun acknowledge() {
         mvc.perform(
-                put(
-                        "/actions/{id}/betId", bet.betAction.id
-                )
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("100")
+            put("/actions/{id}/ack", bet.betAction.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("100")
         )
-                .andExpect(status().isOk)
-                .andReturn()
+            .andExpect(status().isOk)
+            .andReturn()
     }
 }
