@@ -27,9 +27,9 @@ class End2EndTest : AbstractControllerTest() {
     @Test
     fun `E2E API flow scenario`() {
         `When I post market`()
-        `And I post snapshot and I collect bets`()
+        `And I post market event and I collect bets`()
         `Then bet actions are associated with the market and bet IDs are null`()
-        `When I set bet ID for all bet actions`()
+        `When I acknowledge all bet actions`()
         `Then all bet actions should have non empty bet ID`()
         `When I post settled bets for all bet actions`()
         `Then settled bets should be reflected in profit records`()
@@ -47,7 +47,7 @@ class End2EndTest : AbstractControllerTest() {
         assertNotNull(result.response.getHeader(HttpHeaders.LOCATION))
     }
 
-    private fun `And I post snapshot and I collect bets`() {
+    private fun `And I post market event and I collect bets`() {
         val crate = MarketEvent(
                 prices = runnerPrices,
                 bets = emptyList(),
@@ -67,7 +67,7 @@ class End2EndTest : AbstractControllerTest() {
         assertEquals(0, collectedBets.update.size)
     }
 
-    private fun `When I set bet ID for all bet actions`() {
+    private fun `When I acknowledge all bet actions`() {
         for ((i, bet) in collectedBets.place.withIndex()) {
             mvc.perform(
                 MockMvcRequestBuilders.put(
