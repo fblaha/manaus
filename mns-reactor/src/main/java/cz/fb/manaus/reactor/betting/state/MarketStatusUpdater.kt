@@ -22,7 +22,7 @@ class MarketStatusUpdater(
         val state = MarketStatus(
                 id = market.id,
                 openDate = openDate,
-                latestEvent = Instant.now()
+                lastEvent = Instant.now()
         )
         repository.saveOrUpdate(state)
         return emptyList()

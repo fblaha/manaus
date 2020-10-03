@@ -7,5 +7,5 @@ class MarketStatus(
         @Id
         val id: String,
         val openDate: Instant,
-        val latestEvent: Instant
+        val lastEvent: Instant
 )
