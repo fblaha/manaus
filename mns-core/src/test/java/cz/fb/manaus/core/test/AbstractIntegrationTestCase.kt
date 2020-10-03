@@ -2,6 +2,7 @@ package cz.fb.manaus.core.test
 
 
 import cz.fb.manaus.core.model.BlacklistedCategory
+import cz.fb.manaus.core.model.MarketStatus
 import cz.fb.manaus.core.model.TaskExecution
 import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
@@ -31,6 +32,9 @@ abstract class AbstractIntegrationTestCase : AbstractTestCase() {
 
     @Autowired
     protected lateinit var blacklistedCategoryRepository: Repository<BlacklistedCategory>
+
+    @Autowired
+    protected lateinit var marketStatusRepository: Repository<MarketStatus>
 
     @Autowired
     protected lateinit var fooRepository: Repository<Foo>
