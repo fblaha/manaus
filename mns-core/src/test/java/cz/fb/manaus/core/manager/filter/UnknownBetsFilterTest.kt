@@ -7,7 +7,7 @@ import org.junit.Test
 import java.time.Instant
 import kotlin.test.assertEquals
 
-class UnknownBetsValidatorTest {
+class UnknownBetsFilterTest {
 
     @Test
     fun `unknown bets`() {

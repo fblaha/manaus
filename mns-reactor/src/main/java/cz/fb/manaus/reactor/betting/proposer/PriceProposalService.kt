@@ -27,9 +27,9 @@ class PriceProposalService {
 
     private fun reduce(side: Side, values: List<ProposedPrice<Double>>): ProposedPrice<Double> {
         val result: ProposedPrice<Double> = if (side == Side.BACK) {
-            values.maxBy { it.price }!!
+            values.maxByOrNull { it.price } ?: error("empty")
         } else {
-            values.minBy { it.price }!!
+            values.minByOrNull { it.price } ?: error("empty")
         }
 
         val proposers = values

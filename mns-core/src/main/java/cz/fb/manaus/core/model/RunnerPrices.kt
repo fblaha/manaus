@@ -14,7 +14,7 @@ data class RunnerPrices(
 
     val bestPrice: Price?
         @JsonIgnore
-        get() = prices.minWith(PriceComparator)
+        get() = prices.minWithOrNull(PriceComparator)
 
     val sortedPrices: List<Price>
         @JsonIgnore

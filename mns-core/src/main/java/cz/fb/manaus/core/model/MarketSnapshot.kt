@@ -8,7 +8,7 @@ data class SideSelection(val side: Side, val selectionId: Long) {
 
 fun getMarketCoverage(bets: List<Bet>): Map<SideSelection, Bet> {
     return bets.groupBy { SideSelection(it.requestedPrice.side, it.selectionId) }
-            .mapValues { it.value.maxBy { bet -> bet.placedDate } ?: error("empty") }
+            .mapValues { it.value.maxByOrNull { bet -> bet.placedDate } ?: error("empty") }
 }
 
 data class MarketSnapshot(

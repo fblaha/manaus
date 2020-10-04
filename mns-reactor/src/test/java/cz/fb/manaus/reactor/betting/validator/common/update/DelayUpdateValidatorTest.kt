@@ -41,7 +41,7 @@ class DelayUpdateValidatorTest : AbstractIntegrationTestCase() {
         assertEquals(validationResult, result)
     }
 
-    @Test(expected = NullPointerException::class)
+    @Test(expected = IllegalStateException::class)
     fun `no bet action`() {
         marketRepository.saveOrUpdate(market)
         val result = validator.validate(factory.newUpdateBetEvent(Side.LAY, runnerPrices))
