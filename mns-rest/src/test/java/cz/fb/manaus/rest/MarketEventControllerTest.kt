@@ -26,7 +26,9 @@ class MarketEventControllerTest : AbstractControllerTest() {
     fun `push snapshot`() {
         createLiveMarket()
         val bet = Bet(
-                "1", market.id, SEL_DRAW, Price(3.0, 5.0, Side.BACK),
+                "1",
+                market.id, SEL_DRAW,
+                Price(3.0, 5.0, Side.BACK),
                 Instant.now().minus(2, ChronoUnit.HOURS)
         )
         val crate = MarketEvent(
