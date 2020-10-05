@@ -1,4 +1,4 @@
-package cz.fb.manaus.reactor.betting.state
+package cz.fb.manaus.reactor.betting.status
 
 import cz.fb.manaus.core.model.MarketSnapshotEvent
 import cz.fb.manaus.core.model.MarketStatus
