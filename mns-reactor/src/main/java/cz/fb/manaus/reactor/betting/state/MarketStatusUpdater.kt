@@ -17,12 +17,14 @@ class MarketStatusUpdater(
 ) : MarketSnapshotListener {
 
     override fun onMarketSnapshot(marketSnapshotEvent: MarketSnapshotEvent): List<BetCommand> {
-        val market = marketSnapshotEvent.snapshot.market
+        val snapshot = marketSnapshotEvent.snapshot
+        val market = snapshot.market
         val openDate = market.event.openDate
         val state = MarketStatus(
                 id = market.id,
                 openDate = openDate,
-                lastEvent = Instant.now()
+                lastEvent = Instant.now(),
+                bets = snapshot.currentBets
         )
         repository.saveOrUpdate(state)
         return emptyList()
