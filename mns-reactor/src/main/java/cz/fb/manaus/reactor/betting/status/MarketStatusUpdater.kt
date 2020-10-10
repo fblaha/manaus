@@ -20,12 +20,13 @@ class MarketStatusUpdater(
         val snapshot = marketSnapshotEvent.snapshot
         val market = snapshot.market
         val openDate = market.event.openDate
+        // TODO maybe not best place for distinct
+        val bets = snapshot.currentBets.distinctBy { it.betId }.sortedBy { it.requestedPrice.side }
         val state = MarketStatus(
                 id = market.id,
                 openDate = openDate,
                 lastEvent = Instant.now(),
-                // TODO maybe not best place for distinct
-                bets = snapshot.currentBets.distinctBy { it.betId }
+                bets = bets
         )
         repository.saveOrUpdate(state)
         return emptyList()
