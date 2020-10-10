@@ -24,7 +24,8 @@ class MarketStatusUpdater(
                 id = market.id,
                 openDate = openDate,
                 lastEvent = Instant.now(),
-                bets = snapshot.currentBets
+                // TODO maybe not best place for distinct
+                bets = snapshot.currentBets.distinctBy { it.betId }
         )
         repository.saveOrUpdate(state)
         return emptyList()
