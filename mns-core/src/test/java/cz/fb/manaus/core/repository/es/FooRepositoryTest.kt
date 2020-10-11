@@ -78,10 +78,8 @@ class FooRepositoryTest {
     fun list() {
         val foo = Foo("test", "test description")
         repository.saveOrUpdate(foo)
-        Thread.sleep(1000)
         assertEquals(1, repository.list().size)
         repository.delete(foo.name)
-        Thread.sleep(1000)
         assertTrue(repository.list().isEmpty())
     }
 }

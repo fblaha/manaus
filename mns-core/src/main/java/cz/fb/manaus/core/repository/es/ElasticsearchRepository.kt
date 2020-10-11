@@ -27,6 +27,7 @@ class ElasticsearchRepository<T>(
                 .withId(key(entity))
                 .withObject(entity).build()
         operations.index(indexQuery, coordinates)
+        operations.indexOps(coordinates).refresh()
     }
 
     override fun read(id: String): T? {
@@ -35,6 +36,7 @@ class ElasticsearchRepository<T>(
 
     override fun delete(id: String) {
         operations.delete(id, coordinates)
+        operations.indexOps(coordinates).refresh()
     }
 
     override fun list(): List<T> {
@@ -44,5 +46,6 @@ class ElasticsearchRepository<T>(
 
     override fun purge() {
         operations.delete(Query.findAll(), clazz, coordinates)
+        operations.indexOps(coordinates).refresh()
     }
 }
