@@ -39,6 +39,7 @@ class FooRepositoryTest {
         }
     }
 
+    @Before
     @After
     fun clean() {
         repository.purge()

@@ -45,7 +45,11 @@ class ElasticsearchRepository<T>(
     }
 
     override fun purge() {
+        val indexOps = operations.indexOps(coordinates)
+        if (!indexOps.exists()) {
+            indexOps.create()
+        }
         operations.delete(Query.findAll(), clazz, coordinates)
-        operations.indexOps(coordinates).refresh()
+        indexOps.refresh()
     }
 }
