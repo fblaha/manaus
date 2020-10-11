@@ -1,7 +1,6 @@
 package cz.fb.manaus.core.repository.es
 
 import com.google.common.base.CaseFormat
-import cz.fb.manaus.core.repository.Repository
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder
@@ -10,11 +9,11 @@ import org.springframework.data.elasticsearch.core.query.Query
 
 class ElasticsearchRepository<T>(
         private val clazz: Class<T>,
-        private val operations: ElasticsearchOperations,
+        override val operations: ElasticsearchOperations,
         private val key: (T) -> String
-) : Repository<T> {
+) : ElasticsearchOperationsAware<T> {
 
-    val coordinates: IndexCoordinates = IndexCoordinates.of(
+    override val coordinates: IndexCoordinates = IndexCoordinates.of(
             CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, clazz.simpleName.toLowerCase())
     )
 
