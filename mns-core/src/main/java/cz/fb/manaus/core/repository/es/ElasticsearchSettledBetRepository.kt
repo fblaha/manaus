@@ -5,8 +5,7 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.repository.Repository
 import cz.fb.manaus.core.repository.SettledBetRepository
 import org.elasticsearch.index.query.Operator
-import org.elasticsearch.index.query.QueryBuilders.matchQuery
-import org.elasticsearch.index.query.QueryBuilders.rangeQuery
+import org.elasticsearch.index.query.QueryBuilders.*
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates
@@ -38,11 +37,11 @@ class ElasticsearchSettledBetRepository(operations: ElasticsearchOperations) :
         if (maxResults != null)
             builder.withPageable(PageRequest.of(0, maxResults))
         if (side != null)
-            builder.withFilter(matchQuery("side", side).operator(Operator.AND))
+            builder.withFilter(matchQuery("side", side))
         if (from != null)
-            builder.withFilter(rangeQuery("settled").from(from))
+            builder.withFilter(rangeQuery("settled").format("date_time").from(from))
         if (to != null)
-            builder.withFilter(rangeQuery("settled").to(to))
+            builder.withFilter(rangeQuery("settled").format("date_time").to(to))
         return operations.search(builder.build(), SettledBet::class.java, coordinates)
                 .map { it.content }.toList()
     }

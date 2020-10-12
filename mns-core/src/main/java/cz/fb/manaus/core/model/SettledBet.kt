@@ -21,11 +21,11 @@ data class SettledBet(
         val selectionName: String,
         val profitAndLoss: Double,
         val commission: Double?,
-        @Field(type = FieldType.Date, format = DateFormat.ordinal_date_time)
+        @Field(type = FieldType.Date, format = DateFormat.date_time)
         val placed: Instant?,
-        @Field(type = FieldType.Date, format = DateFormat.ordinal_date_time)
+        @Field(type = FieldType.Date, format = DateFormat.date_time)
         val matched: Instant,
-        @Field(type = FieldType.Date, format = DateFormat.ordinal_date_time)
+        @Field(type = FieldType.Date, format = DateFormat.date_time)
         val settled: Instant,
         val price: Price
 ) {
