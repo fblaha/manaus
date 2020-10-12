@@ -1,6 +1,7 @@
 package cz.fb.manaus.core.repository.es
 
 import cz.fb.manaus.core.repository.Repository
+import org.junit.Ignore
 import org.junit.Test
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import kotlin.test.assertEquals
@@ -18,6 +19,7 @@ class FooRepository(operations: ElasticsearchOperations) :
                 Foo::class.java, operations, { it.name }
         )
 
+@Ignore
 class FooRepositoryTest : AbstractElasticsearchTestCase() {
 
     @Test

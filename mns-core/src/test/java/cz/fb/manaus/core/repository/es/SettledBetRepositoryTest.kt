@@ -3,10 +3,12 @@ package cz.fb.manaus.core.repository.es
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.homeSettledBet
+import org.junit.Ignore
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
+@Ignore
 class SettledBetRepositoryTest : AbstractElasticsearchTestCase() {
 
     @Test
