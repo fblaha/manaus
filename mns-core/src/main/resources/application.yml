@@ -5,6 +5,9 @@ markets:
 betting:
   amount: 2.0
 management:
+  health:
+    elasticsearch:
+      enabled: false # TODO enable soon
   endpoints:
     web:
       exposure:
