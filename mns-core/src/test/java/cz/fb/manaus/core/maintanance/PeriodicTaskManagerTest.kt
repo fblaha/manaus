@@ -18,7 +18,7 @@ class PeriodicTaskManagerTest : AbstractIntegrationTestCase() {
     @Test
     fun cleanUp() {
         val name = "not-registered"
-        taskExecutionRepository.saveOrUpdate(TaskExecution(name, Instant.now()))
+        taskExecutionRepository.save(TaskExecution(name, Instant.now()))
         assertNotNull(taskExecutionRepository.read(name))
         periodicTaskManager.cleanUp()
         assertNull(taskExecutionRepository.read(name))

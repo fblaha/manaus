@@ -45,7 +45,7 @@ data class BetEvent(
         return BetAction(
                 selectionId = sideSelection.selectionId,
                 price = proposedPrice!!,
-                id = 0,
+                id = "",
                 time = Instant.now(),
                 marketId = market.id,
                 runnerPrices = marketPrices,

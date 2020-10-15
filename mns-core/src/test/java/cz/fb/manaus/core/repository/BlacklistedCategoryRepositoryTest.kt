@@ -11,7 +11,7 @@ class BlacklistedCategoryRepositoryTest : AbstractIntegrationTestCase() {
     @Test
     fun `save - read`() {
         val category = BlacklistedCategory("test", Duration.ofDays(30), -30.0)
-        blacklistedCategoryRepository.saveOrUpdate(category)
+        blacklistedCategoryRepository.save(category)
         assertEquals(category, blacklistedCategoryRepository.read(category.name))
     }
 }

@@ -1,9 +1,12 @@
-package cz.fb.manaus.core.repository.es
+package cz.fb.manaus.core.repository
 
-import cz.fb.manaus.core.repository.Repository
-import org.junit.Ignore
+import cz.fb.manaus.core.repository.es.ElasticsearchRepository
+import cz.fb.manaus.core.test.AbstractIntegrationTestCase
+import cz.fb.manaus.spring.ManausProfiles
 import org.junit.Test
+import org.springframework.context.annotation.Profile
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
+import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -14,18 +17,19 @@ data class Foo(
         val description: String
 )
 
+@Component
+@Profile(ManausProfiles.DB)
 class FooRepository(operations: ElasticsearchOperations) :
         Repository<Foo> by ElasticsearchRepository(
                 Foo::class.java, operations, { it.name }
         )
 
-@Ignore
-class FooRepositoryTest : AbstractElasticsearchTestCase() {
+class FooRepositoryTest : AbstractIntegrationTestCase() {
 
     @Test
     fun `save - read`() {
         val foo = Foo("test", "test description")
-        fooRepository.saveOrUpdate(foo)
+        fooRepository.save(foo)
         assertEquals(foo, fooRepository.read(foo.name))
     }
 
@@ -37,9 +41,9 @@ class FooRepositoryTest : AbstractElasticsearchTestCase() {
     @Test
     fun `save - update - read`() {
         val foo = Foo("test", "test description")
-        fooRepository.saveOrUpdate(foo)
+        fooRepository.save(foo)
         val nextFoo = foo.copy(description = "better description")
-        fooRepository.saveOrUpdate(nextFoo)
+        fooRepository.save(nextFoo)
         assertEquals(nextFoo, fooRepository.read(foo.name))
     }
 
@@ -55,7 +59,7 @@ class FooRepositoryTest : AbstractElasticsearchTestCase() {
     @Test
     fun list() {
         val foo = Foo("test", "test description")
-        fooRepository.saveOrUpdate(foo)
+        fooRepository.save(foo)
         assertEquals(1, fooRepository.list().size)
         fooRepository.delete(foo.name)
         assertTrue(fooRepository.list().isEmpty())

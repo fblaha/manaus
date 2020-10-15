@@ -19,8 +19,8 @@ class Importer(
 
     fun import(footprint: MarketFootprint) {
         val (market, actions, settledBets) = footprint
-        marketRepository.saveOrUpdate(market)
-        actions.forEach { betActionRepository.saveOrUpdate(it) }
-        settledBets.forEach { settledBetRepository.saveOrUpdate(it) }
+        marketRepository.save(market)
+        actions.forEach { betActionRepository.save(it) }
+        settledBets.forEach { settledBetRepository.save(it) }
     }
 }

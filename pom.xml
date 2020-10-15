@@ -24,7 +24,6 @@
     <properties>
         <kotlin.version>1.4.10</kotlin.version>
         <jackson.version>2.11.2</jackson.version>
-        <nitrite.version>3.4.2</nitrite.version>
         <kotlin.code.style>official</kotlin.code.style>
     </properties>
 
@@ -128,11 +127,6 @@
                 <version>${jackson.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.dizitart</groupId>
-                <artifactId>potassium-nitrite</artifactId>
-                <version>${nitrite.version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-math3</artifactId>

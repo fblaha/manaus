@@ -29,8 +29,8 @@ class BetActionController(
 
     @RequestMapping(value = ["/actions/{id}/ack"], method = [RequestMethod.PUT])
     fun acknowledge(
-        @PathVariable id: Long,
-        @RequestBody betId: String
+            @PathVariable id: String,
+            @RequestBody betId: String
     ): ResponseEntity<*> {
         val changedRows = betActionRepository.setBetId(id, sanitizeId(betId))
         Metrics.counter("mns_action_ack").increment()

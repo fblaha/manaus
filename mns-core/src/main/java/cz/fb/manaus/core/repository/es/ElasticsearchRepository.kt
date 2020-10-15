@@ -1,11 +1,17 @@
 package cz.fb.manaus.core.repository.es
 
 import com.google.common.base.CaseFormat
+import cz.fb.manaus.core.repository.Repository
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder
 import org.springframework.data.elasticsearch.core.query.Query
 
+
+interface ElasticsearchOperationsAware<T> : Repository<T> {
+    val operations: ElasticsearchOperations
+    val coordinates: IndexCoordinates
+}
 
 class ElasticsearchRepository<T>(
         private val clazz: Class<T>,
@@ -17,16 +23,13 @@ class ElasticsearchRepository<T>(
             CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, clazz.simpleName.toLowerCase())
     )
 
-    override fun saveOrUpdate(entity: T) {
-        save(entity)
-    }
-
-    override fun save(entity: T) {
+    override fun save(entity: T): String  {
         val indexQuery = IndexQueryBuilder()
                 .withId(key(entity))
                 .withObject(entity).build()
-        operations.index(indexQuery, coordinates)
+        val id = operations.index(indexQuery, coordinates)
         operations.indexOps(coordinates).refresh()
+        return id
     }
 
     override fun read(id: String): T? {

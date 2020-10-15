@@ -36,7 +36,7 @@ class MarketController(private val marketRepository: MarketRepository) {
     internal fun addOrUpdateMarket(@RequestBody market: Market): ResponseEntity<*> {
         validateMarket(market)
         Metrics.counter("mns_market_post", "eventType", market.eventType.name).increment()
-        marketRepository.saveOrUpdate(market)
+        marketRepository.save(market)
         val location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(market.id).toUri()

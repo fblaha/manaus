@@ -33,7 +33,7 @@ class PeriodicTaskManager(
             val execution = taskExecutionRepository.read(periodicTask.name)
             val now = Instant.now()
             if (execution == null || execution.time.plus(periodicTask.pausePeriod).isBefore(now)) {
-                taskExecutionRepository.saveOrUpdate(TaskExecution(periodicTask.name, now))
+                taskExecutionRepository.save(TaskExecution(periodicTask.name, now))
                 log.info { "executing task '${periodicTask.name}'" }
                 periodicTask.execute()
             }

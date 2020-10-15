@@ -28,7 +28,7 @@ class MarketStatusUpdater(
                 lastEvent = Instant.now(),
                 bets = bets
         )
-        repository.saveOrUpdate(state)
+        repository.save(state)
         return emptyList()
     }
 }

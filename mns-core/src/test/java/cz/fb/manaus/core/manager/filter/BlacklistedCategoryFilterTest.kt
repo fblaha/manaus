@@ -17,7 +17,7 @@ class BlacklistedCategoryFilterTest : AbstractIntegrationTestCase() {
     fun testFilter() {
         assertTrue(filter.accept(market))
         val soccer = "market_sport_soccer"
-        blacklistedCategoryRepository.saveOrUpdate(BlacklistedCategory(soccer, Duration.ofDays(10), -30.0))
+        blacklistedCategoryRepository.save(BlacklistedCategory(soccer, Duration.ofDays(10), -30.0))
         assertFalse(filter.accept(market))
     }
 }

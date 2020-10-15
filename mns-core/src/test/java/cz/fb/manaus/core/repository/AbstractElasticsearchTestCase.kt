@@ -1,6 +1,8 @@
-package cz.fb.manaus.core.repository.es
+package cz.fb.manaus.core.repository
 
-import cz.fb.manaus.core.repository.SettledBetRepository
+import cz.fb.manaus.core.repository.es.ElasticsearchBetActionRepository
+import cz.fb.manaus.core.repository.es.ElasticsearchMarketRepository
+import cz.fb.manaus.core.repository.es.ElasticsearchSettledBetRepository
 import org.apache.http.HttpHost
 import org.elasticsearch.client.RestClient
 import org.elasticsearch.client.RestHighLevelClient
@@ -13,6 +15,8 @@ abstract class AbstractElasticsearchTestCase {
     companion object {
         var fooRepository: FooRepository
         var settledBetRepository: SettledBetRepository
+        var marketRepository: MarketRepository
+        var betActionRepository: BetActionRepository
 
         init {
             val dockerImageName = "docker.elastic.co/elasticsearch/elasticsearch:7.9.2"
@@ -23,6 +27,8 @@ abstract class AbstractElasticsearchTestCase {
             val operations = ElasticsearchRestTemplate(client)
             fooRepository = FooRepository(operations)
             settledBetRepository = ElasticsearchSettledBetRepository(operations)
+            marketRepository = ElasticsearchMarketRepository(operations)
+            betActionRepository = ElasticsearchBetActionRepository(operations)
         }
     }
 
@@ -31,6 +37,8 @@ abstract class AbstractElasticsearchTestCase {
     fun clean() {
         fooRepository.purge()
         settledBetRepository.purge()
+        marketRepository.purge()
+        betActionRepository.purge()
     }
 
 }

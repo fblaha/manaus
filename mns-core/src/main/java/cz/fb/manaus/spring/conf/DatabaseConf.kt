@@ -7,7 +7,10 @@ import javax.annotation.PostConstruct
 
 @ConstructorBinding
 @ConfigurationProperties("db")
-data class DatabaseConf(val file: String? = null) {
+data class DatabaseConf(
+        val host: String = "localhost",
+        val port: Int = 9200,
+) {
 
     private val log = Logger.getLogger(DatabaseConf::class.simpleName)
 

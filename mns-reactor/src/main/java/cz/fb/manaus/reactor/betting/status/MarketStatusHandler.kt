@@ -1,7 +1,6 @@
 package cz.fb.manaus.reactor.betting.status
 
 import cz.fb.manaus.core.model.MarketStatus
-import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.Repository
 import cz.fb.manaus.reactor.betting.BetCommand
 import cz.fb.manaus.reactor.betting.action.BetCommandHandler
@@ -25,7 +24,7 @@ class MarketStatusHandler(
             command.isUpdate -> bets.filter { it.betId != bet.betId }  + listOf(bet)
             else -> error("invalid command")
         }
-        repository.saveOrUpdate(status.copy(bets = newBets))
+        repository.save(status.copy(bets = newBets))
         return command
     }
 }

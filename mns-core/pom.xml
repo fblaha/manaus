@@ -33,10 +33,6 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.dizitart</groupId>
-            <artifactId>potassium-nitrite</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>

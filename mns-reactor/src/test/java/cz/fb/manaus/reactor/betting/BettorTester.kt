@@ -62,7 +62,7 @@ class BettorTester(
         val unmatchedAway = Bet("3", market.id, SEL_AWAY, oldOne, minus10h)
         val bets = listOf(unmatchedHome, unmatchedDraw, unmatchedAway)
         bets.forEach {
-            betActionRepository.idSafeSave(
+            betActionRepository.save(
                     betAction.copy(
                             selectionId = it.selectionId,
                             price = oldOne,

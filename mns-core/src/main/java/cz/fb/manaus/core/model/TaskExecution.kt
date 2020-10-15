@@ -1,12 +1,13 @@
 package cz.fb.manaus.core.model
 
-import org.dizitart.no2.IndexType
-import org.dizitart.no2.objects.Id
-import org.dizitart.no2.objects.Index
+
+import org.springframework.data.elasticsearch.annotations.DateFormat
+import org.springframework.data.elasticsearch.annotations.Field
+import org.springframework.data.elasticsearch.annotations.FieldType
 import java.time.Instant
 
-@Index(value = "name", type = IndexType.Unique)
 data class TaskExecution(
-        @Id val name: String,
+        val name: String,
+        @Field(type = FieldType.Date, format = DateFormat.date_time)
         val time: Instant
 )

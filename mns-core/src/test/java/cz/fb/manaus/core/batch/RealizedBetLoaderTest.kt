@@ -15,9 +15,9 @@ class RealizedBetLoaderTest : AbstractIntegrationTestCase() {
 
     @Test
     fun toRealizedBet() {
-        marketRepository.saveOrUpdate(market)
+        marketRepository.save(market)
         val savedAction = betAction.copy(betId = "1000")
-        val actionId = betActionRepository.idSafeSave(savedAction)
+        val actionId = betActionRepository.save(savedAction)
         val savedBet = homeSettledBet.copy(id = "1000")
         val (bet, action, market) = realizedBetLoader.toRealizedBet(savedBet)
         assertEquals(savedBet, bet)
