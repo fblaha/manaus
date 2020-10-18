@@ -33,7 +33,7 @@ class SettledBetSaver(
                 val market = marketRepository.read(action.marketId) ?: error("no such market")
                 validate(settledBet, action, market)
                 settledBetRepository.save(settledBet)
-                val sideLabel = settledBet.side.toString().toLowerCase()
+                val sideLabel = settledBet.price.side.toString().toLowerCase()
                 Metrics.counter("mns_settled_bet_new", "side", sideLabel).increment()
                 true
             } else {
@@ -44,7 +44,7 @@ class SettledBetSaver(
         } else {
             return if (stored != settledBet) {
                 log.warning { "updating saved settled bet with id '$id'" }
-                val newId = settledBetRepository.save(settledBet)
+                val newId = settledBetRepository.save(settledBet).id
                 check(id == newId)
                 true
             } else {

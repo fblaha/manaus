@@ -139,7 +139,7 @@
             </dependency>
             <dependency>
                 <groupId>org.testcontainers</groupId>
-                <artifactId>elasticsearch</artifactId>
+                <artifactId>mongodb</artifactId>
                 <version>1.15.0-rc2</version>
                 <scope>test</scope>
             </dependency>

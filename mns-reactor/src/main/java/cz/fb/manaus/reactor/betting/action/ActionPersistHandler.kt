@@ -13,7 +13,7 @@ class ActionPersistHandler(private val betActionRepository: BetActionRepository)
     override fun onBetCommand(command: BetCommand): BetCommand {
         val (bet, action) = command
         return if (action != null) {
-            val actionId = betActionRepository.save(action)
+            val actionId = betActionRepository.save(action).id
             BetCommand(bet.copy(actionId = actionId), action)
         } else {
             command

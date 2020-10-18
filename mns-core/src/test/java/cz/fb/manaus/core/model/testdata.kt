@@ -2,6 +2,7 @@ package cz.fb.manaus.core.model
 
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.provider.ProviderTag
+import org.bson.types.ObjectId
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
@@ -46,7 +47,7 @@ val runnerPrices = listOf(
 )
 
 val betAction = BetAction(
-        id = "100",
+        id = ObjectId().toString(),
         marketId = "2",
         time = Instant.now().minus(25, ChronoUnit.HOURS).truncatedTo(ChronoUnit.SECONDS),
         selectionId = SEL_HOME,

@@ -17,11 +17,11 @@ class RealizedBetLoaderTest : AbstractIntegrationTestCase() {
     fun toRealizedBet() {
         marketRepository.save(market)
         val savedAction = betAction.copy(betId = "1000")
-        val actionId = betActionRepository.save(savedAction)
+        val actionId = betActionRepository.save(savedAction).id
         val savedBet = homeSettledBet.copy(id = "1000")
         val (bet, action, market) = realizedBetLoader.toRealizedBet(savedBet)
         assertEquals(savedBet, bet)
-        assertEquals(cz.fb.manaus.core.model.market, market)
+        assertEquals(market, market)
         assertEquals(savedAction.copy(id = actionId), action)
     }
 }

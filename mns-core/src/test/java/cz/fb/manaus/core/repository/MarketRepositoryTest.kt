@@ -7,7 +7,6 @@ import java.time.temporal.ChronoUnit
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 
 class MarketRepositoryTest : AbstractIntegrationTestCase() {
@@ -17,20 +16,6 @@ class MarketRepositoryTest : AbstractIntegrationTestCase() {
         marketRepository.save(market)
         val fromDB = marketRepository.read("2") ?: error("must")
         assertEquals(market, fromDB)
-    }
-
-    @Test
-    fun `save (new ID) - update`() {
-        val noId = market.copy(id = "")
-        val newId = marketRepository.save(noId)
-        assertTrue { newId.isNotBlank() }
-        val fromDB = marketRepository.read(newId) ?: error("must")
-        assertEquals(noId.copy(id = newId), fromDB)
-
-        val updated = fromDB.copy(matchedAmount = 500.0)
-        assertEquals(newId, marketRepository.save(updated))
-        assertEquals(updated, marketRepository.read(newId) ?: error("must"))
-        assertEquals(1, marketRepository.list().size)
     }
 
     @Test

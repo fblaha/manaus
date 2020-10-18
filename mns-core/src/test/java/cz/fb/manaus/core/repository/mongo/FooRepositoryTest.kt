@@ -1,27 +1,30 @@
-package cz.fb.manaus.core.repository
+package cz.fb.manaus.core.repository.mongo
 
-import cz.fb.manaus.core.repository.es.ElasticsearchRepository
+import cz.fb.manaus.core.repository.Repository
 import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import cz.fb.manaus.spring.ManausProfiles
 import org.junit.Test
 import org.springframework.context.annotation.Profile
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations
+import org.springframework.data.mongodb.core.MongoOperations
+import org.springframework.data.mongodb.core.mapping.MongoId
 import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
+
 data class Foo(
+        @MongoId
         val name: String,
         val description: String
 )
 
 @Component
 @Profile(ManausProfiles.DB)
-class FooRepository(operations: ElasticsearchOperations) :
-        Repository<Foo> by ElasticsearchRepository(
-                Foo::class.java, operations, { it.name }
+class FooRepository(operations: MongoOperations) :
+        Repository<Foo> by MongoRepository(
+                "name", Foo::class.java, operations
         )
 
 class FooRepositoryTest : AbstractIntegrationTestCase() {
@@ -60,7 +63,8 @@ class FooRepositoryTest : AbstractIntegrationTestCase() {
     fun list() {
         val foo = Foo("test", "test description")
         fooRepository.save(foo)
-        assertEquals(1, fooRepository.list().size)
+        val list = fooRepository.list()
+        assertEquals(1, list.size)
         fooRepository.delete(foo.name)
         assertTrue(fooRepository.list().isEmpty())
     }

@@ -1,9 +1,6 @@
 package cz.fb.manaus.core.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import org.springframework.data.elasticsearch.annotations.DateFormat
-import org.springframework.data.elasticsearch.annotations.Field
-import org.springframework.data.elasticsearch.annotations.FieldType
 import java.time.Instant
 
 data class Bet(
@@ -11,7 +8,6 @@ data class Bet(
         val marketId: String,
         val selectionId: Long,
         val requestedPrice: Price,
-        @Field(type = FieldType.Date, format = DateFormat.date_time)
         val placedDate: Instant,
         val matchedAmount: Double = 0.0,
         val actionId: String? = null,

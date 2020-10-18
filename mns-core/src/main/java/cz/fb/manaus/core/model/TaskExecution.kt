@@ -1,13 +1,13 @@
 package cz.fb.manaus.core.model
 
 
-import org.springframework.data.elasticsearch.annotations.DateFormat
-import org.springframework.data.elasticsearch.annotations.Field
-import org.springframework.data.elasticsearch.annotations.FieldType
+import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.mapping.Document
 import java.time.Instant
 
+@Document
 data class TaskExecution(
+        @Id
         val name: String,
-        @Field(type = FieldType.Date, format = DateFormat.date_time)
         val time: Instant
 )
