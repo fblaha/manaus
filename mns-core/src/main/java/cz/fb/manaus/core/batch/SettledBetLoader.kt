@@ -42,16 +42,15 @@ class SettledBetLoader(
                 loadFromDatabase(interval)
             }
         }
-        log.info { "bets fetched in '${duration}'" }
         return value
     }
 
     private fun loadFromDatabase(interval: String): List<RealizedBet> {
         val (from, to) = IntervalParser.parse(Instant.now(), interval)
         val (settledBets, sDur) = measureTimedValue { settledBetRepository.find(from = from, to = to) }
-        log.info { "settle bets loaded in '$sDur'" }
+        log.info { "settle bets '$interval' loaded  in '$sDur'" }
         val (bets, rDur) = measureTimedValue { settledBets.map { realizedBetLoader.toRealizedBet(it) } }
-        log.info { "realized bets loaded in '${rDur}'" }
+        log.info { "realized bets '$interval' loaded in '${rDur}'" }
         return bets
     }
 

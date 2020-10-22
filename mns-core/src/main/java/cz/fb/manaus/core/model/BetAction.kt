@@ -15,6 +15,7 @@ data class BetAction(
         val price: Price,
         val marketId: String,
         val selectionId: Long,
+        @Indexed
         val betId: String? = null,
         val runnerPrices: List<RunnerPrices>,
         val chargeGrowth: Double? = null,
