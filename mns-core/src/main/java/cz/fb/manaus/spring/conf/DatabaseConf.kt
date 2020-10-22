@@ -8,8 +8,6 @@ import javax.annotation.PostConstruct
 @ConstructorBinding
 @ConfigurationProperties("db")
 data class DatabaseConf(
-        val host: String = "localhost",
-        val port: Int = 9200,
         val url: String = "mongodb://localhost:27017/test",
 ) {
 

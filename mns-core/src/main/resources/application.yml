@@ -1,5 +1,5 @@
 db:
-  file:
+  url: mongodb://localhost:27017/test
 markets:
   history: 300d
 betting:
