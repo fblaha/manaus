@@ -10,7 +10,7 @@ data class Bet(
         val requestedPrice: Price,
         val placedDate: Instant,
         val matchedAmount: Double = 0.0,
-        val actionId: Long = 0
+        val actionId: String? = null,
 ) {
 
     val isMatched: Boolean

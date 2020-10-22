@@ -27,7 +27,7 @@ class MarketCleanerTest : AbstractIntegrationTestCase() {
     @Test
     fun `execute - not empty market`() {
         saveMarket(4)
-        betActionRepository.idSafeSave(betAction)
+        betActionRepository.save(betAction)
         marketCleaner.execute()
         assertNotNull(marketRepository.read(market.id))
     }
@@ -48,7 +48,7 @@ class MarketCleanerTest : AbstractIntegrationTestCase() {
 
     private fun saveMarket(daysBack: Long) {
         val event = market.event.copy(openDate = Instant.now().minus(daysBack, ChronoUnit.DAYS))
-        marketRepository.saveOrUpdate(market.copy(event = event))
+        marketRepository.save(market.copy(event = event))
         assertNotNull(marketRepository.read(market.id))
     }
 }

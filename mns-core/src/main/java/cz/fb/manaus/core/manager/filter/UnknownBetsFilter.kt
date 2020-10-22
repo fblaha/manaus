@@ -18,9 +18,9 @@ class UnknownBetsFilter(
 
     override fun accept(event: MarketSnapshotEvent): Boolean {
         val myBets = betActionRepository.find(event.snapshot.market.id).mapNotNull { it.betId }.toSet()
-        val unknownBets = getUnknownBets(event.snapshot.currentBets, myBets)
+        return getUnknownBets(event.snapshot.currentBets, myBets)
                 .onEach { log.warning { "unknown bet '${it.betId}'" } }
-        return unknownBets.isEmpty()
+                .isEmpty()
     }
 }
 

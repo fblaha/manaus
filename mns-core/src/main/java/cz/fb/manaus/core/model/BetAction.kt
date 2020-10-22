@@ -1,18 +1,16 @@
 package cz.fb.manaus.core.model
 
-import org.dizitart.no2.IndexType
-import org.dizitart.no2.objects.Id
-import org.dizitart.no2.objects.Index
-import org.dizitart.no2.objects.Indices
+import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.index.Indexed
+import org.springframework.data.mongodb.core.mapping.Document
 import java.time.Instant
 
-@Indices(
-        Index(value = "marketId", type = IndexType.NonUnique),
-        Index(value = "betId", type = IndexType.NonUnique)
-)
+@Document
 data class BetAction(
-        @Id val id: Long,
+        @Id
+        val id: String,
         val betActionType: BetActionType,
+        @Indexed
         val time: Instant,
         val price: Price,
         val marketId: String,

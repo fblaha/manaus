@@ -29,12 +29,12 @@ class BetActionController(
 
     @RequestMapping(value = ["/actions/{id}/ack"], method = [RequestMethod.PUT])
     fun acknowledge(
-        @PathVariable id: Long,
-        @RequestBody betId: String
+            @PathVariable id: String,
+            @RequestBody betId: String
     ): ResponseEntity<*> {
-        val changedRows = betActionRepository.setBetId(id, sanitizeId(betId))
+        val updated = betActionRepository.setBetId(id, sanitizeId(betId))
         Metrics.counter("mns_action_ack").increment()
-        return if (changedRows > 0) {
+        return if (updated) {
             ResponseEntity.ok().build<Any>()
         } else {
             Metrics.counter("mns_action_ack_notFound").increment()

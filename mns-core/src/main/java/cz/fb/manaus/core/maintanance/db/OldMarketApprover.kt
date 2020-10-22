@@ -8,7 +8,7 @@ class OldMarketApprover(private val history: Duration) : MarketDeletionApprover 
 
     override fun isDeletable(marketFootprint: MarketFootprint): Boolean {
         val oldBoundary = Instant.now().minus(history)
-        return oldBoundary.isAfter(marketFootprint.market.openDate)
+        return oldBoundary.isAfter(marketFootprint.market.event.openDate)
     }
 
     override val timeRange: TimeRange?

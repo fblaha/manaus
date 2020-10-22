@@ -8,12 +8,13 @@ import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.core.repository.Repository
 import cz.fb.manaus.core.repository.SettledBetRepository
-import cz.fb.manaus.core.repository.no2.Foo
+import cz.fb.manaus.core.repository.mongo.Foo
 import cz.fb.manaus.spring.ManausProfiles.DB
 import org.junit.After
 import org.junit.Before
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ActiveProfiles
+
 
 @ActiveProfiles(DB)
 abstract class AbstractIntegrationTestCase : AbstractTestCase() {
@@ -41,6 +42,7 @@ abstract class AbstractIntegrationTestCase : AbstractTestCase() {
 
     @Autowired
     private lateinit var repositories: List<Repository<*>>
+
 
     @After
     @Before

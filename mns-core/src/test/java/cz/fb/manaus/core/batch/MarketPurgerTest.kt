@@ -18,7 +18,7 @@ class MarketPurgerTest : AbstractIntegrationTestCase() {
 
     @Test
     fun `purge inactive`() {
-        marketRepository.saveOrUpdate(market)
+        marketRepository.save(market)
         assertNotNull(marketRepository.read(market.id))
         marketPurger.purge(MarketFootprint(market, emptyList(), emptyList()))
         assertNull(marketRepository.read(market.id))
@@ -26,8 +26,8 @@ class MarketPurgerTest : AbstractIntegrationTestCase() {
 
     @Test
     fun `purge active`() {
-        marketRepository.saveOrUpdate(market)
-        betActionRepository.idSafeSave(betAction)
+        marketRepository.save(market)
+        betActionRepository.save(betAction)
         settledBetRepository.save(homeSettledBet)
         assertNotNull(marketRepository.read(market.id))
         assertNotNull(settledBetRepository.read(homeSettledBet.id))

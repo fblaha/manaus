@@ -1,15 +1,21 @@
 package cz.fb.manaus.spring
 
+import com.mongodb.ConnectionString
+import com.mongodb.MongoClientSettings
+import com.mongodb.client.MongoClient
+import com.mongodb.client.MongoClients
 import cz.fb.manaus.spring.conf.DatabaseConf
-import org.dizitart.kno2.nitrite
-import org.dizitart.no2.Nitrite
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
-import java.io.File
+import org.springframework.data.mongodb.core.MongoTemplate
 
+
+interface DatabaseInitializer {
+    val url: String
+}
 
 @Profile(ManausProfiles.DB)
 @Configuration
@@ -17,23 +23,18 @@ import java.io.File
 @EnableConfigurationProperties(DatabaseConf::class)
 open class CoreDatabaseConfiguration {
 
+    @Bean
+    open fun mongoClient(databaseInitializer: DatabaseInitializer?, databaseConf: DatabaseConf): MongoClient {
+        val url = databaseInitializer?.url ?: databaseConf.url
+        val mongoClientSettings = MongoClientSettings.builder()
+                .applyConnectionString(ConnectionString(url))
+                .build()
+        return MongoClients.create(mongoClientSettings)
+    }
 
-    @Bean(destroyMethod = "close")
-    open fun db(databaseConf: DatabaseConf): Nitrite {
-        return if (databaseConf.file.isNullOrBlank()) {
-            nitrite {
-                autoCommitBufferSize = 2048
-                autoCompact = false
-            }
-        } else {
-            val db = nitrite {
-                file = File(databaseConf.file)
-                autoCommitBufferSize = 2048
-                autoCompact = false
-            }
-            db.compact()
-            db
-        }
+    @Bean
+    open fun mongoTemplate(client: MongoClient): MongoTemplate {
+        return MongoTemplate(client, "test")
     }
 
 }

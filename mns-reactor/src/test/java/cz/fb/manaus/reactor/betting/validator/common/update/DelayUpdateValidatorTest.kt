@@ -29,21 +29,21 @@ class DelayUpdateValidatorTest : AbstractIntegrationTestCase() {
             side: Side,
             validationResult: ValidationResult
     ) {
-        marketRepository.saveOrUpdate(market)
+        marketRepository.save(market)
         val now = Instant.now()
         val place = betAction.copy(
                 time = now.minus(beforeMinutes, ChronoUnit.MINUTES),
                 price = Price(2.0, 30.0, side),
                 betActionType = actionType
         )
-        betActionRepository.idSafeSave(place)
+        betActionRepository.save(place)
         val result = validator.validate(factory.newUpdateBetEvent(side, runnerPrices))
         assertEquals(validationResult, result)
     }
 
     @Test(expected = IllegalStateException::class)
     fun `no bet action`() {
-        marketRepository.saveOrUpdate(market)
+        marketRepository.save(market)
         val result = validator.validate(factory.newUpdateBetEvent(Side.LAY, runnerPrices))
         assertEquals(ValidationResult.DROP, result)
     }

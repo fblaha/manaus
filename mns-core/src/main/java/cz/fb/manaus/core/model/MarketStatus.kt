@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.model
 
-import org.dizitart.no2.objects.Id
+import org.springframework.data.annotation.Id
 import java.time.Instant
 
 data class MarketStatus(

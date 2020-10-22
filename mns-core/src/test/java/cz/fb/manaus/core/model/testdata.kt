@@ -2,6 +2,7 @@ package cz.fb.manaus.core.model
 
 import cz.fb.manaus.core.provider.ExchangeProvider
 import cz.fb.manaus.core.provider.ProviderTag
+import org.bson.types.ObjectId
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
@@ -16,9 +17,9 @@ val homeSettledBet: SettledBet = SettledBet(
         selectionName = "Banik Ostrava",
         profitAndLoss = 9.9,
         commission = null,
-        placed = Instant.now().minus(24, ChronoUnit.HOURS),
-        matched = Instant.now().minus(16, ChronoUnit.HOURS),
-        settled = Instant.now().minus(8, ChronoUnit.HOURS),
+        placed = Instant.now().minus(24, ChronoUnit.HOURS).truncatedTo(ChronoUnit.SECONDS),
+        matched = Instant.now().minus(16, ChronoUnit.HOURS).truncatedTo(ChronoUnit.SECONDS),
+        settled = Instant.now().minus(8, ChronoUnit.HOURS).truncatedTo(ChronoUnit.SECONDS),
         price = Price(3.3, 3.0, Side.BACK)
 )
 
@@ -46,9 +47,9 @@ val runnerPrices = listOf(
 )
 
 val betAction = BetAction(
-        id = 0,
+        id = ObjectId().toString(),
         marketId = "2",
-        time = Instant.now().minus(25, ChronoUnit.HOURS),
+        time = Instant.now().minus(25, ChronoUnit.HOURS).truncatedTo(ChronoUnit.SECONDS),
         selectionId = SEL_HOME,
         betId = "1",
         betActionType = BetActionType.PLACE,
@@ -66,14 +67,14 @@ val market = Market(
         event = Event(
                 id = "100",
                 name = "Banik Ostrava vs Sparta Prague",
-                openDate = Instant.now().plus(2, ChronoUnit.DAYS),
+                openDate = Instant.now().plus(2, ChronoUnit.DAYS)
+                        .truncatedTo(ChronoUnit.SECONDS),
                 timezone = "CET",
                 countryCode = "cz",
                 venue = "bazaly"
         ),
         competition = Competition("100", "Czech League"),
         eventType = EventType("1000", "soccer"),
-        latestEvent = Instant.now(),
         runners = listOf(
                 Runner(SEL_HOME, "Banik Ostrava", 0.0, 0),
                 Runner(SEL_AWAY, "Sparta Prague", 0.0, 1),

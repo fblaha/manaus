@@ -30,7 +30,7 @@ class BlacklistRefresher(
                 .onEach { log.info { "deleting blacklisted category '$it'" } }
                 .forEach { blacklistedCategoryRepository.delete(it.name) }
         current.onEach { log.info { "saving blacklisted category '$it'" } }
-                .forEach { blacklistedCategoryRepository.saveOrUpdate(it) }
+                .forEach { blacklistedCategoryRepository.save(it) }
     }
 
 }

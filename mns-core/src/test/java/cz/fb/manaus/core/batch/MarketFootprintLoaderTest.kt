@@ -15,13 +15,13 @@ class MarketFootprintLoaderTest : AbstractIntegrationTestCase() {
 
     @Test
     fun load() {
-        marketRepository.saveOrUpdate(market)
+        marketRepository.save(market)
 
         var footprint = marketFootprintLoader.toFootprint(market)
         assertTrue(footprint.betActions.isEmpty())
         assertTrue(footprint.settledBets.isEmpty())
 
-        betActionRepository.idSafeSave(betAction)
+        betActionRepository.save(betAction)
         settledBetRepository.save(homeSettledBet)
         footprint = marketFootprintLoader.toFootprint(market)
         assertTrue(footprint.betActions.isNotEmpty())

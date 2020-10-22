@@ -1,12 +1,13 @@
 package cz.fb.manaus.core.model
 
-import org.dizitart.no2.IndexType
-import org.dizitart.no2.objects.Id
-import org.dizitart.no2.objects.Index
+
+import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.mapping.Document
 import java.time.Instant
 
-@Index(value = "name", type = IndexType.Unique)
+@Document
 data class TaskExecution(
-        @Id val name: String,
+        @Id
+        val name: String,
         val time: Instant
 )

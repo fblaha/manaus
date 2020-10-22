@@ -16,11 +16,12 @@ class RealizedBetLoader(
 ) {
 
     fun toRealizedBet(settledBet: SettledBet): RealizedBet {
-        val action = betActionRepository.findRecentBetAction(settledBet.id)!!
+        val betId = settledBet.id
+        val action = betActionRepository.findRecentBetAction(betId) ?: error("no action")
         return RealizedBet(
                 settledBet = settledBet,
                 betAction = action,
-                market = marketRepository.read(action.marketId)!!
+                market = marketRepository.read(action.marketId) ?: error("no market")
         )
     }
 }

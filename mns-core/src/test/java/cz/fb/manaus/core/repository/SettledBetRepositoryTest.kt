@@ -13,14 +13,15 @@ class SettledBetRepositoryTest : AbstractIntegrationTestCase() {
     @Test
     fun `save - read`() {
         settledBetRepository.save(homeSettledBet)
-        assertEquals(homeSettledBet, settledBetRepository.read(homeSettledBet.id))
+        val stored = settledBetRepository.read(homeSettledBet.id) ?: error("missing")
+        assertEquals(homeSettledBet, stored)
     }
 
     @Test
     fun `save - update`() {
         settledBetRepository.save(homeSettledBet)
         assertNull(settledBetRepository.read(homeSettledBet.id)!!.commission)
-        settledBetRepository.update(homeSettledBet.copy(commission = 0.1))
+        settledBetRepository.save(homeSettledBet.copy(commission = 0.1))
         assertEquals(0.1, settledBetRepository.read(homeSettledBet.id)!!.commission)
     }
 
