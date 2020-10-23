@@ -35,14 +35,11 @@ class SettledBetLoader(
             })
 
     fun load(interval: String, useCache: Boolean): List<RealizedBet> {
-        val (value, duration) = measureTimedValue {
-            if (useCache) {
-                cache.getUnchecked(interval)
-            } else {
-                loadFromDatabase(interval)
-            }
+        return if (useCache) {
+            cache.getUnchecked(interval)
+        } else {
+            loadFromDatabase(interval)
         }
-        return value
     }
 
     private fun loadFromDatabase(interval: String): List<RealizedBet> {

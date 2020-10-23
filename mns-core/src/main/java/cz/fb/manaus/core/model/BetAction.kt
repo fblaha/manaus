@@ -13,6 +13,7 @@ data class BetAction(
         @Indexed
         val time: Instant,
         val price: Price,
+        @Indexed
         val marketId: String,
         val selectionId: Long,
         @Indexed
