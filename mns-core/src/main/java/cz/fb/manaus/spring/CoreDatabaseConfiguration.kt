@@ -5,12 +5,12 @@ import com.mongodb.MongoClientSettings
 import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoClients
 import cz.fb.manaus.spring.conf.DatabaseConf
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
-import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration
 
 
 interface DatabaseInitializer {
@@ -21,10 +21,17 @@ interface DatabaseInitializer {
 @Configuration
 @ComponentScan("cz.fb.manaus.core")
 @EnableConfigurationProperties(DatabaseConf::class)
-open class CoreDatabaseConfiguration {
+open class CoreDatabaseConfiguration : AbstractMongoClientConfiguration() {
 
-    @Bean
-    open fun mongoClient(databaseInitializer: DatabaseInitializer?, databaseConf: DatabaseConf): MongoClient {
+    @Autowired
+    var databaseInitializer: DatabaseInitializer? = null
+
+    @Autowired
+    lateinit var databaseConf: DatabaseConf
+
+    override fun autoIndexCreation(): Boolean = true
+
+    override fun mongoClient(): MongoClient {
         val url = databaseInitializer?.url ?: databaseConf.url
         val mongoClientSettings = MongoClientSettings.builder()
                 .applyConnectionString(ConnectionString(url))
@@ -32,9 +39,6 @@ open class CoreDatabaseConfiguration {
         return MongoClients.create(mongoClientSettings)
     }
 
-    @Bean
-    open fun mongoTemplate(client: MongoClient): MongoTemplate {
-        return MongoTemplate(client, "test")
-    }
+    override fun getDatabaseName(): String = "mns"
 
 }

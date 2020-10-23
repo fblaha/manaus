@@ -55,6 +55,7 @@ class MongoBetActionRepository(
         val query = Query()
         query.addCriteria(Criteria.where("betId").isEqualTo(betId))
         query.with(Sort.by(Sort.Direction.DESC, "time"))
+        query.limit(1)
         return operations.findOne(query, BetAction::class.java)
     }
 

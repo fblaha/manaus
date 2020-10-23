@@ -8,7 +8,7 @@ import javax.annotation.PostConstruct
 @ConstructorBinding
 @ConfigurationProperties("db")
 data class DatabaseConf(
-        val url: String = "mongodb://localhost:27017/test",
+        val url: String = "mongodb://localhost:27017/mns",
 ) {
 
     private val log = Logger.getLogger(DatabaseConf::class.simpleName)
