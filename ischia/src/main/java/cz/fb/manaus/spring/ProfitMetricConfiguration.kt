@@ -26,6 +26,11 @@ open class ProfitMetricConfiguration {
             updateFrequency = UpdateFrequency.LOW
     )
 
+    private val quarterlyQuery = ProfitQuery(
+            interval = "90d",
+            updateFrequency = UpdateFrequency.LOW
+    )
+
     @Bean
     open fun dailySideProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
             query = dailyQuery,
@@ -43,6 +48,13 @@ open class ProfitMetricConfiguration {
     @Bean
     open fun monthlySideProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
             query = monthlyQuery,
+            categoryPrefix = "side",
+            categoryValues = setOf("lay", "back")
+    )
+
+    @Bean
+    open fun quarterlySideProfitMetric(): ProfitMetricSpec = ProfitMetricSpec(
+            query = quarterlyQuery,
             categoryPrefix = "side",
             categoryValues = setOf("lay", "back")
     )
