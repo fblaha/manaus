@@ -58,7 +58,7 @@ class MarketEventController(
             )
             val collectedBets = notifier.notify(MarketSnapshotEvent(snapshot, account))
             return toResponse(collectedBets)
-        } catch (e: RuntimeException) {
+        } catch (e: Exception) {
             Metrics.counter("mns_exception_event_count").increment()
             logException(marketEvent, e)
             throw e
@@ -84,7 +84,7 @@ class MarketEventController(
         check(marketEvent.prices.isNotEmpty())
     }
 
-    private fun logException(snapshot: MarketEvent, e: RuntimeException) {
+    private fun logException(snapshot: MarketEvent, e: Exception) {
         log.severe { "error occurred for '$snapshot'" }
         log.log(Level.SEVERE, "fix it!", e)
     }
