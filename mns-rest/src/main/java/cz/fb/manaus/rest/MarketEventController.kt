@@ -74,7 +74,7 @@ class MarketEventController(
 
     private fun toResponse(collectedBets: CollectedBets): ResponseEntity<CollectedBets> {
         return if (collectedBets.empty) {
-            ResponseEntity.noContent().build<CollectedBets>()
+            ResponseEntity.noContent().build()
         } else {
             ResponseEntity.ok(collectedBets)
         }

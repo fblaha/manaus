@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import kotlin.test.assertNotNull
 import kotlin.time.ExperimentalTime
@@ -45,7 +44,7 @@ class MarketFootprintControllerTest : AbstractControllerTest() {
                         .content(market)
                         .contentType(MediaType.APPLICATION_JSON)
         )
-                .andExpect(MockMvcResultMatchers.status().isCreated)
+                .andExpect(status().isCreated)
                 .andReturn()
         assertNotNull(result.response.getHeader(HttpHeaders.LOCATION))
     }

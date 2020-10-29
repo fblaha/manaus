@@ -1,20 +1,15 @@
 package cz.fb.manaus.core.maintanance.db
 
-import cz.fb.manaus.core.batch.MarketFootprintLoader
-import cz.fb.manaus.core.batch.MarketPurger
 import cz.fb.manaus.core.maintanance.PeriodicTask
 import cz.fb.manaus.core.model.MarketStatus
-import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.core.repository.Repository
 import cz.fb.manaus.spring.ManausProfiles
-import io.micrometer.core.instrument.Metrics
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.time.Duration
 import java.time.Instant
 import java.util.logging.Logger
 import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
 
 @Component

@@ -68,7 +68,7 @@ class FixedBinFunctionProfitService(
 
     private fun getProgressFunctions(funcName: String?): List<ProgressFunction> {
         return if (funcName != null) {
-            listOf(functions[funcName]!!)
+            listOf(functions.getValue(funcName))
         } else {
             functions.values.sortedBy { it.name }
         }

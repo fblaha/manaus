@@ -37,7 +37,7 @@ class ProbabilityCalculatorTest : AbstractTestCase() {
                 val probability = calculator.fromFairness(fairness[side]!!, side, prices)
                 for ((i, expected) in probabilities.withIndex()) {
                     val selection = SEL_HOME * (i + 1)
-                    Assert.assertEquals(expected, probability[selection]!!, 0.005)
+                    Assert.assertEquals(expected, probability.getValue(selection), 0.005)
                 }
             }
         }

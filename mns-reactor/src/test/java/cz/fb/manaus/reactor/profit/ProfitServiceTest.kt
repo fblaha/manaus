@@ -130,7 +130,7 @@ class ProfitServiceTest : AbstractTestCase() {
     private fun checkCategories(records: List<ProfitRecord>, vararg expectedProfits: Pair<String, Double>) {
         val byCategory = byCategory(records)
         for ((key, value) in expectedProfits) {
-            val record = byCategory[key]!!
+            val record = byCategory.getValue(key)
             Assert.assertEquals(value, record.profit, 0.0001)
         }
     }
@@ -169,8 +169,9 @@ class ProfitServiceTest : AbstractTestCase() {
 
         val byCategory = byCategory(records)
 
-        assertEquals(1, byCategory["market_country_cz"]!!.layCount)
-        Assert.assertEquals(withCharge(3.0), byCategory["market_country_cz"]!!.profit, 0.01)
+        assertEquals(1, byCategory.getValue("market_country_cz").layCount)
+        Assert.assertEquals(withCharge(3.0),
+                byCategory.getValue("market_country_cz").profit, 0.01)
 
         assertTrue(
                 profitService.getProfitRecords(

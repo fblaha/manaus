@@ -15,8 +15,9 @@ data class BetCoverage(private val coverage: Map<MarketSelection, List<RealizedB
         return bets
     }
 
-    fun getSides(marketId: String, selectionId: Long): Set<Side> {
-        return coverage[MarketSelection(marketId, selectionId)]!!.map { it.settledBet.price.side }.toSet()
+    private fun getSides(marketId: String, selectionId: Long): Set<Side> {
+        return coverage.getValue(MarketSelection(marketId, selectionId))
+                .map { it.settledBet.price.side }.toSet()
 
     }
 

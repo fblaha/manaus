@@ -11,8 +11,8 @@ object PriceBackFunction : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double? {
         val price = bet.settledBet.price
-        return when {
-            price.side == Side.BACK -> price.price
+        return when (price.side) {
+            Side.BACK -> price.price
             else -> null
         }
     }

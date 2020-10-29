@@ -40,7 +40,7 @@ object MarketChargeSimulator {
     }
 
     private fun getProbability(winners: Set<Long>, probabilities: Map<Long, Double>): Double {
-        return winners.map { probabilities[it]!! }.reduce { l, r -> l * r }
+        return winners.map { probabilities.getValue(it) }.reduce { l, r -> l * r }
     }
 
 

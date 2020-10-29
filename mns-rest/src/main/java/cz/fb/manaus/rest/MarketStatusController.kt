@@ -1,7 +1,6 @@
 package cz.fb.manaus.rest
 
 import cz.fb.manaus.core.model.MarketStatus
-import cz.fb.manaus.core.model.TaskExecution
 import cz.fb.manaus.core.repository.Repository
 import cz.fb.manaus.spring.ManausProfiles
 import org.springframework.context.annotation.Profile
