@@ -50,7 +50,12 @@ class MarketEventController(
             val market = marketRepository.read(id) ?: error("no such market $id")
             val bets = marketEvent.bets
             betMetricUpdater.update(marketEvent.scanTime, bets)
-            val snapshot = MarketSnapshot(marketPrices, market, bets, marketEvent.tradedVolume)
+            val snapshot = MarketSnapshot(
+                    runnerPrices = marketPrices,
+                    market = market,
+                    currentBets = bets.distinctBy { it.betId },
+                    tradedVolume = marketEvent.tradedVolume
+            )
             val collectedBets = notifier.notify(MarketSnapshotEvent(snapshot, account))
             return toResponse(collectedBets)
         } catch (e: RuntimeException) {
