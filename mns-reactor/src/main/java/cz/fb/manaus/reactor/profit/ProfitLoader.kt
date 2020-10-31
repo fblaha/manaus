@@ -1,6 +1,6 @@
 package cz.fb.manaus.reactor.profit
 
-import cz.fb.manaus.core.batch.SettledBetLoader
+import cz.fb.manaus.core.batch.BetLoader
 import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.reactor.profit.progress.FixedBinFunctionProfitService
 import cz.fb.manaus.spring.ManausProfiles
@@ -15,7 +15,7 @@ import kotlin.time.measureTimedValue
 @ExperimentalTime
 @Profile(ManausProfiles.DB)
 class ProfitLoader(
-        private val betLoader: SettledBetLoader,
+        private val betLoader: BetLoader,
         private val profitService: ProfitService,
         private val fixedBinFunctionProfitService: FixedBinFunctionProfitService
 ) {
@@ -24,10 +24,9 @@ class ProfitLoader(
 
     fun loadProfitRecords(
             interval: String,
-            cache: Boolean,
             projection: String? = null
     ): List<ProfitRecord> {
-        val settledBets = betLoader.load(interval, cache)
+        val settledBets = betLoader.load(interval)
         val (records, duration) = measureTimedValue {
             profitService.getProfitRecords(
                     settledBets,
@@ -43,10 +42,9 @@ class ProfitLoader(
             interval: String,
             binCount: Int,
             function: String?,
-            projection: String?,
-            cache: Boolean
+            projection: String?
     ): List<ProfitRecord> {
-        val settledBets = betLoader.load(interval, cache)
+        val settledBets = betLoader.load(interval)
         val (records, duration) = measureTimedValue {
             fixedBinFunctionProfitService.getProfitRecords(
                     settledBets,

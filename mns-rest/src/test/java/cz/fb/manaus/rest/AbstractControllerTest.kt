@@ -1,6 +1,5 @@
 package cz.fb.manaus.rest
 
-import cz.fb.manaus.core.batch.SettledBetLoader
 import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.betAction
 import cz.fb.manaus.core.model.homeSettledBet
@@ -26,9 +25,6 @@ abstract class AbstractControllerTest : AbstractIntegrationTestCase() {
     @Autowired
     private lateinit var context: WebApplicationContext
 
-    @Autowired
-    private lateinit var settledBetLoader: SettledBetLoader
-
     protected fun checkResponse(url: String, vararg substrings: String) {
         val result = mvc.perform(get(url).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
@@ -42,7 +38,6 @@ abstract class AbstractControllerTest : AbstractIntegrationTestCase() {
     @Before
     fun mockRest() {
         mvc = MockMvcBuilders.webAppContextSetup(context).build()
-        settledBetLoader.invalidateCache()
     }
 
     protected fun createLiveMarket(): RealizedBet {

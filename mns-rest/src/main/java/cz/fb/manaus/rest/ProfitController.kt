@@ -31,7 +31,7 @@ class ProfitController(
             @RequestParam(required = false) projection: String?,
             @RequestParam(defaultValue = "true") cache: Boolean
     ): List<ProfitRecord> {
-        var profitRecords = profitLoader.loadProfitRecords(interval, cache, projection)
+        var profitRecords = profitLoader.loadProfitRecords(interval, projection)
         if (filter != null) {
             val filters = parseFilter(filter)
             profitRecords = profitRecords.filter { filters.any { token -> token in it.category } }
@@ -51,7 +51,7 @@ class ProfitController(
             @RequestParam(required = false) projection: String?,
             @RequestParam(defaultValue = "true") cache: Boolean
     ): List<ProfitRecord> {
-        return profitLoader.loadFixedBinRecords(interval, binCount, function, projection, cache)
+        return profitLoader.loadFixedBinRecords(interval, binCount, function, projection)
     }
 
     private fun parseFilter(rawFilter: String): List<String> {
