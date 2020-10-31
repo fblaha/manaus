@@ -12,4 +12,11 @@ data class MarketStatus(
         val eventName: String,
         val lastEvent: Instant,
         val bets: List<Bet>
-)
+) {
+
+    val matchedAmount: Double
+        get() {
+            return bets.sumByDouble { it.matchedAmount }
+        }
+
+}

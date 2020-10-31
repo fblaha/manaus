@@ -18,6 +18,8 @@ class MarketStatusController(
     val statuses: List<MarketStatus>
         @ResponseBody
         @RequestMapping(value = ["/statuses"], method = [RequestMethod.GET])
-        get() = repository.list().sortedBy { it.lastEvent }
+        get() = repository.list()
+                .sortedBy { it.lastEvent }
+                .sortedBy { it.matchedAmount }
 
 }
