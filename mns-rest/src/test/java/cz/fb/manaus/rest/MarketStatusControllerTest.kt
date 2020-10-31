@@ -15,7 +15,8 @@ class MarketStatusControllerTest : AbstractControllerTest() {
     fun statuses() {
         val status = MarketStatus(
                 id = "777",
-                event = market.event,
+                eventDate = Instant.now(),
+                eventName = market.event.name,
                 lastEvent = Instant.now(),
                 bets = listOf(betTemplate)
         )

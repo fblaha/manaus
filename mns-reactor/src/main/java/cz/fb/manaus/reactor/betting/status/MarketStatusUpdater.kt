@@ -20,9 +20,11 @@ class MarketStatusUpdater(
         val snapshot = marketSnapshotEvent.snapshot
         val market = snapshot.market
         val bets = snapshot.currentBets.sortedBy { it.requestedPrice.side }
+        val event = market.event
         val state = MarketStatus(
                 id = market.id,
-                event = market.event,
+                eventDate = event.openDate,
+                eventName = event.name,
                 lastEvent = Instant.now(),
                 bets = bets
         )
