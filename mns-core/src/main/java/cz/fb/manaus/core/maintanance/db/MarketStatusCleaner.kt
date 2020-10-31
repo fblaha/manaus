@@ -28,7 +28,7 @@ class MarketStatusCleaner(
     override fun execute() {
         val now = Instant.now()
         repository.list()
-                .filter { it.openDate.isBefore(now) }
+                .filter { it.event.openDate.isBefore(now) }
                 .onEach { log.info { "deleting market status '${it.id}'" } }
                 .forEach { repository.delete(it.id) }
     }

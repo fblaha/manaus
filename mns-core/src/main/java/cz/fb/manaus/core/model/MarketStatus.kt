@@ -8,7 +8,7 @@ import java.time.Instant
 data class MarketStatus(
         @Id
         val id: String,
-        val openDate: Instant,
+        val event: Event,
         val lastEvent: Instant,
         val bets: List<Bet>
 )

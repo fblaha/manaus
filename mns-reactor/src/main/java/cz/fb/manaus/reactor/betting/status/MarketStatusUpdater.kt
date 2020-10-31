@@ -19,11 +19,10 @@ class MarketStatusUpdater(
     override fun onMarketSnapshot(marketSnapshotEvent: MarketSnapshotEvent): List<BetCommand> {
         val snapshot = marketSnapshotEvent.snapshot
         val market = snapshot.market
-        val openDate = market.event.openDate
         val bets = snapshot.currentBets.sortedBy { it.requestedPrice.side }
         val state = MarketStatus(
                 id = market.id,
-                openDate = openDate,
+                event = market.event,
                 lastEvent = Instant.now(),
                 bets = bets
         )

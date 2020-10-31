@@ -2,6 +2,7 @@ package cz.fb.manaus.rest
 
 import cz.fb.manaus.core.model.MarketStatus
 import cz.fb.manaus.core.model.betTemplate
+import cz.fb.manaus.core.model.market
 import org.junit.Test
 import java.time.Instant
 import kotlin.time.ExperimentalTime
@@ -14,7 +15,7 @@ class MarketStatusControllerTest : AbstractControllerTest() {
     fun statuses() {
         val status = MarketStatus(
                 id = "777",
-                openDate = Instant.now(),
+                event = market.event,
                 lastEvent = Instant.now(),
                 bets = listOf(betTemplate)
         )
