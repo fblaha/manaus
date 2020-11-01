@@ -27,7 +27,7 @@ class FairnessBackProposer(priceService: PriceService) : PriceProposer by Fairne
                 fixedStrategy(Side.LAY, 0.077, ::isDraw),
                 fixedStrategy(Side.LAY, 0.09),
 
-                fixedStrategy(Side.BACK, 0.06, ::isDraw),
+                fixedStrategy(Side.BACK, 0.07, ::isDraw),
                 fixedStrategy(Side.BACK, 0.08)
         )
 )
