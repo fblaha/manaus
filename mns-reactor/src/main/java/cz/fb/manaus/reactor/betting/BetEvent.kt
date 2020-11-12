@@ -23,7 +23,7 @@ data class BetEvent(
     val oldBet: Bet? = coverage[sideSelection]
     val counterBet: Bet? = coverage[sideSelection.oppositeSide]
     val isOldMatched: Boolean = oldBet?.isMatched == true
-    val betActionType = if (oldBet == null) BetActionType.PLACE else BetActionType.UPDATE
+    val actionType = if (oldBet == null) BetActionType.PLACE else BetActionType.UPDATE
     val cancelable = oldBet != null && !oldBet.isMatched
 
     init {
@@ -49,7 +49,7 @@ data class BetEvent(
                 time = Instant.now(),
                 marketId = market.id,
                 runnerPrices = marketPrices,
-                betActionType = betActionType,
+                betActionType = actionType,
                 chargeGrowth = metrics.chargeGrowthForecast,
                 proposers = proposers
         )
@@ -62,8 +62,8 @@ data class BetEvent(
         val action = betAction(proposers)
         val newPrice = proposedPrice!!
 
-        log.info { "bet $betActionType action '$action'" }
-        return if (betActionType == BetActionType.PLACE) {
+        log.info { "bet $actionType action '$action'" }
+        return if (actionType == BetActionType.PLACE) {
             val bet = Bet(
                     marketId = market.id,
                     placedDate = Instant.now(),

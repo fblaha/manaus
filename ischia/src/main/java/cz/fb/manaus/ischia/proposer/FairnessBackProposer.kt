@@ -1,5 +1,6 @@
 package cz.fb.manaus.ischia.proposer
 
+import cz.fb.manaus.core.model.BetActionType
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.ischia.BackUniverse
 import cz.fb.manaus.ischia.LayUniverse
@@ -12,8 +13,7 @@ import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.stereotype.Component
 
 fun isDraw(e: BetEvent): Boolean {
-    val (_, name, _, _) = e.runner
-    return "draw" in name.toLowerCase()
+    return e.actionType == BetActionType.PLACE
 }
 
 
@@ -24,10 +24,10 @@ class FairnessBackProposer(priceService: PriceService) : PriceProposer by Fairne
         Side.BACK,
         priceService,
         chain(
-                fixedStrategy(Side.LAY, 0.077, ::isDraw),
-                fixedStrategy(Side.LAY, 0.09),
+                fixedStrategy(Side.LAY, 0.077),
+                fixedStrategy(Side.LAY, 0.087, { it.actionType == BetActionType.PLACE }),
 
-                fixedStrategy(Side.BACK, 0.07, ::isDraw),
-                fixedStrategy(Side.BACK, 0.08)
+                fixedStrategy(Side.BACK, 0.07),
+                fixedStrategy(Side.BACK, 0.08, { it.actionType == BetActionType.PLACE })
         )
 )
