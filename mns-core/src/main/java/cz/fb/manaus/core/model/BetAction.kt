@@ -17,11 +17,11 @@ data class BetAction(
         @Indexed
         val marketId: String,
         val selectionId: Long,
+        val runnerPrices: List<RunnerPrices>,
         @Indexed
         val betId: String? = null,
         val chargeGrowth: Double? = null,
         val proposers: Set<String> = emptySet(),
-        val runnerPrices: List<RunnerPrices>,
 )
 
 

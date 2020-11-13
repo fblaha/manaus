@@ -22,6 +22,14 @@ data class Bet(
         @JsonIgnore
         get() = matchedAmount > requestedPrice.amount / 2
 
+    val status: BetStatus
+        @JsonIgnore
+        get() = BetStatus(
+                betId = betId,
+                selectionId = selectionId,
+                requestedPrice = requestedPrice,
+                matchedAmount = matchedAmount
+        )
 
     infix fun replacePrice(newPrice: Double): Bet {
         return copy(requestedPrice = Price(newPrice, requestedPrice.amount, requestedPrice.side))

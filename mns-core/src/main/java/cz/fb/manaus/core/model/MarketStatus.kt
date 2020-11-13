@@ -11,7 +11,7 @@ data class MarketStatus(
         val eventDate: Instant,
         val eventName: String,
         val lastEvent: Instant,
-        val bets: List<Bet>
+        val bets: List<BetStatus>
 ) {
 
     val matchedAmount: Double

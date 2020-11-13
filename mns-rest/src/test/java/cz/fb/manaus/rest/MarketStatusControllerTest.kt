@@ -18,7 +18,7 @@ class MarketStatusControllerTest : AbstractControllerTest() {
                 eventDate = Instant.now(),
                 eventName = market.event.name,
                 lastEvent = Instant.now(),
-                bets = listOf(betTemplate)
+                bets = listOf(betTemplate.status)
         )
         marketStatusRepository.save(status)
         checkResponse("/statuses", "777")
