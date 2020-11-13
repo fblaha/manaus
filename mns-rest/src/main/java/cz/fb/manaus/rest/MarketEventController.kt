@@ -1,6 +1,7 @@
 package cz.fb.manaus.rest
 
 import com.google.common.util.concurrent.AtomicDouble
+import cz.fb.manaus.core.batch.ActionLoader
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.repository.MarketRepository
 import cz.fb.manaus.reactor.betting.MarketSnapshotNotifier
@@ -30,7 +31,8 @@ data class MarketEvent(
 class MarketEventController(
         private val notifier: MarketSnapshotNotifier,
         private val marketRepository: MarketRepository,
-        private val betMetricUpdater: MatchedBetMetricUpdater
+        private val betMetricUpdater: MatchedBetMetricUpdater,
+        private val actionLoader: ActionLoader
 ) {
 
     private val availableMoney: AtomicDouble by lazy { Metrics.gauge("mns_account_money_available", AtomicDouble()) }
@@ -50,10 +52,11 @@ class MarketEventController(
             val market = marketRepository.read(id) ?: error("no such market $id")
             val bets = marketEvent.bets
             betMetricUpdater.update(marketEvent.scanTime, bets)
+            val currentBets = bets.distinctBy { it.betId }.map { actionLoader.load(it) }
             val snapshot = MarketSnapshot(
                     runnerPrices = marketPrices,
                     market = market,
-                    currentBets = bets.distinctBy { it.betId },
+                    currentBets = currentBets,
                     tradedVolume = marketEvent.tradedVolume
             )
             val collectedBets = notifier.notify(MarketSnapshotEvent(snapshot, account))

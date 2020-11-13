@@ -46,7 +46,7 @@ class MarketSnapshotNotifier(
     }
 
     private fun validateCommands(commands: List<BetCommand>) {
-        commands.filter { !it.isCancel }.forEach { check(it.bet.actionId != null) }
+        commands.filter { !it.cancel }.forEach { check(it.bet.action != null) }
     }
 }
 

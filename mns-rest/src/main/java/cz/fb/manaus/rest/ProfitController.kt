@@ -28,8 +28,7 @@ class ProfitController(
             @PathVariable interval: String,
             @RequestParam(required = false) filter: String?,
             @RequestParam(required = false) sort: String?,
-            @RequestParam(required = false) projection: String?,
-            @RequestParam(defaultValue = "true") cache: Boolean
+            @RequestParam(required = false) projection: String?
     ): List<ProfitRecord> {
         var profitRecords = profitLoader.loadProfitRecords(interval, projection)
         if (filter != null) {
@@ -48,8 +47,7 @@ class ProfitController(
             @PathVariable interval: String,
             @RequestParam(defaultValue = "5") binCount: Int,
             @RequestParam(required = false) function: String?,
-            @RequestParam(required = false) projection: String?,
-            @RequestParam(defaultValue = "true") cache: Boolean
+            @RequestParam(required = false) projection: String?
     ): List<ProfitRecord> {
         return profitLoader.loadFixedBinRecords(interval, binCount, function, projection)
     }

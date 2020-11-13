@@ -5,12 +5,13 @@ import java.time.Instant
 
 data class Bet(
         val betId: String? = null,
+        // TODO remove
         val marketId: String,
         val selectionId: Long,
         val requestedPrice: Price,
         val placedDate: Instant,
         val matchedAmount: Double = 0.0,
-        val actionId: String? = null,
+        val action: BetAction? = null,
 ) {
 
     val isMatched: Boolean

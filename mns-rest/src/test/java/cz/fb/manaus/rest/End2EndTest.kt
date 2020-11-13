@@ -68,7 +68,7 @@ class End2EndTest : AbstractControllerTest() {
 
     private fun `When I acknowledge all bet actions`() {
         for ((i, bet) in collectedBets.place.withIndex()) {
-            val put = MockMvcRequestBuilders.put("/actions/{id}/ack", bet.actionId)
+            val put = MockMvcRequestBuilders.put("/actions/{id}/ack", bet.action?.id)
                     .contentType(MediaType.APPLICATION_JSON).content(i.toString())
             mvc.perform(put).andExpect(MockMvcResultMatchers.status().isOk).andReturn()
         }
@@ -136,6 +136,7 @@ class End2EndTest : AbstractControllerTest() {
             assertEquals(3, it.runnerPrices.size)
             assertEquals(BetActionType.PLACE, it.betActionType)
             assertTrue { it.proposers.isNotEmpty() }
+            assertEquals(1, it.version)
         }
     }
 

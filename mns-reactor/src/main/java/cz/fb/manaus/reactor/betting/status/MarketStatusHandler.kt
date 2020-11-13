@@ -15,13 +15,13 @@ class MarketStatusHandler(
 ) : BetCommandHandler {
 
     override fun onBetCommand(command: BetCommand): BetCommand {
-        val (bet, _) = command
+        val (bet) = command
         val status = repository.read(bet.marketId) ?: error("no such status")
         val bets = status.bets
         val newBets = when {
-            command.isCancel -> bets.filter { it.betId != bet.betId }
-            command.isPlace -> bets + listOf(bet)
-            command.isUpdate -> bets.filter { it.betId != bet.betId }  + listOf(bet)
+            command.cancel -> bets.filter { it.betId != bet.betId }
+            command.place -> bets + listOf(bet)
+            command.update -> bets.filter { it.betId != bet.betId } + listOf(bet)
             else -> error("invalid command")
         }
         repository.save(status.copy(bets = newBets))
