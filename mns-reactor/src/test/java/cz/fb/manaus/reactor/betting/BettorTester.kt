@@ -29,8 +29,8 @@ class BettorTester(
         val snapshot = MarketSnapshot(marketPrices, market, bets, emptyMap())
         val collected = betEventSeeker.onMarketSnapshot(MarketSnapshotEvent(snapshot, mbAccount))
                 .filter { it.bet.requestedPrice.side == side }
-        assertEquals(expectedPlaceCount, collected.filter { it.isPlace }.size)
-        assertEquals(expectedUpdateCount, collected.filter { it.isUpdate }.size)
+        assertEquals(expectedPlaceCount, collected.filter { it.place }.size)
+        assertEquals(expectedUpdateCount, collected.filter { it.update }.size)
         return collected
     }
 
@@ -41,7 +41,7 @@ class BettorTester(
             vararg expectedPrices: Double
     ) {
         val result = check(side, marketPrices, listOf(), expectedCount, 0)
-        val toPlace = result.filter { it.isPlace }
+        val toPlace = result.filter { it.place }
         val expected = expectedPrices.toSet()
         if (expected.isNotEmpty()) {
             toPlace.map { it.bet.requestedPrice.price }.forEach { assertTrue("actual: $it") { it in expected } }

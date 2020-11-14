@@ -53,6 +53,7 @@ val betAction = BetAction(
         selectionId = SEL_HOME,
         betId = "1",
         betActionType = BetActionType.PLACE,
+        version = 1,
         runnerPrices = runnerPrices,
         price = Price(3.0, 3.0, Side.BACK),
         proposers = setOf("bestPrice")

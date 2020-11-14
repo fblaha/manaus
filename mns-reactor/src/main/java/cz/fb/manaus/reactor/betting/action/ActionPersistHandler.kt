@@ -11,10 +11,11 @@ import org.springframework.stereotype.Component
 class ActionPersistHandler(private val betActionRepository: BetActionRepository) : BetCommandHandler {
 
     override fun onBetCommand(command: BetCommand): BetCommand {
-        val (bet, action) = command
+        val (bet) = command
+        val action = bet.action
         return if (action != null) {
-            val actionId = betActionRepository.save(action).id
-            BetCommand(bet.copy(actionId = actionId), action)
+            val saved = betActionRepository.save(action)
+            BetCommand(bet.copy(action = saved))
         } else {
             command
         }

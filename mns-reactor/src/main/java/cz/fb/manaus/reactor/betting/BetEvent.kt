@@ -50,6 +50,7 @@ data class BetEvent(
                 marketId = market.id,
                 runnerPrices = marketPrices,
                 betActionType = actionType,
+                version = oldBet?.action?.let { it.version + 1 } ?: 1,
                 chargeGrowth = metrics.chargeGrowthForecast,
                 proposers = proposers
         )
@@ -68,17 +69,22 @@ data class BetEvent(
                     marketId = market.id,
                     placedDate = Instant.now(),
                     selectionId = runnerPrices.selectionId,
-                    requestedPrice = newPrice
+                    requestedPrice = newPrice,
+                    action = action
             )
-            BetCommand(bet, action)
+            BetCommand(bet)
         } else {
             val old = oldBet ?: error("no old bet")
-            BetCommand(old replacePrice newPrice.price, action)
+            val bet = old replacePrice newPrice.price
+            BetCommand(bet.copy(action = action))
         }
     }
 
     val cancel: BetCommand
-        get() = BetCommand(oldBet ?: error("no old bet"), null)
+        get() {
+            val bet = oldBet ?: error("no old bet")
+            return BetCommand(bet.copy(action = null))
+        }
 }
 
 

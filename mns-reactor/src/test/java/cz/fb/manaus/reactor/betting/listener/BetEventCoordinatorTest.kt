@@ -62,9 +62,10 @@ class BetEventCoordinatorTest : AbstractTestCase() {
     fun `happy path`() {
         val price = Price(3.0, 3.0, Side.BACK)
         val coordinator = createCoordinator(price, OK, OK)
-        val (bet, action) = coordinator.onBetEvent(HOME_EVENT_BACK)!!
+        val (bet) = coordinator.onBetEvent(HOME_EVENT_BACK)!!
+        val action = bet.action ?: error("no action")
         assertEquals(price, bet.requestedPrice)
-        assertEquals(price, action!!.price)
+        assertEquals(price, action.price)
         assertEquals(BetActionType.PLACE, action.betActionType)
     }
 

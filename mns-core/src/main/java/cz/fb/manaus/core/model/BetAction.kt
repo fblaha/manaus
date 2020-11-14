@@ -10,6 +10,7 @@ data class BetAction(
         @Id
         val id: String,
         val betActionType: BetActionType,
+        val version: Int,
         @Indexed
         val time: Instant,
         val price: Price,
@@ -18,9 +19,9 @@ data class BetAction(
         val selectionId: Long,
         @Indexed
         val betId: String? = null,
-        val runnerPrices: List<RunnerPrices>,
         val chargeGrowth: Double? = null,
-        val proposers: Set<String> = emptySet()
+        val proposers: Set<String> = emptySet(),
+        val runnerPrices: List<RunnerPrices>,
 )
 
 
