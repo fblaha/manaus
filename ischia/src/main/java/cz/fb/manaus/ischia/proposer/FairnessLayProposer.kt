@@ -17,10 +17,14 @@ class FairnessLayProposer(priceService: PriceService) : PriceProposer by Fairnes
         Side.LAY,
         priceService,
         chain(
-                fixedStrategy(Side.LAY, 0.08),
                 fixedStrategy(Side.LAY, 0.09, { it.version == 1 }),
+                fixedStrategy(Side.LAY, 0.085, { it.version in 2..3 }),
+                fixedStrategy(Side.LAY, 0.08, { it.version in 4..7 }),
+                fixedStrategy(Side.LAY, 0.075),
 
-                fixedStrategy(Side.BACK, 0.07),
-                fixedStrategy(Side.BACK, 0.08, { it.version == 1 })
+                fixedStrategy(Side.BACK, 0.08, { it.version == 1 }),
+                fixedStrategy(Side.BACK, 0.075, { it.version in 2..3 }),
+                fixedStrategy(Side.BACK, 0.07, { it.version in 4..7 }),
+                fixedStrategy(Side.BACK, 0.065),
         )
 )
