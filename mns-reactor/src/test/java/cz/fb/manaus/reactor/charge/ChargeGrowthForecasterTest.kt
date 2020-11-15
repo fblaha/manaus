@@ -29,7 +29,7 @@ class ChargeGrowthForecasterTest : AbstractTestCase() {
     @Test
     fun forecast() {
         val marketPrices = factory.newMarketPrices(0.05, listOf(0.5, 0.3, 0.2))
-        val currentBets = mutableListOf<Bet>()
+        val currentBets = mutableListOf<TrackedBet>()
         val snapshot = MarketSnapshot(marketPrices, market, currentBets)
         val fairness = calculator.getFairness(marketPrices)
         val commission = bfProvider.commission
@@ -38,9 +38,13 @@ class ChargeGrowthForecasterTest : AbstractTestCase() {
         assertTrue(forecast!! > 1)
         val betAmount = adviser.amount
         currentBets.add(
-                Bet(
-                        "1", "1", SEL_DRAW,
-                        Price(3.0, betAmount, Side.LAY), Instant.now(), betAmount
+                TrackedBet(
+                        Bet(
+                                "1", "1", SEL_DRAW,
+                                Price(3.0, betAmount, Side.LAY),
+                                Instant.now(),
+                                betAmount
+                        )
                 )
         )
         val drawBack = SideSelection(Side.BACK, SEL_DRAW)

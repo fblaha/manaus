@@ -46,7 +46,7 @@ class MarketSnapshotNotifier(
     }
 
     private fun validateCommands(commands: List<BetCommand>) {
-        commands.filter { !it.cancel }.forEach { check(it.bet.action != null) }
+        commands.filter { !it.cancel }.forEach { check(it.bet.local != null) }
     }
 }
 
@@ -57,8 +57,8 @@ fun CollectedBets.updateMetrics() {
     updateCounter(Side.LAY, "update", update)
 }
 
-private fun updateCounter(side: Side, type: String, bets: List<Bet>) {
-    val count = bets.count { it.requestedPrice.side == side }
+private fun updateCounter(side: Side, type: String, bets: List<TrackedBet>) {
+    val count = bets.count { it.remote.requestedPrice.side == side }
     Metrics.counter(
             "mns_bet_command_count",
             "type", type,

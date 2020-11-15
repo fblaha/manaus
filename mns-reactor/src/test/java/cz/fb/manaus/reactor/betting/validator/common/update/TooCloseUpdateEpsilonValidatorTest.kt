@@ -31,7 +31,7 @@ class TooCloseUpdateEpsilonValidatorTest : AbstractTestCase() {
     @Test
     fun `accept back`() {
         val oldPrice = Price(2.5, 5.0, Side.BACK)
-        val oldBet = betTemplate.copy(requestedPrice = oldPrice)
+        val oldBet = TrackedBet(betTemplate.copy(requestedPrice = oldPrice))
 
         val prices = pricesTestFactory.newMarketPrices(0.1, listOf(0.4, 0.3, 0.3))
         val event = factory.newBetEvent(Side.BACK, prices, oldBet)
@@ -48,7 +48,7 @@ class TooCloseUpdateEpsilonValidatorTest : AbstractTestCase() {
     fun `accept lay`() {
         val newOne = Price(3.65, 3.0, Side.LAY)
         val oldOne = Price(3.6, 3.0, Side.LAY)
-        val oldBet = betTemplate.copy(requestedPrice = oldOne)
+        val oldBet = TrackedBet(betTemplate.copy(requestedPrice = oldOne))
 
         val event = factory.newBetEvent(Side.LAY, runnerPrices, oldBet)
         assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = newOne.copy(price = 3.65))))

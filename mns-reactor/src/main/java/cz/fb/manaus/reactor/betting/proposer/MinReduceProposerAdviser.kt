@@ -26,8 +26,8 @@ class MinReduceProposerAdviser(
         return if (roundedPrice != null) {
             var amount = adviser.amount
             val counterBet = betEvent.counterBet
-            if (counterBet != null && counterBet.matchedAmount > 0) {
-                amount = counterBet.requestedPrice.amount
+            if (counterBet != null && counterBet.remote.isMatched) {
+                amount = counterBet.remote.requestedPrice.amount
             }
             val minAmount = betEvent.account.provider.minAmount
             val price = Price(roundedPrice, max(amount, minAmount), betEvent.side)

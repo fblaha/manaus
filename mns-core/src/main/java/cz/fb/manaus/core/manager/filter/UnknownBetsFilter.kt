@@ -10,8 +10,8 @@ class UnknownBetsFilter : MarketSnapshotEventFilter {
     private val log = Logger.getLogger(UnknownBetsFilter::class.simpleName)
 
     override fun accept(event: MarketSnapshotEvent): Boolean {
-        return event.snapshot.currentBets.filter { it.action == null }
-                .onEach { log.warning { "unknown bet '${it.betId}'" } }
+        return event.snapshot.currentBets.filter { it.local == null }
+                .onEach { log.warning { "unknown bet '${it.remote.betId}'" } }
                 .isEmpty()
     }
 }

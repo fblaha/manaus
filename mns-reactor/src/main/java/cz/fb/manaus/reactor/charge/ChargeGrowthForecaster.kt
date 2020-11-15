@@ -1,9 +1,9 @@
 package cz.fb.manaus.reactor.charge
 
-import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.MarketSnapshot
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.SideSelection
+import cz.fb.manaus.core.model.TrackedBet
 import cz.fb.manaus.reactor.betting.AmountAdviser
 import cz.fb.manaus.reactor.price.Fairness
 import cz.fb.manaus.reactor.price.ProbabilityCalculator
@@ -18,11 +18,12 @@ class ChargeGrowthForecaster(
         private val amountAdviser: AmountAdviser
 ) {
 
-    private fun convertBetData(currentBets: List<Bet>): Map<Long, List<Price>> {
-        return currentBets.groupBy({ it.selectionId }, {
-            val price = it.requestedPrice.price
-            val matchedAmount = it.matchedAmount
-            val side = it.requestedPrice.side
+    private fun convertBetData(currentBets: List<TrackedBet>): Map<Long, List<Price>> {
+        return currentBets.groupBy({ it.remote.selectionId }, {
+            val bet = it.remote
+            val price = bet.requestedPrice.price
+            val matchedAmount = bet.matchedAmount
+            val side = bet.requestedPrice.side
             Price(price, matchedAmount, side)
         })
     }

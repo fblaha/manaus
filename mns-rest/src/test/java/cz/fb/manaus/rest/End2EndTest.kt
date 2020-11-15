@@ -68,7 +68,7 @@ class End2EndTest : AbstractControllerTest() {
 
     private fun `When I acknowledge all bet actions`() {
         for ((i, bet) in collectedBets.place.withIndex()) {
-            val put = MockMvcRequestBuilders.put("/actions/{id}/ack", bet.action?.id)
+            val put = MockMvcRequestBuilders.put("/actions/{id}/ack", bet.local?.id)
                     .contentType(MediaType.APPLICATION_JSON).content(i.toString())
             mvc.perform(put).andExpect(MockMvcResultMatchers.status().isOk).andReturn()
         }
@@ -78,9 +78,9 @@ class End2EndTest : AbstractControllerTest() {
     private fun `When I post settled bets for all bet actions`() {
         for ((i, bet) in collectedBets.place.withIndex()) {
             val settledBet = homeSettledBet.copy(
-                    selectionId = bet.selectionId,
+                    selectionId = bet.remote.selectionId,
                     id = i.toString(),
-                    price = bet.requestedPrice,
+                    price = bet.remote.requestedPrice,
                     profitAndLoss = 10.0,
                     commission = 0.1
             )

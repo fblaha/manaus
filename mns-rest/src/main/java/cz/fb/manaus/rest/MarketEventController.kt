@@ -79,7 +79,7 @@ class MarketEventController(
         return if (collectedBets.empty) {
             ResponseEntity.noContent().build()
         } else {
-            ResponseEntity.ok(collectedBets)
+            ResponseEntity.ok(collectedBets.minify())
         }
     }
 

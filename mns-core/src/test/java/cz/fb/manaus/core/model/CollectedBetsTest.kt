@@ -16,8 +16,8 @@ class CollectedBetsTest {
         )
 
         val bets = CollectedBets(
-                place = listOf(original),
-                update = listOf(original),
+                place = listOf(TrackedBet(original)),
+                update = listOf(TrackedBet(original)),
                 cancel = listOf("100")
         )
 

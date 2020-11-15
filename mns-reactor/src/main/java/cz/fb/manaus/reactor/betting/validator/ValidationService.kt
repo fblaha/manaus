@@ -47,7 +47,7 @@ class ValidationService(
     }
 
     private fun validate(event: BetEvent, validator: Validator): ValidationResult {
-        val skip = validator.isDowngradeAccepting && isDowngrade(event.proposedPrice, event.oldBet)
+        val skip = validator.isDowngradeAccepting && isDowngrade(event.proposedPrice, event.oldBet?.remote)
         return if (skip) ValidationResult.OK else validator.validate(event)
     }
 

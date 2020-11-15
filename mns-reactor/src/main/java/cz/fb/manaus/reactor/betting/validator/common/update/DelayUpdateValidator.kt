@@ -14,7 +14,7 @@ class DelayUpdateValidator(
 ) : UpdateOnlyValidator {
 
     override fun validate(event: BetEvent): ValidationResult {
-        val betId = event.oldBet!!.betId!!
+        val betId = event.oldBet?.remote?.betId ?: error("no betId")
         val action = betActionRepository.findRecentBetAction(betId) ?: error("no such action")
         val untilNow = action.time.until(Instant.now(), ChronoUnit.MILLIS)
         return if (untilNow > pausePeriod.toMillis()) ValidationResult.OK else ValidationResult.NOP

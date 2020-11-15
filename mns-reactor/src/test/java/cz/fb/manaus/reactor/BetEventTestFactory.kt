@@ -24,11 +24,11 @@ class BetEventTestFactory(
                 requestedPrice = Price(5.0, 5.0, side),
                 placedDate = Instant.now()
         )
-        val event = newBetEvent(side, marketPrices, oldBet)
+        val event = newBetEvent(side, marketPrices, TrackedBet(oldBet))
         return event.copy(proposedPrice = oldBet.requestedPrice)
     }
 
-    fun newBetEvent(side: Side, marketPrices: List<RunnerPrices>, oldBet: Bet?): BetEvent {
+    fun newBetEvent(side: Side, marketPrices: List<RunnerPrices>, oldBet: TrackedBet?): BetEvent {
         val fairness = Fairness(0.9, 1.1)
         val snapshot = MarketSnapshot(
                 runnerPrices = marketPrices,
@@ -55,7 +55,9 @@ class BetEventTestFactory(
             val price = bestPrice.price
             val requestedPrice = Price(price, mbProvider.minAmount, side.opposite)
             val date = Instant.now().minus(2, ChronoUnit.HOURS)
-            val counterBet = Bet("1", marketId, selectionId, requestedPrice, date, mbProvider.minAmount)
+            val counterBet = TrackedBet(
+                    Bet("1", marketId, selectionId, requestedPrice, date, mbProvider.minAmount)
+            )
             listOf(counterBet)
         } else emptyList()
         return MarketSnapshot(marketPrices, market, bets)

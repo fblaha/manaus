@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 class ProposerMetricsUpdater : BetCommandHandler {
 
     override fun onBetCommand(command: BetCommand): BetCommand {
-        val action = command.bet.action
+        val action = command.bet.local
         if (action != null) {
             val side = action.price.side.name.toLowerCase()
             action.proposers.forEach {

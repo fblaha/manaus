@@ -3,15 +3,26 @@ package cz.fb.manaus.core.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.Instant
 
+
+data class TrackedBet(
+        val remote: Bet,
+        val local: BetAction? = null
+) {
+
+    infix fun replacePrice(newPrice: Double): TrackedBet {
+        val replaced = remote.requestedPrice.copy(price = newPrice)
+        return copy(remote = remote.copy(requestedPrice = replaced))
+    }
+
+}
+
 data class Bet(
         val betId: String? = null,
-        // TODO remove
         val marketId: String,
         val selectionId: Long,
         val requestedPrice: Price,
         val placedDate: Instant,
         val matchedAmount: Double = 0.0,
-        val action: BetAction? = null,
 ) {
 
     val isMatched: Boolean
@@ -22,16 +33,4 @@ data class Bet(
         @JsonIgnore
         get() = matchedAmount > requestedPrice.amount / 2
 
-    val status: BetStatus
-        @JsonIgnore
-        get() = BetStatus(
-                betId = betId,
-                selectionId = selectionId,
-                requestedPrice = requestedPrice,
-                matchedAmount = matchedAmount
-        )
-
-    infix fun replacePrice(newPrice: Double): Bet {
-        return copy(requestedPrice = Price(newPrice, requestedPrice.amount, requestedPrice.side))
-    }
 }

@@ -2,6 +2,7 @@ package cz.fb.manaus.reactor.betting.status
 
 import cz.fb.manaus.core.model.MarketSnapshotEvent
 import cz.fb.manaus.core.model.MarketStatus
+import cz.fb.manaus.core.model.status
 import cz.fb.manaus.core.repository.Repository
 import cz.fb.manaus.reactor.betting.BetCommand
 import cz.fb.manaus.reactor.betting.listener.MarketSnapshotListener
@@ -20,7 +21,7 @@ class MarketStatusUpdater(
         val snapshot = marketSnapshotEvent.snapshot
         val market = snapshot.market
         val bets = snapshot.currentBets
-                .map { it.status }
+                .map { it.remote.status }
                 .sortedBy { it.requestedPrice.side }
         val event = market.event
         val state = MarketStatus(

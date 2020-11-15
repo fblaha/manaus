@@ -6,21 +6,21 @@ data class SideSelection(val side: Side, val selectionId: Long) {
         get() = copy(side = side.opposite)
 }
 
-fun getMarketCoverage(bets: List<Bet>): Map<SideSelection, Bet> {
-    return bets.groupBy { SideSelection(it.requestedPrice.side, it.selectionId) }
-            .mapValues { it.value.maxByOrNull { bet -> bet.placedDate } ?: error("empty") }
+fun getMarketCoverage(bets: List<TrackedBet>): Map<SideSelection, TrackedBet> {
+    return bets.groupBy { SideSelection(it.remote.requestedPrice.side, it.remote.selectionId) }
+            .mapValues { it.value.maxByOrNull { bet -> bet.remote.placedDate } ?: error("empty") }
 }
 
 data class MarketSnapshot(
         val runnerPrices: List<RunnerPrices>,
         val market: Market,
-        val currentBets: List<Bet>,
+        val currentBets: List<TrackedBet>,
         val tradedVolume: Map<Long, TradedVolume>? = null
 ) {
-    val coverage: Map<SideSelection, Bet> = getMarketCoverage(currentBets)
+    val coverage: Map<SideSelection, TrackedBet> = getMarketCoverage(currentBets)
 }
 
-fun Map<SideSelection, Bet>.isActive(selectionId: Long): Boolean =
+fun Map<SideSelection, TrackedBet>.isActive(selectionId: Long): Boolean =
         Side.values().any { SideSelection(it, selectionId) in this }
 
 

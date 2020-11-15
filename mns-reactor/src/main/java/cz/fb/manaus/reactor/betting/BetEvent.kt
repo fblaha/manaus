@@ -9,7 +9,7 @@ data class BetEvent(
         val sideSelection: SideSelection,
         val market: Market,
         val marketPrices: List<RunnerPrices>,
-        val coverage: Map<SideSelection, Bet>,
+        val coverage: Map<SideSelection, TrackedBet>,
         val account: Account,
         val metrics: BetMetrics,
         val proposedPrice: Price? = null
@@ -20,22 +20,22 @@ data class BetEvent(
     val side: Side = sideSelection.side
     val runner: Runner = market.getRunner(sideSelection.selectionId)
     val runnerPrices: RunnerPrices = marketPrices.first { it.selectionId == sideSelection.selectionId }
-    val oldBet: Bet? = coverage[sideSelection]
-    val counterBet: Bet? = coverage[sideSelection.oppositeSide]
-    val isOldMatched: Boolean = oldBet?.isMatched == true
+    val oldBet: TrackedBet? = coverage[sideSelection]
+    val counterBet: TrackedBet? = coverage[sideSelection.oppositeSide]
+    val isOldMatched: Boolean = oldBet?.remote?.isMatched == true
     val actionType = if (oldBet == null) BetActionType.PLACE else BetActionType.UPDATE
-    val cancelable = oldBet != null && !oldBet.isMatched
+    val cancelable = oldBet != null && !oldBet.remote.isMatched
 
     init {
         if (proposedPrice != null) {
             val newSide = proposedPrice.side
             check(sideSelection.side == newSide)
             if (oldBet != null) {
-                val oldSide = oldBet.requestedPrice.side
+                val oldSide = oldBet.remote.requestedPrice.side
                 check(oldSide == newSide)
             }
             if (counterBet != null) {
-                val otherSide = counterBet.requestedPrice.side
+                val otherSide = counterBet.remote.requestedPrice.side
                 check(otherSide == newSide.opposite)
             }
         }
@@ -50,7 +50,7 @@ data class BetEvent(
                 marketId = market.id,
                 runnerPrices = marketPrices,
                 betActionType = actionType,
-                version = oldBet?.action?.let { it.version + 1 } ?: 1,
+                version = oldBet?.local?.let { it.version + 1 } ?: 1,
                 chargeGrowth = metrics.chargeGrowthForecast,
                 proposers = proposers
         )
@@ -65,25 +65,27 @@ data class BetEvent(
 
         log.info { "bet $actionType action '$action'" }
         return if (actionType == BetActionType.PLACE) {
-            val bet = Bet(
-                    marketId = market.id,
-                    placedDate = Instant.now(),
-                    selectionId = runnerPrices.selectionId,
-                    requestedPrice = newPrice,
-                    action = action
+            val bet = TrackedBet(
+                    remote = Bet(
+                            marketId = market.id,
+                            placedDate = Instant.now(),
+                            selectionId = runnerPrices.selectionId,
+                            requestedPrice = newPrice,
+                    ),
+                    local = action
             )
             BetCommand(bet)
         } else {
             val old = oldBet ?: error("no old bet")
             val bet = old replacePrice newPrice.price
-            BetCommand(bet.copy(action = action))
+            BetCommand(bet.copy(local = action))
         }
     }
 
     val cancel: BetCommand
         get() {
             val bet = oldBet ?: error("no old bet")
-            return BetCommand(bet.copy(action = null))
+            return BetCommand(bet.copy(local = null))
         }
 }
 
