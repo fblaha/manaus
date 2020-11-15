@@ -1,6 +1,5 @@
 package cz.fb.manaus.ischia.proposer
 
-import cz.fb.manaus.core.model.BetActionType
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.ischia.BackUniverse
 import cz.fb.manaus.ischia.LayUniverse
@@ -19,9 +18,9 @@ class FairnessLayProposer(priceService: PriceService) : PriceProposer by Fairnes
         priceService,
         chain(
                 fixedStrategy(Side.LAY, 0.08),
-                fixedStrategy(Side.LAY, 0.09, { it.actionType == BetActionType.PLACE }),
+                fixedStrategy(Side.LAY, 0.09, { it.version == 1 }),
 
                 fixedStrategy(Side.BACK, 0.07),
-                fixedStrategy(Side.BACK, 0.08, { it.actionType == BetActionType.PLACE })
+                fixedStrategy(Side.BACK, 0.08, { it.version == 1 })
         )
 )

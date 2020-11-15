@@ -25,6 +25,7 @@ data class BetEvent(
     val isOldMatched: Boolean = oldBet?.remote?.isMatched == true
     val actionType = if (oldBet == null) BetActionType.PLACE else BetActionType.UPDATE
     val cancelable = oldBet != null && !oldBet.remote.isMatched
+    val version = oldBet?.local?.let { it.version + 1 } ?: 1
 
     init {
         if (proposedPrice != null) {
@@ -50,7 +51,7 @@ data class BetEvent(
                 marketId = market.id,
                 runnerPrices = marketPrices,
                 betActionType = actionType,
-                version = oldBet?.local?.let { it.version + 1 } ?: 1,
+                version = version,
                 chargeGrowth = metrics.chargeGrowthForecast,
                 proposers = proposers
         )
