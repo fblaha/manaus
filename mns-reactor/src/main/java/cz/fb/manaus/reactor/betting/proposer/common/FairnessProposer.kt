@@ -3,14 +3,13 @@ package cz.fb.manaus.reactor.betting.proposer.common
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
-import cz.fb.manaus.reactor.betting.strategy.Strategy
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.price.PriceService
 
 class FairnessProposer(
         private val side: Side,
         private val priceService: PriceService,
-        private val strategy: Strategy
+        private val strategy: (BetEvent) -> Double?
 ) : PriceProposer {
 
     override fun validate(event: BetEvent): ValidationResult {

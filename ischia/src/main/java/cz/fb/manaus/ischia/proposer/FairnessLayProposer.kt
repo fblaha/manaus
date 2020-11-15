@@ -5,8 +5,6 @@ import cz.fb.manaus.ischia.BackUniverse
 import cz.fb.manaus.ischia.LayUniverse
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.proposer.common.FairnessProposer
-import cz.fb.manaus.reactor.betting.strategy.chain
-import cz.fb.manaus.reactor.betting.strategy.fixedStrategy
 import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.stereotype.Component
 
@@ -16,15 +14,20 @@ import org.springframework.stereotype.Component
 class FairnessLayProposer(priceService: PriceService) : PriceProposer by FairnessProposer(
         Side.LAY,
         priceService,
-        chain(
-                fixedStrategy(Side.LAY, 0.09, { it.version == 1 }),
-                fixedStrategy(Side.LAY, 0.085, { it.version in 2..3 }),
-                fixedStrategy(Side.LAY, 0.08, { it.version in 4..7 }),
-                fixedStrategy(Side.LAY, 0.075),
-
-                fixedStrategy(Side.BACK, 0.08, { it.version == 1 }),
-                fixedStrategy(Side.BACK, 0.075, { it.version in 2..3 }),
-                fixedStrategy(Side.BACK, 0.07, { it.version in 4..7 }),
-                fixedStrategy(Side.BACK, 0.065),
-        )
+        {
+                when (it.side) {
+                        Side.BACK -> when (it.version) {
+                                1 -> 0.08
+                                in 2..3 -> 0.075
+                                in 4..7 -> 0.07
+                                else -> 0.065
+                        }
+                        Side.LAY -> when (it.version) {
+                                1 -> 0.09
+                                in 2..3 -> 0.085
+                                in 4..7 -> 0.08
+                                else -> 0.075
+                        }
+                }
+        }
 )
