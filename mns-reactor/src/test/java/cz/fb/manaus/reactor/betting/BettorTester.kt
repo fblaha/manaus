@@ -1,10 +1,7 @@
 package cz.fb.manaus.reactor.betting
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.repository.BetActionRepository
 import cz.fb.manaus.reactor.betting.listener.BetEventSeeker
-import cz.fb.manaus.spring.ManausProfiles
-import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -12,21 +9,19 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @Component
-@Profile(ManausProfiles.DB)
 class BettorTester(
         private val betEventSeeker: BetEventSeeker,
-        private val betActionRepository: BetActionRepository
 ) {
 
     private fun check(
             side: Side,
             marketPrices: List<RunnerPrices>,
-            bets: List<Bet>,
+            bets: List<TrackedBet>,
             expectedPlaceCount: Int,
             expectedUpdateCount: Int
     ): List<BetCommand> {
 
-        val snapshot = MarketSnapshot(marketPrices, market, bets.map { TrackedBet(it) }, emptyMap())
+        val snapshot = MarketSnapshot(marketPrices, market, bets, emptyMap())
         val collected = betEventSeeker.onMarketSnapshot(MarketSnapshotEvent(snapshot, mbAccount))
                 .filter { it.bet.remote.requestedPrice.side == side }
         assertEquals(expectedPlaceCount, collected.filter { it.place }.size)
@@ -61,17 +56,17 @@ class BettorTester(
         val unmatchedDraw = Bet("2", market.id, SEL_DRAW, oldOne, minus10h)
         val unmatchedAway = Bet("3", market.id, SEL_AWAY, oldOne, minus10h)
         val bets = listOf(unmatchedHome, unmatchedDraw, unmatchedAway)
-        bets.forEach {
-            betActionRepository.save(
-                    betAction.copy(
-                            selectionId = it.selectionId,
-                            price = oldOne,
-                            betId = it.betId
+                .map {
+                    TrackedBet(
+                            remote = it,
+                            local = betAction.copy(
+                                    selectionId = it.selectionId,
+                                    price = oldOne,
+                                    betId = it.betId
+                            )
                     )
-            )
-        }
+                }
         check(side, marketPrices, bets, expectedPlaceCount, expectedUpdateCount)
-        betActionRepository.deleteByMarket(market.id)
     }
 
 }

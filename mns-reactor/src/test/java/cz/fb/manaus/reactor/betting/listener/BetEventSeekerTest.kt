@@ -22,9 +22,7 @@ class MockBetEventListener : BetEventListener {
             return BetCommand(
                     TrackedBet(
                             remote = betTemplate,
-                            local = priceEvent.betAction(
-                                    emptySet(),
-                            )
+                            local = priceEvent.action(emptySet()),
                     )
             )
         }

@@ -14,20 +14,21 @@ import org.springframework.stereotype.Component
 class FairnessLayProposer(priceService: PriceService) : PriceProposer by FairnessProposer(
         Side.LAY,
         priceService,
-        {
-                when (it.side) {
-                        Side.BACK -> when (it.version) {
-                                1 -> 0.08
-                                in 2..3 -> 0.075
-                                in 4..7 -> 0.07
-                                else -> 0.065
-                        }
-                        Side.LAY -> when (it.version) {
-                                1 -> 0.09
-                                in 2..3 -> 0.085
-                                in 4..7 -> 0.08
-                                else -> 0.075
-                        }
-                }
-        }
+        { layStrategy(it.side, it.version) }
 )
+
+
+fun layStrategy(side: Side, version: Int): Double? = when (side) {
+    Side.BACK -> when (version) {
+        1 -> 0.08
+        in 2..3 -> 0.075
+        in 4..7 -> 0.07
+        else -> 0.065
+    }
+    Side.LAY -> when (version) {
+        1 -> 0.09
+        in 2..3 -> 0.085
+        in 4..7 -> 0.08
+        else -> 0.075
+    }
+}

@@ -14,20 +14,20 @@ import org.springframework.stereotype.Component
 class FairnessBackProposer(priceService: PriceService) : PriceProposer by FairnessProposer(
         Side.BACK,
         priceService,
-        {
-            when (it.side) {
-                Side.BACK -> when (it.version) {
-                    1 -> 0.08
-                    in 2..3 -> 0.075
-                    in 4..7 -> 0.07
-                    else -> 0.065
-                }
-                Side.LAY -> when (it.version) {
-                    1 -> 0.087
-                    in 2..3 -> 0.082
-                    in 4..7 -> 0.077
-                    else -> 0.072
-                }
-            }
-        }
+        { backStrategy(it.side, it.version) }
 )
+
+private fun backStrategy(side: Side, version: Int) = when (side) {
+    Side.BACK -> when (version) {
+        1 -> 0.08
+        in 2..3 -> 0.075
+        in 4..7 -> 0.07
+        else -> 0.065
+    }
+    Side.LAY -> when (version) {
+        1 -> 0.087
+        in 2..3 -> 0.082
+        in 4..7 -> 0.077
+        else -> 0.072
+    }
+}

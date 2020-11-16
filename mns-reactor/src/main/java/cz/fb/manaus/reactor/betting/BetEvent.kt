@@ -23,11 +23,11 @@ data class BetEvent(
     val oldBet: TrackedBet? = coverage[sideSelection]
     val counterBet: TrackedBet? = coverage[sideSelection.oppositeSide]
     val isOldMatched: Boolean = oldBet?.remote?.isMatched == true
-    val actionType = if (oldBet == null) BetActionType.PLACE else BetActionType.UPDATE
     val cancelable = oldBet != null && !oldBet.remote.isMatched
     val version = oldBet?.local?.let { it.version + 1 } ?: 1
 
     init {
+        check(version > 0)
         if (proposedPrice != null) {
             val newSide = proposedPrice.side
             check(sideSelection.side == newSide)
@@ -42,30 +42,28 @@ data class BetEvent(
         }
     }
 
-    fun betAction(proposers: Set<String>): BetAction {
-        return BetAction(
-                selectionId = sideSelection.selectionId,
-                price = proposedPrice!!,
-                id = "",
-                time = Instant.now(),
-                marketId = market.id,
-                runnerPrices = marketPrices,
-                betActionType = actionType,
-                version = version,
-                chargeGrowth = metrics.chargeGrowthForecast,
-                proposers = proposers
-        )
-    }
+    fun action(proposers: Set<String>): BetAction = BetAction(
+            selectionId = sideSelection.selectionId,
+            price = proposedPrice ?: error("no price"),
+            id = "",
+            time = Instant.now(),
+            marketId = market.id,
+            runnerPrices = marketPrices,
+            betActionType = if (version == 1) BetActionType.PLACE else BetActionType.UPDATE,
+            version = version,
+            chargeGrowth = metrics.chargeGrowthForecast,
+            proposers = proposers
+    )
 
     // TODO not used
-    val simulatedBet: RealizedBet get() = simulate(betAction(emptySet()), market)
+    val simulatedBet: RealizedBet get() = simulate(action(emptySet()), market)
 
     fun placeOrUpdate(proposers: Set<String>): BetCommand {
-        val action = betAction(proposers)
+        val action = action(proposers)
         val newPrice = proposedPrice!!
 
-        log.info { "bet $actionType action '$action'" }
-        return if (actionType == BetActionType.PLACE) {
+        log.info { "bet version $version action '$action'" }
+        return if (version == 1) {
             val bet = TrackedBet(
                     remote = Bet(
                             marketId = market.id,

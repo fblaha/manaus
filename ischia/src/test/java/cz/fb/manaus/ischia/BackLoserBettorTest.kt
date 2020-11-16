@@ -29,7 +29,6 @@ class BackLoserBettorTest : AbstractIntegrationTestCase() {
         bettorTester.checkPlace(Side.BACK, marketPrices, 3, 3.174)
     }
 
-
     @Test
     fun `update bet`() {
         val market = factory.newMarketPrices(2.8, 3.4, 3.0)
