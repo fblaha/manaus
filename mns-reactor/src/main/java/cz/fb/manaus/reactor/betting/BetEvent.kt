@@ -60,7 +60,7 @@ data class BetEvent(
 
     fun placeOrUpdate(proposers: Set<String>): BetCommand {
         val action = action(proposers)
-        val newPrice = proposedPrice!!
+        val newPrice = proposedPrice ?: error("no price proposed")
 
         log.info { "bet version $version action '$action'" }
         return if (version == 1) {
