@@ -63,7 +63,7 @@ class BetEventCoordinatorTest : AbstractTestCase() {
         val price = Price(3.0, 3.0, Side.BACK)
         val coordinator = createCoordinator(price, OK, OK)
         val (bet) = coordinator.onBetEvent(HOME_EVENT_BACK)!!
-        val action = bet.local ?: error("no action")
+        val action = bet.local
         assertEquals(price, bet.remote.requestedPrice)
         assertEquals(price, action.price)
         assertEquals(BetActionType.PLACE, action.betActionType)

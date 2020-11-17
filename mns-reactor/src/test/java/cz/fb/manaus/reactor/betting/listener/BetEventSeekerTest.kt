@@ -49,7 +49,7 @@ class BetEventSeekerTest : AbstractTestCase() {
         )
         val bets = betEventSeeker.onMarketSnapshot(MarketSnapshotEvent(snapshot, mbAccount))
         assertTrue { bets.isNotEmpty() }
-        assertTrue { bets.all { it.action?.price == Price(3.0, 3.0, Side.BACK) } }
+        assertTrue { bets.all { it.action.price == Price(3.0, 3.0, Side.BACK) } }
     }
 
 }

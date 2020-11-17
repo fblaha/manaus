@@ -16,8 +16,8 @@ class CollectedBetsTest {
         )
 
         val bets = CollectedBets(
-                place = listOf(TrackedBet(original)),
-                update = listOf(TrackedBet(original)),
+                place = listOf(original.asTracked),
+                update = listOf(original.asTracked),
                 cancel = listOf("100")
         )
 
@@ -28,3 +28,14 @@ class CollectedBetsTest {
         assertTrue(tree.has("cancel"))
     }
 }
+
+
+val Bet.asTracked: TrackedBet
+    get() = TrackedBet(
+            this,
+            betAction.copy(
+                    marketId = marketId,
+                    selectionId = selectionId,
+                    price = requestedPrice
+            ),
+    )

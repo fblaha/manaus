@@ -84,7 +84,7 @@ data class BetEvent(
     val cancel: BetCommand
         get() {
             val bet = oldBet ?: error("no old bet")
-            return BetCommand(bet.copy(local = null))
+            return BetCommand(bet = bet, cancel = true)
         }
 }
 

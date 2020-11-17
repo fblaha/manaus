@@ -19,7 +19,7 @@ data class CollectedBets(
 }
 
 fun minify(bet: TrackedBet): TrackedBet {
-    val action = bet.local ?: error("no action")
+    val action = bet.local
     val priceLess = action.copy(runnerPrices = emptyList())
     return bet.copy(local = priceLess)
 }

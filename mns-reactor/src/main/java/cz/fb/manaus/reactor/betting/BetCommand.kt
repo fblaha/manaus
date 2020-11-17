@@ -4,11 +4,10 @@ import cz.fb.manaus.core.model.BetActionType
 import cz.fb.manaus.core.model.CollectedBets
 import cz.fb.manaus.core.model.TrackedBet
 
-data class BetCommand(val bet: TrackedBet) {
+data class BetCommand(val bet: TrackedBet, val cancel: Boolean = false) {
     val action = bet.local
-    val cancel: Boolean = action == null
-    val place: Boolean = action != null && action.betActionType == BetActionType.PLACE
-    val update: Boolean = action != null && action.betActionType == BetActionType.UPDATE
+    val place: Boolean = !cancel && action.betActionType == BetActionType.PLACE
+    val update: Boolean = !cancel && action.betActionType == BetActionType.UPDATE
 }
 
 fun toCollectedBets(commands: List<BetCommand>): CollectedBets {

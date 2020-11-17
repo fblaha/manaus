@@ -52,7 +52,7 @@ class MarketEventController(
             val market = marketRepository.read(id) ?: error("no such market $id")
             val bets = marketEvent.bets
             betMetricUpdater.update(marketEvent.scanTime, bets)
-            val currentBets = bets.distinctBy { it.betId }.map { actionLoader.load(it) }
+            val currentBets = bets.distinctBy { it.betId }.mapNotNull { actionLoader.load(it) }
             val snapshot = MarketSnapshot(
                     runnerPrices = marketPrices,
                     market = market,

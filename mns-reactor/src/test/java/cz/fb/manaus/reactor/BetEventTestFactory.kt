@@ -24,7 +24,7 @@ class BetEventTestFactory(
                 requestedPrice = Price(5.0, 5.0, side),
                 placedDate = Instant.now()
         )
-        val event = newBetEvent(side, marketPrices, TrackedBet(oldBet))
+        val event = newBetEvent(side, marketPrices, oldBet.asTracked)
         return event.copy(proposedPrice = oldBet.requestedPrice)
     }
 
@@ -55,9 +55,15 @@ class BetEventTestFactory(
             val price = bestPrice.price
             val requestedPrice = Price(price, mbProvider.minAmount, side.opposite)
             val date = Instant.now().minus(2, ChronoUnit.HOURS)
-            val counterBet = TrackedBet(
-                    Bet("1", marketId, selectionId, requestedPrice, date, mbProvider.minAmount)
-            )
+            val counterBet = Bet(
+                    betId = "1",
+                    marketId = marketId,
+                    selectionId = selectionId,
+                    requestedPrice = requestedPrice,
+                    placedDate = date,
+                    matchedAmount = mbProvider.minAmount
+            ).asTracked
+
             listOf(counterBet)
         } else emptyList()
         return MarketSnapshot(marketPrices, market, bets)

@@ -41,13 +41,9 @@ class MarketSnapshotNotifier(
         for (handler in handlers) {
             result = result.map { handler.onBetCommand(it) }
         }
-        validateCommands(result)
         return result
     }
 
-    private fun validateCommands(commands: List<BetCommand>) {
-        commands.filter { !it.cancel }.forEach { check(it.bet.local != null) }
-    }
 }
 
 fun CollectedBets.updateMetrics() {

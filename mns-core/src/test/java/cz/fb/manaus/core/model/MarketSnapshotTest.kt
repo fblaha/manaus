@@ -20,23 +20,23 @@ class MarketSnapshotTest {
                 placedDate = Instant.now().minus(2, ChronoUnit.HOURS),
                 matchedAmount = 1.0
         )
-        val successor = TrackedBet(predecessor.copy(placedDate = Instant.now()))
-        val coverage = getMarketCoverage(listOf(successor, TrackedBet(predecessor)))
+        val successor = predecessor.copy(placedDate = Instant.now())
+        val coverage = getMarketCoverage(listOf(successor.asTracked, predecessor.asTracked))
         assertEquals(1, coverage.size)
-        assertEquals(successor, coverage[SideSelection(side, selectionId)])
+        assertEquals(successor.asTracked, coverage[SideSelection(side, selectionId)])
     }
 
     @Test
     fun `is active`() {
-        val bet = TrackedBet(
+        val bet =
                 Bet(
                         marketId = "1",
                         selectionId = 1L,
                         requestedPrice = Price(2.0, 2.0, Side.LAY),
                         placedDate = Instant.now().minus(2, ChronoUnit.HOURS),
                         matchedAmount = 1.0
-                )
-        )
+                ).asTracked
+
         val coverage = getMarketCoverage(listOf(bet))
         assertTrue { coverage.isActive(bet.remote.selectionId) }
         assertFalse { coverage.isActive(bet.remote.selectionId + 100) }

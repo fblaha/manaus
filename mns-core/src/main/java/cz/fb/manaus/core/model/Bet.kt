@@ -6,7 +6,7 @@ import java.time.Instant
 
 data class TrackedBet(
         val remote: Bet,
-        val local: BetAction? = null
+        val local: BetAction,
 ) {
 
     infix fun replacePrice(newPrice: Double): TrackedBet {

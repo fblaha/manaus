@@ -51,8 +51,8 @@ class BetEventTest : AbstractTestCase() {
         val price = Price(3.0, 3.0, Side.BACK)
         val homeEvent = HOME_EVENT_BACK.copy(proposedPrice = price)
         val command = homeEvent.placeOrUpdate(emptySet())
-        assertEquals(price, command.action?.price)
-        assertEquals(BetActionType.PLACE, command.action?.betActionType)
+        assertEquals(price, command.action.price)
+        assertEquals(BetActionType.PLACE, command.action.betActionType)
         assertEquals(price, command.bet.remote.requestedPrice)
     }
 
