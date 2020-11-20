@@ -20,15 +20,15 @@ class FairnessLayProposer(priceService: PriceService) : PriceProposer by Fairnes
 
 fun layStrategy(side: Side, version: Int): Double? = when (side) {
     Side.BACK -> when (version) {
-        1 -> 0.08
-        in 2..3 -> 0.075
-        in 4..7 -> 0.07
-        else -> 0.065
+        1 -> 0.075
+        in 2..3 -> 0.07
+        in 4..7 -> 0.065
+        else -> 0.06
     }
     Side.LAY -> when (version) {
-        1 -> 0.09
-        in 2..3 -> 0.085
-        in 4..7 -> 0.08
-        else -> 0.075
+        1 -> 0.085
+        in 2..3 -> 0.08
+        in 4..7 -> 0.075
+        else -> 0.07
     }
 }
