@@ -19,10 +19,10 @@ class FairnessBackProposer(priceService: PriceService) : PriceProposer by Fairne
 
 private fun backStrategy(side: Side, version: Int) = when (side) {
     Side.BACK -> when (version) {
-        1 -> 0.08
-        in 2..3 -> 0.075
-        in 4..7 -> 0.07
-        else -> 0.065
+        1 -> 0.075
+        in 2..3 -> 0.07
+        in 4..7 -> 0.065
+        else -> 0.06
     }
     Side.LAY -> when (version) {
         1 -> 0.087
