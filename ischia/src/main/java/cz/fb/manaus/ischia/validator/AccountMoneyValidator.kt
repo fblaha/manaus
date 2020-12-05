@@ -12,4 +12,4 @@ import org.springframework.stereotype.Component
 @LayUniverse
 @Component
 @Profile(PRODUCTION)
-object AccountMoneyValidator : Validator by AccountMoneyValidator(25.0)
+object AccountMoneyValidator : Validator by AccountMoneyValidator(50.0)
