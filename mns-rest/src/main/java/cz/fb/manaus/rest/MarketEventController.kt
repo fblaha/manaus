@@ -59,7 +59,8 @@ class MarketEventController(
                     currentBets = currentBets,
                     tradedVolume = marketEvent.tradedVolume
             )
-            val collectedBets = notifier.notify(MarketSnapshotEvent(snapshot, account))
+            val event = MarketSnapshotEvent(snapshot, account)
+            val collectedBets = notifier.notify(event)
             return toResponse(collectedBets)
         } catch (e: Exception) {
             Metrics.counter("mns_exception_event_count").increment()
