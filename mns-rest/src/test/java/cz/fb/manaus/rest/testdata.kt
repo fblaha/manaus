@@ -13,13 +13,12 @@ import cz.fb.manaus.reactor.betting.validator.ValidationCoordinator
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.ValidationService
 import cz.fb.manaus.reactor.betting.validator.Validator
-import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Component
 
 @Component
-class BestPriceProposer(roundingService: RoundingService) : PriceProposer by BestPriceProposer(1, roundingService)
+class BestPriceProposer() : PriceProposer by BestPriceProposer(0.01)
 
 @Component
 object AcceptAllValidator : Validator {
@@ -31,14 +30,13 @@ object AcceptAllValidator : Validator {
 @Configuration
 open class TestLocalConfiguration(
         private val adviser: AmountAdviser,
-        private val proposalService: PriceProposalService,
-        private val roundingService: RoundingService
+        private val proposalService: PriceProposalService
 
 ) {
 
     @Bean
     open fun priceAdviser(proposers: List<PriceProposer>): PriceAdviser {
-        return MinReduceProposerAdviser(proposers, adviser, proposalService, roundingService)
+        return MinReduceProposerAdviser(proposers, adviser, proposalService)
     }
 
     @Bean

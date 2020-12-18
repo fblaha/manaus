@@ -96,7 +96,6 @@ val accountMoney = AccountMoney(2000.0, 1000.0)
 val BF_TAGS: Set<ProviderTag> = setOf(
         ProviderTag.VendorBetfair,
         ProviderTag.MatchedAmount,
-        ProviderTag.PriceShiftFixedStep,
         ProviderTag.TradedVolume,
         ProviderTag.LastMatchedPrice
 )
@@ -104,7 +103,6 @@ val BF_TAGS: Set<ProviderTag> = setOf(
 val MB_TAGS: Set<ProviderTag> = setOf(
         ProviderTag.VendorMatchbook,
         ProviderTag.MatchedAmount,
-        ProviderTag.PriceShiftContinuous
 )
 
 val bfProvider = ExchangeProvider(

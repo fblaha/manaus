@@ -8,7 +8,6 @@ import cz.fb.manaus.reactor.betting.HOME_EVENT_BACK
 import cz.fb.manaus.reactor.betting.HOME_EVENT_LAY
 import cz.fb.manaus.reactor.betting.listener.MockPriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
-import cz.fb.manaus.reactor.rounding.RoundingService
 import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,9 +19,6 @@ class MinReduceProposerAdviserTest : AbstractTestCase() {
     private lateinit var adviser: MinReduceProposerAdviser
 
     @Autowired
-    private lateinit var roundingService: RoundingService
-
-    @Autowired
     private lateinit var proposalService: PriceProposalService
 
     @Before
@@ -31,7 +27,7 @@ class MinReduceProposerAdviserTest : AbstractTestCase() {
         val proposer2 = MockPriceProposer(ValidationResult.OK, 3.5)
         val amountAdviser = FixedAmountAdviser(3.0)
         val proposers = listOf(proposer1, proposer2)
-        adviser = MinReduceProposerAdviser(proposers, amountAdviser, proposalService, roundingService)
+        adviser = MinReduceProposerAdviser(proposers, amountAdviser, proposalService)
     }
 
     @Test

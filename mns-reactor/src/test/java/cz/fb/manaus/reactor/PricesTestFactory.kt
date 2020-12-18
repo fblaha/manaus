@@ -2,15 +2,11 @@ package cz.fb.manaus.reactor
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.price.PriceService
-import cz.fb.manaus.reactor.rounding.RoundingService
-import cz.fb.manaus.reactor.rounding.decrement
-import cz.fb.manaus.reactor.rounding.increment
 import org.springframework.stereotype.Component
 
 
 @Component
 class PricesTestFactory(
-        private val roundingService: RoundingService,
         private val priceService: PriceService
 ) {
 
@@ -27,10 +23,10 @@ class PricesTestFactory(
                 prices = listOf(
                         backBestPrice,
                         layBestPrice,
-                        roundingService.decrement(backBestPrice, 1, bfProvider.minPrice, bfProvider::matches)!!,
-                        roundingService.decrement(backBestPrice, 2, bfProvider.minPrice, bfProvider::matches)!!,
-                        roundingService.increment(layBestPrice, 1, bfProvider::matches)!!,
-                        roundingService.increment(layBestPrice, 2, bfProvider::matches)!!
+                        backBestPrice.copy(price = backBestPrice.price * 0.98),
+                        backBestPrice.copy(price = backBestPrice.price * 0.95),
+                        layBestPrice.copy(price = layBestPrice.price * 1.03),
+                        layBestPrice.copy(price = layBestPrice.price * 1.07),
                 ),
                 lastMatchedPrice = lastMatchedPrice,
                 matchedAmount = 10.0
@@ -49,12 +45,12 @@ class PricesTestFactory(
         for ((i, p) in probabilities.withIndex()) {
             val fairPrice = 1 / p
             val backPrice = priceService.downgrade(fairPrice, downgradeFraction, Side.LAY)
-            val backRounded = roundingService.roundBet(backPrice, bfProvider::matches)
+            val backRounded = Price.round(backPrice)
             val layPrice = priceService.downgrade(fairPrice, downgradeFraction, Side.BACK)
-            val layRounded = roundingService.roundBet(layPrice, bfProvider::matches)
+            val layRounded = Price.round(layPrice)
             val selectionId = SEL_HOME * (i + 1)
-            val lastMatched = roundingService.roundBet(fairPrice, bfProvider::matches)
-            runnerPrices.add(newRunnerPrices(selectionId, backRounded!!, layRounded!!, lastMatched!!))
+            val lastMatched = Price.round(fairPrice)
+            runnerPrices.add(newRunnerPrices(selectionId, backRounded, layRounded, lastMatched))
         }
         return runnerPrices
     }

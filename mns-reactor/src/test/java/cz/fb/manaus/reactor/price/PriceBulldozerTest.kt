@@ -3,7 +3,6 @@ package cz.fb.manaus.reactor.price
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.PriceComparator
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.model.bfProvider
 import cz.fb.manaus.core.test.AbstractTestCase
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -64,15 +63,14 @@ class PriceBulldozerTest : AbstractTestCase() {
     @Test(expected = IllegalStateException::class)
     fun `bulldozed prices are in wrong order - back`() {
         val badOrder = realSample.sortedWith(PriceComparator).reversed()
-        bulldozer.bulldoze(10.0, badOrder, bfProvider::matches)
+        bulldozer.bulldoze(10.0, badOrder)
     }
 
     @Test(expected = IllegalStateException::class)
     fun `bulldozed prices are in wrong order - lay`() {
         bulldozer.bulldoze(
                 10.0,
-                listOf(Price(5.0, 2.0, Side.LAY), Price(4.0, 2.0, Side.LAY)),
-                bfProvider::matches
+                listOf(Price(5.0, 2.0, Side.LAY), Price(4.0, 2.0, Side.LAY))
         )
     }
 
@@ -83,7 +81,7 @@ class PriceBulldozerTest : AbstractTestCase() {
             expectedPrice: Double,
             expectedAmount: Double
     ) {
-        val bulldozed = bulldozer.bulldoze(threshold, prices, bfProvider::matches)
+        val bulldozed = bulldozer.bulldoze(threshold, prices)
         assertEquals(expectedCount, bulldozed.size)
         assertEquals(expectedPrice, bulldozed[0].price, 0.0001)
         assertEquals(expectedAmount, bulldozed[0].amount, 0.0001)

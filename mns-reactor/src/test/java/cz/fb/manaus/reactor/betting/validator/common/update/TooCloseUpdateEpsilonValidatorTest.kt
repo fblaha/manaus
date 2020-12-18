@@ -6,8 +6,6 @@ import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.PricesTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
-import cz.fb.manaus.reactor.rounding.RoundingService
-import cz.fb.manaus.reactor.rounding.decrement
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -17,9 +15,6 @@ class TooCloseUpdateEpsilonValidatorTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var validator: TestValidator
-
-    @Autowired
-    private lateinit var roundingService: RoundingService
 
     @Autowired
     private lateinit var pricesTestFactory: PricesTestFactory
@@ -37,10 +32,10 @@ class TooCloseUpdateEpsilonValidatorTest : AbstractTestCase() {
         val event = factory.newBetEvent(Side.BACK, prices, oldBet)
         assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = oldPrice)))
 
-        var newPrice = roundingService.decrement(oldPrice, 1, bfProvider.minPrice, bfProvider::matches)
+        var newPrice = oldPrice.copy(price = oldPrice.price * 0.99)
         assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = newPrice)))
 
-        newPrice = roundingService.decrement(oldPrice, 3, bfProvider.minPrice, bfProvider::matches)
+        newPrice = oldPrice.copy(price = oldPrice.price * 0.97)
         assertEquals(ValidationResult.OK, validator.validate(event.copy(proposedPrice = newPrice)))
     }
 

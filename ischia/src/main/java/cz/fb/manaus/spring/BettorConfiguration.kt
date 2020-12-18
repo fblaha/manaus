@@ -10,7 +10,6 @@ import cz.fb.manaus.reactor.betting.proposer.MinReduceProposerAdviser
 import cz.fb.manaus.reactor.betting.proposer.PriceProposalService
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationCoordinator
-import cz.fb.manaus.reactor.rounding.RoundingService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
@@ -20,9 +19,7 @@ import kotlin.reflect.full.findAnnotation
 @Profile("ischia")
 open class BettorConfiguration(
         private val adviser: AmountAdviser,
-        private val proposalService: PriceProposalService,
-        private val roundingService: RoundingService
-
+        private val proposalService: PriceProposalService
 ) {
 
     @Bean
@@ -30,7 +27,7 @@ open class BettorConfiguration(
     open fun layAdviser(@LayUniverse proposers: List<PriceProposer>): PriceAdviser {
         check(proposers.isNotEmpty())
         proposers.forEach { checkNotNull(it::class.findAnnotation<LayUniverse>()) }
-        return MinReduceProposerAdviser(proposers, adviser, proposalService, roundingService)
+        return MinReduceProposerAdviser(proposers, adviser, proposalService)
     }
 
     @Bean
@@ -46,7 +43,7 @@ open class BettorConfiguration(
     open fun backAdviser(@BackUniverse proposers: List<PriceProposer>): PriceAdviser {
         check(proposers.isNotEmpty())
         proposers.forEach { checkNotNull(it::class.findAnnotation<BackUniverse>()) }
-        return MinReduceProposerAdviser(proposers, adviser, proposalService, roundingService)
+        return MinReduceProposerAdviser(proposers, adviser, proposalService)
     }
 
     @Bean

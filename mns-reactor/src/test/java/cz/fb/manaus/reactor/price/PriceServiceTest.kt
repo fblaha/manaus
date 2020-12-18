@@ -3,7 +3,6 @@ package cz.fb.manaus.reactor.price
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.PricesTestFactory
-import cz.fb.manaus.reactor.rounding.RoundingService
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,9 +14,6 @@ class PriceServiceTest : AbstractTestCase() {
 
     @Autowired
     private lateinit var priceService: PriceService
-
-    @Autowired
-    private lateinit var roundingService: RoundingService
 
     @Autowired
     private lateinit var factory: PricesTestFactory
@@ -64,13 +60,13 @@ class PriceServiceTest : AbstractTestCase() {
         assertEquals(0.8, backFairness, 0.001)
 
         assertEquals(5.0, getRoundedFairnessFairPrice(4.2, backFairness)!!, 0.01)
-        assertEquals(3.35, getRoundedFairnessFairPrice(2.87, backFairness)!!, 0.01)
+        assertEquals(3.336, getRoundedFairnessFairPrice(2.87, backFairness)!!, 0.01)
         assertEquals(2.0, getRoundedFairnessFairPrice(1.8, backFairness)!!, 0.01)
     }
 
     private fun getRoundedFairnessFairPrice(unfairPrice: Double, fairness: Double): Double? {
         val fairPrice = priceService.getFairnessFairPrice(unfairPrice, fairness)
-        return roundingService.roundBet(fairPrice, bfProvider::matches)
+        return Price.round(fairPrice)
     }
 
     @Test

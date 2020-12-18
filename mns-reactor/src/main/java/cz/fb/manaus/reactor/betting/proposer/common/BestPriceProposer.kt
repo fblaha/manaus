@@ -1,14 +1,13 @@
 package cz.fb.manaus.reactor.betting.proposer.common
 
+import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
-import cz.fb.manaus.reactor.rounding.RoundingService
 
 class BestPriceProposer(
-        private val step: Int,
-        private val roundingService: RoundingService
+        private val step: Double
 ) : PriceProposer {
 
     override fun validate(event: BetEvent): ValidationResult {
@@ -22,14 +21,13 @@ class BestPriceProposer(
         val side = event.side
         val bestPrice = event.runnerPrices.getHomogeneous(side.opposite).bestPrice!!.price
         check(step >= 0)
-        val provider = event.account.provider
-        return if (step == 0) {
+        return if (step == 0.0) {
             bestPrice
         } else {
             if (side == Side.LAY) {
-                roundingService.increment(bestPrice, step, provider::matches)
+                Price.round(bestPrice * (1.0 + step))
             } else {
-                roundingService.decrement(bestPrice, step, provider.minPrice, provider::matches)
+                Price.round(bestPrice * (1.0 - step))
             }
         }
     }
