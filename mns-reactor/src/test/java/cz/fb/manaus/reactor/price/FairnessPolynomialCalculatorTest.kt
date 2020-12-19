@@ -1,22 +1,19 @@
 package cz.fb.manaus.reactor.price
 
 import cz.fb.manaus.core.model.priceEq
-import cz.fb.manaus.core.test.AbstractTestCase
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertTrue
 
 
-class FairnessPolynomialCalculatorTest : AbstractTestCase() {
+class FairnessPolynomialCalculatorTest {
 
-
-    @Autowired
-    private lateinit var calculator: FairnessPolynomialCalculator
     private val eps = 0.001
+    private val calculator = FairnessPolynomialCalculator
 
     @Test
     fun `polynomial fairness`() {
+        val calculator = FairnessPolynomialCalculator
         assertEquals(0.866, calculator.getFairness(1, listOf(2.5, 1.5))!!, eps)
         assertEquals(0.825, calculator.getFairness(1, listOf(2.7, 1.4))!!, eps)
         assertEquals(0.75, calculator.getFairness(1, listOf(2.5, 2.5, 2.5))!!, eps)

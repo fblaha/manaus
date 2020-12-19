@@ -2,10 +2,8 @@ package cz.fb.manaus.reactor.price
 
 import cz.fb.manaus.core.model.RunnerPrices
 import cz.fb.manaus.core.model.Side
-import org.springframework.stereotype.Component
 import java.util.*
 
-@Component
 object ProbabilityCalculator {
 
     fun fromFairness(fairness: Double, side: Side, prices: List<RunnerPrices>): Map<Long, Double> {

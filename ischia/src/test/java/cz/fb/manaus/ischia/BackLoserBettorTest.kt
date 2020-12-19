@@ -12,26 +12,23 @@ import org.springframework.test.context.ActiveProfiles
 class BackLoserBettorTest : AbstractIntegrationTestCase() {
 
     @Autowired
-    private lateinit var factory: PricesTestFactory
-
-    @Autowired
     private lateinit var bettorTester: BettorTester
 
     @Test
     fun `place bet - based on best price`() {
-        val marketPrices = factory.newMarketPrices(2.98, 3.8, 3.0)
+        val marketPrices = PricesTestFactory.newMarketPrices(2.98, 3.8, 3.0)
         bettorTester.checkPlace(Side.BACK, marketPrices, 3, 3.772)
     }
 
     @Test
     fun `place bet - based on fairness`() {
-        val marketPrices = factory.newMarketPrices(2.98, 3.1, 3.0)
+        val marketPrices = PricesTestFactory.newMarketPrices(2.98, 3.1, 3.0)
         bettorTester.checkPlace(Side.BACK, marketPrices, 3, 3.162)
     }
 
     @Test
     fun `update bet`() {
-        val market = factory.newMarketPrices(2.8, 3.4, 3.0)
+        val market = PricesTestFactory.newMarketPrices(2.8, 3.4, 3.0)
         bettorTester.checkUpdate(Side.BACK, 3.0, market, 0, 3)
     }
 

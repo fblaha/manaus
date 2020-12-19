@@ -5,9 +5,7 @@ import cz.fb.manaus.core.model.Side
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction
 import org.apache.commons.math3.analysis.solvers.LaguerreSolver
 import org.apache.commons.math3.exception.NoBracketingException
-import org.springframework.stereotype.Component
 
-@Component
 object FairnessPolynomialCalculator {
 
     private fun toPolynomial(price: Double): PolynomialFunction {

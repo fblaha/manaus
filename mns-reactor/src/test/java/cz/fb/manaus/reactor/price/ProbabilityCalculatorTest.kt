@@ -2,22 +2,11 @@ package cz.fb.manaus.reactor.price
 
 import cz.fb.manaus.core.model.SEL_HOME
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.PricesTestFactory
 import org.junit.Assert
 import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
 
-class ProbabilityCalculatorTest : AbstractTestCase() {
-
-    @Autowired
-    private lateinit var factory: PricesTestFactory
-
-    @Autowired
-    private lateinit var calculator: ProbabilityCalculator
-
-    @Autowired
-    private lateinit var fairnessPolynomialCalculator: FairnessPolynomialCalculator
+class ProbabilityCalculatorTest {
 
     @Test
     fun `probability calculated from fairness`() {
@@ -31,10 +20,10 @@ class ProbabilityCalculatorTest : AbstractTestCase() {
     private fun checkProbability(probabilities: List<Double>) {
         val rates = listOf(0.05, 0.1, 0.2, 0.4)
         for (rate in rates) {
-            val prices = factory.newMarketPrices(rate, probabilities)
-            val fairness = fairnessPolynomialCalculator.getFairness(prices)
+            val prices = PricesTestFactory.newMarketPrices(rate, probabilities)
+            val fairness = FairnessPolynomialCalculator.getFairness(prices)
             for (side in Side.values()) {
-                val probability = calculator.fromFairness(fairness[side]!!, side, prices)
+                val probability = ProbabilityCalculator.fromFairness(fairness[side]!!, side, prices)
                 for ((i, expected) in probabilities.withIndex()) {
                     val selection = SEL_HOME * (i + 1)
                     Assert.assertEquals(expected, probability.getValue(selection), 0.005)

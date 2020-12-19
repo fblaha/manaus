@@ -20,9 +20,6 @@ class DelayUpdateValidatorTest : AbstractIntegrationTestCase() {
     @Autowired
     private lateinit var validator: TestValidator
 
-    @Autowired
-    private lateinit var factory: BetEventTestFactory
-
     private fun checkValidation(
             actionType: BetActionType,
             beforeMinutes: Long,
@@ -37,14 +34,14 @@ class DelayUpdateValidatorTest : AbstractIntegrationTestCase() {
                 betActionType = actionType
         )
         betActionRepository.save(place)
-        val result = validator.validate(factory.newUpdateBetEvent(side, runnerPrices))
+        val result = validator.validate(BetEventTestFactory.newUpdateBetEvent(side, runnerPrices))
         assertEquals(validationResult, result)
     }
 
     @Test(expected = IllegalStateException::class)
     fun `no bet action`() {
         marketRepository.save(market)
-        val result = validator.validate(factory.newUpdateBetEvent(Side.LAY, runnerPrices))
+        val result = validator.validate(BetEventTestFactory.newUpdateBetEvent(Side.LAY, runnerPrices))
         assertEquals(ValidationResult.DROP, result)
     }
 

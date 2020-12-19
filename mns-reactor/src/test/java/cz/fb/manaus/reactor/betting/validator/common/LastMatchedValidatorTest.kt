@@ -17,9 +17,6 @@ class LastMatchedValidatorTest : AbstractTestCase() {
     @Autowired
     private lateinit var validator: TestValidator
 
-    @Autowired
-    private lateinit var factory: BetEventTestFactory
-
     @Test
     fun `accept lay`() {
         checkValidator(Side.LAY, ValidationResult.OK, ValidationResult.DROP)
@@ -31,7 +28,7 @@ class LastMatchedValidatorTest : AbstractTestCase() {
     }
 
     private fun checkValidator(side: Side, lowerResult: ValidationResult, higherResult: ValidationResult) {
-        val event = factory.newBetEvent(side, listOf(homePrices.copy(lastMatchedPrice = 2.1)), null)
+        val event = BetEventTestFactory.newBetEvent(side, listOf(homePrices.copy(lastMatchedPrice = 2.1)), null)
         assertEquals(lowerResult, validator.validate(event.copy(proposedPrice = Price(2.0, 2.0, side))))
         assertEquals(higherResult, validator.validate(event.copy(proposedPrice = Price(2.2, 2.0, side))))
     }

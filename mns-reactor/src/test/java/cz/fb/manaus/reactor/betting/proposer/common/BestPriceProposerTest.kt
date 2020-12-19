@@ -20,12 +20,9 @@ class BestPriceProposerTest : AbstractTestCase() {
     @Autowired
     private lateinit var backProposer: BackProposer
 
-    @Autowired
-    private lateinit var factory: PricesTestFactory
-
     @Test
     fun `lay propose`() {
-        val event = HOME_EVENT_LAY.copy(marketPrices = factory.newMarketPrices(2.0, 4.5))
+        val event = HOME_EVENT_LAY.copy(marketPrices = PricesTestFactory.newMarketPrices(2.0, 4.5))
         assertEquals(ValidationResult.OK, layProposer.validate(event))
         assertEquals(2.01, layProposer.getProposedPrice(event))
     }
@@ -38,7 +35,7 @@ class BestPriceProposerTest : AbstractTestCase() {
 
     @Test
     fun `back propose`() {
-        val prices = factory.newMarketPrices(2.5, 3.5)
+        val prices = PricesTestFactory.newMarketPrices(2.5, 3.5)
         val context = HOME_EVENT_BACK.copy(marketPrices = prices)
         assertEquals(ValidationResult.OK, backProposer.validate(context))
         assertEquals(3.475, backProposer.getProposedPrice(context))

@@ -1,22 +1,14 @@
 package cz.fb.manaus.reactor.price
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.PricesTestFactory
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
 import kotlin.math.max
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class PricingTest : AbstractTestCase() {
-
-    @Autowired
-    private lateinit var factory: PricesTestFactory
-
-    @Autowired
-    private lateinit var calculator: FairnessPolynomialCalculator
+class PricingTest {
 
     @Test
     fun `price downgrading`() {
@@ -41,15 +33,15 @@ class PricingTest : AbstractTestCase() {
     }
 
     private fun getFairness(side: Side, marketPrices: List<RunnerPrices>): Double {
-        return calculator.getFairness(1, getBestPrices(marketPrices, side))!!
+        return FairnessPolynomialCalculator.getFairness(1, getBestPrices(marketPrices, side))!!
     }
 
     @Test
     fun `fair price`() {
         val marketPrices = listOf(
-                factory.newRunnerPrices(1, 4.2, 6.0),
-                factory.newRunnerPrices(2, 2.87, 4.0),
-                factory.newRunnerPrices(1, 1.8, 3.0)
+                PricesTestFactory.newRunnerPrices(1, 4.2, 6.0),
+                PricesTestFactory.newRunnerPrices(2, 2.87, 4.0),
+                PricesTestFactory.newRunnerPrices(1, 1.8, 3.0)
         )
         val layFairness = getFairness(Side.LAY, marketPrices)
         assertEquals(1.5, layFairness, 0.1)
@@ -120,7 +112,7 @@ class PricingTest : AbstractTestCase() {
     fun newMarketPrices(unfairPrices: List<Double>): List<RunnerPrices> {
         val runnerPrices = mutableListOf<RunnerPrices>()
         for ((i, unfairPrice) in unfairPrices.withIndex()) {
-            runnerPrices.add(factory.newRunnerPrices(i.toLong(), unfairPrice, 10.0))
+            runnerPrices.add(PricesTestFactory.newRunnerPrices(i.toLong(), unfairPrice, 10.0))
         }
         return runnerPrices
     }
@@ -183,8 +175,8 @@ class PricingTest : AbstractTestCase() {
 
     @Test
     fun `fairness based fair prices`() {
-        val market = factory.newMarketPrices(0.2, listOf(0.85, 0.1, 0.05))
-        val fairness = calculator.getFairness(market)
+        val market = PricesTestFactory.newMarketPrices(0.2, listOf(0.85, 0.1, 0.05))
+        val fairness = FairnessPolynomialCalculator.getFairness(market)
         val bestBack = getBestPrices(market, Side.BACK)[0]!!
         val bestLay = getBestPrices(market, Side.LAY)[0]!!
         val fairnessBackFairPrice = Pricing.getFairnessFairPrice(bestBack, fairness[Side.BACK]!!)

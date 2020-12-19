@@ -16,20 +16,13 @@ class TooCloseUpdateEpsilonValidatorTest : AbstractTestCase() {
     @Autowired
     private lateinit var validator: TestValidator
 
-    @Autowired
-    private lateinit var pricesTestFactory: PricesTestFactory
-
-    @Autowired
-    private lateinit var factory: BetEventTestFactory
-
-
     @Test
     fun `accept back`() {
         val oldPrice = Price(2.5, 5.0, Side.BACK)
         val oldBet = betTemplate.copy(requestedPrice = oldPrice).asTracked
 
-        val prices = pricesTestFactory.newMarketPrices(0.1, listOf(0.4, 0.3, 0.3))
-        val event = factory.newBetEvent(Side.BACK, prices, oldBet)
+        val prices = PricesTestFactory.newMarketPrices(0.1, listOf(0.4, 0.3, 0.3))
+        val event = BetEventTestFactory.newBetEvent(Side.BACK, prices, oldBet)
         assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = oldPrice)))
 
         var newPrice = oldPrice.copy(price = oldPrice.price * 0.99)
@@ -45,7 +38,7 @@ class TooCloseUpdateEpsilonValidatorTest : AbstractTestCase() {
         val oldOne = Price(3.6, 3.0, Side.LAY)
         val oldBet = betTemplate.copy(requestedPrice = oldOne).asTracked
 
-        val event = factory.newBetEvent(Side.LAY, runnerPrices, oldBet)
+        val event = BetEventTestFactory.newBetEvent(Side.LAY, runnerPrices, oldBet)
         assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = newOne.copy(price = 3.65))))
         assertEquals(ValidationResult.OK, validator.validate(event.copy(proposedPrice = newOne.copy(price = 3.7))))
         assertEquals(ValidationResult.OK, validator.validate(event.copy(proposedPrice = newOne.copy(price = 3.75))))

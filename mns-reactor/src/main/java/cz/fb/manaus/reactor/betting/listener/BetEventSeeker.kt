@@ -12,7 +12,6 @@ typealias MarketRunnerPredicate = (Market, Runner) -> Boolean
 
 @Component
 class BetEventSeeker(
-        private val calculator: FairnessPolynomialCalculator,
         private val betEventNotifier: BetEventNotifier,
         private val chargeGrowthForecaster: ChargeGrowthForecaster,
         private val marketRunnerPredicate: MarketRunnerPredicate = { _, _ -> true }
@@ -24,7 +23,7 @@ class BetEventSeeker(
         val (snapshot, account) = marketSnapshotEvent
         val (marketPrices, market) = snapshot
         val collector = mutableListOf<BetCommand>()
-        val fairness = calculator.getFairness(marketPrices)
+        val fairness = FairnessPolynomialCalculator.getFairness(marketPrices)
         for (runnerPrices in marketPrices) {
             val selectionId = runnerPrices.selectionId
             val runner = market.getRunner(selectionId)

@@ -14,7 +14,6 @@ import kotlin.math.min
 @Component
 class ChargeGrowthForecaster(
         private val simulator: MarketChargeSimulator,
-        private val probabilityCalculator: ProbabilityCalculator,
         private val amountAdviser: AmountAdviser
 ) {
 
@@ -38,7 +37,7 @@ class ChargeGrowthForecaster(
         val fairnessSide = fairness.moreCredibleSide
         if (fairnessSide != null) {
             val sideFairness = fairness[fairnessSide]!!
-            val probabilities = probabilityCalculator.fromFairness(
+            val probabilities = ProbabilityCalculator.fromFairness(
                     sideFairness, fairnessSide, snapshot.runnerPrices
             )
             val marketPrices = snapshot.runnerPrices

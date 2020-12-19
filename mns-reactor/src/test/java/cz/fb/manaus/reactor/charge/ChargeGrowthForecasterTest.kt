@@ -18,20 +18,14 @@ class ChargeGrowthForecasterTest : AbstractTestCase() {
     private lateinit var forecaster: ChargeGrowthForecaster
 
     @Autowired
-    private lateinit var factory: PricesTestFactory
-
-    @Autowired
-    private lateinit var calculator: FairnessPolynomialCalculator
-
-    @Autowired
     private lateinit var adviser: AmountAdviser
 
     @Test
     fun forecast() {
-        val marketPrices = factory.newMarketPrices(0.05, listOf(0.5, 0.3, 0.2))
+        val marketPrices = PricesTestFactory.newMarketPrices(0.05, listOf(0.5, 0.3, 0.2))
         val currentBets = mutableListOf<TrackedBet>()
         val snapshot = MarketSnapshot(marketPrices, market, currentBets)
-        val fairness = calculator.getFairness(marketPrices)
+        val fairness = FairnessPolynomialCalculator.getFairness(marketPrices)
         val commission = bfProvider.commission
         val homeBack = SideSelection(Side.BACK, SEL_HOME)
         var forecast = forecaster.getForecast(homeBack, snapshot, fairness, commission)

@@ -2,10 +2,8 @@ package cz.fb.manaus.reactor
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.price.Pricing
-import org.springframework.stereotype.Component
 
 
-@Component
 object PricesTestFactory {
 
     fun newRunnerPrices(
