@@ -4,7 +4,7 @@ import cz.fb.manaus.core.makeName
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.reactor.betting.BetEvent
-import cz.fb.manaus.reactor.price.PriceService
+import cz.fb.manaus.reactor.price.Pricing
 import org.springframework.stereotype.Service
 
 @Service
@@ -16,7 +16,7 @@ class ValidationService(
         if (oldOne != null && newOne != null) {
             val oldPrice = oldOne.requestedPrice
             check(newOne.side == oldPrice.side)
-            if (PriceService.isDowngrade(newOne.price, oldPrice.price, newOne.side)) {
+            if (Pricing.isDowngrade(newOne.price, oldPrice.price, newOne.side)) {
                 return true
             }
         }

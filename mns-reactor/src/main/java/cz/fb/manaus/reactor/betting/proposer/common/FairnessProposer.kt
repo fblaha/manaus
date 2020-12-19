@@ -4,7 +4,7 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
-import cz.fb.manaus.reactor.price.PriceService
+import cz.fb.manaus.reactor.price.Pricing
 
 class FairnessProposer(
         private val side: Side,
@@ -18,8 +18,8 @@ class FairnessProposer(
     override fun getProposedPrice(event: BetEvent): Double {
         val fairness = event.metrics.fairness[side]!!
         val bestPrice = event.runnerPrices.getHomogeneous(side).bestPrice!!
-        val fairPrice = PriceService.getFairnessFairPrice(bestPrice.price, fairness)
+        val fairPrice = Pricing.getFairnessFairPrice(bestPrice.price, fairness)
         val downgradeFraction = strategy(event) ?: error("no val provided")
-        return PriceService.downgrade(fairPrice, downgradeFraction, event.side)
+        return Pricing.downgrade(fairPrice, downgradeFraction, event.side)
     }
 }

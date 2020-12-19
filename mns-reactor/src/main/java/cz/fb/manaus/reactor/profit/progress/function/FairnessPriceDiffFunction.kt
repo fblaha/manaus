@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.profit.progress.function
 import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
-import cz.fb.manaus.reactor.price.PriceService
+import cz.fb.manaus.reactor.price.Pricing
 import cz.fb.manaus.reactor.price.getRunnerPrices
 import org.springframework.stereotype.Component
 import kotlin.math.abs
@@ -24,8 +24,8 @@ class FairnessPriceDiffFunction(
             val backBest = runnerPrices.getHomogeneous(Side.BACK).bestPrice
             val layPrice = layBest!!.price
             val backPrice = backBest!!.price
-            val fairnessLayFairPrice = PriceService.getFairnessFairPrice(layPrice, layFairness)
-            val fairnessBackFairPrice = PriceService.getFairnessFairPrice(backPrice, backFairness)
+            val fairnessLayFairPrice = Pricing.getFairnessFairPrice(layPrice, layFairness)
+            val fairnessBackFairPrice = Pricing.getFairnessFairPrice(backPrice, backFairness)
             abs(fairnessBackFairPrice - fairnessLayFairPrice)
         } else {
             null

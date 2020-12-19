@@ -5,7 +5,7 @@ import cz.fb.manaus.core.model.priceEq
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
-import cz.fb.manaus.reactor.price.PriceService
+import cz.fb.manaus.reactor.price.Pricing
 
 class BestPriceProposer(
         private val step: Double
@@ -25,7 +25,7 @@ class BestPriceProposer(
         return if (step priceEq 0.0) {
             bestPrice
         } else {
-            Price.round(PriceService.downgrade(bestPrice, -step, side))
+            Price.round(Pricing.downgrade(bestPrice, -step, side))
         }
     }
 }

@@ -6,7 +6,7 @@ import cz.fb.manaus.ischia.LayUniverse
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
-import cz.fb.manaus.reactor.price.PriceService
+import cz.fb.manaus.reactor.price.Pricing
 import org.springframework.stereotype.Component
 
 
@@ -28,7 +28,7 @@ object TradedVolumeProposer : PriceProposer {
 
     override fun getProposedPrice(event: BetEvent): Double {
         val weightedMean = event.metrics.actualTradedVolume!!.weightedMean!!
-        return PriceService.downgrade(
+        return Pricing.downgrade(
                 weightedMean, 0.01,
                 event.side
         )

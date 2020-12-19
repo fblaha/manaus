@@ -15,7 +15,7 @@ object ProbabilityCalculator {
         for (runnerPrice in sidePrices) {
             val bestPrice = runnerPrice.bestPrice
             val unfairPrice = bestPrice!!.price
-            val fairPrice = PriceService.getFairnessFairPrice(unfairPrice, fairness)
+            val fairPrice = Pricing.getFairnessFairPrice(unfairPrice, fairness)
             result[runnerPrice.selectionId] = 1 / fairPrice
         }
         return result

@@ -5,7 +5,7 @@ import cz.fb.manaus.core.category.categorizer.RealizedBetCategorizer
 import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.priceEq
-import cz.fb.manaus.reactor.price.PriceService
+import cz.fb.manaus.reactor.price.Pricing
 import org.springframework.stereotype.Component
 
 @Component
@@ -26,7 +26,7 @@ object MatchedPriceCategorizer : RealizedBetCategorizer {
         return if (matched priceEq requested) {
             PREFIX + "equal"
         } else {
-            val downgrade = PriceService.isDowngrade(matched, requested, side)
+            val downgrade = Pricing.isDowngrade(matched, requested, side)
             if (downgrade) {
                 PREFIX + "better"
             } else {

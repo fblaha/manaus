@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.price
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.priceEq
 
-object PriceService {
+object Pricing {
 
     fun downgrade(price: Double, downgradeFraction: Double, side: Side): Double {
         val aboveOne = price - 1

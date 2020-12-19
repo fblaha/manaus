@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.reactor.price.PriceService
+import cz.fb.manaus.reactor.price.Pricing
 import org.springframework.stereotype.Component
 
 
@@ -42,9 +42,9 @@ object PricesTestFactory {
         val runnerPrices = mutableListOf<RunnerPrices>()
         for ((i, p) in probabilities.withIndex()) {
             val fairPrice = 1 / p
-            val backPrice = PriceService.downgrade(fairPrice, downgradeFraction, Side.LAY)
+            val backPrice = Pricing.downgrade(fairPrice, downgradeFraction, Side.LAY)
             val backRounded = Price.round(backPrice)
-            val layPrice = PriceService.downgrade(fairPrice, downgradeFraction, Side.BACK)
+            val layPrice = Pricing.downgrade(fairPrice, downgradeFraction, Side.BACK)
             val layRounded = Price.round(layPrice)
             val selectionId = SEL_HOME * (i + 1)
             val lastMatched = Price.round(fairPrice)
