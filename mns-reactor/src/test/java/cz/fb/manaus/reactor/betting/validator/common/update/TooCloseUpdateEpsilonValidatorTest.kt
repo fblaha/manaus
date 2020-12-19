@@ -1,20 +1,15 @@
 package cz.fb.manaus.reactor.betting.validator.common.update
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.PricesTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
-import cz.fb.manaus.reactor.betting.validator.Validator
 import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
 import kotlin.test.assertEquals
 
-class TooCloseUpdateEpsilonValidatorTest : AbstractTestCase() {
+class TooCloseUpdateEpsilonValidatorTest {
 
-    @Autowired
-    private lateinit var validator: TestValidator
+    private val validator = TooCloseUpdateEpsilonValidator(0.02)
 
     @Test
     fun `accept back`() {
@@ -46,8 +41,5 @@ class TooCloseUpdateEpsilonValidatorTest : AbstractTestCase() {
         assertEquals(ValidationResult.NOP, validator.validate(event.copy(proposedPrice = newOne.copy(price = 3.55))))
         assertEquals(ValidationResult.OK, validator.validate(event.copy(proposedPrice = newOne.copy(price = 3.5))))
     }
-
-    @Component
-    private class TestValidator : Validator by TooCloseUpdateEpsilonValidator(0.02)
 
 }
