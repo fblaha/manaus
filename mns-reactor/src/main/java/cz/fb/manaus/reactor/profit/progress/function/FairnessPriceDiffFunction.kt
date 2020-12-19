@@ -11,7 +11,6 @@ import kotlin.math.abs
 @Component
 class FairnessPriceDiffFunction(
         private val calculator: FairnessPolynomialCalculator,
-        private val priceService: PriceService
 ) : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double? {
@@ -25,8 +24,8 @@ class FairnessPriceDiffFunction(
             val backBest = runnerPrices.getHomogeneous(Side.BACK).bestPrice
             val layPrice = layBest!!.price
             val backPrice = backBest!!.price
-            val fairnessLayFairPrice = priceService.getFairnessFairPrice(layPrice, layFairness)
-            val fairnessBackFairPrice = priceService.getFairnessFairPrice(backPrice, backFairness)
+            val fairnessLayFairPrice = PriceService.getFairnessFairPrice(layPrice, layFairness)
+            val fairnessBackFairPrice = PriceService.getFairnessFairPrice(backPrice, backFairness)
             abs(fairnessBackFairPrice - fairnessLayFairPrice)
         } else {
             null

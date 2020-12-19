@@ -27,7 +27,7 @@ class BestPriceProposerTest : AbstractTestCase() {
     fun `lay propose`() {
         val event = HOME_EVENT_LAY.copy(marketPrices = factory.newMarketPrices(2.0, 4.5))
         assertEquals(ValidationResult.OK, layProposer.validate(event))
-        assertEquals(2.02, layProposer.getProposedPrice(event))
+        assertEquals(2.01, layProposer.getProposedPrice(event))
     }
 
     @Test
@@ -41,7 +41,7 @@ class BestPriceProposerTest : AbstractTestCase() {
         val prices = factory.newMarketPrices(2.5, 3.5)
         val context = HOME_EVENT_BACK.copy(marketPrices = prices)
         assertEquals(ValidationResult.OK, backProposer.validate(context))
-        assertEquals(3.465, backProposer.getProposedPrice(context))
+        assertEquals(3.475, backProposer.getProposedPrice(context))
     }
 
     @Component

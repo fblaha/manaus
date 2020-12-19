@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 @Component
 @BackUniverse
 @LayUniverse
-class LastMatchedProposer(private val priceService: PriceService) : PriceProposer {
+object LastMatchedProposer : PriceProposer {
 
     override val tags get() = setOf(LastMatchedPrice)
 
@@ -24,7 +24,7 @@ class LastMatchedProposer(private val priceService: PriceService) : PricePropose
 
     override fun getProposedPrice(event: BetEvent): Double {
         val lastMatchedPrice = event.runnerPrices.lastMatchedPrice!!
-        return priceService.downgrade(
+        return PriceService.downgrade(
                 lastMatchedPrice,
                 0.01, event.side
         )

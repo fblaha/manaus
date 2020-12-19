@@ -5,7 +5,6 @@ import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
-import cz.fb.manaus.reactor.price.PriceService
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -53,15 +52,14 @@ class FairnessProposerTest : AbstractTestCase() {
 
 
     @Component
-    class TestLayProposer(priceService: PriceService) : PriceProposer by FairnessProposer(
-            Side.LAY, priceService,
+    object TestLayProposer : PriceProposer by FairnessProposer(
+            Side.LAY,
             { 0.02 }
     )
 
     @Component
-    class TestBackProposer(priceService: PriceService) : PriceProposer by FairnessProposer(
+    object TestBackProposer : PriceProposer by FairnessProposer(
             Side.BACK,
-            priceService,
             { 0.02 }
     )
 

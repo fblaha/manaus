@@ -9,7 +9,9 @@ import cz.fb.manaus.reactor.price.PriceService
 import org.springframework.stereotype.Component
 
 @Component
-class MatchedPriceCategorizer(private val priceService: PriceService) : RealizedBetCategorizer {
+object MatchedPriceCategorizer : RealizedBetCategorizer {
+
+    private const val PREFIX = "matchedPrice_"
 
     override val isSimulationSupported: Boolean = false
 
@@ -24,7 +26,7 @@ class MatchedPriceCategorizer(private val priceService: PriceService) : Realized
         return if (matched priceEq requested) {
             PREFIX + "equal"
         } else {
-            val downgrade = priceService.isDowngrade(matched, requested, side)
+            val downgrade = PriceService.isDowngrade(matched, requested, side)
             if (downgrade) {
                 PREFIX + "better"
             } else {
@@ -33,7 +35,4 @@ class MatchedPriceCategorizer(private val priceService: PriceService) : Realized
         }
     }
 
-    companion object {
-        const val PREFIX = "matchedPrice_"
-    }
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class ProbabilityCalculator(private val priceService: PriceService) {
+object ProbabilityCalculator {
 
     fun fromFairness(fairness: Double, side: Side, prices: List<RunnerPrices>): Map<Long, Double> {
         val sidePrices = prices.map { it.getHomogeneous(side) }
@@ -15,7 +15,7 @@ class ProbabilityCalculator(private val priceService: PriceService) {
         for (runnerPrice in sidePrices) {
             val bestPrice = runnerPrice.bestPrice
             val unfairPrice = bestPrice!!.price
-            val fairPrice = priceService.getFairnessFairPrice(unfairPrice, fairness)
+            val fairPrice = PriceService.getFairnessFairPrice(unfairPrice, fairness)
             result[runnerPrice.selectionId] = 1 / fairPrice
         }
         return result

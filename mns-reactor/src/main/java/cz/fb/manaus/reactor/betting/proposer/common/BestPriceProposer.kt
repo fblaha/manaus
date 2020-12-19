@@ -1,10 +1,11 @@
 package cz.fb.manaus.reactor.betting.proposer.common
 
 import cz.fb.manaus.core.model.Price
-import cz.fb.manaus.core.model.Side
+import cz.fb.manaus.core.model.priceEq
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
+import cz.fb.manaus.reactor.price.PriceService
 
 class BestPriceProposer(
         private val step: Double
@@ -17,18 +18,14 @@ class BestPriceProposer(
         return if (bestPrice != null) ValidationResult.OK else ValidationResult.DROP
     }
 
-    override fun getProposedPrice(event: BetEvent): Double? {
+    override fun getProposedPrice(event: BetEvent): Double {
         val side = event.side
-        val bestPrice = event.runnerPrices.getHomogeneous(side.opposite).bestPrice!!.price
+        val bestPrice = event.runnerPrices.getHomogeneous(side.opposite).bestPrice?.price ?: error("no best price")
         check(step >= 0)
-        return if (step == 0.0) {
+        return if (step priceEq 0.0) {
             bestPrice
         } else {
-            if (side == Side.LAY) {
-                Price.round(bestPrice * (1.0 + step))
-            } else {
-                Price.round(bestPrice * (1.0 - step))
-            }
+            Price.round(PriceService.downgrade(bestPrice, -step, side))
         }
     }
 }

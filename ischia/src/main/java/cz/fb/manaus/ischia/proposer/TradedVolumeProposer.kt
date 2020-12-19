@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 @Component
 @BackUniverse
 @LayUniverse
-class TradedVolumeProposer(private val priceService: PriceService) : PriceProposer {
+object TradedVolumeProposer : PriceProposer {
 
     override val tags get() = setOf(TradedVolume)
 
@@ -28,7 +28,7 @@ class TradedVolumeProposer(private val priceService: PriceService) : PricePropos
 
     override fun getProposedPrice(event: BetEvent): Double {
         val weightedMean = event.metrics.actualTradedVolume!!.weightedMean!!
-        return priceService.downgrade(
+        return PriceService.downgrade(
                 weightedMean, 0.01,
                 event.side
         )

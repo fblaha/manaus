@@ -8,7 +8,7 @@ import org.apache.commons.math3.exception.NoBracketingException
 import org.springframework.stereotype.Component
 
 @Component
-class FairnessPolynomialCalculator {
+object FairnessPolynomialCalculator {
 
     private fun toPolynomial(price: Double): PolynomialFunction {
         return PolynomialFunction(doubleArrayOf(1.0, price - 1))

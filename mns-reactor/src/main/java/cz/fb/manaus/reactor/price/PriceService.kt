@@ -2,15 +2,13 @@ package cz.fb.manaus.reactor.price
 
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.model.priceEq
-import org.springframework.stereotype.Component
 
-@Component
-class PriceService {
+object PriceService {
 
     fun downgrade(price: Double, downgradeFraction: Double, side: Side): Double {
         val aboveOne = price - 1
         val targetFairness = 1 - downgradeFraction
-        check(targetFairness in 0.0..1.0)
+        check(targetFairness in 0.0..2.0)
 
         return when (side) {
             Side.LAY -> 1 + aboveOne * targetFairness

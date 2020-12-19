@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class ValidationService(
-        private val priceService: PriceService,
         private val recorder: ValidationMetricsCollector
 ) {
 
@@ -17,7 +16,7 @@ class ValidationService(
         if (oldOne != null && newOne != null) {
             val oldPrice = oldOne.requestedPrice
             check(newOne.side == oldPrice.side)
-            if (priceService.isDowngrade(newOne.price, oldPrice.price, newOne.side)) {
+            if (PriceService.isDowngrade(newOne.price, oldPrice.price, newOne.side)) {
                 return true
             }
         }
