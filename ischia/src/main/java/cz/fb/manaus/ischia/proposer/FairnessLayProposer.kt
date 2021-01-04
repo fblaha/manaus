@@ -18,15 +18,15 @@ object FairnessLayProposer : PriceProposer by FairnessProposer(
 
 fun layStrategy(side: Side, version: Int): Double? = when (side) {
     Side.BACK -> when (version) {
-        1 -> 0.075
-        in 2..3 -> 0.07
-        in 4..7 -> 0.065
-        else -> 0.06
+        1 -> 0.070
+        in 2..3 -> 0.065
+        in 4..7 -> 0.060
+        else -> 0.055
     }
     Side.LAY -> when (version) {
-        1 -> 0.085
-        in 2..3 -> 0.08
-        in 4..7 -> 0.075
-        else -> 0.07
+        1 -> 0.080
+        in 2..3 -> 0.075
+        in 4..7 -> 0.070
+        else -> 0.065
     }
 }

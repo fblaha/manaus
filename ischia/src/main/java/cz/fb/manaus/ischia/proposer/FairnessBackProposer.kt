@@ -17,15 +17,15 @@ object FairnessBackProposer : PriceProposer by FairnessProposer(
 
 private fun backStrategy(side: Side, version: Int) = when (side) {
     Side.BACK -> when (version) {
-        1 -> 0.075
-        in 2..3 -> 0.07
-        in 4..7 -> 0.065
-        else -> 0.06
+        1 -> 0.070
+        in 2..3 -> 0.065
+        in 4..7 -> 0.060
+        else -> 0.055
     }
     Side.LAY -> when (version) {
-        1 -> 0.087
-        in 2..3 -> 0.082
-        in 4..7 -> 0.077
-        else -> 0.072
+        1 -> 0.080
+        in 2..3 -> 0.075
+        in 4..7 -> 0.070
+        else -> 0.065
     }
 }
