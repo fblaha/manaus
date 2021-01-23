@@ -28,7 +28,7 @@ class LayLoserBettorTest : AbstractIntegrationTestCase() {
     }
 
     @Test
-    fun `upadte bet`() {
+    fun `update bet`() {
         val market = PricesTestFactory.newMarketPrices(2.90, 3.2, 3.0)
         bettorTester.checkUpdate(Side.LAY, 3.0, market, 0, 3)
     }

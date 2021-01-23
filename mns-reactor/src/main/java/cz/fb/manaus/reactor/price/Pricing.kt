@@ -36,9 +36,9 @@ object Pricing {
     /**
      * http://stats.stackexchange.com/questions/140269/how-to-convert-sport-odds-into-percentage
      */
-    fun getOverroundFairPrice(unfairPrice: Double, overround: Double, runnerCount: Int): Double {
-        val probability = 1 / unfairPrice - (overround - 1) / runnerCount
-        require(probability > 0) { listOf(unfairPrice, overround, runnerCount) }
+    fun getOverRoundFairPrice(unfairPrice: Double, overRound: Double, runnerCount: Int): Double {
+        val probability = 1 / unfairPrice - (overRound - 1) / runnerCount
+        require(probability > 0) { listOf(unfairPrice, overRound, runnerCount) }
         return 1 / probability
     }
 

@@ -3,27 +3,27 @@ package cz.fb.manaus.reactor.price
 import cz.fb.manaus.core.model.RunnerPrices
 import cz.fb.manaus.core.model.Side
 
-fun getOverround(bestPrices: List<Double>): Double {
+fun getOverRound(bestPrices: List<Double>): Double {
     return bestPrices.map { 1 / it }.sum()
 }
 
-fun getBestPrices(runnerPrices: List<RunnerPrices>, type: Side): List<Double?> {
-    return runnerPrices.map { it.getHomogeneous(type).bestPrice?.price }
+fun getBestPrices(runnerPrices: List<RunnerPrices>, side: Side): List<Double?> {
+    return runnerPrices.map { it.getHomogeneous(side).bestPrice?.price }
 }
 
-fun getOverround(runnerPrices: List<RunnerPrices>, type: Side): Double? {
-    val bestPrices = getBestPrices(runnerPrices, type)
+fun getOverRound(runnerPrices: List<RunnerPrices>, side: Side): Double? {
+    val bestPrices = getBestPrices(runnerPrices, side)
     return if (bestPrices.all { it != null }) {
-        getOverround(bestPrices.filterNotNull())
+        getOverRound(bestPrices.filterNotNull())
     } else {
         null
     }
 }
 
-fun getReciprocal(runnerPrices: List<RunnerPrices>, type: Side): Double? {
-    return when (val overround = getOverround(runnerPrices, type)) {
+fun getReciprocal(runnerPrices: List<RunnerPrices>, side: Side): Double? {
+    return when (val overRound = getOverRound(runnerPrices, side)) {
         null -> null
-        else -> 1 / overround
+        else -> 1 / overRound
     }
 }
 

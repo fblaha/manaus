@@ -2,14 +2,13 @@ package cz.fb.manaus.reactor.profit.progress.function
 
 import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.reactor.price.getOverround
+import cz.fb.manaus.reactor.price.getOverRound
 import org.springframework.stereotype.Component
 
 @Component
-object OverroundBackFunction : ProgressFunction {
+object OverRoundLayFunction : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double? {
-        return getOverround(bet.betAction.runnerPrices, Side.BACK)
+        return getOverRound(bet.betAction.runnerPrices, Side.LAY)
     }
-
 }
