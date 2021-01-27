@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 @Component
 object WeightedAvgPriceRateFunction : ProgressFunction {
 
-    override fun invoke(bet: RealizedBet): Double? {
+    override fun invoke(bet: RealizedBet): Double {
         val runnerPrices = bet.betAction.runnerPrices
         val settledBet = bet.settledBet
         val side = settledBet.price.side

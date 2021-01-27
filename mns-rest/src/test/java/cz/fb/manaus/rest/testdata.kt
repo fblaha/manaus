@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Component
 
 @Component
-class BestPriceProposer() : PriceProposer by BestPriceProposer(0.01)
+class BestPriceProposer : PriceProposer by BestPriceProposer(0.01)
 
 @Component
 object AcceptAllValidator : Validator {

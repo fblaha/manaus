@@ -7,7 +7,7 @@ import java.time.Instant
 @Component
 object MatchedAheadFunction : AheadTimeFunction {
 
-    override fun getRelatedTime(bet: RealizedBet): Instant? {
+    override fun getRelatedTime(bet: RealizedBet): Instant {
         return bet.settledBet.matched
     }
 

@@ -22,7 +22,7 @@
     </modules>
 
     <properties>
-        <kotlin.version>1.4.10</kotlin.version>
+        <kotlin.version>1.4.21</kotlin.version>
         <jackson.version>2.11.2</jackson.version>
         <kotlin.code.style>official</kotlin.code.style>
     </properties>

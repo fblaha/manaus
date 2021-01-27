@@ -10,7 +10,7 @@ object PriceCountBackFunction : ProgressFunction {
 
     override val includeNoValues: Boolean get() = false
 
-    override fun invoke(bet: RealizedBet): Double? {
+    override fun invoke(bet: RealizedBet): Double {
         val runnerPrices = getRunnerPrices(bet.betAction.runnerPrices, bet.settledBet.selectionId)
         return runnerPrices.getHomogeneous(Side.BACK).prices.size.toDouble()
     }

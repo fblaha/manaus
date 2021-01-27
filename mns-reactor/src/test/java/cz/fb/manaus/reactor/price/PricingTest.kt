@@ -54,7 +54,7 @@ class PricingTest {
         assertEquals(2.0, getRoundedFairnessFairPrice(1.8, backFairness)!!, 0.01)
     }
 
-    private fun getRoundedFairnessFairPrice(unfairPrice: Double, fairness: Double): Double? {
+    private fun getRoundedFairnessFairPrice(unfairPrice: Double, fairness: Double): Double {
         val fairPrice = Pricing.getFairnessFairPrice(unfairPrice, fairness)
         return Price.round(fairPrice)
     }
@@ -110,7 +110,7 @@ class PricingTest {
         checkFairPrices(1, 1.4, 2.6)
     }
 
-    fun newMarketPrices(unfairPrices: List<Double>): List<RunnerPrices> {
+    private fun newMarketPrices(unfairPrices: List<Double>): List<RunnerPrices> {
         val runnerPrices = mutableListOf<RunnerPrices>()
         for ((i, unfairPrice) in unfairPrices.withIndex()) {
             runnerPrices.add(PricesTestFactory.newRunnerPrices(i.toLong(), unfairPrice, 10.0))

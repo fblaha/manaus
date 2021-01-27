@@ -8,7 +8,7 @@ import java.time.temporal.ChronoUnit
 @Component
 class NoBetActionApprover : MarketDeletionApprover {
 
-    override val timeRange: TimeRange?
+    override val timeRange: TimeRange
         get() = TimeRange(
                 Instant.now().minus(7, ChronoUnit.DAYS),
                 Instant.now().minus(6, ChronoUnit.HOURS)

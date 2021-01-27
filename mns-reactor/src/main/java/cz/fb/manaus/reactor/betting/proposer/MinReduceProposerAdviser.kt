@@ -16,7 +16,7 @@ class MinReduceProposerAdviser(
 
     private val log = Logger.getLogger(MinReduceProposerAdviser::class.simpleName)
 
-    override fun getNewPrice(betEvent: BetEvent): ProposedPrice<Price>? {
+    override fun getNewPrice(betEvent: BetEvent): ProposedPrice<Price> {
         val proposedPrice = proposalService.reducePrices(betEvent, proposers)
         val roundedPrice = Price.round(proposedPrice.price)
 

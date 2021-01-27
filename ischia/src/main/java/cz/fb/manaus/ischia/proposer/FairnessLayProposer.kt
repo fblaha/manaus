@@ -16,7 +16,7 @@ object FairnessLayProposer : PriceProposer by FairnessProposer(
 )
 
 
-fun layStrategy(side: Side, version: Int): Double? = when (side) {
+fun layStrategy(side: Side, version: Int): Double = when (side) {
     Side.BACK -> when (version) {
         1 -> 0.070
         in 2..3 -> 0.065

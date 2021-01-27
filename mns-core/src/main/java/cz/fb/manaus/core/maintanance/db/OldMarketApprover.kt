@@ -11,6 +11,6 @@ class OldMarketApprover(private val history: Duration) : MarketDeletionApprover 
         return oldBoundary.isAfter(marketFootprint.market.event.openDate)
     }
 
-    override val timeRange: TimeRange?
+    override val timeRange: TimeRange
         get() = TimeRange(null, Instant.now().minus(history))
 }
