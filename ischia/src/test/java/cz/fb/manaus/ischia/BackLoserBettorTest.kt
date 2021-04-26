@@ -23,7 +23,7 @@ class BackLoserBettorTest : AbstractIntegrationTestCase() {
     @Test
     fun `place bet - based on fairness`() {
         val marketPrices = PricesTestFactory.newMarketPrices(2.98, 3.1, 3.0)
-        bettorTester.checkPlace(Side.BACK, marketPrices, 3, 3.151)
+        bettorTester.checkPlace(Side.BACK, marketPrices, 3, 3.162)
     }
 
     @Test
