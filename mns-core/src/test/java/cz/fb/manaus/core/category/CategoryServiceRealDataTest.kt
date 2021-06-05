@@ -91,11 +91,11 @@ class CategoryServiceRealDataTest : AbstractMarketDataAwareTestCase() {
             categories.forEach { counts[it] = counts.getValue(it) + 1 }
             if (category in categories) {
                 if (mustContainLower != null) {
-                    assertTrue { mustContainLower in market.eventType.name.toLowerCase() }
+                    assertTrue { mustContainLower in market.eventType.name.lowercase() }
                 }
             }
         }
-        return counts[category]!!
+        return counts[category] ?: error("no such category")
     }
 
     companion object {

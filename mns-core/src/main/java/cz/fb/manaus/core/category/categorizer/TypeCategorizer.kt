@@ -9,7 +9,7 @@ object TypeCategorizer : AbstractDelegatingCategorizer("type_") {
     public override fun getCategoryRaw(market: Market): Set<String> {
         return when (market.type) {
             null -> emptySet()
-            else -> setOf(market.type.toLowerCase())
+            else -> setOf(market.type.lowercase())
         }
     }
 }

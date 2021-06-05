@@ -1,6 +1,6 @@
 package cz.fb.manaus.core.model
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.test.assertEquals

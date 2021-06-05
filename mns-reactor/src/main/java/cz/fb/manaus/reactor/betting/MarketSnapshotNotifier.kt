@@ -56,8 +56,8 @@ fun CollectedBets.updateMetrics() {
 private fun updateCounter(side: Side, type: String, bets: List<TrackedBet>) {
     val count = bets.count { it.remote.requestedPrice.side == side }
     Metrics.counter(
-            "mns_bet_command_count",
-            "type", type,
-            "side", side.name.toLowerCase()
+        "mns_bet_command_count",
+        "type", type,
+        "side", side.name.lowercase()
     ).increment(count.toDouble())
 }

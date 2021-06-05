@@ -20,7 +20,7 @@ open class IschiaLocalConfiguration {
         val runnerTest = marketRunnerConf.runnerName ?: ""
         return { market, runner ->
             when (market.type ?: error("missing type")) {
-                TYPE_MATCH_ODDS -> runnerTest in runner.name.toLowerCase()
+                TYPE_MATCH_ODDS -> runnerTest in runner.name.lowercase()
                 else -> true
             }
         }

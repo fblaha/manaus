@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 object SideCategorizer : RealizedBetCategorizer {
 
     override fun getCategories(realizedBet: RealizedBet): Set<String> {
-        val side = realizedBet.settledBet.price.side.name.toLowerCase()
+        val side = realizedBet.settledBet.price.side.name.lowercase()
         return setOf("side_$side")
     }
 

@@ -11,7 +11,7 @@ class ProposerMetricsUpdater : BetCommandHandler {
     override fun onBetCommand(command: BetCommand): BetCommand {
         val action = command.bet.local
         if (!command.cancel) {
-            val side = action.price.side.name.toLowerCase()
+            val side = action.price.side.name.lowercase()
             action.proposers.forEach {
                 Metrics.counter(
                         "mns_proposer_stats",

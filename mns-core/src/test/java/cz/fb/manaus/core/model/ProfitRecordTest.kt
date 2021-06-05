@@ -3,7 +3,7 @@ package cz.fb.manaus.core.model
 import cz.fb.manaus.core.MarketCategories
 import cz.fb.manaus.core.category.Category
 import cz.fb.manaus.core.category.categorizer.COUNTRY_PREFIX
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class ProfitRecordTest {

@@ -15,7 +15,7 @@ object SportCategorizer : AbstractDelegatingCategorizer(SPORT_PREFIX) {
     private val iceHockey = Pattern.compile("ice\\s+hockey")!!
 
     private fun getCategory(market: Market): String? {
-        val typeName = market.eventType.name.toLowerCase()
+        val typeName = market.eventType.name.lowercase()
         when {
             "basketball" == typeName -> return MarketCategories.BASKETBALL
             americanFootball.matcher(typeName).matches() -> return MarketCategories.AMERICAN_FOOTBALL

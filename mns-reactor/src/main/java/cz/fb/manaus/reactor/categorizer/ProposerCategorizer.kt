@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 open class ProposerCategorizer : RealizedBetCategorizer {
 
     private fun getSideAware(prefix: String, side: Side, category: String): String {
-        val strSide = side.name.toLowerCase()
+        val strSide = side.name.lowercase()
         return "$prefix$strSide.$category"
     }
 

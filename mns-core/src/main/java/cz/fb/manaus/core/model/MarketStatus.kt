@@ -16,7 +16,7 @@ data class MarketStatus(
 
     val matchedAmount: Double
         get() {
-            return bets.sumByDouble { it.matchedAmount }
+            return bets.sumOf { it.matchedAmount }
         }
 
 }

@@ -1,9 +1,9 @@
 package cz.fb.manaus.core.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.time.Instant
+import kotlin.test.assertTrue
 
 class CollectedBetsTest {
 

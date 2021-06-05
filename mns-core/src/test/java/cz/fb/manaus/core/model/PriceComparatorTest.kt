@@ -1,7 +1,7 @@
 package cz.fb.manaus.core.model
 
 import com.google.common.collect.Comparators
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 

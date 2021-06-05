@@ -2,11 +2,13 @@ package cz.fb.manaus.core.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import cz.fb.manaus.core.test.AbstractTestCase
-import org.junit.Assert.*
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import java.time.temporal.ChronoUnit
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 val betTemplate = Bet(
         betId = "111",

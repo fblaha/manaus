@@ -32,19 +32,19 @@ class MinReduceProposerAdviserTest : AbstractTestCase() {
 
     @Test
     fun `back price`() {
-        val backPrice = adviser.getNewPrice(HOME_EVENT_BACK)!!.price
+        val backPrice = adviser.getNewPrice(HOME_EVENT_BACK).price
         assertEquals(Price(3.5, 3.0, Side.BACK), backPrice)
     }
 
     @Test
     fun `lay price`() {
-        val backPrice = adviser.getNewPrice(HOME_EVENT_LAY)!!.price
+        val backPrice = adviser.getNewPrice(HOME_EVENT_LAY).price
         assertEquals(Price(3.0, 3.0, Side.LAY), backPrice)
     }
 
     @Test
     fun proposers() {
-        val proposers = adviser.getNewPrice(HOME_EVENT_BACK)!!.proposers
+        val proposers = adviser.getNewPrice(HOME_EVENT_BACK).proposers
         assertEquals(setOf("mockPriceProposer"), proposers)
     }
 

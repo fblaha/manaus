@@ -16,7 +16,7 @@ object WeekDayCategorizer : AbstractDelegatingCategorizer("weekDay_") {
     internal fun getCategory(date: Date): Set<String> {
         val calendar = Calendar.getInstance()
         calendar.time = date
-        val weekDay = SimpleDateFormat("E", Locale.US).format(date).toLowerCase()
+        val weekDay = SimpleDateFormat("E", Locale.US).format(date).lowercase()
         return setOf(weekDay)
     }
 

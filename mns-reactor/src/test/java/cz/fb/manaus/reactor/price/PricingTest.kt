@@ -40,18 +40,18 @@ class PricingTest {
     @Test
     fun `fair price`() {
         val marketPrices = listOf(
-                PricesTestFactory.newRunnerPrices(1, 4.2, 6.0),
-                PricesTestFactory.newRunnerPrices(2, 2.87, 4.0),
-                PricesTestFactory.newRunnerPrices(1, 1.8, 3.0)
+            PricesTestFactory.newRunnerPrices(1, 4.2, 6.0),
+            PricesTestFactory.newRunnerPrices(2, 2.87, 4.0),
+            PricesTestFactory.newRunnerPrices(1, 1.8, 3.0)
         )
         val layFairness = getFairness(Side.LAY, marketPrices)
         assertEquals(1.5, layFairness, 0.1)
         val backFairness = getFairness(Side.BACK, marketPrices)
         assertEquals(0.8, backFairness, 0.001)
 
-        assertEquals(5.0, getRoundedFairnessFairPrice(4.2, backFairness)!!, 0.01)
-        assertEquals(3.336, getRoundedFairnessFairPrice(2.87, backFairness)!!, 0.01)
-        assertEquals(2.0, getRoundedFairnessFairPrice(1.8, backFairness)!!, 0.01)
+        assertEquals(5.0, getRoundedFairnessFairPrice(4.2, backFairness), 0.01)
+        assertEquals(3.336, getRoundedFairnessFairPrice(2.87, backFairness), 0.01)
+        assertEquals(2.0, getRoundedFairnessFairPrice(1.8, backFairness), 0.01)
     }
 
     private fun getRoundedFairnessFairPrice(unfairPrice: Double, fairness: Double): Double {
