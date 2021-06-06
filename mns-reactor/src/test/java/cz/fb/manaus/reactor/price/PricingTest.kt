@@ -14,13 +14,14 @@ class PricingTest {
 
     @Test
     fun `price downgrading`() {
-        assertEquals(3.0, downgrade(3.0, 0.0, Side.BACK), 0.000001)
-        assertEquals(3.0, downgrade(3.0, 0.0, Side.LAY), 0.000001)
-        assertEquals(1.0, downgrade(3.0, 1.0, Side.LAY), 0.000001)
-        assertEquals(2.0, downgrade(3.0, 0.5, Side.LAY), 0.000001)
-        assertEquals(5.0, downgrade(3.0, 0.5, Side.BACK), 0.000001)
-        assertEquals(3.88, downgrade(4.0, 0.04, Side.LAY), 0.000001)
-        assertEquals(4.125, downgrade(4.0, 0.04, Side.BACK), 0.000001)
+        val eps = 0.000001
+        assertEquals(3.0, downgrade(3.0, 0.0, Side.BACK), eps)
+        assertEquals(3.0, downgrade(3.0, 0.0, Side.LAY), eps)
+        assertEquals(1.0, downgrade(3.0, 1.0, Side.LAY), eps)
+        assertEquals(2.0, downgrade(3.0, 0.5, Side.LAY), eps)
+        assertEquals(5.0, downgrade(3.0, 0.5, Side.BACK), eps)
+        assertEquals(3.88, downgrade(4.0, 0.04, Side.LAY), eps)
+        assertEquals(4.125, downgrade(4.0, 0.04, Side.BACK), eps)
     }
 
     @Test
@@ -124,14 +125,14 @@ class PricingTest {
         val overround = getOverRound(marketPrices, Side.BACK)!!
         val reciprocal = getReciprocal(marketPrices, Side.BACK)!!
         val fairness = getFairness(Side.BACK, marketPrices)
-        assertTrue(overround > 1)
+        assertTrue { overround > 1 }
 
         val overroundPrices = unfairPrices.map {
             val fair = Pricing.getOverRoundFairPrice(
                 it, overround,
                 unfairPrices.size
             )
-            assertTrue(it < fair)
+            assertTrue { it < fair }
             fair
         }
 
@@ -144,10 +145,10 @@ class PricingTest {
         }
 
         val overFairnessBased = getOverRound(newMarketPrices(fairnessPrices), Side.BACK)
-        val overOverroundBased = getOverRound(newMarketPrices(overroundPrices), Side.BACK)
+        val overOverRoundBased = getOverRound(newMarketPrices(overroundPrices), Side.BACK)
 
         assertEquals(winnerCount.toDouble(), overFairnessBased!!, 0.001)
-        assertEquals(winnerCount.toDouble(), overOverroundBased!!, 0.001)
+        assertEquals(winnerCount.toDouble(), overOverRoundBased!!, 0.001)
     }
 
     private fun checkOverroundUnfairPrices(
