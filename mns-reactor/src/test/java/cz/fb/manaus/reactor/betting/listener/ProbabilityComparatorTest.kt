@@ -2,12 +2,11 @@ package cz.fb.manaus.reactor.betting.listener
 
 import cz.fb.manaus.core.model.RunnerPrices
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.PricesTestFactory
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class ProbabilityComparatorTest : AbstractTestCase() {
+class ProbabilityComparatorTest {
 
     @Test
     fun `probability comparison`() {

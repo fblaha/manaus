@@ -6,13 +6,10 @@ import cz.fb.manaus.core.model.RealizedBet
 import org.springframework.stereotype.Component
 
 @Component
-class AllCategorizer : RealizedBetCategorizer {
+object AllCategorizer : RealizedBetCategorizer {
 
     override fun getCategories(realizedBet: RealizedBet): Set<String> {
-        return CATEGORIES
+        return setOf(MarketCategories.ALL)
     }
 
-    companion object {
-        val CATEGORIES = setOf(MarketCategories.ALL)
-    }
 }

@@ -1,17 +1,14 @@
 package cz.fb.manaus.core.category.categorizer
 
 import cz.fb.manaus.core.model.market
-import cz.fb.manaus.core.test.AbstractTestCase
-import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
+import org.junit.jupiter.api.Test
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.test.assertTrue
 
-class DayHourCategorizerTest : AbstractTestCase() {
+class DayHourCategorizerTest {
 
-    @Autowired
-    private lateinit var categorizer: DayHourCategorizer
+    val categorizer = DayHourCategorizer
 
     @Test
     fun `hour categories`() {

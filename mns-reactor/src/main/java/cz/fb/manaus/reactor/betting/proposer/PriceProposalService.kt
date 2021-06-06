@@ -7,7 +7,7 @@ import cz.fb.manaus.reactor.betting.BetEvent
 import org.springframework.stereotype.Service
 
 @Service
-class PriceProposalService {
+object PriceProposalService {
 
     fun reducePrices(event: BetEvent, proposers: List<PriceProposer>): ProposedPrice<Double> {
         val prices = mutableListOf<ProposedPrice<Double>>()

@@ -3,7 +3,6 @@ package cz.fb.manaus.reactor.betting.listener
 import com.google.common.primitives.Doubles
 import cz.fb.manaus.core.model.RunnerPrices
 import cz.fb.manaus.core.model.Side
-import java.util.*
 
 class ProbabilityComparator(private val side: Side) : Comparator<RunnerPrices> {
 

@@ -1,17 +1,13 @@
 package cz.fb.manaus.reactor.profit.progress.function
 
 import cz.fb.manaus.core.model.realizedBet
-import cz.fb.manaus.core.test.AbstractTestCase
-import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
+import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
 
-class FairnessLayFunctionTest : AbstractTestCase() {
-    @Autowired
-    private lateinit var fc: FairnessLayFunction
+class FairnessLayFunctionTest {
 
     @Test
     fun `get value`() {
-        assertTrue(fc(realizedBet)!! in (1.0..1.5))
+        assertTrue { FairnessLayFunction(realizedBet)!! in (1.0..1.5) }
     }
 }

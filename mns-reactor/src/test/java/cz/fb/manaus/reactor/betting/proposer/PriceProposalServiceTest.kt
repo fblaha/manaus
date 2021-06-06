@@ -1,17 +1,16 @@
 package cz.fb.manaus.reactor.betting.proposer
 
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractTestCase
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.HOME_EVENT_BACK
 import cz.fb.manaus.reactor.betting.HOME_EVENT_LAY
-import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
-class PriceProposalServiceTest : AbstractTestCase() {
-    @Autowired
-    private lateinit var service: PriceProposalService
+class PriceProposalServiceTest {
+
+    private val service = PriceProposalService
 
     @Test
     fun `back price`() {
@@ -23,14 +22,16 @@ class PriceProposalServiceTest : AbstractTestCase() {
         checkProposal(MIN_PRICE, Side.LAY, PROPOSERS)
     }
 
-    @Test(expected = IllegalStateException::class)
+    @Test
     fun `mandatory price`() {
         val proposer: PriceProposer = object : PriceProposer {
             override fun getProposedPrice(event: BetEvent): Double? {
                 return null
             }
         }
-        service.reducePrices(HOME_EVENT_LAY, listOf(proposer))
+        assertFailsWith<IllegalStateException> {
+            service.reducePrices(HOME_EVENT_LAY, listOf(proposer))
+        }
     }
 
     private fun checkProposal(expectedPrice: Double, side: Side, proposers: List<PriceProposer>) {
@@ -61,9 +62,9 @@ class PriceProposalServiceTest : AbstractTestCase() {
     companion object {
 
         val PROPOSERS = listOf(
-                TestProposer1(),
-                TestProposer2(),
-                FooProposer()
+            TestProposer1(),
+            TestProposer2(),
+            FooProposer()
         )
         const val MIN_PRICE = 1.5
         const val MAX_PRICE = 2.0

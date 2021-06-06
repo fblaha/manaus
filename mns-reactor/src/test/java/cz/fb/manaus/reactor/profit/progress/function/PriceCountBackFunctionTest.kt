@@ -1,18 +1,13 @@
 package cz.fb.manaus.reactor.profit.progress.function
 
 import cz.fb.manaus.core.model.realizedBet
-import cz.fb.manaus.core.test.AbstractTestCase
-import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class PriceCountBackFunctionTest : AbstractTestCase() {
-
-    @Autowired
-    private lateinit var fc: PriceCountBackFunction
+class PriceCountBackFunctionTest {
 
     @Test
     fun category() {
-        assertEquals(2.0, fc(realizedBet))
+        assertEquals(2.0, PriceCountBackFunction(realizedBet))
     }
 }

@@ -12,7 +12,7 @@ fun getWeightedMean(prices: List<Price>): Double? {
 }
 
 @Component
-class PriceBulldozer {
+object PriceBulldozer {
 
     fun bulldoze(threshold: Double, prices: List<Price>): List<Price> {
         var sum = 0.0

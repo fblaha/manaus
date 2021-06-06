@@ -2,7 +2,6 @@ package cz.fb.manaus.reactor.price
 
 import cz.fb.manaus.core.model.RunnerPrices
 import cz.fb.manaus.core.model.Side
-import java.util.*
 
 object ProbabilityCalculator {
 

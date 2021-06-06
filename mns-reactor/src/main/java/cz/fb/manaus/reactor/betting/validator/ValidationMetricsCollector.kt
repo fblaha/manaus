@@ -5,7 +5,7 @@ import io.micrometer.core.instrument.Metrics
 import org.springframework.stereotype.Component
 
 @Component
-class ValidationMetricsCollector {
+object ValidationMetricsCollector {
 
     fun updateMetrics(result: ValidationResult, type: Side, validatorName: String) {
         Metrics.counter(

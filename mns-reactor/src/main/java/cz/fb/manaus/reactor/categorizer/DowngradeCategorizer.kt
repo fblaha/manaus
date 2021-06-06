@@ -7,7 +7,7 @@ import cz.fb.manaus.core.model.PriceComparator
 import org.springframework.stereotype.Component
 
 @Component
-class DowngradeCategorizer : ActionHistoryCategorizer {
+object DowngradeCategorizer : ActionHistoryCategorizer {
 
     override fun getCategories(actions: List<BetAction>, market: Market): Set<String> {
         validate(actions)
@@ -28,13 +28,11 @@ class DowngradeCategorizer : ActionHistoryCategorizer {
 
     private fun validate(actions: List<BetAction>) {
         check(actions
-                .map { it.price.side }
-                .distinct().count() <= 1) { "mixed sides" }
+            .map { it.price.side }
+            .distinct().count() <= 1) { "mixed sides" }
         check(actions.zipWithNext().all { it.first.time < it.second.time }) { "time disorder" }
     }
 
-    companion object {
-        const val DOWNGRADE = "downgrade_true"
-        const val DOWNGRADE_LAST = "downgradeLast_true"
-    }
+    const val DOWNGRADE = "downgrade_true"
+    const val DOWNGRADE_LAST = "downgradeLast_true"
 }

@@ -3,28 +3,24 @@ package cz.fb.manaus.reactor.price
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.PriceComparator
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractTestCase
-import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
-class PriceBulldozerTest : AbstractTestCase() {
-
-    @Autowired
-    private lateinit var bulldozer: PriceBulldozer
+class PriceBulldozerTest {
 
     private val realSample = listOf(
-            Price(6.0, 2.0, Side.BACK),
-            Price(3.0, 4.0, Side.BACK),
-            Price(2.8, 10.0, Side.BACK)
+        Price(6.0, 2.0, Side.BACK),
+        Price(3.0, 4.0, Side.BACK),
+        Price(2.8, 10.0, Side.BACK)
     )
 
     @Test
     fun `bulldoze lay prices`() {
         checkResult(3.0, listOf(Price(3.0, 2.0, Side.LAY), Price(4.0, 2.0, Side.LAY)), 1, 3.5, 4.0)
         val three = listOf(
-                Price(3.0, 2.0, Side.LAY),
-                Price(4.0, 2.0, Side.LAY), Price(5.0, 2.0, Side.LAY)
+            Price(3.0, 2.0, Side.LAY),
+            Price(4.0, 2.0, Side.LAY), Price(5.0, 2.0, Side.LAY)
         )
         checkResult(3.0, three, 2, 3.5, 4.0)
         checkResult(5.0, three, 1, 4.0, 6.0)
@@ -40,8 +36,8 @@ class PriceBulldozerTest : AbstractTestCase() {
     fun `threshold equal to amount sum`() {
         val two = listOf(Price(4.0, 2.0, Side.BACK), Price(3.0, 2.0, Side.BACK))
         val three = listOf(
-                Price(5.0, 2.0, Side.BACK), Price(4.0, 2.0, Side.BACK),
-                Price(3.0, 2.0, Side.BACK)
+            Price(5.0, 2.0, Side.BACK), Price(4.0, 2.0, Side.BACK),
+            Price(3.0, 2.0, Side.BACK)
         )
 
         checkResult(2.0, two, 2, 4.0, 2.0)
@@ -60,39 +56,43 @@ class PriceBulldozerTest : AbstractTestCase() {
         checkResult(100.0, realSample, 1, 3.25, 16.0)
     }
 
-    @Test(expected = IllegalStateException::class)
     fun `bulldozed prices are in wrong order - back`() {
-        val badOrder = realSample.sortedWith(PriceComparator).reversed()
-        bulldozer.bulldoze(10.0, badOrder)
+        assertFailsWith<IllegalStateException> {
+            val badOrder = realSample.sortedWith(PriceComparator).reversed()
+            PriceBulldozer.bulldoze(10.0, badOrder)
+        }
     }
 
-    @Test(expected = IllegalStateException::class)
+    @Test
     fun `bulldozed prices are in wrong order - lay`() {
-        bulldozer.bulldoze(
+        assertFailsWith<IllegalStateException> {
+            PriceBulldozer.bulldoze(
                 10.0,
                 listOf(Price(5.0, 2.0, Side.LAY), Price(4.0, 2.0, Side.LAY))
-        )
+            )
+
+        }
     }
 
     private fun checkResult(
-            threshold: Double,
-            prices: List<Price>,
-            expectedCount: Int,
-            expectedPrice: Double,
-            expectedAmount: Double
+        threshold: Double,
+        prices: List<Price>,
+        expectedCount: Int,
+        expectedPrice: Double,
+        expectedAmount: Double
     ) {
-        val bulldozed = bulldozer.bulldoze(threshold, prices)
+        val bulldozed = PriceBulldozer.bulldoze(threshold, prices)
         assertEquals(expectedCount, bulldozed.size)
         assertEquals(expectedPrice, bulldozed[0].price, 0.0001)
         assertEquals(expectedAmount, bulldozed[0].amount, 0.0001)
 
         assertEquals(
-                prices.map { it.amount }.sum(),
-                bulldozed.map { it.amount }.sum(), 0.0001
+            prices.map { it.amount }.sum(),
+            bulldozed.map { it.amount }.sum(), 0.0001
         )
         assertEquals(
-                getWeightedMean(prices)!!,
-                getWeightedMean(bulldozed)!!, 0.0001
+            getWeightedMean(prices)!!,
+            getWeightedMean(bulldozed)!!, 0.0001
         )
     }
 

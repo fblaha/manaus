@@ -1,18 +1,14 @@
 package cz.fb.manaus.reactor.profit.progress.function
 
 import cz.fb.manaus.core.model.realizedBet
-import cz.fb.manaus.core.test.AbstractTestCase
-import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class ActualRunnerMatchedFunctionTest : AbstractTestCase() {
-    @Autowired
-    private lateinit var fc: ActualRunnerMatchedFunction
+class ActualRunnerMatchedFunctionTest {
 
     @Test
     fun `get value`() {
-        assertEquals(100.0, fc(realizedBet))
+        assertEquals(100.0, ActualRunnerMatchedFunction(realizedBet))
     }
 
 }

@@ -1,15 +1,12 @@
 package cz.fb.manaus.core.category.categorizer
 
-import cz.fb.manaus.core.test.AbstractTestCase
-import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
+import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.test.assertEquals
 
-class WeekDayCategorizerTest : AbstractTestCase() {
+class WeekDayCategorizerTest {
 
-    @Autowired
-    private lateinit var categorizer: WeekDayCategorizer
+    private val categorizer = WeekDayCategorizer
 
     @Test
     fun `week day - mon, tue, wed, thu, fri, sat, sun`() {

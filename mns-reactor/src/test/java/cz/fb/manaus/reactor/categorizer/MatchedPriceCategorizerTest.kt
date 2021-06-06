@@ -1,15 +1,12 @@
 package cz.fb.manaus.reactor.categorizer
 
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractTestCase
-import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class MatchedPriceCategorizerTest : AbstractTestCase() {
+class MatchedPriceCategorizerTest {
 
-    @Autowired
-    private lateinit var categorizer: MatchedPriceCategorizer
+    private val categorizer = MatchedPriceCategorizer
 
     @Test
     fun `better category`() {
