@@ -4,7 +4,7 @@ import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.PricesTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class TooCloseUpdateEpsilonValidatorTest {

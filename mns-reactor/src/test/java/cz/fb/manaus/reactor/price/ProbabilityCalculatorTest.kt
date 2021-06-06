@@ -3,8 +3,8 @@ package cz.fb.manaus.reactor.price
 import cz.fb.manaus.core.model.SEL_HOME
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.reactor.PricesTestFactory
-import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 class ProbabilityCalculatorTest {
 
@@ -26,7 +26,7 @@ class ProbabilityCalculatorTest {
                 val probability = ProbabilityCalculator.fromFairness(fairness[side]!!, side, prices)
                 for ((i, expected) in probabilities.withIndex()) {
                     val selection = SEL_HOME * (i + 1)
-                    Assert.assertEquals(expected, probability.getValue(selection), 0.005)
+                    assertEquals(expected, probability.getValue(selection), 0.005)
                 }
             }
         }

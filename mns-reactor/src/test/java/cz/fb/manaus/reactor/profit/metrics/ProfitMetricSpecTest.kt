@@ -1,7 +1,7 @@
 package cz.fb.manaus.reactor.profit.metrics
 
 import cz.fb.manaus.core.model.ProfitRecord
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

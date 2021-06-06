@@ -2,7 +2,6 @@ package cz.fb.manaus.reactor.profit
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractTestCase
-import org.junit.Assert
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
@@ -131,7 +130,7 @@ class ProfitServiceTest : AbstractTestCase() {
         val byCategory = byCategory(records)
         for ((key, value) in expectedProfits) {
             val record = byCategory.getValue(key)
-            Assert.assertEquals(value, record.profit, 0.0001)
+            assertEquals(value, record.profit, 0.0001)
         }
     }
 
@@ -139,7 +138,7 @@ class ProfitServiceTest : AbstractTestCase() {
         val betList = listOf(*bets).map { toRealizedBet(it) }
         val result = profitService.getProfitRecords(betList, null, false)
         val all = result.first { ProfitRecord.isAllCategory(it) }
-        Assert.assertEquals(expectedAllProfit, all.profit, 0.01)
+        assertEquals(expectedAllProfit, all.profit, 0.01)
         val backCount = betList.filter { it.settledBet.price.side == Side.BACK }.count()
         val layCount = betList.filter { it.settledBet.price.side == Side.LAY }.count()
         assertEquals(backCount, all.backCount)
@@ -170,8 +169,10 @@ class ProfitServiceTest : AbstractTestCase() {
         val byCategory = byCategory(records)
 
         assertEquals(1, byCategory.getValue("market_country_cz").layCount)
-        Assert.assertEquals(withCharge(3.0),
-                byCategory.getValue("market_country_cz").profit, 0.01)
+        assertEquals(
+            withCharge(3.0),
+            byCategory.getValue("market_country_cz").profit, 0.01
+        )
 
         assertTrue(
                 profitService.getProfitRecords(
@@ -200,7 +201,7 @@ class ProfitServiceTest : AbstractTestCase() {
         r1.coverCount = 1
         val r2 = ProfitRecord("test", 100.0, 2.0, 0.06, 1, 1)
         val record = profitService.mergeCategory("test", listOf(r1, r2))
-        Assert.assertEquals(record.coverIndex!!, r1.coverIndex!!, 0.00001)
+        assertEquals(record.coverIndex!!, r1.coverIndex!!, 0.00001)
     }
 }
 

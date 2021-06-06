@@ -13,9 +13,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 
 @Configuration
 @ComponentScan(
-        useDefaultFilters = false,
-        includeFilters = [ComponentScan.Filter(type = FilterType.ANNOTATION, classes = [Configuration::class])],
-        basePackages = ["cz.fb.manaus.spring"]
+    useDefaultFilters = false,
+    includeFilters = [ComponentScan.Filter(type = FilterType.ANNOTATION, classes = [Configuration::class])],
+    basePackages = ["cz.fb.manaus.spring"]
 )
 open class TestConfiguration
 

@@ -4,7 +4,7 @@ import cz.fb.manaus.core.model.bfProvider
 import cz.fb.manaus.core.model.mbProvider
 import cz.fb.manaus.core.provider.ProviderTag.VendorBetfair
 import cz.fb.manaus.core.provider.ProviderTag.VendorMatchbook
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

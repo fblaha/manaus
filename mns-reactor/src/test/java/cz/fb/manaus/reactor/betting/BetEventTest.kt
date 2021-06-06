@@ -3,23 +3,22 @@ package cz.fb.manaus.reactor.betting
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.price.Fairness
-import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 
 val HOME_EVENT_BACK: BetEvent = BetEvent(
-        sideSelection = SideSelection(Side.BACK, SEL_HOME),
-        account = mbAccount,
-        coverage = mutableMapOf(),
-        marketPrices = runnerPrices,
-        market = market,
-        metrics = BetMetrics(
-                actualTradedVolume = tradedVolume[SEL_HOME],
-                fairness = Fairness(0.9, 1.1),
-                chargeGrowthForecast = 1.0
-        )
+    sideSelection = SideSelection(Side.BACK, SEL_HOME),
+    account = mbAccount,
+    coverage = mutableMapOf(),
+    marketPrices = runnerPrices,
+    market = market,
+    metrics = BetMetrics(
+        actualTradedVolume = tradedVolume[SEL_HOME],
+        fairness = Fairness(0.9, 1.1),
+        chargeGrowthForecast = 1.0
+    )
 )
 
 val HOME_EVENT_LAY: BetEvent = HOME_EVENT_BACK.copy(sideSelection = SideSelection(Side.LAY, SEL_HOME))
@@ -35,11 +34,13 @@ class BetEventTest {
     @Test
     fun `simulate settled bet`() {
         val event = BetEventTestFactory.newBetEvent(Side.LAY, 3.5, 4.6)
-                .copy(proposedPrice = Price(3.0, 5.0, Side.LAY))
-        val settledBet = event.simulatedBet
-        assertEquals(event.sideSelection.side, settledBet.settledBet.price.side)
-        Assert.assertEquals(5.0, settledBet.settledBet.price.amount, 0.0001)
-        assertNotNull(settledBet.betAction)
+            .copy(proposedPrice = Price(3.0, 5.0, Side.LAY))
+        val realized = event.simulatedBet
+        val settledBet = realized.settledBet
+        assertEquals(event.sideSelection.side, settledBet.price.side)
+        assertEquals(5.0, settledBet.price.amount, 0.0001)
+        assertEquals(5.0, settledBet.price.amount, 0.0001)
+        assertNotNull(realized.betAction)
     }
 
     @Test
@@ -60,18 +61,18 @@ class BetEventTest {
     @Test
     fun create() {
         val snapshot = MarketSnapshot(
-                runnerPrices = runnerPrices,
-                currentBets = emptyList(),
-                market = market
+            runnerPrices = runnerPrices,
+            currentBets = emptyList(),
+            market = market
         )
 
         val fairness = Fairness(0.9, null)
         val sideSelection = SideSelection(Side.BACK, homePrices.selectionId)
         val event = createBetEvent(
-                sideSelection = sideSelection,
-                snapshot = snapshot,
-                fairness = fairness,
-                account = mbAccount
+            sideSelection = sideSelection,
+            snapshot = snapshot,
+            fairness = fairness,
+            account = mbAccount
         )
         assertEquals(mbAccount, event.account)
         assertEquals(homePrices.selectionId, event.sideSelection.selectionId)

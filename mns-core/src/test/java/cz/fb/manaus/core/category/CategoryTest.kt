@@ -1,7 +1,7 @@
 package cz.fb.manaus.core.category
 
 import cz.fb.manaus.core.category.categorizer.COUNTRY_PREFIX
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 

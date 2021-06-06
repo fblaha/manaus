@@ -1,8 +1,8 @@
 package cz.fb.manaus.reactor.price
 
 import cz.fb.manaus.core.model.priceEq
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 
@@ -54,11 +54,13 @@ class FairnessPolynomialCalculatorTest {
         assertEquals(1.093, calculator.getFairness(1, listOf(3.5, 3.5, 2.7))!!, eps)
     }
 
+
     companion object {
         val BEST_PRICES_HARD = listOf(
-                85.0, 510.0, 270.0, 700.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0,
-                1000.0, 1000.0, 1000.0, 1000.0, 38.0, 95.0, 110.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0,
-                1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0
+            85.0, 510.0, 270.0, 700.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0,
+            1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0,
+            38.0, 95.0, 110.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0,
+            1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0, 1000.0
         )
     }
 

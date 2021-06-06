@@ -3,11 +3,12 @@ package cz.fb.manaus.reactor.price
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.PricesTestFactory
 import cz.fb.manaus.reactor.price.Pricing.downgrade
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.math.max
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+
 
 class PricingTest {
 
@@ -127,8 +128,8 @@ class PricingTest {
 
         val overroundPrices = unfairPrices.map {
             val fair = Pricing.getOverRoundFairPrice(
-                    it, overround,
-                    unfairPrices.size
+                it, overround,
+                unfairPrices.size
             )
             assertTrue(it < fair)
             fair
@@ -150,10 +151,10 @@ class PricingTest {
     }
 
     private fun checkOverroundUnfairPrices(
-            reciprocal: Double,
-            winnerCount: Int,
-            unfairPrices: List<Double>,
-            fairPrices: List<Double>
+        reciprocal: Double,
+        winnerCount: Int,
+        unfairPrices: List<Double>,
+        fairPrices: List<Double>
     ) {
         for ((unfairOrig, fair) in unfairPrices.zip(fairPrices)) {
             val unfairPrice = getOverroundUnfairPrice(fair, reciprocal, winnerCount, unfairPrices.size)
@@ -186,10 +187,10 @@ class PricingTest {
     }
 
     private fun getOverroundUnfairPrice(
-            fairPrice: Double,
-            targetReciprocal: Double,
-            winnerCount: Int,
-            runnerCount: Int
+        fairPrice: Double,
+        targetReciprocal: Double,
+        winnerCount: Int,
+        runnerCount: Int
     ): Double {
         val overround = winnerCount / targetReciprocal
         val selectionOverround = (overround - winnerCount) / runnerCount

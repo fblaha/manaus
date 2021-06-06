@@ -2,7 +2,7 @@ package cz.fb.manaus.reactor.betting
 
 import cz.fb.manaus.core.makeName
 import cz.fb.manaus.reactor.betting.proposer.PriceProposer
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class NamingTest {

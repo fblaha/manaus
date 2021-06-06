@@ -2,9 +2,9 @@ package cz.fb.manaus.reactor.charge
 
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.core.test.AbstractTestCase
-import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
+import kotlin.test.assertTrue
 
 
 class MarketChargeSimulatorTest : AbstractTestCase() {

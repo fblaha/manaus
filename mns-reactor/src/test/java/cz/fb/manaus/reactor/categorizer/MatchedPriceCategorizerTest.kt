@@ -2,9 +2,9 @@ package cz.fb.manaus.reactor.categorizer
 
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractTestCase
-import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
+import kotlin.test.assertEquals
 
 class MatchedPriceCategorizerTest : AbstractTestCase() {
 

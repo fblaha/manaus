@@ -15,8 +15,8 @@ object FairnessPolynomialCalculator {
     fun getFairness(winnerCount: Int, prices: List<Double?>): Double? {
         if (prices.all { it != null }) {
             val presentPrices = prices.mapNotNull { it }
-            var rightSide = multiplyPolynomials(presentPrices)
-            rightSide = rightSide.multiply(PolynomialFunction(doubleArrayOf(winnerCount.toDouble())))
+            val rightSide = multiplyPolynomials(presentPrices)
+                .multiply(PolynomialFunction(doubleArrayOf(winnerCount.toDouble())))
 
             val leftSideItems = mutableListOf<PolynomialFunction>()
             for (i in presentPrices.indices) {
