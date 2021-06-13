@@ -17,7 +17,7 @@ data class BetCoverage(private val coverage: Map<MarketSelection, List<RealizedB
 
     private fun getSides(marketId: String, selectionId: Long): Set<Side> {
         return coverage.getValue(MarketSelection(marketId, selectionId))
-                .map { it.settledBet.price.side }.toSet()
+            .map { it.settledBet.price.side }.toSet()
 
     }
 
@@ -28,16 +28,17 @@ data class BetCoverage(private val coverage: Map<MarketSelection, List<RealizedB
 
     fun getAmount(marketId: String, selectionId: Long, side: Side): Double {
         return coverage.getValue(MarketSelection(marketId, selectionId))
-                .filter { it.settledBet.price.side == side }.map { it.settledBet.price.amount }.sum()
+            .filter { it.settledBet.price.side == side }
+            .sumOf { it.settledBet.price.amount }
     }
 
     fun getPrice(marketId: String, selectionId: Long, side: Side): Double {
         return coverage.getValue(MarketSelection(marketId, selectionId))
-                .filter { it.settledBet.price.side == side }.map { it.settledBet.price.price }.average()
+            .filter { it.settledBet.price.side == side }
+            .map { it.settledBet.price.price }.average()
     }
 
     companion object {
-        val EMPTY = BetCoverage(emptyMap())
         private fun getCoverageKey(bet: RealizedBet): MarketSelection {
             return MarketSelection(bet.market.id, bet.settledBet.selectionId)
         }

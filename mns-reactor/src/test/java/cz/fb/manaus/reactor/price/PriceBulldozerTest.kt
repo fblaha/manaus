@@ -87,8 +87,8 @@ class PriceBulldozerTest {
         assertEquals(expectedAmount, bulldozed[0].amount, 0.0001)
 
         assertEquals(
-            prices.map { it.amount }.sum(),
-            bulldozed.map { it.amount }.sum(), 0.0001
+            prices.sumOf { it.amount },
+            bulldozed.sumOf { it.amount }, 0.0001
         )
         assertEquals(
             getWeightedMean(prices)!!,

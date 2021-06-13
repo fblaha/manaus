@@ -32,15 +32,15 @@ class ProfitService(private val categoryService: CategoryService) {
 
     fun mergeCategory(category: String, records: Collection<ProfitRecord>): ProfitRecord {
         require(records.map { it.category }
-                .all { category == it })
+            .all { category == it })
         val avgPrice = records
-                .map { it.avgPrice }
-                .average()
-        val theoreticalProfit = records.map { it.theoreticalProfit }.sum()
-        val charge = records.map { it.charge }.sum()
-        val layCount = records.map { it.layCount }.sum()
-        val backCount = records.map { it.backCount }.sum()
-        val coverCount = records.map { it.coverCount }.sum()
+            .map { it.avgPrice }
+            .average()
+        val theoreticalProfit = records.sumOf { it.theoreticalProfit }
+        val charge = records.sumOf { it.charge }
+        val layCount = records.sumOf { it.layCount }
+        val backCount = records.sumOf { it.backCount }
+        val coverCount = records.sumOf { it.coverCount }
         val result = ProfitRecord(category, theoreticalProfit, avgPrice, charge, layCount, backCount)
         if (coverCount > 0) {
             val diff = records.filter { it.coverIndex != null }.mapNotNull { it.coverIndex }.average()

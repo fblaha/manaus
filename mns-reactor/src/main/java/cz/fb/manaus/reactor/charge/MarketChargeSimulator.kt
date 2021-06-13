@@ -27,9 +27,9 @@ object MarketChargeSimulator {
                 val isWinner = selection in winners
                 val selectionBets = defaultBets.getValue(selection)
                 profit += if (isWinner)
-                    selectionBets.map { this.profitWinner(it) }.sum()
+                    selectionBets.sumOf { this.profitWinner(it) }
                 else
-                    selectionBets.map { this.profitLoser(it) }.sum()
+                    selectionBets.sumOf { this.profitLoser(it) }
             }
             if (profit > 0) {
                 val charge = profit * commission

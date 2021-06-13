@@ -4,7 +4,7 @@ import cz.fb.manaus.core.model.RunnerPrices
 import cz.fb.manaus.core.model.Side
 
 fun getOverRound(bestPrices: List<Double>): Double {
-    return bestPrices.map { 1 / it }.sum()
+    return bestPrices.sumOf { 1 / it }
 }
 
 fun getBestPrices(runnerPrices: List<RunnerPrices>, side: Side): List<Double?> {

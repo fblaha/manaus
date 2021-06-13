@@ -29,7 +29,7 @@ object PriceBulldozer {
         }
         val priceMean = getWeightedMean(convicts)
         if (priceMean != null) {
-            val amount = convicts.map { it.amount }.sum()
+            val amount = convicts.sumOf { it.amount }
             val price = Price.round(priceMean)
             untouched.add(0, Price(price, amount, prices[0].side))
         }
