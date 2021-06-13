@@ -8,7 +8,18 @@ data class Price(
     val price: Double,
     val amount: Double,
     val side: Side
-) {
+) : Comparable<Price> {
+
+    override fun compareTo(other: Price): Int {
+        if (side == other.side) {
+            return when (side) {
+                Side.BACK -> compareValuesBy(this, other, Price::price, Price::amount)
+                Side.LAY -> compareValuesBy(other, this, Price::price, Price::amount)
+            }
+        }
+        return compareValuesBy(other, this, Price::side)
+    }
+
     companion object {
         fun round(value: Double): Double {
             return Precision.round(value, 3)
