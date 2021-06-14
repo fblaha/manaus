@@ -11,3 +11,8 @@ fun <T> getWeightedMean(data: List<T>, valFunc: (T) -> Double, weightFunc: (T) -
         Mean().evaluate(values, weights)
     }
 }
+
+
+fun getWeightedMean(prices: List<Price>): Double? {
+    return getWeightedMean(prices, Price::price, Price::amount)
+}
