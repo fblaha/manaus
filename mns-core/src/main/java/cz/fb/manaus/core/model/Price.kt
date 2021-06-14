@@ -11,13 +11,11 @@ data class Price(
 ) : Comparable<Price> {
 
     override fun compareTo(other: Price): Int {
-        if (side == other.side) {
-            return when (side) {
-                Side.BACK -> compareValuesBy(this, other, Price::price, Price::amount)
-                Side.LAY -> compareValuesBy(other, this, Price::price, Price::amount)
-            }
+        check(side == other.side) { "mixed sides" }
+        return when (side) {
+            Side.BACK -> compareValuesBy(this, other, Price::price, Price::amount)
+            Side.LAY -> compareValuesBy(other, this, Price::price, Price::amount)
         }
-        return compareValuesBy(other, this, Price::side)
     }
 
     companion object {

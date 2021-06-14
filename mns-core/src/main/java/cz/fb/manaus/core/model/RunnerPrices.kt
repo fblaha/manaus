@@ -16,8 +16,4 @@ data class RunnerPrices(
         @JsonIgnore
         get() = prices.maxOrNull()
 
-    val sortedPrices: List<Price>
-        @JsonIgnore
-        get() = prices.sorted().reversed()
-
 }

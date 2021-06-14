@@ -5,7 +5,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
-import kotlin.test.assertTrue
 
 class PriceTest {
 
@@ -15,22 +14,30 @@ class PriceTest {
         assertNotEquals(Price(2.28, 2.04, Side.LAY), Price(2.28, 2.24, Side.LAY))
     }
 
-    @Test
-    fun testCmp() {
-        assertTrue { Price(2.0, 2.0, Side.BACK) < Price(3.0, 2.0, Side.BACK) }
-        assertTrue { Price(2.0, 2.0, Side.LAY) > Price(3.0, 2.0, Side.LAY) }
-    }
-
-    @ParameterizedTest
-    @CsvSource(
-        "2, 2",
-        "1.99999999, 2",
-        "3.0000001, 3",
-        "3.01, 3.01"
-    )
-    fun round(input: Double, expected: Double) {
-        assertEquals(expected, Price.round(input))
-    }
+//    @Test
+//    fun testCmp() {
+//        assertTrue { Price(2.0, 2.0, Side.BACK) < Price(3.0, 2.0, Side.BACK) }
+//        assertTrue { Price(2.0, 2.0, Side.LAY) > Price(3.0, 2.0, Side.LAY) }
+//
+//        val lst = listOf(
+//            Price(2.0, 2.0, Side.BACK),
+//            Price(3.0, 2.0, Side.BACK),
+//            Price(4.0, 2.0, Side.LAY),
+//            Price(5.0, 2.0, Side.LAY),
+//        )
+//        println(lst.maxOrNull())
+//    }
+//
+@ParameterizedTest
+@CsvSource(
+    "2, 2",
+    "1.99999999, 2",
+    "3.0000001, 3",
+    "3.01, 3.01"
+)
+fun round(input: Double, expected: Double) {
+    assertEquals(expected, Price.round(input))
+}
 
     @ParameterizedTest
     @CsvSource(

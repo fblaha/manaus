@@ -14,16 +14,10 @@ class RunnerPricesTest {
     }
 
     @Test
-    fun `sorted prices`() {
-        assertEquals(4, runnerPrices.first().sortedPrices.size)
-        assertEquals(Side.BACK, runnerPrices.first().sortedPrices.first().side)
-    }
-
-    @Test
     fun `best price`() {
-        assertEquals(Side.BACK, runnerPrices.first().bestPrice?.side)
-        assertEquals(2.5, runnerPrices.first().bestPrice?.price)
         val lay = runnerPrices.first().getHomogeneous(Side.LAY)
+        val back = runnerPrices.first().getHomogeneous(Side.BACK)
+        assertEquals(2.5, back.bestPrice?.price)
         assertEquals(3.5, lay.bestPrice?.price)
     }
 }
