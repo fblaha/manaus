@@ -5,6 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 class PriceTest {
 
@@ -12,6 +13,12 @@ class PriceTest {
     fun testEq() {
         assertEquals(Price(2.28, 2.24, Side.LAY), Price(2.28, 2.24, Side.LAY))
         assertNotEquals(Price(2.28, 2.04, Side.LAY), Price(2.28, 2.24, Side.LAY))
+    }
+
+    @Test
+    fun testCmp() {
+        assertTrue { Price(2.0, 2.0, Side.BACK) < Price(3.0, 2.0, Side.BACK) }
+        assertTrue { Price(2.0, 2.0, Side.LAY) > Price(3.0, 2.0, Side.LAY) }
     }
 
     @ParameterizedTest
