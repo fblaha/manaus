@@ -19,10 +19,13 @@ object Pricing {
 
     fun isDowngrade(newPrice: Double, oldPrice: Double, type: Side): Boolean {
         if (newPrice priceEq oldPrice) return false
-        return if (type == Side.BACK) {
-            newPrice > oldPrice
-        } else {
-            newPrice < oldPrice
+        return when (type) {
+            Side.BACK -> {
+                newPrice > oldPrice
+            }
+            Side.LAY -> {
+                newPrice < oldPrice
+            }
         }
     }
 

@@ -3,10 +3,10 @@ package cz.fb.manaus.core.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 
 data class RunnerPrices(
-        val selectionId: Long,
-        val prices: List<Price>,
-        val lastMatchedPrice: Double?,
-        val matchedAmount: Double?
+    val selectionId: Long,
+    val prices: List<Price>,
+    val lastMatchedPrice: Double?,
+    val matchedAmount: Double?
 ) {
     fun getHomogeneous(side: Side): RunnerPrices {
         return this.copy(prices = this.prices.filter { it.side == side })
@@ -14,10 +14,10 @@ data class RunnerPrices(
 
     val bestPrice: Price?
         @JsonIgnore
-        get() = prices.minWithOrNull(PriceComparator)
+        get() = prices.maxOrNull()
 
     val sortedPrices: List<Price>
         @JsonIgnore
-        get() = prices.sortedWith(PriceComparator)
+        get() = prices.sorted().reversed()
 
 }

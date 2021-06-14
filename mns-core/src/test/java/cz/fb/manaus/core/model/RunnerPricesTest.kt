@@ -22,5 +22,8 @@ class RunnerPricesTest {
     @Test
     fun `best price`() {
         assertEquals(Side.BACK, runnerPrices.first().bestPrice?.side)
+        assertEquals(2.5, runnerPrices.first().bestPrice?.price)
+        val lay = runnerPrices.first().getHomogeneous(Side.LAY)
+        assertEquals(3.5, lay.bestPrice?.price)
     }
 }
