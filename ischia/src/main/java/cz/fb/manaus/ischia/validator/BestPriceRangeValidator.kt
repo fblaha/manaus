@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component
 object BestPriceRangeValidator : Validator {
 
     override fun validate(event: BetEvent): ValidationResult {
-        val bestLay = event.runnerPrices.getHomogeneous(Side.LAY).bestPrice
-        val bestBack = event.runnerPrices.getHomogeneous(Side.BACK).bestPrice
+        val bestLay = event.runnerPrices.by(Side.LAY).bestPrice
+        val bestBack = event.runnerPrices.by(Side.BACK).bestPrice
         return if (bestBack != null && bestLay != null) {
             if (listOf(bestBack.price, bestLay.price).all { it in 1.3..6.0 }) OK else DROP
         } else {

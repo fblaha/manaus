@@ -9,7 +9,7 @@ class PriceReduceFunction(
 ) : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double? {
-        val bestPrices = bet.betAction.runnerPrices.map { it.getHomogeneous(side).bestPrice }
+        val bestPrices = bet.betAction.runnerPrices.map { it.by(side).bestPrice }
         return if (bestPrices.all { it != null }) {
             bestPrices.filterNotNull().map { it.price }.reduce(operator)
         } else {

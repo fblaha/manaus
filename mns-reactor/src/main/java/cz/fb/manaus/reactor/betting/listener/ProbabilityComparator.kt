@@ -7,8 +7,8 @@ import cz.fb.manaus.core.model.Side
 class ProbabilityComparator(private val side: Side) : Comparator<RunnerPrices> {
 
     override fun compare(list1: RunnerPrices, list2: RunnerPrices): Int {
-        val backList1 = list1.getHomogeneous(side)
-        val backList2 = list2.getHomogeneous(side)
+        val backList1 = list1.by(side)
+        val backList2 = list2.by(side)
         val bestPrice1 = backList1.bestPrice ?: error("empty price list")
         val bestPrice2 = backList2.bestPrice ?: error("empty price list")
         val price1 = bestPrice1.price

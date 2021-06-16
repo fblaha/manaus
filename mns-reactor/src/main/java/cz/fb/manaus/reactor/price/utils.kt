@@ -8,7 +8,7 @@ fun getOverRound(bestPrices: List<Double>): Double {
 }
 
 fun getBestPrices(runnerPrices: List<RunnerPrices>, side: Side): List<Double?> {
-    return runnerPrices.map { it.getHomogeneous(side).bestPrice?.price }
+    return runnerPrices.map { it.by(side).bestPrice?.price }
 }
 
 fun getOverRound(runnerPrices: List<RunnerPrices>, side: Side): Double? {

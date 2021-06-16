@@ -13,14 +13,14 @@ class BestPriceProposer(
 
     override fun validate(event: BetEvent): ValidationResult {
         val runnerPrices = event.runnerPrices
-        val homogeneous = runnerPrices.getHomogeneous(event.side.opposite)
+        val homogeneous = runnerPrices.by(event.side.opposite)
         val bestPrice = homogeneous.bestPrice
         return if (bestPrice != null) ValidationResult.OK else ValidationResult.DROP
     }
 
     override fun getProposedPrice(event: BetEvent): Double {
         val side = event.side
-        val bestPrice = event.runnerPrices.getHomogeneous(side.opposite).bestPrice?.price ?: error("no best price")
+        val bestPrice = event.runnerPrices.by(side.opposite).bestPrice?.price ?: error("no best price")
         check(step >= 0)
         return if (step priceEq 0.0) {
             bestPrice

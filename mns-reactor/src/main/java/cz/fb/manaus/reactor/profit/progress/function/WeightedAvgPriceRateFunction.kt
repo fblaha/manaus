@@ -15,7 +15,7 @@ object WeightedAvgPriceRateFunction : ProgressFunction {
         val settledBet = bet.settledBet
         val side = settledBet.price.side
         val prices = getRunnerPrices(runnerPrices, settledBet.selectionId)
-            .getHomogeneous(side)
+            .by(side)
         val price = settledBet.price.price
         val avg = getWeightedMean(prices.prices) ?: error("empty")
         return when (side) {

@@ -12,6 +12,6 @@ object PriceCountLayFunction : ProgressFunction {
 
     override fun invoke(bet: RealizedBet): Double {
         val runnerPrices = getRunnerPrices(bet.betAction.runnerPrices, bet.settledBet.selectionId)
-        return runnerPrices.getHomogeneous(Side.LAY).prices.size.toDouble()
+        return runnerPrices.by(Side.LAY).prices.size.toDouble()
     }
 }

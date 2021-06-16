@@ -6,7 +6,7 @@ import cz.fb.manaus.core.model.Side
 object ProbabilityCalculator {
 
     fun fromFairness(fairness: Double, side: Side, prices: List<RunnerPrices>): Map<Long, Double> {
-        val sidePrices = prices.map { it.getHomogeneous(side) }
+        val sidePrices = prices.map { it.by(side) }
 
         val result = HashMap<Long, Double>()
         for (runnerPrice in sidePrices) {

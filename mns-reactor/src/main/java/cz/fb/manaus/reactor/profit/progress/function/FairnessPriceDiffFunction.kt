@@ -18,8 +18,8 @@ object FairnessPriceDiffFunction : ProgressFunction {
         val backFairness = fairness[Side.BACK]
         return if (layFairness != null && backFairness != null) {
             val runnerPrices = getRunnerPrices(marketPrices, bet.settledBet.selectionId)
-            val layBest = runnerPrices.getHomogeneous(Side.LAY).bestPrice
-            val backBest = runnerPrices.getHomogeneous(Side.BACK).bestPrice
+            val layBest = runnerPrices.by(Side.LAY).bestPrice
+            val backBest = runnerPrices.by(Side.BACK).bestPrice
             val layPrice = layBest!!.price
             val backPrice = backBest!!.price
             val fairnessLayFairPrice = Pricing.getFairnessFairPrice(layPrice, layFairness)

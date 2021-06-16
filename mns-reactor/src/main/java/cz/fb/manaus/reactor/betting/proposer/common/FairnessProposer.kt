@@ -17,7 +17,7 @@ class FairnessProposer(
 
     override fun getProposedPrice(event: BetEvent): Double {
         val fairness = event.metrics.fairness[side] ?: error("bad side")
-        val bestPrice = event.runnerPrices.getHomogeneous(side).bestPrice ?: error("no best side")
+        val bestPrice = event.runnerPrices.by(side).bestPrice ?: error("no best side")
         val fairPrice = Pricing.getFairnessFairPrice(bestPrice.price, fairness)
         val downgradeFraction = strategy(event) ?: error("no val provided")
         return Pricing.downgrade(fairPrice, downgradeFraction, event.side)

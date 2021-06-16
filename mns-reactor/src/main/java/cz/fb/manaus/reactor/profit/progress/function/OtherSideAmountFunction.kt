@@ -11,7 +11,7 @@ object OtherSideAmountFunction : AbstractOfferedAmountFunction() {
         val marketPrices = bet.betAction.runnerPrices
         val prices = cz.fb.manaus.reactor.price.getRunnerPrices(marketPrices, bet.settledBet.selectionId)
         val side = bet.settledBet.price.side.opposite
-        return prices.getHomogeneous(side)
+        return prices.by(side)
     }
 
 }

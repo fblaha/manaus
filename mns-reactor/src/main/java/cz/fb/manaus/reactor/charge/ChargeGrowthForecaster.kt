@@ -44,12 +44,12 @@ class ChargeGrowthForecaster(
             val bets = convertBetData(snapshot.currentBets).toMutableMap()
             val runnerPrices = getRunnerPrices(marketPrices, selectionId)
             val oldCharge = simulator.getChargeMean(
-                    winnerCount = 1,
-                    commission = commission,
-                    probabilities = probabilities,
-                    bets = bets
+                winnerCount = 1,
+                commission = commission,
+                probabilities = probabilities,
+                bets = bets
             )
-            val bestPrice = runnerPrices.getHomogeneous(side.opposite).bestPrice
+            val bestPrice = runnerPrices.by(side.opposite).bestPrice
             if (bestPrice != null) {
                 val price = bestPrice.price
                 val amount = amountAdviser.amount

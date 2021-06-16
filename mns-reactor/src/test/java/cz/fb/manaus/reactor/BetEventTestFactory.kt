@@ -44,17 +44,17 @@ object BetEventTestFactory {
         val marketPrices = PricesTestFactory.newMarketPrices(bestBack, bestLay, 3.0)
         val runnerPrices = marketPrices.first()
         val selectionId = runnerPrices.selectionId
-        val bestPrice = runnerPrices.getHomogeneous(side.opposite).bestPrice
+        val bestPrice = runnerPrices.by(side.opposite).bestPrice
         val bets = if (bestPrice != null) {
             val marketId = "marketId"
             val price = bestPrice.price
             val requestedPrice = Price(price, mbProvider.minAmount, side.opposite)
             val date = Instant.now().minus(2, ChronoUnit.HOURS)
             val counterBet = Bet(
-                    betId = "1",
-                    marketId = marketId,
-                    selectionId = selectionId,
-                    requestedPrice = requestedPrice,
+                betId = "1",
+                marketId = marketId,
+                selectionId = selectionId,
+                requestedPrice = requestedPrice,
                     placedDate = date,
                     matchedAmount = mbProvider.minAmount
             ).asTracked

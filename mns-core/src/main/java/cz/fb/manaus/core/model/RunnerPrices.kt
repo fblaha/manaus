@@ -8,7 +8,7 @@ data class RunnerPrices(
     val lastMatchedPrice: Double?,
     val matchedAmount: Double?
 ) {
-    fun getHomogeneous(side: Side): RunnerPrices {
+    fun by(side: Side): RunnerPrices {
         return this.copy(prices = this.prices.filter { it.side == side })
     }
 
