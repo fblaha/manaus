@@ -3,7 +3,7 @@ package cz.fb.manaus.reactor.betting.listener
 import cz.fb.manaus.core.model.BetActionType
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractTestCase
+import cz.fb.manaus.core.test.AbstractTestCase5
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.HOME_EVENT_BACK
 import cz.fb.manaus.reactor.betting.PriceAdviser
@@ -14,7 +14,7 @@ import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.ValidationResult.*
 import cz.fb.manaus.reactor.betting.validator.ValidationService
 import cz.fb.manaus.reactor.betting.validator.Validator
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -53,7 +53,7 @@ class MockPriceAdviser(
 
 }
 
-class BetEventCoordinatorTest : AbstractTestCase() {
+class BetEventCoordinatorTest : AbstractTestCase5() {
 
     @Autowired
     private lateinit var validationService: ValidationService

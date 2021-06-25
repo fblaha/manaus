@@ -1,10 +1,10 @@
 package cz.fb.manaus.reactor.betting.listener
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.test.AbstractTestCase
+import cz.fb.manaus.core.test.AbstractTestCase5
 import cz.fb.manaus.reactor.betting.BetCommand
 import cz.fb.manaus.reactor.betting.BetEvent
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import kotlin.test.assertTrue
@@ -31,7 +31,7 @@ class MockBetEventListener : BetEventListener {
 }
 
 
-class BetEventSeekerTest : AbstractTestCase() {
+class BetEventSeekerTest : AbstractTestCase5() {
 
     @Autowired
     private lateinit var betEventSeeker: BetEventSeeker

@@ -3,26 +3,26 @@ package cz.fb.manaus.reactor.betting.validator
 import cz.fb.manaus.core.model.Bet
 import cz.fb.manaus.core.model.Price
 import cz.fb.manaus.core.model.Side
-import cz.fb.manaus.core.test.AbstractTestCase
+import cz.fb.manaus.core.test.AbstractTestCase5
 import cz.fb.manaus.reactor.betting.BetEvent
 import cz.fb.manaus.reactor.betting.HOME_EVENT_BACK
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ValidationServiceTest : AbstractTestCase() {
+class ValidationServiceTest : AbstractTestCase5() {
     @Autowired
     private lateinit var service: ValidationService
 
     @Test
     fun `reduce OK - NOP - DROP combinations`() {
         val results = listOf(
-                ValidationResult.OK,
-                ValidationResult.NOP,
-                ValidationResult.DROP,
-                ValidationResult.OK
+            ValidationResult.OK,
+            ValidationResult.NOP,
+            ValidationResult.DROP,
+            ValidationResult.OK
         )
         assertEquals(
                 ValidationResult.DROP,

@@ -1,14 +1,14 @@
 package cz.fb.manaus.reactor.profit.progress
 
-import cz.fb.manaus.core.test.AbstractTestCase
+import cz.fb.manaus.core.test.AbstractTestCase5
 import cz.fb.manaus.reactor.profit.generateBets
 import cz.fb.manaus.reactor.profit.toRealizedBet
 import junit.framework.TestCase.assertTrue
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 
-class FixedBinFunctionProfitServiceTest : AbstractTestCase() {
+class FixedBinFunctionProfitServiceTest : AbstractTestCase5() {
 
     @Autowired
     private lateinit var service: FixedBinFunctionProfitService
@@ -17,8 +17,8 @@ class FixedBinFunctionProfitServiceTest : AbstractTestCase() {
     fun `single bin`() {
         val bets = generateBets().map { toRealizedBet(it) }
         val records = service.getProfitRecords(
-                bets = bets,
-                funcName = "priceBack",
+            bets = bets,
+            funcName = "priceBack",
                 binCount = 1
         )
         assertEquals(1, records.size)

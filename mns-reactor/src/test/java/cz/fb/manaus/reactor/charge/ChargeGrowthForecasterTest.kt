@@ -1,18 +1,18 @@
 package cz.fb.manaus.reactor.charge
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.test.AbstractTestCase
+import cz.fb.manaus.core.test.AbstractTestCase5
 import cz.fb.manaus.reactor.PricesTestFactory
 import cz.fb.manaus.reactor.betting.AmountAdviser
 import cz.fb.manaus.reactor.price.FairnessPolynomialCalculator
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 
-class ChargeGrowthForecasterTest : AbstractTestCase() {
+class ChargeGrowthForecasterTest : AbstractTestCase5() {
 
     @Autowired
     private lateinit var forecaster: ChargeGrowthForecaster

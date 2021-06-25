@@ -1,8 +1,8 @@
 package cz.fb.manaus.core.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import cz.fb.manaus.core.test.AbstractTestCase
-import org.junit.Test
+import cz.fb.manaus.core.test.AbstractTestCase5
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -11,15 +11,15 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 val betTemplate = Bet(
-        betId = "111",
-        marketId = "222",
-        selectionId = SEL_HOME,
-        requestedPrice = Price(3.0, 2.0, Side.BACK),
-        placedDate = Instant.now()
+    betId = "111",
+    marketId = "222",
+    selectionId = SEL_HOME,
+    requestedPrice = Price(3.0, 2.0, Side.BACK),
+    placedDate = Instant.now()
 )
 
 
-class BetTest : AbstractTestCase() {
+class BetTest : AbstractTestCase5() {
 
     @Autowired
     private lateinit var mapper: ObjectMapper
@@ -54,12 +54,12 @@ class BetTest : AbstractTestCase() {
         val requestedPrice = Price(3.0, mbProvider.minAmount, Side.LAY)
         val date = Instant.now().minus(2, ChronoUnit.HOURS)
         return Bet(
-                betId = "1",
-                marketId = market.id,
-                selectionId = 1000L,
-                requestedPrice = requestedPrice,
-                placedDate = date,
-                matchedAmount = matchedAmount
+            betId = "1",
+            marketId = market.id,
+            selectionId = 1000L,
+            requestedPrice = requestedPrice,
+            placedDate = date,
+            matchedAmount = matchedAmount
         )
     }
 }

@@ -1,22 +1,22 @@
 package cz.fb.manaus.reactor.charge
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.test.AbstractTestCase
-import org.junit.Test
+import cz.fb.manaus.core.test.AbstractTestCase5
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertTrue
 
 
-class MarketChargeSimulatorTest : AbstractTestCase() {
+class MarketChargeSimulatorTest : AbstractTestCase5() {
 
     @Autowired
     private lateinit var simulator: MarketChargeSimulator
 
 
     private val threeImbalanced = mapOf(
-            SEL_HOME to 0.5,
-            SEL_DRAW to 0.3,
-            SEL_AWAY to 0.2
+        SEL_HOME to 0.5,
+        SEL_DRAW to 0.3,
+        SEL_AWAY to 0.2
     )
 
     private val threeBalanced = mapOf(

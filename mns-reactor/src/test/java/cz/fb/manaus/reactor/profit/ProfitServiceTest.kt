@@ -1,8 +1,8 @@
 package cz.fb.manaus.reactor.profit
 
 import cz.fb.manaus.core.model.*
-import cz.fb.manaus.core.test.AbstractTestCase
-import org.junit.Test
+import cz.fb.manaus.core.test.AbstractTestCase5
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -10,7 +10,7 @@ import kotlin.test.assertTrue
 
 const val chargeRate = 0.02
 
-class ProfitServiceTest : AbstractTestCase() {
+class ProfitServiceTest : AbstractTestCase5() {
     @Autowired
     private lateinit var profitService: ProfitService
 
@@ -18,9 +18,9 @@ class ProfitServiceTest : AbstractTestCase() {
     @Test
     fun `single selection`() {
         val lay = homeSettledBet.copy(
-                profitAndLoss = 5.0,
-                commission = 0.5 * chargeRate,
-                price = Price(2.0, 4.0, Side.LAY)
+            profitAndLoss = 5.0,
+            commission = 0.5 * chargeRate,
+            price = Price(2.0, 4.0, Side.LAY)
         )
         val back = lay.copy(
                 profitAndLoss = -4.5,

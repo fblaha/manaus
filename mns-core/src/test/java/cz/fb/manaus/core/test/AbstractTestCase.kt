@@ -24,3 +24,9 @@ open class TestConfiguration
 @ContextConfiguration(classes = [TestConfiguration::class])
 @ActiveProfiles("betfair", TEST)
 abstract class AbstractTestCase
+
+
+@SpringBootTest
+@ContextConfiguration(classes = [TestConfiguration::class])
+@ActiveProfiles("betfair", TEST)
+abstract class AbstractTestCase5

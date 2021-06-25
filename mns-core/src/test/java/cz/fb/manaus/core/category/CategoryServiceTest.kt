@@ -4,12 +4,12 @@ import cz.fb.manaus.core.MarketCategories
 import cz.fb.manaus.core.category.categorizer.SPORT_PREFIX
 import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.model.realizedBet
-import cz.fb.manaus.core.test.AbstractTestCase
-import org.junit.Test
+import cz.fb.manaus.core.test.AbstractTestCase5
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertTrue
 
-class CategoryServiceTest : AbstractTestCase() {
+class CategoryServiceTest : AbstractTestCase5() {
     @Autowired
     private lateinit var categoryService: CategoryService
 
@@ -36,11 +36,11 @@ class CategoryServiceTest : AbstractTestCase() {
         val categories = categoryService.getRealizedBetCategories(realizedBet, false)
         assertTrue {
             categories.containsAll(
-                    listOf(
-                            "market_country_cz",
-                            "market_sport_soccer",
-                            "market_type_match_odds"
-                    )
+                listOf(
+                    "market_country_cz",
+                    "market_sport_soccer",
+                    "market_type_match_odds"
+                )
             )
         }
     }

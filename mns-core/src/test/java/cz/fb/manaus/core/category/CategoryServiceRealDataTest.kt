@@ -1,15 +1,37 @@
 package cz.fb.manaus.core.category
 
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.ObjectMapper
 import cz.fb.manaus.core.MarketCategories
 import cz.fb.manaus.core.category.categorizer.COUNTRY_PREFIX
 import cz.fb.manaus.core.category.categorizer.SPORT_PREFIX
-import cz.fb.manaus.core.manager.AbstractMarketDataAwareTestCase
-import org.junit.Test
+import cz.fb.manaus.core.model.Market
+import cz.fb.manaus.core.test.AbstractTestCase5
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.core.io.ResourceLoader
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class CategoryServiceRealDataTest : AbstractMarketDataAwareTestCase() {
+class CategoryServiceRealDataTest : AbstractTestCase5() {
+    private lateinit var markets: List<Market>
+
+    @Autowired
+    private lateinit var resourceLoader: ResourceLoader
+
+    @Autowired
+    private lateinit var objectMapper: ObjectMapper
+
+
+    @BeforeEach
+    fun setUp() {
+        val resource = resourceLoader.getResource("classpath:cz/fb/manaus/core/service/markets.json")
+        markets = objectMapper.readValue(resource.inputStream, object : TypeReference<List<Market>>() {})
+        markets = markets.map { it.copy(event = it.event.copy(openDate = Instant.now().plus(5, ChronoUnit.HOURS))) }
+    }
 
     @Autowired
     private lateinit var categoryService: CategoryService
@@ -100,22 +122,22 @@ class CategoryServiceRealDataTest : AbstractMarketDataAwareTestCase() {
 
     companion object {
         val DISJUNCTIVE_CATEGORIES = setOf(
-                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.BASKETBALL,
-                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.VOLLEYBALL,
-                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.BASEBALL,
-                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.SOCCER,
-                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.AMERICAN_FOOTBALL,
-                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.GOLF,
-                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.HANDBALL,
-                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.GREY_HOUNDS,
-                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.TENNIS,
-                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.FINANCIAL,
-                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.SNOOKER,
-                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.CRICKET,
-                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.RUGBY,
-                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.ICE_HOCKEY,
-                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.MOTOR_SPORT,
-                Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.HORSES
+            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.BASKETBALL,
+            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.VOLLEYBALL,
+            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.BASEBALL,
+            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.SOCCER,
+            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.AMERICAN_FOOTBALL,
+            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.GOLF,
+            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.HANDBALL,
+            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.GREY_HOUNDS,
+            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.TENNIS,
+            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.FINANCIAL,
+            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.SNOOKER,
+            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.CRICKET,
+            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.RUGBY,
+            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.ICE_HOCKEY,
+            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.MOTOR_SPORT,
+            Category.MARKET_PREFIX + SPORT_PREFIX + MarketCategories.HORSES
         )
     }
 }
