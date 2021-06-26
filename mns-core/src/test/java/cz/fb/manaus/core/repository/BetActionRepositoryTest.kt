@@ -3,7 +3,7 @@ package cz.fb.manaus.core.repository
 import cz.fb.manaus.core.model.betAction
 import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import org.bson.types.ObjectId
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue

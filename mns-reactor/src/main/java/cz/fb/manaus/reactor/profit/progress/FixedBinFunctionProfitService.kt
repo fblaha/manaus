@@ -17,7 +17,7 @@ class FixedBinFunctionProfitService(
         private val categoryService: CategoryService,
         private val profitService: ProfitService
 ) {
-    private val functions: Map<String, ProgressFunction> = functions.map { it.name to it }.toMap()
+    private val functions: Map<String, ProgressFunction> = functions.associateBy { it.name }
 
     fun getProfitRecords(
             bets: List<RealizedBet>,

@@ -2,8 +2,8 @@ package cz.fb.manaus.rest
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import cz.fb.manaus.core.model.homeSettledBet
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
@@ -17,7 +17,7 @@ class SettledBetControllerTest : AbstractControllerTest() {
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
-    @Before
+    @BeforeEach
     fun setUp() {
         createLiveMarket()
     }

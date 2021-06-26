@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 class BetFeatureService(private val functions: List<ProgressFunction>) {
 
     fun toFeatureVector(bet: RealizedBet): BetFeatureVector {
-        val features = this.functions.map { it.name to it(bet) }.toMap()
+        val features = this.functions.associate { it.name to it(bet) }
         return BetFeatureVector(
                 id = bet.settledBet.id,
                 side = bet.settledBet.price.side,

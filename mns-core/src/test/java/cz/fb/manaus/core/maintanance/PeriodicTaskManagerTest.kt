@@ -2,7 +2,7 @@ package cz.fb.manaus.core.maintanance
 
 import cz.fb.manaus.core.model.TaskExecution
 import cz.fb.manaus.core.test.AbstractIntegrationTestCase
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import kotlin.test.assertEquals

@@ -10,14 +10,14 @@ import cz.fb.manaus.core.repository.Repository
 import cz.fb.manaus.core.repository.SettledBetRepository
 import cz.fb.manaus.core.repository.mongo.Foo
 import cz.fb.manaus.spring.ManausProfiles.DB
-import org.junit.After
-import org.junit.Before
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ActiveProfiles
 
 
 @ActiveProfiles(DB)
-abstract class AbstractIntegrationTestCase : AbstractTestCase() {
+abstract class AbstractIntegrationTestCase : AbstractTestCase5() {
 
     @Autowired
     protected lateinit var betActionRepository: BetActionRepository
@@ -44,8 +44,8 @@ abstract class AbstractIntegrationTestCase : AbstractTestCase() {
     private lateinit var repositories: List<Repository<*>>
 
 
-    @After
-    @Before
+    @AfterEach
+    @BeforeEach
     fun clean() {
         repositories.forEach { it.purge() }
     }

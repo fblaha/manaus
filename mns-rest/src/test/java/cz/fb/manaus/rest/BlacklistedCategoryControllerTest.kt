@@ -1,7 +1,7 @@
 package cz.fb.manaus.rest
 
 import cz.fb.manaus.core.model.BlacklistedCategory
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.time.Duration
 import kotlin.time.ExperimentalTime
 

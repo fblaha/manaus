@@ -18,7 +18,7 @@ class DayHourCategorizerTest {
         event = event.copy(openDate = dayStart)
         assertTrue { "0_3" in categorizer.getCategories(market.copy(event = event)).first() }
 
-        event = event.copy(openDate = dayStart.plus(3 * 60 + 59, ChronoUnit.MINUTES))
+        event = event.copy(openDate = dayStart.plus(3L * 60 + 59, ChronoUnit.MINUTES))
         assertTrue { "0_3" in categorizer.getCategories(market.copy(event = event)).first() }
 
         event = event.copy(openDate = dayStart.plus(4, ChronoUnit.HOURS))

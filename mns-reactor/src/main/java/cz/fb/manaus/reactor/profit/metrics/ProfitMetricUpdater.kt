@@ -16,20 +16,23 @@ import kotlin.time.ExperimentalTime
 @ExperimentalTime
 @Profile(ManausProfiles.DB)
 class ProfitMetricUpdater(
-        private val profitLoader: ProfitLoader,
-        specs: List<ProfitMetricSpec> = emptyList()
+    private val profitLoader: ProfitLoader,
+    specs: List<ProfitMetricSpec> = emptyList()
 ) {
 
     private val log = Logger.getLogger(ProfitMetricUpdater::class.simpleName)
 
     private fun makeMetrics(spec: ProfitMetricSpec): Map<String, AtomicDouble> =
-            spec.categoryValues
-                    .map { it to Metrics.gauge(spec.metricName, listOf(Tag.of(spec.categoryPrefix, it)), AtomicDouble()) }
-                    .toMap()
+        spec.categoryValues.associateWith {
+            Metrics.gauge(
+                spec.metricName,
+                listOf(Tag.of(spec.categoryPrefix, it)),
+                AtomicDouble()
+            )!!
+        }
 
-    private val allMetrics: Map<String, Map<String, AtomicDouble>> = specs
-            .map { it.metricName to makeMetrics(it) }
-            .toMap()
+    private val allMetrics: Map<String, Map<String, AtomicDouble>> =
+        specs.associate { it.metricName to makeMetrics(it) }
 
     private val byQuery = specs.groupBy { it.query }
 

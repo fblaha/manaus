@@ -3,7 +3,7 @@ package cz.fb.manaus.rest
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.net.HttpHeaders
 import cz.fb.manaus.core.model.market
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post

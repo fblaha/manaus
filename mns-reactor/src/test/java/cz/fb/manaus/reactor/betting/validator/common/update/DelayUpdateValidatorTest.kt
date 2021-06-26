@@ -7,7 +7,7 @@ import cz.fb.manaus.reactor.BetEventTestFactory
 import cz.fb.manaus.reactor.betting.validator.ValidationResult
 import cz.fb.manaus.reactor.betting.validator.Validator
 import cz.fb.manaus.spring.ManausProfiles.DB
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
@@ -15,6 +15,7 @@ import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class DelayUpdateValidatorTest : AbstractIntegrationTestCase() {
     @Autowired
@@ -38,11 +39,12 @@ class DelayUpdateValidatorTest : AbstractIntegrationTestCase() {
         assertEquals(validationResult, result)
     }
 
-    @Test(expected = IllegalStateException::class)
+    @Test
     fun `no bet action`() {
-        marketRepository.save(market)
-        val result = validator.validate(BetEventTestFactory.newUpdateBetEvent(Side.LAY, runnerPrices))
-        assertEquals(ValidationResult.DROP, result)
+        assertFailsWith<IllegalStateException> {
+            marketRepository.save(market)
+            validator.validate(BetEventTestFactory.newUpdateBetEvent(Side.LAY, runnerPrices))
+        }
     }
 
     @Test

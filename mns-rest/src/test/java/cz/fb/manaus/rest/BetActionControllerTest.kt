@@ -2,8 +2,8 @@ package cz.fb.manaus.rest
 
 import cz.fb.manaus.core.model.RealizedBet
 import cz.fb.manaus.core.model.market
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -15,7 +15,7 @@ class BetActionControllerTest : AbstractControllerTest() {
 
     private lateinit var bet: RealizedBet
 
-    @Before
+    @BeforeEach
     fun setUp() {
         bet = createLiveMarket()
     }

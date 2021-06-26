@@ -6,7 +6,7 @@ import com.google.common.net.HttpHeaders
 import cz.fb.manaus.core.MarketCategories
 import cz.fb.manaus.core.model.*
 import cz.fb.manaus.reactor.ml.BetFeatureVector
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders

@@ -4,7 +4,7 @@ import cz.fb.manaus.core.model.MarketStatus
 import cz.fb.manaus.core.model.betTemplate
 import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.model.status
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.time.Instant
 import kotlin.time.ExperimentalTime
 

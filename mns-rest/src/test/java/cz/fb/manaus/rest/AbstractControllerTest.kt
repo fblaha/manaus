@@ -5,7 +5,7 @@ import cz.fb.manaus.core.model.betAction
 import cz.fb.manaus.core.model.homeSettledBet
 import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.test.AbstractIntegrationTestCase
-import org.junit.Before
+import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.test.context.web.WebAppConfiguration
@@ -35,7 +35,7 @@ abstract class AbstractControllerTest : AbstractIntegrationTestCase() {
         }
     }
 
-    @Before
+    @BeforeEach
     fun mockRest() {
         mvc = MockMvcBuilders.webAppContextSetup(context).build()
     }

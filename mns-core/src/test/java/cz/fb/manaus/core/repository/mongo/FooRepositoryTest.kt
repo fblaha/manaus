@@ -3,7 +3,7 @@ package cz.fb.manaus.core.repository.mongo
 import cz.fb.manaus.core.repository.Repository
 import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import cz.fb.manaus.spring.ManausProfiles
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.springframework.context.annotation.Profile
 import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.mapping.MongoId

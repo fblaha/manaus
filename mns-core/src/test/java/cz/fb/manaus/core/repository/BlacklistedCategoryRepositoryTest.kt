@@ -2,7 +2,7 @@ package cz.fb.manaus.core.repository
 
 import cz.fb.manaus.core.model.BlacklistedCategory
 import cz.fb.manaus.core.test.AbstractIntegrationTestCase
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.time.Duration
 import kotlin.test.assertEquals
 

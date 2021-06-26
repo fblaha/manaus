@@ -191,7 +191,7 @@ class ProfitServiceTest : AbstractTestCase5() {
     }
 
     private fun byCategory(records: List<ProfitRecord>): Map<String, ProfitRecord> {
-        return records.map { it.category to it }.toMap()
+        return records.associateBy { it.category }
     }
 
     @Test

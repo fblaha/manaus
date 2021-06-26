@@ -6,8 +6,8 @@ import cz.fb.manaus.core.model.ProfitRecord
 import cz.fb.manaus.core.model.Side
 import cz.fb.manaus.core.test.AbstractIntegrationTestCase
 import cz.fb.manaus.reactor.profit.ProfitService
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Duration
 import kotlin.test.assertEquals
@@ -33,7 +33,7 @@ class UnprofitableCategoriesRegistryTest : AbstractIntegrationTestCase() {
     @Autowired
     private lateinit var realizedBetLoader: RealizedBetLoader
 
-    @Before
+    @BeforeEach
     fun setUp() {
         registry = UnprofitableCategoriesRegistry(
                 name = "test",

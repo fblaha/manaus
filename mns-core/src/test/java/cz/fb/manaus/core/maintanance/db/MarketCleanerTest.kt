@@ -3,7 +3,7 @@ package cz.fb.manaus.core.maintanance.db
 import cz.fb.manaus.core.model.betAction
 import cz.fb.manaus.core.model.market
 import cz.fb.manaus.core.test.AbstractIntegrationTestCase
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 import java.time.temporal.ChronoUnit
