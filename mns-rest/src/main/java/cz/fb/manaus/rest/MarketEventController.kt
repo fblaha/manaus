@@ -19,20 +19,20 @@ import java.util.logging.Logger
 
 
 data class MarketEvent(
-        var prices: List<RunnerPrices>,
-        var bets: List<Bet>,
-        var account: Account,
-        val tradedVolume: Map<Long, TradedVolume>? = null,
-        var scanTime: Long = 0
+    val prices: List<RunnerPrices>,
+    val bets: List<Bet>,
+    val account: Account,
+    val tradedVolume: Map<Long, TradedVolume>? = null,
+    val scanTime: Long = 0
 )
 
 @Controller
 @Profile(ManausProfiles.DB)
 class MarketEventController(
-        private val notifier: MarketSnapshotNotifier,
-        private val marketRepository: MarketRepository,
-        private val betMetricUpdater: MatchedBetMetricUpdater,
-        private val actionLoader: ActionLoader
+    private val notifier: MarketSnapshotNotifier,
+    private val marketRepository: MarketRepository,
+    private val betMetricUpdater: MatchedBetMetricUpdater,
+    private val actionLoader: ActionLoader
 ) {
 
     private val availableMoney: AtomicDouble by lazy { Metrics.gauge("mns_account_money_available", AtomicDouble()) }
@@ -54,10 +54,10 @@ class MarketEventController(
             betMetricUpdater.update(marketEvent.scanTime, bets)
             val currentBets = bets.distinctBy { it.betId }.mapNotNull { actionLoader.load(it) }
             val snapshot = MarketSnapshot(
-                    runnerPrices = marketPrices,
-                    market = market,
-                    currentBets = currentBets,
-                    tradedVolume = marketEvent.tradedVolume
+                runnerPrices = marketPrices,
+                market = market,
+                currentBets = currentBets,
+                tradedVolume = marketEvent.tradedVolume
             )
             val event = MarketSnapshotEvent(snapshot, account)
             val collectedBets = notifier.notify(event)

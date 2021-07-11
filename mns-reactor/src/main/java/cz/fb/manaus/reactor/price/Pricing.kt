@@ -13,7 +13,7 @@ object Pricing {
         return when (side) {
             Side.LAY -> 1 + aboveOne * targetFairness
             Side.BACK -> 1 + aboveOne / targetFairness
-            else -> throw IllegalStateException()
+            else -> error("unexpected side")
         }
     }
 
